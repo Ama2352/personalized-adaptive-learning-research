@@ -1,0 +1,72 @@
+diff --git a/source-cpp/pyBKT/fit/EM_fit.py b/source-cpp/pyBKT/fit/EM_fit.py
+index 3db33c033a8d0a77a1c9c5c7d2f36ec7b38ac17f..54caab301428c5ce854dfaf1a897b72c71270db7 100755
+--- a/source-cpp/pyBKT/fit/EM_fit.py
++++ b/source-cpp/pyBKT/fit/EM_fit.py
+@@ -7,7 +7,7 @@ import os
+ def EM_fit(model, data, tol = None, maxiter = None, parallel = True, fixed = {}):
+ 
+     if tol is None: 
+-        tol = 1e-3
++        tol = 0.005
+     if maxiter is None:
+         maxiter = 100
+ 
+@@ -23,6 +23,8 @@ def EM_fit(model, data, tol = None, maxiter = None, parallel = True, fixed = {})
+             result['all_emission_softcounts'][j] = result['all_emission_softcounts'][j].transpose()
+ 
+         log_likelihoods[i][0] = result['total_loglike']
++        if not np.isfinite(log_likelihoods[i][0]):
++            raise FloatingPointError("pyBKT produced a non-finite EM log likelihood")
+ 
+         if(i > 1 and abs(log_likelihoods[i][0] - log_likelihoods[i-1][0]) < tol):
+             break
+diff --git a/source-cpp/pyBKT/fit/E_step.cpp b/source-cpp/pyBKT/fit/E_step.cpp
+index bfc3657aac520f2c6890d900701e3177662aecd6..abe1269cd3991b4c209f643b3df218384bfbb1fb 100755
+--- a/source-cpp/pyBKT/fit/E_step.cpp
++++ b/source-cpp/pyBKT/fit/E_step.cpp
+@@ -338,7 +338,29 @@ static PyObject* run(PyObject * module, PyObject * args) {
+     PyDict_SetItemString(result, "all_emission_softcounts", all_emission_softcounts_arr);
+     PyDict_SetItemString(result, "all_initial_softcounts", all_initial_softcounts_arr);
+     PyDict_SetItemString(result, "alpha", alpha_out_arr);
+-    PyDict_SetItemString(result, "total_loglike", PyLong_FromLong(*total_loglike));
++    PyObject *total_loglike_obj = PyFloat_FromDouble(*total_loglike);
++    if (total_loglike_obj == NULL) {
++        for (int i = 0; i < 8; i++)
++            Py_XDECREF(*DM_PTRS[i]);
++        Py_XDECREF(all_trans_softcounts_arr);
++        Py_XDECREF(all_emission_softcounts_arr);
++        Py_XDECREF(all_initial_softcounts_arr);
++        Py_XDECREF(alpha_out_arr);
++        Py_DECREF(result);
++        return NULL;
++    }
++    if (PyDict_SetItemString(result, "total_loglike", total_loglike_obj) < 0) {
++        Py_DECREF(total_loglike_obj);
++        for (int i = 0; i < 8; i++)
++            Py_XDECREF(*DM_PTRS[i]);
++        Py_XDECREF(all_trans_softcounts_arr);
++        Py_XDECREF(all_emission_softcounts_arr);
++        Py_XDECREF(all_initial_softcounts_arr);
++        Py_XDECREF(alpha_out_arr);
++        Py_DECREF(result);
++        return NULL;
++    }
++    Py_DECREF(total_loglike_obj);
+ 
+     for (int i = 0; i < 8; i++)
+         Py_XDECREF(*DM_PTRS[i]);
+diff --git a/source-py/pyBKT/fit/EM_fit.py b/source-py/pyBKT/fit/EM_fit.py
+index 36e89ee425606d632c4807fc2dfe8ff8f23689fb..fac46e12618d92315a9be729501f0b06ae0a54a4 100755
+--- a/source-py/pyBKT/fit/EM_fit.py
++++ b/source-py/pyBKT/fit/EM_fit.py
+@@ -40,7 +40,9 @@ def EM_fit(model, data, tol = 0.005, maxiter = 100, parallel = True, fixed = {})
+         for j in range(num_subparts):
+             result['all_emission_softcounts'][j] = result['all_emission_softcounts'][j].transpose()
+ 
+-        log_likelihoods[i][0] = result['total_loglike']
++        # NumPy 2 rejects assigning a 1x1 array to a scalar slot.
++        # This extracts the same scalar without changing the EM calculation.
++        log_likelihoods[i][0] = result['total_loglike'].item()
+         if(i > 1 and abs(log_likelihoods[i][0] - log_likelihoods[i-1][0]) <= tol):
+             break
+ 
