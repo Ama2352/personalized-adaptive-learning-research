@@ -1,0 +1,760 @@
+{
+  "schema_version": 1,
+  "roadmap_version": "1.0",
+  "as_of": "2026-11-07",
+  "execution_authorized": false,
+  "approval_rule": "Không tự approve methodology, data execution, cloud spend, full CV, Holdout hoặc final selection",
+  "tasks": [
+    {
+      "id": "T01",
+      "research_objective": "Đóng băng inventory nguồn và đối chiếu đề cương",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "research",
+      "priority": "P0",
+      "owner": "Cả hai",
+      "dependencies": [],
+      "required_inputs": "proposal PDF, current Git status, source_inventory.json",
+      "files_components": "research_tracking/; docs/thesis_recovery/",
+      "implementation_objective": "Lập bảng requirements với page refs và source hashes, ghi feedback do user cung cấp",
+      "acceptance_criteria": "Tất cả required models, learned graph, demo, article có experiment và owner",
+      "verification_steps": "Đọc proposal5trang và kiểm SHA, không query Test",
+      "required_artifacts": "requirements-lock.json, discrepancy log",
+      "estimated_effort": "0.5–1pd",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "local",
+      "authorization_requirements": "SAFE",
+      "status": "PLANNED",
+      "blockers": [
+        "Sẵn sàng"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T02",
+      "research_objective": "Duyệt protocol và allocation model theo môi trường",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "methodology",
+      "priority": "P0",
+      "owner": "Cả hai + advisor",
+      "dependencies": [
+        "T01"
+      ],
+      "required_inputs": "02,05,07,08,09",
+      "files_components": "docs/thesis_recovery/",
+      "implementation_objective": "Chốt estimands, split, confidence, mastery, seeds, primary families và model×dataset matrix",
+      "acceptance_criteria": "Advisor có decision record S01–07, ngân sách/capacity được chủ nhiệm xác nhận",
+      "verification_steps": "Review scientific checklist và count fit matrix",
+      "required_artifacts": "protocol-v1.json, approval-reference",
+      "estimated_effort": "0.5–1pd +1–3 ngày chờ",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "none",
+      "authorization_requirements": "METHOD_APPROVAL",
+      "status": "PLANNED",
+      "blockers": [
+        "Chờ quyết định"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T03",
+      "research_objective": "Tìm revision Paper1 tương ứng PDF",
+      "rq": [
+        "RQ1"
+      ],
+      "workstream": "reproduction",
+      "priority": "P0",
+      "owner": "Dương",
+      "dependencies": [
+        "T01"
+      ],
+      "required_inputs": "paper1 notebook/PDF, P2 archived inputs",
+      "files_components": "paper1/; docs/thesis_recovery/evidence/",
+      "implementation_objective": "Read-only tìm nguồn continuity/latent50seeds và frozen results, ghi missing nếu không có",
+      "acceptance_criteria": "Mọi discrepancy seed/latent/controller resolved hoặc advisor chấp nhận limitation",
+      "verification_steps": "Đối chiếu CELL và paper trang2–4, không run full",
+      "required_artifacts": "paper1-source-reconciliation.md",
+      "estimated_effort": "1–2pd, timebox2pd",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "local",
+      "authorization_requirements": "SAFE",
+      "status": "PLANNED",
+      "blockers": [
+        "Thiếu revision"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T04",
+      "research_objective": "Kiểm P2 graph và tách environment/estimator/controller contract",
+      "rq": [
+        "RQ1",
+        "RQ2"
+      ],
+      "workstream": "simulator",
+      "priority": "P0",
+      "owner": "Dương",
+      "dependencies": [
+        "T01"
+      ],
+      "required_inputs": "P2 notebooks/specs, graph inputs hashes",
+      "files_components": "P2/source/; future src/simulation/diagnostic_v1/",
+      "implementation_objective": "Đề xuất schema3graphs, validate nodes/items/map, extract isolated fixture adapter sau approval",
+      "acceptance_criteria": "28node,84item, endpoint coverage, map extras/duplicates rõ, golden fixture parity",
+      "verification_steps": "Synthetic fixtures, compare unchanged source hash",
+      "required_artifacts": "simulator-contract-v1.json, graph-audit.json",
+      "estimated_effort": "1.5–2.5pd",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "local",
+      "authorization_requirements": "SAFE_ENGINEERING_AFTER_INSTRUCTION",
+      "status": "PLANNED",
+      "blockers": [
+        "Chưa thực hiện"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T05",
+      "research_objective": "Đóng băng simulator vocabulary và mastery adapter",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "integration",
+      "priority": "P0",
+      "owner": "Cả hai",
+      "dependencies": [
+        "T02",
+        "T04"
+      ],
+      "required_inputs": "item84/concept28, AKT inputs, selector interfaces",
+      "files_components": "src/knowledge_tracing/akt/; future simulator adapter",
+      "implementation_objective": "Define predict_reference, mastery_score, readiness, next action, causal history và calibration split",
+      "acceptance_criteria": "Không numeric remap Junyi→Grade10, no oracle in model inputs, consistent reference criterion",
+      "verification_steps": "Synthetic current/future labels perturbation và all84 item coverage",
+      "required_artifacts": "adapter-schema.json, unit fixtures",
+      "estimated_effort": "1.5–2.5pd",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "local",
+      "authorization_requirements": "METHOD_APPROVAL",
+      "status": "PLANNED",
+      "blockers": [
+        "Mastery semantics pending"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T06",
+      "research_objective": "Đăng ký Junyi order controls và graph learner",
+      "rq": [
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "graph",
+      "priority": "P0",
+      "owner": "Dương",
+      "dependencies": [
+        "T02"
+      ],
+      "required_inputs": "catalog metadata spec, frozen folds identities",
+      "files_components": "src/knowledge_tracing/shared_kt.py; future graph_controls/",
+      "implementation_objective": "Specify degree/chapter/support nulls, train-only order placebo và learned graph fitting",
+      "acceptance_criteria": "Không validation/Test graph fitting, separate observational interpretation, cycle/reachability acceptance",
+      "verification_steps": "Synthetic DAG rewiring, record rejected edges and matched stats",
+      "required_artifacts": "graph-controls-spec.json, fixtures",
+      "estimated_effort": "1–2pd",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "local",
+      "authorization_requirements": "SAFE_DESIGN; REAL_DATA_APPROVAL_LATER",
+      "status": "PLANNED",
+      "blockers": [
+        "Chưa thực hiện"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T07",
+      "research_objective": "Sửa hợp đồng publish checkpoint/export trên filesystem",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "systems",
+      "priority": "P0",
+      "owner": "Sang",
+      "dependencies": [
+        "T01"
+      ],
+      "required_inputs": "synthetic_tests_retry.log, checkpoint.py, prediction.py",
+      "files_components": "src/knowledge_tracing/akt/checkpoint.py; prediction.py; tests/akt/",
+      "implementation_objective": "Diagnose hard-link capability và lựa chọn immutable atomic publish không overwrite, giữ old artifact compatibility",
+      "acceptance_criteria": "Synthetic checkpoint/export suite pass trên supported Windows/Linux fs, permissions fail đúng, no overwrite race",
+      "verification_steps": "Small isolated filesystem probes, interrupted publish, hash/reload checks",
+      "required_artifacts": "fs-capability.json, test logs, artifact-schema-v1.json",
+      "estimated_effort": "1.5–2.5pd",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "local",
+      "authorization_requirements": "SAFE_ENGINEERING_AFTER_INSTRUCTION",
+      "status": "PARTIALLY_VERIFIED",
+      "blockers": [
+        "Windows native no-overwrite publish và existing integration verified, Linux GPU/Volume validation pending"
+      ],
+      "execution_owner": "Codex",
+      "evidence": [
+        "evidence/b0-filesystem-tests-20261107.log",
+        "evidence/b0-full-tests-20261107.log"
+      ]
+    },
+    {
+      "id": "T08",
+      "research_objective": "Chuẩn bị pinned CUDA image và bounded entrypoint",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "gpu",
+      "priority": "P0",
+      "owner": "Sang",
+      "dependencies": [
+        "T02",
+        "T07"
+      ],
+      "required_inputs": "upstream hash, CPU lock, stage specs",
+      "files_components": "future scripts/akt/modal_plan_runner.py; akt/config.py; authorization.py",
+      "implementation_objective": "Add explicit CUDA validation phases with per-run caps, Linux paths, image lock, no self approval",
+      "acceptance_criteria": "Local schema rejects missing auth/budget/mismatch, CUDA smoke job at most oneGPU, no auto next-stage",
+      "verification_steps": "Mock remote lifecycle, local import/preflight tests",
+      "required_artifacts": "image digest/lock, run-spec schema, dry-run log",
+      "estimated_effort": "2–3pd",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "local",
+      "authorization_requirements": "SAFE_PREPARATION; CLOUD_APPROVAL_FOR_RUN",
+      "status": "PLANNED",
+      "blockers": [
+        "Chưa CUDA runtime"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T09",
+      "research_objective": "Triển khai bốn graph residual variants và causal tests",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "models",
+      "priority": "P0",
+      "owner": "Sang",
+      "dependencies": [
+        "T02",
+        "T05"
+      ],
+      "required_inputs": "06 architecture approved, pinned AKT",
+      "files_components": "future akt graph augmentation module; tests/akt/",
+      "implementation_objective": "Implement A0,A1,A2,A3 with per-edge c, observed mask, g and exact branch disable",
+      "acceptance_criteria": "g0 same-backbone parity, empty/c0 zero, no future/current label leak, oracle inputs inaccessible",
+      "verification_steps": "Synthetic forward/backward, map permutation, parameter counts",
+      "required_artifacts": "model-spec.json, unit logs, source hashes",
+      "estimated_effort": "2–4pd",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "local",
+      "authorization_requirements": "ARCHITECTURE_APPROVAL_THEN_SAFE",
+      "status": "PLANNED",
+      "blockers": [
+        "Chưa triển khai"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T10",
+      "research_objective": "Sinh dataset simulator Development riêng",
+      "rq": [
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "data",
+      "priority": "P0",
+      "owner": "Dương",
+      "dependencies": [
+        "T02",
+        "T04",
+        "T05"
+      ],
+      "required_inputs": "frozen env dynamics và approved mixture policy",
+      "files_components": "future simulator generator/cache/",
+      "implementation_objective": "Generate bounded1k learner cohort trước, coverage all items, split disjoint train/val/calibration, final seeds reserved",
+      "acceptance_criteria": "No seed/learner overlap, stable order and labels, env truth stored eval-only, target counts exact",
+      "verification_steps": "Hash repeat generation, leakage audit, coverage strata",
+      "required_artifacts": "sim-data-manifest, logs parquet, split hashes",
+      "estimated_effort": "1.5–3pd + CPU run",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "bounded CPU",
+      "authorization_requirements": "BOUNDED_EXECUTION_APPROVAL",
+      "status": "PLANNED",
+      "blockers": [
+        "Dataset chưa có"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T11",
+      "research_objective": "Triển khai mid-epoch resume và consumed-window ledger",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "systems",
+      "priority": "P0",
+      "owner": "Sang",
+      "dependencies": [
+        "T07"
+      ],
+      "required_inputs": "shuffle buffer, optimizer/RNG, stopper semantics",
+      "files_components": "akt/training.py; checkpoint.py; runner.py; tests/akt/",
+      "implementation_objective": "Save sampler/cursor/buffer/RNG/global_step/stopper and resume CLI at optimizer boundary",
+      "acceptance_criteria": "Continuous20 vs10+resume10 same consumed IDs and numeric tolerance, committed-step metric accounting",
+      "verification_steps": "Synthetic interrupt during publish, after step, before commit",
+      "required_artifacts": "resume contract, logs, checkpoint certificates",
+      "estimated_effort": "2–3pd",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "local",
+      "authorization_requirements": "SAFE_ENGINEERING_AFTER_INSTRUCTION",
+      "status": "PLANNED",
+      "blockers": [
+        "Chỉ checkpoint cuối epoch"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T12",
+      "research_objective": "Xây edge reliability và oracle-separated calibration",
+      "rq": [
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "graph",
+      "priority": "P0",
+      "owner": "Dương",
+      "dependencies": [
+        "T02",
+        "T06",
+        "T10"
+      ],
+      "required_inputs": "train sequences, candidate graphs, noise generator",
+      "files_components": "future graph confidence estimator/calibrator",
+      "implementation_objective": "Implement frozen simple reliability bootstrap train-only, separate oracle ceiling, held graph realization calibration",
+      "acceptance_criteria": "No final true labels training main model, stability score labelled đúng, edge metrics valid on held graphs",
+      "verification_steps": "Synthetic known edges, shuffled confidence negative control, fit-ID audit",
+      "required_artifacts": "edge-confidence.parquet, provenance, calibration report",
+      "estimated_effort": "2–3pd",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "bounded CPU",
+      "authorization_requirements": "METHOD_AND_BOUNDED_APPROVAL",
+      "status": "PLANNED",
+      "blockers": [
+        "Identifiability cần kiểm"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T13",
+      "research_objective": "Chạy chẩn đoán ba trap và causal-chain GAM",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "experiments",
+      "priority": "P0",
+      "owner": "Dương",
+      "dependencies": [
+        "T02",
+        "T03",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "required_inputs": "E02–E06 specs, P2 fixture adapters",
+      "files_components": "future diagnostic harness/; P2 frozen reference read-only",
+      "implementation_objective": "Implement/run invariant tests, local/parent adaptation ablations, paired λ×graph, order negative controls",
+      "acceptance_criteria": "Trace đủ6tầng, proof/counterexample đúng, paired base states equal, no historical output modified",
+      "verification_steps": "Synthetic fixtures trước, bounded simulator runs sau approval",
+      "required_artifacts": "E02–E06 trace tables, intervention manifests",
+      "estimated_effort": "3–5pd + CPU",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "bounded CPU",
+      "authorization_requirements": "SAFE_TESTS; EXPERIMENT_APPROVAL",
+      "status": "PLANNED",
+      "blockers": [
+        "Source P1 unresolved"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T14",
+      "research_objective": "CUDA ladder stages1–4 và recovery durability",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "gpu",
+      "priority": "P0",
+      "owner": "Sang",
+      "dependencies": [
+        "T08",
+        "T11"
+      ],
+      "required_inputs": "signed run-spec, image, synthetic+approved Dev cohort",
+      "files_components": "future modal_plan_runner.py",
+      "implementation_objective": "Execute approved stages separately with acceptance review, Volume commit/reload and cancellation",
+      "acceptance_criteria": "Finite GPU steps, exact sample ledger, complete small lifecycle/export, durable checkpoints",
+      "verification_steps": "07 ladder verify artifacts not exit status, no automatic retry",
+      "required_artifacts": "stage1–4 reports, hashes, actual billed telemetry",
+      "estimated_effort": "1–2pd +≤60minGPU",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "GPU bounded",
+      "authorization_requirements": "EXPLICIT_CLOUD_AND_DATA_APPROVAL",
+      "status": "PLANNED",
+      "blockers": [
+        "Chưa authorization"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T15",
+      "research_objective": "Throughput benchmark và stage6 projection",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "gpu",
+      "priority": "P0",
+      "owner": "Sang + Dương",
+      "dependencies": [
+        "T14"
+      ],
+      "required_inputs": "accepted lifecycle, representative length cohort, cost rates",
+      "files_components": "future GPU benchmark/projection tool",
+      "implementation_objective": "Measure train/val targets/s, load/export/checkpoint overhead, compare GPUs only bounded if approved",
+      "acceptance_criteria": "Projected full matrix budget/deadline using p10 throughput accepted, source/config stable",
+      "verification_steps": "Synchronized timing, target counts, VRAM/RAM, actual cost/target",
+      "required_artifacts": "stage5–6 benchmark.json, cost-matrix.json",
+      "estimated_effort": "1pd +≤2.5hGPU",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "GPU bounded",
+      "authorization_requirements": "EXPLICIT_BUDGET_APPROVAL",
+      "status": "PLANNED",
+      "blockers": [
+        "UNKNOWN throughput"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T16",
+      "research_objective": "AKT Junyi Development evaluation được duyệt",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "models",
+      "priority": "P1",
+      "owner": "Sang",
+      "dependencies": [
+        "T02",
+        "T15"
+      ],
+      "required_inputs": "frozen assignments, approved full protocol, expected target counts",
+      "files_components": "akt/runner.py; experiments/akt/",
+      "implementation_objective": "One fold per auth, inner epoch selection and outer refit or approved protocol alternative",
+      "acceptance_criteria": "All allocated folds complete, common/OOV metrics valid, recovered identity exact",
+      "verification_steps": "Artifact contract, learner cluster comparisons, cost ledger",
+      "required_artifacts": "checkpoints,predictions, fold metrics, CV summary",
+      "estimated_effort": "1–2pd + measured GPU hours",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "GPU full",
+      "authorization_requirements": "FULL_DEV_CV_APPROVAL",
+      "status": "PLANNED",
+      "blockers": [
+        "Budget forecast pending"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T17",
+      "research_objective": "Chuẩn hóa SAKT comparator",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "baselines",
+      "priority": "P1",
+      "owner": "Sang",
+      "dependencies": [
+        "T02",
+        "T05"
+      ],
+      "required_inputs": "pinned upstream/provenance, shared sequence schema",
+      "files_components": "future knowledge_tracing/sakt/; tests/",
+      "implementation_objective": "Minimal adapter causal mask/OOV/export, train/eval allocated env",
+      "acceptance_criteria": "Synthetic causality+coverage pass, accepted fit and metrics in approved comparator matrix",
+      "verification_steps": "Same target join, source pin, train-only vocab",
+      "required_artifacts": "SAKT provenance/checkpoint/predictions",
+      "estimated_effort": "2–3pd + GPU measured",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "GPU bounded/full",
+      "authorization_requirements": "MODEL_PROTOCOL_AND_EXECUTION_APPROVAL",
+      "status": "PLANNED",
+      "blockers": [
+        "Chưa source pinned"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T18",
+      "research_objective": "Chuẩn hóa GKT comparator",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "baselines",
+      "priority": "P1",
+      "owner": "Sang + Dương",
+      "dependencies": [
+        "T02",
+        "T04",
+        "T05"
+      ],
+      "required_inputs": "pinned GKT variant, concept/item graph mapping",
+      "files_components": "future knowledge_tracing/gkt/; tests/",
+      "implementation_objective": "Minimal graph-state adapter with explicit graph source and response updates",
+      "acceptance_criteria": "No future labels, mapping/graph hash exact, allocated fits accepted",
+      "verification_steps": "Causal tests, empty graph sanity, common-population metrics",
+      "required_artifacts": "GKT provenance/checkpoint/predictions",
+      "estimated_effort": "2–3pd + GPU measured",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "GPU bounded/full",
+      "authorization_requirements": "MODEL_PROTOCOL_AND_EXECUTION_APPROVAL",
+      "status": "PLANNED",
+      "blockers": [
+        "Chưa chọn variant"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T19",
+      "research_objective": "Fit simulator A0–A3 và registered ablations",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "experiments",
+      "priority": "P0",
+      "owner": "Sang",
+      "dependencies": [
+        "T09",
+        "T10",
+        "T12",
+        "T15"
+      ],
+      "required_inputs": "approved confidence/main/noise graphs, datasets and seeds",
+      "files_components": "future simulator model runner/",
+      "implementation_objective": "Train separate4variants shared init,1seed core first then3 if approved",
+      "acceptance_criteria": "Full checkpoints/export/calibration, no forced improvement, core comparators đầy đủ",
+      "verification_steps": "Accepted stage7 artifact contract for simulator, negative confidence controls",
+      "required_artifacts": "E07/E08 model artifacts and tables",
+      "estimated_effort": "2–3pd + measured GPU",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "GPU full",
+      "authorization_requirements": "EXPLICIT_EXPERIMENT_AND_BUDGET_APPROVAL",
+      "status": "PLANNED",
+      "blockers": [
+        "Chưa train data/architecture"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T20",
+      "research_objective": "Closed-loop và noise/history conditions",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "experiments",
+      "priority": "P0",
+      "owner": "Dương",
+      "dependencies": [
+        "T13",
+        "T19"
+      ],
+      "required_inputs": "frozen checkpoints/mastery calibration, final seed manifest",
+      "files_components": "future simulator evaluation/",
+      "implementation_objective": "Paired50 seeds/profile main, selected noise grid, controller on/off diagnostic",
+      "acceptance_criteria": "Same base/uniforms, targets and action trace complete, retained relation documented, RMST/censor",
+      "verification_steps": "E09/E06 contract plus true-state inaccessible training",
+      "required_artifacts": "closed-loop traces, outcomes, seed-paired deltas",
+      "estimated_effort": "2–4pd + inference",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "CPU/GPU inference",
+      "authorization_requirements": "BOUNDED_EXPERIMENT_APPROVAL",
+      "status": "PLANNED",
+      "blockers": [
+        "Model checkpoints pending"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T21",
+      "research_objective": "Demo nghiên cứu fixture rồi verified artifacts",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "demo",
+      "priority": "P1",
+      "owner": "Sang",
+      "dependencies": [
+        "T05"
+      ],
+      "required_inputs": "profile/model/graph schemas, fixture traces",
+      "files_components": "future research_demo/",
+      "implementation_objective": "Viewer state/confidence/ready/next action/route/outcomes, later artifact loader",
+      "acceptance_criteria": "Scenario/model/graph selection works, predictions and replay exact, source/run provenance visible",
+      "verification_steps": "Manual checklist/screenshots, stale/missing artifact tests",
+      "required_artifacts": "demo source, screenshots, replay validation",
+      "estimated_effort": "2–3pd, parallel",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "local",
+      "authorization_requirements": "SAFE_ENGINEERING_AFTER_INSTRUCTION",
+      "status": "PLANNED",
+      "blockers": [
+        "Chưa có UI"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T22",
+      "research_objective": "Thống kê và selection stability",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "statistics",
+      "priority": "P0",
+      "owner": "Dương",
+      "dependencies": [
+        "T16",
+        "T17",
+        "T18",
+        "T20"
+      ],
+      "required_inputs": "registered primary families, common-row predictions/outcomes",
+      "files_components": "paired_bootstrap.py; future research stats/",
+      "implementation_objective": "Learner/seed cluster CI, Holm families, graph-free/fixed/CG stability selection Dev",
+      "acceptance_criteria": "Counts/unit/families exact, negative/inconclusive interpreted đúng, no Test-informed selection",
+      "verification_steps": "Synthetic known deltas and bootstrap checks, independent table reconciliation",
+      "required_artifacts": "statistics manifest, CI tables, claims ledger",
+      "estimated_effort": "2–3pd + CPU",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "local/CPU",
+      "authorization_requirements": "FINAL_SELECTION_APPROVAL_IF_APPLIED",
+      "status": "PLANNED",
+      "blockers": [
+        "Results pending"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T23",
+      "research_objective": "Viết thesis và article draft liên tục",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "writing",
+      "priority": "P1",
+      "owner": "Cả hai",
+      "dependencies": [
+        "T01",
+        "T02"
+      ],
+      "required_inputs": "proposal, baseline report, approved methods, available evidence",
+      "files_components": "future thesis/; research_tracking/",
+      "implementation_objective": "Start literature/methods/limitations now, add result table references as accepted",
+      "acceptance_criteria": "Every claim references run/source, all RQs and proposal deliverables covered, article draft ready14/12",
+      "verification_steps": "Cross-check claims ledger, advisor review",
+      "required_artifacts": "thesis draft, article draft, decision response",
+      "estimated_effort": "6–9pd across weeks",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "local",
+      "authorization_requirements": "SAFE_WRITING",
+      "status": "PLANNED",
+      "blockers": [
+        "Chưa manuscript tích hợp"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T24",
+      "research_objective": "Freeze results, hoàn thiện thesis và reproducibility package",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "delivery",
+      "priority": "P0",
+      "owner": "Cả hai",
+      "dependencies": [
+        "T21",
+        "T22",
+        "T23"
+      ],
+      "required_inputs": "verified artifacts, demo, drafts",
+      "files_components": "research_tracking/; final package/",
+      "implementation_objective": "Finalize sources/config/seeds/hash and relocation references, update docs without historical modification",
+      "acceptance_criteria": "All mandatory requirements signed off, offline smoke guide works, private IDs excluded public package",
+      "verification_steps": "Independent manifest reconciliation, no artifact moves without inventory compare",
+      "required_artifacts": "final thesis/article/demo/reproduction index",
+      "estimated_effort": "3–4pd + advisor1week",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "local",
+      "authorization_requirements": "PUBLICATION_OR_SCOPE_APPROVAL_AS_NEEDED",
+      "status": "PLANNED",
+      "blockers": [
+        "Pending scientific evidence"
+      ],
+      "execution_owner": "Codex"
+    },
+    {
+      "id": "T25",
+      "research_objective": "Chuẩn bị bảo vệ và nộp",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "delivery",
+      "priority": "P0",
+      "owner": "Cả hai",
+      "dependencies": [
+        "T24"
+      ],
+      "required_inputs": "final review, demo snapshots, thesis",
+      "files_components": "future defense/",
+      "implementation_objective": "Slides and scripted demo with offline verified trace fallback, rehearse limitations/negative findings",
+      "acceptance_criteria": "Submission checklist signed by29/12, reproducible demo and RQ answers clear",
+      "verification_steps": "Two rehearsals, final file integrity check",
+      "required_artifacts": "slides, defense notes, submission receipt",
+      "estimated_effort": "3–4pd, finalweek",
+      "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
+      "compute_cost_category": "local",
+      "authorization_requirements": "SUBMISSION_APPROVAL",
+      "status": "PLANNED",
+      "blockers": [
+        "Pending final review"
+      ],
+      "execution_owner": "Codex"
+    }
+  ],
+  "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud"
+}
