@@ -16,7 +16,7 @@ from knowledge_tracing.gam_kt.model import build_model
 ROOT = Path(__file__).resolve().parents[2]
 NOTEBOOK = (
     ROOT
-    / "drive-download-20261018T084013Z-1-001"
+    / "paper2"
     / "rivf2026_gam_kt_artifact_v20"
     / "rivf2026_gam_kt_artifact_v20"
     / "source"
