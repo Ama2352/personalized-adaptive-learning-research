@@ -92,7 +92,7 @@
     "dag": "PASS",
     "json": "PASS",
     "retention_fixture": "PASS",
-    "current_suite": "179 passed on2026-11-07",
+    "current_suite": "186 passed on2026-11-07",
     "git_diff_check_exit_code": 0
   },
   "engineering_loop_plan": {
@@ -102,7 +102,7 @@
     "local_model_engineering_requested": true,
     "paid_execution_authorized": false,
     "methodology_decisions": "09/S01–S07 còn proposed",
-    "next_batch": "T11 mid-epoch resume, T04/T05 contracts và actual Colab CUDA run khi có runtime",
+    "next_batch": "T11 sampler/cursor và trainer counters integration, sau đó interruption/recovery toàn epoch",
     "research_diagnosis_parallel_with_models": true,
     "execution_owner": "Codex cho toàn bộ implementation và research tooling",
     "modal_assumed_available": true,
@@ -124,6 +124,14 @@
     "mid_epoch_resume_verified": false,
     "gate2_pointer": "Historical pointer giữ nguyên, source đã đổi cần fresh Gate2 evidence trước real-data execution",
     "bundle": "artifacts/akt/colab/akt-synthetic-20261107-v2.zip",
-    "notebook": "notebooks/akt_colab_synthetic.ipynb"
+    "notebook": "notebooks/akt_colab_synthetic.ipynb",
+    "recovery_checkpoint_api": {
+      "status": "VERIFIED_CPU",
+      "suite": "186 passed in46.89s",
+      "scope": "Model/Adam/RNG restore ở optimizer boundary, real AKT next-step exact parity",
+      "sampler_trainer_loop_integrated": false,
+      "log": "evidence/recovery-suite-20261107.log",
+      "source_sha256": "72db90a37e18e03fc0056a00e8e54f838169569359653cfe3ca32e8bd19df4cc"
+    }
   }
 }
