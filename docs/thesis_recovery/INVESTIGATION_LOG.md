@@ -41,3 +41,13 @@ Bộ Colab synthetic đã commit6ff0532. Lưu tracking/evidence scoped trong com
 ## 07/11/2026 — Loop T11, recovery checkpoint API
 
 Triển khai save/load/restore recovery checkpoint riêng với kind training_recovery_v1, validation epoch/step/state, giữ định dạng complete-epoch và bảo vệ output cũ. Recovery checkpoint bị từ chối bởi loader/restore dùng model selection. Test actual AKT+Adam với dropout so optimizer update tiếp theo sau restore, exact weights/loss và RNG draws CPU. Existing checkpoint tests vẫn đạt. Fullsuite186passed46.89s, evidence/recovery-suite-20261107.log. Lần đầu setup test lỗi do parent basetemp chưa có, đã tạo parent và rerun bằng directory mới, không thay implementation vì lỗi môi trường. T11 vẫn IN_PROGRESS, sampler/trainer loop và CLI chưa tích hợp, chưa khẳng định full mid-epoch lifecycle. Không thực thi cloud, dữ liệu thật hoặc Holdout.
+
+## 07/11/2026 — Phiên engineering từ chỉ thị đính kèm
+
+Đọc chỉ thị, AGENTS và durable state. Xác minh sys.executable/sys.prefix/pip đúng.venv, không cài dependency. Gói1 paired trace diagnostics source +9tests mới, shared suite19pass,commit40b61a6. Gói2 paired factorial identities+6tests và AST historical theta_at fixture, shared25pass,commit88db625. Actual source method hash và notebook hash trong paper2-retention-source-fixture.json, factor.43171052342907973,error1.7053e-13. Không rerun historical experiment.
+
+Gói3 replayable shuffled-window cursor+13tests,20checks sampler/recoverypass,commit1d63b35. Bảo toàn original shuffle order, đọc/hash prefix O(prefix), no optimizer replay. Gói4 DAG delete/add/reverse +9tests,shared34pass,commit161b66b. Không gọi các graphs này degree-matched null controls.
+
+Gói5 resumable epoch Python entrypoint+2integration tests,commit7048419. Interrupt sau step2 và resume khớp original train_epoch exact weights/loss,17targets,9windows,5updates. Caps cộng dồn, changed stream reject. Chưa nối gated CLI/selection/refit hoặc early-stopper history, chưa GPU/realdata. Intermediate fullsuite223pass41.42s, final225pass44.55s.
+
+Source/architecture phương pháp chưa được approved giữ pending. Thêm runbook12 nêu inputs/acceptance/limitations. T06,T11,T13 còn IN_PROGRESS đúng scope. Phiên có nhiều gói được commit, chưa chạy đủ3giờ và chưa hoàn tất KLTN. Next ready batch là selection/refit/stopper integration và paired trace adapter, không có cloud spend/Holdout access.

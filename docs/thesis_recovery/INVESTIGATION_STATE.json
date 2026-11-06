@@ -76,7 +76,7 @@
   "critical_blockers": [
     "Paper1 provenance unresolved",
     "simulator vocabulary/mastery/training contract chưa accepted",
-    "no CUDA lifecycle or mid-epoch resume proof",
+    "CUDA lifecycle chưa kiểm, CPU synthetic epoch resume đã verified, CLI integration pending",
     "no measured throughput/approved full matrix budget",
     "mandatory baseline allocation pending",
     "Linux/Colab GPU publish/lifecycle chưa thực chạy, Windows local fix đã verified"
@@ -92,7 +92,7 @@
     "dag": "PASS",
     "json": "PASS",
     "retention_fixture": "PASS",
-    "current_suite": "186 passed on2026-11-07",
+    "current_suite": "225 passed on2026-11-07",
     "git_diff_check_exit_code": 0
   },
   "engineering_loop_plan": {
@@ -102,7 +102,7 @@
     "local_model_engineering_requested": true,
     "paid_execution_authorized": false,
     "methodology_decisions": "09/S01–S07 còn proposed",
-    "next_batch": "T11 sampler/cursor và trainer counters integration, sau đó interruption/recovery toàn epoch",
+    "next_batch": "Nối resumable epoch vào gated selection/refit, early-stopper và best-checkpoint history; tích hợp paired trace harness",
     "research_diagnosis_parallel_with_models": true,
     "execution_owner": "Codex cho toàn bộ implementation và research tooling",
     "modal_assumed_available": true,
@@ -121,7 +121,7 @@
     },
     "synthetic_probe": "passed_synthetic CPU,1optimizer step,400targets,checkpoint reload/export/causal invariance",
     "cuda_executed": false,
-    "mid_epoch_resume_verified": false,
+    "mid_epoch_resume_verified": "CPU synthetic epoch entrypoint only, CLI/cloud pending",
     "gate2_pointer": "Historical pointer giữ nguyên, source đã đổi cần fresh Gate2 evidence trước real-data execution",
     "bundle": "artifacts/akt/colab/akt-synthetic-20261107-v2.zip",
     "notebook": "notebooks/akt_colab_synthetic.ipynb",
@@ -133,5 +133,37 @@
       "log": "evidence/recovery-suite-20261107.log",
       "source_sha256": "72db90a37e18e03fc0056a00e8e54f838169569359653cfe3ca32e8bd19df4cc"
     }
+  },
+  "latest_engineering_batch": {
+    "as_of": "2026-11-07",
+    "scope": "Local RQ diagnostics and AKT interrupted epoch, no cloud/data benchmark",
+    "interpreter": "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+    "dependencies_installed": false,
+    "commits": [
+      "40b61a6",
+      "88db625",
+      "1d63b35",
+      "161b66b",
+      "7048419"
+    ],
+    "verification": {
+      "rq1_shared_tests": "19 passed",
+      "rq2_shared_tests": "25 passed",
+      "sampler_recovery_tests": "20 passed",
+      "graph_shared_tests": "34 passed",
+      "resumable_epoch_tests": "2 passed",
+      "final_akt_shared_gam": "225 passed in44.55s"
+    },
+    "rq1": "Paired prediction/mastery/ready/action diagnostics verified on synthetic fixtures, model/controller trace integration pending",
+    "rq2": "Actual historical retention-method fixture, paired factorial guards, deterministic DAG perturbations, no empirical effectiveness claim",
+    "rq3": "AKT CPU epoch interruption/resume parity verified, graph model architecture unchanged",
+    "remaining": [
+      "CLI selection/refit and early-stopper integration",
+      "CUDA/Colab/Modal actual runtime verification",
+      "Accepted mastery/confidence/model-dataset protocol",
+      "Historical Paper1 revision",
+      "Model experiments and inferential analysis"
+    ],
+    "runbook": "12_RESEARCH_TOOLING_RUNBOOK.md"
   }
 }
