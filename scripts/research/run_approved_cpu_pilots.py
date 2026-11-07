@@ -22,6 +22,9 @@ from knowledge_tracing.gam_kt.practice_order import summarize_practice_order
 from knowledge_tracing.akt.data import read_development_assignments
 from knowledge_tracing.akt.runner import _data_paths
 from knowledge_tracing.akt.splits import make_inner_split
+from knowledge_tracing.gam_kt.catalog_graph import correct_with_historical_rule
+from knowledge_tracing.graph_controls import rewire_matched_graph
+from knowledge_tracing.shared_kt import PrerequisiteGraph
 
 
 def write(directory, name, payload):
@@ -92,7 +95,7 @@ outcomes.json lưu4cells cùng latent/random identity mỗi seed/profile. contra
     return directory
 
 
-def junyi_order(run_id):
+def junyi_order(run_id, *, matched_controls=False):
     paths=_data_paths()
     assignments=read_development_assignments(paths)
     split=make_inner_split(assignments,outer_fold=0)
@@ -105,11 +108,18 @@ def junyi_order(run_id):
     sources=[ROOT/'scripts/research/run_approved_cpu_pilots.py',ROOT/'src/knowledge_tracing/evidence.py',
              ROOT/'src/knowledge_tracing/gam_kt/practice_order.py',catalog,paths.assignments,
              paths.canonical_manifest,paths.split_manifest]
+    if matched_controls:
+        sources += [ROOT/'src/knowledge_tracing/gam_kt/catalog_graph.py',
+                    ROOT/'src/knowledge_tracing/graph_controls.py',
+                    ROOT/'paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/junyi_cycle_corrected_ablation_confirmation.ipynb']
     metadata={'kind':'approved_cpu_junyi_order_pilot','rq':['RQ2'],'authorization':'User approved CPU09/CPU10 limits2026-11-07',
               'outer_fold':0,'scope':'inner-train learners only','max_learners':32,'max_events_per_learner':120,
               'max_seconds':120,'cohort_sha256':hashlib.sha256(json.dumps(sorted(cohort)).encode()).hexdigest(),
               'graph_source':'catalog prerequisites, comma-delimited parent→exercise','uses_correct_labels':False,
               'duckdb_memory':'512MB','duckdb_threads':2}
+    metadata['matched_controls'] = matched_controls
+    metadata['control_spec'] = {'seeds':[0,1,2], 'requested_swaps':10,
+        'support_bins':['0','1-2','3-5','6+'], 'support_scope':'same approved inner-train cohort prefix'} if matched_controls else None
     note='''# Pilot Junyi first-exposure order
 
 Tối đa32learner inner-train của outer-fold0,120events/learner, hash-selected cohort. Chỉ đọc user/exercise/time_done/source_row, không dùng correctness labels hoặc Holdout. Metadata graph từ prerequisites của exercise catalog, không dùng relationship_annotation_testing.
@@ -134,19 +144,56 @@ order_summary.json chứa co-observation và hướng first exposure trên prefi
         self_edges=[edge for edge in edges if edge[0]==edge[1]]
         usable=[edge for edge in edges if edge[0]!=edge[1]]
         rows=data.to_dict('records')
-        write(directory,'order_summary.json',summarize_practice_order(rows,usable,allowed_users=set(cohort),outer_fold=0))
+        summary = summarize_practice_order(rows,usable,allowed_users=set(cohort),outer_fold=0)
+        write(directory,'order_summary.json',summary)
         write(directory,'reverse_summary.json',summarize_practice_order(rows,[(b,a) for a,b in usable],allowed_users=set(cohort),outer_fold=0))
         names=set(frame.name.astype(str))
         write(directory,'catalog_audit.json',{'catalog_exercises':len(names),'edges':len(edges),
             'self_edges':self_edges,'missing_parent_endpoints':sorted({a for a,b in edges if a not in names}),
             'actual_learners':len(cohort),'actual_events':len(rows)})
+        if matched_controls:
+            corrected = correct_with_historical_rule(frame.name.astype(str).tolist(),edges)
+            graph = PrerequisiteGraph.from_edges(corrected['nodes'], corrected['corrected_edges'])
+            support = summary['exercise_learner_support']
+            topics = dict(zip(frame.name.astype(str),frame.topic.astype(str)))
+            areas = dict(zip(frame.name.astype(str),frame.area.astype(str)))
+            def support_bin(node):
+                count = support.get(node,0)
+                if count == 0:
+                    return '0'
+                if count <= 2:
+                    return '1-2'
+                return '3-5' if count <= 5 else '6+'
+            strata = {node:json.dumps([areas[node],support_bin(node)]) for node in graph.nodes}
+            write(directory,'support_strata.json',{'learner_support':support,'topic':topics,
+                                                   'area_support_strata':strata})
+            write(directory,'corrected_graph.json',corrected)
+            controls=[]
+            for seed in [0,1,2]:
+                try:
+                    result = rewire_matched_graph(graph,swaps=10,chapters=topics,node_strata=strata,seed=seed)
+                except ValueError as error:
+                    controls.append({'seed':seed,'status':'unavailable','reason':str(error)})
+                    continue
+                changed = set(graph.edges) ^ set(result.graph.edges)
+                controls.append({'seed':seed,'status':'constructed','edges':result.graph.edges,
+                    'applied_swaps':result.applied_changes,'original_sha256':result.original_sha256,
+                    'result_sha256':result.result_sha256,'changed_edge_entries':len(changed),
+                    'changed_entries_with_both_endpoints_observed':sum(support.get(a,0)>0 and support.get(b,0)>0 for a,b in changed),
+                    'order':summarize_practice_order(rows,result.graph.edges,allowed_users=set(cohort),outer_fold=0)})
+            write(directory,'matched_controls.json',controls)
+            (directory/'CONTROL_NOTE.md').write_text(
+                '# Matched-control feasibility\n\nGiữ degree, node set và joint topic/area/prefix-support-bin pair counts trên reconstructed DAG. '
+                'Ba seed cố định,10swap mỗi control, không uniform graph sampler. Support từ đúng32inner-train prefixes, '
+                'không phải full train support. Changed-edge coverage cho biết controls có thực sự đổi cạnh được cohort quan sát hay không. '
+                'Chưa là graph predictive benefit hoặc causal experiment. Không dùng control chỉ đổi unsupported edges để kết luận graph neutral.\n',encoding='utf-8')
     return directory
 
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
-    parser.add_argument('mode',choices=('factorial','junyi-order'))
+    parser.add_argument('mode',choices=('factorial','junyi-order','junyi-controls'))
     parser.add_argument('--run-id',required=True)
     args=parser.parse_args()
-    path=factorial(args.run_id) if args.mode=='factorial' else junyi_order(args.run_id)
+    path=factorial(args.run_id) if args.mode=='factorial' else junyi_order(args.run_id,matched_controls=args.mode=='junyi-controls')
     print(json.dumps({'run':str(path.relative_to(ROOT)),**verify_evidence_bundle(path)},ensure_ascii=False))

@@ -84,18 +84,23 @@ def perturb_graph(graph: PrerequisiteGraph, *, operation: str, count: int, seed:
 
 
 def rewire_matched_graph(graph: PrerequisiteGraph, *, swaps: int, chapters: dict[str, str],
-                         seed: int = 42) -> PerturbedGraph:
+                         seed: int = 42, node_strata: dict[str, str] | None = None) -> PerturbedGraph:
     """Double-edge swap giữ in/out-degree và số cạnh mỗi chapter pair.
 
     Đây là constrained sensitivity control, không lấy mẫu đều mọi DAG.
     Mỗi cạnh gốc chỉ được dùng một lần, không undo để đạt số swap giả.
-    Support/frequency chưa được matching và phải kiểm riêng trên Junyi.
+    node_strata tùy chọn giữ joint chapter/stratum pair counts, ví dụ support-bin
+    được caller tính trên train-only data. Không tự suy bin từ dữ liệu khác.
     """
     if type(swaps) is not int or swaps < 0 or type(seed) is not int:
         raise ValueError('invalid matched rewiring request')
     checked = PrerequisiteGraph.from_edges(graph.nodes, graph.edges)
     if set(chapters) != set(checked.nodes) or not _acyclic(checked.nodes, checked.edges):
         raise ValueError('matched rewiring requires DAG and complete chapter mapping')
+    strata = dict.fromkeys(checked.nodes, '') if node_strata is None else node_strata
+    if set(strata) != set(checked.nodes) or any(not isinstance(value, str) for value in strata.values()):
+        raise ValueError('matched rewiring requires complete string strata')
+    labels = {node: (chapters[node], strata[node]) for node in checked.nodes}
     edges = set(checked.edges)
     candidates = list(combinations(checked.edges, 2))
     random.Random(seed).shuffle(candidates)
@@ -108,8 +113,8 @@ def rewire_matched_graph(graph: PrerequisiteGraph, *, swaps: int, chapters: dict
         replacement = {(a, d), (c, b)}
         if a == d or c == b or replacement & edges or replacement & set(checked.edges):
             continue
-        old_pairs = Counter([(chapters[a], chapters[b]), (chapters[c], chapters[d])])
-        new_pairs = Counter([(chapters[a], chapters[d]), (chapters[c], chapters[b])])
+        old_pairs = Counter([(labels[a], labels[b]), (labels[c], labels[d])])
+        new_pairs = Counter([(labels[a], labels[d]), (labels[c], labels[b])])
         proposed = edges - {(a, b), (c, d)} | replacement
         if old_pairs == new_pairs and _acyclic(checked.nodes, proposed):
             edges = proposed

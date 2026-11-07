@@ -34,4 +34,6 @@ def summarize_practice_order(events, edges, *, allowed_users, outer_fold, max_ev
                         'parent_first_count': precedes, 'child_first_count': len(together)-precedes,
                         'parent_first_fraction': precedes/len(together) if together else None})
     return {'learners': len(first), 'events': sum(counts.values()), 'edges': results,
+            'exercise_learner_support': dict(sorted(Counter(exercise for mapping in first.values()
+                                                           for exercise in mapping).items())),
             'scope': 'First exposure in bounded observed prefix, no causal instructional interpretation'}

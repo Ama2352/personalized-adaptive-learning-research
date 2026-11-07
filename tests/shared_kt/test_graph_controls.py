@@ -4,10 +4,26 @@ import pytest
 
 from knowledge_tracing.graph_controls import graph_fingerprint, perturb_graph
 from knowledge_tracing.shared_kt import PrerequisiteGraph
+from knowledge_tracing.graph_controls import rewire_matched_graph
+from collections import Counter
 
 
 def graph():
     return PrerequisiteGraph.from_edges(['A','B','C','isolated'], [('A','B'),('B','C')])
+
+
+def test_matched_rewiring_preserves_joint_topic_support_pair_counts():
+    original = PrerequisiteGraph.from_edges(['A','B','C','D'], [('A','C'),('B','D')])
+    chapters = dict.fromkeys(original.nodes, 'topic')
+    strata = {'A':'low','B':'low','C':'high','D':'high'}
+    result = rewire_matched_graph(original, swaps=1, chapters=chapters, node_strata=strata)
+    pair_counts = lambda edges: Counter((strata[a],strata[b]) for a,b in edges)
+    assert pair_counts(result.graph.edges) == pair_counts(original.edges)
+    with pytest.raises(ValueError, match='insufficient'):
+        rewire_matched_graph(original, swaps=1, chapters=chapters,
+                             node_strata={'A':'1','B':'2','C':'3','D':'4'})
+    with pytest.raises(ValueError, match='strata'):
+        rewire_matched_graph(original, swaps=1, chapters=chapters,node_strata={'A':'1'})
 
 
 @pytest.mark.parametrize('operation', ['delete', 'add', 'reverse'])
