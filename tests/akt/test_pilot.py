@@ -150,6 +150,13 @@ def test_pilot_completed_cycle_reloads_checkpoint_and_exports_aligned_prediction
     monkeypatch.setattr(runner, '_require_authorization', lambda *args: approved)
     monkeypatch.setattr(runner, '_require_gate2_evidence', lambda _: {'status': 'PASS'})
     monkeypatch.setattr(runner, '_check_resource_budget', lambda budget: 1)
+    # Đây là lifecycle fixture. Resource thresholds được kiểm bằng snapshots
+    # xác định ở các tests riêng, không phụ thuộc RAM của ứng dụng khác trên máy.
+    monkeypatch.setattr(training_module, 'memory_snapshot', lambda: {
+        'pid': 123, 'process_rss_bytes': 512 * 1024**2,
+        'process_peak_rss_bytes': 512 * 1024**2,
+        'system_available_ram_bytes': 4 * 1024**3,
+        'system_total_ram_bytes': 8 * 1024**3})
     monkeypatch.setattr(runner, '_load_phase_inputs', lambda _, **kwargs: (
         {'runtime_report_sha256': 'runtime', 'source': {'commit': config.source_commit}},
         InnerSplit(('train',), ('val',), 0, 'split'),
