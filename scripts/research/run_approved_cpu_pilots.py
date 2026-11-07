@@ -95,11 +95,15 @@ outcomes.json lưu4cells cùng latent/random identity mỗi seed/profile. contra
     return directory
 
 
-def junyi_order(run_id, *, matched_controls=False):
+def junyi_order(run_id, *, matched_controls=False, max_learners=32, prefix_events=120, query_timeout=120):
+    limits = ((max_learners,256),(prefix_events,300),(query_timeout,180))
+    if any(type(value) is not int or not 1 <= value <= maximum for value,maximum in limits):
+        raise ValueError('Junyi pilot exceeds user-approved CPU limits')
+    started = time.perf_counter()
     paths=_data_paths()
     assignments=read_development_assignments(paths)
     split=make_inner_split(assignments,outer_fold=0)
-    cohort=sorted(split.inner_train_users,key=lambda user:hashlib.sha256(f'order-pilot-v1|{user}'.encode()).hexdigest())[:32]
+    cohort=sorted(split.inner_train_users,key=lambda user:hashlib.sha256(f'order-pilot-v1|{user}'.encode()).hexdigest())[:max_learners]
     selected=assignments[assignments.user_id.isin(cohort)].copy()
     catalog=ROOT/'dataset/junyi_Exercise_table.csv'
     frame=pd.read_csv(catalog).fillna('')
@@ -113,11 +117,13 @@ def junyi_order(run_id, *, matched_controls=False):
                     ROOT/'src/knowledge_tracing/graph_controls.py',
                     ROOT/'paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/junyi_cycle_corrected_ablation_confirmation.ipynb']
     metadata={'kind':'approved_cpu_junyi_order_pilot','rq':['RQ2'],'authorization':'User approved CPU09/CPU10 limits2026-11-07',
-              'outer_fold':0,'scope':'inner-train learners only','max_learners':32,'max_events_per_learner':120,
-              'max_seconds':120,'cohort_sha256':hashlib.sha256(json.dumps(sorted(cohort)).encode()).hexdigest(),
+              'outer_fold':0,'scope':'inner-train learners only','max_learners':max_learners,'max_events_per_learner':prefix_events,
+              'max_seconds':query_timeout,'cohort_sha256':hashlib.sha256(json.dumps(sorted(cohort)).encode()).hexdigest(),
               'graph_source':'catalog prerequisites, comma-delimited parent→exercise','uses_correct_labels':False,
               'duckdb_memory':'512MB','duckdb_threads':2}
     metadata['matched_controls'] = matched_controls
+    if max_learners >32 or prefix_events>120 or query_timeout>120:
+        metadata['authorization']='User delegated expansion choice after explicit max256learners×300events/180s proposal2026-11-07'
     metadata['control_spec'] = {'seeds':[0,1,2], 'requested_swaps':10,
         'support_bins':['0','1-2','3-5','6+'], 'support_scope':'same approved inner-train cohort prefix'} if matched_controls else None
     note='''# Pilot Junyi first-exposure order
@@ -128,7 +134,7 @@ order_summary.json chứa co-observation và hướng first exposure trên prefi
 '''
     with record_evidence_run(ROOT,run_id,metadata=metadata,sources=sources,note=note) as directory:
         con=duckdb.connect(config={'memory_limit':'512MB','threads':'2','temp_directory':''})
-        timer=threading.Timer(120,con.interrupt)
+        timer=threading.Timer(max(.01,query_timeout-(time.perf_counter()-started)),con.interrupt)
         timer.daemon=True
         try:
             con.register('selected_inner_train',selected)
@@ -136,17 +142,17 @@ order_summary.json chứa co-observation và hướng first exposure trên prefi
             timer.start()
             data=con.execute("SELECT c.user_id,c.exercise,c.time_done,c.source_row,u.fold,'development' AS partition "
                 "FROM read_parquet(?,hive_partitioning=true) c JOIN selected_inner_train u ON c.user_id=u.user_id "
-                "QUALIFY row_number() OVER (PARTITION BY c.user_id ORDER BY c.time_done,c.source_row)<=120 "
-                "ORDER BY c.user_id,c.time_done,c.source_row",[pattern]).df()
+                "QUALIFY row_number() OVER (PARTITION BY c.user_id ORDER BY c.time_done,c.source_row)<=? "
+                "ORDER BY c.user_id,c.time_done,c.source_row",[pattern,prefix_events]).df()
         finally:
             timer.cancel()
             con.close()
         self_edges=[edge for edge in edges if edge[0]==edge[1]]
         usable=[edge for edge in edges if edge[0]!=edge[1]]
         rows=data.to_dict('records')
-        summary = summarize_practice_order(rows,usable,allowed_users=set(cohort),outer_fold=0)
+        summary = summarize_practice_order(rows,usable,allowed_users=set(cohort),outer_fold=0,max_events=prefix_events)
         write(directory,'order_summary.json',summary)
-        write(directory,'reverse_summary.json',summarize_practice_order(rows,[(b,a) for a,b in usable],allowed_users=set(cohort),outer_fold=0))
+        write(directory,'reverse_summary.json',summarize_practice_order(rows,[(b,a) for a,b in usable],allowed_users=set(cohort),outer_fold=0,max_events=prefix_events))
         names=set(frame.name.astype(str))
         write(directory,'catalog_audit.json',{'catalog_exercises':len(names),'edges':len(edges),
             'self_edges':self_edges,'missing_parent_endpoints':sorted({a for a,b in edges if a not in names}),
@@ -170,6 +176,8 @@ order_summary.json chứa co-observation và hướng first exposure trên prefi
             write(directory,'corrected_graph.json',corrected)
             controls=[]
             for seed in [0,1,2]:
+                if time.perf_counter()-started >query_timeout:
+                    raise TimeoutError('Junyi control pilot wall cap exceeded')
                 try:
                     result = rewire_matched_graph(graph,swaps=10,chapters=topics,node_strata=strata,seed=seed)
                 except ValueError as error:
@@ -180,13 +188,16 @@ order_summary.json chứa co-observation và hướng first exposure trên prefi
                     'applied_swaps':result.applied_changes,'original_sha256':result.original_sha256,
                     'result_sha256':result.result_sha256,'changed_edge_entries':len(changed),
                     'changed_entries_with_both_endpoints_observed':sum(support.get(a,0)>0 and support.get(b,0)>0 for a,b in changed),
-                    'order':summarize_practice_order(rows,result.graph.edges,allowed_users=set(cohort),outer_fold=0)})
+                    'changed_entries_with_observed_child':sum(support.get(b,0)>0 for a,b in changed),
+                    'order':summarize_practice_order(rows,result.graph.edges,allowed_users=set(cohort),outer_fold=0,max_events=prefix_events)})
             write(directory,'matched_controls.json',controls)
             (directory/'CONTROL_NOTE.md').write_text(
                 '# Matched-control feasibility\n\nGiữ degree, node set và joint topic/area/prefix-support-bin pair counts trên reconstructed DAG. '
-                'Ba seed cố định,10swap mỗi control, không uniform graph sampler. Support từ đúng32inner-train prefixes, '
+                'Ba seed cố định,10swap mỗi control, không uniform graph sampler. Support từ đúngcohort inner-train prefixes đã ghi trong manifest, '
                 'không phải full train support. Changed-edge coverage cho biết controls có thực sự đổi cạnh được cohort quan sát hay không. '
                 'Chưa là graph predictive benefit hoặc causal experiment. Không dùng control chỉ đổi unsupported edges để kết luận graph neutral.\n',encoding='utf-8')
+        (directory/'README.md').write_text(note.replace('Tối đa32learner inner-train của outer-fold0,120events/learner',
+            f'Tối đa{max_learners}learner inner-train của outer-fold0,{prefix_events}events/learner'),encoding='utf-8')
     return directory
 
 
@@ -194,6 +205,11 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser()
     parser.add_argument('mode',choices=('factorial','junyi-order','junyi-controls'))
     parser.add_argument('--run-id',required=True)
+    parser.add_argument('--max-learners',type=int,default=32)
+    parser.add_argument('--prefix-events',type=int,default=120)
+    parser.add_argument('--query-timeout',type=int,default=120)
     args=parser.parse_args()
-    path=factorial(args.run_id) if args.mode=='factorial' else junyi_order(args.run_id,matched_controls=args.mode=='junyi-controls')
+    path=factorial(args.run_id) if args.mode=='factorial' else junyi_order(args.run_id,
+        matched_controls=args.mode=='junyi-controls',max_learners=args.max_learners,
+        prefix_events=args.prefix_events,query_timeout=args.query_timeout)
     print(json.dumps({'run':str(path.relative_to(ROOT)),**verify_evidence_bundle(path)},ensure_ascii=False))
