@@ -61,49 +61,92 @@ def test_json_writer_atomically_replaces_existing_json(tmp_path):
     assert list(tmp_path.glob('progress.json.*.tmp')) == []
 
 
-def test_json_writer_retries_a_transient_windows_replace_denial(tmp_path, monkeypatch):
+def _mock_json_writer_os(monkeypatch, *, name, replace):
+    # Chỉ thay os của runner; os.name toàn cục phải giữ host để pathlib/pytest hoạt động.
+    monkeypatch.setattr(runner, 'os', SimpleNamespace(
+        name=name, getpid=runner.os.getpid, fsync=runner.os.fsync, replace=replace))
+
+
+@pytest.mark.parametrize('winerror', [5, 32, 33])
+def test_json_writer_retries_a_transient_windows_replace_denial(tmp_path, monkeypatch, winerror):
     path = tmp_path / 'progress.json'
     path.write_text('{"old":true}\n', encoding='utf-8')
     real_replace = runner.os.replace
     attempts = []
+    sleeps = []
 
     def replace_with_one_sharing_denial(source, target):
         attempts.append((Path(source), Path(target)))
         if len(attempts) == 1:
             error = PermissionError(13, 'access denied')
-            error.winerror = 5
+            error.winerror = winerror
             raise error
         return real_replace(source, target)
 
-    monkeypatch.setattr(runner.os, 'replace', replace_with_one_sharing_denial)
-    monkeypatch.setattr(runner.time, 'sleep', lambda _: None)
+    _mock_json_writer_os(monkeypatch, name='nt', replace=replace_with_one_sharing_denial)
+    monkeypatch.setattr(runner.time, 'sleep', sleeps.append)
 
     runner._write_json(path, {'new': True})
 
     assert len(attempts) == 2
+    assert sleeps == [0.05]
     assert json.loads(path.read_text(encoding='utf-8')) == {'new': True}
     assert list(tmp_path.glob('progress.json.*.tmp')) == []
 
 
-def test_json_writer_propagates_persistent_denial_and_cleans_temp(tmp_path, monkeypatch):
+@pytest.mark.parametrize('winerror', [5, 32, 33])
+def test_json_writer_propagates_persistent_denial_and_cleans_temp(tmp_path, monkeypatch, winerror):
     path = tmp_path / 'progress.json'
     path.write_text('{"old":true}\n', encoding='utf-8')
     attempts = []
+    sleeps = []
 
     def always_denied(source, target):
         attempts.append((Path(source), Path(target)))
         error = PermissionError(13, 'access denied')
-        error.winerror = 5
+        error.winerror = winerror
         raise error
 
-    monkeypatch.setattr(runner.os, 'replace', always_denied)
-    monkeypatch.setattr(runner.time, 'sleep', lambda _: None)
+    _mock_json_writer_os(monkeypatch, name='nt', replace=always_denied)
+    monkeypatch.setattr(runner.time, 'sleep', sleeps.append)
 
     with pytest.raises(PermissionError) as error:
         runner._write_json(path, {'new': True})
 
-    assert error.value.winerror == 5
+    assert error.value.winerror == winerror
     assert len(attempts) == 5
+    assert sleeps == [0.05, 0.1, 0.2, 0.4]
+    assert json.loads(path.read_text(encoding='utf-8')) == {'old': True}
+    assert list(tmp_path.glob('progress.json.*.tmp')) == []
+
+
+@pytest.mark.parametrize(('platform_name', 'winerror'), [
+    ('posix', None), ('posix', 5), ('posix', 32), ('posix', 33),
+    ('nt', None), ('nt', 87),
+])
+def test_json_writer_does_not_retry_non_transient_replace_denial(
+        tmp_path, monkeypatch, platform_name, winerror):
+    path = tmp_path / 'progress.json'
+    path.write_text('{"old":true}\n', encoding='utf-8')
+    attempts = []
+    sleeps = []
+    denial = PermissionError(13, 'access denied')
+    if winerror is not None:
+        denial.winerror = winerror
+
+    def always_denied(source, target):
+        attempts.append((Path(source), Path(target)))
+        raise denial
+
+    _mock_json_writer_os(monkeypatch, name=platform_name, replace=always_denied)
+    monkeypatch.setattr(runner.time, 'sleep', sleeps.append)
+
+    with pytest.raises(PermissionError) as error:
+        runner._write_json(path, {'new': True})
+
+    assert error.value is denial
+    assert len(attempts) == 1
+    assert sleeps == []
     assert json.loads(path.read_text(encoding='utf-8')) == {'old': True}
     assert list(tmp_path.glob('progress.json.*.tmp')) == []
 

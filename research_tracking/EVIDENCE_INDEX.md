@@ -108,3 +108,16 @@ Kitv6 có113source/fixture files, source-only notebook copies và project venv. 
 - [Colab T4 device discovery](runs/colab-device-discovery-20261107-01/README.md): JSON cell01 do user cung cấp; Torch2.14.1+cu130/Python3.13.16/TeslaT4. Chưa model/lifecycle/recovery, không independently captured runtime.
 
 - [OfficialColabMCP/preflight](runs/colab-mcp-preflight-20261107-01/README.md):44outputs;actualagentT4cell execution/setup verified;CPU435pass/7fail/8errors,CUDAmodelstagesnotrun;noModal.
+
+## Bổ sung bốn bundles local đã đóng — 07/11/2026
+
+Đã đối chiếu trực tiếp manifest và SHA-256 của **114/114 outputs** trong bốn bundles dưới đây. Đây là kiểm integrity của hồ sơ đã lưu, không phải bốn thí nghiệm efficacy mới; verdict lịch sử phía trên giữ nguyên.
+
+| Bundle | Phạm vi bằng chứng và báo cáo | Giới hạn diễn giải |
+|---|---|---|
+| [parallel-graph-diagnostics-20261107-01](runs/parallel-graph-diagnostics-20261107-01/README.md), 32 outputs | [Graph residual/gate prototype](reports/graph_gate_prototype_20261107.md): 75 synthetic CPU cases; [factorial uncertainty](reports/factorial_pilot_uncertainty_20261107.md): 10 paired seed blocks, 10.000 joint resampling draws, giữ failure và reproduction. | Kernel phần mềm chưa hook native AKT hoặc train CG-AKT; post-hoc empirical envelopes không là formal population CI/significance. PG deficit 0/2.400 không chứng minh equivalence. |
+| [cpu-portability-gate-20261107-01](runs/cpu-portability-gate-20261107-01/README.md), 38 outputs | [Platform fixtures](reports/colab_platform_fixtures_20261107.md), local Windows Gate15 462 pass; notebook v12 harness 20 cases/dependency 4 mocked cases, actual one-row DuckDB 1.3.2 error → 1.5.6 pass; snapshot [RQ1/RQ2 synthesis](reports/rq12_evidence_synthesis_20261107.md). | Gate15 là software gate Windows tại source snapshot; harness mocks và one-row API contrast không thay actual runtime/full-suite acceptance. Synthesis từ aggregates/pilots không là confirmatory graph benefit hoặc phê duyệt S04/S05. |
+| [paper1-revision-audit-20261107-01](runs/paper1-revision-audit-20261107-01/README.md), 14 outputs | [Paper1 revision reconciliation](reports/paper1_revision_reconciliation_20261107.md): 33 input hashes, PDF/source/AST/Git/archive audit; một Git notebook blob và chín source-kit copies cùng source. | Chưa tìm exact PDF revision trong local scope; Q01 chỉ thu hẹp, S01 chưa duyệt. Current-source counterexample không tự bác bỏ finite tested-run claims của PDF. |
+| [sakt-core-engineering-20261107-01](runs/sakt-core-engineering-20261107-01/README.md), 30 outputs | [SAKT core readiness](reports/sakt_core_readiness_20261107.md): paper-equation single-block core; giữ 35-pass intermediate và source-bound 37-pass final CPU synthetic evidence, 0 optimizer steps. | Random weights chưa là fitted baseline; adapter/trainer/epoch selection/refit/export/resume/calibration còn thiếu. Gate15 và kit v12 không chứa SAKT; attention không tự là prerequisite graph. |
+
+Số outputs là inventory snapshot của các bundles, không chỉ số hoàn thành RQ. Không bổ sung runtime/GPU verdict từ thông tin chưa có bundle đã đối chiếu.

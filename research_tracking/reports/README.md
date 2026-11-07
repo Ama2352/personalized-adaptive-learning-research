@@ -47,3 +47,14 @@ JSON bootstrap chuyển từ root `reports/` với bytes/SHA giữ nguyên. [H�
 2. Một execution mới dùng run ID mới trong `research_tracking/runs/`; không tạo thêm một root `reports/` hay thư mục tên chung chung để chứa cùng loại file.
 3. Không đổi số liệu, seed hoặc protocol khi di chuyển file. Ghi inventory trước, so SHA sau và cập nhật chỉ mục; manifests/models/predictions/bundles lịch sử giữ nguyên.
 4. Bản luận văn sau này trích nhận định có scope, bảng/số liệu và run ID; không đưa toàn bộ debug logs vào thân báo cáo.
+
+## Bổ sung từ các bundles local đã đóng — 07/11/2026
+
+Đã kiểm SHA-256 đủ 114 outputs của bốn bundles được dẫn dưới đây. Báo cáo tổng hợp, exploratory analysis và kiểm phần mềm có mức bằng chứng riêng; các mục lịch sử phía trên giữ nguyên.
+
+- [Graph residual/gate prototype](graph_gate_prototype_20261107.md) và [factorial pilot uncertainty](factorial_pilot_uncertainty_20261107.md), [bundle 32 outputs](../runs/parallel-graph-diagnostics-20261107-01/README.md): 75 CPU synthetic cases cho kernel; 10 seed blocks/profile với joint resampling post-hoc. Chưa native CG-AKT/training, chưa formal population CI hoặc efficacy.
+- [Platform fixtures](colab_platform_fixtures_20261107.md) và [RQ1/RQ2 evidence synthesis](rq12_evidence_synthesis_20261107.md), [bundle 38 outputs](../runs/cpu-portability-gate-20261107-01/README.md): Windows Gate15 462 pass, v12 mocked harness/dependency checks, one-row DuckDB version/API contrast và snapshot aggregates. Không suy full runtime acceptance hoặc confirmatory graph benefit từ các kiểm này.
+- [Paper1 revision reconciliation](paper1_revision_reconciliation_20261107.md), [bundle 14 outputs](../runs/paper1-revision-audit-20261107-01/README.md): source/PDF/Git/candidate inventory thu hẹp local provenance; chưa exact reproduction, Q01/S01 vẫn mở.
+- [SAKT core readiness](sakt_core_readiness_20261107.md), [bundle 30 outputs](../runs/sakt-core-engineering-20261107-01/README.md): source-bound final 37 CPU synthetic cases, random weights và 0 optimizer steps. Chưa fitted baseline/adapter/trainer; Gate15 và kit v12 không chứa SAKT.
+
+Chỉ mục này không thêm GPU/runtime verdict khi chưa có evidence bundle đã đối chiếu; không tự thông qua S04/S05 hoặc bỏ required baselines.

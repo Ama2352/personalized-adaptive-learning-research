@@ -33,15 +33,42 @@ def test_probe_rejects_wrong_interpreter_before_loading_source(tmp_path):
         inspect_runtime(tmp_path, expected_env=tmp_path / 'not-current-env')
 
 
-def test_lock_accepts_percent_encoded_wheel_name(tmp_path):
-    url = 'https://download-r2.pytorch.org/torch-2.7.1%2Bcpu-cp313-cp313-win_amd64.whl'
+@pytest.mark.parametrize('platform_tag', ['win_amd64', 'manylinux_2_17_x86_64'])
+def test_lock_accepts_percent_encoded_wheel_name(tmp_path, monkeypatch, platform_tag):
+    from pip._vendor.packaging import tags
+
+    # Chọn môi trường resolver giả lập rõ ràng, độc lập Python/OS của host chạy test.
+    monkeypatch.setattr(tags, 'sys_tags', lambda: iter([tags.Tag('cp313', 'cp313', platform_tag)]))
+    url = f'https://download-r2.pytorch.org/torch-2.7.1%2Bcpu-cp313-cp313-{platform_tag}.whl'
     entry = report_entry(url)
     entry['metadata'] = {'name': 'torch', 'version': '2.7.1+cpu'}
     report = tmp_path / 'report.json'
     report.write_text(json.dumps({'install': [entry]}), encoding='utf-8')
     lock = tmp_path / 'lock.txt'
     write_lock_from_report(report, lock)
-    assert 'torch @ ' + url in lock.read_text(encoding='utf-8')
+    assert lock.read_text(encoding='utf-8') == f'torch @ {url} --hash=sha256:{"a" * 64}\n'
+
+
+@pytest.mark.parametrize(('wheel_platform', 'runtime_platform'), [
+    ('win_amd64', 'manylinux_2_17_x86_64'),
+    ('manylinux_2_17_x86_64', 'win_amd64'),
+])
+def test_lock_rejects_percent_encoded_wheel_for_incompatible_platform(
+        tmp_path, monkeypatch, wheel_platform, runtime_platform):
+    from pip._vendor.packaging import tags
+
+    monkeypatch.setattr(tags, 'sys_tags', lambda: iter([tags.Tag('cp313', 'cp313', runtime_platform)]))
+    url = f'https://download-r2.pytorch.org/torch-2.7.1%2Bcpu-cp313-cp313-{wheel_platform}.whl'
+    entry = report_entry(url)
+    entry['metadata'] = {'name': 'torch', 'version': '2.7.1+cpu'}
+    report = tmp_path / 'report.json'
+    report.write_text(json.dumps({'install': [entry]}), encoding='utf-8')
+    lock = tmp_path / 'lock.txt'
+
+    with pytest.raises(ValueError, match='invalid wheel identity, platform or SHA-256'):
+        write_lock_from_report(report, lock)
+
+    assert not lock.exists()
 
 
 def test_probe_rejects_modules_imported_from_outside_isolated_environment(tmp_path, monkeypatch):

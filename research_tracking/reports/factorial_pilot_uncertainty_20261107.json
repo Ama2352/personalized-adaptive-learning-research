@@ -1,0 +1,521 @@
+{
+  "schema_version": 1,
+  "evidence_level": "EXPLORATORY POST-HOC uncertainty; không confirmatory/final efficacy",
+  "estimand": "[(edge-on - edge-off)|lambda0.55 - (edge-on - edge-off)|lambda0]",
+  "outcome_unit_vi": "Net mean theta gain, Elo-scale mean trên28concept, horizon120steps.",
+  "treatment_vi": "Parent signal và parent adaptation bật/tắt cùng nhau; local pathway off cả hai.",
+  "conditioning_vi": "G_env/G_controller lịch sử, graph-correlated initial abilities, cùng base/uniforms trong4cells theo hồ sơ nguồn.",
+  "inference_unit_vi": "Seed block21000–21009; giữ đủ3profiles và contrast đã paired4cells bên trong block. Không resample events/cells riêng.",
+  "resampling": {
+    "draws": 10000,
+    "seed": 42,
+    "rng": "Python random.Random/MT19937; randrange(10)",
+    "draw_size_seed_blocks": 10,
+    "same_draw_for_all_profiles": true,
+    "indices_sha256": "74371bfe655b10b760462cff05a8917ed2852181a96902d63a24989a42802792",
+    "indices_hash_encoding": "Nối10000draws, mỗi draw10index0-based dạng bytes; thứ tựSEEDS tăng dần.",
+    "quantile_method": "Linear interpolation at rank(n-1)*p; p=.025,.975.",
+    "interpretation_vi": "Khoảng percentile của mean khi lấy mẫu lại empirical10seed blocks; không formal population95%CI.",
+    "assumptions_vi": "Chỉ có nghĩa suy rộng nếu seed blocks độc lập/exchangeable và đại diện cho simulator seed law cố định; chưa được pilot xác lập."
+  },
+  "family_vi": "Ba mean interaction theo PG/PY/PYH. Khoảng marginal exploratory, không simultaneous coverage/correction; không pvalues/rejections/heterogeneity test.",
+  "limits_vi": [
+    "Post-hoc sau khi đã nhìn mean; không preregistration hoặc independent final seeds.",
+    "N=10blocks: empirical bootstrap không khôi phục tails chưa thấy, calibration/coverage population chưa bảo đảm.",
+    "LOO/range là sensitivity mô tả trên cùng10seed, không CI hoặc favorable-seed selection.",
+    "PG structural zero và deficit0/2400 là mechanism không exposed trong pilot; không proof of equivalence hay graph neutral.",
+    "Không raw graph gain/time-DiD, không causal efficacy trên Junyi/người học thật.",
+    "Không mở outcomes/traces: pairing4cell dựa aggregate và hồ sơ đã lưu, không audit lại latent/random identity từng cell."
+  ],
+  "validation": {
+    "records": 30,
+    "complete_seed_profile_grid": true,
+    "source_interaction_arithmetic_tolerance": 1e-12,
+    "summary_mean_checks": {
+      "PG": {
+        "source_mean": 0.0,
+        "recomputed_mean": 0.0,
+        "absolute_error": 0.0
+      },
+      "PY": {
+        "source_mean": 0.03401725798722075,
+        "recomputed_mean": 0.03401725798722075,
+        "absolute_error": 0.0
+      },
+      "PYH": {
+        "source_mean": 0.05352858741293511,
+        "recomputed_mean": 0.05352858741293511,
+        "absolute_error": 0.0
+      }
+    },
+    "arithmetic_negative_controls": {
+      "four_cell_known_answer": true,
+      "identity_lambda_interaction_zero": true,
+      "identity_treatment_interaction_zero": true,
+      "constant_zero_resampling_zero": true
+    },
+    "aggregate_source_hash_checks": [
+      {
+        "path": "research_tracking/runs/cpu-factorial-20261107-01/contrasts.json",
+        "sha256": "3434777a92aca5e44032d281a36a8d95aa7b390ac909c2dc24832c553b125327",
+        "matches_synthesis_manifest_verification": true
+      },
+      {
+        "path": "research_tracking/runs/cpu-factorial-20261107-01/summary.json",
+        "sha256": "3deaabd76c93176b1f45dc1a5c3527865525962c97c8f74f436816b2e846f57c",
+        "matches_synthesis_manifest_verification": true
+      }
+    ],
+    "cpu_budget_seconds": 60
+  },
+  "input_inventory": [
+    {
+      "path": "research_tracking/runs/cpu-factorial-20261107-01/contrasts.json",
+      "sha256": "3434777a92aca5e44032d281a36a8d95aa7b390ac909c2dc24832c553b125327"
+    },
+    {
+      "path": "research_tracking/runs/cpu-factorial-20261107-01/summary.json",
+      "sha256": "3deaabd76c93176b1f45dc1a5c3527865525962c97c8f74f436816b2e846f57c"
+    },
+    {
+      "path": "research_tracking/reports/cpu_pilot_followup_20261107.json",
+      "sha256": "adc68ed68d5d20721cbb4d2098ff150d209cc982463d872832530b635cc80fca"
+    },
+    {
+      "path": "research_tracking/reports/rq12_evidence_synthesis_20261107.md",
+      "sha256": "11a56977a731038ff2e61219d74af5d2c484c0810842bb661757cdf179f11e5c"
+    },
+    {
+      "path": "research_tracking/reports/rq12_evidence_synthesis_20261107.json",
+      "sha256": "ed8fb4cd90e1002c4654c1b8d216ca023c33ba580572c9631d922a0b55efd7f3"
+    },
+    {
+      "path": "research_tracking/reports/cpu_pilots_20261107.md",
+      "sha256": "f3678872f82d2830d6bc7e95d10b78f1004ad0f9d26998fd584e43235d8d0dcd"
+    },
+    {
+      "path": "research_tracking/runs/cpu-factorial-20261107-01/README.md",
+      "sha256": "444f2c6345a1636ec7a34ba5085f6cd85bea7737ff27ab4e5a8227fb2b13b163"
+    }
+  ],
+  "analysis_source": {
+    "path": "artifacts/akt/local-tests/parallel-factorial-analysis-20261107-01/analyze_factorial_uncertainty.py",
+    "sha256": "7bf9400d0f82378ec8f0d95710cb652109935d6f1ee5f003325aa33f1f871345"
+  },
+  "profiles": {
+    "PG": {
+      "paired_seed_blocks": 10,
+      "mean_graph_effect_mechanism_on": 0.11085331585282869,
+      "mean_graph_effect_mechanism_off": 0.11085331585282869,
+      "mean_interaction": 0.0,
+      "seed_interaction_min": 0.0,
+      "seed_interaction_max": 0.0,
+      "seed_interaction_sample_sd": 0.0,
+      "positive_seed_count": 0,
+      "zero_seed_count": 10,
+      "negative_seed_count": 0,
+      "leave_one_seed_out": [
+        {
+          "omitted_seed": 21000,
+          "mean_interaction": 0.0
+        },
+        {
+          "omitted_seed": 21001,
+          "mean_interaction": 0.0
+        },
+        {
+          "omitted_seed": 21002,
+          "mean_interaction": 0.0
+        },
+        {
+          "omitted_seed": 21003,
+          "mean_interaction": 0.0
+        },
+        {
+          "omitted_seed": 21004,
+          "mean_interaction": 0.0
+        },
+        {
+          "omitted_seed": 21005,
+          "mean_interaction": 0.0
+        },
+        {
+          "omitted_seed": 21006,
+          "mean_interaction": 0.0
+        },
+        {
+          "omitted_seed": 21007,
+          "mean_interaction": 0.0
+        },
+        {
+          "omitted_seed": 21008,
+          "mean_interaction": 0.0
+        },
+        {
+          "omitted_seed": 21009,
+          "mean_interaction": 0.0
+        }
+      ],
+      "leave_one_seed_out_mean_min": 0.0,
+      "leave_one_seed_out_mean_max": 0.0,
+      "exploratory_empirical_resampling_mean_quantiles": {
+        "q025": 0.0,
+        "q975": 0.0
+      },
+      "mechanism_on_coverage": {
+        "events": 2400,
+        "positive_deficit": 0,
+        "positive_deficit_fraction": 0.0
+      },
+      "initial_min_ability_in_pilot": 1269.3117807694116,
+      "per_seed_paired_aggregate": [
+        {
+          "seed": 21000,
+          "profile": "PG",
+          "graph_effect_mechanism_on": -0.010496340805509874,
+          "graph_effect_mechanism_off": -0.010496340805509874,
+          "interaction_contrast": 0.0
+        },
+        {
+          "seed": 21001,
+          "profile": "PG",
+          "graph_effect_mechanism_on": -0.27689265537926033,
+          "graph_effect_mechanism_off": -0.27689265537926033,
+          "interaction_contrast": 0.0
+        },
+        {
+          "seed": 21002,
+          "profile": "PG",
+          "graph_effect_mechanism_on": -0.2948759283160598,
+          "graph_effect_mechanism_off": -0.2948759283160598,
+          "interaction_contrast": 0.0
+        },
+        {
+          "seed": 21003,
+          "profile": "PG",
+          "graph_effect_mechanism_on": -0.2608665045922933,
+          "graph_effect_mechanism_off": -0.2608665045922933,
+          "interaction_contrast": 0.0
+        },
+        {
+          "seed": 21004,
+          "profile": "PG",
+          "graph_effect_mechanism_on": 0.23082563797543543,
+          "graph_effect_mechanism_off": 0.23082563797543543,
+          "interaction_contrast": 0.0
+        },
+        {
+          "seed": 21005,
+          "profile": "PG",
+          "graph_effect_mechanism_on": 0.30251231320408145,
+          "graph_effect_mechanism_off": 0.30251231320408145,
+          "interaction_contrast": 0.0
+        },
+        {
+          "seed": 21006,
+          "profile": "PG",
+          "graph_effect_mechanism_on": 0.00586060287174206,
+          "graph_effect_mechanism_off": 0.00586060287174206,
+          "interaction_contrast": 0.0
+        },
+        {
+          "seed": 21007,
+          "profile": "PG",
+          "graph_effect_mechanism_on": -0.2169541858336359,
+          "graph_effect_mechanism_off": -0.2169541858336359,
+          "interaction_contrast": 0.0
+        },
+        {
+          "seed": 21008,
+          "profile": "PG",
+          "graph_effect_mechanism_on": 1.5840185222027365,
+          "graph_effect_mechanism_off": 1.5840185222027365,
+          "interaction_contrast": 0.0
+        },
+        {
+          "seed": 21009,
+          "profile": "PG",
+          "graph_effect_mechanism_on": 0.045401697201050695,
+          "graph_effect_mechanism_off": 0.045401697201050695,
+          "interaction_contrast": 0.0
+        }
+      ]
+    },
+    "PY": {
+      "paired_seed_blocks": 10,
+      "mean_graph_effect_mechanism_on": 0.0514858970948409,
+      "mean_graph_effect_mechanism_off": 0.017468639107620153,
+      "mean_interaction": 0.03401725798722075,
+      "seed_interaction_min": -0.14921102046063517,
+      "seed_interaction_max": 0.17681559206896047,
+      "seed_interaction_sample_sd": 0.09420572009857421,
+      "positive_seed_count": 7,
+      "zero_seed_count": 0,
+      "negative_seed_count": 3,
+      "leave_one_seed_out": [
+        {
+          "omitted_seed": 21000,
+          "mean_interaction": 0.03682822709123304
+        },
+        {
+          "omitted_seed": 21001,
+          "mean_interaction": 0.04117610704759435
+        },
+        {
+          "omitted_seed": 21002,
+          "mean_interaction": 0.020952407261987945
+        },
+        {
+          "omitted_seed": 21003,
+          "mean_interaction": 0.02906962214525071
+        },
+        {
+          "omitted_seed": 21004,
+          "mean_interaction": 0.05437595559253808
+        },
+        {
+          "omitted_seed": 21005,
+          "mean_interaction": 0.03211155943661535
+        },
+        {
+          "omitted_seed": 21006,
+          "mean_interaction": 0.03052547715538218
+        },
+        {
+          "omitted_seed": 21007,
+          "mean_interaction": 0.018150776422583004
+        },
+        {
+          "omitted_seed": 21008,
+          "mean_interaction": 0.04069132445646254
+        },
+        {
+          "omitted_seed": 21009,
+          "mean_interaction": 0.03629112326256031
+        }
+      ],
+      "leave_one_seed_out_mean_min": 0.018150776422583004,
+      "leave_one_seed_out_mean_max": 0.05437595559253808,
+      "exploratory_empirical_resampling_mean_quantiles": {
+        "q025": -0.021574110439119547,
+        "q975": 0.08816270804851313
+      },
+      "mechanism_on_coverage": {
+        "events": 2400,
+        "positive_deficit": 1919,
+        "positive_deficit_fraction": 0.7995833333333333
+      },
+      "initial_min_ability_in_pilot": 911.4695492498937,
+      "per_seed_paired_aggregate": [
+        {
+          "seed": 21000,
+          "profile": "PY",
+          "graph_effect_mechanism_on": -0.20295189181868523,
+          "graph_effect_mechanism_off": -0.2116704278697954,
+          "interaction_contrast": 0.00871853605111017
+        },
+        {
+          "seed": 21001,
+          "profile": "PY",
+          "graph_effect_mechanism_on": -0.018614703084218753,
+          "graph_effect_mechanism_off": 0.011797680471922867,
+          "interaction_contrast": -0.03041238355614162
+        },
+        {
+          "seed": 21002,
+          "profile": "PY",
+          "graph_effect_mechanism_on": 0.6363924377104047,
+          "graph_effect_mechanism_off": 0.48479152319608865,
+          "interaction_contrast": 0.151600914514316
+        },
+        {
+          "seed": 21003,
+          "profile": "PY",
+          "graph_effect_mechanism_on": -0.2279793947772486,
+          "graph_effect_mechanism_off": -0.3065253753421997,
+          "interaction_contrast": 0.0785459805649511
+        },
+        {
+          "seed": 21004,
+          "profile": "PY",
+          "graph_effect_mechanism_on": -0.4322609251825815,
+          "graph_effect_mechanism_off": -0.28304990472194635,
+          "interaction_contrast": -0.14921102046063517
+        },
+        {
+          "seed": 21005,
+          "profile": "PY",
+          "graph_effect_mechanism_on": 0.10876210051492707,
+          "graph_effect_mechanism_off": 0.05759355557225776,
+          "interaction_contrast": 0.051168544942669314
+        },
+        {
+          "seed": 21006,
+          "profile": "PY",
+          "graph_effect_mechanism_on": -0.1656462015281801,
+          "graph_effect_mechanism_off": -0.23108948700194798,
+          "interaction_contrast": 0.06544328547376788
+        },
+        {
+          "seed": 21007,
+          "profile": "PY",
+          "graph_effect_mechanism_on": 0.05613310040557273,
+          "graph_effect_mechanism_off": -0.12068249166338774,
+          "interaction_contrast": 0.17681559206896047
+        },
+        {
+          "seed": 21008,
+          "profile": "PY",
+          "graph_effect_mechanism_on": -0.17361838744042757,
+          "graph_effect_mechanism_off": -0.14756904720447217,
+          "interaction_contrast": -0.0260493402359554
+        },
+        {
+          "seed": 21009,
+          "profile": "PY",
+          "graph_effect_mechanism_on": 0.9346428361488464,
+          "graph_effect_mechanism_off": 0.9210903656396816,
+          "interaction_contrast": 0.013552470509164749
+        }
+      ]
+    },
+    "PYH": {
+      "paired_seed_blocks": 10,
+      "mean_graph_effect_mechanism_on": 0.37808179681246135,
+      "mean_graph_effect_mechanism_off": 0.3245532093995262,
+      "mean_interaction": 0.05352858741293511,
+      "seed_interaction_min": -0.07675815203157654,
+      "seed_interaction_max": 0.2142249632423585,
+      "seed_interaction_sample_sd": 0.08846983032605858,
+      "positive_seed_count": 7,
+      "zero_seed_count": 0,
+      "negative_seed_count": 3,
+      "leave_one_seed_out": [
+        {
+          "omitted_seed": 21000,
+          "mean_interaction": 0.05487773219928707
+        },
+        {
+          "omitted_seed": 21001,
+          "mean_interaction": 0.046295041192798654
+        },
+        {
+          "omitted_seed": 21002,
+          "mean_interaction": 0.06489349260192087
+        },
+        {
+          "omitted_seed": 21003,
+          "mean_interaction": 0.0528931617358408
+        },
+        {
+          "omitted_seed": 21004,
+          "mean_interaction": 0.03567343454299918
+        },
+        {
+          "omitted_seed": 21005,
+          "mean_interaction": 0.06800489179565863
+        },
+        {
+          "omitted_seed": 21006,
+          "mean_interaction": 0.061899763054605254
+        },
+        {
+          "omitted_seed": 21007,
+          "mean_interaction": 0.055053337796685656
+        },
+        {
+          "omitted_seed": 21008,
+          "mean_interaction": 0.044636050604322186
+        },
+        {
+          "omitted_seed": 21009,
+          "mean_interaction": 0.05105896860523283
+        }
+      ],
+      "leave_one_seed_out_mean_min": 0.03567343454299918,
+      "leave_one_seed_out_mean_max": 0.06800489179565863,
+      "exploratory_empirical_resampling_mean_quantiles": {
+        "q025": 0.0030530269857074036,
+        "q975": 0.10568908192460659
+      },
+      "mechanism_on_coverage": {
+        "events": 2400,
+        "positive_deficit": 1197,
+        "positive_deficit_fraction": 0.49875
+      },
+      "initial_min_ability_in_pilot": 929.6329742298149,
+      "per_seed_paired_aggregate": [
+        {
+          "seed": 21000,
+          "profile": "PYH",
+          "graph_effect_mechanism_on": 0.9230240761519566,
+          "graph_effect_mechanism_off": 0.8816377918161891,
+          "interaction_contrast": 0.04138628433576752
+        },
+        {
+          "seed": 21001,
+          "profile": "PYH",
+          "graph_effect_mechanism_on": 0.6350057594900296,
+          "graph_effect_mechanism_off": 0.5163752560958663,
+          "interaction_contrast": 0.11863050339416326
+        },
+        {
+          "seed": 21002,
+          "profile": "PYH",
+          "graph_effect_mechanism_on": -0.956077308378136,
+          "graph_effect_mechanism_off": -0.9073217490901992,
+          "interaction_contrast": -0.048755559287936734
+        },
+        {
+          "seed": 21003,
+          "profile": "PYH",
+          "graph_effect_mechanism_on": 0.4287573496736332,
+          "graph_effect_mechanism_off": 0.36950993116684927,
+          "interaction_contrast": 0.059247418506783944
+        },
+        {
+          "seed": 21004,
+          "profile": "PYH",
+          "graph_effect_mechanism_on": 1.972460627122011,
+          "graph_effect_mechanism_off": 1.7582356638796526,
+          "interaction_contrast": 0.2142249632423585
+        },
+        {
+          "seed": 21005,
+          "profile": "PYH",
+          "graph_effect_mechanism_on": -0.778026595375378,
+          "graph_effect_mechanism_off": -0.7012684433438015,
+          "interaction_contrast": -0.07675815203157654
+        },
+        {
+          "seed": 21006,
+          "profile": "PYH",
+          "graph_effect_mechanism_on": 0.5201600858141013,
+          "graph_effect_mechanism_off": 0.5419720791761975,
+          "interaction_contrast": -0.02181199336209616
+        },
+        {
+          "seed": 21007,
+          "profile": "PYH",
+          "graph_effect_mechanism_on": 0.578282892164486,
+          "graph_effect_mechanism_off": 0.5384770582053058,
+          "interaction_contrast": 0.03980583395918025
+        },
+        {
+          "seed": 21008,
+          "profile": "PYH",
+          "graph_effect_mechanism_on": -0.39499762920744175,
+          "graph_effect_mechanism_off": -0.5285590478978932,
+          "interaction_contrast": 0.13356141869045146
+        },
+        {
+          "seed": 21009,
+          "profile": "PYH",
+          "graph_effect_mechanism_on": 0.8522287106693511,
+          "graph_effect_mechanism_off": 0.7764735539870955,
+          "interaction_contrast": 0.07575515668225563
+        }
+      ]
+    }
+  }
+}

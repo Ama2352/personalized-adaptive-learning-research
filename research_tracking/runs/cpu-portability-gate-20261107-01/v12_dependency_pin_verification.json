@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "cases": [
+    {
+      "duckdb": "1.3.2",
+      "missing_modules": [],
+      "requested_install": [
+        "duckdb==1.5.6"
+      ],
+      "status": "PASS"
+    },
+    {
+      "duckdb": "1.5.6",
+      "missing_modules": [],
+      "requested_install": [],
+      "status": "PASS"
+    },
+    {
+      "duckdb": "1.5.6",
+      "missing_modules": [
+        "psutil"
+      ],
+      "requested_install": [
+        "psutil"
+      ],
+      "status": "PASS"
+    },
+    {
+      "duckdb": "1.3.2",
+      "missing_modules": [
+        "networkx"
+      ],
+      "requested_install": [
+        "duckdb==1.5.6",
+        "networkx"
+      ],
+      "status": "PASS"
+    }
+  ],
+  "venv_before_install_guard": true,
+  "wheel_only_and_install_report": true,
+  "scope": "Local mocked dependency probe; remote install separately verified"
+}
