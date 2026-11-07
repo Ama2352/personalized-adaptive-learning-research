@@ -104,3 +104,5 @@ Kitv6 có113source/fixture files, source-only notebook copies và project venv. 
 - [Gate407](runs/cpu-colab-recovery-gate-20261107-01/README.md):7outputs,0fail/error/skip,169.05s; noCUDA/fulltraining/Gate4.
 
 - [VS Code one-file notebook handoff](runs/cpu-vscode-colab-notebook-20261107-01/README.md):9outputs,20localchecks, embedded137file source parity and failure ZIP export; GPU/setup/CPU guards mocked, chưaactualremote.
+
+- [Colab T4 device discovery](runs/colab-device-discovery-20261107-01/README.md): JSON cell01 do user cung cấp; Torch2.14.1+cu130/Python3.13.16/TeslaT4. Chưa model/lifecycle/recovery, không independently captured runtime.

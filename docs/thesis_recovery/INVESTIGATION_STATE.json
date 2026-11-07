@@ -322,6 +322,7 @@
     "verification": "CRC/each SHA/current source parity; notebook originals unchanged; no actual isolated Linux/Colab/CUDA execution"
   },
   "next_bounded_engineering_batch": [
+    "User pasted actual cell01 CONNECTED_GPU/TeslaT4/Python3.13.16/Torch2.14.1+cu130 output. Hardware discovery only; run bounded notebook interactively and inspect returned ZIP, no full model/Gate4/throughput claim.",
     "User selected VSCode handoff: notebook8cells now self-contained embeddedv11,20localchecks; no ZIP upload. Wait for actual kernel/device output and verify returned artifact ZIP. Agent terminal kernel bridge remains unverified; do not claim remote execution from mocks.",
     "Official Colab CLI/MCP routes now discovered: inspect interactive MCP/client compatibility first; CLI Linux/macOS only, no Windows support promised. Do not equate installed VSCode extension with agent access. No runtime allocated.",
     "Actual Colab not connected/executed: current7cell notebook + v11 ready for standard interactive run; user already authorized free Colab; preserve returned ZIP, no automatic paid fallback.",
@@ -572,7 +573,7 @@
     "git_output_sha_verified": 38
   },
   "colab_connection_investigation_20261107": {
-    "status": "OFFICIAL_OPTIONS_FOUND_NOT_CONNECTED",
+    "status": "VSCODE_DEVICE_CONNECTED_USER_REPORTED_NO_AGENT_KERNEL_BRIDGE",
     "official_cli": "https://github.com/googlecolab/google-colab-cli",
     "official_mcp": "https://github.com/googlecolab/colab-mcp",
     "cli_platform_support": "Linux/macOS only per current README; Windows unsupported; WSL not verified",
@@ -586,7 +587,7 @@
     "correction": "Prior no-direct-tool statement was session-specific; official terminal/agent routes do exist"
   },
   "vscode_colab_handoff_20261107": {
-    "status": "PREPARED_AND_LOCALLY_VERIFIED_NOT_CONNECTED",
+    "status": "DEVICE_CONNECTED_USER_REPORTED_CHECKS_PENDING",
     "notebook": "notebooks/akt_colab_synthetic.ipynb",
     "cells": 8,
     "embedded_bundle": "akt-synthetic-20261107-v11.zip",
@@ -596,11 +597,30 @@
     "browser_files_api_required": false,
     "local_checks": 20,
     "checks_scope": "Actual source extraction/ZIP export; mocked connection/GPU/setup/CPU guards",
-    "actual_remote_execution": false,
+    "actual_remote_execution": true,
     "evidence": "cpu-vscode-colab-notebook-20261107-01",
     "handoff": "User opens notebook, selects Colab GPU kernel and authenticates; cell01 device discovery then RunAll bounded checks; final ZIP+SHA downloaded via Colab Contents",
     "agent_terminal_kernel_bridge_verified": false,
     "core_source_gate_407_still_valid": true,
-    "full_suite_rerun": false
+    "full_suite_rerun": false,
+    "actual_remote_execution_scope": "User-reported device discovery only; model checks not verified",
+    "actual_model_checks_verified": false
+  },
+  "colab_device_discovery_20261107": {
+    "status": "USER_REPORTED_CONNECTED_TESLA_T4",
+    "payload": {
+      "status": "CONNECTED_GPU",
+      "python": "3.13.16 (main, Oct  1 2026, 15:40:24) [GCC 13.3.0]",
+      "python_executable": "/usr/bin/python3",
+      "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+      "torch": "2.14.1+cu130",
+      "cuda_build": "13.0",
+      "gpu_name": "Tesla T4",
+      "scope": "Connection/device discovery only; no model step"
+    },
+    "evidence": "colab-device-discovery-20261107-01",
+    "verification_source": "User-pasted cell01 output; independent returned artifact ZIP not received",
+    "model_cuda_execution_verified": false,
+    "next": "RunAll bounded notebook, then verify CPU acceptance and both CUDA probe artifacts; no automatic Modal fallback"
   }
 }
