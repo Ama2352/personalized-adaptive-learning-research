@@ -37,3 +37,7 @@ Nguồn: notebook `paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_
 6. Generator manifest phải gắn split-plan/domain/source hashes, profile allocation (metadata riêng), RNG states/mapping, logging policy, clock semantics, cap và role. Sinh shard train trước; không đọc/sinh final audit cohort để thiết kế train/calibration. Feature support và history coverage theo behavior policy phải được báo riêng.
 
 Đây là prerequisite cho collector và role-aware trainer, không phải approval chạy full simulator hoặc tự đổi training distribution. Không gọi các64arithmetic fixture events là simulated learner training data.
+
+## Kết thúc gói DATA01–04
+
+70targeted tests và Gate2-11 mới361tests đều khôngfail/error/skip, source/lock/upstream stable. Bundle gate và report tại `research_tracking/` ghi log/hash/proof; TASKS có DATA05/06planned cho collector fixture và role-aware runner. S04/S05 vẫnpending; chưa có generated research cohort, trained graph model hoặc GPU result. Git raw-byte verification24bundles/225outputs và task DAG53PASS; xem `research_tracking/reports/git_evidence_verification_simulator_data_20261107.json`.

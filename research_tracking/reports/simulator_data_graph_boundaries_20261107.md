@@ -49,3 +49,5 @@ Gate2-11 (`20261107-simulator-data-11`) **361passed,0failed/error/skipped**, pyt
 Inspection bổ sung trước collector (notebook Paper2 cell9/15/17/19): initial ability được parent-smoothing, replay chọn difficulty theo latent theta, closed-loop dùng paired uniforms theo timestep. Chi tiết và điều kiện giữ nguyên latent realization/oracle sidecar/clock unit ở mục collector của19. Đây là source evidence về thiết kế, chưa là kết quả chạy collector mới.
 
 Để giữ evidence qua Git, bundle giữ bytes gốc kể cả CRLF; whitespace attribute chỉ công nhận CRLF hợp lệ tại runs. Logs bị ignore mặc định phải add explicit theo manifest; không normalize hoặc sửa logs đã đóng để qua kiểm tra. Portable kitv9 vẫn là snapshot trước gói này, không đại diện source361tests và chưa chạy Colab/CUDA.
+
+Đối chiếu sau commit9ed5f12: **24completed bundles,24manifest bytes và225output hashes** khớp nguyên bytes trong Git; DAG53tasks và22links hợp lệ, Gate2 current vẫn source-bound. [Hồ sơ kiểm](git_evidence_verification_simulator_data_20261107.json) ghi phạm vi và Git head. DATA01–04 complete engineering; DATA05/06 mới planned, không ghi nhầm thành đã triển khai.
