@@ -115,3 +115,7 @@ Các mục count/inventory phía trên là snapshots có ngày, không tự cậ
 ## Báo cáo GVHD08/11
 
 Mở [báo cáo GVHD](../research_tracking/reports/BAO_CAO_TIEN_DO_GVHD_20261108.md) để xem các claim đã có bằng chứng và agenda phương pháp. [RQ1 transitions](../research_tracking/reports/rq1_transition_evidence_20261108.md) và [RQ2 conditions](../research_tracking/reports/rq2_conditions_evidence_20261108.md) có scripts tái tính ở scripts/research và bundles theo run trong research_tracking/runs; reuse dữ liệu đã lưu, không rerun tất cả paper hoặc dùng software pass làm efficacy.
+
+## Điểm vào engineering08/11
+
+[Context CPU acceptance](../research_tracking/reports/akt_worker_context_readiness_20261108.md), [GKT partial kernel](../research_tracking/reports/gkt_core_readiness_20261108.md), [demo read-only](../research_tracking/reports/demo_readiness_20261108.md) và [bản thảo phương pháp](../research_tracking/reports/THESIS_METHODS_RQ12_DRAFT_20261108.md) dùng cấu trúc hiện hành. Source demo ở src/research_demo, không thêm top-level app/results folder. Bundles mới giữ raw logs/source/receipts; checkpoint/prediction lớn của CPU toy run giữ experiments/akt/results/ctx0801, scratch/dependency metadata ở artifacts/akt. Không dọn hoặc di chuyển protected/historical paths.

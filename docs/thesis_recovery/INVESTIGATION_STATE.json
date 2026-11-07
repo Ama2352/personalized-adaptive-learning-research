@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "as_of": "2026-11-07",
+  "as_of": "2026-11-08",
   "roadmap_version": "1.0",
   "current_pass": 4,
   "passes_completed": [
@@ -358,16 +358,10 @@
     "gpu_executed": false
   },
   "current_software_gate": {
-    "status": "PASS",
-    "run_id": "20261107-linux-worker-17",
-    "passed": 513,
-    "failed": 0,
-    "errors": 0,
-    "skipped": 0,
-    "pytest_seconds": 269.98,
-    "report_sha256": "4501b75cad421b75987b959cf843b3edfa57334bb4e449db1aa0fbcf09198baa",
-    "archive": "cpu-linux-worker-20261107-01",
-    "scope": "WindowsCPU AKT/shared suite; explicitLinuxplatform fixtures, not actualLinux/CUDA mainworker; SAKT separately89cases"
+    "status": "PENDING_REFRESH_NEXT_NATIVE_MODULE",
+    "last_verified": "Gate18 661PASS source snapshot",
+    "reason": "New AKT simulator engineering module/test in progress; do not promote old Gate to changed source.",
+    "next": "Gate19 after new native sources/tests frozen; safe fixtures only."
   },
   "previous_software_gate": {
     "run_id": "20261107-simulator-batch-10",
@@ -830,5 +824,120 @@
     "sakt_new_adapter_cases": 52,
     "no_gpu_or_modal_execution": true,
     "remaining": "Public GPU phase/runtime paths wiring/Linux environment hashlock and actual Linux/CUDA worker still pending"
+  },
+  "software_gate_before_worker_context": {
+    "status": "PASS",
+    "run_id": "20261107-linux-worker-17",
+    "passed": 513,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "pytest_seconds": 269.98,
+    "report_sha256": "4501b75cad421b75987b959cf843b3edfa57334bb4e449db1aa0fbcf09198baa",
+    "archive": "cpu-linux-worker-20261107-01",
+    "scope": "WindowsCPU AKT/shared suite; explicitLinuxplatform fixtures, not actualLinux/CUDA mainworker; SAKT separately89cases"
+  },
+  "advisor_batch_20261108": {
+    "status": "IN_PROGRESS",
+    "parent": "AKT explicitimmutableworkercontext/runtimepathwiring; boundedGPUphasepreparation",
+    "agents": {
+      "graph_gate_prototype": "RQ1conditionaltransitions fromstoredsynthetictraces",
+      "platform_fixture_compat": "RQ2profile/controlcoverage contrasts fromstoredaggregates",
+      "rq12_evidence_synthesis": "GVHD report localonly, no sending"
+    },
+    "execution_limits": "LocalCPU, reuseapprovedstoredartifacts; noJunyi/Holdout query, noGPU/Modalcredit, .venvonly; source/outputSHA andcommits afterverification",
+    "research_outputs": {
+      "status": "COMPLETED_DESCRIPTIVE_REANALYSIS_AND_LOCAL_REPORT",
+      "report": "research_tracking\\reports\\BAO_CAO_TIEN_DO_GVHD_20261108.md",
+      "report_sha256": "16bab005cb0af960a81d2b8dd4ee291e9bffee17ce6081952e810376c5e55728",
+      "bundles": {
+        "cpu-rq1-transitions-20261108-01": 12,
+        "rq2-conditions-evidence-20261108-01": 6,
+        "rq2-conditions-validation-20261108-01": 21
+      },
+      "new_analyzer_tests": 52,
+      "no_new_training_or_simulator_execution": true,
+      "rq_completion_claim": false,
+      "report_sent_externally": false
+    },
+    "engineering_outputs": {
+      "status": "COMPLETED_LOCAL_SCOPED_BATCH",
+      "bundles": [
+        "gkt-core-engineering-20261108-01",
+        "gpu08-environment-proposal-20261108-01",
+        "cpu-worker-context-20261108-01",
+        "demo-readonly-engineering-20261108-01"
+      ],
+      "rq_completed": false,
+      "new_actual_gpu": false,
+      "modal_spending": false
+    }
+  },
+  "autonomous_engineering_loop": {
+    "status": "ACTIVE",
+    "authorization": "User explicitly requests sustained engineering and parallel subagents, 2026-11-08; earlier instructions authorize verified incremental commits.",
+    "goal": "Hoàn thiện KLTN theo đề cương và RQ1–RQ3; không đồng nhất hoàn thiện code với hoàn tất nghiên cứu.",
+    "execution": "Chỉ .venv local; phân tích artifact pilot đã lưu và synthetic checks; không dùng Holdout, full CV, real-data benchmark rerun hoặc cloud credits.",
+    "modal": {
+      "free_credit_user_reported_usd": 30,
+      "out_of_pocket_limit_usd": 0,
+      "new_spending_authorized": false
+    },
+    "latest_verified_commit": "4d2cdf58cfb28dc57a028bdc9803a3c2a9ab4f88",
+    "commit_evidence": "artifacts/akt/local-tests/git-evidence-verification-e4a44e9.json",
+    "closed_science_outputs": 39,
+    "current_main": "Local AKT simulator role-aware engineering lifecycle integration + prepare GPU08 Linux resolution; Colab frontend confirmation pending.",
+    "parallel": [
+      "SAKT isolated synthetic CPU trainer/checkpoint with independent read-only reviewer",
+      "Minimal AKT simulator role-aware trainer design before research adoption"
+    ],
+    "next": [
+      "Finish reviewed SAKT03/SIMTRAIN01 scoped synthetic batches",
+      "Refresh native Gate19 after freeze",
+      "Commit verified evidence + source; use free Colab CPU for Linux resolution when frontend connects",
+      "No Modal/fullCV/Holdout or methodology adoption without exact authorization"
+    ],
+    "pending_external": [
+      "S01 exact Paper1 revision",
+      "S04 mastery/calibration/controller adoption",
+      "S05 model/environment/protocol allocation",
+      "Full Linux CUDA dependency lock and actual new-worker hardware test"
+    ],
+    "recovery": "Đọc state, INVESTIGATION_LOG và TASKS trước khi tiếp tục; không chạy lại job/bundle đóng; kiểm tra tiến trình đang chạy và SHA source.",
+    "limits": "Hoạt động trong phiên agent còn được cấp thực thi; không cam kết chạy khi máy hoặc ứng dụng tắt; không tự lập lịch hay gửi báo cáo ra ngoài.",
+    "closed_engineering_bundles": [
+      "gkt-core-engineering-20261108-01",
+      "gpu08-environment-proposal-20261108-01",
+      "cpu-worker-context-20261108-01",
+      "demo-readonly-engineering-20261108-01"
+    ],
+    "verified_component_commits": {
+      "science_rq12": "e4a44e9",
+      "gkt_kernel": "661a44b",
+      "gpu08_metadata": "dc2b802",
+      "akt_context": "fbb0ed2",
+      "readonly_demo": "4d2cdf5"
+    },
+    "verified_new_output_blobs": 290,
+    "colab_connection": {
+      "status": "WAITING_FRONTEND_CONFIRMATION",
+      "opened_free_cpu_bridge": true,
+      "remote_runtime_calls": 0,
+      "user_question_pending": true,
+      "private_current_state": "artifacts/akt/private/colab-bridge/current.json",
+      "no_paid_fallback": true
+    }
+  },
+  "last_verified_software_gate": {
+    "status": "PASS",
+    "suite": "tests/akt tests/shared_kt",
+    "passed": 661,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "elapsed_seconds": 177.08,
+    "report": "artifacts/akt/preflight/gate2-evidence-20261108-context-18.json",
+    "sha256": "8d51380ed58b104aea0c0de37bdeb097d12e45071252ec973a696dc1fc7ac66d",
+    "scope": "Windows CPU source-bound; no actual new-worker CUDA/Gate4/research authorization"
   }
 }

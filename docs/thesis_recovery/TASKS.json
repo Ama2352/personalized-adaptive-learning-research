@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "roadmap_version": "1.0",
-  "as_of": "2026-11-07",
+  "as_of": "2026-11-08",
   "execution_authorized": false,
   "approval_rule": "Không tự approve methodology, data execution, cloud spend, full CV, Holdout hoặc final selection",
   "tasks": [
@@ -553,7 +553,7 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "GPU bounded/full",
       "authorization_requirements": "MODEL_PROTOCOL_AND_EXECUTION_APPROVAL",
-      "status": "PLANNED",
+      "status": "IN_PROGRESS",
       "blockers": [
         "Chưa chọn variant"
       ],
@@ -646,7 +646,7 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "local",
       "authorization_requirements": "SAFE_ENGINEERING_AFTER_INSTRUCTION",
-      "status": "PLANNED",
+      "status": "IN_PROGRESS",
       "blockers": [
         "Chưa có UI"
       ],
@@ -710,7 +710,7 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "local",
       "authorization_requirements": "SAFE_WRITING",
-      "status": "PLANNED",
+      "status": "IN_PROGRESS",
       "blockers": [
         "Chưa manuscript tích hợp"
       ],
@@ -1931,12 +1931,13 @@
       "implementation_objective": "BoundedGPUphase and explicit runtime-path wiring",
       "acceptance_criteria": "CPUguardsunchanged; exactapprovedcapsinclVRAM; source/runtimepath identity matchesbothprocesses; no publicfullfold bypass",
       "verification_steps": "Review+scoped CPU synthetic/negative tests, source hashes and immutable artifacts; actualCUDA only in separately bounded stage",
-      "required_artifacts": "20_LINUX_CUDA_WORKER_CONTRACT.md;runtime/mainworkerreports",
+      "required_artifacts": "cpu-worker-context-20261108-01; Gate18; akt_worker_context_readiness_20261108.md",
       "estimated_effort": "1–2 engineeringdays; actualGPU elapsed unknown",
       "compute_cost_category": "LocalCPU now; GPU09 boundedfreeColab only after prerequisites",
       "authorization_requirements": "Localengineering authorized; no methodology/fullCV/Holdout/Modal allocation from this task",
-      "status": "PLANNED",
-      "blockers": []
+      "status": "COMPLETED",
+      "blockers": [],
+      "completion_scope": "Software wiring/negative checks and actual guarded local CPU synthetic lifecycle only; actual GPU under GPU09."
     },
     {
       "id": "GPU08",
@@ -1958,8 +1959,13 @@
       "estimated_effort": "1–2 engineeringdays; actualGPU elapsed unknown",
       "compute_cost_category": "LocalCPU now; GPU09 boundedfreeColab only after prerequisites",
       "authorization_requirements": "Localengineering authorized; no methodology/fullCV/Holdout/Modal allocation from this task",
-      "status": "PLANNED",
-      "blockers": []
+      "status": "PARTIALLY_VERIFIED",
+      "blockers": [
+        "Full transitive Linux hash lock, isolated install/runtime and image digest not yet verified."
+      ],
+      "evidence_refs": [
+        "research_tracking/runs/gpu08-environment-proposal-20261108-01/README.md"
+      ]
     },
     {
       "id": "GPU09",
@@ -1985,11 +1991,202 @@
       "authorization_requirements": "Localengineering authorized; no methodology/fullCV/Holdout/Modal allocation from this task",
       "status": "PLANNED",
       "blockers": []
+    },
+    {
+      "id": "RQDIAG01",
+      "research_objective": "Conditional PMRA diagnosis từ traces đã lưu",
+      "rq": [
+        "RQ1"
+      ],
+      "workstream": "local_evidence_and_software",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "CPU04"
+      ],
+      "required_inputs": "Frozen source/proposal and previously closed pilot artifacts; no new real data",
+      "files_components": "research_tracking/runs/cpu-rq1-transitions-20261108-01/README.md",
+      "implementation_objective": "Conditional PMRA diagnosis từ traces đã lưu",
+      "acceptance_criteria": "Deliverable scoped correctly, source/output hashes and meaningful verification; no promotion to final RQ or fitted model.",
+      "verification_steps": "Review referenced report and SHA-bound bundle/source map; tests as reported, no redundant model reruns.",
+      "required_artifacts": [
+        "research_tracking/runs/cpu-rq1-transitions-20261108-01/README.md"
+      ],
+      "estimated_effort": "Completed in bounded08/11 engineering batch",
+      "compute_cost_category": "LocalCPU/no paidGPU",
+      "authorization_requirements": "User local engineering loop; no scientific scope/paid run approval inferred.",
+      "status": "COMPLETED",
+      "blockers": []
+    },
+    {
+      "id": "RQDIAG02",
+      "research_objective": "Profile contrast LOO và graph-control denominator sensitivity từ aggregates",
+      "rq": [
+        "RQ2"
+      ],
+      "workstream": "local_evidence_and_software",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "CPU09",
+        "CPU10"
+      ],
+      "required_inputs": "Frozen source/proposal and previously closed pilot artifacts; no new real data",
+      "files_components": "research_tracking/runs/rq2-conditions-evidence-20261108-01/README.md",
+      "implementation_objective": "Profile contrast LOO và graph-control denominator sensitivity từ aggregates",
+      "acceptance_criteria": "Deliverable scoped correctly, source/output hashes and meaningful verification; no promotion to final RQ or fitted model.",
+      "verification_steps": "Review referenced report and SHA-bound bundle/source map; tests as reported, no redundant model reruns.",
+      "required_artifacts": [
+        "research_tracking/runs/rq2-conditions-evidence-20261108-01/README.md"
+      ],
+      "estimated_effort": "Completed in bounded08/11 engineering batch",
+      "compute_cost_category": "LocalCPU/no paidGPU",
+      "authorization_requirements": "User local engineering loop; no scientific scope/paid run approval inferred.",
+      "status": "COMPLETED",
+      "blockers": []
+    },
+    {
+      "id": "GKT01",
+      "research_objective": "Pure static graph message/readout kernel; chưa full GKT",
+      "rq": [
+        "RQ3 supporting comparator"
+      ],
+      "workstream": "local_evidence_and_software",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [],
+      "required_inputs": "Frozen source/proposal and previously closed pilot artifacts; no new real data",
+      "files_components": "research_tracking/runs/gkt-core-engineering-20261108-01/README.md",
+      "implementation_objective": "Pure static graph message/readout kernel; chưa full GKT",
+      "acceptance_criteria": "Deliverable scoped correctly, source/output hashes and meaningful verification; no promotion to final RQ or fitted model.",
+      "verification_steps": "Review referenced report and SHA-bound bundle/source map; tests as reported, no redundant model reruns.",
+      "required_artifacts": [
+        "research_tracking/runs/gkt-core-engineering-20261108-01/README.md"
+      ],
+      "estimated_effort": "Completed in bounded08/11 engineering batch",
+      "compute_cost_category": "LocalCPU/no paidGPU",
+      "authorization_requirements": "User local engineering loop; no scientific scope/paid run approval inferred.",
+      "status": "COMPLETED",
+      "blockers": []
+    },
+    {
+      "id": "DEMO01",
+      "research_objective": "Read-only verified synthetic replay viewer; partial E11",
+      "rq": [
+        "demo"
+      ],
+      "workstream": "local_evidence_and_software",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "RQDIAG01",
+        "RQDIAG02"
+      ],
+      "required_inputs": "Frozen source/proposal and previously closed pilot artifacts; no new real data",
+      "files_components": "research_tracking/runs/demo-readonly-engineering-20261108-01/README.md",
+      "implementation_objective": "Read-only verified synthetic replay viewer; partial E11",
+      "acceptance_criteria": "Deliverable scoped correctly, source/output hashes and meaningful verification; no promotion to final RQ or fitted model.",
+      "verification_steps": "Review referenced report and SHA-bound bundle/source map; tests as reported, no redundant model reruns.",
+      "required_artifacts": [
+        "research_tracking/runs/demo-readonly-engineering-20261108-01/README.md"
+      ],
+      "estimated_effort": "Completed in bounded08/11 engineering batch",
+      "compute_cost_category": "LocalCPU/no paidGPU",
+      "authorization_requirements": "User local engineering loop; no scientific scope/paid run approval inferred.",
+      "status": "COMPLETED",
+      "blockers": []
+    },
+    {
+      "id": "WRITE01",
+      "research_objective": "Bản thảo phương pháp/giới hạn với claim-source map; chưa luận văn hoàn chỉnh",
+      "rq": [
+        "RQ1/RQ2"
+      ],
+      "workstream": "local_evidence_and_software",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "RQDIAG01",
+        "RQDIAG02"
+      ],
+      "required_inputs": "Frozen source/proposal and previously closed pilot artifacts; no new real data",
+      "files_components": "research_tracking/reports/THESIS_METHODS_RQ12_DRAFT_20261108.md",
+      "implementation_objective": "Bản thảo phương pháp/giới hạn với claim-source map; chưa luận văn hoàn chỉnh",
+      "acceptance_criteria": "Deliverable scoped correctly, source/output hashes and meaningful verification; no promotion to final RQ or fitted model.",
+      "verification_steps": "Review referenced report and SHA-bound bundle/source map; tests as reported, no redundant model reruns.",
+      "required_artifacts": [
+        "research_tracking/reports/THESIS_METHODS_RQ12_DRAFT_20261108.md"
+      ],
+      "estimated_effort": "Completed in bounded08/11 engineering batch",
+      "compute_cost_category": "LocalCPU/no paidGPU",
+      "authorization_requirements": "User local engineering loop; no scientific scope/paid run approval inferred.",
+      "status": "COMPLETED",
+      "blockers": []
+    },
+    {
+      "id": "SAKT03",
+      "research_objective": "Trainer SAKT CPU với dữ liệu giả: sliding_last_context/target_block1, vocabulary chỉ từ train, mask và ledger target đầy đủ, checkpoint chỉ dùng kiểm kỹ thuật.",
+      "rq": [
+        "RQ3 supporting model readiness"
+      ],
+      "workstream": "model_training_readiness",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "SAKT02"
+      ],
+      "required_inputs": "Existing causal model/data/role contracts + hand-crafted observable toy fixtures",
+      "files_components": "src/knowledge_tracing/sakt/training*.py;tests/sakt/test_training*.py",
+      "implementation_objective": "Trainer SAKT CPU với dữ liệu giả: sliding_last_context/target_block1, vocabulary chỉ từ train, mask và ledger target đầy đủ, checkpoint chỉ dùng kiểm kỹ thuật.",
+      "acceptance_criteria": "Finite genuine update; labels only loss/scoring; exhaustive target accounting, frozen eval, strict identity reload, no fitted research promotion.",
+      "verification_steps": "Meaningful known-answer/negative/parity tests; bounded .venv CPU; source hash snapshots and failures retained.",
+      "required_artifacts": "Readiness report + immutable source/log/XML/identity evidence bundle",
+      "estimated_effort": "1 bounded engineering batch; no research corpus training scheduled",
+      "compute_cost_category": "Local CPU synthetic only",
+      "authorization_requirements": "User sustained local engineering request; Synthetic suite <=120s/32 optimizer steps; no real data/GPU/fitted-role promotion.",
+      "status": "IN_PROGRESS",
+      "blockers": [
+        "S04/S05 pending for scientific adoption/full fit, not pure synthetic engineering."
+      ]
+    },
+    {
+      "id": "SIMTRAIN01",
+      "research_objective": "Vòng đời AKT simulator một epoch với vai trò dữ liệu riêng; không giả fold Junyi, không calibration/refit/final hoặc cấp chứng nhận phục vụ mô hình.",
+      "rq": [
+        "RQ3 supporting model readiness"
+      ],
+      "workstream": "model_training_readiness",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "DATA06",
+        "GPU07"
+      ],
+      "required_inputs": "Existing causal model/data/role contracts + hand-crafted observable toy fixtures",
+      "files_components": "src/knowledge_tracing/akt/simulator_engineering.py;tests/akt/test_simulator_engineering.py",
+      "implementation_objective": "Vòng đời AKT simulator một epoch với vai trò dữ liệu riêng; không giả fold Junyi, không calibration/refit/final hoặc cấp chứng nhận phục vụ mô hình.",
+      "acceptance_criteria": "Finite genuine update; labels only loss/scoring; exhaustive target accounting, frozen eval, strict identity reload, no fitted research promotion.",
+      "verification_steps": "Meaningful known-answer/negative/parity tests; bounded .venv CPU; source hash snapshots and failures retained.",
+      "required_artifacts": "Readiness report + immutable source/log/XML/identity evidence bundle",
+      "estimated_effort": "1 bounded engineering batch; no research corpus training scheduled",
+      "compute_cost_category": "Local CPU synthetic only",
+      "authorization_requirements": "User sustained local engineering request; Per run <=2train+1selection learner/12events per learner/4updates/60s/2GiBRAM; suite <=90s/16updates.",
+      "status": "IN_PROGRESS",
+      "blockers": [
+        "S04/S05 pending for scientific adoption/full fit, not pure synthetic engineering."
+      ]
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",
   "local_cpu_engineering_authorized": true,
-  "local_cpu_authorization_reference": "User request 2026-11-07 engineering loop, organize evidence, commit completed work",
+  "local_cpu_authorization_reference": "User2026-11-08 sustained engineering loop and parallel subagents; retain earlier safety/commit/budget limits",
   "cloud_financial_constraint": {
     "monthly_ceiling_usd": 30,
     "reference": "User07/11",

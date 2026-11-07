@@ -75,3 +75,13 @@ Chỉ mục này không thêm GPU/runtime verdict khi chưa có evidence bundle 
 - [BAO_CAO_TIEN_DO_GVHD_20261108.md](BAO_CAO_TIEN_DO_GVHD_20261108.md): bản tổng hợp đọc độc lập, nguồn/giới hạn/những điểm cần GVHD chốt. JSON đi cùng lưu claim→artifact và SHA; chưa tự gửi ra ngoài.
 - [rq1_transition_evidence_20261108.md](rq1_transition_evidence_20261108.md): conditional event tables và trường hợp cụ thể từ stored synthetic traces,25unitcases; không biến scalar-P/preview thành causal full-chain.
 - [rq2_conditions_evidence_20261108.md](rq2_conditions_evidence_20261108.md): profile-pair LOO, graph-control exposure và đổi dấu theo weighting/population,27unitcases. [Primary](../runs/rq2-conditions-evidence-20261108-01/README.md) và [validation](../runs/rq2-conditions-validation-20261108-01/README.md) có vai trò khác nhau; không tăng n bằng việc archive/reproduce.
+
+## Batch08/11 — sản phẩm kỹ thuật và bản thảo luận văn
+
+- [AKT worker context](akt_worker_context_readiness_20261108.md), [review độc lập](gpu07_adversarial_review_20261108.md): Gate18 661PASS, actual-guard WindowsCPU toy lifecycle48targets/2updates/8predictions; actual Linux/CUDA mới vẫn chưa kiểm.
+- [GKT source plan](gkt_source_and_core_plan_20261108.md), [GKT kernel](gkt_core_readiness_20261108.md):43PASS, chỉ toán tử message/readout, chưa recurrence/trainer/fitted baseline.
+- [Demo chỉ đọc](demo_readiness_20261108.md):53PASS và visual QA, partialE11; replay stored synthetic artifacts, không giả lập fittedCG-AKT/live personalization.
+- [Bản thảo phương pháp RQ1/RQ2](THESIS_METHODS_RQ12_DRAFT_20261108.md): phần sẵn trích dẫn với [.sources.json](THESIS_METHODS_RQ12_DRAFT_20261108.sources.json), giữ pilot/descriptive/provenance limits, không tự chốt protocol.
+- [GPU08 environment proposal](../../docs/akt-linux-cuda-environment.md): official metadata và receipts đã archive; full Linux transitive hash lock/image/actual runtime còn thiếu. Không dùng Windows --platform để chứng nhận Linux markers.
+
+- [Model completion delta](model_completion_contract_20261108.md): required comparators vẫn giữ đủ; core/inference/trainer/fitted results/simulator bridge là các mức khác nhau. SAKT03 và SIMTRAIN01 tiếp tục synthetic-only, chưa adoption S04/S05.

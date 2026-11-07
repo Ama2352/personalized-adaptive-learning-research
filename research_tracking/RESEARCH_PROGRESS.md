@@ -1,5 +1,12 @@
 # Tiến độ nghiên cứu
 
+**Vòng tiếp theo đang làm:** SAKT03 và SIMTRAIN01 chỉ dùng dữ liệu giả để kiểm kỹ thuật. Module/test AKT mới cần Gate19 sau freeze; Gate18 bên dưới là snapshot nguồn đã kiểm trước batch mới, không tự áp dụng cho nguồn đang sửa. Colab CPU chờ xác nhận frontend, chưa remote call/GPU/Modal.
+
+## Snapshot engineering08/11 — xem giới hạn từng bằng chứng
+
+Gate18 WindowsCPU661PASS; real-guard watchdog toy lifecycle48targets/2updates/8predictions đã kiểm. **Actual new-worker Linux/CUDA và GPU08fullhashlock/image vẫn thiếu**, chưa Gate4/fulltraining. GKT43PASS purekernel vẫn incomplete; demo53PASS+visualQA là storedsynthetic replay/partialE11; bản thảo phương phápRQ12 đã cósourcesmap. RQ1/RQ2 chỉ pilot/descriptive, RQ3 chưa fittedcomparisons. [Context report](reports/akt_worker_context_readiness_20261108.md), [demo](reports/demo_readiness_20261108.md), [GKT](reports/gkt_core_readiness_20261108.md), [thesisdraft](reports/THESIS_METHODS_RQ12_DRAFT_20261108.md). No Modal credit used by batch, no Holdout or external sending. Các snapshot cũ dưới đây là lịch sử, không thay current verdict.
+
+
 **Trạng thái hiện tại — 07/11/2026:** đọc dashboard này trước các snapshots lịch sử bên dưới. Đề cương và Paper1/2 đã tìm được; lịch sử04/11 “chưa thấy” không còn mô tả inventory hiện tại. Không dùng các số test/version của snapshot cũ thay nghiệm thu mới.
 
 | Phạm vi | Trạng thái dựa bằng chứng hiện tại | Việc còn thiếu |

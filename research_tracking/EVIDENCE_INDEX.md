@@ -139,3 +139,12 @@ Số outputs là inventory snapshot của các bundles, không chỉ số hoàn 
 - [RQ1](reports/rq1_transition_evidence_20261108.md), [run12outputs](runs/cpu-rq1-transitions-20261108-01/README.md): join stored synthetic snapshots;944/964 scalar-P-changed giữ concept preview,2/116 scalar-P-same đổi preview; conditional co-occurrence không causal mediation. Empty graph-package37Pchanges/0MRA; closed-loop thiếu M/R nên không suy fullchain.
 - [RQ2](reports/rq2_conditions_evidence_20261108.md), [primary6outputs](runs/rq2-conditions-evidence-20261108-01/README.md), [validation21outputs](runs/rq2-conditions-validation-20261108-01/README.md): paired-profile contrast/LOO và Junyi control exposure/denominator decomposition. Mean PYH−PY không robust sign dưới LOO; controls chỉ thay20/976baseedges,40removed/addedentries. Không causal benefit/equivalence hoặc populationCI.
 - Cả hai reuse stored artifacts, không train/simulator rerun hoặc query Junyi/Holdout outcomes mới;52newsynthetic analyzer tests pass. Analysis primary và validation archive không là các thí nghiệm độc lập.
+
+## Batch engineering08/11 — context, GKT, demo và môi trường
+
+- [gkt-core-engineering-20261108-01](runs/gkt-core-engineering-20261108-01/README.md): GKT pure static kernel; 20 outputs SHA verified; software_partial_kernel_not_fitted.
+- [gpu08-environment-proposal-20261108-01](runs/gpu08-environment-proposal-20261108-01/README.md): Linux CUDA environment metadata; 25 outputs SHA verified; proposal_only_not_full_lock_or_runtime.
+- [cpu-worker-context-20261108-01](runs/cpu-worker-context-20261108-01/README.md): AKT context and bounded CUDA phase; 113 outputs SHA verified; actual_guard_Windows_CPU_synthetic_only.
+- [demo-readonly-engineering-20261108-01](runs/demo-readonly-engineering-20261108-01/README.md): Read-only synthetic evidence demo; 93 outputs SHA verified; partial_demo_no_live_fitted_personalization.
+
+GKT archive force_add_paths.json rỗng do check-ignore stdin sai; danh sách explicit đúng là execution.log và trial01_pytest.log. Chỉ sửa locator ở chỉ mục này, không sửa bundle đóng. GPU08 dùng argv từng path. Source/code/testing hoàn tất không thay quyền thực thi nghiên cứu.
