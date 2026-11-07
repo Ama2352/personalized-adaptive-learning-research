@@ -121,3 +121,9 @@ Kitv6 có113source/fixture files, source-only notebook copies và project venv. 
 | [sakt-core-engineering-20261107-01](runs/sakt-core-engineering-20261107-01/README.md), 30 outputs | [SAKT core readiness](reports/sakt_core_readiness_20261107.md): paper-equation single-block core; giữ 35-pass intermediate và source-bound 37-pass final CPU synthetic evidence, 0 optimizer steps. | Random weights chưa là fitted baseline; adapter/trainer/epoch selection/refit/export/resume/calibration còn thiếu. Gate15 và kit v12 không chứa SAKT; attention không tự là prerequisite graph. |
 
 Số outputs là inventory snapshot của các bundles, không chỉ số hoàn thành RQ. Không bổ sung runtime/GPU verdict từ thông tin chưa có bundle đã đối chiếu.
+
+## Actual AKT CUDA trên Colab T4 — 07/11/2026
+
+- [Nghiệm thu](reports/colab_cuda_acceptance_20261107.md), [phản biện độc lập](reports/colab_cuda_adversarial_review_20261107.md) và [bundle68outputs](runs/colab-cuda-synthetic-20261107-01/README.md): agent tự chạy setup/CPU505pass/GPU400target1update và fresh-process recovery17targets5vs2+3; delta0 trong tolerance1e-5.44original outputSHA,144chunk receipts và139source-file hashes đã kiểm; CSV400rows là bản trích từ synthetic Parquet.
+- Checkpoints/binary giữ trong `experiments/akt/results/colab-actual-cuda-20261107-01/`, ZIP gốc28.657.701bytesSHA64392c70... ở artifacts/akt/colab. Không sửa historicalfailure435/7/8; bản mới có source/workspace/manifest riêng.
+- Gate4false, không realdata/fulltraining/RQ efficacy, không hardkill/preemption/ModalVolume proof hoặc representative cost forecast. Runtime thử nghiệm đã chấp nhận unassign sau nhận đủ artifacts; bridgeclosed. Không dùng credit Modal. GPU06/runtime-phase contract còn trước mainworker training.

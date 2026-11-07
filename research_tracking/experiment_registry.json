@@ -1328,6 +1328,59 @@
         "SequenceKTModel/simulator adapter, trainer/epoch selection/refit/export/resume/calibration và protocol conventions còn thiếu.",
         "Gate15 và kitv12 không chứa SAKT; bộ kiểm lõi này không chứng minh Linux/Colab/CUDA acceptance."
       ]
+    },
+    {
+      "id": "colab-cuda-synthetic-20261107-01",
+      "model": "AKT NonRasch graph-free",
+      "rq": [],
+      "evidence_role": "actual_colab_cuda_synthetic_technical_acceptance_only",
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED_OUTPUT_INTEGRITY_AND_BOUNDED_CONTRACTS",
+      "evidence_refs": [
+        "runs/colab-cuda-synthetic-20261107-01/manifest.json",
+        "runs/colab-cuda-synthetic-20261107-01/README.md",
+        "reports/colab_cuda_acceptance_20261107.md",
+        "reports/colab_cuda_adversarial_review_20261107.md"
+      ],
+      "output_count": 68,
+      "actual_remote_execution": true,
+      "gpu_name": "Tesla T4",
+      "cpu_tests": {
+        "passed": 505,
+        "deselected": 2,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 117.23
+      },
+      "lifecycle": {
+        "synthetic_targets": 400,
+        "optimizer_updates": 1,
+        "step_seconds": 0.916326332999688,
+        "peak_allocated_vram_bytes": 187200000
+      },
+      "recovery": {
+        "targets_per_branch": 17,
+        "continuous_updates": 5,
+        "interrupted_updates": 2,
+        "resumed_updates": 3,
+        "all_process_updates": 10,
+        "fresh_processes": 3,
+        "elapsed_seconds": 28.94393326799991,
+        "floating_atol": 1e-05,
+        "floating_rtol": 1e-05,
+        "max_state_abs_delta": 0,
+        "max_prediction_abs_delta": 0
+      },
+      "gate4_pass": false,
+      "modal_compute_executed": false,
+      "limitations": [
+        "Controlled optimizer-boundary recovery in same runtime, not hardkill/preemption/Volume durability.",
+        "No main Linux/CUDA worker/runtime-phase contract yet; inherited Colab freeze not training image/hashlock.",
+        "Synthetic same-cohort prediction coverage, not independent predictive evaluation or thesis/RQ efficacy.",
+        "One synchronized training step not representative throughput/cost forecast; paid allocation remains gated.",
+        "Unassign accepted after local integrity verification; no independent cloud runtime-list readback."
+      ]
     }
   ]
 }

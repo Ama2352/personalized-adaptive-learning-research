@@ -58,3 +58,9 @@ JSON bootstrap chuyển từ root `reports/` với bytes/SHA giữ nguyên. [H�
 - [SAKT core readiness](sakt_core_readiness_20261107.md), [bundle 30 outputs](../runs/sakt-core-engineering-20261107-01/README.md): source-bound final 37 CPU synthetic cases, random weights và 0 optimizer steps. Chưa fitted baseline/adapter/trainer; Gate15 và kit v12 không chứa SAKT.
 
 Chỉ mục này không thêm GPU/runtime verdict khi chưa có evidence bundle đã đối chiếu; không tự thông qua S04/S05 hoặc bỏ required baselines.
+
+## Nghiệm thu GPU thực tế07/11
+
+- [colab_cuda_acceptance_20261107.md](colab_cuda_acceptance_20261107.md): actual ColabT4 CPU505pass,400target lifecycle và controlled fresh-process CUDA recovery; trả đủ44outputs/SHA, không fulltraining/Gate4.
+- [colab_cuda_adversarial_review_20261107.md](colab_cuda_adversarial_review_20261107.md): kiểm độc lập source/coverage và các blockers Linuxruntime, mainworker lifecycle, throughput, Modal durability/budget.
+- [Bundle CUDA68outputs](../runs/colab-cuda-synthetic-20261107-01/README.md) giữ raw receipts/logs/JUnit/manifests/source snapshots, không heavy checkpoints trong Git. Các failures preflight vẫn giữ nguyên trong bundle lịch sử.

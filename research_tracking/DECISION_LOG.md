@@ -16,3 +16,7 @@ Chỉ ghi quyết định rõ trong tài liệu/config/run evidence. Không suy 
 ## DEC-CPU-20261107
 
 User chấp thuận pilot factorial10seed/profile×120steps và Junyi32inner-train×120prefix. Runs đã completed. Catalog thô Junyi có self-loops/cycle, cần graph-version decision, không tự cắt cạnh. Confirmatory inference và final scope vẫn pending.
+
+## D-20261107-CUDA — Probe đạt, chưa cấp quyền training chính thức
+
+**Bằng chứng:** [CUDA acceptance](reports/colab_cuda_acceptance_20261107.md), [independent review](reports/colab_cuda_adversarial_review_20261107.md), kitv12 và returned44outputs. Quyết định kỹ thuật: không rerun các probe đã đạt hoặc dùng Modal đểdebuglại; ưu tiên GPU06/Linuxruntime+boundedmainworkercontract và explicitnegativecontrols. Không đồng nhất controlledoptimizer-boundaryresume với hardkill/Volumeproof; không dự báo fullCV từ một synchronizedstep. Không thay approvedscientificmethodology, S04/S05 hoặc requiredmodels. Paidallocation/fullCV/Holdout vẫn gate riêng; 30free/net0 giữ nguyên.

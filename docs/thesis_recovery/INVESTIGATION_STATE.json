@@ -81,7 +81,7 @@
     "mandatory baseline allocation pending",
     "Linux/Colab GPU publish/lifecycle chưa thực chạy, Windows local fix đã verified"
   ],
-  "next_recommended_investigation": "Read latest colab_recovery report; continue independent graph/protocol engineering, execute Colab only through an available standard runtime, no credit spend",
+  "next_recommended_investigation": "Đọc colab_cuda_acceptance_20261107.md và adversarial runtime blockers; làm Linux/GPU fullworker contract cục bộ trước bất kỳ Modal pilot có chi phí.",
   "resume_instructions": "Đọc STATE, LOG,09 và03 trước. Không lặp PDF/source scans đã có nếu hashes không đổi. Đọc current test logs và staged status. Mọi sửa verdict append lý do vào LOG. Không launch training từ task existence.",
   "resolved_questions": {
     "Q09": "Map đủ28nodes,36unique IDs,8extra metadata IDs,0duplicates, planning_validation.json"
@@ -322,16 +322,12 @@
     "verification": "CRC/each SHA/current source parity; notebook originals unchanged; no actual isolated Linux/Colab/CUDA execution"
   },
   "next_bounded_engineering_batch": [
-    "Current priorityCOLAB05: actualColab MCP now works/TeslaT4 directly captured; CPU450cases=435pass/7fail/8errors/0skip,2deselected115.86s. Fix12DuckDBfixture API cases and3Windows/Linux assumptions with controls, no skips/gate bypass. Preserve run01/02ZIPs; new source Gate/kit before rerunGPU. Bridge52627 may remain active, verify status; no install/auth repetition.",
-    "User pasted actual cell01 CONNECTED_GPU/TeslaT4/Python3.13.16/Torch2.14.1+cu130 output. Hardware discovery only; run bounded notebook interactively and inspect returned ZIP, no full model/Gate4/throughput claim.",
-    "User selected VSCode handoff: notebook8cells now self-contained embeddedv11,20localchecks; no ZIP upload. Wait for actual kernel/device output and verify returned artifact ZIP. Agent terminal kernel bridge remains unverified; do not claim remote execution from mocks.",
-    "Official Colab CLI/MCP routes now discovered: inspect interactive MCP/client compatibility first; CLI Linux/macOS only, no Windows support promised. Do not equate installed VSCode extension with agent access. No runtime allocated.",
-    "Actual Colab not connected/executed: current7cell notebook + v11 ready for standard interactive run; user already authorized free Colab; preserve returned ZIP, no automatic paid fallback.",
-    "Do not rerun completed CPU recovery/regression/collector fixtures without source changes or a specific unresolved concern; current source-bound Gate14 is407pass.",
-    "Independent local work: isolated graph-variant prototype per06 with graph-off equivalence/history/oracle boundaries; separately track main architecture and accepted evaluation protocol.",
-    "Prepare Linux CUDA image/lock/runtime-origin/Modal bounded run-spec locally without provisioning. Colab pass will not prove Modal Volume/preemption/durability.",
-    "S04 mastery/calibration/controller and S05 model/environment/full corpus allocation remain pending; no final training/data collection from fixture acceptance.",
-    "Modal authenticated workspace honguyenminhsang2005, token expires2026-11-14T17:37:38+07:00; credit-only30/net0, no compute launched."
+    "Thiết kế rồi cài riêng Linux/CUDA runtime identity và bounded GPU worker phase: giữ Windows CPU guards, không dùng lock Windows/CPU cho Linux hoặc nới origin checks để Colab pass.",
+    "Chuẩn bị source-bound synthetic fullworker train/validation/checkpoint/export/resume contract, quota/runtime/VRAM budget và throughput benchmark; chưa real-data/fullCV/Modal allocation.",
+    "SAKT core37tests đã có, còn adapter/trainer/export/resume và final context/firsttarget/calibration protocol; GKT vẫn required, không tự bỏ.",
+    "S04 mastery/calibration/controller và S05 model/environment/corpus allocation cần chốt trước final evidence collection/training; Junyi và Grade10 phải riêng vocab/fits.",
+    "Paper1 exact submitted revision chưa local; cần source+inputs+actualseeds+perseed outputs để reproduction, không sửa historical results.",
+    "Modal30freecredits/net0 untouched; không auto paid fallback. Colab lifecycle/recovery pass không làm Gate4 đạt hoặc xác lập cost/target."
   ],
   "simulator_interface_engineering_20261107": {
     "status": "COMPLETED_CPU_ENGINEERING",
@@ -364,17 +360,15 @@
   },
   "current_software_gate": {
     "status": "PASS",
-    "run_id": "20261107-colab-recovery-14",
-    "passed": 407,
+    "run_id": "20261107-parallel-portability-15",
+    "passed": 462,
     "failed": 0,
     "errors": 0,
     "skipped": 0,
-    "pytest_seconds": 169.05,
-    "wrapper_seconds": 171.19081980001647,
-    "timeout_seconds": 540,
-    "report_sha256": "4ed716224778b069816e0ba22370bfc4ad5c60326a89cfc5d7b832133716d961",
-    "archive": "cpu-colab-recovery-gate-20261107-01",
-    "scope": "CPU synthetic/software only; no actual CUDA/Colab/full research acceptance"
+    "pytest_seconds": 294.17,
+    "report_sha256": "7e15832f72632dd07f676ef277a8ad49d3f4a71ef35c8f40099492f5b9071f16",
+    "archive": "cpu-portability-gate-20261107-01",
+    "scope": "Local CPU tests/akt + tests/shared_kt, includes isolated graph kernel; excludes new SAKT package/tests. No full research/Gate4 acceptance."
   },
   "previous_software_gate": {
     "run_id": "20261107-simulator-batch-10",
@@ -626,7 +620,7 @@
     "next": "RunAll bounded notebook, then verify CPU acceptance and both CUDA probe artifacts; no automatic Modal fallback"
   },
   "colab_mcp_engineering_20261107": {
-    "status": "CONNECTED_ACTUAL_REMOTE_EXECUTION_VERIFIED_CPU_PORTABILITY_FAILED",
+    "status": "COMPLETED_BOUNDED_CUDA_ACCEPTANCE_BRIDGE_CLOSED",
     "evidence": "colab-mcp-preflight-20261107-01",
     "client": "scripts/colab_mcp_client.py",
     "upstream_commit": "b9ab3899e0f1fa493390b1fd6d54aa2e464ecdf1",
@@ -642,21 +636,22 @@
     "torch_remote": "2.14.1+cu130",
     "colab_setup02": "PASS_WITH_VENV_TARGET_CHECK",
     "cpu_tests": {
-      "passed": 435,
-      "failed": 7,
-      "errors": 8,
+      "passed": 505,
+      "failed": 0,
+      "errors": 0,
       "skipped": 0,
       "deselected": 2,
-      "pytest_seconds": 115.86
+      "pytest_seconds": 117.23
     },
-    "cuda_model_checks_executed": false,
+    "cuda_model_checks_executed": true,
     "agent_terminal_kernel_bridge_verified": true,
     "modal_compute_or_credits_used": false,
     "bridge_exec_session_id": 52627,
     "bridge_private_state": "artifacts/akt/private/colab-bridge/current.json",
     "ttl_seconds": 7200,
-    "resume": "Check write_stdin status on52627 before assuming connection; if expired start client with local network permission and official browser, no reinstall and no automatic experiment retry. Cell map in artifacts/akt/colab/mcp-cell-map.json; all failures exported locally with hashes.",
-    "next": "COLAB05: dependency and OS-explicit fixture fixes; new source-bound Gate/kit then rerun bounded portability before GPU model stages"
+    "resume": "Bridge closed after guarded current-runtime unassign accepted and all44outputs received; no automatic reconnect, allocation or rerun. Read current CUDA acceptance and GPU06 first.",
+    "next": "Không tái lập auth/setup hoặc rerun đã đạt; GPU fullworker cần Linux runtime + bounded GPU-phase contract. Không tự provision Modal.",
+    "historical_failure_evidence": "colab-mcp-preflight-20261107-01"
   },
   "kaggle_alternative_20261107": {
     "status": "EVALUATED_NOT_CONFIGURED",
@@ -673,5 +668,124 @@
     "uploaded_or_provisioned": false,
     "recommendation": "Fix observed dependency/platform portability failures first; Kaggle optional batch-job fallback, not an automatic cure for15testissues",
     "user_concern": "Too much time spent on Colab setup; stop expanding connection infrastructure now that native execution is verified"
+  },
+  "parallel_engineering_20261107": {
+    "status": "COMPLETED_VERIFIED_BOUNDED_BATCH",
+    "authorization": "User explicitly requested parallel agents",
+    "tasks": [
+      "platform_fixture_compat",
+      "rq12_evidence_synthesis",
+      "graph_gate_prototype"
+    ],
+    "parent_work": "Colab dependency/API readiness and integration, archive and Git coordination",
+    "no_subagent_git_mutations": true,
+    "no_realdata_holdout_cloudspend": true,
+    "mcp_commit": "e7dcf6b",
+    "mcp_git_output_sha_verified": 44,
+    "bundles": [
+      "parallel-graph-diagnostics-20261107-01",
+      "cpu-portability-gate-20261107-01",
+      "paper1-revision-audit-20261107-01",
+      "sakt-core-engineering-20261107-01"
+    ],
+    "graph_prototype_tests": 42,
+    "sakt_core_tests": 37,
+    "scientific_limits": "Graph kernel chưa tích hợp/trainedCG-AKT; SAKT chưatrainer/adapter/benchmark; RQ1/2 synthesis/exploratory pilot không confirmatory efficacy; Paper1 exact revision chưa tìm thấy",
+    "integrated_commit": "e25dfea58da0d0872e0ae924b7ce243295a39065",
+    "git_output_hashes_verified": 114
+  },
+  "software_gate_before_parallel_batch": {
+    "status": "PASS",
+    "run_id": "20261107-colab-recovery-14",
+    "passed": 407,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "pytest_seconds": 169.05,
+    "wrapper_seconds": 171.19081980001647,
+    "timeout_seconds": 540,
+    "report_sha256": "4ed716224778b069816e0ba22370bfc4ad5c60326a89cfc5d7b832133716d961",
+    "archive": "cpu-colab-recovery-gate-20261107-01",
+    "scope": "CPU synthetic/software only; no actual CUDA/Colab/full research acceptance"
+  },
+  "superseded_next_batches": [
+    {
+      "replaced_on": "2026-11-07",
+      "reason": "Actual Colab CUDA acceptance and parallel batch completed",
+      "items": [
+        "Current priorityCOLAB05: actualColab MCP now works/TeslaT4 directly captured; CPU450cases=435pass/7fail/8errors/0skip,2deselected115.86s. Fix12DuckDBfixture API cases and3Windows/Linux assumptions with controls, no skips/gate bypass. Preserve run01/02ZIPs; new source Gate/kit before rerunGPU. Bridge52627 may remain active, verify status; no install/auth repetition.",
+        "User pasted actual cell01 CONNECTED_GPU/TeslaT4/Python3.13.16/Torch2.14.1+cu130 output. Hardware discovery only; run bounded notebook interactively and inspect returned ZIP, no full model/Gate4/throughput claim.",
+        "User selected VSCode handoff: notebook8cells now self-contained embeddedv11,20localchecks; no ZIP upload. Wait for actual kernel/device output and verify returned artifact ZIP. Agent terminal kernel bridge remains unverified; do not claim remote execution from mocks.",
+        "Official Colab CLI/MCP routes now discovered: inspect interactive MCP/client compatibility first; CLI Linux/macOS only, no Windows support promised. Do not equate installed VSCode extension with agent access. No runtime allocated.",
+        "Actual Colab not connected/executed: current7cell notebook + v11 ready for standard interactive run; user already authorized free Colab; preserve returned ZIP, no automatic paid fallback.",
+        "Do not rerun completed CPU recovery/regression/collector fixtures without source changes or a specific unresolved concern; current source-bound Gate14 is407pass.",
+        "Independent local work: isolated graph-variant prototype per06 with graph-off equivalence/history/oracle boundaries; separately track main architecture and accepted evaluation protocol.",
+        "Prepare Linux CUDA image/lock/runtime-origin/Modal bounded run-spec locally without provisioning. Colab pass will not prove Modal Volume/preemption/durability.",
+        "S04 mastery/calibration/controller and S05 model/environment/full corpus allocation remain pending; no final training/data collection from fixture acceptance.",
+        "Modal authenticated workspace honguyenminhsang2005, token expires2026-11-14T17:37:38+07:00; credit-only30/net0, no compute launched."
+      ]
+    }
+  ],
+  "colab_cuda_acceptance_20261107": {
+    "status": "VERIFIED_ACTUAL_COLAB_CUDA_SYNTHETIC",
+    "zip": "artifacts\\akt\\colab\\actual-cuda-synthetic-20261107-01.zip",
+    "zip_bytes": 28657701,
+    "zip_sha256": "64392c70b03162b923740dbe73c0b991a0e7f3f03eea31e6912172db2158f188",
+    "output_directory": "experiments\\akt\\results\\colab-actual-cuda-20261107-01",
+    "output_files": 44,
+    "cpu_tests": 505,
+    "cpu_failures": 0,
+    "cpu_errors": 0,
+    "cpu_skips": 0,
+    "lifecycle": {
+      "status": "passed_synthetic",
+      "gpu_name": "Tesla T4",
+      "training_seconds": 0.916326332999688,
+      "peak_vram_bytes": 187200000,
+      "gate4_pass": false
+    },
+    "recovery": {
+      "status": "passed_synthetic_recovery",
+      "elapsed_seconds": 28.94393326799991,
+      "cuda_mid_epoch_resume_verified": true,
+      "max_state_abs_delta": 0.0,
+      "max_prediction_abs_delta": 0.0,
+      "gate4_pass": false
+    },
+    "scope": "Bounded synthetic CUDA lifecycle/controlled optimizer-boundary recovery only; no full training, realdata, Modal, hard-kill/preemption or RQ efficacy",
+    "evidence": "colab-cuda-synthetic-20261107-01",
+    "source_kit": "akt-synthetic-20261107-v12.zip",
+    "source_kit_files": 139,
+    "source_kit_sha256": "ddb35b8eb39906eea6ca6d1ad629d849d398ce4111ee95f3eca64ed9d369155b",
+    "cpu_seconds": 117.23,
+    "explicit_deselections": 2,
+    "chunk_count": 144,
+    "runtime_release": "CURRENT_SYNTHETIC_RUNTIME_UNASSIGN_ACCEPTED",
+    "bridge_closed": true,
+    "cloud_runtime_list_independently_verified": false,
+    "modal_credits_used": 0,
+    "limits": "Controlled optimizer-boundary interruption; no hard-kill, preemption, Volume durability, representative throughput or final RQ result",
+    "archive_output_count": 68,
+    "independent_readonly_review": "PASS_BOUNDED_CONTRACTS_MAIN_WORKER_BLOCKED",
+    "heavy_checkpoint_files": 13,
+    "parquet_files": 2,
+    "derived_csv_rows": 400
+  },
+  "current_readiness_summary": {
+    "overall_thesis": "NOT_READY_FOR_FINAL_RESEARCH",
+    "RQ1": "PARTIAL_DIAGNOSTIC_EVIDENCE",
+    "RQ2": "PARTIAL_CONTROLLED_PILOTS_AND_CONFOUNDING_AUDIT",
+    "RQ3": "GRAPH_KERNEL_ONLY_NOT_TRAINED_CGAKT",
+    "AKT_CUDA": "BOUNDED_SYNTHETIC_ACCEPTED",
+    "AKT_MAIN_LINUX_GPU_WORKER": "NOT_READY_RUNTIME_PHASE_CONTRACT_MISSING",
+    "SAKT": "CORE_VERIFIED_TRAINER_ADAPTER_PENDING",
+    "GKT": "REQUIRED_PENDING",
+    "Modal": "NO_COMPUTE_SPEND_NO_AUTOMATIC_ALLOCATION",
+    "primary_next_task": "GPU06",
+    "methodology_pending": [
+      "S04",
+      "S05"
+    ],
+    "supersedes": "Prior connection/kit/gate snapshots are historical; current_software_gate and colab_cuda_acceptance_20261107 govern current readiness"
   }
 }

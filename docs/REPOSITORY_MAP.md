@@ -98,3 +98,12 @@ Nguồn đối chiếu chính: [AKT config](../src/knowledge_tracing/akt/config.
 ## Đợt sắp xếp07/11
 
 Chỉ di chuyển JSON bootstrap về nơi thống nhất, cập nhật locator/index, ghi quy ước trong AGENTS và bỏ root reports sau khi xác nhận rỗng. .pytest_cache giữ nguyên vì quyền truy cập bị chặn, chưa xác minh nội dung; không thay ACL hoặc retry xóa. Trước/sau có inventory SHA; nội dung thống kê và bundles/manifests/models/predictions cũ giữ nguyên. Không dọn artifacts/akt/local-tests hoặc tmp vì một số file còn được evidence/resume inventory tham chiếu.
+
+## Điểm vào mới sau batch CPU/CUDA07/11
+
+- [AKT actual CUDA acceptance](../research_tracking/reports/colab_cuda_acceptance_20261107.md) và [phản biện GPU](../research_tracking/reports/colab_cuda_adversarial_review_20261107.md): CPU505pass, synthetic400target lifecycle và fresh-process recovery; chưa full training/Gate4. Checkpoint/binary giữ tại `experiments/akt/results/colab-actual-cuda-20261107-01/`, summaries/logs/SHA trong run bundle theo chỉ mục.
+- [RQ1/RQ2 synthesis](../research_tracking/reports/rq12_evidence_synthesis_20261107.md) và [factorial uncertainty](../research_tracking/reports/factorial_pilot_uncertainty_20261107.md): tổng hợp aggregates/exploratory post-hoc, không rerun toàn paper hoặc confirmatory efficacy.
+- [Paper1 revision reconciliation](../research_tracking/reports/paper1_revision_reconciliation_20261107.md): exact source revision chưa tìm thấy trong phạm vi local; không sửa lịch sử để ép khớp PDF.
+- [Graph kernel](../src/knowledge_tracing/graph_augmentation.py) cùng [báo cáo](../research_tracking/reports/graph_gate_prototype_20261107.md): độc lập, chưa CG-AKT trained. [SAKT core](../src/knowledge_tracing/sakt/) cùng [readiness](../research_tracking/reports/sakt_core_readiness_20261107.md):37CPUtests, chưa trainer/benchmark; không nằm trong kitv12/Gate15.
+
+Các mục count/inventory phía trên là snapshots có ngày, không tự cập nhật khi thêm run. Current deliverable status ở `research_tracking/RESEARCH_PROGRESS.md` và `docs/thesis_recovery/INVESTIGATION_STATE.json`; run manifests đã đóng luôn bất biến.

@@ -1626,20 +1626,18 @@
         "COLAB01",
         "COLAB03"
       ],
-      "required_inputs": "Self-contained8cell notebook; standard VSCode Colab interactive GPU kernel/auth, no source upload needed",
+      "required_inputs": "Official Colab MCP bridge on user-selected free T4, source-bound v12 kit; browser runtime released after all44outputs verified locally",
       "files_components": "notebooks/akt_colab_synthetic.ipynb;docs/akt-colab-synthetic-runbook.md",
       "implementation_objective": "Run CPU portability then lifecycle400targets/1update and separate17target recovery; export full result ZIP even failures",
       "acceptance_criteria": "Nonempty zero-failure/error/skip portability suite; finite lifecycle/reload/current-future invariance; exact ledger/RNG/sampler, CUDA model/Adam/prediction tolerance1e-5, complete inventories; no Gate4 claim",
       "verification_steps": "Inspect reports/source/runtime IDs, every output SHA and checkpoint certificates; do not accept exit0 alone",
       "required_artifacts": "Returned resultZIP; immutable evidence run with Vietnamese interpretation and failure classification",
-      "estimated_effort": "Setup+review0.25day; CPU portability cap600s,lifecycle600s,recoverycontroller180s; actual runtime unmeasured",
+      "estimated_effort": "Completed: CPU117.23s,one lifecycle optimizerstep0.916326s,controlled recovery28.943933s; not representative fulltraining throughput",
       "authorization_requirements": "Free interactive Colab already requested by user; no paid tier/Modal fallback/real data; no SSH/tunnel",
-      "status": "PARTIALLY_VERIFIED",
-      "blockers": [
-        "450caseColab portability gate failed:12DuckDBCOPYTO? cases on1.3.2 and3Windows/Linux assumptions; resolve without skipping or relaxing validators before CUDA lifecycle/recovery"
-      ],
-      "verification_scope": "Direct agent MCP execution onT4 verified; setup fixed; actualCPU portability failed435pass/7fail/8errors, GPU model stages not run",
-      "verification_evidence": "colab-mcp-preflight-20261107-01"
+      "status": "COMPLETED",
+      "blockers": [],
+      "verification_scope": "Actual Colab T4 synthetic CPU505pass,400target lifecycle and17target freshprocess recovery; no fulltraining/Gate4",
+      "verification_evidence": "colab-cuda-synthetic-20261107-01"
     },
     {
       "id": "COLAB03",
@@ -1709,9 +1707,131 @@
       "estimated_effort": "0.5–1 engineeringday including boundedverification,not unmeasuredGPUtraining",
       "compute_cost_category": "LocalCPU/freeColab, noModal fallback",
       "authorization_requirements": "Safecompatibilityengineering alreadyauthorized;no data/split/modelhyperparameter or scientificmethodology change",
-      "status": "PLANNED",
+      "status": "COMPLETED",
       "blockers": [],
-      "verification_scope": "Engineeringcompatibility only;doesnotcloseRQ/Gate4"
+      "verification_scope": "Local462pass and actual Linux505pass/2unchanged declared deselections,0failure/error/skip; production retry/runtime validators unchanged",
+      "verification_evidence": [
+        "cpu-portability-gate-20261107-01",
+        "colab-cuda-synthetic-20261107-01"
+      ]
+    },
+    {
+      "id": "GRAPH01",
+      "research_objective": "Kernel residual confidence/gate độc lập, graph-off parity và causal/oracle/domain guards",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "bounded_parallel_engineering",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [],
+      "required_inputs": "parallel-graph-diagnostics-20261107-01",
+      "files_components": "src/knowledge_tracing/graph_augmentation.py;tests/shared_kt/test_graph_augmentation.py",
+      "implementation_objective": "Kernel residual confidence/gate độc lập, graph-off parity và causal/oracle/domain guards",
+      "acceptance_criteria": "42newcases +33graph-context cases pass; no nativeAKT change, no trainedCG-AKT claim",
+      "verification_steps": "Source/provenance review; scoped synthetic tests or aggregate arithmetic checks; immutable output SHA inventory",
+      "required_artifacts": "parallel-graph-diagnostics-20261107-01",
+      "estimated_effort": "Completed bounded batch",
+      "compute_cost_category": "Local CPU / no training spend",
+      "authorization_requirements": "User-authorized local engineering; methodology/fulltraining/paid allocation remain separate",
+      "status": "COMPLETED",
+      "blockers": []
+    },
+    {
+      "id": "SYNTH01",
+      "research_objective": "Tổng hợp causal-chain/closed-loop/Junyi evidence hiện có và sensitivity post-hoc",
+      "rq": [
+        "RQ1",
+        "RQ2"
+      ],
+      "workstream": "bounded_parallel_engineering",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [],
+      "required_inputs": "parallel-graph-diagnostics-20261107-01;cpu-portability-gate-20261107-01",
+      "files_components": "research_tracking/reports/rq12_evidence_synthesis_20261107.*;factorial_pilot_uncertainty_20261107.*",
+      "implementation_objective": "Tổng hợp causal-chain/closed-loop/Junyi evidence hiện có và sensitivity post-hoc",
+      "acceptance_criteria": "21selected outputSHA, exact source means/seedblocks,10kexploratory draws reproduced; no confirmatory pvalue/causal graph-benefit claim",
+      "verification_steps": "Source/provenance review; scoped synthetic tests or aggregate arithmetic checks; immutable output SHA inventory",
+      "required_artifacts": "parallel-graph-diagnostics-20261107-01;cpu-portability-gate-20261107-01",
+      "estimated_effort": "Completed bounded batch",
+      "compute_cost_category": "Local CPU / no training spend",
+      "authorization_requirements": "User-authorized local engineering; methodology/fulltraining/paid allocation remain separate",
+      "status": "COMPLETED",
+      "blockers": []
+    },
+    {
+      "id": "P1REV01",
+      "research_objective": "Đối chiếu exact Paper1 revision và PDF, thu hẹp evidence gap",
+      "rq": [
+        "RQ1",
+        "RQ2"
+      ],
+      "workstream": "bounded_parallel_engineering",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [],
+      "required_inputs": "paper1-revision-audit-20261107-01",
+      "files_components": "research_tracking/reports/paper1_revision_reconciliation_20261107.*",
+      "implementation_objective": "Đối chiếu exact Paper1 revision và PDF, thu hẹp evidence gap",
+      "acceptance_criteria": "33inputs+PDF5pages/sourceAST/Git/archive candidates verified; Q01/S01 remain unresolved",
+      "verification_steps": "Source/provenance review; scoped synthetic tests or aggregate arithmetic checks; immutable output SHA inventory",
+      "required_artifacts": "paper1-revision-audit-20261107-01",
+      "estimated_effort": "Completed bounded batch",
+      "compute_cost_category": "Local CPU / no training spend",
+      "authorization_requirements": "User-authorized local engineering; methodology/fulltraining/paid allocation remain separate",
+      "status": "COMPLETED",
+      "blockers": []
+    },
+    {
+      "id": "SAKT01",
+      "research_objective": "SAKT paper-equation causal core và collator độc lập",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "bounded_parallel_engineering",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [],
+      "required_inputs": "sakt-core-engineering-20261107-01",
+      "files_components": "src/knowledge_tracing/sakt/;tests/sakt/",
+      "implementation_objective": "SAKT paper-equation causal core và collator độc lập",
+      "acceptance_criteria": "37CPU tests pass,0optimizersteps; provenance explicit; no adapter/trainer/benchmark or authorcode parity claim",
+      "verification_steps": "Source/provenance review; scoped synthetic tests or aggregate arithmetic checks; immutable output SHA inventory",
+      "required_artifacts": "sakt-core-engineering-20261107-01",
+      "estimated_effort": "Completed bounded batch",
+      "compute_cost_category": "Local CPU / no training spend",
+      "authorization_requirements": "User-authorized local engineering; methodology/fulltraining/paid allocation remain separate",
+      "status": "COMPLETED",
+      "blockers": []
+    },
+    {
+      "id": "GPU06",
+      "research_objective": "Linux/CUDA runtime identity và bounded fullworker contract, giữ Windows CPU safeguards",
+      "rq": [],
+      "workstream": "bounded_parallel_engineering",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "COLAB02",
+        "COLAB05"
+      ],
+      "required_inputs": "colab-cuda-synthetic-20261107-01 + runtime blocker review",
+      "files_components": "src/knowledge_tracing/akt/authorization.py;config.py;scripts/akt/check_runtime.py;Linux supplemental runtime manifest/lock design",
+      "implementation_objective": "Linux/CUDA runtime identity và bounded fullworker contract, giữ Windows CPU safeguards",
+      "acceptance_criteria": "Explicit platform/image/source/dependency hashes, interpreter origin modes, bounded GPU phase; negative controls reject stale/source-mismatched/CPUlock reports; no silent relaxation",
+      "verification_steps": "Source/provenance review; scoped synthetic tests or aggregate arithmetic checks; immutable output SHA inventory",
+      "required_artifacts": "colab-cuda-synthetic-20261107-01 + runtime blocker review",
+      "estimated_effort": "1–2 engineering days; no cloud runtime assumed",
+      "compute_cost_category": "Local CPU / no training spend",
+      "authorization_requirements": "Local contract design/implementation/negative-control tests already authorized; no realdata, methodology change, fullCV, Holdout or cloud allocation. Paid execution remains separately gated.",
+      "status": "PLANNED",
+      "blockers": []
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

@@ -1,5 +1,22 @@
 # Tiến độ nghiên cứu
 
+**Trạng thái hiện tại — 07/11/2026:** đọc dashboard này trước các snapshots lịch sử bên dưới. Đề cương và Paper1/2 đã tìm được; lịch sử04/11 “chưa thấy” không còn mô tả inventory hiện tại. Không dùng các số test/version của snapshot cũ thay nghiệm thu mới.
+
+| Phạm vi | Trạng thái dựa bằng chứng hiện tại | Việc còn thiếu |
+|---|---|---|
+| RQ1/RQ2 | PARTIALLY VERIFIED: source diagnosis, fixed-stream/closed-loop pilots, factorial và Junyi controls; đã tổng hợp với giới hạn | Final estimands, đủ mechanism exposure, controlled inference và S04/S05; không causal graph-benefit claim |
+| Paper1 | Audit PDF/source/Git/archives hoàn tất trong phạm vi local; exact submitted revision vẫn thiếu | Source+inputs+actual seed list+per-seed outputs và xác nhận tác giả/advisor |
+| AKT graph-free | Actual Colab T4 bounded CUDA lifecycle/recovery PASS; local Gate15462pass, Colab CPU505pass/2declared exclusions | Linux/CUDA mainworker contract, representative pilot/throughput, full Development protocol; Gate4false |
+| Graph residual/gate | Kernel độc lập42tests pass, reuse causal context guards, graph-off parity | Chưa native AKT integration, learned gate/confidence training hoặc CG-AKT result |
+| SAKT | Paper-equation core37CPUtests pass,0optimizersteps | Adapter/trainer/export/resume/final protocol; không full baseline benchmark |
+| GKT và required comparisons | Yêu cầu đề cương giữ nguyên | GKT và các evaluation pipelines còn phải triển khai/kiểm; không tự loại baseline |
+| Modal | 30USD free credits do user báo,0USD trả thêm; **chưa dùng compute/credits** | Runtime/image/Volume/budget controls và exact approved run allocation |
+
+Đọc [nghiệm thu CUDA](reports/colab_cuda_acceptance_20261107.md), [phản biện](reports/colab_cuda_adversarial_review_20261107.md), [RQ1/RQ2 synthesis](reports/rq12_evidence_synthesis_20261107.md) và [mục lục bằng chứng](EVIDENCE_INDEX.md). Heavy artifacts giữ tại `experiments/akt/results/colab-actual-cuda-20261107-01/`; không nhầm software acceptance với hoàn thành RQ. Next task làGPU06 trong backlog, chưa launch training/Modal.
+
+## Snapshot ngày04/11 và nhật ký cập nhật tiếp theo
+
+
 **Cập nhật:** 2026-11-04. Trạng thái theo evidence workspace và RQ/sprint từ yêu cầu người dùng; repo không có proposal/advisor feedback để xác minh wording chính thức.
 
 ## Dashboard
