@@ -1,0 +1,38 @@
+# Sổ quyết định và vấn đề mở
+
+Mọi đề xuất phương pháp dưới đây chưa được phê duyệt chỉ bởi việc xuất hiện trong tài liệu. User đã cho phép inspection/planning/synthetic checks. Không có approval cloud, real-data pilot, full CV hoặc Test.
+
+| ID | Evidence và quyết định | Trạng thái/confidence | Tradeoff/owner |
+|---|---|---|---|
+|D01 |Đề cương tìm thấy tại paper2, dùng wording trang2–5 thay tracking cũ thiếu proposal |Supported/high, trạng thái approved theo user |Cả hai, chữ ký bản scan chưa xác thực |
+|D02 |Paper1 notebook khác PDF, không dùng source này tái lập kết quả paper50seeds |Supported/high |Dương tìm đúng revision, không dựng lại rồi gọi reproduction |
+|D03 |Graph-GAM có trong P2, benchmark KLTN hiện graph-free |Supported/high |Reuse source, thêm parity adapter |
+|D04 |Paper2 graph-package có local adaptation, root-control cần thiết |Supported/high |Factorial isolation tăng số conditions CPU nhỏ |
+|D05 |G14=e^(-.84)Gfinal khi no practice/homogeneous decay |Supported/high theo algebra/source |Giữ metric bắt buộc, thêm sensitivity independent dynamics |
+|D06 |Junyi checkpoint không map Grade10 vocabulary |Supported/high |Train riêng, tăng fit count nhưng bảo đảm semantics |
+|D07 |Gate2 05/11 là164 pass, hashes hiện khớp |Supported/high historical snapshot |Không tự nâng GPU readiness |
+|D08 |Current synthetic retry161pass15fail, link publish và notebook path blocker |Supported/high current log |Sang xử filesystem contract, Dương provenance, chưa biết OS sandbox vs general platform |
+|D09 |Minimal residual confidence/gate, A0 fallback checkpoint riêng |Proposed/medium |Advisor/Sang duyệt architecture và threshold semantics |
+|D10 |Paired mechanism factorial thay DiD High-vs-Low |Proposed/high validity rationale |Advisor xác nhận estimand simulator-conditional |
+|D11 |Giữ outer5fold và inner10% learner epoch selection, không innerKfold |Proposed/medium feasibility |Advisor duyệt cost, current code đã có outer refit |
+|D12 |Không full Cartesian models×noise×history×profile |Proposed/high need, allocation unresolved |Advisor duyệt exact model/dataset coverage, không bỏ required baseline |
+|D13 |PlanB conditional measured cost và capacity |Proposed/medium |Nhóm duyệt available person-days và dollar ceiling |
+|D14 |Modern models primary, BKT là reference |Supported/high proposal trang4 |Không dành critical path rerun EM |
+|D15 |Graph learning train-only, reliability không tự là causal confidence |Proposed/high methodology |Dương chốt estimator và calibration graph split |
+|D16 |Final simulator audit seeds mới sau freeze, published seeds reference |Proposed/high |Dương quản seeds, advisor approve independent final interpretation |
+
+## Các quyết định cần advisor
+
+S01 chốt source Paper1 nào đại diện submitted paper, phương án xử lý exact reproduction nếu không còn source. S02 chấp thuận diagnostic-v1 và primary net gain với retained14 giải thích redundancy. S03 estimand factorial ψ và causal interpretation conditional simulator. S04 mastery reference bank/calibration/threshold dùng true state trên simulator Dev, proxy confidence và oracle boundaries. S05 phạm vi train/eval SAKT/GKT và graph-learned trên hai environments, core seeds, Junyi full CV allocation. S06 final evaluation sau BKT Holdout đã xem, access ledger và freeze selection. S07 PlanA contingency nếu budget/deadline vượt. Không bỏ model, RQ, demo, article draft hoặc learned graph âm thầm.
+
+Budget owner xác nhận B00 mức USD tổng, stage ladder allocation, platform/payment/quota, workspace usage cap và net spend cap. Số150/300/600 trong roadmap là đề xuất envelope, chưa approval hoặc measured estimate.
+
+## Câu hỏi mở cần evidence
+
+Q01 đúng Paper1 code+outputs+seed manifest ở đâu, deadline12/11, Dương. Q02 hard-link failure chỉ sandbox Windows hay portable pipeline, T07 Stage2 filesystem tests, Sang. Q03 query mastery AKT có hỗ trợ reference difficulty ngoài84 item hay phải dùng fixed bank, T05, cả hai. Q04 coverage simulator-generated logs có đủ cho AKT và GKT, T10 learning curve. Q05 estimated edge confidence có generalize sang graph realization mới, T12. Q06 throughput/cost/risk GPU thực, T15. Q07 exact allocation model×dataset được advisor đồng ý chưa, T02. Q08 capacity hai sinh viên thực tế, tuần đầu. Q09 graph map36 rows có duplicates ảnh hưởng28 concept hay chỉ extra metadata, T04. Q10 holdout access history ngoài artifacts được cung cấp, chưa độc lập xác minh toàn bộ human viewing.
+
+## Alternatives bị loại hoặc hoãn
+
+Rebuild simulator toàn bộ bị loại vì mất lịch sử và effort. Merge P1/P2 dynamics bị loại vì semantics khác. Junyi checkpoint numeric-index mapping sang simulator bị loại vì không semantic crosswalk. High/Low observational DiD bị loại vì counterfactual assumption không bảo đảm. Inner5fold nested mỗi outer bị hoãn vì không requirement và compute lớn. Full hyperparameter sweep, learned neural confidence, third dataset, production LMS bị hoãn vì proposal không đòi và làm trễ evidence. Bỏ SAKT/GKT chỉ vì tiện là REMOVE-WITH-APPROVAL, chưa được quyết định.
+
+Kiểm chứng cuối Q09 đã giải quyết. `evidence/planning_validation.json` xác nhận map36ID duy nhất, đủ28nodes,8extraIDs, không missing/duplicate. Advanced31edges=28intra+3cross, baseline25intra, không missing endpoints/isolated nodes trong inputs P2. Không suy provenance Paper1 từ việc graph counts giống PDF.

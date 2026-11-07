@@ -1,0 +1,103 @@
+{
+  "gate2_current_build_mismatches": [],
+  "gate2_report_fields": {
+    "command": "$env:PYTHONPATH='src;third_party'; .venv\\Scripts\\python.exe -B -m pytest tests/akt tests/shared_kt -q -p no:cacheprovider",
+    "evidence_id": "gate2-20261105-01",
+    "historical_gate2_artifacts_sha256": {
+      "log": "55200622772dca06a859a86d3d301640502e0f6cc4db2e0510842fabeadc870b",
+      "report": "3b7ec3c55829d969ab4a2f4a1cfa0e02136b9faa2c71d9d805c8a2579ba269df"
+    },
+    "historical_reports_modified": false,
+    "lock_sha256": "3e721fdb49543ad0888cf02a863826ebc6144c0d1dd670f2490ebcc0d69b8c0a",
+    "pid_diagnostic": {
+      "assessment": "PID label mismatch is confirmed and affects process identity reporting; a bounded same-host process probe showed parent kill also ended its child. Worker RSS guard runs inside the worker PID. Historical cause remains unresolved.",
+      "authorization_rejected_before_data_load": true,
+      "current_unauthorized_cli_popen_pid": 18648,
+      "current_worker_event_pid": 21756,
+      "generic_child_survived_parent_kill": false,
+      "historical_watchdog_popen_pid": 20816,
+      "historical_worker_snapshot_pid": 27116,
+      "observed_process_tree": "Popen PID is a Python parent process with a same-command Python child; worker event PID belongs to the child.",
+      "worker_data_load_event": false
+    },
+    "prepared_pilot_config_file_sha256": "13f93e2008a01ae8422a46d6805752d44fea2c94c2f4feab0f68833c2cfac660",
+    "prepared_pilot_config_sha256": "84abf459ab687286bc3e7ea1a6d0df666f5d243b249c0feda4a8e2f5b274fa94",
+    "runtime": {
+      "cuda_available": false,
+      "device": "cpu",
+      "numpy_origin": "D:\\Dev\\KLTN\\.venv\\Lib\\site-packages\\numpy\\__init__.py",
+      "numpy_version": "2.5.4",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "python": "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+      "python_version": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+      "torch_origin": "D:\\Dev\\KLTN\\.venv\\Lib\\site-packages\\torch\\__init__.py",
+      "torch_version": "2.7.1+cpu"
+    },
+    "runtime_report_sha256": "259c171fe63e39a14d9bdf42793bd854a5be73ded19a7a800a2e8a982906f1b4",
+    "schema_version": 1,
+    "source": {
+      "commit": "01b7e8d7d7c862cabc9467108e3e7f2555653a88",
+      "files": {
+        "LICENSE": "891133edce0d8693f5b916d4257ce70b71a02aa110cb02cc5d47326544ea4522",
+        "README.md": "df8eea9919dcdb343f3a841540af18e2039b8b0c33af449ca9c752d11f56ee8b",
+        "akt.py": "be2788c20cac602e86ef3a51e5294b37dd7b200f818be4e173dbd69069a3ec6d"
+      },
+      "remote": "https://github.com/arghosh/AKT.git",
+      "tree": "904863502337ef2eefd1769d14836b62e3c3804a"
+    },
+    "source_commit": "01b7e8d7d7c862cabc9467108e3e7f2555653a88",
+    "status": "PASS",
+    "suite": "tests/akt tests/shared_kt",
+    "test_log_file": "gate2-tests-20261105-01.log",
+    "test_log_sha256": "15b1df8841a0c88424d71655e1ef210d91318ea1c41ef64e58f57338b7ea9f71",
+    "test_result": {
+      "elapsed_seconds": 68.53,
+      "errors": 0,
+      "failed": 0,
+      "passed": 164,
+      "skipped": 0
+    }
+  },
+  "graph_inputs": {
+    "paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\data\\simulator_inputs\\concept_to_chapter_map.csv": {
+      "sha256": "aa99cffb251ce6757258d2e87fe707455bc74b6b3917ead1acf48c5e96ee0a17",
+      "rows": 36,
+      "columns": [
+        "concept_id",
+        "chapter"
+      ]
+    },
+    "paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\data\\simulator_inputs\\edges.csv": {
+      "sha256": "ecd910d8df52f8790997391de657ea0f9e8357446212c168b73e500d0facc2fb",
+      "rows": 31,
+      "columns": [
+        "source",
+        "target"
+      ]
+    },
+    "paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\data\\simulator_inputs\\edges_baseline.csv": {
+      "sha256": "9d795fb88d00e5c2ec1d3b2215bb93038a944354c3c4709b6b0aa9d66906c39d",
+      "rows": 25,
+      "columns": [
+        "source",
+        "target"
+      ]
+    },
+    "paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\data\\simulator_inputs\\nodes.csv": {
+      "sha256": "6db464d1fd3df5d4215d51c9f90dc0f7e24f252517252784c80bdb5fa6291650",
+      "rows": 28,
+      "columns": [
+        "concept_id"
+      ]
+    },
+    "paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\data\\simulator_inputs\\question_bank.csv": {
+      "sha256": "fb5924ac0d19049ef1a5be23352592e30dfa3a4bde3e3fa07f10979fe0887e4d",
+      "rows": 84,
+      "columns": [
+        "question_id",
+        "concept_id",
+        "elo_difficulty"
+      ]
+    }
+  }
+}

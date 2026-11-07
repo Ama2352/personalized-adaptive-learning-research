@@ -357,11 +357,11 @@ Selection/refit validate returned learner IDs against declared lists/split befor
 
 - [ ] **Step 1 — tests first evidence:** rerun required smoke guard test Task12 và checkpoint/alignment tests nếu build thay đổi; không thêm “test” mirror smoke summary. Verify cohort subset inner train/val, không outer users.
 - [ ] **Step 2 — pin resource limits:** CPU FP32 B4, d32/heads4/blocks1, H/T100, ≤32 inner-train và16 inner-val users, ≤4096 targets **mỗi phía**, ≤20 optimizer steps, ≤120s train. Tổng smoke subprocess ≤300s, max RSS 2 GiB và available-RAM floor 1 GiB; đây là safety hypotheses, fail preflight nếu import/runtime headroom không đủ. Loader workers0, DuckDB512MB/threads≤2. No repeated seeds/config search.
-- [ ] **Step 3 — chạy duy nhất command sau Task12:**
+- [ ] **Step 3 — chạy duy nhất command qua watchdog CLI:** Dùng config và authorization dành riêng cho run; authorization phải khớp phase, run_id, SHA-256 config, source/runtime/data identity và toàn bộ resource caps. Config template `smoke.json` giữ `execution_enabled=false`.
   ```powershell
-  & $AktPython -m knowledge_tracing.akt.cli smoke --config experiments/akt/configs/smoke.json --run-id smoke-001
+  & $AktPython -m knowledge_tracing.akt.cli smoke --config experiments/akt/configs/smoke-task13-20261031-01.json --authorization experiments/akt/authorizations/smoke-task13-20261031-01.json
   ```
-  Run-id nếu tồn tại phải từ chối/đổi sang ID mới, không overwrite. Complete train→inner-val→save/load→prediction cycle trong bounds; validate train/val actual rows/users/hash, no full dataset scan artifact re-generation.
+  CLI hiện không nhận `--run-id`; `run_id` được khóa trong config. Run-id nếu tồn tại phải từ chối/đổi sang ID mới, không overwrite. Complete train→inner-val→save/load→prediction cycle trong bounds; validate train/val actual rows/users/hash, no full dataset scan artifact re-generation. Authorization chỉ dùng được cho chính phase/config/source/data identity này; không tái sử dụng cho pilot, full fold, CV hoặc config khác.
 - [ ] **Step 4 — đánh giá:** finite loss/grad, at least one nonzero gradient/parameter update, finite known p không trivially constant (range>1e-6 và variance>0 trên ≥2 distinct inputs), checkpoint reload eval allclose1e-6, expected/export/fitted/OOV accounting đúng. Không gate trên AUC phải hơn BKT/GAM hoặc training loss phải đẹp. Synthetic tests đã cover first/short/long/OOV dù sampled real cohort không có mọi case.
 - [ ] **Step 5 — Gate3 report:** exact command/build/env, actual steps/time/RSS, p/loss/gradient observations, completed/bounded/incomplete/failed. Max-step limit là bounded success chỉ nếu save/val/export complete; watchdog/memory kill trước cycle xong là failure/incomplete. Gate3 PASS chỉ khi full bounded cycle xong, không trace leakage và caps được giữ.
 

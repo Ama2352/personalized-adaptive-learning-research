@@ -1,0 +1,454 @@
+
+--- Trang 1 ---
+Separating Graph and Policy Effects in Adaptive
+Mathematics
+Sequencing: A Simulation Study
+Phạm Triều Dương, Hồ Nguyễn Minh Sang, and Lê Văn Tuấn
+Faculty of Software Engineering
+University of Information Technology, VNU-HCM
+Ho Chi Minh City, Vietnam
+{23520355, 23521338}@student.uit.edu.vn, tuanlv@uit.edu.vn
+Abstract—Prerequisite-aware adaptive systems can restrict
+learners to ready concepts yet still generate fragmented paths
+because graph feasibility does not determine which ready concept
+is selected. This paper contributes a controlled decomposition of
+these two mechanisms in Grade 10 mathematics: prerequisite-
+graph structure and selection policy. We implement an inter-
+pretable sequencer that combines a directed concept graph,
+concept-level Elo estimates, closest-difficulty item selection, and
+chapter continuity. We first compare a fixed linear baseline, a
+25-edge intra-chapter graph, and a 31-edge advanced graph under
+the same continuity-aware controller, using 50 seeds for each of
+three synthetic learner profiles. We then hold the advanced graph
+fixed and ablate three selection policies. For the uniformly strong
+and function-weak profiles, both graph conditions reduce mean
+chapter switches from 11 to 2 and re-entry from 9 to 0; reductions
+are smaller for the uniformly weak profile. More importantly,
+continuity yields zero re-entry in every tested run, whereas the
+two non-continuity policies average 16.70–19.36 re-entries across
+profiles. The advanced graph shows no consistent advantage over
+the standard graph, so its added relations cannot be credited with
+an independent gain. The result shows why prerequisite feasibility
+and path continuity should be designed and evaluated separately.
+These findings characterize simulated mechanism behavior, not
+classroom effectiveness, and require validation with real learners.
+Index Terms—adaptive learning, concept graph, educational
+technology, Elo rating, learning-path sequencing
+I. INTRODUCTION
+Mathematics is cumulative: a missing prerequisite can
+hinder a topic in another chapter. In Grade 10, set operations,
+quadratic inequalities, and quadratic functions form connected
+dependencies [1]. Yet systems that personalize pace or difficulty
+may retain a common content order, causing repeated chapter
+changes or premature exposure. Adaptive systems instead use
+learner state and domain structure to select material at each
+interaction [2], [3].
+A prerequisite graph determines which concepts are feasible,
+but the selection policy determines which feasible concept
+appears next. We study an interpretable sequencer in which a
+directed graph constrains feasibility, concept-level Elo estimates
+mastery, and a continuity-aware controller prefers the current
+chapter. Elo supports inexpensive online updates [4], while con-
+cept graphs represent prerequisites explicitly [5]. The method is
+transparent sequencing rather than a learned prediction model.
+We ask three research questions.RQ1:Under one shared
+continuity-aware controller, how do a fixed linear sequence
+(B0), a standard intra-chapter graph (B1), and an advanced
+graph (GA) differ in switching, re-entry, and mastery?RQ2:
+Does GA provide a consistent advantage over B1 in the
+current concept set?RQ3:With GA held fixed, how does
+chapter-continuity selection affect re-entry relative to plain
+lowest-Elo and cross-chapter-unlock policies? This two-stage
+design compares structural conditions and then isolates policy
+behavior; all outcomes are simulation evidence rather than
+classroom effectiveness.
+The paper makes three contributions:
+• a controlled evaluation design that separates prerequisite-
+graph structure from the policy that selects among feasible
+concepts;
+• reproducible evidence across three synthetic profiles and
+50 seeds, including the negative result that GA does not
+consistently improve on B1 and an ablation attributing zero
+re-entry to chapter continuity; and
+• an interpretable sequencing artifact over 28 Grade 10
+mathematics concepts that combines prerequisite readiness,
+concept-level Elo updates, closest-difficulty item selection,
+and chapter continuity.
+The remainder reviews related work, defines the method, reports
+results, and discusses limitations.
+II. RELATEDWORK
+A. Adaptive Sequencing and Learner Modeling
+Adaptive systems combine domain, learner, and policy
+models. Adaptive hypermedia pioneered user-model-based
+navigation [2], [6], and personalized path guidance jointly
+considered difficulty and concept continuity [7], while tutoring
+systems demonstrated structured practice and feedback [3].
+Learner-modeling reviews distinguish knowledge representation
+from the policy acting on it [8]. Sequencing research studies
+the policy directly [9], [10]; decision-theoretic work further
+relates teaching actions to the learner model, domain, and
+
+--- Trang 2 ---
+objective [11]. Thus, a valid state and graph do not prevent
+alternating among feasible chapters.
+Knowledge tracing estimates evolving mastery from inter-
+actions [12]; deep knowledge tracing learns flexible temporal
+representations from student data [13], while factorization
+approaches support sparse data and side information [14].
+Broader comparisons also cover Bayesian and logistic learner
+models [15]. Elo provides a lightweight online estimate on a
+shared learner–item scale [4]. Here, Elo is only a concept-level
+state estimator: difficulties stay fixed and no model is trained
+from the simulations. We evaluate sequencing behavior, not
+predictive superiority.
+B. Concept and Knowledge Graphs
+A prerequisite graph uses directed edges to restrict selection
+until parent concepts are mastered while permitting multiple
+valid routes. Knowledge-space theory related learner states to
+graph-like structures [16]; later work learned concept graphs
+and prerequisite relations from educational data [5], [17], [18].
+Knowledge-graph systems also organize adaptive resources and
+paths [19]. These works motivate structured domains, but a
+controller must still choose among ready concepts.
+C. Research Gap
+Prior work establishes state estimation, prerequisites, and
+policy optimization, but treating them as one intervention
+obscures whether path behavior comes from the feasible set
+or the controller’s choice. We reportchapter switchesand the
+stricterchapter re-entryin two stages: a structural comparison
+under one controller, then a policy ablation on one graph.
+The contribution is not a new graph-learning, tracing, or
+optimization algorithm, but a reproducible mechanism analysis
+that attributes continuity to the responsible component and
+retains the negative result when the advanced graph does not
+outperform the standard one. A mathematics teacher reviewed
+the domain artifacts.
+III. PROPOSEDMETHOD
+A. System Overview
+The adaptive engine maintains an Elo estimate θv,t for every
+concept v at interaction t. A directed graph restricts selection to
+concepts whose prerequisites are mastered. The controller then
+favors a ready concept in the learner’s current chapter, selects
+an item of nearby difficulty, observes a binary response, and
+updates the corresponding Elo estimate. Fig. 1 summarizes this
+closed loop. The components are deliberately interpretable: the
+graph determines feasibility, the policy determines navigation,
+and Elo updates only the estimated learner state.
+B. Concept Graph and Ready Set
+Let V contain 28 concepts drawn from three Grade 10 units:
+sets and propositions, quadratic inequalities, and quadratic
+functions. A directed edge (u, v) means that u is a prerequisite
+ofv. The standard graph used as the structural baseline is
+GB1 = (V, E B1),|E B1|= 25,(1)
+Compute prerequisite-feasible ready set
+Prefer current chapter; select the lowest-Elo concept
+Select the closest-difficulty item
+Observe or simulate a response
+Update concept-level Elo and mastery state
+Fig. 1. Continuity-aware adaptive sequencing cycle.
+where every edge is intra-chapter. The advanced graph is
+GA = (V, E intra ∪E cross),|E intra|= 28,|E cross|= 3.
+(2)
+Both graphs are directed acyclic graphs. Relative to B1,
+GA adds three intra-chapter and three cross-chapter relations.
+Consequently, a GA–B1 comparison evaluates the advanced
+structure as a whole; it does not isolate the three cross-chapter
+edges.
+A concept is ready when it is not mastered and all its graph
+predecessors are mastered. With mastery threshold τ, the ready
+set is
+Rt ={v∈V|θ v,t < τ∧θ u,t ≥τ,∀u∈Pred(v)}.(3)
+This forward-only rule prevents prerequisite violations but
+cannot return automatically to a weak prerequisite after
+a downstream failure. A mathematics teacher deemed the
+manually authored concepts, chapter mappings, both graphs,
+and question bank suitable for this study.
+Each concept has three simulated items with fixed difficulties
+1050, 1200, and 1350, reflecting increasing cognitive demand
+[20]. After selecting conceptv t, the engine chooses
+qt = arg min
+q∈Q(vt)
+|dq −θ vt,t|,(4)
+breaking ties by prior exposure count and item identifier.
+Selecting an item near the estimated ability is a design rationale
+related to appropriate challenge [21]; it is not evidence of a
+measured pedagogical benefit.
+C. Concept-Level Elo Model
+For an item with fixed difficulty dq, the estimated probability
+of a correct response is
+Pt =P(S t = 1|θ v,t, dq) = 1
+1 + 10(dq−θv,t)/400 .(5)
+This is a one-parameter logistic response curve after a change
+of scale, placing ability and difficulty on the same axis [4],
+[22]. After observing St ∈ {0,1} , the selected concept estimate
+becomes
+θv,t+1 =θ v,t +K t(St −P t).(6)
+All unselected concept estimates remain unchanged. Item
+difficulties are never updated in this study.
+
+--- Trang 3 ---
+The update factor decreases with the number Nv,t of previous
+interactions on the selected concept:
+Kt =
+
+
+
+40, N v,t <5,
+24,5≤N v,t <15,
+16, N v,t ≥15.
+(7)
+A larger early update responds quickly to diagnostic evidence,
+while later updates stabilize the estimate. A concept is marked
+mastered when its updated Elo reachesτ= 1250.
+D. Continuity-Aware Adaptive Sequencing
+A lowest-Elo rule targets the weakest ready concept, but a
+global rule can alternate between chapters whenever several
+concepts are feasible. We add a continuity filter. Let the ready
+concepts in the previously selected chapterh t−1 be
+Rh
+t ={v∈ R t : ch(v) =h t−1}.(8)
+If this set is nonempty, the candidate set is restricted to it;
+otherwise all ready concepts remain eligible:
+Ct =
+(
+Rh
+t ,R h
+t ̸=∅,
+Rt,otherwise. (9)
+The engine selects vt = arg minv∈Ct θv,t. Equal-Elo ties follow
+a fixed graph traversal order, preserving reproducibility. The
+continuity filter never overrides graph prerequisites; it changes
+only the order among already feasible concepts.
+Algorithm 1 gives the full interaction cycle. In a deployed
+system, St would be a learner response. In the evaluation it is
+sampled from a persona-specific latent-ability model described
+in Section IV.
+IV. EXPERIMENTALEVALUATION
+A. Simulation Setup
+The evaluation separates graph structure from selection
+policy. All conditions use the same 84-item bank, concept-level
+Elo update, fixed item difficulties, mastery threshold τ= 1250 ,
+dynamic K, and 500-interaction budget. Only the graph or the
+stated selection policy changes within a comparison.
+We use uniformly strong (US), uniformly weak (UW),
+and function-weak (FW) synthetic profiles. US samples
+concept ability from N(1400,50 2); UW uses N(1050,50 2).
+FW uses N(1000,50 2) for quadratic-function concepts and
+N(1250,50 2) elsewhere. The engine’s observable Elo estimates
+are distinct from these latent values: estimates start at 1200,
+except that FW starts at 1050 in the quadratic-functions unit.
+A response is sampled from the logistic probability in (5)
+using latent ability, and the latent value increases by 12 after
+each item with feedback, up to 1500. This learning gain is a
+simulation assumption, not an empirical estimate.
+The structural comparison contains three models. B0 follows
+a fixed lexicographic topological order. B1 uses the 25-
+edge intra-chapter graph, and GA uses the 31-edge advanced
+graph. The graph models share the continuity-aware lowest-
+Elo controller. We run 50 seeds for every persona–model pair,
+producing 450 runs. Achapter switchis any change from the
+Algorithm 1Continuity-Aware Adaptive Sequencing
+Input: Graph G, items Q, estimates θ0, threshold τ, budget
+T
+Output:Interaction path and final estimates
+1:h←∅
+2:fort= 1toTdo
+3:R ←COMPUTEREADYSET(G,θ, τ)
+4:ifR=∅then
+5:break
+6:end if
+7:C ←FILTERCURRENTCHAPTER(R, h)
+8:ifC=∅then
+9:C ← R
+10:end if
+11:v←arg min u∈C θu
+12:q←arg min x∈Q(v) |dx −θ v|
+13:S←OBSERVERESPONSE(q)
+14:P←(1 + 10 (dq−θv)/400)−1
+15:θ v ←θ v +DYNAMICK(N v)(S−P)
+16:ifθ v ≥τthen
+17:MARKMASTERED(v)
+18:end if
+19:h←CHAPTER(v)
+20:end for
+chapter selected at the previous interaction. Achapter re-entry
+is a switch into a chapter visited earlier in the same run, making
+it a stricter measure of zigzag behavior. Mastery rate is the
+fraction of 28 concepts reachingτbefore the budget ends.
+B. Graph-Structure Comparison
+Table I reports aggregate outcomes. Under the continuity-
+aware controller, B1 and GA reduce mean switches from 11
+to 2 and mean re-entry from 9 to 0 for US and FW. For UW,
+switches fall from 2.940 to 1 and re-entry from 0.940 to 0.
+UW often reaches the 500-interaction cap: its mastery rates
+therefore describe progress within a fixed budget, not eventual
+mastery.
+Fig. 2 shows that most groups are deterministic with respect
+to the switch count; only UW under B0 varies across seeds.
+The main finding is therefore about the combined graph-and-
+controller conditions relative to the fixed sequence. GA and B1
+are almost identical on switching and mastery. Because GA
+also adds three intra-chapter relations alongside three cross-
+chapter relations, these data neither isolate nor demonstrate an
+independent advantage from cross-chapter edges.
+C. Selection-Strategy Ablation
+To identify the source of the re-entry reduction, we hold GA
+fixed and compare continuity-aware lowest-Elo, plain lowest-
+Elo, and a cross-chapter-unlock strategy. Fig. 3 reports the
+result. Continuity produces zero re-entry in every tested run
+for all three personas. Plain lowest-Elo averages 16.70, 17.22,
+and 18.36 re-entries for US, UW, and FW, respectively; cross-
+chapter unlock averages 16.86, 17.26, and 19.36.
+
+--- Trang 4 ---
+TABLE I
+STRUCTURAL COMPARISON OVER50SEEDS(τ= 1250,MEAN±STANDARD DEVIATION). US/UW/FW:UNIFORMLY STRONG/WEAK AND
+FUNCTION-WEAK PROFILES.
+Persona Model Chapter switches↓Chapter re-entry↓Mastery rate↑
+US B011.000±0.000 9.000±0.000 1.000±0.000
+B12.000±0.000 0.000±0.000 1.000±0.000
+GA2.000±0.000 0.000±0.000 1.000±0.000
+UW B02.940±0.424 0.940±0.424 0.476±0.056
+B11.000±0.000 0.000±0.000 0.435±0.050
+GA1.000±0.000 0.000±0.000 0.466±0.045
+FW B011.000±0.000 9.000±0.000 0.999±0.005
+B12.000±0.000 0.000±0.000 0.998±0.015
+GA2.000±0.000 0.000±0.000 0.998±0.011
+Fig. 2. Chapter-switch distributions over 50 seeds. Orange lines are medians; green triangles are means. US/UW/FW: uniformly strong/weak and function-weak.
+The associated mean mastery rates are 1.000, 0.466, and
+0.998 under continuity; 1.000, 0.379, and 0.999 under plain
+lowest-Elo; and 1.000, 0.379, and 1.000 under cross-chapter
+unlock. Thus, the zero re-entry result belongs to the continuity
+policy. It must not be attributed to GA’s cross-chapter edges.
+For UW, continuity also improves mastery within the fixed
+budget, while the small differences for US and FW are not
+evidence of classroom learning gains.
+D. Threats to Validity
+A mathematics teacher reviewed the domain artifacts. Gaus-
+sian personas compress learner diversity into three profiles,
+item responses follow the same logistic family used by the
+estimator, and the latent ability gain of 12 is assumed. The
+finite question bank omits richer item characteristics, and the
+simulator does not model forgetting, motivation, disengagement,
+or measurement noise beyond response sampling. GA differs
+from B1 by three intra-chapter and three cross-chapter relations,
+preventing a cross-edge-only causal claim. Finally, repeated
+seeds quantify stochastic stability within this simulator but
+do not represent a student population. The evaluation tests
+navigation mechanisms, not educational effectiveness.
+V. DISCUSSION ANDCONCLUSION
+A. Interpretation and Limitations
+The results answer the three research questions with de-
+liberately limited claims. For RQ1, prerequisite-constrained
+sequencing with chapter continuity substantially reduces chap-
+ter switching and eliminates re-entry in the tested profiles
+relative to the fixed baseline. Mastery remains comparable
+for US and FW. The UW outcomes are conditional on the
+500-interaction budget and do not establish eventual mastery.
+For RQ2, the advanced graph does not consistently improve
+on the standard intra-chapter graph. Their navigation measures
+are identical, and their mastery rates are similar across the
+simulated profiles. Moreover, GA adds three intra-chapter
+relations together with three cross-chapter relations, so the
+experiment cannot isolate the effect of cross-chapter edges.
+The negative result is useful: adding structural detail is not
+automatically beneficial.
+For RQ3, holding GA fixed reveals that chapter continuity,
+rather than the graph alone, causes the zero-re-entry behavior.
+Plain lowest-Elo and cross-chapter-unlock selection average
+between 16.70 and 19.36 re-entries, whereas the continuity-
+aware controller produces none. This distinction is central
+to interpreting graph-based adaptive systems: prerequisites
+determine which concepts are feasible, while the controller
+determines the experienced path.
+These findings concern mechanism behavior in simulation,
+not educational effectiveness. One teacher reviewed the domain
+artifacts; broader review remains desirable. The learner profiles
+cover only three synthetic patterns, and the response and
+learning processes are simplified. Future work should broaden
+this review, add forgetting and backward remediation, test cross-
+
+--- Trang 5 ---
+Fig. 3. Chapter re-entry under three GA policies over 50 seeds. With the graph fixed, continuity eliminates re-entry. US/UW/FW: uniformly strong/weak and
+function-weak. Plot marks follow Fig. 2.
+chapter edges in a controlled factorial design, and preregister
+a pilot study with real learners.
+B. Conclusion
+This paper presented an interpretable adaptive mathematics
+sequencer that combines a prerequisite graph, concept-level Elo
+estimates, and a continuity-aware selection policy. Across 450
+simulated runs, the combined graph-and-controller conditions
+reduced fragmented navigation without a consistent advantage
+for the advanced graph over the standard graph. The ablation
+further showed that chapter continuity—not cross-chapter graph
+edges—eliminated re-entry in the tested setting. The study
+therefore provides a reproducible modeling result and a cautious
+basis for broader educator review and learner studies.
+REFERENCES
+[1] Vietnam Ministry of Education and Training, “Circular No. 32/2018/TT-
+BGDDT promulgating the general education program,” Dec. 26, 2018,
+in Vietnamese.
+[2] P. Brusilovsky, “Adaptive hypermedia,”User Model. User-Adapted Inter-
+act., vol. 11, nos. 1–2, pp. 87–110, 2001, doi: 10.1023/A:1011143116306.
+[3] K. VanLehn, “The behavior of tutoring systems,”Int. J. Artif. Intell. Educ.,
+vol. 16, no. 3, pp. 227–265, 2006, doi: 10.3233/IRG-2006-16(3)02.
+[4] R. Pelánek, “Applications of the Elo rating system in adaptive edu-
+cational systems,”Comput. Educ., vol. 98, pp. 169–179, 2016, doi:
+10.1016/j.compedu.2016.03.017.
+[5] Y . Yanget al., “Concept graph learning from educational data,” in
+Proc. 8th ACM Int. Conf. Web Search Data Mining (WSDM), 2015, pp.
+159–168, doi: 10.1145/2684822.2685292.
+[6] P. Brusilovsky and E. Millán, “User models for adaptive hypermedia and
+adaptive educational systems,” inThe Adaptive Web, P. Brusilovsky, A.
+Kobsa, and W. Nejdl, Eds. Berlin, Germany: Springer, 2007, pp. 3–53,
+doi: 10.1007/978-3-540-72079-9_1.
+[7] C.-M. Chen, “Intelligent web-based learning system with personalized
+learning path guidance,”Comput. Educ., vol. 51, no. 2, pp. 787–814,
+2008, doi: 10.1016/j.compedu.2007.08.004.
+[8] M. C. Desmarais and R. S. J. d. Baker, “A review of recent advances in
+learner and skill modeling in intelligent learning environments,”User
+Model. User-Adapted Interact., vol. 22, nos. 1–2, pp. 9–38, 2012, doi:
+10.1007/s11257-011-9106-8.
+[9] S. Doroudi, V . Aleven, and E. Brunskill, “Where’s the reward? A review
+of reinforcement learning for instructional sequencing,”Int. J. Artif. Intell.
+Educ., vol. 29, no. 4, pp. 568–620, 2019, doi: 10.1007/s40593-019-00187-
+x.
+[10] J. Bassenet al., “Reinforcement learning for the adaptive scheduling of
+educational activities,” inProc. CHI Conf. Human Factors Comput. Syst.
+(CHI), 2020, pp. 1–12, doi: 10.1145/3313831.3376518.
+[11] A. N. Rafferty, E. Brunskill, T. L. Griffiths, and P. Shafto, “Faster teaching
+via POMDP planning,”Cogn. Sci., vol. 40, no. 6, pp. 1290–1332, 2016,
+doi: 10.1111/cogs.12290.
+[12] A. T. Corbett and J. R. Anderson, “Knowledge tracing: Modeling
+the acquisition of procedural knowledge,”User Model. User-Adapted
+Interact., vol. 4, no. 4, pp. 253–278, 1994, doi: 10.1007/BF01099821.
+[13] C. Piechet al., “Deep knowledge tracing,” inProc. 28th Adv. Neural
+Inf. Process. Syst. (NIPS), 2015, pp. 505–513.
+[14] J.-J. Vie and H. Kashima, “Knowledge tracing machines: Factorization
+machines for knowledge tracing,” inProc. AAAI Conf. Artif. Intell., vol.
+33, no. 1, 2019, pp. 750–757, doi: 10.1609/aaai.v33i01.3301750.
+[15] R. Pelánek, “Bayesian knowledge tracing, logistic models, and beyond:
+An overview of learner modeling techniques,”User Model. User-Adapted
+Interact., vol. 27, nos. 3–5, pp. 313–350, 2017, doi: 10.1007/s11257-
+017-9193-2.
+[16] J.-P. Doignon and J.-C. Falmagne, “Spaces for the assessment of
+knowledge,”Int. J. Man-Machine Stud., vol. 23, no. 2, pp. 175–196,
+1985, doi: 10.1016/S0020-7373(85)80031-6.
+[17] L. Pan, C. Li, J. Li, and J. Tang, “Prerequisite relation learning for
+concepts in MOOCs,” inProc. 55th Annu. Meeting Assoc. Comput.
+Linguistics (ACL), 2017, pp. 1447–1456, doi: 10.18653/v1/P17-1133.
+[18] W. Lu, Y . Zhou, J. Yu, and C. Jia, “Concept extraction and prerequisite
+relation learning from educational data,” inProc. AAAI Conf. Artif. Intell.,
+vol. 33, no. 1, 2019, pp. 9678–9685, doi: 10.1609/aaai.v33i01.33019678.
+[19] L. Lin and F. Wang, “Adaptive learning system based on knowledge
+graph,” inProc. 9th Int. Conf. Educ. Training Technol. (ICETT), 2023,
+Art. no. 7, pp. 1–7, doi: 10.1145/3599640.3599647.
+[20] B. S. Bloom, Ed.,Taxonomy of Educational Objectives: The Classification
+of Educational Goals, Handbook I: Cognitive Domain. New York, NY ,
+USA: Longmans, Green, 1956.
+[21] L. S. Vygotsky,Mind in Society: The Development of Higher Psycholog-
+ical Processes, M. Cole, V . John-Steiner, S. Scribner, and E. Souberman,
+Eds. Cambridge, MA, USA: Harvard Univ. Press, 1978.
+[22] G. Rasch,Probabilistic Models for Some Intelligence and Attainment
+Tests. Copenhagen, Denmark: Danish Institute for Educational Research,
+1960.

@@ -1,0 +1,1111 @@
+# CELL 2
+import importlib.util
+import subprocess
+import sys
+
+if importlib.util.find_spec("gdown") is None:
+    subprocess.run([sys.executable, "-m", "pip", "install", "-q", "gdown"], check=False)
+
+# CELL 3
+from __future__ import annotations
+
+import hashlib
+import json
+import math
+import os
+import re
+import shutil
+import warnings
+from collections import Counter, deque
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from pathlib import Path
+from urllib.request import urlopen
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from scipy.stats import rankdata, wilcoxon
+from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_score
+
+warnings.filterwarnings("ignore", category=FutureWarning)
+sns.set_theme(style="whitegrid", context="notebook")
+
+GLOBAL_SEED = 20260721
+QUICK_MODE = os.getenv("QUICK_MODE", "0") == "1"
+TEST_SEEDS = tuple(range(0, 3)) if QUICK_MODE else tuple(range(1000, 1050))
+REPLAY_STEPS = 120 if QUICK_MODE else 300
+CLOSED_LOOP_STEPS = 120 if QUICK_MODE else 500
+PERSONAS = ("PG", "PY", "PYH")
+
+MASTERY_ELO = 1250.0
+PREREQUISITE_READY_ELO = 1150.0
+MODEL_INITIAL_ELO = 1200.0
+TRUE_GAIN_SCALE = 12.0
+TRUE_FORGET_RATE = 0.06
+SHORT_GAP_HOURS = 6.0
+CYCLE_GAP_HOURS = 72.0
+RETENTION_GAP_DAYS = 14.0
+MAX_CONSECUTIVE_CONCEPT = 3
+MIN_PREREQUISITE_EXPOSURES = 6
+BOOTSTRAP_SAMPLES = 400 if QUICK_MODE else 3000
+
+DRIVE_FOLDER_URL = "https://drive.google.com/drive/folders/1AGaofiHZixZLb4fIF-VldfQK6kTYMMc7?usp=drive_link"
+DATA_ROOT = Path("/content/graduation_thesis_data") if Path("/content").exists() else Path("./graduation_thesis_data")
+OUTPUT_ROOT = Path("/content/research_ready_v2_bkt_outputs") if Path("/content").exists() else Path("./research_ready_v2_bkt_outputs")
+DRIVE_RESULT_DIR = Path("/content/drive/MyDrive/Graduation-Thesis-Research/Research-Ready-v2-BKT")
+DATA_ROOT.mkdir(parents=True, exist_ok=True)
+OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
+
+REQUIRED_FILES = {
+    "nodes": "nodes.csv",
+    "edges": "edges.csv",
+    "edges_baseline": "edges_baseline.csv",
+    "questions": "question_bank.csv",
+    "concept_map": "concept_to_chapter_map.csv",
+}
+
+print({
+    "quick_mode": QUICK_MODE,
+    "n_test_seeds": len(TEST_SEEDS),
+    "replay_steps": REPLAY_STEPS,
+    "closed_loop_steps": CLOSED_LOOP_STEPS,
+    "output_root": str(OUTPUT_ROOT),
+})
+
+# CELL 5
+def locate_files(root: Path) -> dict[str, Path]:
+    found = {}
+    for key, filename in REQUIRED_FILES.items():
+        matches = list(root.rglob(filename))
+        if matches:
+            found[key] = matches[0]
+    return found
+
+def try_drive(root: Path) -> bool:
+    try:
+        import gdown
+        gdown.download_folder(
+            url=DRIVE_FOLDER_URL, output=str(root), quiet=False,
+            use_cookies=False, remaining_ok=True,
+        )
+        return len(locate_files(root)) == len(REQUIRED_FILES)
+    except Exception as exc:
+        print("Drive download unavailable:", type(exc).__name__, str(exc)[:160])
+        return False
+
+def try_github(root: Path) -> bool:
+    base = "https://raw.githubusercontent.com/Ama2352/AdaptiveLMS/main/docs"
+    ok = True
+    for filename in REQUIRED_FILES.values():
+        target = root / filename
+        if target.exists():
+            continue
+        try:
+            with urlopen(f"{base}/{filename}", timeout=30) as response:
+                target.write_bytes(response.read())
+        except Exception as exc:
+            print(f"GitHub unavailable for {filename}: {type(exc).__name__}")
+            ok = False
+    return ok and len(locate_files(root)) == len(REQUIRED_FILES)
+
+files = locate_files(DATA_ROOT)
+if len(files) != len(REQUIRED_FILES):
+    try_drive(DATA_ROOT)
+    files = locate_files(DATA_ROOT)
+if len(files) != len(REQUIRED_FILES):
+    try_github(DATA_ROOT)
+    files = locate_files(DATA_ROOT)
+if len(files) != len(REQUIRED_FILES):
+    raise FileNotFoundError(f"Missing required files: {set(REQUIRED_FILES) - set(files)}")
+
+def read_csv_clean(path: Path) -> pd.DataFrame:
+    df = pd.read_csv(path, encoding="utf-8-sig")
+    df.columns = [str(c).strip().lstrip("\ufeff") for c in df.columns]
+    for col in df.select_dtypes(include="object").columns:
+        df[col] = df[col].astype(str).str.strip()
+    return df
+
+nodes_df = read_csv_clean(files["nodes"])
+edges_df = read_csv_clean(files["edges"])
+edges_baseline_df = read_csv_clean(files["edges_baseline"])
+questions_df = read_csv_clean(files["questions"])
+concept_map_df = read_csv_clean(files["concept_map"])
+
+if "node_id" in nodes_df.columns and "concept_id" not in nodes_df.columns:
+    nodes_df = nodes_df.rename(columns={"node_id": "concept_id"})
+if "difficulty_elo" in questions_df.columns and "elo_difficulty" not in questions_df.columns:
+    questions_df = questions_df.rename(columns={"difficulty_elo": "elo_difficulty"})
+
+for name, frame, required in [
+    ("nodes", nodes_df, {"concept_id"}),
+    ("edges", edges_df, {"source", "target"}),
+    ("questions", questions_df, {"question_id", "concept_id", "elo_difficulty"}),
+    ("concept map", concept_map_df, {"concept_id", "chapter"}),
+]:
+    missing = required - set(frame.columns)
+    assert not missing, f"{name} missing columns: {missing}"
+
+questions_df["elo_difficulty"] = pd.to_numeric(questions_df["elo_difficulty"], errors="raise")
+nodes = nodes_df["concept_id"].drop_duplicates().tolist()
+chapter_map = dict(concept_map_df[["concept_id", "chapter"]].drop_duplicates().values)
+for cid in nodes:
+    chapter_map.setdefault(cid, "Unknown")
+
+class ConceptDAG:
+    def __init__(self, node_ids, edge_pairs):
+        self.nodes = list(dict.fromkeys(node_ids))
+        self.pred = {n: [] for n in self.nodes}
+        self.succ = {n: [] for n in self.nodes}
+        for source, target in edge_pairs:
+            if source not in self.pred or target not in self.pred:
+                continue
+            self.succ[source].append(target)
+            self.pred[target].append(source)
+
+    def predecessors(self, node):
+        return tuple(self.pred.get(node, ()))
+
+    def successors(self, node):
+        return tuple(self.succ.get(node, ()))
+
+    def topological_order(self):
+        indegree = {n: len(self.pred[n]) for n in self.nodes}
+        ready = sorted(n for n, d in indegree.items() if d == 0)
+        order = []
+        while ready:
+            node = ready.pop(0)
+            order.append(node)
+            for child in sorted(self.succ[node]):
+                indegree[child] -= 1
+                if indegree[child] == 0:
+                    ready.append(child)
+                    ready.sort()
+        if len(order) != len(self.nodes):
+            raise ValueError("Concept graph must be a DAG")
+        return order
+
+graph = ConceptDAG(nodes, edges_df[["source", "target"]].itertuples(index=False, name=None))
+topological_order = graph.topological_order()
+questions_by_concept = {
+    cid: g.sort_values(["elo_difficulty", "question_id"]).reset_index(drop=True)
+    for cid, g in questions_df.groupby("concept_id", sort=False)
+}
+assert all(cid in questions_by_concept for cid in nodes)
+
+data_hashes = {key: hashlib.sha256(path.read_bytes()).hexdigest() for key, path in files.items()}
+print({
+    "concepts": len(nodes), "advanced_edges": len(edges_df),
+    "baseline_edges": len(edges_baseline_df), "questions": len(questions_df),
+    "chapters": len(set(chapter_map.values())),
+})
+
+# CELL 7
+levels = ("NB", "TH", "VD", "UNK")
+chapters = sorted(set(chapter_map.values()))
+concept_index = {cid: i for i, cid in enumerate(nodes)}
+chapter_index = {name: i for i, name in enumerate(chapters)}
+level_index = {name: i for i, name in enumerate(levels)}
+
+FEATURE_DIM = len(nodes) + len(chapters) + len(levels) + 3
+
+def question_level(qid: str) -> str:
+    match = re.search(r"_(NB|TH|VD)_", str(qid))
+    return match.group(1) if match else "UNK"
+
+def item_feature(cid: str, qid: str | None, difficulty: float) -> np.ndarray:
+    vector = np.zeros(FEATURE_DIM, dtype=np.float32)
+    vector[concept_index[cid]] = 1.0
+    offset = len(nodes)
+    vector[offset + chapter_index[chapter_map[cid]]] = 0.65
+    offset += len(chapters)
+    vector[offset + level_index[question_level(qid or "")]] = 0.85
+    offset += len(levels)
+    bucket = int(np.clip(round((float(difficulty) - 850.0) / 250.0), 0, 2))
+    vector[offset + bucket] = 0.55
+    norm = float(np.linalg.norm(vector))
+    return vector / norm if norm else vector
+
+question_features = {
+    str(row.question_id): item_feature(str(row.concept_id), str(row.question_id), float(row.elo_difficulty))
+    for row in questions_df.itertuples(index=False)
+}
+concept_features = {
+    cid: item_feature(cid, None, MASTERY_ELO) for cid in nodes
+}
+assert all(np.isfinite(v).all() for v in question_features.values())
+print({"feature_source": "structured item metadata", "feature_dim": FEATURE_DIM, "uses_target": False})
+
+# CELL 9
+def elo_probability(theta: float, difficulty: float) -> float:
+    return float(1.0 / (1.0 + 10.0 ** ((difficulty - theta) / 400.0)))
+
+def persona_base_abilities(persona: str, seed: int) -> dict[str, float]:
+    persona_index = PERSONAS.index(persona)
+    rng = np.random.default_rng(GLOBAL_SEED + seed * 101 + persona_index * 10_007)
+    if persona == "PG": global_mean = 1400.0
+    elif persona == "PY": global_mean = 1050.0
+    elif persona == "PYH": global_mean = 1175.0
+    else: raise ValueError(persona)
+
+    global_offset = float(rng.normal(0.0, 30.0))
+    chapter_offsets = {chapter: float(rng.normal(0.0, 35.0)) for chapter in chapters}
+    raw = {}
+    for cid in topological_order:
+        persona_shift = -150.0 if persona == "PYH" and "Hàm số" in chapter_map[cid] else 0.0
+        value = global_mean + global_offset + chapter_offsets[chapter_map[cid]] + persona_shift + rng.normal(0.0, 28.0)
+        parents = graph.predecessors(cid)
+        if parents:
+            value = 0.72 * value + 0.28 * float(np.mean([raw[p] for p in parents]))
+        raw[cid] = float(np.clip(value, 850.0, 1500.0))
+    return raw
+
+class LatentStudentEnvironment:
+    def __init__(self, base_theta: dict[str, float]):
+        self.base = dict(base_theta)
+        self.theta = dict(base_theta)
+        self.last_seen = {cid: None for cid in nodes}
+
+    def theta_at(self, cid: str, timestamp: pd.Timestamp) -> float:
+        previous = self.last_seen[cid]
+        if previous is None:
+            return self.theta[cid]
+        days = max(0.0, (timestamp - previous).total_seconds() / 86400.0)
+        learned_gain = max(0.0, self.theta[cid] - self.base[cid])
+        return self.base[cid] + learned_gain * math.exp(-TRUE_FORGET_RATE * days)
+
+    def snapshot(self, timestamp: pd.Timestamp) -> dict[str, float]:
+        return {cid: self.theta_at(cid, timestamp) for cid in nodes}
+
+    def interact(
+        self, cid: str, difficulty: float, timestamp: pd.Timestamp,
+        outcome_uniform: float, learning_uniform: float,
+    ):
+        theta_before = self.theta_at(cid, timestamp)
+        previous = self.last_seen[cid]
+        gap_days = 0.0 if previous is None else max(0.0, (timestamp - previous).total_seconds() / 86400.0)
+        p_true = elo_probability(theta_before, difficulty)
+        y = int(outcome_uniform < p_true)
+
+        parents = graph.predecessors(cid)
+        parent_thetas = [self.theta_at(p, timestamp) for p in parents]
+        prereq_deficits = [
+            float(np.clip((PREREQUISITE_READY_ELO - value) / 300.0, 0.0, 1.0))
+            for value in parent_thetas
+        ]
+        prerequisite_deficit = float(np.mean(prereq_deficits)) if prereq_deficits else 0.0
+        prereq_violation = any(value < PREREQUISITE_READY_ELO for value in parent_thetas)
+
+        # Neutral learning mechanism: challenge/feedback/spacing/prerequisite all matter.
+        challenge_match = math.exp(-0.5 * ((p_true - 0.65) / 0.22) ** 2)
+        feedback_factor = 1.15 if y == 0 else 0.85
+        spacing_factor = 1.0 + 0.20 * min(gap_days, 7.0) / 7.0
+        prereq_factor = 1.0 - 0.55 * prerequisite_deficit
+        stochastic_factor = 0.85 + 0.30 * float(learning_uniform)
+        learning_gain = (
+            TRUE_GAIN_SCALE * challenge_match * feedback_factor
+            * spacing_factor * prereq_factor * stochastic_factor
+        )
+
+        self.theta[cid] = min(1600.0, theta_before + learning_gain)
+        self.last_seen[cid] = timestamp
+        return {
+            "y": y, "p_true": p_true, "theta_before": theta_before,
+            "learning_gain": learning_gain, "challenge_match": challenge_match,
+            "prereq_violation": int(prereq_violation),
+            "prerequisite_deficit": prerequisite_deficit, "gap_days": gap_days,
+        }
+
+# CELL 11
+def dynamic_k(attempts: int) -> float:
+    if attempts < 5: return 40.0
+    if attempts <= 15: return 24.0
+    return 16.0
+
+def choose_question(cid: str, ability: float, question_counts: Counter):
+    candidates = questions_by_concept[cid].copy()
+    candidates["distance"] = (candidates["elo_difficulty"] - ability).abs()
+    nearest_distance = candidates["distance"].min()
+    pool = candidates[candidates["distance"] <= nearest_distance + 1e-9].copy()
+    pool["seen"] = pool["question_id"].map(lambda q: question_counts[str(q)])
+    row = pool.sort_values(["seen", "question_id"]).iloc[0]
+    return row
+
+class CoverageAwareSelectorMixin:
+    def _init_selector(self):
+        self.selection_counts = Counter()
+        self.question_counts = Counter()
+        self.current_chapter = None
+        self.recent_concepts = deque(maxlen=MAX_CONSECUTIVE_CONCEPT)
+
+    def ready_set(self):
+        unmastered = [cid for cid in nodes if not self.is_mastered(cid)]
+        ready = [
+            cid for cid in unmastered
+            if all(
+                self.is_mastered(p)
+                or self.selection_counts[p] >= MIN_PREREQUISITE_EXPOSURES
+                for p in graph.predecessors(cid)
+            )
+        ]
+        if ready:
+            return ready
+        if not unmastered:
+            return list(nodes)
+        # If model confidence prevents an exact frontier, choose the concepts with
+        # the fewest unresolved prerequisites instead of jumping arbitrarily.
+        deficits = {
+            cid: sum(not self.is_mastered(p) for p in graph.predecessors(cid))
+            for cid in unmastered
+        }
+        minimum = min(deficits.values())
+        return [cid for cid in unmastered if deficits[cid] == minimum]
+
+    def select(self):
+        candidates = self.ready_set()
+        if len(set(self.recent_concepts)) == 1 and len(self.recent_concepts) == MAX_CONSECUTIVE_CONCEPT:
+            alternatives = [cid for cid in candidates if cid != self.recent_concepts[-1]]
+            if not alternatives:
+                # A spaced-review escape hatch: revisit another exposed/ready concept
+                # instead of drilling the only frontier concept indefinitely.
+                alternatives = [
+                    cid for cid in nodes
+                    if cid != self.recent_concepts[-1]
+                    and all(
+                        self.is_mastered(p)
+                        or self.selection_counts[p] >= MIN_PREREQUISITE_EXPOSURES
+                        for p in graph.predecessors(cid)
+                    )
+                ]
+            if alternatives:
+                candidates = alternatives
+
+        min_visits = min(self.selection_counts[cid] for cid in candidates)
+        balanced = [cid for cid in candidates if self.selection_counts[cid] <= min_visits + 1]
+        cid = min(
+            balanced,
+            key=lambda x: (
+                self.mastery_score(x),
+                0 if chapter_map[x] == self.current_chapter else 1,
+                self.selection_counts[x],
+                x,
+            ),
+        )
+        row = choose_question(cid, self.ability(cid), self.question_counts)
+        qid = str(row["question_id"])
+        self.selection_counts[cid] += 1
+        self.question_counts[qid] += 1
+        self.recent_concepts.append(cid)
+        self.current_chapter = chapter_map[cid]
+        return cid, qid, float(row["elo_difficulty"])
+
+def sigmoid(x: float) -> float:
+    return float(1.0 / (1.0 + math.exp(-float(np.clip(x, -30.0, 30.0)))))
+
+def clip_norm(vector: np.ndarray, max_norm=3.0):
+    norm = float(np.linalg.norm(vector))
+    return vector * (max_norm / norm) if norm > max_norm else vector
+
+# CELL 13
+class AdaptiveLMSPolicy(CoverageAwareSelectorMixin):
+    name = "AdaptiveLMS"
+
+    def __init__(self):
+        self.theta = {cid: MODEL_INITIAL_ELO for cid in nodes}
+        self.attempts = {cid: 0 for cid in nodes}
+        self._init_selector()
+
+    def ability(self, cid): return self.theta[cid]
+    def is_mastered(self, cid): return self.theta[cid] >= MASTERY_ELO
+    def mastery_score(self, cid): return elo_probability(self.theta[cid], MASTERY_ELO)
+
+    def predict(self, cid, qid, difficulty, timestamp):
+        return elo_probability(self.theta[cid], difficulty)
+
+    def update(self, cid, qid, difficulty, timestamp, y, p_pred):
+        self.theta[cid] += dynamic_k(self.attempts[cid]) * (y - p_pred)
+        self.attempts[cid] += 1
+
+    def model_mastery_rate(self):
+        return float(np.mean([self.is_mastered(cid) for cid in nodes]))
+
+@dataclass
+class MemoryState:
+    theta: float = MODEL_INITIAL_ELO
+    memory: np.ndarray = field(default_factory=lambda: np.zeros(FEATURE_DIM, dtype=np.float32))
+    pi_task: float = 1.0
+    pi_time: float = 0.05
+    attempts: int = 0
+    last_timestamp: pd.Timestamp | None = None
+    recent_outcomes: deque = field(default_factory=lambda: deque(maxlen=8))
+    ever_mastered: bool = False
+    currently_mastered: bool = False
+    times_forgotten: int = 0
+
+class GAMKTPolicy(CoverageAwareSelectorMixin):
+    def __init__(self, use_graph_context: bool):
+        self.use_graph_context = use_graph_context
+        self.name = "Graph-GAM-KT" if use_graph_context else "GAM-KT"
+        self.states = {cid: MemoryState() for cid in nodes}
+        self.r_pos, self.r_neg = 0.60, 1.00
+        self.q_task, self.q_time = 0.04, 0.04
+        self.time_decay_rate = 0.02
+        self.theta_lr, self.memory_lr = 80.0, 1.00
+        self.item_weight, self.graph_weight = 0.80, 0.35
+        self._init_selector()
+
+    def ability(self, cid): return self.states[cid].theta
+
+    def is_mastered(self, cid):
+        state = self.states[cid]
+        return state.theta >= MASTERY_ELO and state.pi_task <= 0.55
+
+    def _graph_summary(self, cid):
+        if not self.use_graph_context:
+            return {"signal": 0.0, "uncertainty": 0.0, "deficit": 0.0}
+        parents = graph.predecessors(cid)
+        if not parents:
+            return {"signal": 0.0, "uncertainty": 0.0, "deficit": 0.0}
+        parent_states = [self.states[p] for p in parents]
+        signal = float(np.mean([(s.theta - MASTERY_ELO) / 400.0 for s in parent_states]))
+        uncertainty = float(np.mean([s.pi_task for s in parent_states]))
+        deficit = float(np.mean([max(0.0, (MASTERY_ELO - s.theta) / 400.0) for s in parent_states]))
+        return {
+            "signal": float(np.clip(signal, -1.5, 1.5)),
+            "uncertainty": uncertainty,
+            "deficit": deficit,
+        }
+
+    def _context(self, cid):
+        state = self.states[cid]
+        graph_summary = self._graph_summary(cid)
+        struggling = (
+            state.attempts >= 5 and len(state.recent_outcomes) >= 5
+            and float(np.mean(state.recent_outcomes)) < 0.40
+        )
+        q_task = self.q_task
+        r_neg = self.r_neg
+        decay = self.time_decay_rate
+        if self.use_graph_context:
+            q_task += 0.025 * graph_summary["uncertainty"] + 0.020 * graph_summary["deficit"]
+            r_neg *= 0.90 if struggling else 1.0
+            decay += 0.004 * state.times_forgotten + 0.004 * graph_summary["deficit"]
+        return {
+            "q_task": float(np.clip(q_task, 0.01, 0.18)),
+            "r_pos": self.r_pos,
+            "r_neg": float(np.clip(r_neg, 0.50, 2.00)),
+            "decay": float(np.clip(decay, 0.01, 0.10)),
+            "graph_signal": graph_summary["signal"],
+        }
+
+    def _decayed_pi(self, cid, timestamp):
+        state = self.states[cid]
+        context = self._context(cid)
+        if state.last_timestamp is None:
+            return state.pi_task, state.pi_time, context
+        days = max(0.0, (timestamp - state.last_timestamp).total_seconds() / 86400.0)
+        return (
+            float(np.clip(state.pi_task + context["decay"] * days, 0.0, 1.0)),
+            float(np.clip(state.pi_time + context["decay"] * days, 0.0, 1.0)),
+            context,
+        )
+
+    def mastery_score(self, cid):
+        state = self.states[cid]
+        context = self._context(cid)
+        item_signal = float(np.dot(state.memory, concept_features[cid]))
+        logit = (
+            math.log(10.0) * (state.theta - MASTERY_ELO) / 400.0
+            + self.item_weight * item_signal
+            + self.graph_weight * context["graph_signal"]
+        )
+        base = sigmoid(logit)
+        confidence = float(np.clip(1.0 - 0.45 * state.pi_task - 0.35 * state.pi_time, 0.10, 1.0))
+        return 0.5 + confidence * (base - 0.5)
+
+    def predict(self, cid, qid, difficulty, timestamp):
+        state = self.states[cid]
+        pi_task, pi_time, context = self._decayed_pi(cid, timestamp)
+        logit = (
+            math.log(10.0) * (state.theta - difficulty) / 400.0
+            + self.item_weight * float(np.dot(state.memory, question_features[qid]))
+            + self.graph_weight * context["graph_signal"]
+        )
+        raw = sigmoid(logit)
+        confidence = float(np.clip(1.0 - 0.45 * pi_task - 0.35 * pi_time, 0.10, 1.0))
+        return float(np.clip(0.5 + confidence * (raw - 0.5), 1e-6, 1 - 1e-6))
+
+    def update(self, cid, qid, difficulty, timestamp, y, p_pred):
+        state = self.states[cid]
+        pi_task, _, context = self._decayed_pi(cid, timestamp)
+        observation_noise = context["r_pos"] if y == 1 else context["r_neg"]
+        gain = pi_task / (pi_task + observation_noise)
+        residual = float(y - p_pred)
+        state.theta += self.theta_lr * gain * residual
+        state.memory = clip_norm(
+            state.memory + self.memory_lr * gain * residual * question_features[qid]
+        )
+        state.pi_task = float(np.clip((1.0 - gain) * pi_task + context["q_task"], 0.01, 1.0))
+        state.pi_time = self.q_time
+        state.last_timestamp = timestamp
+        state.attempts += 1
+        state.recent_outcomes.append(int(y))
+        was_mastered = state.currently_mastered
+        state.currently_mastered = self.is_mastered(cid)
+        if state.currently_mastered:
+            state.ever_mastered = True
+        elif was_mastered and state.ever_mastered:
+            state.times_forgotten += 1
+
+    def model_mastery_rate(self):
+        return float(np.mean([self.is_mastered(cid) for cid in nodes]))
+
+
+
+# Canonical four-parameter BKT. These defaults are replaced by the development-
+# stream grid search below before any test prediction is produced.
+BKT_PARAMS = {"p_init": 0.20, "p_learn": 0.10, "p_guess": 0.20, "p_slip": 0.10}
+BKT_MASTERY_THRESHOLD = 0.95
+
+class BKTPolicy(CoverageAwareSelectorMixin):
+    """Per-concept Bayesian Knowledge Tracing baseline (no forgetting)."""
+
+    name = "BKT"
+
+    def __init__(self, p_init, p_learn, p_guess, p_slip):
+        assert 0.0 < p_init < 1.0
+        assert 0.0 <= p_learn < 1.0
+        assert 0.0 <= p_guess < 1.0
+        assert 0.0 <= p_slip < 1.0
+        assert p_guess + p_slip < 1.0
+        self.p_known = {cid: float(p_init) for cid in nodes}
+        self.p_learn = float(p_learn)
+        self.p_guess = float(p_guess)
+        self.p_slip = float(p_slip)
+        self._init_selector()
+
+    def _p_correct(self, cid):
+        prior = self.p_known[cid]
+        return float(prior * (1.0 - self.p_slip) + (1.0 - prior) * self.p_guess)
+
+    def ability(self, cid):
+        # BKT itself is difficulty-agnostic. This monotone mapping is used only by
+        # the shared question chooser, not by the BKT response probability.
+        p = float(np.clip(self._p_correct(cid), 1e-4, 1.0 - 1e-4))
+        theta = MASTERY_ELO + 400.0 * math.log10(p / (1.0 - p))
+        return float(np.clip(theta, 850.0, 1600.0))
+
+    def is_mastered(self, cid):
+        return self.p_known[cid] >= BKT_MASTERY_THRESHOLD
+
+    def mastery_score(self, cid):
+        return self.p_known[cid]
+
+    def predict(self, cid, qid, difficulty, timestamp):
+        del qid, difficulty, timestamp
+        return float(np.clip(self._p_correct(cid), 1e-6, 1.0 - 1e-6))
+
+    def update(self, cid, qid, difficulty, timestamp, y, p_pred):
+        del qid, difficulty, timestamp, p_pred
+        prior = self.p_known[cid]
+        if int(y) == 1:
+            numerator = prior * (1.0 - self.p_slip)
+            denominator = numerator + (1.0 - prior) * self.p_guess
+        else:
+            numerator = prior * self.p_slip
+            denominator = numerator + (1.0 - prior) * (1.0 - self.p_guess)
+        posterior = numerator / max(denominator, 1e-12)
+        self.p_known[cid] = float(
+            np.clip(posterior + (1.0 - posterior) * self.p_learn, 1e-6, 1.0 - 1e-6)
+        )
+
+    def model_mastery_rate(self):
+        return float(np.mean([self.is_mastered(cid) for cid in nodes]))
+
+
+POLICY_FACTORIES = {
+    "AdaptiveLMS": AdaptiveLMSPolicy,
+    "BKT": lambda: BKTPolicy(**BKT_PARAMS),
+    "GAM-KT": lambda: GAMKTPolicy(use_graph_context=False),
+    "Graph-GAM-KT": lambda: GAMKTPolicy(use_graph_context=True),
+}
+
+# CELL 15
+from itertools import product
+
+DEV_SEEDS = tuple(range(2000, 2003)) if QUICK_MODE else tuple(range(2000, 2020))
+
+def generate_bkt_development_events():
+    rows = []
+    for seed in DEV_SEEDS:
+        for persona_index, persona in enumerate(PERSONAS):
+            base = persona_base_abilities(persona, seed)
+            env = LatentStudentEnvironment(base)
+            rng = np.random.default_rng(GLOBAL_SEED + 71_771 + seed * 271 + persona_index * 13_013)
+            timestamp = pd.Timestamp(datetime(2025, 1, 1, tzinfo=timezone.utc))
+            for step in range(REPLAY_STEPS):
+                gap = CYCLE_GAP_HOURS if step > 0 and step % len(nodes) == 0 else SHORT_GAP_HOURS
+                timestamp += pd.Timedelta(hours=gap)
+                cid = topological_order[step % len(topological_order)]
+                theta = env.theta_at(cid, timestamp)
+                row = choose_question(cid, theta, Counter())
+                difficulty = float(row["elo_difficulty"])
+                outcome = env.interact(cid, difficulty, timestamp, rng.random(), rng.random())
+                rows.append({
+                    "student_id": f"DEV_{persona}_{seed}", "concept_id": cid,
+                    "event_index": step, "y": int(outcome["y"]),
+                })
+    return pd.DataFrame(rows).sort_values(["student_id", "event_index"]).reset_index(drop=True)
+
+def bkt_development_log_loss(events, p_init, p_learn, p_guess, p_slip):
+    losses = []
+    for _, group in events.groupby("student_id", sort=False):
+        mastery = {cid: float(p_init) for cid in nodes}
+        for event in group.itertuples(index=False):
+            prior = mastery[event.concept_id]
+            p = float(np.clip(
+                prior * (1.0 - p_slip) + (1.0 - prior) * p_guess,
+                1e-6, 1.0 - 1e-6,
+            ))
+            losses.append(-(event.y * math.log(p) + (1 - event.y) * math.log(1 - p)))
+            if event.y == 1:
+                numerator = prior * (1.0 - p_slip)
+                denominator = numerator + (1.0 - prior) * p_guess
+            else:
+                numerator = prior * p_slip
+                denominator = numerator + (1.0 - prior) * (1.0 - p_guess)
+            posterior = numerator / max(denominator, 1e-12)
+            mastery[event.concept_id] = posterior + (1.0 - posterior) * p_learn
+    return float(np.mean(losses))
+
+bkt_dev_events = generate_bkt_development_events()
+search_rows = []
+for p_init, p_learn, p_guess, p_slip in product(
+    (0.10, 0.20, 0.35, 0.50),
+    (0.05, 0.10, 0.20),
+    (0.10, 0.20, 0.30),
+    (0.05, 0.10, 0.20),
+):
+    if p_guess + p_slip >= 1.0:
+        continue
+    search_rows.append({
+        "p_init": p_init, "p_learn": p_learn,
+        "p_guess": p_guess, "p_slip": p_slip,
+        "dev_log_loss": bkt_development_log_loss(
+            bkt_dev_events, p_init, p_learn, p_guess, p_slip
+        ),
+    })
+
+bkt_parameter_search = pd.DataFrame(search_rows).sort_values(
+    ["dev_log_loss", "p_init", "p_learn", "p_guess", "p_slip"]
+).reset_index(drop=True)
+best = bkt_parameter_search.iloc[0]
+BKT_PARAMS = {
+    key: float(best[key]) for key in ("p_init", "p_learn", "p_guess", "p_slip")
+}
+assert set(DEV_SEEDS).isdisjoint(TEST_SEEDS)
+assert BKT_PARAMS["p_guess"] + BKT_PARAMS["p_slip"] < 1.0
+print({
+    "bkt_reference": "Corbett & Anderson (1994)",
+    "development_seeds": [DEV_SEEDS[0], DEV_SEEDS[-1]],
+    "development_events": len(bkt_dev_events),
+    "selected_parameters": BKT_PARAMS,
+    "development_log_loss": float(best["dev_log_loss"]),
+})
+display(bkt_parameter_search.head(10).round(6))
+
+# CELL 17
+def generate_replay_events():
+    rows = []
+    for seed in TEST_SEEDS:
+        for persona_index, persona in enumerate(PERSONAS):
+            base = persona_base_abilities(persona, seed)
+            env = LatentStudentEnvironment(base)
+            rng = np.random.default_rng(GLOBAL_SEED + 31_337 + seed * 271 + persona_index * 13_013)
+            timestamp = pd.Timestamp(datetime(2026, 1, 1, tzinfo=timezone.utc))
+            for step in range(REPLAY_STEPS):
+                gap = CYCLE_GAP_HOURS if step > 0 and step % len(nodes) == 0 else SHORT_GAP_HOURS
+                timestamp += pd.Timedelta(hours=gap)
+                cid = topological_order[step % len(topological_order)]
+                theta = env.theta_at(cid, timestamp)
+                row = choose_question(cid, theta, Counter())
+                qid, difficulty = str(row["question_id"]), float(row["elo_difficulty"])
+                outcome = env.interact(cid, difficulty, timestamp, rng.random(), rng.random())
+                rows.append({
+                    "student_id": f"{persona}_{seed}", "persona": persona, "seed": seed,
+                    "event_index": step, "timestamp": timestamp, "concept_id": cid,
+                    "question_id": qid, "difficulty": difficulty, **outcome,
+                })
+    events = pd.DataFrame(rows).sort_values(["student_id", "event_index"]).reset_index(drop=True)
+    assert not events.duplicated(["student_id", "event_index"]).any()
+    return events
+
+def expected_calibration_error(y, p, bins=10):
+    y, p = np.asarray(y), np.asarray(p)
+    edges = np.linspace(0.0, 1.0, bins + 1)
+    ids = np.clip(np.digitize(p, edges[1:-1], right=False), 0, bins - 1)
+    total = len(y)
+    return float(sum(
+        (ids == b).sum() / total * abs(y[ids == b].mean() - p[ids == b].mean())
+        for b in range(bins) if (ids == b).any()
+    ))
+
+replay_events = generate_replay_events()
+prediction_rows = []
+for (student_id, persona, seed), group in replay_events.groupby(["student_id", "persona", "seed"], sort=False):
+    for model_name, factory in POLICY_FACTORIES.items():
+        model = factory()
+        for event in group.itertuples(index=False):
+            # Strict predict-then-update guard: target is only passed after prediction.
+            p_pred = float(np.clip(model.predict(
+                event.concept_id, event.question_id, event.difficulty, event.timestamp
+            ), 1e-6, 1 - 1e-6))
+            prediction_rows.append({
+                "model": model_name, "student_id": student_id, "persona": persona,
+                "seed": seed, "event_index": event.event_index,
+                "concept_id": event.concept_id, "question_id": event.question_id,
+                "y_true": event.y, "p_true": event.p_true, "p_pred": p_pred,
+            })
+            model.update(
+                event.concept_id, event.question_id, event.difficulty,
+                event.timestamp, event.y, p_pred,
+            )
+
+replay_predictions = pd.DataFrame(prediction_rows)
+replay_metric_rows = []
+for (model, persona, seed), group in replay_predictions.groupby(["model", "persona", "seed"]):
+    y, p = group["y_true"].to_numpy(), group["p_pred"].to_numpy()
+    replay_metric_rows.append({
+        "model": model, "persona": persona, "seed": seed,
+        "accuracy": accuracy_score(y, p >= 0.5),
+        "auc": roc_auc_score(y, p) if len(np.unique(y)) == 2 else np.nan,
+        "log_loss": log_loss(y, p, labels=[0, 1]),
+        "brier": brier_score_loss(y, p),
+        "ece": expected_calibration_error(y, p),
+        "p_true_mae": float(np.mean(np.abs(group["p_true"] - p))),
+    })
+replay_metrics = pd.DataFrame(replay_metric_rows)
+print({"shared_events": len(replay_events), "predictions": len(replay_predictions)})
+display(replay_metrics.groupby(["model", "persona"]).mean(numeric_only=True).drop(columns="seed").round(4))
+
+# CELL 19
+def normalized_entropy(values):
+    counts = np.array(list(Counter(values).values()), dtype=float)
+    if len(counts) <= 1: return 0.0
+    probabilities = counts / counts.sum()
+    return float(-(probabilities * np.log(probabilities)).sum() / np.log(len(nodes)))
+
+def max_consecutive(values):
+    best = current = 0
+    previous = None
+    for value in values:
+        current = current + 1 if value == previous else 1
+        best = max(best, current)
+        previous = value
+    return best
+
+def soft_mastery(snapshot):
+    return float(np.mean([elo_probability(theta, MASTERY_ELO) for theta in snapshot.values()]))
+
+def run_closed_loop():
+    event_rows, run_rows, curve_rows = [], [], []
+    for seed in TEST_SEEDS:
+        if (seed - TEST_SEEDS[0]) % 10 == 0:
+            print(f"Closed-loop progress: seed {seed - TEST_SEEDS[0] + 1}/{len(TEST_SEEDS)}")
+        for persona_index, persona in enumerate(PERSONAS):
+            base = persona_base_abilities(persona, seed)
+            initial_mastery = float(np.mean([v >= MASTERY_ELO for v in base.values()]))
+            initial_soft_mastery = soft_mastery(base)
+            initial_mean_theta = float(np.mean(list(base.values())))
+            rng = np.random.default_rng(GLOBAL_SEED + 999_983 + seed * 271 + persona_index * 13_013)
+            outcome_uniforms = rng.random(CLOSED_LOOP_STEPS)
+            learning_uniforms = rng.random(CLOSED_LOOP_STEPS)
+
+            for policy_name, factory in POLICY_FACTORIES.items():
+                env, policy = LatentStudentEnvironment(base), factory()
+                timestamp = pd.Timestamp(datetime(2026, 1, 1, tzinfo=timezone.utc))
+                concepts, chapters_seen = [], []
+                total_learning_gain = 0.0
+                violations = eligible_nonroot = 0
+                prerequisite_deficit_sum = 0.0
+                run_event_start = len(event_rows)
+
+                for step in range(CLOSED_LOOP_STEPS):
+                    gap = CYCLE_GAP_HOURS if step > 0 and step % len(nodes) == 0 else SHORT_GAP_HOURS
+                    timestamp += pd.Timedelta(hours=gap)
+                    cid, qid, difficulty = policy.select()
+                    p_pred = float(np.clip(policy.predict(cid, qid, difficulty, timestamp), 1e-6, 1 - 1e-6))
+                    outcome = env.interact(
+                        cid, difficulty, timestamp,
+                        outcome_uniforms[step], learning_uniforms[step],
+                    )
+                    policy.update(cid, qid, difficulty, timestamp, outcome["y"], p_pred)
+
+                    total_learning_gain += outcome["learning_gain"]
+                    if graph.predecessors(cid):
+                        eligible_nonroot += 1
+                        violations += outcome["prereq_violation"]
+                        prerequisite_deficit_sum += outcome["prerequisite_deficit"]
+                    concepts.append(cid)
+                    chapters_seen.append(chapter_map[cid])
+                    snapshot = env.snapshot(timestamp)
+                    mastery_rate = float(np.mean([v >= MASTERY_ELO for v in snapshot.values()]))
+                    soft_mastery_rate = soft_mastery(snapshot)
+                    event_rows.append({
+                        "policy": policy_name, "persona": persona, "seed": seed,
+                        "step": step, "timestamp": timestamp, "concept_id": cid,
+                        "question_id": qid, "chapter": chapter_map[cid],
+                        "difficulty": difficulty, "p_pred": p_pred, **outcome,
+                        "true_mastery_rate": mastery_rate,
+                        "soft_mastery_rate": soft_mastery_rate,
+                        "model_mastery_rate": policy.model_mastery_rate(),
+                    })
+                    if step % 10 == 0 or step == CLOSED_LOOP_STEPS - 1:
+                        curve_rows.append({
+                            "policy": policy_name, "persona": persona, "seed": seed,
+                            "step": step + 1, "true_mastery_rate": mastery_rate,
+                            "mastery_gain": mastery_rate - initial_mastery,
+                            "soft_mastery_gain": soft_mastery_rate - initial_soft_mastery,
+                        })
+
+                final_snapshot = env.snapshot(timestamp)
+                retention_timestamp = timestamp + pd.Timedelta(days=RETENTION_GAP_DAYS)
+                retention_snapshot = env.snapshot(retention_timestamp)
+                final_mastery = float(np.mean([v >= MASTERY_ELO for v in final_snapshot.values()]))
+                retention_mastery = float(np.mean([v >= MASTERY_ELO for v in retention_snapshot.values()]))
+                final_soft_mastery = soft_mastery(final_snapshot)
+                retention_soft_mastery = soft_mastery(retention_snapshot)
+                rows = event_rows[run_event_start:]
+                y = np.array([r["y"] for r in rows])
+                p = np.array([r["p_pred"] for r in rows])
+                run_rows.append({
+                    "policy": policy_name, "persona": persona, "seed": seed,
+                    "correct_rate": float(y.mean()),
+                    "accuracy": accuracy_score(y, p >= 0.5),
+                    "auc": roc_auc_score(y, p) if len(np.unique(y)) == 2 else np.nan,
+                    "log_loss": log_loss(y, p, labels=[0, 1]),
+                    "brier": brier_score_loss(y, p),
+                    "initial_true_mastery_rate": initial_mastery,
+                    "initial_soft_mastery": initial_soft_mastery,
+                    "final_true_mastery_rate": final_mastery,
+                    "mastery_gain": final_mastery - initial_mastery,
+                    "retention_mastery_rate": retention_mastery,
+                    "retention_mastery_gain": retention_mastery - initial_mastery,
+                    "final_soft_mastery": final_soft_mastery,
+                    "soft_mastery_gain": final_soft_mastery - initial_soft_mastery,
+                    "retention_soft_mastery": retention_soft_mastery,
+                    "retention_soft_mastery_gain": retention_soft_mastery - initial_soft_mastery,
+                    "mean_theta_gain": float(np.mean(list(final_snapshot.values()))) - initial_mean_theta,
+                    "retention_theta_gain": float(np.mean(list(retention_snapshot.values()))) - initial_mean_theta,
+                    "total_learning_gain": total_learning_gain,
+                    "mean_learning_gain": total_learning_gain / CLOSED_LOOP_STEPS,
+                    "concepts_covered": len(set(concepts)),
+                    "concept_coverage_rate": len(set(concepts)) / len(nodes),
+                    "route_entropy": normalized_entropy(concepts),
+                    "max_consecutive_concept": max_consecutive(concepts),
+                    "prerequisite_violations": violations,
+                    "prerequisite_opportunities": eligible_nonroot,
+                    "prerequisite_violation_rate": violations / max(1, eligible_nonroot),
+                    "mean_prerequisite_deficit": prerequisite_deficit_sum / max(1, eligible_nonroot),
+                    "final_model_mastery_rate": policy.model_mastery_rate(),
+                })
+    return pd.DataFrame(event_rows), pd.DataFrame(run_rows), pd.DataFrame(curve_rows)
+
+closed_events, closed_metrics, learning_curves = run_closed_loop()
+print({"closed_loop_events": len(closed_events), "runs": len(closed_metrics)})
+display(closed_metrics.groupby(["policy", "persona"]).mean(numeric_only=True).drop(columns="seed").round(4))
+
+# CELL 21
+def bootstrap_mean_ci(delta, seed, samples=BOOTSTRAP_SAMPLES):
+    values = np.asarray(delta, dtype=float)
+    rng = np.random.default_rng(seed)
+    means = np.array([
+        rng.choice(values, size=len(values), replace=True).mean()
+        for _ in range(samples)
+    ])
+    return tuple(np.quantile(means, [0.025, 0.975]))
+
+def rank_biserial(delta):
+    values = np.asarray(delta, dtype=float)
+    values = values[values != 0]
+    if len(values) == 0: return 0.0
+    ranks = rankdata(np.abs(values))
+    return float((ranks[values > 0].sum() - ranks[values < 0].sum()) / ranks.sum())
+
+def holm_adjust(p_values):
+    p = np.asarray(p_values, dtype=float)
+    order = np.argsort(p)
+    adjusted = np.empty(len(p), dtype=float)
+    running = 0.0
+    m = len(p)
+    for rank, idx in enumerate(order):
+        value = min(1.0, (m - rank) * p[idx])
+        running = max(running, value)
+        adjusted[idx] = running
+    return adjusted
+
+def paired_tests(frame, group_col, metrics, directions, protocol):
+    comparisons = (("Graph-GAM-KT", "AdaptiveLMS"), ("Graph-GAM-KT", "BKT"), ("Graph-GAM-KT", "GAM-KT"))
+    rows = []
+    for persona_index, persona in enumerate(PERSONAS):
+        subset = frame[frame["persona"] == persona]
+        for comparison_index, (proposed, baseline) in enumerate(comparisons):
+            for metric_index, metric in enumerate(metrics):
+                pivot = subset.pivot(index="seed", columns=group_col, values=metric).dropna()
+                if not {proposed, baseline}.issubset(pivot.columns): continue
+                delta = (pivot[proposed] - pivot[baseline]).to_numpy()
+                benefit = directions[metric] * delta
+                if np.allclose(delta, 0):
+                    stat, pvalue = 0.0, 1.0
+                else:
+                    stat, pvalue = wilcoxon(delta, zero_method="wilcox", alternative="two-sided")
+                ci_low, ci_high = bootstrap_mean_ci(
+                    delta,
+                    GLOBAL_SEED + persona_index * 1000 + comparison_index * 100 + metric_index,
+                )
+                rows.append({
+                    "protocol": protocol, "persona": persona,
+                    "proposed": proposed, "baseline": baseline, "metric": metric,
+                    "n_pairs": len(delta),
+                    "proposed_mean": pivot[proposed].mean(),
+                    "baseline_mean": pivot[baseline].mean(),
+                    "raw_delta": delta.mean(), "benefit_delta": benefit.mean(),
+                    "bootstrap_ci_low": ci_low, "bootstrap_ci_high": ci_high,
+                    "rank_biserial": rank_biserial(benefit),
+                    "wilcoxon_stat": stat, "p_value": pvalue,
+                })
+    result = pd.DataFrame(rows)
+    result["p_holm"] = holm_adjust(result["p_value"].fillna(1.0))
+    result["reject_holm_05"] = result["p_holm"] < 0.05
+    return result
+
+replay_directions = {"auc": 1, "log_loss": -1, "brier": -1, "ece": -1, "p_true_mae": -1}
+closed_directions = {
+    "retention_soft_mastery_gain": 1, "retention_theta_gain": 1,
+    "mean_learning_gain": 1, "concept_coverage_rate": 1,
+    "route_entropy": 1, "mean_prerequisite_deficit": -1,
+    "log_loss": -1, "brier": -1,
+}
+
+replay_tests = paired_tests(
+    replay_metrics, "model", list(replay_directions), replay_directions, "fixed_replay"
+)
+closed_tests = paired_tests(
+    closed_metrics, "policy", list(closed_directions), closed_directions, "closed_loop"
+)
+all_tests = pd.concat([replay_tests, closed_tests], ignore_index=True)
+
+print("Significant after Holm correction; benefit_delta > 0 favors Graph-GAM-KT")
+display(all_tests[all_tests["reject_holm_05"]].round(6))
+display(all_tests.round(6))
+
+# CELL 23
+# Anti-collapse checks are protocol invariants, not claims of superiority.
+assert closed_metrics["max_consecutive_concept"].max() <= MAX_CONSECUTIVE_CONCEPT
+assert closed_metrics["concept_coverage_rate"].min() > 0.25
+assert np.isfinite(closed_metrics[["log_loss", "brier", "mean_learning_gain"]]).all().all()
+
+curve_summary = (
+    learning_curves.groupby(["policy", "persona", "step"])["soft_mastery_gain"]
+    .agg(["mean", "sem"]).reset_index()
+)
+fig, axes = plt.subplots(1, 3, figsize=(17, 4.5), sharey=True)
+for ax, persona in zip(axes, PERSONAS):
+    data = curve_summary[curve_summary["persona"] == persona]
+    for policy, group in data.groupby("policy"):
+        ax.plot(group["step"], group["mean"], label=policy)
+        ax.fill_between(
+            group["step"], group["mean"] - 1.96 * group["sem"],
+            group["mean"] + 1.96 * group["sem"], alpha=0.15,
+        )
+    ax.axhline(0, color="black", linewidth=0.8)
+    ax.set_title(persona); ax.set_xlabel("Interaction step"); ax.set_ylabel("Soft mastery gain")
+axes[0].legend(title="Policy")
+plt.tight_layout()
+plt.savefig(OUTPUT_ROOT / "mastery_gain_curves.png", dpi=180, bbox_inches="tight")
+plt.show()
+
+plot_metrics = [
+    ("retention_soft_mastery_gain", "14-day soft-mastery gain ↑"),
+    ("retention_theta_gain", "14-day mean theta gain ↑"),
+    ("concept_coverage_rate", "Concept coverage ↑"),
+    ("mean_prerequisite_deficit", "Mean prerequisite deficit ↓"),
+]
+fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+for ax, (metric, title) in zip(axes.flat, plot_metrics):
+    sns.boxplot(data=closed_metrics, x="persona", y=metric, hue="policy", ax=ax)
+    ax.set_title(title); ax.set_xlabel("")
+for ax in axes.flat[1:]:
+    if ax.legend_ is not None: ax.legend_.remove()
+axes.flat[0].legend(title="Policy")
+plt.tight_layout()
+plt.savefig(OUTPUT_ROOT / "closed_loop_primary_outcomes.png", dpi=180, bbox_inches="tight")
+plt.show()
+
+# CELL 25
+bkt_parameter_search.to_csv(OUTPUT_ROOT / "bkt_parameter_search.csv", index=False)
+replay_events.to_csv(OUTPUT_ROOT / "replay_shared_events.csv", index=False)
+replay_predictions.to_csv(OUTPUT_ROOT / "replay_predictions.csv", index=False)
+replay_metrics.to_csv(OUTPUT_ROOT / "replay_metrics_by_seed.csv", index=False)
+replay_tests.to_csv(OUTPUT_ROOT / "replay_paired_tests.csv", index=False)
+closed_events.to_csv(OUTPUT_ROOT / "closed_loop_events.csv", index=False)
+closed_metrics.to_csv(OUTPUT_ROOT / "closed_loop_metrics_by_seed.csv", index=False)
+learning_curves.to_csv(OUTPUT_ROOT / "closed_loop_learning_curves.csv", index=False)
+closed_tests.to_csv(OUTPUT_ROOT / "closed_loop_paired_tests.csv", index=False)
+all_tests.to_csv(OUTPUT_ROOT / "all_paired_tests_holm.csv", index=False)
+
+manifest = {
+    "experiment": "adaptive_lms_vs_bkt_vs_gam_kt_vs_graph_gam_kt_research_ready_v2_1",
+    "created_at_utc": datetime.now(timezone.utc).isoformat(),
+    "global_seed": GLOBAL_SEED,
+    "test_seeds": list(TEST_SEEDS),
+    "personas": list(PERSONAS),
+    "replay_steps": REPLAY_STEPS,
+    "closed_loop_steps": CLOSED_LOOP_STEPS,
+    "policies": list(POLICY_FACTORIES),
+    "bkt_reference": "Corbett & Anderson (1994), doi:10.1007/BF01099821",
+    "bkt_parameters": BKT_PARAMS,
+    "bkt_development_seeds": list(DEV_SEEDS),
+    "bkt_parameter_selection_metric": "development Log Loss",
+    "bkt_forgetting": False,
+    "common_random_numbers": True,
+    "predict_before_update": True,
+    "target_used_as_feature": False,
+    "feature_source": "structured item metadata",
+    "retention_gap_days": RETENTION_GAP_DAYS,
+    "mastery_elo": MASTERY_ELO,
+    "prerequisite_ready_elo": PREREQUISITE_READY_ELO,
+    "true_gain_scale": TRUE_GAIN_SCALE,
+    "true_forget_rate": TRUE_FORGET_RATE,
+    "max_consecutive_concept": MAX_CONSECUTIVE_CONCEPT,
+    "minimum_prerequisite_exposures": MIN_PREREQUISITE_EXPOSURES,
+    "bootstrap_samples": BOOTSTRAP_SAMPLES,
+    "multiple_testing": "Holm family-wise correction per protocol table",
+    "data_hashes_sha256": data_hashes,
+}
+(OUTPUT_ROOT / "experiment_manifest.json").write_text(
+    json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8"
+)
+
+archive = Path(shutil.make_archive(str(OUTPUT_ROOT), "zip", root_dir=OUTPUT_ROOT))
+print("Local bundle:", archive)
+
+drive_copy = None
+if Path("/content").exists():
+    try:
+        from google.colab import drive
+        drive.mount("/content/drive", force_remount=False)
+        DRIVE_RESULT_DIR.mkdir(parents=True, exist_ok=True)
+        drive_copy = DRIVE_RESULT_DIR / archive.name
+        shutil.copy2(archive, drive_copy)
+        shutil.copy2(OUTPUT_ROOT / "experiment_manifest.json", DRIVE_RESULT_DIR / "experiment_manifest.json")
+        shutil.copy2(OUTPUT_ROOT / "all_paired_tests_holm.csv", DRIVE_RESULT_DIR / "all_paired_tests_holm.csv")
+        print("Saved to Drive:", drive_copy)
+    except Exception as exc:
+        print("Drive persistence failed; download the local ZIP before runtime closes:", type(exc).__name__, exc)
+
+print("Files:")
+for path in sorted(OUTPUT_ROOT.iterdir()):
+    print(" -", path.name)
+
