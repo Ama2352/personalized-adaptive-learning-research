@@ -102,3 +102,5 @@ Kitv6 có113source/fixture files, source-only notebook copies và project venv. 
 - [Báo cáo](reports/colab_recovery_readiness_20261107.md): technical CPU evidence, không research improvement.
 - [Regression/trials/probe/guards](runs/cpu-colab-recovery-20261107-01/README.md):31outputs vớiSHA, giữ failures/source cũ; actual CPU3processes exact,19mockcases.
 - [Gate407](runs/cpu-colab-recovery-gate-20261107-01/README.md):7outputs,0fail/error/skip,169.05s; noCUDA/fulltraining/Gate4.
+
+- [VS Code one-file notebook handoff](runs/cpu-vscode-colab-notebook-20261107-01/README.md):9outputs,20localchecks, embedded137file source parity and failure ZIP export; GPU/setup/CPU guards mocked, chưaactualremote.

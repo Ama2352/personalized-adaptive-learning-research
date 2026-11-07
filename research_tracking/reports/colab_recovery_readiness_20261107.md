@@ -39,3 +39,7 @@ Actual Colab/Linux/CUDA vẫn **CHƯA CHẠY**. Phiên local không có kênh th
 - Bundle [cpu-colab-recovery-20261107-01](../runs/cpu-colab-recovery-20261107-01/README.md): regression trước/sau, trial thất bại, CPU recovery3processes, guard harness, notebook snapshot và bundle inventory.
 - [Gate archive](../runs/cpu-colab-recovery-gate-20261107-01/README.md): **407passed,0fail/error/skip**,169.05giây pytest, cap540giây CPU; nguồn/lock/upstream ổn định, pointer đã kiểm lại. Report SHA `4ed716224778b069816e0ba22370bfc4ad5c60326a89cfc5d7b832133716d961`. Snapshot401 cũ được giữ; số test không được dùng thay nghiệm thu CUDA hoặc kết quả RQ.
 - Tiếp theo: thực thi notebook trên GPU Colab khi runtime sẵn sàng, giữ cả output thất bại/thành công; không tự retry training, không chạy Modal từ việc token còn hiệu lực.
+
+## Cập nhật handoff VS Code — cùng ngày07/11
+
+Notebook hiện8cells, nhúng nguyên kitv11 cóSHA cố định và không còn gọi browser upload/download. Cell01 chỉ kiểm kết nối, cellcuối xuất ZIP+SHA tải quaColabContents; source/model/tests trong kit khôngđổi.20checks local đạt: actual137file extraction và failure ZIP export/hash/no-overwrite, các guard GPU/setup/CPU làmocks. Initialharness false-positive vì comment chứa google.colab đã sửa bằng ASTimportcheck; giữ log/source cũ. Bằng chứng ở runs/cpu-vscode-colab-notebook-20261107-01, khôngactualColab/CUDA. Nội dung7cells/19guards ở phần trước mô tả bảnnotebook lịch sử. Mở runbook hiện tại cho thao tác mới.

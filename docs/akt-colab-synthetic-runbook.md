@@ -1,47 +1,46 @@
-# Kiểm AKT tổng hợp trên Colab
+# AKT tổng hợp trên Colab trong VS Code
 
-Mục đích là kiểm CUDA, causal inputs, artifact publish và checkpoint reload trên Linux GPU bằng nguồn hiện tại. Notebook là `notebooks/akt_colab_synthetic.ipynb`. Bundle chứa allowlist Python source/tests và probe tổng hợp, có SHA-256 từng file. Source AKT upstream được clone riêng và checkout đúng commit đã pinned.
+## File duy nhất cần mở
 
-Chỉ thị user07/11: **local → Colab free → Modal**. Các kiểm CUDA tổng hợp dùng chung ưu tiên Colab trước, không tự dùng credits Modal để debug khi chưa thử được gói Colab đã chuẩn bị. Không có runtime Colab được kết nối hiện tại. Colab pass không thay kiểm riêng image/Volume/cancel/recovery của Modal; lượt đó phải nhỏ và có allocation riêng. Nếu Colab chưa có GPU/quota, tiếp tục việc local, không tự chuyển sang tiêu Modal credits.
+Mở `D:\Dev\KLTN\notebooks\akt_colab_synthetic.ipynb` trong VS Code. Notebook hiện có8cells (1hướng dẫn,7code), nhúng sẵn kit nguồn v11 nên **không cần upload ZIP hoặc sửa đường dẫn**. Cell nguồn dài được đánh dấu thu gọn. Không dùng kernel `.venv` Windows local cho notebook này.
 
-## Chuẩn bị local
+Extensions đã được liệt kê ở máy local: `google.colab`, `ms-toolsai.jupyter`, `ms-python.python`. Việc có extension không chứng minh Google đã đăng nhập hoặc GPU đã được cấp.
 
-```powershell
-.\.venv\Scripts\python.exe -B scripts/akt/build_colab_bundle.py --output artifacts/akt/colab/akt-synthetic-local-check.zip
-```
+## Kết nối và chạy
 
-Lệnh từ chối ghi đè bundle. Khi source đổi, tạo tên bundle mới. Source hashes và dependencies của mỗi run nằm trong report. Bundle gồm source hiện tại trong working tree, vì vậy dùng manifest hash để xác định chính xác snapshot. Schema2 dùng scope source_and_bounded_test_fixtures, gồm script dependencies và các simulator CSV nhỏ cần cho tests. Notebook nguồn Paper1/2 được sao dưới dạng source-only, bỏ outputs/execution metadata trong bản copy. Source cells giữ nguyên, original SHA và transform ghi trong manifest. Notebook gốc giữ nguyên trên repo. Junyi interactions, CV/refit predictions và checkpoint nằm ngoài allowlist.
+1. Trong notebook, chọn **Select Kernel → Colab → New Colab Server**; chọn GPU T4 nếu tài khoản được cấp miễn phí. Hoàn tất đăng nhập Google/chấp thuận quyền bằng tài khoản của người dùng. Không mua compute units nếu không có GPU miễn phí.
+2. Chạy cell **01 — kiểm kết nối**. Cell chỉ đọc thông tin Python/PyTorch/CUDA/device, không train hoặc cài packages. Phải thấy `CONNECTED_GPU`; nếu lỗi sai kernel/không GPU thì dừng và giữ output.
+3. Có thể chọn **Run All** để chạy bộ kiểm tổng hợp nhỏ. Cell02 kiểm SHA rồi giải nén nguồn trong `/content/kltn-synthetic-<run-id>`; cell03 tạo `.venv` riêng ở đó và clone đúng upstream commit. Cài package còn thiếu chỉ bằng interpreter của `.venv`, kế thừa PyTorch runtime, không cài vào Python global.
+4. Cell04 CPU portability phải có JUnit không rỗng, không fail/error/skip trước cell05 CUDA lifecycle và cell06 recovery. Mỗi bước có điều kiện chặn, không tự chuyển Modal khi lỗi.
+5. Cell07 xuất `/content/akt-colab-results-<run-id>.zip` và file `.zip.sha256`. Mở thanh **Colab → Contents → /content**, nhấp phải từng file → **Download**. Lưu thêm notebook có output.
+6. Tải kết quả xong dùng **Colab: Remove Server** để giải phóng runtime. Không chỉ đóng notebook rồi giả định server đã dừng.
 
-## Chạy notebook
+Nếu bất kỳ bước nào lỗi, không bấm Run All để thử lại ngay. Chạy riêng cell07 để giữ log/checkpoint đã có, kể cả failure. Nếu lỗi xảy ra trước khi tạo workspace, giữ traceback trong output notebook. Không có auto-retry hoặc paid fallback. Agent terminal local chưa có kênh điều khiển kernel chỉ từ việc người dùng kết nối notebook; chạy qua giao diện VS Code chuẩn đã được chuẩn bị đầy đủ.
 
-Mở notebook trong Colab bằng Upload notebook. Các kiểm CPU thông thường tiếp tục chạy local; trong Colab chạy portability precheck trước GPU probe. Chọn GPU runtime khi bắt đầu gói kiểm nhỏ và ngắt runtime sau khi tải kết quả. Đổi runtime type có thể làm mất state/files; nếu đổi, chạy lại từ đầu/upload lại, không giả định ROOT/.venv còn. Notebook kiểm schema và bắt buộc manifest có recovery probe (kitv11 trở lên), kiểm hash trước extract, clone upstream pinned và tạo ROOT/.venv với system-site-packages để kế thừa PyTorch runtime. Các package còn thiếu chỉ được cài bằng interpreter của venv này. CPU/GPU subprocess dùng cùng interpreter đó. PyTorch/runtime identity được ghi trong output, cần pin image và xác minh lại khi chuyển Modal.
+Nguồn thao tác giao diện: [Colab VS Code User Guide](https://github.com/googlecolab/colab-vscode/wiki/User-Guide) (đọc07/11/2026). Notebook không còn phụ thuộc `google.colab.files.upload/download`, dùng nguồn nhúng và tải file qua extension. Không cần mount Drive hoặc cung cấp token trong repository.
 
-Cell kiểm CPU chạy AKT/shared/GAM, subprocess timeout600giây và CUDA_VISIBLE_DEVICES rỗng trong riêng workerCPU. Tăng từ300vì suite local hiện mất khoảng375giây; đây là CPU software budget, không tăng GPU workload. JUnit phải có tests>0, khôngfail/error/skip; exit0 riêng chưa đủ. Hai integration tests được loại rõ bằng tên. `test_native_akt_import_cpu` cần local venv/Windows lock; `test_actual_frozen_assignments_are_unchanged_and_student_disjoint` cần assignments thật không thuộc portable kit. Probe thay thế ghi runtime/source/dependency identity thực. Các tests còn lại dùng source/fixtures trong bundle. Cell GPU yêu cầu CPU_PORTABILITY_OK và recheck hashes nguồn, giữ visibility GPU của runtime, chạy một synthetic epoch, một optimizer step,400targets, H/T100, d256 và defaults kiến trúc hiện tại, timeout600giây. Nếu thiếu GPU hoặc test lỗi, dừng và giữ log. Cell cuối tải output kể cả failure để lưu bằng chứng.
+## Workload và nghiệm thu
 
-Kit hiện tại là `artifacts/akt/colab/akt-synthetic-20261107-v11.zip`, **137files**, SHA256 `0d4d59a973b4909b26837f795ead499f3b0da6375db3dd6f58096c57530a9f09`. Có thêm recovery probe và tests; giữ v10 nguyên bytes như snapshot cũ. Đã kiểm CRC, từng file SHA và source parity; đây chưa là isolated Linux/CUDA execution. Notebook nằm ngoài ZIP allowlist: dùng bản notebook hiện tại cùng v11. Kết quả software gate mới nhất và giới hạn nằm trong `research_tracking/reports/colab_recovery_readiness_20261107.md`.
+| Bước | Giới hạn | Điều kiện đạt |
+|---|---|---|
+| Setup | venv120s; missing-packages300s; clone180s; pin60s; freeze60s, không optimizer step | `.venv` riêng, upstream `01b7e8d7d7c862cabc9467108e3e7f2555653a88`, logs/runtime identities |
+| CPU portability | subprocess600s, worker ẩn CUDA | JUnit có tests>0,0fail/error/skip. Hai exclusions được ghi rõ trong acceptance JSON |
+| CUDA lifecycle | d256,H/T100,400targets,1update,subprocess600s | Finite gradients/update,400predictions,checkpoint reload parity1e-6,current/future-label invariance,artifact SHA |
+| CUDA recovery | d32,dropout0.2,H/T2,batch2,17targets mỗi nhánh; continuous5 so interrupt2+resume3, tổng10updates | Exact target ledger/RNG/sampler,source checkpoint bất biến; model/Adam/predictions atol=rtol1e-5. Worker60s,controller180s,notebook240s |
+| Export | ZIP mới, không ghi đè, chỉ synthetic outputs của run | CRC/từng output SHA trong RESULT_MANIFEST,ZIP SHA ngoài,flags phản ánh cả failure |
 
-Lịch sử: local isolated extraction kiểm AKT/shared240passed1deselected trênv5; manifest so v6 chứng minh mọi file AKT/shared và dependency giống v5, chỉ đổi test_core của GAM. GAM trênv6 đạt31passed1deselected. v4 có missing host fixtures, v5 còn GAM test phụ thuộc assignments thật, giữ logs và ZIP cũ để truy nguồn. V7 bổ sung recovery CLI, synthetic fixture và common-population diagnostic source/tests.
+Lifecycle report giữ `mid_epoch_resume_verified=false`; recovery chỉ xác nhận CUDA nếu probe riêng đạt thật. `gate4_pass=false` trong cả hai. Đây chưa là full training, real-data pilot, throughput full-fold, hard-kill/preemption hay Modal Volume durability. Không dùng kết quả software để kết luận graph cải thiện RQ1–RQ3.
 
-Notebook yêu cầu người dùng ở giao diện Colab chọn runtime, upload bundle và tải output. Chưa có remote runtime nào được kết nối trong phiên local. Phiên này không có công cụ nối trực tiếp runtime Colab. Người dùng chạy notebook qua giao diện chuẩn và tải ZIP kết quả về; chỉ gửi URL notebook chưa cung cấp một kênh thực thi cho agent.
+## Source snapshot và bằng chứng local
 
-## Nghiệm thu
+Kitv11 có137files,339864bytes, SHA256 `0d4d59a973b4909b26837f795ead499f3b0da6375db3dd6f58096c57530a9f09`. ZIP ở `artifacts/akt/colab/akt-synthetic-20261107-v11.zip` và bytes nhúng trong notebook phải giống nhau. Allowlist chỉ source/tests/fixtures; không Junyi interactions, credentials, CV/refit/Test predictions hoặc checkpoint. Ba notebook Paper1/2 được strip outputs/metadata trong bản copy, giữ cell source và original hashes; bản gốc không đổi. Khi đổi nguồn, tạo kit mới và cập nhật payload/SHA cùng nhau, không sửa ZIP cũ.
 
-Report có `status=passed_synthetic`, `cuda_lifecycle=true`, finite gradient/update,400prediction rows, checkpoint reload prediction parity tolerance1e-6, current/future-label invariance và output SHA inventory. GPU timings dùng đồng bộ đầu/cuối optimizer step, substep telemetry cũ chỉ mang tính chẩn đoán. Probe không ước lượng throughput full-fold từ một step.
+Main source-bound Gate2 hiện407passed là CPU software snapshot, không được rerun trong gói sửa frontend này. Notebook nằm ngoài build hashes Gate2 và source ZIP; code/model/tests nguồn v11 không đổi. [Báo cáo recovery](../research_tracking/reports/colab_recovery_readiness_20261107.md) giữ các bước trước. Bundle `cpu-vscode-colab-notebook-20261107-01` lưu kiểm local mới:20cases, extraction137files và ZIP export thật; GPU/setup/CPU guard dùng mocks. Actual VS Code/Colab/Linux/CUDA vẫn chưa chạy.
 
-Report lifecycle giữ `mid_epoch_resume_verified=false` và `gate4_pass=false`, không đổi ý nghĩa kết quả cũ. Cell recovery riêng chỉ chạy sau CPU và CUDA lifecycle đạt, recheck source SHA rồi gọi:
+Lịch sử source kits v4–v10 và các bundles cũ được giữ nguyên; không dùng số tests của kit cũ thay nghiệm thu nguồn hiện tại. Cell upload/download browser của notebook trước sửa đã có snapshot theo evidence/Git, không bị sửa trong bundle đã đóng.
 
-```text
-.venv/bin/python -B scripts/akt/synthetic_recovery_probe.py --device cuda --output-dir experiments/akt/results/colab-synthetic-recovery-cuda
-```
+## Kênh điều khiển và chi phí
 
-Probe dùng production `train_epoch`, mô hình nhỏ d32/dropout0.2, fixture17targets/H2T2/batch2. Ba tiến trình chạy continuous5updates, interrupt sau committed step2 rồi resume3updates; tổng10updates thực tế. Timeout mỗi worker60s, controller180s, notebook240s. Kiểm exact target ledger, RNG/sampler và checkpoint nguồn bất biến; model/Adam/predictions CUDA dùng atol=rtol1e-5 khai báo trước. Không tự nới tolerance hoặc retry. Report riêng chỉ ghi `cuda_mid_epoch_resume_verified=true` khi actual CUDA đạt; Gate4 vẫn false. Local CPU probe đã đạt exact equality qua ba tiến trình, không là xác nhận CUDA. Không chứng minh hard-kill/preemption, image hay Volume Modal. Nếu lỗi, tải log/report/checkpoint rồi dừng để phân loại; không chuyển sang Modal tự động. Complete real-data pilot và throughput vẫn chưa thực hiện. Tải ZIP kết quả ra khỏi runtime trước khi runtime mất. Output chứa synthetic IDs.
+Ưu tiên **local CPU → Colab free → Modal**. Modal chỉ30USD free credits,0USD trả thêm; không launch từ tài liệu hoặc từ token validity. [FAQ Colab](https://research.google.com/colaboratory/faq.html) nêu GPU/quota/time có thể thay đổi. Không mua paid tier hoặc dùng workaround vượt quota.
 
-Colab GPU/time availability thay đổi và runtime có thể bị thu hồi. Chỉ dùng giao diện notebook tiêu chuẩn cho kiểm tương tác. Nguồn chính thức được đọc ngày07/11/2026 tại https://research.google.com/colaboratory/faq.html.
-
-## Đính chính kênh kết nối chính thức — 07/11/2026
-
-Điều tra bổ sung sau câu hỏi user tìm được [Colab CLI chính thức](https://github.com/googlecolab/google-colab-cli), được [Google công bố05/06/2026](https://developers.googleblog.com/introducing-the-google-colab-cli/): hỗ trợ thực thi script/notebook, upload/download và stop runtime từ terminal. README hiện chỉ công bố Linux/macOS, không Windows; chưa kiểm tương thích WSL hoặc cài CLI. Không dùng khẳng định “chỉ có thể chạy thủ công qua UI” làm hạn chế chung của Colab. Phiên hiện tại vẫn chưa có kết nối thực tế.
-
-[Colab MCP chính thức](https://github.com/googlecolab/colab-mcp) nối agent local với notebook mở trong browser; yêu cầu client hỗ trợ notifications/tools/list_changed, package hiện yêu cầuPython>=3.13. Project .venv cóPython3.13.5 nhưng chưa cài colab_mcp/colab_cli; chưa kiểm client handshake/OAuth. Có thể giữ notebook interactive qua MCP, không cần tự dựng SSH/tunnel. Extensiongoogle.colab0.9.7 xuất hiện trong danh sách VSCode local, nhưng CLI liệt kê báo quyền lỗi ghi logs/chdir; đây chưa xác nhận đăng nhập hay kernel chạy được. [Quick start chính thức VSCode](https://github.com/googlecolab/colab-vscode) dùng Select Kernel→Colab→Auto Connect. Notebook hiện có browser upload/download nên cần kiểm tương thích khi đổi frontend, không hứa chạy nguyên xi trongVSCode.
-
-[FAQColab](https://research.google.com/colaboratory/faq.html) còn giới hạn remote SSH/free runtimes. Việc có CLI/MCP chính thức không chứng minh mọi chế độ hoặc tài khoản đều được GPU miễn phí: kiểm entitlement/quota/account trước allocation, không mua CU/paidtier, không dùngSSH hoặc workaround vượt quota. Khuyến nghị điều tra MCP notebook interactive trước; CLI là hướng riêng cần môi trường được hỗ trợ và xác thực user. Giữ localvenv, artifact/cost caps hiện tại; chưa cài thêm, login hoặc khởi tạo runtime nào trong lượt kiểm này.
+[Colab CLI chính thức](https://github.com/googlecolab/google-colab-cli) có terminal execution/upload/download/stop, hiện README công bố Linux/macOS, không Windows; chưa cài/chạy CLI hoặc kiểm WSL. [Colab MCP chính thức](https://github.com/googlecolab/colab-mcp) cần client handshake hỗ trợ notifications/tools/list_changed và Python>=3.13; projectPython3.13.5 khớp yêu cầu phiên bản nhưng MCP chưa cài/kết nối. Đây là các hướng khác để điều khiển, không là bằng chứng phiên này đã có kernel access. VS Code notebook là hướng handoff hiện tại người dùng chọn.

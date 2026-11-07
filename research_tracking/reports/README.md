@@ -22,7 +22,7 @@ JSON bootstrap chuyển từ root `reports/` với bytes/SHA giữ nguyên. [H�
 
 ## Kỹ thuật và tính tái lập
 
-- [Colab recovery readiness](colab_recovery_readiness_20261107.md): sửa CUDA RNG restore từ source/regression, CPU recovery qua3processes exact,19mockguards và Gate407. Kitv11; chưa actualColab/CUDA, không dùng Modal credits.
+- [Colab recovery readiness](colab_recovery_readiness_20261107.md): sửa CUDA RNG restore từ source/regression, CPU recovery qua3processes exact,19mockguards và Gate407. Kitv11; cập nhật notebookVSCode mộtfile/20localchecks, chưa actualColab/CUDA, không dùng Modal credits.
 - [Modal setup](../../docs/akt-modal-setup.md): kết nối local và trần30USD/tháng; [SDK proof](../runs/cpu-modal-client-20261107-01/README.md) chỉ kiểm projectvenv/CLI/dependencies, chưa auth hoặc cloud execution.
 - [Modal access readiness](modal_access_readiness_20261107.md): token/workspace/environment đã kiểm bằng API chỉ đọc; vẫn chưa chạy compute hoặc xác minh CUDA/budget bằng API.
 - [Colab-first runbook](../../docs/akt-colab-synthetic-runbook.md): ưu tiên kiểm CUDA trênColabfree; [local notebook guard proof](../runs/cpu-colab-first-20261107-01/README.md) chỉ8mockcases và1packagingtest, chưa actualremoteGPU.

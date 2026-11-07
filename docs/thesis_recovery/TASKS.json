@@ -1623,9 +1623,10 @@
       "id": "COLAB02",
       "research_objective": "Kiểm CUDA miễn phí trước Modal",
       "dependencies": [
-        "COLAB01"
+        "COLAB01",
+        "COLAB03"
       ],
-      "required_inputs": "Standard Colab interactive GPU runtime; current7cell notebook + exactv11ZIP",
+      "required_inputs": "Self-contained8cell notebook; standard VSCode Colab interactive GPU kernel/auth, no source upload needed",
       "files_components": "notebooks/akt_colab_synthetic.ipynb;docs/akt-colab-synthetic-runbook.md",
       "implementation_objective": "Run CPU portability then lifecycle400targets/1update and separate17target recovery; export full result ZIP even failures",
       "acceptance_criteria": "Nonempty zero-failure/error/skip portability suite; finite lifecycle/reload/current-future invariance; exact ledger/RNG/sampler, CUDA model/Adam/prediction tolerance1e-5, complete inventories; no Gate4 claim",
@@ -1635,9 +1636,33 @@
       "authorization_requirements": "Free interactive Colab already requested by user; no paid tier/Modal fallback/real data; no SSH/tunnel",
       "status": "PLANNED",
       "blockers": [
-        "No actual Colab session connected. Official MCP requires client handshake/OAuth verification; CLI README supports Linux/macOS only. Standard notebook UI remains usable; agent access to VSCode kernel not established."
+        "User connection/OAuth/device discovery not yet performed; notebook ready. Agent local terminal to kernel bridge not verified; direct interactive RunAll is prepared."
       ],
       "verification_scope": "Generic CUDA only; Modal image/Volume/cancellation still T14"
+    },
+    {
+      "id": "COLAB03",
+      "research_objective": "Chuẩn bị notebook Colab một file cho VSCode theo user",
+      "rq": [],
+      "workstream": "gpu_readiness",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "COLAB01"
+      ],
+      "required_inputs": "Current notebook; immutable allowlisted v11ZIP; VSCode official guide",
+      "files_components": "notebooks/akt_colab_synthetic.ipynb;docs/akt-colab-synthetic-runbook.md",
+      "implementation_objective": "Embed SHA-pinned source payload, guard wrong kernel/stale setup and export results without browser upload/download",
+      "acceptance_criteria": "Seven code cells parse, source137file hash parity, invalid payload/path/source rejection, only projectvenv installer, fail-state export checksum/no-overwrite; no real GPU claim",
+      "verification_steps": "20localcases; actual extraction and ZIPexport, mocked GPU/setup/CPU; require unchanged currentGate407",
+      "required_artifacts": "cpu-vscode-colab-notebook-20261107-01;notebook cell inventory;user runbook",
+      "estimated_effort": "Completed local handoff batch; no measured remote runtime",
+      "compute_cost_category": "local CPU,0model updates",
+      "authorization_requirements": "User explicitly requested notebook preparation; no runtime allocation/cloudspend/real data",
+      "status": "COMPLETED",
+      "blockers": [],
+      "verification_scope": "Notebook preparation only; actual remote lifecycle remains COLAB02/T14"
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",
