@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="71" time="13.156" timestamp="2026-11-08T01:06:06.033888+07:00" hostname="Ama"><testcase classname="tests.akt.test_runner" name="test_no_phase_runs_by_default_without_requesting_any_learners" time="0.034" /><testcase classname="tests.akt.test_runner" name="test_full_fold_refuses_without_future_authorization_and_no_cv_command" time="0.011" /><testcase classname="tests.akt.test_runner" name="test_json_writer_atomically_replaces_existing_json" time="0.014" /><testcase classname="tests.akt.test_runner" name="test_json_writer_retries_a_transient_windows_replace_denial[5]" time="0.015" /><testcase classname="tests.akt.test_runner" name="test_json_writer_retries_a_transient_windows_replace_denial[32]" time="0.015" /><testcase classname="tests.akt.test_runner" name="test_json_writer_retries_a_transient_windows_replace_denial[33]" time="0.013" /><testcase classname="tests.akt.test_runner" name="test_json_writer_propagates_persistent_denial_and_cleans_temp[5]" time="0.014" /><testcase classname="tests.akt.test_runner" name="test_json_writer_propagates_persistent_denial_and_cleans_temp[32]" time="0.015" /><testcase classname="tests.akt.test_runner" name="test_json_writer_propagates_persistent_denial_and_cleans_temp[33]" time="0.015" /><testcase classname="tests.akt.test_runner" name="test_json_writer_does_not_retry_non_transient_replace_denial[posix-None]" time="0.015" /><testcase classname="tests.akt.test_runner" name="test_json_writer_does_not_retry_non_transient_replace_denial[posix-5]" time="0.017" /><testcase classname="tests.akt.test_runner" name="test_json_writer_does_not_retry_non_transient_replace_denial[posix-32]" time="0.014" /><testcase classname="tests.akt.test_runner" name="test_json_writer_does_not_retry_non_transient_replace_denial[posix-33]" time="0.014" /><testcase classname="tests.akt.test_runner" name="test_json_writer_does_not_retry_non_transient_replace_denial[nt-None]" time="0.016" /><testcase classname="tests.akt.test_runner" name="test_json_writer_does_not_retry_non_transient_replace_denial[nt-87]" time="0.014" /><testcase classname="tests.akt.test_runner" name="test_fold_readiness_rejects_pilot_without_complete_validation_checkpoint_and_export[pilot_result0]" time="0.017" /><testcase classname="tests.akt.test_runner" name="test_fold_readiness_rejects_pilot_without_complete_validation_checkpoint_and_export[pilot_result1]" time="0.020" /><testcase classname="tests.akt.test_runner" name="test_fold_readiness_rejects_failed_pilot" time="0.025" /><testcase classname="tests.akt.test_runner" name="test_fold_readiness_accepts_only_complete_pilot_lifecycle" time="0.022" /><testcase classname="tests.akt.test_runner" name="test_private_fold_workflow_is_guarded_and_orders_selection_refit_export" time="0.241" /><testcase classname="tests.akt.test_runner" name="test_smoke_and_pilot_cohorts_exclude_outer_users_deterministically" time="0.048" /><testcase classname="tests.akt.test_runner" name="test_config_cannot_expand_smoke_or_pilot_caps" time="0.030" /><testcase classname="tests.akt.test_runner" name="test_configs_are_disabled_namespaced_and_gate_pass_is_not_authorization" time="1.214" /><testcase classname="tests.akt.test_runner" name="test_smoke_authorization_binds_exact_data_identity_and_phase" time="0.010" /><testcase classname="tests.akt.test_runner" name="test_checkpoint_reload_state_parity_is_exact" time="0.073" /><testcase classname="tests.akt.test_runner" name="test_authorization_identity_includes_current_gate2_source_hashes" time="0.002" /><testcase classname="tests.akt.test_runner" name="test_approved_lower_cohort_and_target_caps_reach_loader" time="0.328" /><testcase classname="tests.akt.test_runner" name="test_gate2_evidence_rejects_code_drift_and_missing_log" time="0.124" /><testcase classname="tests.akt.test_runner" name="test_gate2_pointer_rejects_tampered_versioned_evidence" time="0.020" /><testcase classname="tests.akt.test_runner" name="test_resource_floor_fails_before_data_loading" time="0.002" /><testcase classname="tests.akt.test_runner" name="test_rss_ceiling_error_includes_worker_and_system_measurements" time="0.002" /><testcase classname="tests.akt.test_runner" name="test_cli_watchdog_reports_timeout_without_completed_result" time="0.029" /><testcase classname="tests.akt.test_runner" name="test_failed_synthetic_run_manifest_keeps_audit_records" time="0.045" /><testcase classname="tests.akt.test_runner" name="test_config_rejects_unsafe_run_id_and_output_path" time="0.014" /><testcase classname="tests.akt.test_runner" name="test_readiness_report_never_grants_execution_authorization" time="0.028" /><testcase classname="tests.akt.test_runner" name="test_cli_has_no_default_execution_phase_and_help_is_available" time="0.017" /><testcase classname="tests.akt.test_runner" name="test_preflight_verifies_gate1_without_opening_dataset" time="0.060" /><testcase classname="tests.akt.test_worker_lifecycle" name="test_main_worker_reads_parquet_selects_validates_reloads_and_exports" time="0.740"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">parquet_worker = (AKTConfig(project_root=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/context-20261108-03/wk0/p'), output_dir=Win...e-canonical.json'), WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/context-20261108-03/wk0/p/fixture-split.json')])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000232E61E2DD0&gt;
+
+    def test_main_worker_reads_parquet_selects_validates_reloads_and_exports(parquet_worker, monkeypatch):
+        config, config_path, approval_path, parent_split, inputs = parquet_worker
+        before = {str(p): sha(p) for p in inputs}
+        loaded = []
+        actual_load = runner._load_phase_inputs
+    
+        def observe_real_loader(*args, **kwargs):
+            result = actual_load(*args, **kwargs)
+            loaded.append(result)
+            return result
+    
+        monkeypatch.setattr(runner, '_load_phase_inputs', observe_real_loader)
+&gt;       assert runner._worker_main(['smoke', '--config', str(config_path),
+                                    '--authorization', str(approval_path)]) == 0
+
+tests\akt\test_worker_lifecycle.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\runner.py:812: in _worker_main
+    result = dispatch[phase](config,authorization=authorization,_invocation=invocation,**extra)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\runner.py:662: in run_smoke
+    return _with_context(_run_phase,config,authorization,pilot=False,invocation=_invocation,context=context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\runner.py:61: in _with_context
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\runner.py:441: in _run_phase
+    selection = select_checkpoint(
+src\knowledge_tracing\akt\training.py:513: in select_checkpoint
+    adapter = AKTAdapter(config, encoding)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\model.py:22: in __init__
+    self.native = build_native(config, n_items=len(encoding.vocabulary.values))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = False, timeout = None, check = True
+popenargs = (['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD'],)
+kwargs = {'stdout': -1, 'text': True}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output &amp; stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+&gt;               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: CalledProcessError</failure></testcase><testcase classname="tests.akt.test_worker_lifecycle" name="test_main_worker_rejects_changed_parquet_identity_before_loading" time="0.198" /><testcase classname="tests.akt.test_cuda_budget" name="test_cuda_allocator_budget_and_snapshot" time="0.002" /><testcase classname="tests.akt.test_cuda_budget" name="test_cuda_budget_refuses_wrong_device_or_unavailable_hardware[available-False]" time="0.002" /><testcase classname="tests.akt.test_cuda_budget" name="test_cuda_budget_refuses_wrong_device_or_unavailable_hardware[count-0]" time="0.002" /><testcase classname="tests.akt.test_cuda_budget" name="test_cuda_budget_refuses_wrong_device_or_unavailable_hardware[count-2]" time="0.002" /><testcase classname="tests.akt.test_cuda_budget" name="test_cuda_budget_refuses_wrong_device_or_unavailable_hardware[count-True]" time="0.002" /><testcase classname="tests.akt.test_cuda_budget" name="test_cuda_budget_refuses_wrong_device_or_unavailable_hardware[total-1024]" time="0.002" /><testcase classname="tests.akt.test_cuda_budget" name="test_cuda_budget_rejects_unbounded_or_invalid_allocation[True]" time="0.002" /><testcase classname="tests.akt.test_cuda_budget" name="test_cuda_budget_rejects_unbounded_or_invalid_allocation[1]" time="0.002" /><testcase classname="tests.akt.test_cuda_budget" name="test_cuda_budget_rejects_unbounded_or_invalid_allocation[3221225472]" time="0.002" /><testcase classname="tests.akt.test_cuda_budget" name="test_cuda_peak_memory_stops_on_budget_exhaustion" time="0.002" /><testcase classname="tests.akt.test_cuda_budget" name="test_new_cuda_phase_does_not_enable_cuda_on_legacy_cpu_phase" time="0.064" /><testcase classname="tests.akt.test_cuda_budget" name="test_cuda_entry_requires_context_before_any_runtime_or_data_access" time="0.027" /><testcase classname="tests.akt.test_cuda_budget" name="test_cuda_setup_failure_keeps_original_error_and_manifest" time="0.051" /><testcase classname="tests.akt.test_context" name="test_context_loads_and_preserves_config_hash" time="0.215" /><testcase classname="tests.akt.test_context" name="test_context_rejects_invalid_schema_paths_and_scopes[schema_version-True]" time="0.036" /><testcase classname="tests.akt.test_context" name="test_context_rejects_invalid_schema_paths_and_scopes[schema_version-2]" time="0.047" /><testcase classname="tests.akt.test_context" name="test_context_rejects_invalid_schema_paths_and_scopes[scope-holdout]" time="0.033" /><testcase classname="tests.akt.test_context" name="test_context_rejects_invalid_schema_paths_and_scopes[canonical-dataset/a.parquet]" time="0.066" /><testcase classname="tests.akt.test_context" name="test_context_rejects_invalid_schema_paths_and_scopes[assignments-artifacts/bkt_baseline/a.parquet]" time="0.082" /><testcase classname="tests.akt.test_context" name="test_context_rejects_invalid_schema_paths_and_scopes[lock_file-artifacts/akt/private/modal.toml]" time="0.057" /><testcase classname="tests.akt.test_context" name="test_context_rejects_invalid_schema_paths_and_scopes[runtime_report-docs/runtime.json]" time="0.077" /><testcase classname="tests.akt.test_context" name="test_context_rejects_invalid_schema_paths_and_scopes[dataset_root-artifacts/akt]" time="0.071" /><testcase classname="tests.akt.test_context" name="test_context_rejects_invalid_schema_paths_and_scopes[canonical-../escape.parquet]" time="0.084" /><testcase classname="tests.akt.test_context" name="test_context_rejects_invalid_schema_paths_and_scopes[canonical-artifacts/akt/synthetic/a/**/*.parquet]" time="0.089" /><testcase classname="tests.akt.test_context" name="test_context_rejects_invalid_schema_paths_and_scopes[canonical-C:\\dataset\\a.parquet]" time="0.078" /><testcase classname="tests.akt.test_context" name="test_context_sha_and_input_inventory_are_bound" time="0.201" /><testcase classname="tests.akt.test_context" name="test_context_rejects_extra_parquet_not_in_inventory" time="0.139" /><testcase classname="tests.akt.test_context" name="test_context_rejects_false_marker_even_with_matching_hash" time="0.164" /><testcase classname="tests.akt.test_context" name="test_context_cli_requires_both_flags[None-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]" time="0.001" /><testcase classname="tests.akt.test_context" name="test_context_cli_requires_both_flags[context.json-None]" time="0.002" /><testcase classname="tests.akt.test_context" name="test_legacy_call_shape_and_child_context_flags_are_preserved" time="0.004" /><testcase classname="tests.akt.test_context" name="test_cuda_context_requires_explicit_allocator_limits" time="0.270" /></testsuite></testsuites>

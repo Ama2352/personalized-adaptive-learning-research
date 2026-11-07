@@ -7,6 +7,7 @@ import hashlib
 import json
 import math
 import os
+import re
 from pathlib import Path
 import sys
 from typing import Callable
@@ -225,6 +226,19 @@ def require_authorization(config: AKTConfig, authorization: dict | None, *,
                           identity_fn: Callable[[AKTConfig], dict] = authorization_identity) -> dict:
     if not config.execution_enabled or not isinstance(authorization, dict):
         raise PermissionError('explicit phase authorization is required')
+    if config.phase=='cuda-smoke':
+        identity_value=authorization.get('identity')
+        limits=identity_value.get('worker_context_cuda_limits') if isinstance(identity_value,dict) else None
+        if (not isinstance(identity_value,dict)
+                or identity_value.get('worker_context_scope')!='synthetic-development-only'
+                or not isinstance(identity_value.get('worker_context_sha256'),str)
+                or not re.fullmatch('[a-f0-9]{64}',identity_value['worker_context_sha256'])
+                or not isinstance(identity_value.get('worker_context_inputs_sha256'),dict)
+                or not identity_value['worker_context_inputs_sha256']
+                or not isinstance(limits,dict) or set(limits)!={'max_vram_bytes','visible_devices'}
+                or type(limits['max_vram_bytes']) is not int or not 64*1024**2<=limits['max_vram_bytes']<=2*1024**3
+                or type(limits['visible_devices']) is not int or limits['visible_devices']!=1):
+            raise PermissionError('CUDA smoke requires a hash-bound synthetic context')
     if (authorization.get('approved') is not True
             or authorization.get('scope') != 'development-inner-only'
             or authorization.get('phase') != config.phase
@@ -243,7 +257,7 @@ def require_authorization(config: AKTConfig, authorization: dict | None, *,
             'min_available_ram_bytes': config.min_available_ram_bytes}
     required_caps = ({'max_train_users', 'max_val_users', 'max_targets_per_side', 'max_steps',
                      'max_seconds', 'max_wall_seconds', 'max_rss_bytes', 'min_available_ram_bytes'}
-                    if config.phase == 'smoke' else
+                    if config.phase in {'smoke','cuda-smoke'} else
                     {'max_train_users', 'max_val_users', 'max_total_targets', 'max_seconds',
                      'max_wall_seconds', 'max_rss_bytes', 'min_available_ram_bytes'})
     requested = authorization.get('caps')

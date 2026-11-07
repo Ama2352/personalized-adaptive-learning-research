@@ -23,6 +23,8 @@ from knowledge_tracing.shared_kt import StableVocabulary
 from . import authorization as authorization_module
 from .checkpoint import load_checkpoint, restore_checkpoint, save_checkpoint
 from .config import AKTConfig, DataPaths, PROJECT_ROOT, SOURCE_COMMIT, load_config, validate_config
+from .context import WorkerContext, context_authorization_identity, context_from_options
+from .device_budget import configure_cuda_budget, cuda_budget_snapshot
 from .data import iter_development_learners, read_development_assignments
 from .encoding import ExerciseEncoding, fit_vocabulary
 from .evaluation import score_akt_shards
@@ -53,10 +55,17 @@ def _gate2_build_hashes() -> dict:
     return authorization_module.gate2_build_hashes(PROJECT_ROOT)
 
 
-def _require_gate2_evidence(config: AKTConfig) -> dict:
+def _with_context(function, *args, context=None, **kwargs):
+    # Giữ nguyên call shape của CPU API/fixtures lịch sử khi không có sidecar.
+    if context is not None:kwargs['context']=context
+    return function(*args, **kwargs)
+
+
+def _require_gate2_evidence(config: AKTConfig, *, context: WorkerContext | None = None) -> dict:
+    if context is not None:context.validate_for(config)
     return authorization_module.require_gate2_evidence(
-        config, project_root=PROJECT_ROOT, gate2_report=GATE2_REPORT,
-        lock_file=LOCK_FILE, build_hashes_fn=_gate2_build_hashes)
+        config, project_root=PROJECT_ROOT, gate2_report=context.gate2_report if context else GATE2_REPORT,
+        lock_file=context.lock_file if context else LOCK_FILE, build_hashes_fn=_gate2_build_hashes)
 
 
 @dataclass(frozen=True)
@@ -68,25 +77,30 @@ class RunResult:
     summary: dict
 
 
-def preflight(config: AKTConfig) -> dict:
+def preflight(config: AKTConfig, *, context: WorkerContext | None = None) -> dict:
     """Read only source, lock and Gate 1 evidence; never opens the dataset."""
+    if context is not None:context.validate_for(config)
     return authorization_module.preflight(config, project_root=PROJECT_ROOT,
-                                          runtime_report_path=RUNTIME_REPORT, lock_file=LOCK_FILE)
+        runtime_report_path=context.runtime_report if context else RUNTIME_REPORT,
+        lock_file=context.lock_file if context else LOCK_FILE)
 
 
 def _config_hash(config: AKTConfig) -> str:
     return authorization_module.config_hash(config)
 
 
-def _require_authorization(config: AKTConfig, authorization: dict | None) -> dict:
+def _require_authorization(config: AKTConfig, authorization: dict | None, *, context: WorkerContext | None = None) -> dict:
     return authorization_module.require_authorization(
-        config, authorization, identity_fn=_authorization_identity)
+        config, authorization, identity_fn=(_authorization_identity if context is None
+            else lambda cfg: context_authorization_identity(cfg,context)))
 
 
 def _select_inner_cohort(assignments: pd.DataFrame, *, outer_fold: int, seed: int, phase: str,
                          max_train_users: int, max_val_users: int) -> tuple[tuple[str, ...], tuple[str, ...], InnerSplit]:
     split = make_inner_split(assignments, outer_fold=outer_fold, seed=seed)
-    tag = 'akt-smoke-v1' if phase == 'smoke' else 'akt-pilot-v1'
+    tags={'smoke':'akt-smoke-v1','cuda-smoke':'akt-smoke-v1','pilot':'akt-pilot-v1'}
+    if phase not in tags:raise ValueError('unknown bounded cohort phase')
+    tag=tags[phase]
 
     def sample(users: tuple[str, ...], maximum: int) -> tuple[str, ...]:
         ranked = sorted(users, key=lambda user: (
@@ -103,18 +117,22 @@ def _select_inner_cohort(assignments: pd.DataFrame, *, outer_fold: int, seed: in
     return train, val, subset
 
 
-def _data_paths() -> DataPaths:
+def _data_paths(*, context: WorkerContext | None = None) -> DataPaths:
+    if context is not None:
+        context.revalidate(PROJECT_ROOT)
+        return context.data_paths
     return DataPaths(CANONICAL, ASSIGNMENTS, CANONICAL_MANIFEST, SPLIT_MANIFEST)
 
 
 def _capped_learners(config: AKTConfig, users: tuple[str, ...], *, target_cap: int,
-                     phase_dir: Path, stats: dict | None = None) -> tuple[LearnerEvents, ...]:
+                     phase_dir: Path, stats: dict | None = None,
+                     context: WorkerContext | None = None) -> tuple[LearnerEvents, ...]:
     if not users or target_cap < len(users):
         raise ValueError('target cap cannot provide one chronological target per selected learner')
     output = []
     remaining = target_cap
     allowed_folds = tuple(fold for fold in range(5) if fold != config.outer_fold)
-    paths = _data_paths()
+    paths = _with_context(_data_paths, context=context)
     for learner in iter_development_learners(
             paths, user_ids=users, allowed_folds=allowed_folds, fetch_rows=config.fetch_rows,
             temp_dir=phase_dir / 'duckdb-tmp', preserve_user_order=True, stats=stats):
@@ -133,7 +151,13 @@ def _capped_learners(config: AKTConfig, users: tuple[str, ...], *, target_cap: i
     return result
 
 
-def _identity(config: AKTConfig, preflight_result: dict) -> dict:
+def _identity(config: AKTConfig, preflight_result: dict, *, context: WorkerContext | None = None) -> dict:
+    if context is not None:
+        context.validate_for(config)
+        return {**authorization_module.identity(config,preflight_result,project_root=PROJECT_ROOT,
+            canonical_manifest=context.data_paths.canonical_manifest,
+            assignments=context.data_paths.assignments,split_manifest=context.data_paths.split_manifest),
+            **context.identity}
     return {
         'protocol': config.protocol_version,
         'config_sha256': _config_hash(config),
@@ -145,8 +169,9 @@ def _identity(config: AKTConfig, preflight_result: dict) -> dict:
     }
 
 
-def _authorization_identity(config: AKTConfig) -> dict:
+def _authorization_identity(config: AKTConfig, *, context: WorkerContext | None = None) -> dict:
     """Bind approval to current source, runtime, split and frozen data manifests."""
+    if context is not None:return context_authorization_identity(config,context)
     identity = _identity(config, preflight(config))
     gate2 = _require_gate2_evidence(config)
     identity.update({'build_hashes': _gate2_build_hashes(),
@@ -193,12 +218,12 @@ def _write_json(path: Path, payload: dict) -> None:
         raise
 
 
-def _load_phase_inputs(config: AKTConfig, *, output_reserved: bool = False
+def _load_phase_inputs(config: AKTConfig, *, output_reserved: bool = False, context: WorkerContext | None = None
                        ) -> tuple[dict, InnerSplit, tuple[LearnerEvents, ...], tuple[LearnerEvents, ...], dict]:
     loading_started = time.perf_counter()
-    preflight_result = preflight(config)
+    preflight_result = _with_context(preflight,config,context=context)
     assignments_started = time.perf_counter()
-    assignments = read_development_assignments(_data_paths())
+    assignments = read_development_assignments(_with_context(_data_paths,context=context))
     assignments_seconds = time.perf_counter() - assignments_started
     train_users, val_users, split = _select_inner_cohort(
         assignments, outer_fold=config.outer_fold, seed=config.seed, phase=config.phase,
@@ -211,20 +236,21 @@ def _load_phase_inputs(config: AKTConfig, *, output_reserved: bool = False
         raise FileExistsError('AKT run_id already exists; choose a new run_id')
     phase_dir = (PROJECT_ROOT / 'artifacts/akt/tmp' / config.run_id).resolve()
     phase_dir.mkdir(parents=True, exist_ok=False)
-    if config.phase == 'smoke':
+    if config.phase in {'smoke','cuda-smoke'}:
         train_cap = config.max_targets_per_side
         val_cap = config.max_targets_per_side
-    else:
+    elif config.phase=='pilot':
         train_cap = config.max_total_targets // 2
         val_cap = config.max_total_targets - train_cap
+    else:raise ValueError('unknown bounded loader phase')
     loading_stats = {'train': {}, 'validation': {}}
     train_started = time.perf_counter()
     train_data = _capped_learners(config, train_users, target_cap=train_cap, phase_dir=phase_dir / 'train',
-                                  stats=loading_stats['train'])
+                                  stats=loading_stats['train'], **({'context':context} if context else {}))
     train_loading_seconds = time.perf_counter() - train_started
     validation_started = time.perf_counter()
     val_data = _capped_learners(config, val_users, target_cap=val_cap, phase_dir=phase_dir / 'validation',
-                                stats=loading_stats['validation'])
+                                stats=loading_stats['validation'], **({'context':context} if context else {}))
     validation_loading_seconds = time.perf_counter() - validation_started
     active_train = tuple(learner.user_id for learner in train_data)
     active_val = tuple(learner.user_id for learner in val_data)
@@ -233,7 +259,7 @@ def _load_phase_inputs(config: AKTConfig, *, output_reserved: bool = False
     subset_payload = json.dumps({'original': split.split_hash, 'train': active_train, 'val': active_val},
                                 sort_keys=True, separators=(',', ':')).encode()
     split = InnerSplit(active_train, active_val, config.outer_fold, hashlib.sha256(subset_payload).hexdigest())
-    identity = _identity(config, preflight_result)
+    identity = _with_context(_identity,config,preflight_result,context=context)
     identity['loader_highwater'] = loading_stats
     observations = {
         'selected_train_learners': len(train_users),
@@ -290,9 +316,13 @@ def _resource_summary(samples: list[dict]) -> dict:
 
 
 def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
-               invocation: dict | None = None) -> RunResult:
+               invocation: dict | None = None, context: WorkerContext | None = None,
+               cuda: bool = False) -> RunResult:
     validate_config(config)
-    approved = _require_authorization(config, authorization)
+    if cuda:
+        if pilot or context is None:raise ValueError('CUDA smoke requires explicit synthetic context')
+        context.validate_for(config)
+    approved = _with_context(_require_authorization,config,authorization,context=context)
     caps = approved['caps']
     # The approved limits may be stricter than the template. Use them for
     # cohort selection and loading as well as the optimizer/watchdog.
@@ -300,10 +330,10 @@ def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
     validate_config(config)
     recovery_source = (validate_source(config, current_identity=approved['identity'], caps=caps)
                        if config.recovery is not None else None)
-    expected_phase = 'pilot' if pilot else 'smoke'
+    expected_phase = 'cuda-smoke' if cuda else ('pilot' if pilot else 'smoke')
     if config.phase != expected_phase:
         raise ValueError(f'{expected_phase} runner requires phase={expected_phase}')
-    gate2 = _require_gate2_evidence(config)
+    gate2 = _with_context(_require_gate2_evidence,config,context=context)
     _emit_memory_event('worker-before-data-load', config.phase, config.run_id,
                        max_rss_bytes=caps['max_rss_bytes'],
                        min_available_ram_bytes=caps['min_available_ram_bytes'])
@@ -323,18 +353,23 @@ def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
     identity: dict = approved.get('identity', {})
     resource_samples: list[dict] = []
     latest_progress: dict | None = None
+    gpu_budget = None
 
     def record_resource(snapshot: dict | None = None, *, phase: str) -> None:
         sample = dict(snapshot or memory_snapshot())
+        if gpu_budget is not None:
+            sample['cuda_allocator']=cuda_budget_snapshot(torch.cuda,max_vram_bytes=context.cuda_limits.max_vram_bytes)
         sample['phase'] = phase
         resource_samples.append(sample)
 
-    output_reserved = pilot or config.recovery is not None
+    output_reserved = pilot or config.recovery is not None or context is not None
     if output_reserved:
         config.output_dir.mkdir(parents=True, exist_ok=False)
         _mark_manifest(config, identity, 'incomplete', started_at=time.time(),
                        stop_reason='run_in_progress', requested_outer_users=False, **audit)
     try:
+        if cuda:
+            gpu_budget=configure_cuda_budget(torch.cuda,max_vram_bytes=context.cuda_limits.max_vram_bytes)
         if recovery_source is not None:
             # Kế thừa prefix trước data load: failure không có update mới vẫn ghi đủ attempt wall time.
             for item in recovery_source['files']:
@@ -346,9 +381,10 @@ def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
                            max_rss_bytes=caps['max_rss_bytes'],
                            min_available_ram_bytes=caps['min_available_ram_bytes'])
         record_resource(phase='before_data_load')
-        loaded = (_load_phase_inputs(config, output_reserved=True) if output_reserved
-                  else _load_phase_inputs(config))
+        loaded = _with_context(_load_phase_inputs,config,context=context,
+                               **({'output_reserved':True} if output_reserved else {}))
         identity, split, train_data, val_data = loaded[:4]
+        if context is not None:context.validate_for(config)
         if config.recovery is not None:
             # Loader timings thuộc telemetry, không phải training identity.
             identity.pop('loader_highwater', None)
@@ -412,7 +448,7 @@ def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
                     'phase': config.phase, 'run_id': config.run_id},
             **({'progress_callback': record_training_progress,
                 'resource_callback': lambda snapshot: record_resource(snapshot, phase='resource_guard')}
-               if pilot else {}),
+               if pilot or cuda else {}),
             **({'save_recovery': True, 'checkpoint_callback': record_checkpoint,
                 'resume_checkpoint': config.recovery.source_envelope.parent / recovery_source['checkpoint']
                                      if recovery_source else None}
@@ -585,6 +621,10 @@ def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
                        'outer_users_requested': False, 'holdout_requested': False,
                        'selection_checkpoint': str(selection.checkpoint.name),
                        'source_commit': identity['source']['commit']})
+        if context is not None:context.validate_for(config)
+        if gpu_budget is not None:
+            summary['cuda_allocator_budget']={**gpu_budget,
+                **cuda_budget_snapshot(torch.cuda,max_vram_bytes=context.cuda_limits.max_vram_bytes)}
         if pilot:
             summary['worker_resources'] = _resource_summary(resource_samples)
             if latest_progress is not None:
@@ -618,13 +658,18 @@ def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
 
 
 def run_smoke(config: AKTConfig, *, authorization: dict | None = None,
-              _invocation: dict | None = None) -> RunResult:
-    return _run_phase(config, authorization, pilot=False, invocation=_invocation)
+              _invocation: dict | None = None, context: WorkerContext | None = None) -> RunResult:
+    return _with_context(_run_phase,config,authorization,pilot=False,invocation=_invocation,context=context)
 
 
 def run_pilot(config: AKTConfig, *, authorization: dict | None = None,
-              _invocation: dict | None = None) -> RunResult:
-    return _run_phase(config, authorization, pilot=True, invocation=_invocation)
+              _invocation: dict | None = None, context: WorkerContext | None = None) -> RunResult:
+    return _with_context(_run_phase,config,authorization,pilot=True,invocation=_invocation,context=context)
+
+
+def run_cuda_smoke(config: AKTConfig, *, authorization: dict | None = None,
+                   _invocation: dict | None = None, context: WorkerContext | None = None) -> RunResult:
+    return _run_phase(config,authorization,pilot=False,invocation=_invocation,context=context,cuda=True)
 
 
 def prepare_fold_readiness(config: AKTConfig, *, pilot_result: Path) -> dict:
@@ -748,18 +793,22 @@ def main(argv: list[str] | None = None) -> int:
 
 
 def _worker_main(argv: list[str]) -> int:
-    if not argv or argv[0] not in {'smoke', 'pilot'}:
+    if not argv or argv[0] not in {'smoke', 'pilot', 'cuda-smoke'}:
         raise ValueError('invalid internal AKT worker phase')
     phase, *rest = argv
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument('--config', required=True, type=Path)
     parser.add_argument('--authorization', type=Path)
+    parser.add_argument('--context-file',type=Path)
+    parser.add_argument('--context-sha256')
     args = parser.parse_args(rest)
     config = load_config(args.config)
+    context = context_from_options(args,config)
     _emit_memory_event('worker-after-runtime-import', phase, config.run_id)
     authorization = json.loads(args.authorization.read_text(encoding='utf-8')) if args.authorization else None
     invocation = {'kind': 'cli', 'argv': [sys.executable, '-m', 'knowledge_tracing.akt.cli', *sys.argv[1:]]}
-    result = (run_smoke(config, authorization=authorization, _invocation=invocation) if phase == 'smoke'
-              else run_pilot(config, authorization=authorization, _invocation=invocation))
+    extra={'context':context} if context is not None else {}
+    dispatch={'smoke':run_smoke,'pilot':run_pilot,'cuda-smoke':run_cuda_smoke}
+    result = dispatch[phase](config,authorization=authorization,_invocation=invocation,**extra)
     print(json.dumps(asdict(result), indent=2, default=str))
     return 0

@@ -59,3 +59,7 @@ Review độc lập không thấy authorization widening trong runtime/worker pa
 - Synthetic CUDA phase phải có manifests/Parquet riêng và hash-bound authorization trước loader; không dùng protected BKT paths vì defaults có sẵn. Development-only/fold exclusions/split hashing và cumulative recovery budget giữ nguyên. Không cho resume CPU→CUDA hoặc đổi domain âm thầm.
 
 Đây là thiết kế/technical review, không tự phê duyệt GPU07 phase, scientific protocol hoặc allocation. Phần local tiếp theo được user cho phép tiếp tục; GPU execution vẫn phải có stage contract cụ thể và đủ prerequisites.
+
+## Cập nhật 08/11 — GPU07 phần local đã có code và bằng chứng
+
+Các mục migration phía trên là snapshot trước batch08/11. Context sidecar riêng đã nối watchdog/child/preflight/Gate/auth/loader/recovery; dataclass/config hash lịch sử giữ nguyên. Phase cuda-smoke có synthetic context + allocator cap + explicit dispatch, chưa chạy trên hardware mới. Gate18 đạt661PASS/177,08s và public watchdog real-guard CPU dummy lifecycle đạt48train targets/2updates/8validation predictions/checkpoint reload. Không inject source/runtime/Gate/RAM validator trong run này. [Báo cáo nghiệm thu](../../research_tracking/reports/akt_worker_context_readiness_20261108.md) tách unit fixtures, actual CPU, actualCUDA còn thiếu và các lần lỗi. GPU08 full Linux hash lock/image và GPU09 actual new-worker CUDA vẫn là prerequisite; không suy quyền cloud hoặc hoàn tất Gate4.

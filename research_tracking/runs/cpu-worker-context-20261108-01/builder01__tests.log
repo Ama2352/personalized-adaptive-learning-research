@@ -1,0 +1,50 @@
+...................................................F.                    [100%]
+================================== FAILURES ===================================
+______________ test_cli_has_no_execution_or_arbitrary_root_flag _______________
+
+prepared_root = WindowsPath('D:/Dev/KLTN/artifacts/akt/tmp/parallel-synthetic-context-20261108-01/test_cli_has_no_execution_or_a0/repo')
+capsys = <_pytest.capture.CaptureFixture object at 0x000001C78B2F1FD0>
+
+    def test_cli_has_no_execution_or_arbitrary_root_flag(prepared_root, capsys):
+>       assert builder.main(['--dataset-id', 'cli', '--runtime-report', 'artifacts/akt/preflight/r.json',
+            '--lock-file', 'requirements-akt.lock.txt', '--gate2-report', 'artifacts/akt/preflight/g.json']) == 0
+
+tests\akt\test_synthetic_context_builder.py:226: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\akt\prepare_synthetic_context.py:239: in main
+    result = prepare_synthetic_context(args.dataset_id, runtime_report=args.runtime_report,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+dataset_id = 'cli', runtime_report = 'artifacts/akt/preflight/r.json'
+lock_file = 'requirements-akt.lock.txt'
+gate2_report = 'artifacts/akt/preflight/g.json', mode = 'smoke', caps = {}
+cuda_limits = None, project_root = WindowsPath('D:/Dev/KLTN')
+
+    def prepare_synthetic_context(dataset_id: str, *, runtime_report: str, lock_file: str,
+                                  gate2_report: str, mode: str = 'smoke', caps: dict | None = None,
+                                  cuda_limits: dict | None = None,
+                                  project_root: Path = PROJECT_ROOT) -> dict:
+        """Tạo mới exclusive; project_root chỉ phục vụ API fixture, CLI dùng trusted ROOT.
+    
+        Không đọc runtime/lock/Gate2, không tạo authorization, không import Torch/backend.
+        Lỗi sau reserve giữ nguyên input dở dang để truy vết; không tự xóa hay ghi đè.
+        """
+        root = Path(project_root).resolve()
+        if root != PROJECT_ROOT.resolve():
+>           raise ValueError('project root must be the trusted repository root')
+E           ValueError: project root must be the trusted repository root
+
+scripts\akt\prepare_synthetic_context.py:114: ValueError
+============================== warnings summary ===============================
+.venv\Lib\site-packages\_pytest\cacheprovider.py:469
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:469: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\nodeids: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+.venv\Lib\site-packages\_pytest\cacheprovider.py:423
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:423: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\lastfailed: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/lastfailed", self.lastfailed)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/akt/test_synthetic_context_builder.py::test_cli_has_no_execution_or_arbitrary_root_flag
+1 failed, 52 passed, 2 warnings in 5.62s

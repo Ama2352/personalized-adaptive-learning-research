@@ -1,0 +1,44 @@
+{
+  "command": [
+    "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+    "-B",
+    "-m",
+    "knowledge_tracing.akt.cli",
+    "smoke",
+    "--config",
+    "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\context-real-cpu-20261108-01\\execution-config.json",
+    "--authorization",
+    "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\context-real-cpu-20261108-01\\authorization.json",
+    "--context-file",
+    "D:\\Dev\\KLTN\\artifacts\\akt\\synthetic\\ctx0801\\worker-context.json",
+    "--context-sha256",
+    "f52a545f2229d0d9783a91b25005458c26571812a840a06bec188e9780a87f06"
+  ],
+  "input_hashes": {
+    "artifacts/akt/synthetic/ctx0801/SYNTHETIC_ONLY.json": "635e92409a6109c97ff83fa099734e75429c5d73429a89d89bb36f82b3552833",
+    "artifacts/akt/synthetic/ctx0801/assignments.parquet": "33172d4f2f48789d24fb903d302888a4a5d80dfbd3d8ee15dab6763e834b04c9",
+    "artifacts/akt/synthetic/ctx0801/canonical/events.parquet": "3090518d43fe56330c0732c42edf4bd97aff64bda52a3c1f515fcc7a8155eef3",
+    "artifacts/akt/synthetic/ctx0801/canonical_manifest.json": "8720ee803e488cfbad26477a2506327f0bc1cae01987eb92e6b951f7edf2228b",
+    "artifacts/akt/synthetic/ctx0801/config.json": "e4c4f045781a9da45cb89676d4842e98c2a2f7793f4e4da49aeddb702bef5755",
+    "artifacts/akt/synthetic/ctx0801/split_manifest.json": "a5b301ea3695cc0117af715c38ec06e82cc7ea8d8dcea458b8d9e4f937efb2c1",
+    "artifacts/akt/synthetic/ctx0801/worker-context.json": "f52a545f2229d0d9783a91b25005458c26571812a840a06bec188e9780a87f06"
+  },
+  "expected": {
+    "train_users": 6,
+    "validation_users": 1,
+    "train_targets": 48,
+    "validation_predictions": 8,
+    "optimizer_steps": 2
+  },
+  "limits": {
+    "max_train_users": 8,
+    "max_val_users": 4,
+    "max_targets_per_side": 64,
+    "max_steps": 2,
+    "max_seconds": 120,
+    "max_wall_seconds": 300,
+    "max_rss_bytes": 2147483648,
+    "min_available_ram_bytes": 1073741824
+  },
+  "scope": "Local actual-guard synthetic CPU lifecycle only"
+}

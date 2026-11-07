@@ -12,6 +12,7 @@ import time
 
 from .authorization import preflight, require_authorization
 from .config import load_config
+from .context import context_from_options, context_authorization_identity
 from .resources import memory_snapshot
 from .recovery import validate_source, publish_envelope
 
@@ -77,22 +78,31 @@ def _persist_parent_resources(config, events: list[dict], *, status: str,
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description='AKT Development-only guarded commands')
     commands = parser.add_subparsers(dest='command', required=True)
-    for name in ('preflight', 'smoke', 'pilot', 'fold-readiness'):
+    for name in ('preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness'):
         command = commands.add_parser(name)
         command.add_argument('--config', required=True, type=Path)
-        if name in {'smoke', 'pilot'}:
+        if name != 'fold-readiness':
+            command.add_argument('--context-file',type=Path)
+            command.add_argument('--context-sha256')
+        if name in {'smoke', 'cuda-smoke', 'pilot'}:
             command.add_argument('--authorization', type=Path)
         if name == 'fold-readiness':
             command.add_argument('--pilot-result', required=True, type=Path)
     return parser
 
 
-def _worker_args(argv: list[str]) -> tuple[str, Path, Path | None]:
+def _parse_worker_args(argv: list[str]):
     parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument('phase', choices=('smoke', 'pilot'))
+    parser.add_argument('phase', choices=('smoke', 'cuda-smoke', 'pilot'))
     parser.add_argument('--config', required=True, type=Path)
     parser.add_argument('--authorization', type=Path)
-    args = parser.parse_args(argv)
+    parser.add_argument('--context-file',type=Path)
+    parser.add_argument('--context-sha256')
+    return parser.parse_args(argv)
+
+
+def _worker_args(argv: list[str]) -> tuple[str, Path, Path | None]:
+    args = _parse_worker_args(argv)
     return args.phase, args.config, args.authorization
 
 
@@ -100,16 +110,25 @@ def main(argv: list[str] | None = None) -> int:
     if argv is None:
         argv = sys.argv[1:]
     if argv and argv[0] == '_execute':
-        phase, config_path, _authorization_path = _worker_args(argv[1:])
-        config = load_config(config_path)
-        _emit_memory_event('worker-before-runtime-import', phase, config.run_id)
+        parsed = _parse_worker_args(argv[1:])
+        config = load_config(parsed.config)
+        context = context_from_options(parsed,config)
+        approval=(json.loads(parsed.authorization.read_text(encoding='utf-8'))
+                  if parsed.authorization is not None else None)
+        extra=({'identity_fn':lambda cfg:context_authorization_identity(cfg,context)}
+               if context is not None else {})
+        require_authorization(config,approval,**extra)  # Fail trước import Torch/runner.
+        _emit_memory_event('worker-before-runtime-import', parsed.phase, config.run_id)
         from .runner import _worker_main
         return _worker_main(argv[1:])
 
     args = _parser().parse_args(argv)
     config = load_config(args.config)
+    context = context_from_options(args,config)
     if args.command == 'preflight':
-        print(json.dumps(preflight(config), indent=2, default=str))
+        extra=({'runtime_report_path':context.runtime_report,'lock_file':context.lock_file}
+               if context is not None else {})
+        print(json.dumps(preflight(config,**extra), indent=2, default=str))
         return 0
     if args.command == 'fold-readiness':
         from .runner import prepare_fold_readiness
@@ -123,7 +142,9 @@ def main(argv: list[str] | None = None) -> int:
     authorization = None
     if args.authorization is not None:
         authorization = json.loads(args.authorization.read_text(encoding='utf-8'))
-    require_authorization(config, authorization)
+    extra=({'identity_fn':lambda cfg:context_authorization_identity(cfg,context)}
+           if context is not None else {})
+    require_authorization(config, authorization,**extra)
     approved_caps = authorization['caps']
     timeout = approved_caps['max_wall_seconds']
     if timeout is None:
@@ -159,6 +180,9 @@ def main(argv: list[str] | None = None) -> int:
               '--config', str(args.config.resolve())]
     if args.authorization is not None:
         worker.extend(['--authorization', str(args.authorization.resolve())])
+    if context is not None:
+        worker.extend(['--context-file',str(context.manifest_path),
+                       '--context-sha256',context.manifest_sha256])
     started = time.perf_counter()
     process = subprocess.Popen(worker, cwd=config.project_root, stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE, text=True)

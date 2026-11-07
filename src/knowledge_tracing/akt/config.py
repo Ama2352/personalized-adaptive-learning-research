@@ -85,11 +85,11 @@ def validate_config(config: AKTConfig) -> None:
         validate_options(config)
     if config.project_root.resolve() != PROJECT_ROOT.resolve():
         raise ValueError('project root must be the trusted repository root')
-    if config.phase not in {'preflight', 'smoke', 'pilot', 'fold-readiness', 'fold'}:
+    if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold'}:
         raise ValueError('invalid phase')
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,79}', config.run_id):
         raise ValueError('invalid run_id')
-    if config.phase in {'smoke', 'pilot', 'fold'} and config.output_dir.name != config.run_id:
+    if config.phase in {'smoke', 'cuda-smoke', 'pilot', 'fold'} and config.output_dir.name != config.run_id:
         raise ValueError('run_id must namespace the output directory')
     if config.phase == 'fold-readiness' and config.execution_enabled:
         raise ValueError('fold readiness cannot enable execution')
@@ -112,6 +112,8 @@ def validate_config(config: AKTConfig) -> None:
             or config.patience <= 0 or config.max_epochs <= 0 or config.min_delta < 0
             or not 0 <= config.dropout < 1):
         raise ValueError('invalid training configuration')
+    if config.inner_val_fraction != 0.1:
+        raise ValueError('protocol v1 requires the frozen 10% inner learner split')
     for name in ('max_train_users', 'max_val_users', 'max_targets_per_side', 'max_total_targets',
                  'max_steps', 'max_seconds', 'max_wall_seconds', 'max_rss_bytes', 'min_available_ram_bytes'):
         value = getattr(config, name)
@@ -128,8 +130,9 @@ def validate_config(config: AKTConfig) -> None:
         raise ValueError('protected output or output outside AKT directory')
     if config.phase == 'fold' and output.parent != (root / 'experiments/akt/results').resolve():
         raise ValueError('fold output must use a unique results run directory')
-    if config.phase == 'smoke':
-        if (config.device != 'cpu' or config.context != 100 or config.target_block != 100
+    if config.phase in {'smoke','cuda-smoke'}:
+        required_device='cpu' if config.phase=='smoke' else 'cuda'
+        if (config.device != required_device or config.context != 100 or config.target_block != 100
                 or config.d_model != 32 or config.heads != 4 or config.blocks != 1
                 or config.d_ff != 64 or config.final_fc != 32 or config.batch_size > 4
                 or config.max_epochs != 1 or config.max_train_users is None or not 1 <= config.max_train_users <= 32
