@@ -14,6 +14,7 @@ class DecisionTrace:
     mastery: Mapping[str, float]
     ready: frozenset[str]
     action: str | None
+    mastered: frozenset[str] | None = None
 
 
 def _validate(trace: DecisionTrace) -> None:
@@ -28,6 +29,8 @@ def _validate(trace: DecisionTrace) -> None:
         raise ValueError('invalid concept coverage')
     if trace.action is not None and trace.action not in trace.ready:
         raise ValueError('action outside ready set')
+    if trace.mastered is not None and not trace.mastered.issubset(trace.mastery):
+        raise ValueError('invalid explicit mastery decisions')
 
 
 def compare_decision_traces(reference: Sequence[DecisionTrace],
@@ -58,8 +61,13 @@ def compare_decision_traces(reference: Sequence[DecisionTrace],
                 or set(left.mastery) != set(right.mastery)):
             raise ValueError('paired identity, label or concept mismatch')
         concept_rows += len(left.mastery)
-        crossings += sum((p >= threshold) != (right.mastery[c] >= threshold)
-                         for c, p in left.mastery.items())
+        if (left.mastered is None) != (right.mastered is None):
+            raise ValueError('mastery decision semantics mismatch')
+        if left.mastered is not None:
+            crossings += len(left.mastered ^ right.mastered)
+        else:
+            crossings += sum((p >= threshold) != (right.mastery[c] >= threshold)
+                             for c, p in left.mastery.items())
         ready_changes += left.ready != right.ready
         action_changes += left.action != right.action
         union = left.ready | right.ready

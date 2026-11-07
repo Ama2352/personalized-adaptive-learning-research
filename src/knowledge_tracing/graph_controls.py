@@ -4,6 +4,8 @@ from dataclasses import dataclass
 import hashlib
 import json
 import random
+from collections import Counter
+from itertools import combinations
 
 from .shared_kt import PrerequisiteGraph
 
@@ -78,4 +80,42 @@ def perturb_graph(graph: PrerequisiteGraph, *, operation: str, count: int, seed:
         raise ValueError(f'insufficient valid perturbations: requested={count}, available={applied}')
     result = PrerequisiteGraph.from_edges(checked.nodes, list(edges))
     return PerturbedGraph(result, operation, seed, count, applied,
+                          graph_fingerprint(checked), graph_fingerprint(result))
+
+
+def rewire_matched_graph(graph: PrerequisiteGraph, *, swaps: int, chapters: dict[str, str],
+                         seed: int = 42) -> PerturbedGraph:
+    """Double-edge swap giữ in/out-degree và số cạnh mỗi chapter pair.
+
+    Đây là constrained sensitivity control, không lấy mẫu đều mọi DAG.
+    Mỗi cạnh gốc chỉ được dùng một lần, không undo để đạt số swap giả.
+    Support/frequency chưa được matching và phải kiểm riêng trên Junyi.
+    """
+    if type(swaps) is not int or swaps < 0 or type(seed) is not int:
+        raise ValueError('invalid matched rewiring request')
+    checked = PrerequisiteGraph.from_edges(graph.nodes, graph.edges)
+    if set(chapters) != set(checked.nodes) or not _acyclic(checked.nodes, checked.edges):
+        raise ValueError('matched rewiring requires DAG and complete chapter mapping')
+    edges = set(checked.edges)
+    candidates = list(combinations(checked.edges, 2))
+    random.Random(seed).shuffle(candidates)
+    applied = 0
+    for (a, b), (c, d) in candidates:
+        if applied == swaps:
+            break
+        if a == c or b == d or (a, b) not in edges or (c, d) not in edges:
+            continue
+        replacement = {(a, d), (c, b)}
+        if a == d or c == b or replacement & edges or replacement & set(checked.edges):
+            continue
+        old_pairs = Counter([(chapters[a], chapters[b]), (chapters[c], chapters[d])])
+        new_pairs = Counter([(chapters[a], chapters[d]), (chapters[c], chapters[b])])
+        proposed = edges - {(a, b), (c, d)} | replacement
+        if old_pairs == new_pairs and _acyclic(checked.nodes, proposed):
+            edges = proposed
+            applied += 1
+    if applied != swaps:
+        raise ValueError(f'insufficient matched swaps: requested={swaps}, available={applied}')
+    result = PrerequisiteGraph.from_edges(checked.nodes, sorted(edges))
+    return PerturbedGraph(result, 'degree_chapter_rewire', seed, swaps, applied,
                           graph_fingerprint(checked), graph_fingerprint(result))

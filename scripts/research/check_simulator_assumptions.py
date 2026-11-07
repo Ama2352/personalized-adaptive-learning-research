@@ -58,5 +58,50 @@ def check_retention_source():
                      'Final state still depends on earlier practice order. No empirical graph-benefit claim.'}
 
 
+def check_paper1_reentry_source():
+    """Phản ví dụ dùng selector nguồn đã tìm, không tái lập bảng trong PDF."""
+    path = ROOT / 'paper1/AdaptiveEngineSimulation_Enhanced.ipynb'
+    notebook = json.loads(path.read_text(encoding='utf-8'))
+    matches = []
+    for index, cell in enumerate(notebook['cells']):
+        if cell['cell_type'] == 'code':
+            source = ''.join(cell['source'])
+            for node in ast.parse(source).body:
+                if isinstance(node, ast.FunctionDef) and node.name == 'select_adaptive_question':
+                    matches.append((index, node, ast.get_source_segment(source, node)))
+    if len(matches) != 1:
+        raise ValueError('ambiguous Paper1 selector source')
+    index, node, source = matches[0]
+    namespace = {'pd': pd}
+    exec(compile(ast.Module(body=[node], type_ignores=[]), '<Paper1 selector fixture>', 'exec'), namespace)
+    nodes = ['A1', 'B1', 'A2']
+    parents = {'A1': [], 'B1': ['A1'], 'A2': ['B1']}
+    graph = SimpleNamespace(nodes=lambda: nodes, predecessors=lambda cid: parents[cid])
+    profiles = pd.DataFrame([{f'elo_{cid}': 1200.0 for cid in nodes}], index=['fixture'])
+    questions = pd.DataFrame([{'concept_id': cid, 'question_id': cid, 'elo_difficulty': 1200.0} for cid in nodes])
+    chapters = {'A1': 'A', 'A2': 'A', 'B1': 'B'}
+    routes = {}
+    for strategy in ('lowest_elo', 'cross_chapter_unlock'):
+        profiles.loc['fixture'] = 1200.0
+        route = []
+        previous = set()
+        for _ in nodes:
+            _, info = namespace['select_adaptive_question'](
+                'fixture', profiles, questions, graph, chapters, selection_strategy=strategy,
+                prev_ready_nodes=previous, cross_edges={('A1', 'B1'), ('B1', 'A2')})
+            cid = info['target_concept']
+            route.append(cid)
+            profiles.loc['fixture', f'elo_{cid}'] = 1400.0
+            previous = set(info['ready_nodes'])
+        assert route == ['A1', 'B1', 'A2']
+        routes[strategy] = {'concepts': route, 'chapters': [chapters[cid] for cid in route], 'chapter_reentries': 1}
+    return {'status': 'passed_source_counterexample', 'notebook': str(path.relative_to(ROOT)),
+            'notebook_sha256': hashlib.sha256(path.read_bytes()).hexdigest(), 'cell': index,
+            'selector_sha256': hashlib.sha256(source.encode()).hexdigest(), 'routes': routes,
+            'scope': 'Actual available selector on synthetic DAG, externally scripted mastery transitions. '
+                     'No guarantee of zero reentry in this revision. PDF/source equivalence remains unresolved.'}
+
+
 if __name__ == '__main__':
-    print(json.dumps(check_retention_source(), ensure_ascii=False, indent=2))
+    print(json.dumps({'retention': check_retention_source(), 'paper1': check_paper1_reentry_source()},
+                     ensure_ascii=False, indent=2))
