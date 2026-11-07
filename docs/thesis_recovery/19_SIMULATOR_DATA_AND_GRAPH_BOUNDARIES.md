@@ -41,3 +41,19 @@ Nguồn: notebook `paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_
 ## Kết thúc gói DATA01–04
 
 70targeted tests và Gate2-11 mới361tests đều khôngfail/error/skip, source/lock/upstream stable. Bundle gate và report tại `research_tracking/` ghi log/hash/proof; TASKS có DATA05/06planned cho collector fixture và role-aware runner. S04/S05 vẫnpending; chưa có generated research cohort, trained graph model hoặc GPU result. Git raw-byte verification24bundles/225outputs và task DAG53PASS; xem `research_tracking/reports/git_evidence_verification_simulator_data_20261107.json`.
+
+## DATA05–06 — Collector và adapter đã cài trong phạm vi fixture
+
+`src/knowledge_tracing/simulator_collection.py` có `CollectionRecipe` explicit và `collect_training_fixture(plan, profiles=..., recipe=...)`. Entry point chỉ sinh train shard, tối đa2learners×12events/call,30giây/call. `cyclic_items` hoặc `uniform_items` chọn từ84items mà không đọc oracle. Phương trình environment/base ability giữ nguyên nguồn Paper2; RNG collector riêng có version, không claim reproduction published runs. Outcome/learning channels được derive riêng từ response seed, ổn định prefix khi tăng cap; behavior RNG riêng. Clock cố định Unix seconds UTC, event đầu start+gap.
+
+Return tách trajectories observable, oracle sidecar và manifest. Oracle lưu initial state/hash, profile/seed mapping, response/behavior RNG states, uniforms, per-event latent diagnostics và final state để replay. Latent RNG nằm trong `persona_base_abilities`: lưu seed/function-source identity và actual base state, không giả ghi internal RNG state mà hàm nguồn không expose. Source/input paths canonical POSIX để domain identity không đổi chỉ vì Windows/Linux path separator. Môi trường/cross-platform numerical execution chưa được xác minh chỉ bằng canonical paths.
+
+`src/knowledge_tracing/akt/simulator_data.py`:
+
+- `SimulatorShard`: kiểm exact observable schema, learner role/coverage/domain, budget và data hash.
+- `fit_simulator_encoding(train)`: train-only vocabulary/support theo learner; bind plan/domain/train shard, immutable support và fresh `ExerciseEncoding` cho native AKT.
+- `iter_simulator_windows`: reuse `iter_window_slices`/`slice_causal_inputs` thật; train trả `TrainingWindow`, prediction trả `WindowInputs` hoặc `SimulatorUnseenQuery` không có correctness label. Không tạo `KTEvent.fold` giả.
+- `scoring_targets`: ground truth/identity riêng cho kiểm coverage. Prediction windows chỉ có shifted history. Calibration/final và optimize selection bị chặn; không tự refit/train selection.
+- Adapter này chưa là complete training/epoch-selection/checkpoint runner. Native CPU collator nhận được windows và đúng24unique target rows trong integration fixture; không instantiate NN/optimizer.
+
+Fixture `cpu-sim-collector-20261107-02` và60targeted tests kiểm exact source-environment replay, repeat observable/oracle, profile-independent logging/RNG, global RNG invariance, caps/clock/role/oracle guards, OOV, source-bound vocabulary, target accounting và existing-window/collator parity. `...-01` failed vì tên hai pytest modules trùng nhau: giữ cả failed bundle, đổi tên test mới, không xóa cache để che lỗi. Trial local đầu lỗi Windows provenance path cũng được lưu source/log riêng. Software gate361 cũ stale sau source changes; cần Gate2 mới trước final acceptance.

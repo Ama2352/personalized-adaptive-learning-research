@@ -80,3 +80,7 @@ Kitv6 có113source/fixture files, source-only notebook copies và project venv. 
 `runs/cpu-sim-data-context-20261107-01/02/03`: mỗi bundle7outputs, final70targeted tests khôngfail/error/skip,2learner×8events×4roles số học,0training steps. Split/observable schema và effective-window/full-history counterexample được lưu trong proof.json. Đọc `reports/simulator_data_graph_boundaries_20261107.md`. Không đánh đồng contract với simulated research dataset, calibrated confidence hoặc CG-AKT implementation.
 
 `runs/cpu-sim-data-context-gate-20261107-01`: archive source-bound Gate2-11 mới361pass0fail/error/skip,152.84giây, explicit CPU-test timeout420s. SHA/logs/JUnit/current và previous pointer giữ nguyên bytes. Gate2-10 ở mục trên là snapshot lịch sử, không current source sau DATA01–04. Kitv9 chưa có source mới.
+
+## Collector và KT simulator windows07/11
+
+`runs/cpu-sim-collector-20261107-02`:60targeted tests/no fail/error/skip, Paper2-equation train-only2×12fixture, repeat/source replay exact,24target rows/12windows,0NN/optimizer. Observable/oracle/manifest tách riêng. `...-01` giữ failedpytestcollection vì trùng tên modules; không sửa historical bundle. Xem report simulator_collection_runner_20261107.md; corpus/training/calibration/refit/final research runner chưa hoàn thành.

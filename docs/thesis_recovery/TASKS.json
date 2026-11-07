@@ -105,7 +105,7 @@
         "T01"
       ],
       "required_inputs": "P2 notebooks/specs, graph inputs hashes",
-      "files_components": "P2/source/; future src/simulation/diagnostic_v1/",
+      "files_components": "src/knowledge_tracing/paper2_reference.py;simulator_collection.py;Paper2 source/input read-only",
       "implementation_objective": "Đề xuất schema3graphs, validate nodes/items/map, extract isolated fixture adapter sau approval",
       "acceptance_criteria": "28node,84item, endpoint coverage, map extras/duplicates rõ, golden fixture parity",
       "verification_steps": "Synthetic fixtures, compare unchanged source hash",
@@ -114,11 +114,12 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "local",
       "authorization_requirements": "SAFE_ENGINEERING_AFTER_INSTRUCTION",
-      "status": "PLANNED",
+      "status": "PARTIALLY_VERIFIED",
       "blockers": [
-        "Chưa thực hiện"
+        "Historical reproduction/confirmatory protocol remains separate; contract evidence assembled across CPU03/SIM/DATA, no full rerun"
       ],
-      "execution_owner": "Codex"
+      "execution_owner": "Codex",
+      "verification_evidence": "paper2_reference.py;test_paper2_reference.py;planning_validation.json;SIM03 28concept84item;DATA05 source-environment replay"
     },
     {
       "id": "T05",
@@ -143,11 +144,12 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "local",
       "authorization_requirements": "METHOD_APPROVAL",
-      "status": "PLANNED",
+      "status": "PARTIALLY_VERIFIED",
       "blockers": [
-        "Mastery semantics pending"
+        "S04 reference weights/calibration/mastery threshold/controller criterion remains pending"
       ],
-      "execution_owner": "Codex"
+      "execution_owner": "Codex",
+      "verification_evidence": "SIM01–05:domain/reference/session;DATA01–06:splits/observable/window; no mastery claim"
     },
     {
       "id": "T06",
@@ -174,7 +176,7 @@
       "authorization_requirements": "SAFE_DESIGN; REAL_DATA_APPROVAL_LATER",
       "status": "IN_PROGRESS",
       "blockers": [
-        "DAG perturbations verified, degree/chapter/support matching and train-only graph learner pending"
+        "Matched controls/common-population pilots verified; train-only graph learner and confirmatory exposure/estimand protocol pending"
       ],
       "execution_owner": "Codex",
       "evidence": [
@@ -298,7 +300,7 @@
       "authorization_requirements": "BOUNDED_EXECUTION_APPROVAL",
       "status": "PLANNED",
       "blockers": [
-        "Dataset chưa có"
+        "Full simulator corpus not generated; DATA05 only2×12train fixture; approved mixture/profile/coverage/allocation required"
       ],
       "execution_owner": "Codex"
     },
@@ -324,16 +326,17 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "local",
       "authorization_requirements": "SAFE_ENGINEERING_AFTER_INSTRUCTION",
-      "status": "IN_PROGRESS",
+      "status": "PARTIALLY_VERIFIED",
       "blockers": [
-        "CPU synthetic epoch parity verified, gated CLI/selection/refit/early-stopper and cloud durability pending"
+        "CPU sampler/model/RNG/CLI selection/refit recovery verified; Linux/CUDA/Volume durability remains pending"
       ],
       "execution_owner": "Codex",
       "evidence": [
         "evidence/sampler-recovery-tests.log",
         "evidence/resumable-epoch-tests.log",
         "evidence/engineering-loop-final-tests.log"
-      ]
+      ],
+      "verification_evidence": "REC01–06;cpu-akt-recovery-20261107-01;17_AKT_RECOVERY_ENGINEERING_LOG.md;T14 for remote durability"
     },
     {
       "id": "T12",
@@ -1508,7 +1511,7 @@
         "DATA04"
       ],
       "required_inputs": "Recipe explicit, Paper2source/input SHA,19collector prerequisites",
-      "files_components": "paper2_reference.py;simulator_data.py;new collector in src/knowledge_tracing;tests/shared_kt",
+      "files_components": "src/knowledge_tracing/simulator_collection.py;tests/shared_kt/test_simulator_collection.py;scripts/research/check_simulator_collection.py",
       "implementation_objective": "Prototype collector mô phỏng với manifest và observable/oracle boundary",
       "acceptance_criteria": "Không đổi Paper2 environment; fixed base/state/uniform hashes, declared logging policy và clock unit; train fixture tối đa2learners×12events, không final cohort; schema audit và repeat/parity tests",
       "verification_steps": "Project .venv bounded fixture; source/input/state/output SHA; targeted tests then fresh source-bound Gate2",
@@ -1516,10 +1519,10 @@
       "estimated_effort": "0.5–1 engineering day; not GPU training duration",
       "compute_cost_category": "bounded local CPU",
       "authorization_requirements": "Small synthetic/reference-environment fixture only; no model training, real dataset, cloud or final cohort; changing scientific distribution needs separate protocol approval",
-      "status": "PLANNED",
-      "blockers": [
-        "Scientific cohort allocation/refit/calibration remain S04/S05; do not silently select defaults"
-      ]
+      "status": "COMPLETED",
+      "blockers": [],
+      "verification_evidence": "cpu-sim-collector-20261107-02:60targeted pass;source environment exact replay;24unique targets/collator;19 contract; final source-bound Gate2 pending",
+      "verification_scope": "Bounded train-only collector and windows adapter; NOT full corpus/NN trainer/calibrator/refit/final runner"
     },
     {
       "id": "DATA06",
@@ -1537,7 +1540,7 @@
         "DATA05"
       ],
       "required_inputs": "DATA05manifest;19;AKT existing recipe/checkpoint interfaces;S04/S05 pending",
-      "files_components": "simulator_data.py;akt/types.py;akt/windows.py;docs/thesis_recovery",
+      "files_components": "src/knowledge_tracing/akt/simulator_data.py;tests/akt/test_simulator_role_windows.py;19 contract",
       "implementation_objective": "Hợp đồng simulator role-aware KT training/evaluation runner",
       "acceptance_criteria": "Role guards/predict-before-update/vocab/OOV/window target accounting explicit; không gán Junyi folds giả, không train thật; calibration/refit/final roles excluded until protocol accepted",
       "verification_steps": "Project .venv bounded fixture; source/input/state/output SHA; targeted tests then fresh source-bound Gate2",
@@ -1545,10 +1548,10 @@
       "estimated_effort": "0.5–1 engineering day; not GPU training duration",
       "compute_cost_category": "bounded local CPU",
       "authorization_requirements": "Safe contract/adaptor fixtures; no model architecture/optimization/protocol adoption or full training",
-      "status": "PLANNED",
-      "blockers": [
-        "Scientific cohort allocation/refit/calibration remain S04/S05; do not silently select defaults"
-      ]
+      "status": "COMPLETED",
+      "blockers": [],
+      "verification_evidence": "cpu-sim-collector-20261107-02:60targeted pass;source environment exact replay;24unique targets/collator;19 contract; final source-bound Gate2 pending",
+      "verification_scope": "Bounded train-only collector and windows adapter; NOT full corpus/NN trainer/calibrator/refit/final runner"
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",
