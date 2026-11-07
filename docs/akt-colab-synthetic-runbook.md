@@ -5,16 +5,16 @@ Mục đích là kiểm CUDA, causal inputs, artifact publish và checkpoint rel
 ## Chuẩn bị local
 
 ```powershell
-python scripts/akt/build_colab_bundle.py --output artifacts/akt/colab/akt-synthetic-20261107.zip
+.\.venv\Scripts\python.exe -B scripts/akt/build_colab_bundle.py --output artifacts/akt/colab/akt-synthetic-20261107-v4.zip
 ```
 
-Lệnh từ chối ghi đè bundle. Khi source đổi, tạo tên bundle mới. Source hashes và dependencies của mỗi run nằm trong report. Bundle gồm source hiện tại trong working tree, bao gồm các file chưa track, vì vậy dùng manifest hash để xác định chính xác snapshot. Không đưa dataset, credentials hoặc historical prediction/model artifacts vào bundle.
+Lệnh từ chối ghi đè bundle. Khi source đổi, tạo tên bundle mới. Source hashes và dependencies của mỗi run nằm trong report. Bundle gồm source hiện tại trong working tree, vì vậy dùng manifest hash để xác định chính xác snapshot. Schema2 dùng scope source_and_bounded_test_fixtures, gồm script dependencies và các simulator CSV nhỏ cần cho tests. Notebook nguồn Paper1/2 được sao dưới dạng source-only, bỏ outputs/execution metadata trong bản copy. Source cells giữ nguyên, original SHA và transform ghi trong manifest. Notebook gốc giữ nguyên trên repo. Junyi interactions, CV/refit predictions và checkpoint nằm ngoài allowlist.
 
 ## Chạy notebook
 
-Mở notebook trong Colab bằng Upload notebook, chọn GPU runtime, chạy tuần tự các cells. Upload bundle do lệnh trên tạo. Notebook kiểm hash trước extract, clone upstream pinned và cài các dependency còn thiếu. PyTorch do runtime cung cấp, ghi lại pip freeze và CUDA/GPU identity. Môi trường này là kiểm tương thích thăm dò, phải pin image và xác minh lại khi chuyển Modal.
+Mở notebook trong Colab bằng Upload notebook. Có thể chạy các cell chuẩn bị/CPU trước, rồi chọn GPU runtime khi cần CUDA probe. Upload bundle do lệnh trên tạo. Notebook nhận cả schema1 cũ và schema2 mới, kiểm hash trước extract, clone upstream pinned và tạo ROOT/.venv với system-site-packages để kế thừa PyTorch runtime. Các package còn thiếu chỉ được cài bằng interpreter của venv này. CPU/GPU subprocess dùng cùng interpreter đó. PyTorch/runtime identity được ghi trong output, cần pin image và xác minh lại khi chuyển Modal.
 
-Cell kiểm CPU chạy suite AKT/shared tổng hợp trước, subprocess timeout300giây. Test `test_native_akt_import_cpu` được deselect rõ vì kiểm `.venv` và lockfile CPU Windows local, không tương ứng runtime Colab. Probe thay thế ghi runtime/source/dependency identity thực. Các synthetic tests còn lại giữ nguyên, bundle gồm ba config fixtures và runtime checker. Cell GPU chạy duy nhất một synthetic epoch, một optimizer step,400targets, H/T100, d256 và các defaults kiến trúc hiện tại. Timeout600giây. Nếu thiếu GPU hoặc test lỗi, dừng và giữ log. Notebook không tự retry, không tự mount Drive hoặc đọc Junyi. Cài dependency chỉ cần những package còn thiếu, không dùng Windows CPU lockfile trên Linux.
+Cell kiểm CPU chạy suite AKT/shared trước, subprocess timeout300giây. Test `test_native_akt_import_cpu` được loại bằng biểu thức tên test độc lập OS vì kiểm venv/lockfile Windows local. Probe thay thế ghi runtime/source/dependency identity thực. Các tests còn lại dùng source và fixture trong bundle. Cell GPU chạy một synthetic epoch, một optimizer step,400targets, H/T100, d256 và defaults kiến trúc hiện tại, timeout600giây. Nếu thiếu GPU hoặc test lỗi, dừng và giữ log. Cell cuối tải output để lưu bằng chứng.
 
 Notebook yêu cầu người dùng ở giao diện Colab chọn runtime, upload bundle và tải output. Chưa có remote runtime nào được kết nối trong phiên local. Có thể điều khiển notebook hiện có sau khi được cấp link/quyền và runtime sẵn sàng, tùy công cụ truy cập.
 

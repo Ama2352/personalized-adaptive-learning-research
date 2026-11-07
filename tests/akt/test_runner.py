@@ -20,6 +20,15 @@ def config_hash(config):
     return hashlib.sha256(json.dumps(asdict(config), sort_keys=True, default=str).encode()).hexdigest()
 
 
+@pytest.fixture
+def synthetic_authorization_inputs(monkeypatch):
+    # Test authorization so sánh identity, không phụ thuộc Gate1/data của máy.
+    monkeypatch.setattr(runner, 'preflight', lambda _: {'source': {'commit': runner.SOURCE_COMMIT}})
+    monkeypatch.setattr(runner, '_identity', lambda config, result: {
+        'config_sha256': config_hash(config), 'source': result['source'],
+        'assignments_sha256': 'synthetic-assignments'})
+
+
 def test_no_phase_runs_by_default_without_requesting_any_learners(tmp_path, monkeypatch):
     config = replace(load_config(PROJECT_ROOT / 'experiments/akt/configs/smoke.json'),
                      run_id='smoke-test', output_dir=PROJECT_ROOT / 'experiments/akt/results/smoke-test')
@@ -240,7 +249,7 @@ def test_config_cannot_expand_smoke_or_pilot_caps():
         validate_config(replace(pilot, max_total_targets=100001))
 
 
-def test_configs_are_disabled_namespaced_and_gate_pass_is_not_authorization(monkeypatch):
+def test_configs_are_disabled_namespaced_and_gate_pass_is_not_authorization(monkeypatch, synthetic_authorization_inputs):
     configs = [load_config(PROJECT_ROOT / 'experiments/akt/configs' / name)
                for name in ('smoke.json', 'pilot.json', 'fold0.json')]
     assert all(config.execution_enabled is False for config in configs)
@@ -337,7 +346,7 @@ def test_authorization_identity_includes_current_gate2_source_hashes(monkeypatch
     assert identity['gate2_pointer_sha256'] == 'current-pointer-hash'
 
 
-def test_approved_lower_cohort_and_target_caps_reach_loader(monkeypatch):
+def test_approved_lower_cohort_and_target_caps_reach_loader(monkeypatch, synthetic_authorization_inputs):
     config = replace(load_config(PROJECT_ROOT / 'experiments/akt/configs/smoke.json'), execution_enabled=True)
     monkeypatch.setattr(runner, '_require_gate2_evidence', lambda _: {
         'status': 'PASS', 'report_sha256': 'gate-report', 'test_log_sha256': 'gate-log',
@@ -480,6 +489,9 @@ def test_cli_watchdog_reports_timeout_without_completed_result(tmp_path, monkeyp
     path = tmp_path / 'approval.json'
     path.write_text(json.dumps(approval), encoding='utf-8')
     monkeypatch.setattr(watchdog, 'load_config', lambda path: config)
+    monkeypatch.setattr(watchdog, 'memory_snapshot', lambda: {
+        'pid': 123, 'process_rss_bytes': 100, 'process_peak_rss_bytes': 100,
+        'system_available_ram_bytes': 4 * 1024**3, 'system_total_ram_bytes': 8 * 1024**3})
     class TimedOutWorker:
         pid = 987
         def __init__(self):
@@ -580,10 +592,21 @@ def test_cli_has_no_default_execution_phase_and_help_is_available():
     assert help_exit.value.code == 0
 
 
-def test_preflight_verifies_gate1_without_opening_dataset(monkeypatch):
+def test_preflight_verifies_gate1_without_opening_dataset(tmp_path, monkeypatch):
     config = load_config(PROJECT_ROOT / 'experiments/akt/configs/smoke.json')
     monkeypatch.setattr(runner, 'read_development_assignments',
                         lambda *args, **kwargs: pytest.fail('preflight must not open assignments'))
+    lock = tmp_path/'lock.txt'
+    lock.write_text('synthetic lock',encoding='utf-8')
+    source = {'commit': config.source_commit}
+    report = tmp_path/'runtime.json'
+    report.write_text(json.dumps({'source':source,'lock_sha256':hashlib.sha256(lock.read_bytes()).hexdigest(),
+        'python':str((PROJECT_ROOT/'.venv/Scripts/python.exe').resolve())}),encoding='utf-8')
+    monkeypatch.setattr(runner, 'LOCK_FILE', lock)
+    monkeypatch.setattr(runner, 'RUNTIME_REPORT', report)
+    monkeypatch.setattr(runner, 'GATE2_REPORT', tmp_path/'missing-gate2.json')
+    monkeypatch.setattr(runner.authorization_module, 'verify_upstream', lambda *args: source)
+    monkeypatch.setattr(runner.authorization_module.sys, 'prefix', str(PROJECT_ROOT/'.venv'))
     result = runner.preflight(config)
     assert result['status'] == 'ready'
     assert result['source']['commit'] == config.source_commit
