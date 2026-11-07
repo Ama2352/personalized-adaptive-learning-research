@@ -22,6 +22,7 @@ JSON bootstrap chuyển từ root `reports/` với bytes/SHA giữ nguyên. [H�
 
 ## Kỹ thuật và tính tái lập
 
+- [simulator_data_graph_boundaries_20261107.md](simulator_data_graph_boundaries_20261107.md): split/schema cho dữ liệu mô phỏng và graph-context history scope; fixture kỹ thuật, chưa là CG-AKT efficacy.
 - [simulator_kt_interface_20261107.md](simulator_kt_interface_20261107.md): typed session/query/checkpoint bridge, export fix, frozen inference và independent batching. Đây là engineering evidence, không là CG-AKT efficacy.
 - `git_evidence_verification_*.json`: đối chiếu output hashes với bytes trong Git.
 - `colab_bundle_*_verification_*.json`, `colab_upstream_*_inventory_*.json`: kiểm bundle/dependency/portability; không tự chứng minh đã chạy Colab/CUDA.

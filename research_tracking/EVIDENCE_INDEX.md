@@ -74,3 +74,7 @@ Kitv6 có113source/fixture files, source-only notebook copies và project venv. 
 ## Latest simulator bridge/batch gate07/11
 
 `runs/cpu-sim-kt-batch-gate-20261107-01` có11outputs nguồn/source-bound Gate2-10 296tests, local source hashes; `runs/cpu-sim-kt-interface-20261107-03-batch` giữ measured call/tolerance/timing proof. Earlier gate09 và runs01/02 giữ nguyên. Read report simulator_kt_interface_20261107.md, không suy learning efficacy/GPU readiness.
+
+## Simulator data/graph boundaries07/11
+
+`runs/cpu-sim-data-context-20261107-01/02/03`: mỗi bundle7outputs, final70targeted tests khôngfail/error/skip,2learner×8events×4roles số học,0training steps. Split/observable schema và effective-window/full-history counterexample được lưu trong proof.json. Đọc `reports/simulator_data_graph_boundaries_20261107.md`. Không đánh đồng contract với simulated research dataset, calibrated confidence hoặc CG-AKT implementation.

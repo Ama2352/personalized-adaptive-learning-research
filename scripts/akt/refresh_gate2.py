@@ -28,7 +28,15 @@ def test_result(xml_path):
     return {'passed': counts['tests'], 'failed': 0, 'errors': 0, 'skipped': 0}
 
 
-def refresh(run_id, *, publish_current=False):
+def validate_timeout(seconds):
+    """Ngân sách riêng cho CPU software suite, không thay cap training/pilot."""
+    if type(seconds) is not int or not 1 <= seconds <= 600:
+        raise ValueError('Gate2 CPU test timeout must be an integer from 1 to 600 seconds')
+    return seconds
+
+
+def refresh(run_id, *, publish_current=False, timeout_seconds=300):
+    validate_timeout(timeout_seconds)
     if Path(sys.prefix).resolve() != (ROOT / '.venv').resolve():
         raise ValueError('use the project .venv interpreter')
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,79}', run_id):
@@ -56,7 +64,8 @@ def refresh(run_id, *, publish_current=False):
                '-p', 'no:cacheprovider', '--basetemp', str(temporary), '--junitxml', str(junit)]
     started = time.perf_counter()
     with log.open('xb') as stream:
-        result = subprocess.run(command, cwd=ROOT, env=env, stdout=stream, stderr=subprocess.STDOUT, timeout=300)
+        result = subprocess.run(command, cwd=ROOT, env=env, stdout=stream, stderr=subprocess.STDOUT,
+                                timeout=timeout_seconds)
     if result.returncode:
         raise RuntimeError(f'Gate2 tests failed, inspect {log}')
     counts = test_result(junit)
@@ -69,7 +78,7 @@ def refresh(run_id, *, publish_current=False):
                'lock_sha256': lock_before, 'build_hashes': before,
                'test_log_sha256': sha256_file(log), 'junit_sha256': sha256_file(junit),
                'command': command, 'python': sys.executable,
-               'elapsed_seconds': time.perf_counter() - started,
+               'elapsed_seconds': time.perf_counter() - started, 'timeout_seconds': timeout_seconds,
                'scope': 'CPU synthetic/software gate only, no CUDA or full-training acceptance'}
     with report.open('x', encoding='utf-8', newline='\n') as stream:
         json.dump(payload, stream, ensure_ascii=False, indent=2)
@@ -98,5 +107,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--run-id', required=True)
     parser.add_argument('--publish-current', action='store_true')
+    parser.add_argument('--timeout-seconds', type=int, default=300,
+                        help='CPU software suite only, explicit maximum 600 seconds; default 300')
     args = parser.parse_args()
-    print(json.dumps(refresh(args.run_id, publish_current=args.publish_current), ensure_ascii=False, indent=2))
+    print(json.dumps(refresh(args.run_id, publish_current=args.publish_current,
+                             timeout_seconds=args.timeout_seconds), ensure_ascii=False, indent=2))

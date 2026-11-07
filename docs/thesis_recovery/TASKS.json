@@ -1375,6 +1375,122 @@
       "blockers": [],
       "verification_evidence": "cpu-sim-kt-interface-20261107-03-batch;cpu-sim-kt-batch-gate-20261107-01;Gate2-10 296pass",
       "verification_scope": "CPU engineering equivalence abs1e-6; no threshold/controller/GPU approval"
+    },
+    {
+      "id": "DATA01",
+      "research_objective": "Plan learner/seed families explicit cho bốn role",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "simulator_data_boundaries",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "SIM05"
+      ],
+      "required_inputs": "19_SIMULATOR_DATA_AND_GRAPH_BOUNDARIES.md;18 interface;S04/S05 pending",
+      "files_components": "simulator_data.py",
+      "implementation_objective": "Plan learner/seed families explicit cho bốn role",
+      "acceptance_criteria": "IDs/seeds disjoint và stable khi reorder/tăng train count",
+      "verification_steps": "Project .venv, bounded arithmetic fixture; no real-data training/Holdout/cloud",
+      "required_artifacts": "Immutable runs with README/logs/JUnit/source-output hashes; aggregate report",
+      "estimated_effort": "0.25–0.5 engineering day per task; CPU tests separate",
+      "compute_cost_category": "bounded local CPU synthetic; no cloud spend",
+      "authorization_requirements": "Safe engineering authorized; no adopted methodology/splits/thresholds/refit or paid run",
+      "status": "COMPLETED",
+      "blockers": [],
+      "verification_evidence": "cpu-sim-data-context-20261107-03:70targeted tests;report simulator_data_graph_boundaries_20261107.md",
+      "verification_scope": "Schema and history-boundary engineering only; no generated research cohort or trained CG-AKT"
+    },
+    {
+      "id": "DATA02",
+      "research_objective": "Observable schema, role-bound audit và train projection",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "simulator_data_boundaries",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "DATA01"
+      ],
+      "required_inputs": "19_SIMULATOR_DATA_AND_GRAPH_BOUNDARIES.md;18 interface;S04/S05 pending",
+      "files_components": "simulator_data.py",
+      "implementation_objective": "Observable schema, role-bound audit và train projection",
+      "acceptance_criteria": "Reject oracle/wrong-role/missing/duplicate/chronology/domain; không mở role khác hoặc giả fold Junyi",
+      "verification_steps": "Project .venv, bounded arithmetic fixture; no real-data training/Holdout/cloud",
+      "required_artifacts": "Immutable runs with README/logs/JUnit/source-output hashes; aggregate report",
+      "estimated_effort": "0.25–0.5 engineering day per task; CPU tests separate",
+      "compute_cost_category": "bounded local CPU synthetic; no cloud spend",
+      "authorization_requirements": "Safe engineering authorized; no adopted methodology/splits/thresholds/refit or paid run",
+      "status": "COMPLETED",
+      "blockers": [],
+      "verification_evidence": "cpu-sim-data-context-20261107-03:70targeted tests;report simulator_data_graph_boundaries_20261107.md",
+      "verification_scope": "Schema and history-boundary engineering only; no generated research cohort or trained CG-AKT"
+    },
+    {
+      "id": "DATA03",
+      "research_objective": "Graph context audit trên effective window AKT",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "simulator_data_boundaries",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "DATA02"
+      ],
+      "required_inputs": "19_SIMULATOR_DATA_AND_GRAPH_BOUNDARIES.md;18 interface;S04/S05 pending",
+      "files_components": "graph_context.py;akt/windows.py",
+      "implementation_objective": "Graph context audit trên effective window AKT",
+      "acceptance_criteria": "Past-only/global anchors/OOV; full-history sensitivity riêng, confidence provenance và graph-off controls",
+      "verification_steps": "Project .venv, bounded arithmetic fixture; no real-data training/Holdout/cloud",
+      "required_artifacts": "Immutable runs with README/logs/JUnit/source-output hashes; aggregate report",
+      "estimated_effort": "0.25–0.5 engineering day per task; CPU tests separate",
+      "compute_cost_category": "bounded local CPU synthetic; no cloud spend",
+      "authorization_requirements": "Safe engineering authorized; no adopted methodology/splits/thresholds/refit or paid run",
+      "status": "COMPLETED",
+      "blockers": [],
+      "verification_evidence": "cpu-sim-data-context-20261107-03:70targeted tests;report simulator_data_graph_boundaries_20261107.md",
+      "verification_scope": "Schema and history-boundary engineering only; no generated research cohort or trained CG-AKT"
+    },
+    {
+      "id": "DATA04",
+      "research_objective": "Evidence, source-bound Gate2 và handoff",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "simulator_data_boundaries",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "DATA03"
+      ],
+      "required_inputs": "19_SIMULATOR_DATA_AND_GRAPH_BOUNDARIES.md;18 interface;S04/S05 pending",
+      "files_components": "scripts/research;docs/thesis_recovery;research_tracking",
+      "implementation_objective": "Evidence, source-bound Gate2 và handoff",
+      "acceptance_criteria": "Targeted tests và Gate2 không fail/error/skip; bundles SHA verified; task DAG và commit verified",
+      "verification_steps": "Project .venv, bounded arithmetic fixture; no real-data training/Holdout/cloud",
+      "required_artifacts": "Immutable runs with README/logs/JUnit/source-output hashes; aggregate report",
+      "estimated_effort": "0.25–0.5 engineering day per task; CPU tests separate",
+      "compute_cost_category": "bounded local CPU synthetic; no cloud spend",
+      "authorization_requirements": "Safe engineering authorized; no adopted methodology/splits/thresholds/refit or paid run",
+      "status": "IN_PROGRESS",
+      "blockers": [],
+      "verification_evidence": "cpu-sim-data-context-20261107-03:70targeted tests;report simulator_data_graph_boundaries_20261107.md",
+      "verification_scope": "Schema and history-boundary engineering only; no generated research cohort or trained CG-AKT"
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",
