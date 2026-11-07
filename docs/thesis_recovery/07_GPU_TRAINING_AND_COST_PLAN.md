@@ -6,7 +6,7 @@ Ngày tra cứu official Modal 06/11/2026. Chưa xác minh account, credit eligi
 
 Theo [Modal pricing](https://modal.com/pricing), GPU Functions giá USD/s là T4 .000164, L4 .000222, A10 .000306, L40S .000542, A10040 .000583, A10080 .000694, H100 .001097. Tương ứng USD/h .5904,.7992,1.1016,1.9512,2.0988,2.4984,3.9492. Physical CPU core .0000131/s, GiB RAM .00000222/s. Starter niêm yết30 USD credit/tháng, không đưa credit vào budget guarantee. Volume .09 USD/GiB/tháng với allowance1TiB ghi trên pricing, egress .04 USD/GiB sau included allowance theo plan. Điều kiện account và allowance phải xác minh trước upload. Không trừ credit hai lần khi lập tổng chi phí.
 
-Với2 physical cores+8GiB, CPU/RAM .222336 USD/h, rate tổng L4 1.021536 USD/h, A10 1.323936, L40S2.173536. Đây là request ví dụ để so sánh, chưa cấu hình đã duyệt. Giá training GPU Functions, không áp Sandbox CPU premium. Chọn L4/A10 khởi đầu, L40S chỉ nếu measured cost/target tốt hơn. Chưa có VRAM benchmark để khẳng định batch nào đủ.
+Hiệu chỉnh số học07/11 theo cùng unit rates: với2 physical cores+8GiB, CPU/RAM **.158256 USD/h** (.09432+.063936), rate tổng L4 **.957456 USD/h**, A10 **1.259856**, L40S**2.109456**. Con số.222336 ở bản trước cộng sai, không phải đổi giá hoặc số liệu experiment. Đây là request ví dụ để so sánh, chưa cấu hình đã duyệt; bill theo request/actual usage thực tế và còn startup/idle/storage. Giá training GPU Functions, không áp Sandbox CPU premium. Chọn L4/A10 khởi đầu, L40S chỉ nếu measured cost/target tốt hơn. Chưa có VRAM benchmark để khẳng định batch nào đủ.
 
 [Timeouts](https://modal.com/docs/guide/timeouts) ghi mặc định300s, tối đa24h/attempt, timeout mỗi retry reset, user code cần tự deadline vì platform có thể quá vài giây. [Volumes](https://modal.com/docs/guide/volumes) hỗ trợ persistent storage, flush và commit trước exit, không coi temp container là checkpoint durable. Volume v2 recommended trong docs hiện hành, cần fs behavior test riêng. [Budgets](https://modal.com/docs/guide/budgets) phân biệt workspace usage cap trước credits với spend limit net sau credits, có dừng workloads khi reach spend limit. Environment budgets dành Team/Enterprise và chỉ compute. Không thay bằng alert. User/account owner cấu hình workspace cap và net spend limit, local ledger còn cần reserve cho jobs và storage.
 
@@ -57,11 +57,11 @@ Measured GPU throughput hiện UNKNOWN. CPU pilot32 batches/7.346 targets không
 
 | Scenario giả định để stress-test | E, r giả định | AKT Dev5fold GPU giờ / L4 compute USD |4 variants Dev5fold | Ý nghĩa |
 |---|---|---|---|---|
-|Optimistic |E3,r20k |7.19h /7.34USD |28.76h /29.38USD |Chưa measurement |
-|Expected planning |E10,r5k |Work=81D, giờ93.18, USD95.18 |372.7h,380.7USD |Chưa measurement |
-|Conservative |E20,r1k |Work=161D, giờ926.03, USD945.99 |3704h,3784USD |Một GPU vượt thời gian thực nghiệm |
+|Optimistic |E3,r20k |7.19h /6.88USD |28.76h /27.54USD |Chưa measurement |
+|Expected planning |E10,r5k |Work=81D, giờ93.18, USD89.21 |372.7h,356.86USD |Chưa measurement |
+|Conservative |E20,r1k |Work=161D, giờ926.03, USD886.63 |3704h,3546.52USD |Một GPU vượt thời gian thực nghiệm |
 
-Kiểm tra số học. Optimistic work25D/r20k =25.883s≈7.19h,7.34USD, 4variants28.76h,29.38USD. Expected81D/r5k=335.441s≈93.18h. Conservative161D/r1k=3.333.699s≈926.03h. Dấu chấm trong số giây ở đây phân tách nghìn. Các throughput giả định chỉ là axes sensitivity, không dự báo AKT. Es/Er có thể khác, phải thay bằng history pilot. Overhead10/25/50% là reserve scenario, không measured overhead.
+Kiểm tra số học sau hiệu chỉnh rate. Optimistic work25D/r20k =25.883s≈7.19h,6.88USD, 4variants28.76h,27.54USD. Expected81D/r5k=335.441s≈93.18h. Conservative161D/r1k=3.333.699s≈926.03h. Dấu chấm trong số giây ở đây phân tách nghìn. Các throughput giả định chỉ là axes sensitivity, không dự báo AKT. Es/Er có thể khác, phải thay bằng history pilot. Overhead10/25/50% là reserve scenario, không measured overhead.
 
 Một epoch outer train 16.565m/rtr seconds, val1.6565m/rval seconds, outer eval4.141m/rval. Refit allDev E*D/rtr. Additional final Holdout inference chỉ nếu authorized, tách cost. Simulator4variants×3training seeds×E×Nsim/r + val + closed-loop query count/rinfer. Confidence calibration/graph learning CPU và ablation retrains thêm theo actual manifest. Learned/noisy train graph thay mỗi condition đòi fit riêng. Same-checkpoint gate-off/shuffle confidence inference không fit lại nhưng khác question so với trained ablation.
 
@@ -97,3 +97,9 @@ Ba chốt cần xử lý trước remote lifecycle:
 3. Portable bundle strip notebook outputs/metadata: full notebook storage SHA sẽ khác, dù source equations giống nhau. Collector domain identity phải dựa semantic definitions/constants/input/clock, còn storage SHA giữ ở integrity provenance. Static audit đã xác nhận v1 mismatch trước cloud; sửa và test trước checkpoint handoff. Domain cũ không được tự sửa trong historical checkpoints/bundles.
 
 Hiện `synthetic_device_probe.py --device cuda --output-dir <new>` là bounded synthetic400targets/1step với reload/export/causality checks, **không** là real-data/full-training/Gate4 pass hoặc mid-epoch CUDA recovery proof. Chưa chạy nó trong invocation này. Lệnh GPU còn cần runtime/account/budget được kết nối và allocation explicit; không provision trong khi làm CPU engineering.
+
+## Ràng buộc user mới07/11:30USD/tháng
+
+User báo đã có Modal và ngân sách30USD/tháng; phải chuẩn bị kỹ và hướng dẫn kết nối. Các envelope150/300/600USD phía trên là proposal cũ, **không được dùng thay hạn mức30USD hiện tại**. Chưa xác minh30USD làcredits hayout-of-pocket, usage/resets/workspace chưa có; giữ grossceiling30 và không tự cộngcredits hoặc giả có60USDthángsau. Chưa có exact paidrun được duyệt.
+
+LocalSDK1.6.3 đã cài bằng pinned supplemental wheel lock trongprojectvenv, không đổi30existingversions/AKTlock; chỉ chạy version/help/pipcheck, không auth/GPU. Handoff, dashboardusage/netspendcap, ngân sáchđềxuất2+3+20+5USD và các trường user cần cung cấp ở [akt-modal-setup](../akt-modal-setup.md). Cost/target vẫnUNKNOWN; không hứa fullCV hoặc complete matrix vừa30USD. Lưu costplan arithmetic correction07/11:2CPU+8GiB=.158256USD/h, L4combined=.957456USD/h trước overhead/actual usage; actual price/account access kiểm trước mỗilaunch.

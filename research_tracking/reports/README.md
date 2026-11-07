@@ -22,6 +22,7 @@ JSON bootstrap chuyển từ root `reports/` với bytes/SHA giữ nguyên. [H�
 
 ## Kỹ thuật và tính tái lập
 
+- [Modal setup](../../docs/akt-modal-setup.md): kết nối local và trần30USD/tháng; [SDK proof](../runs/cpu-modal-client-20261107-01/README.md) chỉ kiểm projectvenv/CLI/dependencies, chưa auth hoặc cloud execution.
 - [simulator_collection_runner_20261107.md](simulator_collection_runner_20261107.md): collector Paper2 train-only và role-aware KT windows/collation; fixture engineering, chưa là corpus/full trainer hoặc research benefit.
 - [simulator_data_graph_boundaries_20261107.md](simulator_data_graph_boundaries_20261107.md): split/schema cho dữ liệu mô phỏng và graph-context history scope; fixture kỹ thuật, chưa là CG-AKT efficacy.
 - [simulator_kt_interface_20261107.md](simulator_kt_interface_20261107.md): typed session/query/checkpoint bridge, export fix, frozen inference và independent batching. Đây là engineering evidence, không là CG-AKT efficacy.

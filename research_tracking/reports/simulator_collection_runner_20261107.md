@@ -52,3 +52,5 @@ Registry bổ sung16terminal run manifest indices đã có từ các batch recov
 **Gate2-13:401passed,0failed/error/skipped,374.53giây**, explicit CPU suite budget540s; source/lock/upstream ổn định và current pointerverified. Report SHA `fddb2fe0e8efb15002f35a2079ebada2bace12aacfbf21d3cefde8ce9df6c546`. [Archive14outputs](../runs/cpu-sim-collector-gate-20261107-01/README.md) giữ report/log/JUnit401 và396, current/previous pointer, v1test snapshot đúngSHA, v1/v2RNG parity và v10verification. Chỉ2sourcefiles đổi từ gate396 sang401; prior snapshots được kiểm với hashes report396, không thay report cũ.
 
 DATA05–07 complete trong phạm vi engineering đã nêu. Registry42entries sau khi thêm gate archive mới. Các con số này không đổi trạng thái RQ: chưa có CG-AKT trained/evaluated hoặc accepted full simulator experiment. Không phải mọi phần cài đặt mô hình đã hoàn thành.
+
+Đối chiếu bytes trong Git sau commit0ca3835:29completed bundles284outputs và1failed bundle10outputs đều khớp hashes;30manifest nguyênbytes, DAG54tasks và32linksPASS. [Hồ sơ kiểm](git_evidence_verification_collector_20261107.json) không coi failedrun làpass.

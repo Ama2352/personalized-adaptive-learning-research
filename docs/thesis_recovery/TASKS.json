@@ -238,11 +238,13 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "local",
       "authorization_requirements": "SAFE_PREPARATION; CLOUD_APPROVAL_FOR_RUN",
-      "status": "PLANNED",
+      "status": "PARTIALLY_VERIFIED",
       "blockers": [
-        "Chưa CUDA runtime"
+        "LocalSDKready; account login/workspace/credits/reset/caps unverified; LinuxCUDAimage/lock/runtime-origin/Volume entrypoint still pending"
       ],
-      "execution_owner": "Codex"
+      "execution_owner": "Codex",
+      "verification_evidence": "cpu-modal-client-20261107-01:SDK1.6.3/27newpackages/30existingversionsunchanged/pipcheck;docs/akt-modal-setup.md",
+      "verification_scope": "Local controller only; no remote compute/auth or paidrun"
     },
     {
       "id": "T09",
@@ -433,7 +435,7 @@
       "authorization_requirements": "EXPLICIT_CLOUD_AND_DATA_APPROVAL",
       "status": "PLANNED",
       "blockers": [
-        "Chưa authorization"
+        "UserreportsModal30USD/month; exactGPUrun allocation, auth/accountcap and LinuxCUDAimage not yetverified"
       ],
       "execution_owner": "Codex"
     },
@@ -492,7 +494,8 @@
       "blockers": [
         "Budget forecast pending"
       ],
-      "execution_owner": "Codex"
+      "execution_owner": "Codex",
+      "financial_constraint": "User30USD/month ceiling; measure cost/target and obtain exact protocol/run authorization; no inherited150/300/600USD envelope"
     },
     {
       "id": "T17",
@@ -584,7 +587,8 @@
       "blockers": [
         "Chưa train data/architecture"
       ],
-      "execution_owner": "Codex"
+      "execution_owner": "Codex",
+      "financial_constraint": "User30USD/month ceiling; measure cost/target and obtain exact protocol/run authorization; no inherited150/300/600USD envelope"
     },
     {
       "id": "T20",
@@ -1585,5 +1589,11 @@
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",
   "local_cpu_engineering_authorized": true,
-  "local_cpu_authorization_reference": "User request 2026-11-07 engineering loop, organize evidence, commit completed work"
+  "local_cpu_authorization_reference": "User request 2026-11-07 engineering loop, organize evidence, commit completed work",
+  "cloud_financial_constraint": {
+    "monthly_ceiling_usd": 30,
+    "reference": "User07/11",
+    "exact_run_authorized": false,
+    "balance_and_cycle_unverified": true
+  }
 }

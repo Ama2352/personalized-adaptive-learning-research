@@ -50,3 +50,9 @@ Q03 được thu hẹp: AKT item84 query bridge đã kiểm, không có numeric 
 D19 supported: split/schema4roles và graph-context effective-window audit có70targeted tests, không là trained CG-AKT; xem19 và report simulator_data_graph_boundaries_20261107.md. Full-history context có thể dùng thông tin baseline không có; D18 vẫn proposed về primary comparison.
 
 D20 supported/source: Paper2 persona_base_abilities có parent-smoothed latent ability; replay item difficulty được chọn từ theta thật (notebook cell9/17). Collector mới phải tách oracle sidecar và ghi logging-policy provenance, không tự tái dùng replay generator làm corpus deployment-like. Paired mechanism comparisons cần giữ base realization khi thay learning-edge mechanism; exact protocol vẫn S03/S05. Clock unit và response/learning RNG channels là prerequisite bổ sung ở19.
+
+## Modal budget theo user07/11
+
+D21 binding: user báo cóModal với30USD/tháng, yêu cầu chuẩn bị kỹ và hướng dẫn quyền truy cập. Tạm trần tổngusage30USD, chưa xác minhcredit/out-of-pocket/workspace/remaining/reset. Các150/300/600USD cũ chỉproposal, không làauthorization. Không fullCV hoặc cloudrun tự động. Phân bổ2readiness+3benchmark+20training+5reserve là đề xuất, không per-run approval. Sourcebound401CPU vàlocalSDK không chứng minhbudget/actualCUDAready.
+
+D22 supported: ModalSDK1.6.3 cài27newpackages trongprojectvenv,30existingversions vàAKTlock unchanged;localCLI/pipcheckPASS, noauth/jobs. SupplementalWindowsclientlock không thayLinuxCUDAimagelock. UserđăngnhậpbrowserquaCLI vớiignoredprivateconfig, khônggửitoken/passwordtrongchat. Handoff `docs/akt-modal-setup.md`; officialbudgets/config/token sources ởtài liệunày.
