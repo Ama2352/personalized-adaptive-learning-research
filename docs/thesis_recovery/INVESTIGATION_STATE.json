@@ -322,6 +322,8 @@
     "verification": "ZIP integrity and current raw-source parity only; notebook copies stripped, Windows lock hash fixture; not executed inside ZIP/Linux/Colab/CUDA"
   },
   "next_bounded_engineering_batch": [
+    "GPU policy now localCPU→Colabfree→Modal. Notebook/v10 ready for user interactive Colab run; no actual Colab GPU connected/executed, no automatic paid fallback if quota unavailable. Inspect returned artifact ZIP before credit spend.",
+    "Current notebook guards locally checked:8mockcases and1realbundlepytest PASS; CPU portability timeout600s/JUnit/nonempty/noerrors/noskips, CPU/source guards beforeGPU; current400target probe still no CUDA mid-epoch resume or Gate4 claim.",
     "Modal profilekltn/workspacehonguyenminhsang2005 authenticated and read-only verified; expiry2026-11-14T17:37:38+07:00. Do not repeat login or request secrets. Gross30/freecredits only/net0, dashboardcaps userreported not APIreadback; no compute launched.",
     "Read current state and collector report/19; DATA01–07 and Gate13 archived, do not repeat completed recovery/interface/collector fixtures",
     "Next safe engineering: isolated graph-variant prototype per06 with graph-off equivalence and explicit oracle/history boundaries; main architecture/evaluation adoption must remain separately tracked",
@@ -455,9 +457,10 @@
     "registry_total_before_final_gate_archive": 41,
     "scope": "Index backfill only; no additional claimed research experiments or historical verdict rewrites",
     "added_gate_archive_after_backfill": 1,
-    "registry_total": 44,
+    "registry_total": 45,
     "added_modal_local_client": 1,
-    "added_modal_readonly_access": 1
+    "added_modal_readonly_access": 1,
+    "added_colab_notebook_guard": 1
   },
   "modal_budget_20261107": {
     "user_reported_account_available": true,
@@ -473,7 +476,7 @@
     "reference": "User07/11 reply: only30USDfreecredits/noextra;workspacehonguyenminhsang2005,30remaining,start07/11/2026,resetnextmonth",
     "supersedes": "Unapproved150/300/600USD planning envelopes; do not add credits or future cycle allowance automatically",
     "proposed_envelope_usd": {
-      "readiness": 2,
+      "modal_specific_revalidation_after_colab": 2,
       "benchmark": 3,
       "training_after_forecast": 20,
       "reserve": 5
@@ -485,7 +488,8 @@
     "account_details_verified": false,
     "dashboard_limits_user_reported_step_complete": true,
     "dashboard_limits_user_report_source": "User: xong bước1, referring previous Usage & Billing checklist; no independent readback",
-    "credit_balance_api_verified": false
+    "credit_balance_api_verified": false,
+    "readiness_provider_priority": "Colabfree first;2USD reserved only for Modal-specific image/Volume/runtime validation if needed, not generic CUDA debugging"
   },
   "modal_local_client_20261107": {
     "status": "AUTHENTICATED_WORKSPACE_VERIFIED_NO_COMPUTE",
@@ -515,5 +519,23 @@
     "default_environment": "main",
     "workspace_image_builder_version": "2026.10",
     "access_evidence": "cpu-modal-access-20261107-01"
+  },
+  "gpu_execution_policy_20261107": {
+    "order": [
+      "local_cpu",
+      "colab_free_gpu",
+      "modal_bounded_platform_check_then_pilot_training"
+    ],
+    "generic_cuda_tests_preferred_provider": "colab_free",
+    "modal_generic_debug_before_colab_allowed": false,
+    "colab_unavailable_auto_modal_fallback": false,
+    "colab_actual_execution_verified": false,
+    "current_colab_workload": "400synthetic targets/1optimizerstep,600s GPU subprocess cap",
+    "mid_epoch_cuda_resume_verified": false,
+    "modal_platform_revalidation_required": true,
+    "source": "User07/11: kiểm thử GPU trênColab trước vìModal tính phí",
+    "runbook": "docs/akt-colab-synthetic-runbook.md",
+    "notebook": "notebooks/akt_colab_synthetic.ipynb",
+    "local_guard_evidence": "cpu-colab-first-20261107-01"
   }
 }

@@ -24,6 +24,7 @@ JSON bootstrap chuyển từ root `reports/` với bytes/SHA giữ nguyên. [H�
 
 - [Modal setup](../../docs/akt-modal-setup.md): kết nối local và trần30USD/tháng; [SDK proof](../runs/cpu-modal-client-20261107-01/README.md) chỉ kiểm projectvenv/CLI/dependencies, chưa auth hoặc cloud execution.
 - [Modal access readiness](modal_access_readiness_20261107.md): token/workspace/environment đã kiểm bằng API chỉ đọc; vẫn chưa chạy compute hoặc xác minh CUDA/budget bằng API.
+- [Colab-first runbook](../../docs/akt-colab-synthetic-runbook.md): ưu tiên kiểm CUDA trênColabfree; [local notebook guard proof](../runs/cpu-colab-first-20261107-01/README.md) chỉ8mockcases và1packagingtest, chưa actualremoteGPU.
 - [simulator_collection_runner_20261107.md](simulator_collection_runner_20261107.md): collector Paper2 train-only và role-aware KT windows/collation; fixture engineering, chưa là corpus/full trainer hoặc research benefit.
 - [simulator_data_graph_boundaries_20261107.md](simulator_data_graph_boundaries_20261107.md): split/schema cho dữ liệu mô phỏng và graph-context history scope; fixture kỹ thuật, chưa là CG-AKT efficacy.
 - [simulator_kt_interface_20261107.md](simulator_kt_interface_20261107.md): typed session/query/checkpoint bridge, export fix, frozen inference và independent batching. Đây là engineering evidence, không là CG-AKT efficacy.

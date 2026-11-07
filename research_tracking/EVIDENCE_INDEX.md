@@ -92,3 +92,7 @@ Kitv6 có113source/fixture files, source-only notebook copies và project venv. 
 ## Modal access chỉ đọc07/11 — vận hành, không thí nghiệm RQ
 
 `runs/cpu-modal-access-20261107-01`:5outputs gồm exact read-only probe và sanitized result; API xác nhận profilekltn/workspacehonguyenminhsang2005, environmentmain, builder2026.10, expiry14/11/2026 17:37:38 Asia/Saigon. Không lưu tokenID/secret/raw SDKoutput hoặc privateconfig hash; không compute/image/Volume/settings mutation. Đọc `reports/modal_access_readiness_20261107.md` về những gì API chưa xác minh: credit/spendlimits và actualCUDA/training readiness.
+
+## Colab-first notebook07/11 — local guard evidence
+
+`runs/cpu-colab-first-20261107-01`:8outputs,8mockguardcases và1actualbundlepytest; AST/CPUflag/JUnit/sourcechange guards pass, khôngactualColab/Linux/CUDA. NotebookCPUtimeout600s thay300s để chứa suite hiện tại, GPUprobe400targets/1step khôngđổi. Xem docs/akt-colab-synthetic-runbook.md;v10kit135files vẫnZIP/sourceparity-only. Không coi localguardPASS thànhmid-epochCUDAresume hoặcđượcquyềndùngModalcredits.

@@ -240,7 +240,8 @@
       "authorization_requirements": "SAFE_PREPARATION; CLOUD_APPROVAL_FOR_RUN",
       "status": "PARTIALLY_VERIFIED",
       "blockers": [
-        "Read-only auth/workspace verified; LinuxCUDAimage/lock/runtime-origin and per-run bounded entrypoint/Volume still pending; budget limits userreported not API readback"
+        "Read-only auth/workspace verified; LinuxCUDAimage/lock/runtime-origin and per-run bounded entrypoint/Volume still pending; budget limits userreported not API readback",
+        "Colab-first userpolicy: no Modal genericCUDAdebug before Colab evidence; no automatic paidfallback"
       ],
       "execution_owner": "Codex",
       "verification_evidence": "cpu-modal-client-20261107-01:SDK1.6.3/27newpackages/30existingversionsunchanged/pipcheck;docs/akt-modal-setup.md;cpu-modal-access-20261107-01:workspace/tokenexpiry/defaultenvironment verified without compute",
@@ -431,13 +432,14 @@
       "required_artifacts": "stage1–4 reports, hashes, actual billed telemetry",
       "estimated_effort": "1–2pd +≤60minGPU",
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
-      "compute_cost_category": "GPU bounded",
+      "compute_cost_category": "ColabfreeGPU first; boundedModal-specific revalidation only after reviewedColab evidence",
       "authorization_requirements": "EXPLICIT_CLOUD_AND_DATA_APPROVAL",
       "status": "PLANNED",
       "blockers": [
-        "Auth verified for honguyenminhsang2005; onlyfreecredits30/net0; exactGPUrun allocation, bounded launcher/LinuxCUDAimage and durable artifacts not yet ready"
+        "Colab interactive runtime/evidence not yetavailable;400targetprobe only notCUDAmid-epochresume; Modal-specific image/Volume/launcher stillpending; freecredits-only30/net0"
       ],
-      "execution_owner": "Codex"
+      "execution_owner": "Codex",
+      "verification_evidence": "cpu-colab-first-20261107-01:8localmockguardcases+1bundlepytest; no actual Colab/CUDA execution"
     },
     {
       "id": "T15",
@@ -1603,5 +1605,15 @@
     "cycle_reset_date": null,
     "cycle_reset_description": "Tháng kế theo user; exact day/time unverified",
     "account_details_evidence": "User reply07/11; not dashboard/API verified"
+  },
+  "gpu_execution_priority": {
+    "order": [
+      "local_cpu",
+      "colab_free",
+      "modal"
+    ],
+    "generic_cuda_debug_before_colab_on_modal": false,
+    "automatic_paid_fallback": false,
+    "source": "User07/11 Colab-first instruction"
   }
 }

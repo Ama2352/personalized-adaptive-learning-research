@@ -37,9 +37,11 @@ Trong Usage & Billing, đặt **Workspace usage limit30USD** cho toàn kỳ và 
 
 ## Cách dùng quỹ — đề xuất, chưa là quyền chạy
 
+Ưu tiên user07/11: **kiểm thử CUDA dùng chung trên Colab free trước khi dùng Modal credits**. Gói Colab tại `notebooks/akt_colab_synthetic.ipynb` và [runbook](akt-colab-synthetic-runbook.md). Phần2USD dưới đây chỉ là reserve cho kiểm đặc thù môi trường Modal sau Colab, không là ngân sách mặc định debug CUDA. Chưa có actual Colabrun; không tự chuyển sang Modal khi Colab hếtquota.
+
 | Phần quỹ | Mức tối đa dự kiến |
 |---|---:|
-| CUDA smoke + checkpoint/recovery verification |2USD|
+| Kiểm riêng image/Volume/recovery Modal sau Colab nếu cần |2USD|
 | Throughput/larger bounded benchmark để dự báo cost/target |3USD|
 | Training đã chốt protocol và có forecast nằm trong quỹ còn lại |20USD|
 | Reserve cho startup/storage/failure/usage khác |5USD|
