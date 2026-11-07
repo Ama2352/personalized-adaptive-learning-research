@@ -44,6 +44,14 @@ Kiểm thêm target cap qua resume xác nhận pending batch chưa update không
 
 ## Việc tiếp theo
 
+### Refit recovery và Gate2 mới
+
+`refit_outer_train(..., save_recovery=True, resume_checkpoint=...)` lưu sau mỗi epoch hoàn chỉnh. Snapshot khóa config, learner scope, số epoch đã chọn, encoding và budget. Khôi phục model/Adam/RNG và history, không đọc validation để chọn lại epoch. Mặc định tắt recovery giữ hành vi caller hiện tại. Test actual AKT CPU có dropout ngắt sau epoch1 rồi tiếp tục đủ3epoch khớp weights, Adam, RNG và losses với chạy liên tục. Suite refit/selection/training đạt32passed26.17s.
+
+`scripts/akt/refresh_gate2.py --run-id <unique-id> --publish-current` chỉ dùng project .venv, CPU synthetic suite tests/akt tests/shared_kt, timeout300s. Giữ log và JUnit, từ chối fail/error/skip/zero tests và source/lock thay trong lúc chạy. Lưu báo cáo mới bất biến, lưu pointer cũ trước khi cập nhật pointer hiện hành. Gate2 build identity bổ sung root shared modules, diagnostic scripts và các source/input Paper1/2 mà test suite sử dụng.
+
+Lần20261107-cpu-recovery-01 đạt235passed89.93s, current Gate2 đã được xác minh qua require_gate2_evidence. Đây là software gate CPU. CUDA, successful Task14 và full training acceptance vẫn là bằng chứng riêng. Refit/selection recovery vẫn là Python APIs, chưa được nối qua CLI hoặc gộp với batch recovery.
+
 ### Khôi phục selection sau epoch đã validation
 
 `training.select_checkpoint(..., save_recovery=True)` ghi `inner-recovery-epoch-N.pt` sau mỗi epoch hoàn chỉnh đã validation. Truyền `resume_checkpoint=Path(...)` cùng config, identity và budget để tiếp tục. Snapshot chứa model/Adam/RNG, toàn history, selected epoch và hash của best checkpoint. Early stopping được dựng lại từ history theo đúng thứ tự, kể cả các epoch không cải thiện. Best checkpoint phải còn nguyên cùng thư mục snapshot. Snapshot đã đạt patience trả kết quả mà không train thêm.

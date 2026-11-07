@@ -534,7 +534,9 @@ def select_checkpoint(config: AKTConfig, *, inner_split: InnerSplit,
 
 def refit_outer_train(config: AKTConfig, *, outer_train_users: tuple[str, ...],
                       train_learners_factory: Callable[[], Iterator[LearnerEvents]],
-                      selected_epochs: int, identity: dict, budget: dict | None = None) -> AKTAdapter:
+                      selected_epochs: int, identity: dict, budget: dict | None = None,
+                      save_recovery: bool = False,
+                      resume_checkpoint: Path | None = None) -> AKTAdapter:
     epoch_budget = _bounded_epoch_budget(budget)
     if not 1 <= selected_epochs <= config.max_epochs:
         raise ValueError('invalid refit epoch budget')
@@ -545,7 +547,28 @@ def refit_outer_train(config: AKTConfig, *, outer_train_users: tuple[str, ...],
     optimizer = torch.optim.Adam(adapter.native.parameters(), lr=config.lr, betas=config.betas,
                                  eps=config.eps, weight_decay=config.weight_decay)
     history = []
-    for epoch in range(1, selected_epochs + 1):
+    recovery_identity = {**adapter.run_identity, 'refit_recovery': {
+        'config_sha256': hashlib.sha256(json.dumps(asdict(config), sort_keys=True, default=str).encode()).hexdigest(),
+        'outer_train_users': sorted(outer_train_users), 'selected_epochs': selected_epochs,
+        'budget': epoch_budget}}
+    first_epoch = 1
+    output = _prepare_output(config) if save_recovery else None
+    if resume_checkpoint is not None:
+        if not save_recovery:
+            raise ValueError('refit resume requires recovery snapshots')
+        payload = load_checkpoint(Path(resume_checkpoint), expected_identity=recovery_identity, device=config.device)
+        progress = payload['progress']
+        history = progress.get('history')
+        if (progress.get('role') != 'refit_recovery_v1' or type(progress.get('epoch')) is not int
+                or not 1 <= progress['epoch'] <= selected_epochs or not isinstance(history, list)
+                or len(history) != progress['epoch']
+                or any(entry.get('epoch') != index or entry.get('valid_targets', 0) <= 0
+                       or not math.isfinite(entry.get('loss_sum', math.nan))
+                       for index, entry in enumerate(history, start=1))):
+            raise ValueError('invalid refit recovery history')
+        restore_checkpoint(adapter, optimizer, payload)
+        first_epoch = progress['epoch'] + 1
+    for epoch in range(first_epoch, selected_epochs + 1):
         factory = lambda: _training_windows(train_learners_factory, outer_train_users,
                                             config.outer_fold, encoding, config)
         stats = train_epoch(adapter, factory, optimizer=optimizer, epoch=epoch, budget=epoch_budget)
@@ -554,6 +577,11 @@ def refit_outer_train(config: AKTConfig, *, outer_train_users: tuple[str, ...],
         history.append({'epoch': epoch, 'loss_sum': stats.loss_sum, 'valid_targets': stats.valid_targets,
                         'mean_loss': stats.loss_sum / stats.valid_targets, 'sampler_seed': config.seed + epoch,
                         'optimizer_steps': stats.optimizer_steps, 'resource': stats.resource})
+        if save_recovery:
+            save_checkpoint(output / f'refit-recovery-epoch-{epoch}.pt', adapter, optimizer,
+                            identity=recovery_identity,
+                            progress={'role': 'refit_recovery_v1', 'epoch': epoch,
+                                      'complete': True, 'history': list(history)})
     adapter.optimizer = optimizer
     adapter.training_history = history
     adapter.completed_epochs = selected_epochs
