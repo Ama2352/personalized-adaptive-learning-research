@@ -49,7 +49,11 @@ def preserve_checkpoint(source: Path, destination: Path) -> Path:
     if source.resolve() == destination.resolve():
         return source
     expected = digest_file(source)
-    temp = destination.with_name(destination.name + '.' + uuid.uuid4().hex + '.tmp')
+    if destination.exists():
+        if digest_file(destination) != expected:
+            raise FileExistsError('preserved checkpoint destination differs')
+        return destination
+    temp = destination.with_name('.copy-' + uuid.uuid4().hex + '.tmp')
     try:
         with source.open('rb') as old, temp.open('xb') as new:
             for chunk in iter(lambda: old.read(1024 * 1024), b''):

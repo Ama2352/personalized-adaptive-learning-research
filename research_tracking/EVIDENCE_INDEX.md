@@ -62,3 +62,7 @@ Kitv6 có113source/fixture files, source-only notebook copies và project venv. 
 ## Đối chiếu common population07/11
 
 `runs/cpu-junyi-common-20261107-01`: source/outputs SHA verified, reused all3controls,256learners12575events,2.39s. No correctness/Holdout/train. Interpretation và denominator rules tại `reports/cpu_common_population_20261107.md`.
+
+## AKT recovery source-bound Gate2, cập nhật cuối07/11
+
+`runs/cpu-akt-recovery-20261107-01` archive24outputs: Gate2-07 failure, Gate2-08 success274tests và `lifecycle_proof.json`. Model/Adam/RNG/predictions của2actual CLI synthetic cases khớp exact. Không real-data/GPU. Xem `docs/thesis_recovery/17_AKT_RECOVERY_ENGINEERING_LOG.md`.

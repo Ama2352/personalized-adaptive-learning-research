@@ -15,7 +15,10 @@ def fixture_source(tmp_path):
     identity = {'config_sha256': 'attempt-old', 'build_hashes': {'source.py': 'sha'},
                 'assignments_sha256': 'split-sha', 'source': {'commit': 'pinned'}}
     config = AKTConfig(project_root=tmp_path, output_dir=directory, run_id='old',
-                       max_wall_seconds=100, recovery=RecoveryOptions())
+                       phase='pilot', max_epochs=1, max_train_users=2, max_val_users=1,
+                       max_total_targets=20, max_seconds=30, max_wall_seconds=100,
+                       max_rss_bytes=2*1024**3, min_available_ram_bytes=1024**3,
+                       recovery=RecoveryOptions())
     files = {'manifest.json': {'run_id': 'old', 'status': 'incomplete'},
              'watchdog-resources.json': {'run_id': 'old', 'status': 'failed'}}
     for name, value in files.items():
@@ -24,7 +27,9 @@ def fixture_source(tmp_path):
     reference = {'name': 'snapshot.pt', 'sha256': recovery.digest_file(directory / 'snapshot.pt')}
     (directory / 'recovery-progress.json').write_text(json.dumps({
         'checkpoint': 'snapshot.pt', 'files': [reference]}), encoding='utf-8')
-    approval = {'identity': identity, 'caps': {'max_wall_seconds': 100}}
+    approval = {'identity': identity, 'approval_reference': 'synthetic fixture',
+                'caps': {key:getattr(config,key) for key in ('max_train_users','max_val_users',
+                    'max_total_targets','max_seconds','max_wall_seconds','max_rss_bytes','min_available_ram_bytes')}}
     recovery.publish_envelope(config, authorization=approval, elapsed_seconds=12.5)
     envelope = directory / 'recovery-envelope.json'
     destination = replace(config, run_id='new', output_dir=directory.with_name('new'),
@@ -147,3 +152,29 @@ def test_parent_uses_remaining_wall_allowance(tmp_path, monkeypatch):
     monkeypatch.setattr(watchdog.subprocess, 'Popen', lambda *args, **kwargs: Process())
     assert watchdog.main(['smoke', '--config', 'fixture.json', '--authorization', str(path)]) == 0
     assert seen == [87.5]
+
+
+def test_early_failed_retry_keeps_prefix_and_counts_its_wall_time(tmp_path, monkeypatch):
+    from knowledge_tracing.akt import config as config_module, runner
+    original, config, approval = fixture_source(tmp_path)
+    before = {path.name: recovery.digest_file(path) for path in original.output_dir.iterdir()}
+    monkeypatch.setattr(config_module, 'PROJECT_ROOT', tmp_path)
+    monkeypatch.setattr(runner, '_require_authorization', lambda *args: approval)
+    monkeypatch.setattr(runner, '_require_gate2_evidence', lambda _: {'fixture':True})
+    monkeypatch.setattr(runner, '_check_resource_budget', lambda _: 1)
+    def load(*args, **kwargs):
+        assert kwargs == {'output_reserved':True}
+        raise RuntimeError('synthetic early loader failure')
+    monkeypatch.setattr(runner, '_load_phase_inputs', load)
+    with pytest.raises(RuntimeError, match='early loader'):
+        runner.run_pilot(config, authorization=approval)
+    assert recovery.digest_file(config.output_dir/'snapshot.pt') == recovery.digest_file(original.output_dir/'snapshot.pt')
+    (config.output_dir/'watchdog-resources.json').write_text(json.dumps({
+        'run_id':config.run_id,'status':'failed'}),encoding='utf-8')
+    recovery.publish_envelope(config, authorization=approval, elapsed_seconds=7)
+    path = config.output_dir/'recovery-envelope.json'
+    next_config = replace(config,run_id='next',output_dir=config.output_dir.with_name('next'),
+        recovery=RecoveryOptions(source_envelope=path,source_sha256=recovery.digest_file(path)))
+    value = recovery.validate_source(next_config,current_identity=approval['identity'],caps=approval['caps'])
+    assert value['attempt'] == 2 and value['cumulative_wall_seconds'] == 19.5
+    assert before == {path.name: recovery.digest_file(path) for path in original.output_dir.iterdir()}

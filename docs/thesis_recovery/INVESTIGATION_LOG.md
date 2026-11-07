@@ -105,3 +105,7 @@ Selection/refit dùng cùng train_epoch accounting, cursor/RNG/Adam/early-stoppi
 ## 07/11/2026 — Common-population sensitivity cho Trap3
 
 Kiểm10pure order tests, rồi45GAM tests6.29s. Tái dùng nguyên3controls; đọc lại đúng approved256×300prefix,12575events,2.39s, reproduces original control summaries. Fixed incoming-degree opportunities + equal learner weights, missing/ties riêng;239eligible learners1361opportunities. Prior fraction chỉđổi1/7/1learners, common coverage569/564/566opportunities96/96/95learners. Identitycontrol0. KhôngCI/p-value/causalclaim, khônggraphgeneration/training/Holdout. Artifact bundle và report cpu_common_population_20261107.md.
+
+## 07/11/2026 — Nghiệm thu cuối recovery và lưu bằng chứng
+
+Gate2-07 271pass2fail do Windows long temp path, khôngpublish; sửa short temp names. Review sửa early-failure budget lineage;51parent/runner pass14.68s. Gate2-08 final274pass0fail/error/skip217.71s, source/lock/upstream stable, pointerverified. Archive cpu-akt-recovery-20261107-01 có24outputs và exact model/Adam/RNG/prediction proof cho2CLI cases. V7 kit120files SHA018888bbee3718f0c9ce9222ae079315aefca67d176e4d2be8ec49d78f69c9cc verified ZIP only. REC01–06/CPU11 complete trong phạm vi CPU synthetic; khôngreal-data AKT/GPU/Holdout. RQ1/2 PARTIAL, RQ3 chưatraining/evaluation. Next: simulator/mastery interface and confirmatory protocol, remote lifecycle when runtime ready.

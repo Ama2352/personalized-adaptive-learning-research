@@ -44,3 +44,15 @@
 |Adversarial consistency |PASS review, NOT READY execution |Current contradictions become blockers, no auto training |
 
 Biggest unresolved issue là simulator integration contract và adequacy của generated data/mastery decision, vì dù Junyi AKT train thành công vẫn chưa có closed-loop evidence RQ3. Source Paper1 missing revision hạn chế reproduction, GPU filesystem/resume là execution blockers. Kết luận **NOT READY** cho full experiment. Safe engineering batch có thể review và triển khai sau chỉ thị tiếp theo. Không declare convergence từ file existence.
+
+## Cập nhật sau engineering CPU ngày07/11
+
+Các dòng implementation-readiness phía trên là verdict của audit ban đầu. Recovery mid-epoch, selection/refit và public smoke/pilot đã được nối, có actual AKT CPU dropout parity và subprocess export proof; xem17_AKT_RECOVERY_ENGINEERING_LOG.md. CUDA/real-data acceptance vẫn chưa có. Gate2-07 phát hiện Windows long temporary path (271pass2fail), giữ log và không publish; đã sửa tên tạm, kiểm parent/runner51pass và chạy Gate2-08 cho source cuối. Không coi targeted pass là full Gate2 pass trước output.
+
+Review bổ sung đã sửa thất thoát budget lineage khi retry fail trước checkpoint mới: attempt reserve/copy verified pointer trước loader, test chain12.5+7=19.5s. Commit-count là prefix model đã publish; hard kill có thể mất update sau snapshot, cần báo rollback và đo I/O/cadence trước GPU. Tổng wall worker được cộng kể cả import/load/validation/export của failed attempts. Run mới vẫn authorization riêng; không tự tạo retry loop hoặc dùng envelope để tự approve. Global cloud allocation còn cần ledger/limits trước paid execution, không suy hard spending cap từ CPU watchdog.
+
+Trap3 thêm diagnostic trên cùng learner/child opportunities, không thay final protocol. Phản biện “matched degree đã đủ” bị bác bởi missing-parent và exposure counts: chỉ1–7/239learners đổi prior score, intersection96/96/95learners. Kết quả0 không là equivalence/graph-neutral proof. Common subsets khác giữa controls, không xếp hạng hoặc pool chúng như cùng estimand. Không dùng logs để claim instructional causality.
+
+Biggest research blocker vẫn là accepted Junyi/simulator mastery/training contract và confirmatory protocol. Hoàn tất engineering recovery không hoàn tất RQ3; RQ1/RQ2 diagnostic evidence không tự hoàn tất research questions. Các baseline/deliverable bắt buộc trong proposal vẫn giữ. Full CV, Holdout, CUDA và thay scientific methodology vẫn cần đúng gate; phần safe CPU được user cho phép tiếp tục.
+
+Nghiệm thu sau review: Gate2-08 274passed, nofail/error/skip, source-bound pointerverified. Hai lỗi mới đã có regression tests và artifact proof trong cpu-akt-recovery-20261107-01. Software readiness CPU đã cập nhật; research/GPU readiness không nâng theo.

@@ -1,0 +1,173 @@
+.............FF......................................................... [ 26%]
+........................................................................ [ 52%]
+........................................................................ [ 79%]
+.........................................................                [100%]
+================================== FAILURES ===================================
+__ test_actual_cli_fresh_attempt_recovery_and_prediction_export[batch-exit] ___
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-20261107-cli-recovery-07-e21d109a188e472cba547a1067b3d7bd/test_actual_cli_fresh_attempt_0')
+boundary = 'batch-exit'
+
+    @pytest.mark.parametrize('boundary', ['batch-exit', 'export'])
+    def test_actual_cli_fresh_attempt_recovery_and_prediction_export(tmp_path, boundary):
+        root = tmp_path / 'project'
+        root.mkdir()
+        template = load_config(PROJECT_ROOT / 'experiments/akt/configs/smoke.json')
+        config = replace(template, project_root=root, execution_enabled=True, run_id='continuous',
+            output_dir=root / 'experiments/akt/results/continuous', recovery=RecoveryOptions(),
+            dropout=.2, batch_size=2, max_steps=3, max_seconds=60, max_wall_seconds=180)
+        result = launch(config, tmp_path / 'continuous-cli')
+>       assert result.returncode == 0, result.stderr
+E       AssertionError: {"event": "watchdog-before-worker-spawn", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 28116, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "watchdog-after-worker-spawn", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 28116, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592, "worker_pid": 33212}
+E         {"elapsed_seconds": 15.226054099999601, "event": "watchdog-after-worker-exit", "phase": "smoke", "pid": 28116, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592, "worker_pid": 33212, "worker_returncode": 1}
+E         {"event": "worker-before-runtime-import", "phase": "smoke", "pid": 21024, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "worker-after-runtime-import", "phase": "smoke", "pid": 21024, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "worker-before-data-load", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 21024, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "worker-before-data-load", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 21024, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         Traceback (most recent call last):
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 80, in <module>
+E             raise SystemExit(main())
+E                              ~~~~^^
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 76, in main
+E             return watchdog.main(sys.argv[1:])
+E                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\watchdog.py", line 94, in main
+E             return _worker_main(argv[1:])
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\runner.py", line 754, in _worker_main
+E             result = (run_smoke(config, authorization=authorization, _invocation=invocation) if phase == 'smoke'
+E                       ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\runner.py", line 614, in run_smoke
+E             return _run_phase(config, authorization, pilot=False, invocation=_invocation)
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\runner.py", line 397, in _run_phase
+E             selection = select_checkpoint(
+E                 config, inner_split=split, train_learners_factory=lambda: iter(train_data),
+E             ...<11 lines>...
+E                                          if recovery_source else None}
+E                    if config.recovery is not None else {}))
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\training.py", line 594, in select_checkpoint
+E             stats = train_epoch(adapter, factory, **train_kwargs)
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\training.py", line 321, in train_epoch
+E             if len(pending) >= adapter.config.batch_size and not flush():
+E                                                                  ~~~~~^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\training.py", line 301, in flush
+E             save_batch()
+E             ~~~~~~~~~~^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\training.py", line 200, in save_batch
+E             save_recovery_checkpoint(path, adapter, optimizer, identity=recovery['identity'], resume_state=committed_state)
+E             ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\checkpoint.py", line 121, in save_recovery_checkpoint
+E             _save_payload(path, adapter, optimizer, identity=identity,
+E             ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                           progress={'complete': False, 'epoch': resume_state['epoch']},
+E                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                           resume_state=resume_state)
+E                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\checkpoint.py", line 45, in _save_payload
+E             with temp.open('xb') as stream:
+E                  ~~~~~~~~~^^^^^^
+E           File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py", line 537, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-cli-recovery-07-e21d109a188e472cba547a1067b3d7bd\\test_actual_cli_fresh_attempt_0\\project\\experiments\\akt\\results\\continuous\\inner-batch-epoch-1-step-1-e1f9b574c0e14466b0f33676ffd12c89.pt.fedd6a84dac64cc9842d89954fcb7438.tmp'
+E         Traceback (most recent call last):
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 80, in <module>
+E             raise SystemExit(main())
+E                              ~~~~^^
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 76, in main
+E             return watchdog.main(sys.argv[1:])
+E                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\watchdog.py", line 190, in main
+E             raise RuntimeError(f'AKT child process failed with exit code {returncode}')
+E         RuntimeError: AKT child process failed with exit code 1
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe', 'D:\\Dev\\KLTN\\tests\\akt\\cli_recovery_fixture.p...f\'AKT child process failed with exit code {returncode}\')\nRuntimeError: AKT child process failed with exit code 1\n').returncode
+
+tests\akt\test_cli_recovery.py:58: AssertionError
+____ test_actual_cli_fresh_attempt_recovery_and_prediction_export[export] _____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-20261107-cli-recovery-07-e21d109a188e472cba547a1067b3d7bd/test_actual_cli_fresh_attempt_1')
+boundary = 'export'
+
+    @pytest.mark.parametrize('boundary', ['batch-exit', 'export'])
+    def test_actual_cli_fresh_attempt_recovery_and_prediction_export(tmp_path, boundary):
+        root = tmp_path / 'project'
+        root.mkdir()
+        template = load_config(PROJECT_ROOT / 'experiments/akt/configs/smoke.json')
+        config = replace(template, project_root=root, execution_enabled=True, run_id='continuous',
+            output_dir=root / 'experiments/akt/results/continuous', recovery=RecoveryOptions(),
+            dropout=.2, batch_size=2, max_steps=3, max_seconds=60, max_wall_seconds=180)
+        result = launch(config, tmp_path / 'continuous-cli')
+>       assert result.returncode == 0, result.stderr
+E       AssertionError: {"event": "watchdog-before-worker-spawn", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 26408, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "watchdog-after-worker-spawn", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 26408, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592, "worker_pid": 31988}
+E         {"elapsed_seconds": 23.723593500006245, "event": "watchdog-after-worker-exit", "phase": "smoke", "pid": 26408, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592, "worker_pid": 31988, "worker_returncode": 1}
+E         {"event": "worker-before-runtime-import", "phase": "smoke", "pid": 7812, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "worker-after-runtime-import", "phase": "smoke", "pid": 7812, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "worker-before-data-load", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 7812, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "worker-before-data-load", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 7812, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         Traceback (most recent call last):
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 80, in <module>
+E             raise SystemExit(main())
+E                              ~~~~^^
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 76, in main
+E             return watchdog.main(sys.argv[1:])
+E                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\watchdog.py", line 94, in main
+E             return _worker_main(argv[1:])
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\runner.py", line 754, in _worker_main
+E             result = (run_smoke(config, authorization=authorization, _invocation=invocation) if phase == 'smoke'
+E                       ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\runner.py", line 614, in run_smoke
+E             return _run_phase(config, authorization, pilot=False, invocation=_invocation)
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\runner.py", line 397, in _run_phase
+E             selection = select_checkpoint(
+E                 config, inner_split=split, train_learners_factory=lambda: iter(train_data),
+E             ...<11 lines>...
+E                                          if recovery_source else None}
+E                    if config.recovery is not None else {}))
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\training.py", line 594, in select_checkpoint
+E             stats = train_epoch(adapter, factory, **train_kwargs)
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\training.py", line 321, in train_epoch
+E             if len(pending) >= adapter.config.batch_size and not flush():
+E                                                                  ~~~~~^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\training.py", line 301, in flush
+E             save_batch()
+E             ~~~~~~~~~~^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\training.py", line 200, in save_batch
+E             save_recovery_checkpoint(path, adapter, optimizer, identity=recovery['identity'], resume_state=committed_state)
+E             ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\checkpoint.py", line 121, in save_recovery_checkpoint
+E             _save_payload(path, adapter, optimizer, identity=identity,
+E             ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                           progress={'complete': False, 'epoch': resume_state['epoch']},
+E                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                           resume_state=resume_state)
+E                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\checkpoint.py", line 45, in _save_payload
+E             with temp.open('xb') as stream:
+E                  ~~~~~~~~~^^^^^^
+E           File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py", line 537, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-cli-recovery-07-e21d109a188e472cba547a1067b3d7bd\\test_actual_cli_fresh_attempt_1\\project\\experiments\\akt\\results\\continuous\\inner-batch-epoch-1-step-1-9214ff8bdffc4afb9d9d1ea52c70077c.pt.4c96d02cf4bf4b86bad259b55a328d0e.tmp'
+E         Traceback (most recent call last):
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 80, in <module>
+E             raise SystemExit(main())
+E                              ~~~~^^
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 76, in main
+E             return watchdog.main(sys.argv[1:])
+E                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\watchdog.py", line 190, in main
+E             raise RuntimeError(f'AKT child process failed with exit code {returncode}')
+E         RuntimeError: AKT child process failed with exit code 1
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe', 'D:\\Dev\\KLTN\\tests\\akt\\cli_recovery_fixture.p...f\'AKT child process failed with exit code {returncode}\')\nRuntimeError: AKT child process failed with exit code 1\n').returncode
+
+tests\akt\test_cli_recovery.py:58: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_cli_recovery.py::test_actual_cli_fresh_attempt_recovery_and_prediction_export[batch-exit]
+FAILED tests/akt/test_cli_recovery.py::test_actual_cli_fresh_attempt_recovery_and_prediction_export[export]
+2 failed, 271 passed in 195.29s (0:03:15)

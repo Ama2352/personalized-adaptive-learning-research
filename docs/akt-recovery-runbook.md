@@ -42,4 +42,6 @@ Wall cap là tổng thời gian worker của cả chuỗi attempt; hết tổng 
 
 ## Bằng chứng hiện tại
 
-Xem `docs/thesis_recovery/17_AKT_RECOVERY_ENGINEERING_LOG.md`: actual CPU AKT dropout parity và CLI parent/worker synthetic fixture. Chưa có CUDA/Modal hoặc successful real-data pilot cho build recovery mới. Colab kit v6 là snapshot trước thay đổi này; phải build kit mới trước khi dùng để kiểm recovery.
+Xem `docs/thesis_recovery/17_AKT_RECOVERY_ENGINEERING_LOG.md`: actual CPU AKT dropout parity và CLI parent/worker synthetic fixture. Chưa có CUDA/Modal hoặc successful real-data pilot cho build recovery mới. Colab kit v7 đã build120files với recovery source mới; vẫn cần runtime smoke trên Colab, không gán kết quả isolated kitv6 cho v7.
+
+Attempt khôi phục reserve trước loader và giữ pointer từ source. Vì vậy lỗi trước update mới vẫn có thể công bố envelope với cumulative wall time mới. Worker stdout/stderr nằm trong run directory; manifest/watchdog/pointer/envelope là các vai trò khác nhau, không sửa file cũ để reset counters. Nếu worker chưa từng có committed snapshot, không có checkpoint hợp lệ để resume; cần phân loại lỗi và duyệt lại allocation trước rerun.

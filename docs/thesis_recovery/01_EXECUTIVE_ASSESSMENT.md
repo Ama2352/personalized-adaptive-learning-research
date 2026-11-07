@@ -36,3 +36,21 @@ AKT local CPU, lỗi progress I/O, thiếu pretrained checkpoint xác minh, chec
 Kết quả graph-off hoặc delta âm đều chấp nhận nếu implementation, controls, coverage và CI đúng. Không có ý nghĩa thống kê chưa chứng minh tương đương. RQ3 cần phương pháp được kiểm tra đầy đủ, không đòi ép thắng. BKT lịch sử giữ nguyên với limitation selection bias. Thực nghiệm mới phải đóng băng primary estimand, multiplicity, split và gate trước execution.
 
 Fresh runtime verification06/11 ghi161passed15failed sau retry có kiểm soát. Failures liên quan checkpoint/export hard-link publish và stale GAM notebook path, chi tiết03 và evidence/synthetic_tests_retry.log. Historical Gate2 164pass05/11 vẫn nguyên và build hashes khớp, current environment chưa green. Đây là blocker T07 trước GPU.
+
+## Dashboard cập nhật sau engineering07/11
+
+Những nhận định lỗi I/O, untracked source và chưađượcphépcommit ở phần đầu là snapshot audit trước user authorization. User sauđó cho phép CPU loop/commit; gói mới giữ nguyên source/result lịch sử.
+
+| Hạng mục | Trạng thái hiện hành | Nghiệm thu/thiếu hụt |
+|---|---|---|
+| Tổng thể KLTN | Chưa sẵn sàng full research execution | Scientific protocol và simulator/mastery contract còn cần chốt |
+| RQ1 | PARTIAL | Source diagnostics và decision chain có evidence; chưaconfirmatory inference |
+| RQ2 | PARTIAL | Ba trap có pilot/controls; common-population analysis cho thấy weak exposure |
+| RQ3 | Chưa có kết quả nghiên cứu | AKT CPU engineering verified; fixed/CG-AKT chưatraining/evaluation |
+| Model engineering | Một phần verified | BKT/GAM historical baseline giữ; AKT recovery Gate2-08 274pass; required SAKT/GKT vẫn chưa triển khai trong audit |
+| Simulator | Source reuse/diagnostics verified có giới hạn | Paper1 revision/PDF discrepancy và integration/mastery contract còn mở |
+| GPU | Chưaverified | KhôngCUDA/Modal execution; kitv7 ZIP120files integrity-only |
+| Evidence | Curated/verified cho các bounded runs | Không dùng software/pilot pass để claim learning benefit |
+| Demo/viết thesis | Chưa nghiệm thu sản phẩm/bản thảo hoàn chỉnh | Audit03 và proposal deliverables vẫn áp dụng; report modules có thể trích dẫn |
+
+Critical path kế tiếp: chốt simulator training/mastery + primary estimands → implement/test minimal graph variants → bounded CUDA lifecycle/throughput → approved train/evaluate → analysis/writing/demo. Graph-control null không là equivalence; Junyi predictive benchmark không thay Grade10closed-loop evidence. Chi tiết recovery ở17, common-population ởresearch_tracking/reports/cpu_common_population_20261107.md.

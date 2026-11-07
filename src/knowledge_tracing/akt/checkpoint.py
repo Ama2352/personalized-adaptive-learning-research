@@ -40,7 +40,8 @@ def _save_payload(path, adapter, optimizer, *, identity, progress, resume_state=
     if resume_state is not None:
         payload['checkpoint_kind'] = 'training_recovery_v1'
         payload['resume_state'] = resume_state
-    temp = path.with_name(path.name + '.' + uuid.uuid4().hex + '.tmp')
+    # Không nhân đôi basename dài: nested run paths trên Windows có thể vượt MAX_PATH.
+    temp = path.with_name('.akt-' + uuid.uuid4().hex + '.tmp')
     try:
         with temp.open('xb') as stream:
             torch.save(payload, stream)

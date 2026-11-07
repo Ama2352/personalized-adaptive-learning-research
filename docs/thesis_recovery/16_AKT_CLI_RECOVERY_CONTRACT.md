@@ -1,5 +1,7 @@
 # Contract tích hợp recovery vào CLI AKT
 
+**Cập nhật triển khai07/11:** REC01–REC06 đã có source và kiểm synthetic CPU. Nhật ký hiện hành tại `17_AKT_RECOVERY_ENGINEERING_LOG.md`, runbook tại `../akt-recovery-runbook.md`. Đoạn dưới giữ bản thiết kế ban đầu để truy vết; acceptance trên CUDA/real-data không được suy ra từ CPU fixture.
+
 Ngày07/11/2026. Engineering design cho bước tiếp theo, chưa là chức năng CLI đã triển khai. Không thay protocol, hyperparameters hoặc cấp quyền full fold/GPU.
 
 ## Hiện có và khoảng trống

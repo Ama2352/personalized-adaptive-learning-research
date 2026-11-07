@@ -58,3 +58,7 @@ Kitv6 có113source/fixture files, source-only notebook copies và project venv. 
 ## Recovery CLI và common-population07/11, cập nhật mới
 
 AKT public smoke/pilot recovery đã nối và kiểm trên actual CPU model/parent-worker synthetic fixture; chưa real-data/GPU. Xem `docs/thesis_recovery/17_AKT_RECOVERY_ENGINEERING_LOG.md`. RQ2 có descriptive learner/common-opportunity analysis tái dùng3controls, chưa confirmatory protocol; xem `reports/cpu_common_population_20261107.md`. RQ1/RQ2 còn PARTIAL, RQ3 chưa trained/evaluated. Các Gate2 số test ở mục trước là snapshot lịch sử, build mới cần refresh.
+
+### Nghiệm thu engineering cuối07/11
+
+REC01–REC06 và CPU11 completed **CPU synthetic only**. Source-bound Gate2-08 đạt274pass, pointerverified; GAM riêng45pass. HaiCLI cases có artifact-level exact model/Adam/RNG/prediction proof,85targets/3steps/9predictions/case. Source Paper1/2 và historical results giữ nguyên. RQ1/RQ2 vẫn PARTIAL; fixed/CG-AKT, required comparators và controlled final experiments chưa được hoàn tất từ software tests. Kitv7 mới chỉ ZIP integrity, chưaactualColab/CUDA.

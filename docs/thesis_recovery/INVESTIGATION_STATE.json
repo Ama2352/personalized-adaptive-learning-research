@@ -9,7 +9,7 @@
     3,
     4
   ],
-  "planning_verdict": "NOT READY",
+  "planning_verdict": "NOT READY FOR FULL RESEARCH EXECUTION",
   "safe_engineering_design": "REVIEWABLE",
   "expensive_execution_authorized": false,
   "completed_investigations": [
@@ -292,12 +292,15 @@
     "recovery_backlog": "REC01–REC06 in TASKS.json,42task dependency DAG verified"
   },
   "recovery_engineering_20261107": {
-    "stage": "CLI_SYNTHETIC_VERIFIED_PENDING_GATE2",
-    "tests": "94 regression + 2 CLI + 16 snapshot tests passed",
+    "stage": "COMPLETED_CPU_SYNTHETIC",
+    "tests": "Final Gate2-08:274passed0failed0errors0skipped; GAM separate45passed",
     "log": "evidence/20261107-recovery-schema-02.log",
-    "cli_recovery_ready": "CPU_SYNTHETIC_ONLY",
-    "next": "Refresh source-bound Gate2; common-population Junyi diagnostics; no real-data AKT/GPU",
-    "gate2_current_build": "STALE_AFTER_SOURCE_CHANGE"
+    "cli_recovery_ready": "VERIFIED_CPU_SYNTHETIC_ONLY",
+    "next": "Accepted simulator/mastery and confirmatory contracts; Colab/GPU lifecycle when runtime available",
+    "gate2_current_build": "PASS_20261107-cli-recovery-08",
+    "evidence_bundle": "research_tracking/runs/cpu-akt-recovery-20261107-01",
+    "gate2_report_sha256": "51e5367ab41724e01336943df207b1fc6364f5db826b3d5bb65447c0e1984e9f",
+    "gpu_executed": false
   },
   "common_population_diagnostic_20261107": {
     "run_id": "cpu-junyi-common-20261107-01",
@@ -311,5 +314,17 @@
       1
     ],
     "critical_limit": "Weak exposure; common populations differ across controls; no causal/instructional conclusion"
-  }
+  },
+  "portable_bundle_latest": {
+    "path": "artifacts/akt/colab/akt-synthetic-20261107-v7.zip",
+    "files": 120,
+    "sha256": "018888bbee3718f0c9ce9222ae079315aefca67d176e4d2be8ec49d78f69c9cc",
+    "verification": "ZIP_INTEGRITY_ONLY; main source Gate2 verified separately; v7 isolated/Colab/CUDA not executed"
+  },
+  "next_bounded_engineering_batch": [
+    "Read current state and completed REC evidence before work",
+    "Prepare testable simulator training/mastery interface against draft architecture; preserve historical source",
+    "Register confirmatory estimands and coverage/perturbation exposure for supervisor decision",
+    "Verify v7 CPU/CUDA on actually connected runtime, no cloud spending without allocation"
+  ]
 }

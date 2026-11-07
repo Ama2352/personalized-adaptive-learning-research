@@ -16,6 +16,19 @@ from .resources import memory_snapshot
 from .recovery import validate_source, publish_envelope
 
 
+def _persist_worker_logs(config, stdout, stderr):
+    output = config.output_dir.resolve()
+    if output.parent != (config.project_root / 'experiments/akt/results').resolve() or output.name != config.run_id:
+        raise ValueError('unsafe worker log path')
+    if not output.is_dir():
+        return
+    for name, payload in (('worker-stdout.log', stdout), ('worker-stderr.log', stderr)):
+        with (output / name).open('x', encoding='utf-8', newline='\n') as stream:
+            stream.write(payload or '')
+            stream.flush()
+            os.fsync(stream.fileno())
+
+
 def _emit_memory_event(event: str, phase: str, run_id: str, *, snapshot: dict | None = None,
                       **extra) -> dict:
     payload = {'event': event, 'phase': phase, 'run_id': run_id,
@@ -160,6 +173,7 @@ def main(argv: list[str] | None = None) -> int:
         _write_captured(stdout, sys.stdout)
         _write_captured(stderr, sys.stderr)
         elapsed = time.perf_counter() - started
+        _persist_worker_logs(config, stdout, stderr)
         emit('watchdog-timeout', elapsed_seconds=elapsed, timeout_seconds=timeout,
              worker_pid=process.pid)
         _persist_parent_resources(config, parent_events, status='incomplete',
@@ -169,6 +183,7 @@ def main(argv: list[str] | None = None) -> int:
         raise TimeoutError('smoke/pilot watchdog stopped the child before a complete result') from exc
     returncode = process.wait()
     elapsed = time.perf_counter() - started
+    _persist_worker_logs(config, stdout, stderr)
     emit('watchdog-after-worker-exit', elapsed_seconds=elapsed,
          worker_returncode=returncode, worker_pid=process.pid)
     status = 'failed' if returncode else 'completed'

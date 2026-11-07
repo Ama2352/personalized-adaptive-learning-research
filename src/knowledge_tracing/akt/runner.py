@@ -30,7 +30,7 @@ from .model import AKTAdapter
 from .prediction import export_predictions, iter_predictions, order_prediction_learners
 from .provenance import sha256_file
 from .resources import memory_snapshot
-from .recovery import validate_source, semantic_hash, digest_file
+from .recovery import validate_source, semantic_hash, digest_file, preserve_checkpoint
 from .splits import InnerSplit, make_inner_split
 from .training import _check_resource_budget, _encoding_hash, refit_outer_train, select_checkpoint
 from .types import LearnerEvents
@@ -329,16 +329,24 @@ def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
         sample['phase'] = phase
         resource_samples.append(sample)
 
-    if pilot:
+    output_reserved = pilot or config.recovery is not None
+    if output_reserved:
         config.output_dir.mkdir(parents=True, exist_ok=False)
         _mark_manifest(config, identity, 'incomplete', started_at=time.time(),
                        stop_reason='run_in_progress', requested_outer_users=False, **audit)
     try:
+        if recovery_source is not None:
+            # Kế thừa prefix trước data load: failure không có update mới vẫn ghi đủ attempt wall time.
+            for item in recovery_source['files']:
+                preserve_checkpoint(config.recovery.source_envelope.parent / item['name'],
+                                    config.output_dir / item['name'])
+            _write_json(config.output_dir / 'recovery-progress.json', {
+                'checkpoint': recovery_source['checkpoint'], 'files': recovery_source['files']})
         _emit_memory_event('worker-before-data-load', config.phase, config.run_id,
                            max_rss_bytes=caps['max_rss_bytes'],
                            min_available_ram_bytes=caps['min_available_ram_bytes'])
         record_resource(phase='before_data_load')
-        loaded = (_load_phase_inputs(config, output_reserved=True) if pilot
+        loaded = (_load_phase_inputs(config, output_reserved=True) if output_reserved
                   else _load_phase_inputs(config))
         identity, split, train_data, val_data = loaded[:4]
         if config.recovery is not None:
@@ -363,7 +371,7 @@ def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
             'selected_validation_targets': sum(len(user.events) for user in val_data),
         }
         record_resource(phase='after_data_load')
-        if not pilot:
+        if not output_reserved:
             config.output_dir.mkdir(parents=True, exist_ok=False)
         cohort = {'train_users': len(train_data), 'validation_users': len(val_data),
                   'train_targets_selected': sum(len(user.events) for user in train_data),
