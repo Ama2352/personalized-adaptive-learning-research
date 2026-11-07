@@ -110,6 +110,12 @@ def train_resumable_epoch(adapter, optimizer, windows_factory, *, epoch: int,
         if steps % checkpoint_every_steps == 0:
             save_progress()
         _check_resource_budget(resource_budget or {})
+    if steps == max_steps and stop_reason == 'step_budget':
+        try:
+            cursor.peek()
+        except StopIteration:
+            complete = True
+            stop_reason = 'epoch_complete'
     if steps > saved_steps:
         save_progress()
     if complete and not valid_targets:

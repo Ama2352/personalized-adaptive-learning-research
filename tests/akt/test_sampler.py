@@ -53,3 +53,12 @@ def test_resume_rejects_changed_prefix_and_identity():
     with pytest.raises(ValueError, match='exceeds'):
         ReplayableWindowCursor(make, seed=43, stream_identity='fixture', buffer_size=1,
                                state={**state, 'consumed_windows': 999})
+def test_peek_does_not_commit_or_skip_window():
+    cursor = ReplayableWindowCursor(factory(), seed=43, stream_identity='fixture')
+    before = cursor.state_dict()
+    item = cursor.peek()
+    assert cursor.peek() is item
+    assert cursor.state_dict() == before
+    assert next(cursor) is item
+    assert cursor.state_dict()['consumed_windows'] == 1
+

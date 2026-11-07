@@ -53,6 +53,7 @@ class ReplayableWindowCursor:
         self.consumed = 0
         self.digest = hashlib.sha256(b'akt-window-prefix-v1').digest()
         self.iterator = iter(iter_shuffled_windows(factory, seed=seed, buffer_size=buffer_size))
+        self.pending = None
         if state is not None:
             if (state.get('schema_version') != 1 or state.get('seed') != seed
                     or state.get('stream_identity') != stream_identity or state.get('buffer_size') != buffer_size
@@ -70,10 +71,17 @@ class ReplayableWindowCursor:
         return self
 
     def __next__(self):
-        entry = next(self.iterator)
+        entry = self.peek()
+        self.pending = None
         self.digest = hashlib.sha256(self.digest + _window_digest(entry)).digest()
         self.consumed += 1
         return entry
+
+    def peek(self):
+        """Nhìn window tiếp theo mà không commit cursor hoặc prefix digest."""
+        if self.pending is None:
+            self.pending = next(self.iterator)
+        return self.pending
 
     def state_dict(self):
         return {'schema_version': 1, 'seed': self.seed, 'stream_identity': self.stream_identity,

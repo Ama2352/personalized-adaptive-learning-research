@@ -98,3 +98,18 @@ def test_checkpoint_cadence_flushes_last_step_on_bounded_stop(tmp_path, monkeypa
         checkpoint_every_steps=2, checkpoint_callback=lambda path, state: checkpoints.append(state['optimizer_steps']))
     assert result['stop_reason'] == 'step_budget'
     assert checkpoints == [2, 3]
+
+
+def test_epoch_finishes_when_step_cap_equals_exact_required_updates(tmp_path, monkeypatch):
+    monkeypatch.setattr(module, 'PROJECT_ROOT', tmp_path)
+    model, optimizer, factory = setup()
+    args = dict(epoch=1, stream_identity='fixed', identity={},
+                checkpoint_dir=tmp_path/'experiments/akt/results/run',max_steps=5,max_seconds=60)
+    result = train_resumable_epoch(model, optimizer, factory, **args)
+    assert result['complete'] and result['stop_reason'] == 'epoch_complete'
+    assert result['optimizer_steps'] == 5 and result['valid_targets'] == 17
+    clone, opt, factory = setup()
+    resumed = train_resumable_epoch(clone,opt,factory,**args,
+                                   resume_checkpoint=args['checkpoint_dir']/'recovery-epoch-1-step-5.pt')
+    assert resumed['complete'] and resumed['optimizer_steps'] == 5
+    assert all(torch.equal(p,q) for p,q in zip(model.native.parameters(),clone.native.parameters()))
