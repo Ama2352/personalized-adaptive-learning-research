@@ -30,6 +30,7 @@ from .model import AKTAdapter
 from .prediction import export_predictions, iter_predictions, order_prediction_learners
 from .provenance import sha256_file
 from .resources import memory_snapshot
+from .recovery import validate_source, semantic_hash, digest_file
 from .splits import InnerSplit, make_inner_split
 from .training import _check_resource_budget, _encoding_hash, refit_outer_train, select_checkpoint
 from .types import LearnerEvents
@@ -297,6 +298,8 @@ def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
     # cohort selection and loading as well as the optimizer/watchdog.
     config = replace(config, **caps)
     validate_config(config)
+    recovery_source = (validate_source(config, current_identity=approved['identity'], caps=caps)
+                       if config.recovery is not None else None)
     expected_phase = 'pilot' if pilot else 'smoke'
     if config.phase != expected_phase:
         raise ValueError(f'{expected_phase} runner requires phase={expected_phase}')
@@ -311,7 +314,11 @@ def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
     audit = {'invocation': invocation or {'kind': 'python-api', 'phase': expected_phase},
              'authorization_reference': approved['approval_reference'],
              'authorized_config_sha256': approved.get('config_sha256'), 'approved_caps': caps,
-             'attempt': 1, 'retry_history': [],
+             'attempt': (recovery_source['attempt'] if recovery_source else 0) + 1,
+             'retry_history': ([{'source_run_id': recovery_source['source_run_id'],
+                                'envelope_sha256': config.recovery.source_sha256,
+                                'cumulative_wall_seconds': recovery_source['cumulative_wall_seconds']}]
+                               if recovery_source else []),
              'gate_records': {'gate1': {'status': 'verified'}, 'gate2': gate2}}
     identity: dict = approved.get('identity', {})
     resource_samples: list[dict] = []
@@ -334,6 +341,19 @@ def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
         loaded = (_load_phase_inputs(config, output_reserved=True) if pilot
                   else _load_phase_inputs(config))
         identity, split, train_data, val_data = loaded[:4]
+        if config.recovery is not None:
+            # Loader timings thuộc telemetry, không phải training identity.
+            identity.pop('loader_highwater', None)
+            identity['config_sha256'] = semantic_hash(config)
+            identity['build_hashes'] = approved['identity']['build_hashes']
+            digest = hashlib.sha256()
+            for side, learners in (('train', train_data), ('validation', val_data)):
+                digest.update(side.encode())
+                for learner in learners:
+                    digest.update(json.dumps(asdict(learner), sort_keys=True, default=str,
+                                             separators=(',', ':')).encode())
+                    digest.update(b'\n')
+            identity['cohort_content_sha256'] = digest.hexdigest()
         load_observations = loaded[4] if len(loaded) > 4 else {
             'selected_train_learners': len(train_data),
             'selected_validation_learners': len(val_data),
@@ -368,6 +388,12 @@ def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
                     'worker_resources': _resource_summary(resource_samples),
                 })
 
+        def record_checkpoint(path: Path, best: Path | None) -> None:
+            files = [path] + ([best] if best is not None else [])
+            _write_json(config.output_dir / 'recovery-progress.json', {
+                'checkpoint': path.name,
+                'files': [{'name': item.name, 'sha256': digest_file(item)} for item in files]})
+
         selection = select_checkpoint(
             config, inner_split=split, train_learners_factory=lambda: iter(train_data),
             val_learners_factory=lambda: iter(val_data), identity=identity,
@@ -378,7 +404,11 @@ def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
                     'phase': config.phase, 'run_id': config.run_id},
             **({'progress_callback': record_training_progress,
                 'resource_callback': lambda snapshot: record_resource(snapshot, phase='resource_guard')}
-               if pilot else {}))
+               if pilot else {}),
+            **({'save_recovery': True, 'checkpoint_callback': record_checkpoint,
+                'resume_checkpoint': config.recovery.source_envelope.parent / recovery_source['checkpoint']
+                                     if recovery_source else None}
+               if config.recovery is not None else {}))
         record_resource(phase='after_selection_and_validation')
         if time.perf_counter() - started > caps['max_wall_seconds']:
             raise TimeoutError('phase wall-clock cap exceeded')

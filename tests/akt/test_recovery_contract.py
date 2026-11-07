@@ -111,3 +111,39 @@ def test_symlink_reference_cannot_escape_run(tmp_path):
     config = replace(config, recovery=replace(config.recovery, source_sha256=recovery.digest_file(envelope)))
     with pytest.raises(ValueError, match='file name'):
         recovery.validate_source(config, current_identity=approval['identity'], caps=approval['caps'])
+
+
+def test_exhausted_wall_budget_blocks_another_attempt(tmp_path):
+    _, config, approval = fixture_source(tmp_path)
+    path = config.recovery.source_envelope
+    value = json.loads(path.read_text(encoding='utf-8'))
+    value['cumulative_wall_seconds'] = 100
+    path.write_text(json.dumps(value), encoding='utf-8')
+    config = replace(config, recovery=replace(config.recovery, source_sha256=recovery.digest_file(path)))
+    with pytest.raises(ValueError, match='budget exhausted'):
+        recovery.validate_source(config, current_identity=approval['identity'], caps=approval['caps'])
+
+
+def test_parent_uses_remaining_wall_allowance(tmp_path, monkeypatch):
+    from knowledge_tracing.akt import watchdog
+    config = AKTConfig(project_root=tmp_path, phase='smoke', run_id='new',
+                       output_dir=tmp_path / 'experiments/akt/results/new', max_wall_seconds=100,
+                       recovery=RecoveryOptions())
+    approval = {'caps': {'max_wall_seconds': 100, 'max_rss_bytes': None,
+                        'min_available_ram_bytes': None}, 'identity': {}}
+    path = tmp_path / 'approval.json'
+    path.write_text(json.dumps(approval), encoding='utf-8')
+    monkeypatch.setattr(watchdog, 'load_config', lambda _: config)
+    monkeypatch.setattr(watchdog, 'require_authorization', lambda *args: approval)
+    monkeypatch.setattr(watchdog, 'validate_source', lambda *args, **kwargs: {'cumulative_wall_seconds': 12.5})
+    seen = []
+    class Process:
+        pid = 123
+        def communicate(self, *, timeout):
+            seen.append(timeout)
+            return '', ''
+        def wait(self):
+            return 0
+    monkeypatch.setattr(watchdog.subprocess, 'Popen', lambda *args, **kwargs: Process())
+    assert watchdog.main(['smoke', '--config', 'fixture.json', '--authorization', str(path)]) == 0
+    assert seen == [87.5]

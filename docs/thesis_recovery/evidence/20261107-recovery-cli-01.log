@@ -1,0 +1,86 @@
+FF........                                                               [100%]
+================================== FAILURES ===================================
+__ test_actual_cli_fresh_attempt_recovery_and_prediction_export[batch-exit] ___
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/recovery-cli-93cd663a1cc94af89867fc5abe2a4738/test_actual_cli_fresh_attempt_0')
+boundary = 'batch-exit'
+
+    @pytest.mark.parametrize('boundary', ['batch-exit', 'export'])
+    def test_actual_cli_fresh_attempt_recovery_and_prediction_export(tmp_path, boundary):
+        root = tmp_path / 'project'
+        root.mkdir()
+        template = load_config(PROJECT_ROOT / 'experiments/akt/configs/smoke.json')
+        config = replace(template, project_root=root, execution_enabled=True, run_id='continuous',
+            output_dir=root / 'experiments/akt/results/continuous', recovery=RecoveryOptions(),
+            dropout=.2, batch_size=2, max_steps=3, max_seconds=60, max_wall_seconds=180)
+        result = launch(config, tmp_path / 'continuous-cli')
+>       assert result.returncode == 0, result.stderr
+E       AssertionError: {"event": "watchdog-before-worker-spawn", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 13340, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "watchdog-after-worker-spawn", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 13340, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592, "worker_pid": 32160}
+E         {"elapsed_seconds": 0.16885190000175498, "event": "watchdog-after-worker-exit", "phase": "smoke", "pid": 13340, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592, "worker_pid": 32160, "worker_returncode": 1}
+E         Traceback (most recent call last):
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 78, in <module>
+E             raise SystemExit(main())
+E                              ~~~~^^
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 16, in main
+E             from knowledge_tracing.akt import config as config_module, runner, watchdog, authorization
+E         ModuleNotFoundError: No module named 'knowledge_tracing'
+E         Traceback (most recent call last):
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 78, in <module>
+E             raise SystemExit(main())
+E                              ~~~~^^
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 74, in main
+E             return watchdog.main(sys.argv[1:])
+E                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\watchdog.py", line 189, in main
+E             raise RuntimeError(f'AKT child process failed with exit code {returncode}')
+E         RuntimeError: AKT child process failed with exit code 1
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe', 'D:\\Dev\\KLTN\\tests\\akt\\cli_recovery_fixture.p...f\'AKT child process failed with exit code {returncode}\')\nRuntimeError: AKT child process failed with exit code 1\n').returncode
+
+tests\akt\test_cli_recovery.py:57: AssertionError
+____ test_actual_cli_fresh_attempt_recovery_and_prediction_export[export] _____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/recovery-cli-93cd663a1cc94af89867fc5abe2a4738/test_actual_cli_fresh_attempt_1')
+boundary = 'export'
+
+    @pytest.mark.parametrize('boundary', ['batch-exit', 'export'])
+    def test_actual_cli_fresh_attempt_recovery_and_prediction_export(tmp_path, boundary):
+        root = tmp_path / 'project'
+        root.mkdir()
+        template = load_config(PROJECT_ROOT / 'experiments/akt/configs/smoke.json')
+        config = replace(template, project_root=root, execution_enabled=True, run_id='continuous',
+            output_dir=root / 'experiments/akt/results/continuous', recovery=RecoveryOptions(),
+            dropout=.2, batch_size=2, max_steps=3, max_seconds=60, max_wall_seconds=180)
+        result = launch(config, tmp_path / 'continuous-cli')
+>       assert result.returncode == 0, result.stderr
+E       AssertionError: {"event": "watchdog-before-worker-spawn", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 9888, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "watchdog-after-worker-spawn", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 9888, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592, "worker_pid": 19452}
+E         {"elapsed_seconds": 0.15259209999931045, "event": "watchdog-after-worker-exit", "phase": "smoke", "pid": 9888, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592, "worker_pid": 19452, "worker_returncode": 1}
+E         Traceback (most recent call last):
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 78, in <module>
+E             raise SystemExit(main())
+E                              ~~~~^^
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 16, in main
+E             from knowledge_tracing.akt import config as config_module, runner, watchdog, authorization
+E         ModuleNotFoundError: No module named 'knowledge_tracing'
+E         Traceback (most recent call last):
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 78, in <module>
+E             raise SystemExit(main())
+E                              ~~~~^^
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 74, in main
+E             return watchdog.main(sys.argv[1:])
+E                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\watchdog.py", line 189, in main
+E             raise RuntimeError(f'AKT child process failed with exit code {returncode}')
+E         RuntimeError: AKT child process failed with exit code 1
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe', 'D:\\Dev\\KLTN\\tests\\akt\\cli_recovery_fixture.p...f\'AKT child process failed with exit code {returncode}\')\nRuntimeError: AKT child process failed with exit code 1\n').returncode
+
+tests\akt\test_cli_recovery.py:57: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_cli_recovery.py::test_actual_cli_fresh_attempt_recovery_and_prediction_export[batch-exit]
+FAILED tests/akt/test_cli_recovery.py::test_actual_cli_fresh_attempt_recovery_and_prediction_export[export]
+2 failed, 8 passed in 30.51s

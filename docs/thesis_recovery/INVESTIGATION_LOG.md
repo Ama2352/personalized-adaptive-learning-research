@@ -97,3 +97,7 @@ Kiểm cuối batch:13bundles/123Git output blobs khớpSHA, require_gate2_evide
 ## 07/11/2026 — Recovery schema và source contract
 
 Tiếp loop theo user authorization 1–2 giờ. RecoveryOptions default off, source envelope SHA/path/semantic/input/cumulative-wall validation không import Torch. 21contract tests và 48contract+runner tests pass. Log/giới hạn trong17_AKT_RECOVERY_ENGINEERING_LOG.md. Chưa nối CLI; Gate2 build cũ stale. Không real-data training/Holdout/cloud.
+
+## 07/11/2026 — Recovery nối public CLI trên synthetic CPU
+
+Selection/refit dùng cùng train_epoch accounting, cursor/RNG/Adam/early-stopping snapshot, fresh attempt và terminal parent envelope. CLI04 2passed83.91s sau3lần sửa harness (giữ logs); prediction export/weights bit-identical với continuous, source immutable. Regression02 94passed36.54s sau default-off compatibility fix; snapshot01 16passed27.35s sau giảm duplicate Torch loads. Chưa Gate2 refresh cho build mới, chưa real-data/GPU. Runbook docs/akt-recovery-runbook.md.

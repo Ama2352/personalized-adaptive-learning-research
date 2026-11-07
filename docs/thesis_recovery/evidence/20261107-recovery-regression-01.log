@@ -1,0 +1,270 @@
+........................................................................ [ 76%]
+.........F.......FFF..                                                   [100%]
+================================== FAILURES ===================================
+___________ test_failed_synthetic_run_manifest_keeps_audit_records ____________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/recovery-regression-c1ac936317344f24a614564acd145734/test_failed_synthetic_run_mani0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001ED563FFAF0>
+
+    def test_failed_synthetic_run_manifest_keeps_audit_records(tmp_path, monkeypatch):
+        config = replace(load_config(PROJECT_ROOT / 'experiments/akt/configs/smoke.json'),
+                         output_dir=tmp_path / 'run', execution_enabled=True)
+        caps = {'max_train_users': 4, 'max_val_users': 2, 'max_targets_per_side': 20,
+                'max_steps': 2, 'max_seconds': 10, 'max_wall_seconds': 30,
+                'max_rss_bytes': config.max_rss_bytes, 'min_available_ram_bytes': config.min_available_ram_bytes}
+        approved = {'caps': caps, 'approval_reference': 'synthetic-approval'}
+        learner = LearnerEvents('synthetic', 1, (KTEvent('synthetic', 'A', 1, 1, 1, 0, 1),))
+        monkeypatch.setattr(runner, 'validate_config', lambda config: None)
+        monkeypatch.setattr(runner, '_require_authorization', lambda *args: approved)
+        monkeypatch.setattr(runner, '_check_resource_budget', lambda budget: 0)
+        monkeypatch.setattr(runner, '_require_gate2_evidence', lambda config: {'status': 'PASS', 'report_sha256': 'gate'})
+        monkeypatch.setattr(runner, '_load_phase_inputs', lambda config: (
+            {'runtime_report_sha256': 'runtime'}, object(), (learner,), (learner,)))
+        def stop(*args, **kwargs):
+            raise RuntimeError('synthetic failure')
+        monkeypatch.setattr(runner, 'select_checkpoint', stop)
+        with pytest.raises(RuntimeError, match='synthetic failure'):
+>           runner.run_smoke(config, authorization=approved, _invocation={'kind': 'cli', 'argv': ['synthetic']})
+
+tests\akt\test_runner.py:545: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\runner.py:613: in run_smoke
+    return _run_phase(config, authorization, pilot=False, invocation=_invocation)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+config = AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/recov...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+authorization = {'caps': {'max_train_users': 4, 'max_val_users': 2, 'max_targets_per_side': 20, 'max_steps': 2, ...}, 'approval_reference': 'synthetic-approval'}
+pilot = False, invocation = {'kind': 'cli', 'argv': ['synthetic']}
+
+    def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
+                   invocation: dict | None = None) -> RunResult:
+        validate_config(config)
+        approved = _require_authorization(config, authorization)
+        caps = approved['caps']
+        # The approved limits may be stricter than the template. Use them for
+        # cohort selection and loading as well as the optimizer/watchdog.
+        config = replace(config, **caps)
+        validate_config(config)
+>       recovery_source = validate_source(config, current_identity=approved['identity'], caps=caps)
+                                                                   ^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'identity'
+
+src\knowledge_tracing\akt\runner.py:301: KeyError
+_ test_pilot_completed_cycle_reloads_checkpoint_and_exports_aligned_predictions _
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/recovery-regression-c1ac936317344f24a614564acd145734/test_pilot_completed_cycle_rel0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001ED563FF150>
+
+    def test_pilot_completed_cycle_reloads_checkpoint_and_exports_aligned_predictions(
+            tmp_path, monkeypatch):
+        base_config = load_config(PROJECT_ROOT / 'experiments/akt/configs/pilot.json')
+        monkeypatch.setattr(config_module, 'PROJECT_ROOT', tmp_path)
+        monkeypatch.setattr(runner, 'PROJECT_ROOT', tmp_path)
+        monkeypatch.setattr(prediction_module, 'PROJECT_ROOT', tmp_path)
+        config = replace(
+            base_config,
+            project_root=tmp_path,
+            source_root=PROJECT_ROOT / 'artifacts/akt/dependencies/upstream',
+            run_id='pilot-synthetic-full',
+            output_dir=tmp_path / 'experiments/akt/results/pilot-synthetic-full',
+            execution_enabled=True,
+            max_train_users=4,
+            max_val_users=2,
+            max_total_targets=20,
+        )
+        train = make_learner('train', 1, ['A', 'B', 'A', 'B'], row_start=1)
+        val = make_learner('val', 2, ['A', 'B', 'A', 'OOV'], row_start=20)
+        caps = {'max_train_users': 4, 'max_val_users': 2, 'max_total_targets': 20,
+                'max_seconds': 30, 'max_wall_seconds': 60,
+                'max_rss_bytes': 2 * 1024**3, 'min_available_ram_bytes': 1024**3}
+        approved = {'caps': caps, 'approval_reference': 'synthetic pilot authorization'}
+        monkeypatch.setattr(runner, '_require_authorization', lambda *args: approved)
+        monkeypatch.setattr(runner, '_require_gate2_evidence', lambda _: {'status': 'PASS'})
+        monkeypatch.setattr(runner, '_check_resource_budget', lambda budget: 1)
+        # Đây là lifecycle fixture. Resource thresholds được kiểm bằng snapshots
+        # xác định ở các tests riêng, không phụ thuộc RAM của ứng dụng khác trên máy.
+        monkeypatch.setattr(training_module, 'memory_snapshot', lambda: {
+            'pid': 123, 'process_rss_bytes': 512 * 1024**2,
+            'process_peak_rss_bytes': 512 * 1024**2,
+            'system_available_ram_bytes': 4 * 1024**3,
+            'system_total_ram_bytes': 8 * 1024**3})
+        monkeypatch.setattr(runner, '_load_phase_inputs', lambda _, **kwargs: (
+            {'runtime_report_sha256': 'runtime', 'source': {'commit': config.source_commit}},
+            InnerSplit(('train',), ('val',), 0, 'split'),
+            (train,), (val,),
+            {'selected_train_learners': 1, 'selected_validation_learners': 1,
+             'loaded_train_learners': 1, 'loaded_validation_learners': 1,
+             'selected_train_targets': 4, 'selected_validation_targets': 4,
+             'data_loading_seconds': 0.01,
+             'chronological_query_sort_and_materialize_seconds': 0.01},
+        ))
+    
+>       result = runner.run_pilot(config, authorization={'synthetic': True})
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_pilot.py:171: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\runner.py:618: in run_pilot
+    return _run_phase(config, authorization, pilot=True, invocation=_invocation)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+config = AKTConfig(project_root=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/recovery-regression-c1ac936317344f24a614564a...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+authorization = {'synthetic': True}, pilot = True, invocation = None
+
+    def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
+                   invocation: dict | None = None) -> RunResult:
+        validate_config(config)
+        approved = _require_authorization(config, authorization)
+        caps = approved['caps']
+        # The approved limits may be stricter than the template. Use them for
+        # cohort selection and loading as well as the optimizer/watchdog.
+        config = replace(config, **caps)
+        validate_config(config)
+>       recovery_source = validate_source(config, current_identity=approved['identity'], caps=caps)
+                                                                   ^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'identity'
+
+src\knowledge_tracing\akt\runner.py:301: KeyError
+_______ test_pilot_partial_epoch_is_bounded_and_skips_checkpoint_export _______
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/recovery-regression-c1ac936317344f24a614564acd145734/test_pilot_partial_epoch_is_bo0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001ED5B16E190>
+
+    def test_pilot_partial_epoch_is_bounded_and_skips_checkpoint_export(tmp_path, monkeypatch):
+        base_config = load_config(PROJECT_ROOT / 'experiments/akt/configs/pilot.json')
+        monkeypatch.setattr(config_module, 'PROJECT_ROOT', tmp_path)
+        monkeypatch.setattr(runner, 'PROJECT_ROOT', tmp_path)
+        monkeypatch.setattr(prediction_module, 'PROJECT_ROOT', tmp_path)
+        config = replace(
+            base_config,
+            project_root=tmp_path,
+            source_root=PROJECT_ROOT / 'artifacts/akt/dependencies/upstream',
+            run_id='pilot-synthetic-bounded',
+            output_dir=tmp_path / 'experiments/akt/results/pilot-synthetic-bounded',
+            execution_enabled=True,
+            max_train_users=4,
+            max_val_users=2,
+            max_total_targets=20,
+        )
+        learner = make_learner('train', 1, ['A', 'B'], row_start=1)
+        caps = {'max_train_users': 4, 'max_val_users': 2, 'max_total_targets': 20,
+                'max_seconds': 30, 'max_wall_seconds': 60,
+                'max_rss_bytes': 2 * 1024**3, 'min_available_ram_bytes': 1024**3}
+        approved = {'caps': caps, 'approval_reference': 'synthetic pilot authorization'}
+        selection = type('Selection', (), {
+            'status': 'bounded', 'stop_reason': 'time_budget', 'selected_epoch': None,
+            'checkpoint': None, 'history': [{'complete_epoch': False, 'training': {
+                'optimizer_steps': 1, 'processed_target_rows': 3, 'optimized_target_rows': 2,
+                'windows_processed': 3, 'loss_sum': 1.2, 'nonzero_gradient_steps': 1,
+                'max_pre_clip_grad_norm': 0.4, 'max_post_clip_grad_norm': 0.4,
+            }}],
+        })()
+        monkeypatch.setattr(runner, '_require_authorization', lambda *args: approved)
+        monkeypatch.setattr(runner, '_require_gate2_evidence', lambda _: {'status': 'PASS'})
+        monkeypatch.setattr(runner, '_check_resource_budget', lambda budget: 1)
+        monkeypatch.setattr(runner, '_load_phase_inputs', lambda _, **kwargs: (
+            {'runtime_report_sha256': 'runtime', 'source': {'commit': config.source_commit}},
+            InnerSplit(('train',), ('val',), 0, 'split'),
+            (learner,), (learner,), {'selected_train_learners': 1, 'selected_validation_learners': 1,
+                                     'loaded_train_learners': 1, 'loaded_validation_learners': 1,
+                                     'selected_train_targets': 2, 'selected_validation_targets': 2},
+        ))
+        monkeypatch.setattr(runner, 'select_checkpoint', lambda *args, **kwargs: selection)
+        monkeypatch.setattr(runner, 'load_checkpoint', lambda *args, **kwargs: pytest.fail('partial checkpoint loaded'))
+        monkeypatch.setattr(runner, 'export_predictions', lambda *args, **kwargs: pytest.fail('partial export run'))
+    
+>       result = runner.run_pilot(config, authorization={'synthetic': True})
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_pilot.py:253: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\runner.py:618: in run_pilot
+    return _run_phase(config, authorization, pilot=True, invocation=_invocation)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+config = AKTConfig(project_root=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/recovery-regression-c1ac936317344f24a614564a...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+authorization = {'synthetic': True}, pilot = True, invocation = None
+
+    def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
+                   invocation: dict | None = None) -> RunResult:
+        validate_config(config)
+        approved = _require_authorization(config, authorization)
+        caps = approved['caps']
+        # The approved limits may be stricter than the template. Use them for
+        # cohort selection and loading as well as the optimizer/watchdog.
+        config = replace(config, **caps)
+        validate_config(config)
+>       recovery_source = validate_source(config, current_identity=approved['identity'], caps=caps)
+                                                                   ^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'identity'
+
+src\knowledge_tracing\akt\runner.py:301: KeyError
+__________ test_pilot_failure_is_not_mislabeled_as_a_bounded_partial __________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/recovery-regression-c1ac936317344f24a614564acd145734/test_pilot_failure_is_not_misl0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001ED5B20D550>
+
+    def test_pilot_failure_is_not_mislabeled_as_a_bounded_partial(tmp_path, monkeypatch):
+        base_config = load_config(PROJECT_ROOT / 'experiments/akt/configs/pilot.json')
+        monkeypatch.setattr(config_module, 'PROJECT_ROOT', tmp_path)
+        monkeypatch.setattr(runner, 'PROJECT_ROOT', tmp_path)
+        config = replace(base_config, project_root=tmp_path,
+                         source_root=PROJECT_ROOT / 'artifacts/akt/dependencies/upstream',
+                         run_id='pilot-synthetic-failure',
+                         output_dir=tmp_path / 'experiments/akt/results/pilot-synthetic-failure',
+                         execution_enabled=True, max_train_users=4, max_val_users=2,
+                         max_total_targets=20)
+        learner = make_learner('train', 1, ['A', 'B'], row_start=1)
+        caps = {'max_train_users': 4, 'max_val_users': 2, 'max_total_targets': 20,
+                'max_seconds': 30, 'max_wall_seconds': 60,
+                'max_rss_bytes': 2 * 1024**3, 'min_available_ram_bytes': 1024**3}
+        monkeypatch.setattr(runner, '_require_authorization', lambda *args: {
+            'caps': caps, 'approval_reference': 'synthetic pilot authorization'})
+        monkeypatch.setattr(runner, '_require_gate2_evidence', lambda _: {'status': 'PASS'})
+        monkeypatch.setattr(runner, '_check_resource_budget', lambda budget: 1)
+        monkeypatch.setattr(runner, '_load_phase_inputs', lambda _, **kwargs: (
+            {'runtime_report_sha256': 'runtime', 'source': {'commit': config.source_commit}},
+            InnerSplit(('train',), ('val',), 0, 'split'), (learner,), (learner,),
+            {'selected_train_learners': 1, 'selected_validation_learners': 1,
+             'loaded_train_learners': 1, 'loaded_validation_learners': 1,
+             'selected_train_targets': 2, 'selected_validation_targets': 2},
+        ))
+        monkeypatch.setattr(runner, 'select_checkpoint', lambda *args, **kwargs: (_ for _ in ()).throw(
+            ValueError('synthetic nonfinite failure')))
+    
+        with pytest.raises(ValueError, match='synthetic nonfinite'):
+>           runner.run_pilot(config, authorization={'synthetic': True})
+
+tests\akt\test_pilot.py:295: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\runner.py:618: in run_pilot
+    return _run_phase(config, authorization, pilot=True, invocation=_invocation)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+config = AKTConfig(project_root=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/recovery-regression-c1ac936317344f24a614564a...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+authorization = {'synthetic': True}, pilot = True, invocation = None
+
+    def _run_phase(config: AKTConfig, authorization: dict | None, *, pilot: bool,
+                   invocation: dict | None = None) -> RunResult:
+        validate_config(config)
+        approved = _require_authorization(config, authorization)
+        caps = approved['caps']
+        # The approved limits may be stricter than the template. Use them for
+        # cohort selection and loading as well as the optimizer/watchdog.
+        config = replace(config, **caps)
+        validate_config(config)
+>       recovery_source = validate_source(config, current_identity=approved['identity'], caps=caps)
+                                                                   ^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'identity'
+
+src\knowledge_tracing\akt\runner.py:301: KeyError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_runner.py::test_failed_synthetic_run_manifest_keeps_audit_records
+FAILED tests/akt/test_pilot.py::test_pilot_completed_cycle_reloads_checkpoint_and_exports_aligned_predictions
+FAILED tests/akt/test_pilot.py::test_pilot_partial_epoch_is_bounded_and_skips_checkpoint_export
+FAILED tests/akt/test_pilot.py::test_pilot_failure_is_not_mislabeled_as_a_bounded_partial
+4 failed, 90 passed in 30.07s

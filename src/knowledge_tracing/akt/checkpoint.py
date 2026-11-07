@@ -61,6 +61,22 @@ def load_checkpoint(path: Path, *, expected_identity: dict, device: str) -> dict
     return payload
 
 
+def load_training_snapshot(path: Path, *, expected_identity: dict, device: str) -> dict:
+    """Đọc một lần để phân loại snapshot; không giữ thêm bản model/Adam trên GPU."""
+    payload = torch.load(path, map_location=device, weights_only=True)
+    if payload.get('identity') != expected_identity:
+        raise ValueError('checkpoint identity mismatch')
+    if payload.get('checkpoint_kind') == 'training_recovery_v1':
+        if payload.get('progress', {}).get('complete') is not False:
+            raise ValueError('invalid recovery checkpoint progress')
+        _validate_resume_state(payload.get('resume_state'))
+        if payload['progress'].get('epoch') != payload['resume_state']['epoch']:
+            raise ValueError('recovery epoch mismatch')
+    elif payload.get('progress', {}).get('complete') is not True:
+        raise ValueError('checkpoint is incomplete')
+    return payload
+
+
 def restore_checkpoint(adapter: AKTAdapter, optimizer: torch.optim.Optimizer, payload: dict) -> None:
     """Restore a same-runtime complete checkpoint, including its random streams."""
     progress = payload.get('progress', {})

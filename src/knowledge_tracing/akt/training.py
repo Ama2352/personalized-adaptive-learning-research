@@ -13,11 +13,15 @@ from collections.abc import Callable, Iterator
 import numpy as np
 import torch
 
-from .checkpoint import load_checkpoint, restore_checkpoint, save_checkpoint
+from .checkpoint import (load_checkpoint, restore_checkpoint, save_checkpoint,
+                         load_recovery_checkpoint, restore_recovery_checkpoint, save_recovery_checkpoint,
+                         load_training_snapshot)
 from .config import AKTConfig
 from .encoding import ExerciseEncoding, fit_vocabulary
 from .model import AKTAdapter
 from .resources import memory_snapshot
+from .recovery import training_config_hash, training_budget, preserve_checkpoint
+from .sampler import ReplayableWindowCursor
 from .splits import InnerSplit
 from .tensors import collate_windows
 from .types import LearnerEvents, TrainingWindow, UnseenTarget
@@ -108,7 +112,8 @@ def _shuffle_windows(factory: Callable[[], Iterator[TrainingWindow]], *, seed: i
 def train_epoch(adapter: AKTAdapter, windows_factory: Callable[[], Iterator[TrainingWindow]], *,
                 optimizer: torch.optim.Optimizer, epoch: int, budget: dict,
                 progress_callback: Callable[[dict], None] | None = None,
-                resource_callback: Callable[[dict], None] | None = None) -> EpochStats:
+                resource_callback: Callable[[dict], None] | None = None,
+                recovery: dict | None = None) -> EpochStats:
     if epoch < 1:
         raise ValueError('invalid epoch')
     adapter.native.train()
@@ -126,6 +131,76 @@ def train_epoch(adapter: AKTAdapter, windows_factory: Callable[[], Iterator[Trai
     batch_shape_counts: dict[str, int] = {}
     resource_samples: list[dict] = []
     pending: list[TrainingWindow] = []
+
+    cursor = None
+    saved_steps = 0
+    last_checkpoint = None
+    committed_state = None
+    if recovery is not None:
+        payload = None
+        sampler_state = None
+        if recovery.get('resume_checkpoint') is not None:
+            payload = load_recovery_checkpoint(recovery['resume_checkpoint'],
+                expected_identity=recovery['identity'], device=adapter.config.device)
+            state = payload['resume_state']
+            if state['epoch'] != epoch:
+                raise ValueError('recovery epoch mismatch')
+            trainer = state['trainer_state']
+            if trainer.get('role') != 'epoch_accounting_v1':
+                raise ValueError('invalid epoch accounting schema')
+            saved = EpochStats(**trainer['stats'])
+            if (saved.optimizer_steps != state['optimizer_steps'] or saved.valid_targets < 1
+                    or saved.collated_windows != state['sampler_state']['consumed_windows']
+                    or not math.isfinite(saved.loss_sum) or saved.loss_sum < 0
+                    or not math.isfinite(saved.resource['wall_seconds']) or saved.resource['wall_seconds'] < 0):
+                raise ValueError('invalid epoch recovery accounting')
+            loss_sum, valid_targets, steps = saved.loss_sum, saved.valid_targets, saved.optimizer_steps
+            nonzero_gradient_steps, parameter_update_steps = saved.nonzero_gradient_steps, saved.parameter_update_steps
+            windows_processed, processed_target_rows = saved.windows_processed, saved.processed_target_rows
+            max_pre_clip_grad_norm, max_post_clip_grad_norm = saved.max_pre_clip_grad_norm, saved.max_post_clip_grad_norm
+            max_rss = saved.resource['peak_rss_bytes']
+            resource_samples = list(saved.resource['samples'])
+            batches, collated_windows = saved.batches, saved.collated_windows
+            valid_tokens, target_tokens = saved.valid_tokens, saved.target_tokens
+            context_tokens, padding_tokens = saved.context_tokens, saved.padding_tokens
+            clipped_steps = saved.clipped_steps
+            forward_seconds, backward_seconds = saved.forward_seconds, saved.backward_seconds
+            gradient_clip_seconds, optimizer_seconds = saved.gradient_clip_seconds, saved.optimizer_seconds
+            sequence_length_counts, batch_shape_counts = dict(saved.sequence_length_counts), dict(saved.batch_shape_counts)
+            started -= saved.resource['wall_seconds']
+            sampler_state = state['sampler_state']
+        cursor = ReplayableWindowCursor(windows_factory, seed=adapter.config.seed + epoch,
+                    stream_identity=hashlib.sha256(json.dumps(recovery['identity'], sort_keys=True).encode()).hexdigest(),
+                    state=sampler_state)
+        if payload is not None:
+            # Replay trước restore để factory không tiêu thụ RNG của model vừa phục hồi.
+            restore_recovery_checkpoint(adapter, optimizer, payload)
+            saved_steps = steps
+            last_checkpoint = recovery['resume_checkpoint']
+            del payload
+
+    def snapshot_stats(is_complete=False):
+        return EpochStats(loss_sum, valid_targets, steps, is_complete,
+            {'wall_seconds': time.perf_counter()-started, 'peak_rss_bytes': max_rss,
+             'samples': list(resource_samples)}, nonzero_gradient_steps, parameter_update_steps,
+            max_pre_clip_grad_norm, max_post_clip_grad_norm, windows_processed,
+            processed_target_rows, valid_targets, batches=batches, collated_windows=collated_windows,
+            sequence_length_counts=dict(sequence_length_counts), batch_shape_counts=dict(batch_shape_counts),
+            valid_tokens=valid_tokens, target_tokens=target_tokens, context_tokens=context_tokens,
+            padding_tokens=padding_tokens, forward_seconds=forward_seconds, backward_seconds=backward_seconds,
+            gradient_clip_seconds=gradient_clip_seconds, optimizer_seconds=optimizer_seconds,
+            clipped_steps=clipped_steps, stop_reason=stop_reason)
+
+    def save_batch():
+        nonlocal saved_steps, last_checkpoint
+        if recovery is None or steps == saved_steps:
+            return
+        prefix = recovery.get('prefix', 'inner')
+        path = recovery['checkpoint_dir'] / f'{prefix}-batch-epoch-{epoch}-step-{steps}-{uuid.uuid4().hex}.pt'
+        save_recovery_checkpoint(path, adapter, optimizer, identity=recovery['identity'], resume_state=committed_state)
+        saved_steps, last_checkpoint = steps, path
+        if recovery.get('checkpoint_callback') is not None:
+            recovery['checkpoint_callback'](path)
 
     def progress(*, complete_epoch: bool) -> None:
         if progress_callback is None:
@@ -170,6 +245,7 @@ def train_epoch(adapter: AKTAdapter, windows_factory: Callable[[], Iterator[Trai
         nonlocal batches, collated_windows, valid_tokens, target_tokens, context_tokens, padding_tokens
         nonlocal clipped_steps, forward_seconds, backward_seconds, gradient_clip_seconds, optimizer_seconds
         nonlocal stop_reason
+        nonlocal committed_state
         if not pending:
             return True
         rss = _check_resource_budget(budget, samples=resource_samples, observer=resource_callback)
@@ -216,6 +292,13 @@ def train_epoch(adapter: AKTAdapter, windows_factory: Callable[[], Iterator[Trai
             gradient_clip_seconds += float(result.get('gradient_clip_seconds', 0.0))
             optimizer_seconds += float(result.get('optimizer_seconds', 0.0))
         pending.clear()
+        if recovery is not None:
+            committed_state = {'schema_version': 1, 'epoch': epoch, 'optimizer_steps': steps,
+                'sampler_state': cursor.state_dict(),
+                'trainer_state': {'role': 'epoch_accounting_v1', 'stats': asdict(snapshot_stats()),
+                                  'selection_state': recovery.get('selection_state')}}
+        if recovery is not None and steps % adapter.config.recovery.checkpoint_every_steps == 0:
+            save_batch()
         # Record a completed optimizer step before checking its post-update memory use.
         # If the cap is crossed here, the bounded run still persists the work just done.
         try:
@@ -228,12 +311,13 @@ def train_epoch(adapter: AKTAdapter, windows_factory: Callable[[], Iterator[Trai
         progress(complete_epoch=False)
         return True
 
-    for entry in _shuffle_windows(windows_factory, seed=adapter.config.seed + epoch):
+    for entry in (cursor if cursor is not None else _shuffle_windows(windows_factory, seed=adapter.config.seed + epoch)):
         windows_processed += 1
         processed_target_rows += int(entry.window.target_mask.sum())
         length = len(entry.window.inputs.item_ids)
         sequence_length_counts[length] = sequence_length_counts.get(length, 0) + 1
         pending.append(entry)
+        # Flush trước lần lấy window kế tiếp: snapshot luôn ở committed batch boundary.
         if len(pending) >= adapter.config.batch_size and not flush():
             complete = False
             break
@@ -245,20 +329,13 @@ def train_epoch(adapter: AKTAdapter, windows_factory: Callable[[], Iterator[Trai
         stop_reason = 'epoch_complete'
     elif stop_reason == 'training_in_progress':
         stop_reason = 'bounded_budget'
-    stats = EpochStats(
-        loss_sum, valid_targets, steps, complete,
-        {'wall_seconds': time.perf_counter()-started, 'peak_rss_bytes': max_rss,
-         'samples': resource_samples},
-        nonzero_gradient_steps, parameter_update_steps,
-        max_pre_clip_grad_norm, max_post_clip_grad_norm,
-        windows_processed, processed_target_rows, valid_targets,
-        batches=batches, collated_windows=collated_windows,
-        sequence_length_counts=sequence_length_counts, batch_shape_counts=batch_shape_counts,
-        valid_tokens=valid_tokens, target_tokens=target_tokens,
-        context_tokens=context_tokens, padding_tokens=padding_tokens,
-        forward_seconds=forward_seconds, backward_seconds=backward_seconds,
-        gradient_clip_seconds=gradient_clip_seconds, optimizer_seconds=optimizer_seconds,
-        clipped_steps=clipped_steps, stop_reason=stop_reason)
+    save_batch()
+    if (recovery is not None and last_checkpoint is not None
+            and Path(last_checkpoint).parent.resolve() != recovery['checkpoint_dir'].resolve()):
+        local = preserve_checkpoint(Path(last_checkpoint), recovery['checkpoint_dir'] / Path(last_checkpoint).name)
+        if recovery.get('checkpoint_callback') is not None:
+            recovery['checkpoint_callback'](local)
+    stats = snapshot_stats(complete)
     if progress_callback is not None:
         progress(complete_epoch=complete)
     return stats
@@ -424,7 +501,8 @@ def select_checkpoint(config: AKTConfig, *, inner_split: InnerSplit,
                       progress_callback: Callable[[dict], None] | None = None,
                       resource_callback: Callable[[dict], None] | None = None,
                       save_recovery: bool = False,
-                      resume_checkpoint: Path | None = None) -> SelectionResult:
+                      resume_checkpoint: Path | None = None,
+                      checkpoint_callback: Callable[[Path, Path | None], None] | None = None) -> SelectionResult:
     epoch_budget = _bounded_epoch_budget(budget)
     output_dir = _prepare_output(config)
     if (inner_split.outer_fold != config.outer_fold
@@ -439,22 +517,31 @@ def select_checkpoint(config: AKTConfig, *, inner_split: InnerSplit,
     history: list[dict] = []
     chosen: Path | None = None
     run_identity = {**identity, 'split_hash': inner_split.split_hash, 'encoding_hash': _encoding_hash(encoding)}
-    config_hash = hashlib.sha256(json.dumps(asdict(config), sort_keys=True, default=str).encode()).hexdigest()
+    config_hash = training_config_hash(config)
     recovery_identity = {**run_identity, 'selection_recovery': {
-        'config_sha256': config_hash, 'budget': epoch_budget}}
+        'config_sha256': config_hash, 'budget': training_budget(config, epoch_budget)}}
     first_epoch = 1
+    batch_resume = None
     if resume_checkpoint is not None:
         if not save_recovery:
             raise ValueError('selection resume requires recovery snapshots')
-        payload = load_checkpoint(Path(resume_checkpoint), expected_identity=recovery_identity,
-                                  device=config.device)
-        progress = payload['progress']
+        payload = load_training_snapshot(Path(resume_checkpoint), expected_identity=recovery_identity,
+                                          device='cpu')
+        partial = payload.get('checkpoint_kind') == 'training_recovery_v1'
+        if partial:
+            if config.recovery is None:
+                raise ValueError('batch resume requires recovery configuration')
+            progress = payload['resume_state']['trainer_state'].get('selection_state', {})
+            batch_resume = Path(resume_checkpoint)
+        else:
+            progress = payload['progress']
         saved_history = progress.get('history')
-        if (progress.get('role') != 'selection_recovery_v1'
+        if (progress.get('role') != ('selection_batch_v1' if partial else 'selection_recovery_v1')
                 or type(progress.get('epoch')) is not int
                 or not 1 <= progress['epoch'] <= config.max_epochs
                 or not isinstance(saved_history, list)
-                or len(saved_history) != progress['epoch']):
+                or len(saved_history) != progress['epoch'] - int(partial)
+                or (partial and payload['resume_state']['epoch'] != progress['epoch'])):
             raise ValueError('invalid selection recovery history')
         for expected_epoch, entry in enumerate(saved_history, start=1):
             if (entry.get('epoch') != expected_epoch or entry.get('complete_epoch') is not True
@@ -464,17 +551,25 @@ def select_checkpoint(config: AKTConfig, *, inner_split: InnerSplit,
         if stopper.best_epoch != progress.get('selected_epoch'):
             raise ValueError('selection recovery best epoch mismatch')
         best_name = progress.get('best_checkpoint')
-        if not isinstance(best_name, str) or Path(best_name).name != best_name:
-            raise ValueError('invalid selection recovery checkpoint path')
-        chosen = Path(resume_checkpoint).parent / best_name
-        if hashlib.sha256(chosen.read_bytes()).hexdigest() != progress.get('best_checkpoint_sha256'):
-            raise ValueError('selection recovery best checkpoint mismatch')
-        best = load_checkpoint(chosen, expected_identity=run_identity, device=config.device)
-        if best['progress'].get('epoch') != stopper.best_epoch:
-            raise ValueError('selection recovery best checkpoint epoch mismatch')
-        restore_checkpoint(adapter, optimizer, payload)
+        if stopper.best_epoch is not None:
+            if not isinstance(best_name, str) or Path(best_name).name != best_name:
+                raise ValueError('invalid selection recovery checkpoint path')
+            chosen = Path(resume_checkpoint).parent / best_name
+            if hashlib.sha256(chosen.read_bytes()).hexdigest() != progress.get('best_checkpoint_sha256'):
+                raise ValueError('selection recovery best checkpoint mismatch')
+            best = load_checkpoint(chosen, expected_identity=run_identity, device=config.device)
+            if best['progress'].get('epoch') != stopper.best_epoch:
+                raise ValueError('selection recovery best checkpoint epoch mismatch')
+            del best
+            if config.recovery is not None:
+                chosen = preserve_checkpoint(chosen, output_dir / chosen.name)
+        elif not partial or best_name is not None or progress.get('best_checkpoint_sha256') is not None:
+            raise ValueError('invalid selection recovery empty best checkpoint')
+        if not partial:
+            restore_checkpoint(adapter, optimizer, payload)
         history = saved_history
-        first_epoch = progress['epoch'] + 1
+        first_epoch = progress['epoch'] + int(not partial)
+        del payload
     for epoch in range(first_epoch, config.max_epochs + 1):
         if stopper.stale_epochs >= stopper.patience:
             break
@@ -486,7 +581,18 @@ def select_checkpoint(config: AKTConfig, *, inner_split: InnerSplit,
                 'epoch': epoch, **payload})
         if resource_callback is not None:
             train_kwargs['resource_callback'] = resource_callback
+        if config.recovery is not None:
+            if not save_recovery:
+                raise ValueError('configured recovery requires snapshots')
+            selection_state = {'role': 'selection_batch_v1', 'epoch': epoch,
+                'history': list(history), 'selected_epoch': stopper.best_epoch,
+                'best_checkpoint': chosen.name if chosen else None,
+                'best_checkpoint_sha256': hashlib.sha256(chosen.read_bytes()).hexdigest() if chosen else None}
+            train_kwargs['recovery'] = {'checkpoint_dir': output_dir, 'identity': recovery_identity,
+                'selection_state': selection_state, 'resume_checkpoint': batch_resume,
+                'checkpoint_callback': (lambda path: checkpoint_callback(path, chosen)) if checkpoint_callback else None}
         stats = train_epoch(adapter, factory, **train_kwargs)
+        batch_resume = None
         if not stats.complete:
             history.append({'epoch': epoch, 'complete_epoch': False,
                             'stop_reason': stats.stop_reason,
@@ -518,17 +624,24 @@ def select_checkpoint(config: AKTConfig, *, inner_split: InnerSplit,
             if resource_callback is not None:
                 _check_resource_budget(epoch_budget, observer=resource_callback)
         if save_recovery:
-            save_checkpoint(output_dir / f'inner-recovery-epoch-{epoch}.pt', adapter, optimizer,
+            recovery_path = output_dir / f'inner-recovery-epoch-{epoch}.pt'
+            save_checkpoint(recovery_path, adapter, optimizer,
                             identity=recovery_identity,
                             progress={'role': 'selection_recovery_v1', 'epoch': epoch,
                                       'complete': True, 'history': list(history),
                                       'selected_epoch': stopper.best_epoch,
                                       'best_checkpoint': chosen.name,
                                       'best_checkpoint_sha256': hashlib.sha256(chosen.read_bytes()).hexdigest()})
+            if checkpoint_callback is not None:
+                checkpoint_callback(recovery_path, chosen)
         if stop:
             break
     if chosen is None or stopper.best_epoch is None:
         raise ValueError('no valid selection checkpoint')
+    if resume_checkpoint is not None and first_epoch > len(history) and checkpoint_callback is not None:
+        # Selection đã hoàn tất trước interruption tại export: vẫn có snapshot ở attempt mới.
+        snapshot = preserve_checkpoint(Path(resume_checkpoint), output_dir / Path(resume_checkpoint).name)
+        checkpoint_callback(snapshot, chosen)
     return SelectionResult(stopper.best_epoch, inner_split.split_hash, chosen, history)
 
 
@@ -536,7 +649,8 @@ def refit_outer_train(config: AKTConfig, *, outer_train_users: tuple[str, ...],
                       train_learners_factory: Callable[[], Iterator[LearnerEvents]],
                       selected_epochs: int, identity: dict, budget: dict | None = None,
                       save_recovery: bool = False,
-                      resume_checkpoint: Path | None = None) -> AKTAdapter:
+                      resume_checkpoint: Path | None = None,
+                      checkpoint_callback: Callable[[Path, Path | None], None] | None = None) -> AKTAdapter:
     epoch_budget = _bounded_epoch_budget(budget)
     if not 1 <= selected_epochs <= config.max_epochs:
         raise ValueError('invalid refit epoch budget')
@@ -548,40 +662,68 @@ def refit_outer_train(config: AKTConfig, *, outer_train_users: tuple[str, ...],
                                  eps=config.eps, weight_decay=config.weight_decay)
     history = []
     recovery_identity = {**adapter.run_identity, 'refit_recovery': {
-        'config_sha256': hashlib.sha256(json.dumps(asdict(config), sort_keys=True, default=str).encode()).hexdigest(),
+        'config_sha256': training_config_hash(config),
         'outer_train_users': sorted(outer_train_users), 'selected_epochs': selected_epochs,
-        'budget': epoch_budget}}
+        'budget': training_budget(config, epoch_budget)}}
     first_epoch = 1
+    batch_resume = None
     output = _prepare_output(config) if save_recovery else None
     if resume_checkpoint is not None:
         if not save_recovery:
             raise ValueError('refit resume requires recovery snapshots')
-        payload = load_checkpoint(Path(resume_checkpoint), expected_identity=recovery_identity, device=config.device)
-        progress = payload['progress']
+        payload = load_training_snapshot(Path(resume_checkpoint), expected_identity=recovery_identity, device='cpu')
+        partial = payload.get('checkpoint_kind') == 'training_recovery_v1'
+        if partial:
+            if config.recovery is None:
+                raise ValueError('batch resume requires recovery configuration')
+            progress = payload['resume_state']['trainer_state'].get('selection_state', {})
+            batch_resume = Path(resume_checkpoint)
+        else:
+            progress = payload['progress']
         history = progress.get('history')
-        if (progress.get('role') != 'refit_recovery_v1' or type(progress.get('epoch')) is not int
+        if (progress.get('role') != ('refit_batch_v1' if partial else 'refit_recovery_v1')
+                or type(progress.get('epoch')) is not int
                 or not 1 <= progress['epoch'] <= selected_epochs or not isinstance(history, list)
-                or len(history) != progress['epoch']
+                or len(history) != progress['epoch'] - int(partial)
+                or (partial and payload['resume_state']['epoch'] != progress['epoch'])
                 or any(entry.get('epoch') != index or entry.get('valid_targets', 0) <= 0
                        or not math.isfinite(entry.get('loss_sum', math.nan))
                        for index, entry in enumerate(history, start=1))):
             raise ValueError('invalid refit recovery history')
-        restore_checkpoint(adapter, optimizer, payload)
-        first_epoch = progress['epoch'] + 1
+        if not partial:
+            restore_checkpoint(adapter, optimizer, payload)
+        first_epoch = progress['epoch'] + int(not partial)
+        del payload
     for epoch in range(first_epoch, selected_epochs + 1):
         factory = lambda: _training_windows(train_learners_factory, outer_train_users,
                                             config.outer_fold, encoding, config)
-        stats = train_epoch(adapter, factory, optimizer=optimizer, epoch=epoch, budget=epoch_budget)
+        recovery = None
+        if config.recovery is not None:
+            if not save_recovery:
+                raise ValueError('configured recovery requires snapshots')
+            recovery = {'prefix': 'refit', 'checkpoint_dir': output, 'identity': recovery_identity,
+                'selection_state': {'role': 'refit_batch_v1', 'epoch': epoch, 'history': list(history)},
+                'resume_checkpoint': batch_resume,
+                'checkpoint_callback': (lambda path: checkpoint_callback(path, None)) if checkpoint_callback else None}
+        stats = train_epoch(adapter, factory, optimizer=optimizer, epoch=epoch, budget=epoch_budget,
+                            **({'recovery': recovery} if recovery is not None else {}))
+        batch_resume = None
         if not stats.complete:
             raise RuntimeError('incomplete refit epoch')
         history.append({'epoch': epoch, 'loss_sum': stats.loss_sum, 'valid_targets': stats.valid_targets,
                         'mean_loss': stats.loss_sum / stats.valid_targets, 'sampler_seed': config.seed + epoch,
                         'optimizer_steps': stats.optimizer_steps, 'resource': stats.resource})
         if save_recovery:
-            save_checkpoint(output / f'refit-recovery-epoch-{epoch}.pt', adapter, optimizer,
+            snapshot = output / f'refit-recovery-epoch-{epoch}.pt'
+            save_checkpoint(snapshot, adapter, optimizer,
                             identity=recovery_identity,
                             progress={'role': 'refit_recovery_v1', 'epoch': epoch,
                                       'complete': True, 'history': list(history)})
+            if checkpoint_callback is not None:
+                checkpoint_callback(snapshot, None)
+    if resume_checkpoint is not None and first_epoch > len(history) and checkpoint_callback is not None:
+        snapshot = preserve_checkpoint(Path(resume_checkpoint), output / Path(resume_checkpoint).name)
+        checkpoint_callback(snapshot, None)
     adapter.optimizer = optimizer
     adapter.training_history = history
     adapter.completed_epochs = selected_epochs

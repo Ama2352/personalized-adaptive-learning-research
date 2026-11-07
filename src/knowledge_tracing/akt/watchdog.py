@@ -13,6 +13,7 @@ import time
 from .authorization import preflight, require_authorization
 from .config import load_config
 from .resources import memory_snapshot
+from .recovery import validate_source, publish_envelope
 
 
 def _emit_memory_event(event: str, phase: str, run_id: str, *, snapshot: dict | None = None,
@@ -114,6 +115,10 @@ def main(argv: list[str] | None = None) -> int:
     timeout = approved_caps['max_wall_seconds']
     if timeout is None:
         raise ValueError('smoke/pilot configuration must include a wall-clock cap')
+    source = (validate_source(config, current_identity=authorization['identity'], caps=approved_caps)
+              if config.recovery is not None else None)
+    if source is not None:
+        timeout -= source['cumulative_wall_seconds']
 
     parent_events: list[dict] = []
 
@@ -160,6 +165,7 @@ def main(argv: list[str] | None = None) -> int:
         _persist_parent_resources(config, parent_events, status='incomplete',
                                   worker_pid=process.pid, elapsed_seconds=elapsed,
                                   stop_reason='watchdog_timeout')
+        publish_envelope(config, authorization=authorization, elapsed_seconds=elapsed)
         raise TimeoutError('smoke/pilot watchdog stopped the child before a complete result') from exc
     returncode = process.wait()
     elapsed = time.perf_counter() - started
@@ -176,6 +182,8 @@ def main(argv: list[str] | None = None) -> int:
                               worker_pid=process.pid, elapsed_seconds=elapsed,
                               worker_returncode=returncode,
                               stop_reason=None if returncode == 0 else 'worker_exit_nonzero')
+    if status != 'completed':
+        publish_envelope(config, authorization=authorization, elapsed_seconds=elapsed)
     _write_captured(stdout, sys.stdout)
     _write_captured(stderr, sys.stderr)
     if returncode:

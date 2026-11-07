@@ -10,6 +10,8 @@ import json
 import math
 from pathlib import Path
 import re
+import os
+import uuid
 
 from .config import AKTConfig, RecoveryOptions
 from .filesystem import publish_new_file
@@ -35,6 +37,31 @@ def training_config_hash(config: AKTConfig) -> str:
     if config.recovery is not None:
         return semantic_hash(config)
     return hashlib.sha256(json.dumps(asdict(config), sort_keys=True, default=str).encode()).hexdigest()
+
+
+def training_budget(config: AKTConfig, budget: dict) -> dict:
+    return {key: value for key, value in budget.items()
+            if config.recovery is None or key != 'run_id'}
+
+
+def preserve_checkpoint(source: Path, destination: Path) -> Path:
+    """Copy byte-identical vào attempt mới, không thay checkpoint/identity nguồn."""
+    if source.resolve() == destination.resolve():
+        return source
+    expected = digest_file(source)
+    temp = destination.with_name(destination.name + '.' + uuid.uuid4().hex + '.tmp')
+    try:
+        with source.open('rb') as old, temp.open('xb') as new:
+            for chunk in iter(lambda: old.read(1024 * 1024), b''):
+                new.write(chunk)
+            new.flush()
+            os.fsync(new.fileno())
+        if digest_file(temp) != expected or digest_file(source) != expected:
+            raise ValueError('checkpoint changed during preservation')
+        publish_new_file(temp, destination)
+    finally:
+        temp.unlink(missing_ok=True)
+    return destination
 
 
 def stable_inputs(identity: dict) -> dict:
@@ -114,6 +141,7 @@ def validate_source(config: AKTConfig, *, current_identity: dict, caps: dict) ->
     manifest = _read_json(_checked_file(path.parent, value.get('manifest')))
     watchdog = _read_json(_checked_file(path.parent, value.get('watchdog')))
     if (manifest.get('run_id') != path.parent.name
+            or manifest.get('status') not in {'incomplete', 'failed', 'bounded'}
             or watchdog.get('run_id') != path.parent.name
             or watchdog.get('status') not in {'incomplete', 'failed', 'bounded'}):
         raise ValueError('recovery source is not a terminated incomplete attempt')
@@ -158,7 +186,6 @@ def publish_envelope(config: AKTConfig, *, authorization: dict, elapsed_seconds:
             json.dump(value, stream, sort_keys=True, separators=(',', ':'))
             stream.write('\n')
             stream.flush()
-            import os
             os.fsync(stream.fileno())
         publish_new_file(temp, destination)
     finally:
