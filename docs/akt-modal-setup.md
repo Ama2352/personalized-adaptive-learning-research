@@ -7,6 +7,7 @@ Ngày07/11/2026. User đã có Modal và nêu mức30USD/tháng. Chưa xác minh
 - Modal SDK1.6.3 cài trong `D:\Dev\KLTN\.venv`,27package mới,30existingpackage versions giữ nguyên. `pip check`, CLIversion/help pass. Không cài Python global, không đổi `requirements-akt.lock.txt`.
 - `requirements-modal-client.in` và `requirements-modal-client.lock.txt` là phần bổ sung cho controller Windows hiện tại, pin public wheel hashes. Nó dựa trên projectvenv đã có các shared dependencies; không là standalone lock cho Linux/CUDA training image.
 - Bằng chứng tại `research_tracking/runs/cpu-modal-client-20261107-01/`. Source-bound CPU Gate401 vẫn hợp lệ; suite đó chạy trước SDKinstall. Sauinstall đã kiểm versions/source/lock và localSDK, không claim rerun401.
+- [Kiểm Git cuối](../research_tracking/reports/git_evidence_verification_modal_20261107.json) đối chiếu nguyên bytes của bundles và xác nhận privateconfig không tracked. Đây không là xác nhận tài khoản hoặc cloud budget đã được cấu hình.
 - Private config dùng `artifacts/akt/private/modal.toml`, Gitignored đã kiểm. Chưa có token được tạo. Không đưa credentials vào logs, source, registry hoặc chat.
 
 ## Người dùng cần cung cấp
