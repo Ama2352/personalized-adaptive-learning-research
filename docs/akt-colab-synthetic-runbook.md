@@ -5,7 +5,7 @@ Mục đích là kiểm CUDA, causal inputs, artifact publish và checkpoint rel
 ## Chuẩn bị local
 
 ```powershell
-.\.venv\Scripts\python.exe -B scripts/akt/build_colab_bundle.py --output artifacts/akt/colab/akt-synthetic-20261107-v4.zip
+.\.venv\Scripts\python.exe -B scripts/akt/build_colab_bundle.py --output artifacts/akt/colab/akt-synthetic-local-check.zip
 ```
 
 Lệnh từ chối ghi đè bundle. Khi source đổi, tạo tên bundle mới. Source hashes và dependencies của mỗi run nằm trong report. Bundle gồm source hiện tại trong working tree, vì vậy dùng manifest hash để xác định chính xác snapshot. Schema2 dùng scope source_and_bounded_test_fixtures, gồm script dependencies và các simulator CSV nhỏ cần cho tests. Notebook nguồn Paper1/2 được sao dưới dạng source-only, bỏ outputs/execution metadata trong bản copy. Source cells giữ nguyên, original SHA và transform ghi trong manifest. Notebook gốc giữ nguyên trên repo. Junyi interactions, CV/refit predictions và checkpoint nằm ngoài allowlist.
@@ -14,7 +14,9 @@ Lệnh từ chối ghi đè bundle. Khi source đổi, tạo tên bundle mới. 
 
 Mở notebook trong Colab bằng Upload notebook. Có thể chạy các cell chuẩn bị/CPU trước, rồi chọn GPU runtime khi cần CUDA probe. Upload bundle do lệnh trên tạo. Notebook nhận cả schema1 cũ và schema2 mới, kiểm hash trước extract, clone upstream pinned và tạo ROOT/.venv với system-site-packages để kế thừa PyTorch runtime. Các package còn thiếu chỉ được cài bằng interpreter của venv này. CPU/GPU subprocess dùng cùng interpreter đó. PyTorch/runtime identity được ghi trong output, cần pin image và xác minh lại khi chuyển Modal.
 
-Cell kiểm CPU chạy suite AKT/shared trước, subprocess timeout300giây. Test `test_native_akt_import_cpu` được loại bằng biểu thức tên test độc lập OS vì kiểm venv/lockfile Windows local. Probe thay thế ghi runtime/source/dependency identity thực. Các tests còn lại dùng source và fixture trong bundle. Cell GPU chạy một synthetic epoch, một optimizer step,400targets, H/T100, d256 và defaults kiến trúc hiện tại, timeout600giây. Nếu thiếu GPU hoặc test lỗi, dừng và giữ log. Cell cuối tải output để lưu bằng chứng.
+Cell kiểm CPU chạy AKT/shared/GAM, subprocess timeout300giây và CUDA_VISIBLE_DEVICES rỗng trong riêng workerCPU. Hai integration tests được loại rõ bằng tên. `test_native_akt_import_cpu` cần local venv/Windows lock; `test_actual_frozen_assignments_are_unchanged_and_student_disjoint` cần assignments thật không thuộc portable kit. Probe thay thế ghi runtime/source/dependency identity thực. Các tests còn lại dùng source/fixtures trong bundle. Cell GPU giữ visibility GPU của runtime, chạy một synthetic epoch, một optimizer step,400targets, H/T100, d256 và defaults kiến trúc hiện tại, timeout600giây. Nếu thiếu GPU hoặc test lỗi, dừng và giữ log. Cell cuối tải output để lưu bằng chứng.
+
+Kit mới nhất đã build là artifacts/akt/colab/akt-synthetic-20261107-v6.zip,113files, SHA256 cc6db51705a0549afe834ebc27f444f73e5bb149c8fb904c1c967b1276b73af7. Local isolated extraction kiểm AKT/shared240passed1deselected trênv5; manifest so v6 chứng minh mọi file AKT/shared và dependency giống v5, chỉ đổi test_core của GAM. GAM trênv6 đạt31passed1deselected. Đây là hai suite riêng, chưa là actual Colab/Linux/CUDA run. v4 có missing host fixtures, v5 còn GAM test phụ thuộc assignments thật, giữ logs và ZIP cũ để truy nguồn.
 
 Notebook yêu cầu người dùng ở giao diện Colab chọn runtime, upload bundle và tải output. Chưa có remote runtime nào được kết nối trong phiên local. Có thể điều khiển notebook hiện có sau khi được cấp link/quyền và runtime sẵn sàng, tùy công cụ truy cập.
 

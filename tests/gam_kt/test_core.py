@@ -133,14 +133,17 @@ def test_difficulty_uses_train_only_and_matches_original_formula():
     assert fitted.get("never_seen") == fitted.global_difficulty
 
 
-def test_order_ties_use_source_row_and_assignments_are_not_regenerated():
+def test_order_ties_use_source_row_without_io_or_mutating_input(monkeypatch):
     from knowledge_tracing.gam_kt.splits import order_user_events
 
     frame = pd.DataFrame({"user_id": ["b", "a", "a"], "time_done": [2, 5, 5], "source_row": [8, 7, 2]})
+    def forbidden(*args, **kwargs):
+        raise AssertionError('ordering must not access or regenerate dataset files')
+    monkeypatch.setattr(pd, 'read_parquet', forbidden)
+    monkeypatch.setattr(duckdb, 'connect', forbidden)
     ordered = order_user_events(frame)
     assert ordered.source_row.tolist() == [2, 7, 8]
-    frozen_path = __import__("pathlib").Path("artifacts/bkt_baseline/splits/assignments.parquet")
-    assert frozen_path.is_file()
+    assert frame.source_row.tolist() == [8, 7, 2]
 
 
 def test_actual_frozen_assignments_are_unchanged_and_student_disjoint():
