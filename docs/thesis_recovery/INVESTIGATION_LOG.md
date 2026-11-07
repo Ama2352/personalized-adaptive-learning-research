@@ -55,3 +55,7 @@ Source/architecture phương pháp chưa được approved giữ pending. Thêm 
 ## 07/11/2026 — Đối chiếu DeepWiki AKT theo yêu cầu
 
 Đọc GettingStarted/Installation/RunningModels qua link từ DeepWiki home sau directopen failure. Wiki index01b7e8 khớp pinned upstream. Source/hash check và khởi tạo2models xác nhận d_ff effective upstreamCLI2048 vì utils không truyền parser d_ff1024, adapter KLTN truyền1024. Có sai khác loss reduction/lr/batch/seed/window/epoch selection. Đây là native NonRasch adaptation, không full recipe reproduction.4upstream paritytests pass8.50s. Không sửa hyperparameters/source upstream, không cài dependencies hoặc run realdata. Báo cáo13 và evidence mới ghi đầy đủ.
+
+## 07/11/2026 — Mở rộng đối chiếu chín trang và nested pages AKT
+
+Đọc20trang yêu cầu/liên quan,3trang con fetch failure được ghi rõ và dùng pinned source để kiểm cơ chế. Xác nhận wiki có sai lệch QA formula, event-table schema, skill/problem và header/split interpretations. DATA trả3arrays gồm student index, PID_DATA trả3arrays gồm pid. Thêm4synthetic loader/adapter contract tests, cùng native parity/causality đạt17pass11.28s. Không thay architecture/hyperparameter hoặc chạy dữ liệu thật/GPU. Báo cáo14 và JSON inventory/hash ghi chi tiết. Giữ next dependency là architecture identity, CLI recovery integration và CUDA lifecycle.
