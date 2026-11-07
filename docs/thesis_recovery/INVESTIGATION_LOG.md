@@ -93,3 +93,7 @@ Phát hiện builder cũ thiếu shared-test Paper1/2 fixtures và diagnostic sc
 Main Gate2portable-kit06pass241, nofail/error/skip, current pointerverified. Archives giữ cảfailed/support-cap03 và successful04/05/06 cùngkitv4/v5/v6 manifests. PublicCLI recovery vẫn chưaimplemented, contract16 cóREC01–06.
 
 Kiểm cuối batch:13bundles/123Git output blobs khớpSHA, require_gate2_evidence PASS_CPU241tests. TASKS bổ sungREC01–REC06 vớideps,42task DAG được kiểm khôngcycle. Working tree sạch trước ghi verification cuối. Kitv6 được xác minh local theo hai suite, actualColab/CUDAfalse. RQ và publicCLI recovery chưa complete.
+
+## 07/11/2026 — Recovery schema và source contract
+
+Tiếp loop theo user authorization 1–2 giờ. RecoveryOptions default off, source envelope SHA/path/semantic/input/cumulative-wall validation không import Torch. 21contract tests và 48contract+runner tests pass. Log/giới hạn trong17_AKT_RECOVERY_ENGINEERING_LOG.md. Chưa nối CLI; Gate2 build cũ stale. Không real-data training/Holdout/cloud.

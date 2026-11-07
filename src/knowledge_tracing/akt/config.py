@@ -21,6 +21,13 @@ class DataPaths:
 
 
 @dataclass(frozen=True)
+class RecoveryOptions:
+    checkpoint_every_steps: int = 1
+    source_envelope: Path | None = None
+    source_sha256: str | None = None
+
+
+@dataclass(frozen=True)
 class AKTConfig:
     project_root: Path = PROJECT_ROOT
     output_dir: Path = PROJECT_ROOT / 'experiments/akt/results/preflight'
@@ -69,9 +76,13 @@ class AKTConfig:
     memory_mb: int = 512
     threads: int = 2
     fetch_rows: int = 50000
+    recovery: RecoveryOptions | None = None
 
 
 def validate_config(config: AKTConfig) -> None:
+    if config.recovery is not None:
+        from .recovery import validate_options
+        validate_options(config)
     if config.project_root.resolve() != PROJECT_ROOT.resolve():
         raise ValueError('project root must be the trusted repository root')
     if config.phase not in {'preflight', 'smoke', 'pilot', 'fold-readiness', 'fold'}:
@@ -157,6 +168,16 @@ def load_config(path: Path) -> AKTConfig:
                 data[key] = PROJECT_ROOT / data[key]
     if 'betas' in data:
         data['betas'] = tuple(data['betas'])
+    if data.get('recovery') is not None:
+        options = data['recovery']
+        if not isinstance(options, dict):
+            raise ValueError('recovery must be an object or null')
+        options = dict(options)
+        if options.get('source_envelope') is not None:
+            options['source_envelope'] = Path(options['source_envelope'])
+            if not options['source_envelope'].is_absolute():
+                options['source_envelope'] = PROJECT_ROOT / options['source_envelope']
+        data['recovery'] = RecoveryOptions(**options)
     config = AKTConfig(**data)
     validate_config(config)
     return config

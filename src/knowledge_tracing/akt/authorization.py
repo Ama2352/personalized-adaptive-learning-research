@@ -186,4 +186,7 @@ def require_authorization(config: AKTConfig, authorization: dict | None, *,
             raise PermissionError(f'authorization exceeds or changes configured cap: {name}')
     if authorization.get('gate_pass') or authorization.get('status') == 'PASS':
         raise PermissionError('gate evidence cannot grant execution authorization')
+    if config.recovery is not None:
+        from .recovery import validate_source
+        validate_source(config, current_identity=authorization['identity'], caps=requested)
     return authorization
