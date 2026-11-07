@@ -40,3 +40,11 @@ Run32learner và run mở rộng256learner có notes/manifests riêng. Xem repor
 ## CPU-SIM-KT-INTERFACE — Causal query/probe plumbing
 
 Native AKT online/offline/geometry/OOV và session isolation được kiểm bằng synthetic fixtures và Paper2 bank metadata. Không là CG-AKT efficacy. Delayed-query invariance cho thấy native model không biết elapsed calendar time, không chứng minh latent retention bất biến. Source/export bug H3/T2 được tái hiện/sửa; historical predictions giữ nguyên. Xem simulator_kt_interface_20261107.md và runs/cpu-sim-kt-interface-20261107-01/02.
+
+## CPU-SIM-DATA — Observable/oracle và role boundaries
+
+`runs/cpu-sim-data-context-20261107-03` và `runs/cpu-sim-collector-20261107-04-portable`: schema chặn oracle fields, train-only vocabulary, current/future input-prefix guard, role-disjoint allocation, OOV/global-window/collator accounting. Đây là evidence phần mềm hỗ trợ tính hợp lệ cho RQ1/RQ3, không là predictive/learning benefit. Collector fixture24targets chỉ phủ22/84items; full corpus T10, mastery calibration và complete trainer vẫn mở. Không suy learner independence từ seed namespaces.
+
+## CPU-SIM-DOMAIN — Checkpoint environment identity khi strip notebook output
+
+`runs/cpu-sim-collector-trials-20261107-01/collector-domain-audit-01.json` xác nhận full storageSHA làm domainv1 khác dù mọi cellsource identical. Collectorv2 đã tách semantic definitions/constants/input/clock khỏi storage integrity;65targeted tests kiểm actual bundler, already-stripped copy và scientific-change negative controls. V1/v2oracle/RNG/query/label parity giữ nguyên trong fixture. Không là actual Linux/CUDA/Modal checkpoint handoff proof; runtime/Volume ladder vẫn bắt buộc. Đọc report simulator_collection_runner_20261107.md trước khi trích nhận định này.

@@ -2,7 +2,7 @@
 
 ## Mức hoàn thiện
 
-DATA05/06 đã có code và **60targeted tests pass,0fail/error/skip**,8.85giây, trong [run02](../runs/cpu-sim-collector-20261107-02/README.md). Đây là collector/adapter fixture, chưa là full training runner hoặc corpus nghiên cứu được duyệt. Không train NN, không đọc Junyi/real Holdout, không GPU/cloud. Gate2 toàn source cần refresh sau gói này.
+DATA05–07 completed CPU engineering với **65targeted tests** ở [run04](../runs/cpu-sim-collector-20261107-04-portable/README.md) và **401tests source-bound Gate2-13**, khôngfail/error/skip. Đây là collector/adapter fixture và compatibility fix, chưa là full training runner hoặc corpus nghiên cứu được duyệt. Không đọc Junyi/real Holdout hoặc dùng GPU/cloud. Collector proof không instantiate NN/optimizer; software suite có các bounded native synthetic tests sẵn có. Run02 với60tests là snapshotv1, chi tiết các lần thử bên dưới.
 
 Chi tiết API/contract tại [19_SIMULATOR_DATA_AND_GRAPH_BOUNDARIES](../../docs/thesis_recovery/19_SIMULATOR_DATA_AND_GRAPH_BOUNDARIES.md), phần DATA05–06.
 
@@ -40,3 +40,15 @@ Collector **v2** dùng semantic identity của allowlisted definition hashes/con
 Đối chiếu v1run02 vớiv2run03: **oracle sidecar gồm RNG states/uniforms và learner queries/labels identical**. Domain/policy/recipe identities đổi có chủ đích theo version; không tự migrate model cũ. Fixture vẫn22observed/62unobserved items,24targets và0optimizer steps.
 
 Gate2-12 của sourcev1 đạt396tests,0fail/error/skip374.84giây (wall378.92s), timeout420s. Sau semantic fix phải coi gate này là snapshot; source mới cần Gate2-13. Dự toán software suite mới540s (hard maximum600s ở runner) vì measured runtime biến động lớn so với gate361/152.84s trước; không đổi smoke/pilot/training/cloud budgets hoặc bỏ tests.
+
+## Gói chuyển runtime và cập nhật chỉ mục
+
+V10135files SHA `db6b122df8297135db04ad63835b3d96909b403467456983b9c04b5082049eab` đã kiểm ZIP/hash/source parity, có collectorv2/adapter/unique test module names; không kèm dataset/checkpoints/oracle JSON. [Bản kiểm](colab_bundle_v10_verification_20261107.json) ghi notebook-copy transforms. Chưa extract/execute suite trong bundle hoặc chạy Linux/Colab/CUDA; Windows CPU wheel lock chỉ là fixture hash, không dùng install Linux image. V9 giữ nguyên như snapshot lịch sử.
+
+Registry bổ sung16terminal run manifest indices đã có từ các batch recovery/interface/data/collector; đây là backfill chỉ mục, không phải16thí nghiệm mới hoặc nâng mức kết luận RQ. Failed run giữ statusFAILED; execution hoàn tất archive không làm trialfailed thànhpass. `CLAIM_EVIDENCE_MATRIX`, ledger và reportsREADME được nối để sau này trích đúng loại bằng chứng.
+
+## Nghiệm thu source cuối
+
+**Gate2-13:401passed,0failed/error/skipped,374.53giây**, explicit CPU suite budget540s; source/lock/upstream ổn định và current pointerverified. Report SHA `fddb2fe0e8efb15002f35a2079ebada2bace12aacfbf21d3cefde8ce9df6c546`. [Archive14outputs](../runs/cpu-sim-collector-gate-20261107-01/README.md) giữ report/log/JUnit401 và396, current/previous pointer, v1test snapshot đúngSHA, v1/v2RNG parity và v10verification. Chỉ2sourcefiles đổi từ gate396 sang401; prior snapshots được kiểm với hashes report396, không thay report cũ.
+
+DATA05–07 complete trong phạm vi engineering đã nêu. Registry42entries sau khi thêm gate archive mới. Các con số này không đổi trạng thái RQ: chưa có CG-AKT trained/evaluated hoặc accepted full simulator experiment. Không phải mọi phần cài đặt mô hình đã hoàn thành.

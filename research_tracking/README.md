@@ -2,6 +2,8 @@
 
 **Điểm bắt đầu cho người viết báo cáo:** [Bản đồ repository](../docs/REPOSITORY_MAP.md) và [mục lục báo cáo](reports/README.md). `reports/` là nơi thống nhất bản phân tích/số liệu tổng hợp; `runs/` là bundles bằng chứng theo run. Hai phần phục vụ diễn giải và kiểm chứng, chưa phải bản luận văn hoàn chỉnh. Output bootstrap baseline đã chuyển từ root `reports/` vào đây, có [hồ sơ relocation](reports/report_relocation_20261107.json).
 
+**Collector/KT simulator mới:** [báo cáo DATA05–07](reports/simulator_collection_runner_20261107.md) phân biệt collector fixture, adapter, domain portability fix và corpus/trainer chưa hoàn thành. Registry được bổ sung từ các terminal run manifests đã tồn tại; đó là cập nhật chỉ mục, không là số thí nghiệm mới. Current source-bound software gate xem investigation state, không lấy số tests trong các snapshot lịch sử bên dưới.
+
 Nội dung theo run có thể là pilot nghiên cứu, kiểm phần mềm hoặc archive một lần kiểm; không dùng số thư mục hay số tests để tính số thí nghiệm trả lời RQ. Với run đã đóng gói, đọc README và manifest trước kết quả. Các mục phân công/audit ban đầu bên dưới được giữ để truy lịch sử; trạng thái triển khai mới xem [progress](RESEARCH_PROGRESS.md) và [investigation state](../docs/thesis_recovery/INVESTIGATION_STATE.json).
 
 ## Mục đích và phạm vi

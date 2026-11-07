@@ -36,3 +36,15 @@ Run32learner và run mở rộng256learner có notes/manifests riêng. Xem repor
 ## Portable-kit và Gate2 cuối batch07/11
 
 Kitv6 có113source/fixture files, source-only notebook copies và project venv. Manifest comparison chỉ ra AKT/shared v6 giống v5 đã kiểm240passed1deselected; GAMv6 đạt31passed1deselected. Hai local integration exclusions được ghi rõ. Actual Colab/CUDA chưa chạy. Main Gate2 đạt241test khôngskip. Tất cả log thành công/thất bại của batch ở runs/cpu-controls-portability-20261107-01.
+
+## Collector/adapter simulator07/11 — engineering, không confirmatory experiments
+
+| Run | Trạng thái | Bằng chứng | Giới hạn |
+|---|---|---|---|
+|cpu-sim-collector-20261107-01|FAILED|Collector proof24targets; pytest collection error do test module trùng basename|Không coi failed suite làPASS; bundle giữ nguyên|
+|cpu-sim-collector-20261107-02|COMPLETED|60targeted tests, v1 exact source replay/repeat;24targets12windows|Train-only2×12fixture,0NN/optimizer,22/84items|
+|cpu-sim-collector-trials-20261107-01|COMPLETED archive|12outputs gồm lỗi Windows path, source snapshots, log14/34tests và static domain defect|Archive hoàn tất không biến các trial failed thànhpassed|
+|cpu-sim-collector-20261107-03-semantic|COMPLETED|64tests, collectorv2 semantic domain, RNG namespacev1|KhôngactualLinux/CUDA|
+|cpu-sim-collector-20261107-04-portable|COMPLETED|65tests gồm already-stripped checkout; v1/v2oracle/queries/labels exact|Khôngfullcorpus/trainer/calibration/refit/final runner|
+
+Gate2-12 nguồn v1 đạt396tests374.84s; sau semantic fix cần source-bound gate mới. Gate counts là kiểm phần mềm, không số thí nghiệm RQ. Xem reports/simulator_collection_runner_20261107.md và investigation state cho current gate sau nghiệm thu.
