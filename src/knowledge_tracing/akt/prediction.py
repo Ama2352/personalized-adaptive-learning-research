@@ -76,7 +76,7 @@ def iter_predictions(adapter: AKTAdapter, learners: Iterable[LearnerEvents]) -> 
                     hashlib.sha256(f'{event.user_id}\0{entry.global_rank}\0unseen'.encode()).hexdigest(),
                     checkpoint_id)
                 continue
-            probabilities = np.asarray(adapter.predict(entry.inputs), dtype=np.float64)
+            probabilities = np.asarray(adapter.predict_window(entry), dtype=np.float64)
             if probabilities.shape != entry.target_mask.shape:
                 raise ValueError('adapter prediction shape does not align with window')
             for index in np.flatnonzero(entry.target_mask):

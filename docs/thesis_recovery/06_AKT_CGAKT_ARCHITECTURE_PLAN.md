@@ -1,5 +1,7 @@
 # Kiến trúc AKT và CG-AKT đề xuất
 
+Cập nhật engineering07/11: domain/session/reference và AKT online/checkpoint bridge đã được triển khai prototype theo18_SIMULATOR_KT_INTERFACE.md. Không tự adopt mastery/calibration/controller protocol hoặc graph architecture bên dưới; các phần đó vẫn cần review. Junyi checkpoint thiếu simulator identity bị từ chối.
+
 Đây là design cần review trước implementation. Upstream AKT NonRasch giữ source commit đã pinned. Không sửa architecture trong phiên điều tra.
 
 ## Bốn điều kiện tối thiểu

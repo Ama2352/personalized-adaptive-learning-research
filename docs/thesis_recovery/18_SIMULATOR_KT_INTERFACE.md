@@ -22,3 +22,11 @@ Reference bank và weights phải khai báo rõ. Prototype trả `mean_reference
 |SIM04|Persist source/log/hash/task state|Vietnamese report, immutable bundle, source-bound Gate2 refresh sau stable code, commit từng gói verified|
 
 Không nối protocol vào run full experiment hoặc gọi native Paper2 `is_mastered` bằng score mới. Không tái sử dụng Junyi checkpoint cho Grade10. Không chọn reference weights/ngưỡng dựa trên Holdout hoặc final simulator seeds. Các tests chỉ chứng minh semantics phần mềm; diversity/coverage của training trajectories và calibration vẫn cần thí nghiệm riêng đã duyệt.
+
+## SIM01/SIM02 — Kiểm chứng đầu
+
+Pure contract10tests pass. Actual AKT fixture train8events, tối đa2updates; không random weights giả làm fitted model, không báo predictive/learning metric. Loader kiểm SHA, complete/selected role, training domain, vocabulary và inference recipe; giữ Torch RNG khi tạo container model. Online/OOV/block-boundary/history/reset/probe tests và model/export regression36passed24.80s (`evidence/20261107-sim-export-04.log`). CPU online/offline tolerance abs1e-6, không suy tolerance CUDA.
+
+Phát hiện bug export: `iter_predictions` gọi `adapter.predict` trên window đã có geometry, làm re-anchor lần2. Fixture H3/T2 cho3/11predictions khác, maxabs0.00178698 (`sim-parity-02.log`). Thêm `predict_window` chấm trực tiếp, online và export cùng dùng. Đây là software bug ở cấu hình hợp lệ, không đổi hyperparameters/selection protocol. Fixture H100/T100 với205events vàOOV xác minh old-local-window và direct-window parity abs1e-6, cùng online boundaries. Không suy tất cả run cũ hỏng hoặc sửa historical predictions.
+
+Lưu failures: `sim-online-01`14pass1fail do test setup dùng strict shared vocabulary cho OOV; sửa fixture encoding, không nới shared API. `sim-export-03`25pass10fail do FakeAdapter chưa cập nhật interface mới; đổi fixture sang `predict_window`, không fallback production sang re-anchor cũ. Logs giữ nguyên. Gate2 full build còn cần refresh sau SIM03 ổn định.

@@ -113,3 +113,7 @@ Gate2-07 271pass2fail do Windows long temp path, khôngpublish; sửa short temp
 ## 07/11/2026 — Simulator interface bắt đầu
 
 Đọc state và source KT/window/selector. Không lấy Junyi checkpoint gán sang simulator, không chọn threshold. SIM01 có domain/bank identity, predict ticket→observe, pure probes, snapshot/reset, missing-reference coverage;10contract tests pass0.18s. SIM02 native tests đang chạy; fixture đầu14pass1fail vì shared strict vocabulary rejects OOV trong test setup, sửa fixture dùng explicit AKT OOV encoding, không nới production vocabulary. Source mới làm Gate2 cũ stale; full refresh sau stable batch.
+
+## 07/11/2026 — Native online parity và double re-anchor bug
+
+SIM02 actual AKT fixture train8events≤2updates, SHA/domain/recipe/vocab/selected-checkpoint guards; frozen model and RNG, snapshot/reset/crosslearner verified. New regression xác nhận export double-window bug H3/T2,3/11predictions maxabs0.00178698. Direct predict_window sửa semantics, default H100/T100205events+OOV legacy/direct parity1e-6.36tests pass24.80s sau fake adapter API update; failed logs giữ. Không realdata/GPU/Holdout hoặc sửa historical artifacts.

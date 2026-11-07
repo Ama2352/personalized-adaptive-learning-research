@@ -25,8 +25,8 @@ class FakeAdapter:
         self.config = SimpleNamespace(context=100, target_block=100)
         self.run_identity = {'source': 'pinned', 'checkpoint': 'synthetic'}
 
-    def predict(self, inputs):
-        return np.full(len(inputs.item_ids), 0.6, dtype=np.float64)
+    def predict_window(self, window):
+        return np.full(len(window.inputs.item_ids), 0.6, dtype=np.float64)
 
 
 def ready_records(user=None):

@@ -1,0 +1,38 @@
+.....F                                                                   [100%]
+================================== FAILURES ===================================
+_ test_export_does_not_reanchor_prebuilt_windows_when_context_is_not_multiple_of_block _
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/sim-parity-c55958f802ab40728b62e86d3f8e2780/test_export_does_not_reanchor_0')
+
+    def test_export_does_not_reanchor_prebuilt_windows_when_context_is_not_multiple_of_block(tmp_path):
+        from knowledge_tracing.akt.prediction import iter_predictions
+        fixture=fitted_fixture(tmp_path)
+        bank,config,model,optimizer,path,identity=fixture
+        model.checkpoint_id=sha256_file(path)
+        sequence=['A','B','C','A','B','C','A','B','C','A','B']
+        events=tuple(KTEvent('eval',item,i//2,i+1,i%2,0,2) for i,item in enumerate(sequence))
+        rows=[dict(user_id='eval',exercise=e.exercise,time_done=e.time_done,source_row=e.source_row,correct=e.correct)
+              for e in events]
+        inputs,_=build_causal_sequence_inputs(rows,item_key='exercise',item_vocabulary=model.encoding.vocabulary)
+        expected=model.predict(inputs)
+        actual=np.asarray([record.prediction for record in iter_predictions(model,[LearnerEvents('eval',2,events)])])
+>       np.testing.assert_allclose(actual,expected,rtol=0,atol=1e-6)
+E       AssertionError: 
+E       Not equal to tolerance rtol=0, atol=1e-06
+E       
+E       Mismatched elements: 3 / 11 (27.3%)
+E       Mismatch at indices:
+E        [5]: 0.5043010711669922 (ACTUAL), 0.5058983564376831 (DESIRED)
+E        [7]: 0.5179684162139893 (ACTUAL), 0.5182119607925415 (DESIRED)
+E        [9]: 0.4790510833263397 (ACTUAL), 0.4772641062736511 (DESIRED)
+E       Max absolute difference among violations: 0.00178698
+E       Max relative difference among violations: 0.00374421
+E        ACTUAL: array([0.473941, 0.516425, 0.509299, 0.479051, 0.518459, 0.504301,
+E              0.480424, 0.517968, 0.507732, 0.479051, 0.518459])
+E        DESIRED: array([0.473941, 0.516425, 0.509299, 0.479051, 0.518459, 0.505898,
+E              0.480424, 0.518212, 0.507732, 0.477264, 0.518459])
+
+tests\akt\test_online_simulator.py:156: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_online_simulator.py::test_export_does_not_reanchor_prebuilt_windows_when_context_is_not_multiple_of_block
+1 failed, 5 passed in 23.18s

@@ -98,6 +98,26 @@ class AKTAdapter:
         flush()
         return self
 
+    def predict_window(self, window: WindowInputs) -> np.ndarray:
+        """Chấm một window đã có global geometry, không cắt/re-anchor lần nữa."""
+        size = len(window.inputs.item_ids)
+        if (not 1 <= size <= self.config.max_length or len(window.inputs.user_ids) != size
+                or len(set(window.inputs.user_ids)) != 1
+                or not np.array_equal(window.inputs.sequence_offsets, [0, size])):
+            raise ValueError('invalid prebuilt prediction window')
+        batch = collate_windows([window], n_items=len(self.encoding.vocabulary.values), device=self.config.device)
+        previous_mode = self.native.training
+        try:
+            self.native.eval()
+            with torch.no_grad():
+                _, probabilities, _ = self.native(batch.q_data, batch.qa_data, batch.loss_targets)
+                result = probabilities.reshape(batch.q_data.shape)[0].cpu().numpy().astype(np.float64)
+                if not np.isfinite(result).all() or np.any((result < 0) | (result > 1)):
+                    raise ValueError('invalid prebuilt window probabilities')
+                return result
+        finally:
+            self.native.train(previous_mode)
+
     def predict(self, inputs: CausalSequenceInputs) -> np.ndarray:
         result = np.full(len(inputs.item_ids), np.nan, dtype=np.float64)
         visited = np.zeros(len(result), dtype=bool)
