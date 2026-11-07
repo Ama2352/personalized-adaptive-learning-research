@@ -101,3 +101,7 @@ Tiếp loop theo user authorization 1–2 giờ. RecoveryOptions default off, so
 ## 07/11/2026 — Recovery nối public CLI trên synthetic CPU
 
 Selection/refit dùng cùng train_epoch accounting, cursor/RNG/Adam/early-stopping snapshot, fresh attempt và terminal parent envelope. CLI04 2passed83.91s sau3lần sửa harness (giữ logs); prediction export/weights bit-identical với continuous, source immutable. Regression02 94passed36.54s sau default-off compatibility fix; snapshot01 16passed27.35s sau giảm duplicate Torch loads. Chưa Gate2 refresh cho build mới, chưa real-data/GPU. Runbook docs/akt-recovery-runbook.md.
+
+## 07/11/2026 — Common-population sensitivity cho Trap3
+
+Kiểm10pure order tests, rồi45GAM tests6.29s. Tái dùng nguyên3controls; đọc lại đúng approved256×300prefix,12575events,2.39s, reproduces original control summaries. Fixed incoming-degree opportunities + equal learner weights, missing/ties riêng;239eligible learners1361opportunities. Prior fraction chỉđổi1/7/1learners, common coverage569/564/566opportunities96/96/95learners. Identitycontrol0. KhôngCI/p-value/causalclaim, khônggraphgeneration/training/Holdout. Artifact bundle và report cpu_common_population_20261107.md.

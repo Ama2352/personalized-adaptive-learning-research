@@ -32,3 +32,7 @@ User chấp thuận bounded pilot trước execution. Xem reports/cpu_pilots_202
 ## Matched-control exposure07/11/2026
 
 Run32learner và run mở rộng256learner có notes/manifests riêng. Xem reports/cpu_matched_controls_20261107.md. Source controls giữ degree/topic/area/prefix-support-bin counts, còn learner-level co-observation thay đổi. Không suy graph neutral từ controls thiếu exposure. Mở rộng256×300/180s do user giao lựa chọn sau proposal cụ thể.
+
+## CPU-RQ2-COMMON — Coverage và learner weighting
+
+`runs/cpu-junyi-common-20261107-01/common_population.json` kiểm fixed-denominator learner/child diagnostic và identity negative control0. Chỉ1–7/239eligible learners có prior score đổi dưới mỗi control. Low exposure làm null comparison yếu; không suy graph neutral hoặc instructional benefit. `reports/cpu_common_population_20261107.md` ghi scope/estimand/attrition.

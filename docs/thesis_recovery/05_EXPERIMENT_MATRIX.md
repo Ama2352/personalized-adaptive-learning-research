@@ -42,3 +42,7 @@ E03 positive chỉ rõ tầng graph bắt đầu/dừng tác động, negative d
 E05 positive là predictive advantage còn sau null controls, negative gợi ý proxy-order hoặc graph-off, inconclusive vẫn giữ giới hạn observational. E06 positive là interactions/robustness đo được, negative là không thấy heterogeneity trong tested range, inconclusive do strata support thấp không extrapolate.
 
 E07 positive là semantic correctness, negative chặn train, inconclusive thiếu CUDA test chặn full. E08/E09 positive có effect size/CI và primary correction, negative/off là kết quả hợp lệ, inconclusive cần báo detectable effect và budget, không seed-shopping. E10 positive comparator evaluation đủ, negative model metrics kém vẫn đủ comparator nếu training accepted, inconclusive incomplete lifecycle không được xếp hạng. E11/E12 positive deliverable được nghiệm thu, negative cần sửa, inconclusive thiếu provenance ngăn công bố claim.
+
+## Bổ sung chẩn đoán Trap3 ngày07/11
+
+Đã thực hiện sensitivity descriptive trên approved prefix, không thay confirmatory protocol: fixed learner–child population, incoming-degree denominator, missing/ties categories và common-coobserved intersection/attrition. Xem `research_tracking/reports/cpu_common_population_20261107.md`. Chỉ1–7learners chịu thay đổi prior score dưới mỗi control. Confirmatory design phải chốt coverage/estimand và perturbation exposure trước inference, không lấy nullpilot làm graph-neutral claim hoặc chọncontrol theo labels.

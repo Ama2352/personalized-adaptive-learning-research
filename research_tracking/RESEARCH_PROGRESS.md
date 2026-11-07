@@ -54,3 +54,7 @@ Run32learner và run mở rộng256learner có notes/manifests riêng. Xem repor
 ## Portable-kit và Gate2 cuối batch07/11
 
 Kitv6 có113source/fixture files, source-only notebook copies và project venv. Manifest comparison chỉ ra AKT/shared v6 giống v5 đã kiểm240passed1deselected; GAMv6 đạt31passed1deselected. Hai local integration exclusions được ghi rõ. Actual Colab/CUDA chưa chạy. Main Gate2 đạt241test khôngskip. Tất cả log thành công/thất bại của batch ở runs/cpu-controls-portability-20261107-01.
+
+## Recovery CLI và common-population07/11, cập nhật mới
+
+AKT public smoke/pilot recovery đã nối và kiểm trên actual CPU model/parent-worker synthetic fixture; chưa real-data/GPU. Xem `docs/thesis_recovery/17_AKT_RECOVERY_ENGINEERING_LOG.md`. RQ2 có descriptive learner/common-opportunity analysis tái dùng3controls, chưa confirmatory protocol; xem `reports/cpu_common_population_20261107.md`. RQ1/RQ2 còn PARTIAL, RQ3 chưa trained/evaluated. Các Gate2 số test ở mục trước là snapshot lịch sử, build mới cần refresh.

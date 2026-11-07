@@ -58,3 +58,7 @@ Run32learner và run mở rộng256learner có notes/manifests riêng. Xem repor
 ## Portable-kit và Gate2 cuối batch07/11
 
 Kitv6 có113source/fixture files, source-only notebook copies và project venv. Manifest comparison chỉ ra AKT/shared v6 giống v5 đã kiểm240passed1deselected; GAMv6 đạt31passed1deselected. Hai local integration exclusions được ghi rõ. Actual Colab/CUDA chưa chạy. Main Gate2 đạt241test khôngskip. Tất cả log thành công/thất bại của batch ở runs/cpu-controls-portability-20261107-01.
+
+## Đối chiếu common population07/11
+
+`runs/cpu-junyi-common-20261107-01`: source/outputs SHA verified, reused all3controls,256learners12575events,2.39s. No correctness/Holdout/train. Interpretation và denominator rules tại `reports/cpu_common_population_20261107.md`.
