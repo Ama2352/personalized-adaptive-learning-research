@@ -51,3 +51,7 @@ Gói3 replayable shuffled-window cursor+13tests,20checks sampler/recoverypass,co
 Gói5 resumable epoch Python entrypoint+2integration tests,commit7048419. Interrupt sau step2 và resume khớp original train_epoch exact weights/loss,17targets,9windows,5updates. Caps cộng dồn, changed stream reject. Chưa nối gated CLI/selection/refit hoặc early-stopper history, chưa GPU/realdata. Intermediate fullsuite223pass41.42s, final225pass44.55s.
 
 Source/architecture phương pháp chưa được approved giữ pending. Thêm runbook12 nêu inputs/acceptance/limitations. T06,T11,T13 còn IN_PROGRESS đúng scope. Phiên có nhiều gói được commit, chưa chạy đủ3giờ và chưa hoàn tất KLTN. Next ready batch là selection/refit/stopper integration và paired trace adapter, không có cloud spend/Holdout access.
+
+## 07/11/2026 — Đối chiếu DeepWiki AKT theo yêu cầu
+
+Đọc GettingStarted/Installation/RunningModels qua link từ DeepWiki home sau directopen failure. Wiki index01b7e8 khớp pinned upstream. Source/hash check và khởi tạo2models xác nhận d_ff effective upstreamCLI2048 vì utils không truyền parser d_ff1024, adapter KLTN truyền1024. Có sai khác loss reduction/lr/batch/seed/window/epoch selection. Đây là native NonRasch adaptation, không full recipe reproduction.4upstream paritytests pass8.50s. Không sửa hyperparameters/source upstream, không cài dependencies hoặc run realdata. Báo cáo13 và evidence mới ghi đầy đủ.
