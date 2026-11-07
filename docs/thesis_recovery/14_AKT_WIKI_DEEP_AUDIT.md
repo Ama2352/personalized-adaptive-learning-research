@@ -96,3 +96,15 @@ Chi tiết d_ff và số parameter trên vocabulary tổng hợp nằm ở báo 
 `tests/akt/test_upstream_data_contract.py` bổ sung bốn test fixture cho DATA, PID_DATA, header và alignment adapter. Chạy cùng `test_upstream_parity.py` và `test_causality.py` bằng `.venv/Scripts/python.exe -B` đạt **17 passed in 11.28s**, log `evidence/akt-wiki-data-contract-tests.log`.
 
 Không cài thư viện, không chạy benchmark dữ liệu thật, không đọc Holdout hoặc cấp GPU. Thay đổi của lần kiểm toán chỉ gồm tests, tài liệu và tracking. Các file có sẵn chưa commit trong working tree được giữ riêng.
+
+## Kiểm tra tiếp sáu trang kiến trúc theo yêu cầu
+
+Đã mở lại AKT Class, Architecture Class và MultiHeadAttention thành công. TransformerLayer và hai trang Rasch/NonRasch tiếp tục fetch failure khi mở trực tiếp, qua mục lục và URL có query. Trạng thái truy cập ba trang này vẫn chưa giải quyết. Cơ chế được đối chiếu từ source đã pin, không coi đây là đã đọc nội dung wiki bị lỗi.
+
+Architecture Class mô tả đúng hai stack và thứ tự attention. Các block chẵn của blocks_2 dùng q/q/q, mask1 và bỏ FFN. Block lẻ dùng q/q/history, mask0 và bật FFN. `apply_pos` điều khiển position-wise FFN. Không có positional embedding mới được cộng trong forward này.
+
+Trang attention có hai giải thích cần thu hẹp. `zero_pad` zero hàng attention đầu tiên vì chưa có lịch sử dưới strict-past mask. Đây không phải cơ chế tổng quát phát hiện padding token. Gammas được khởi tạo Xavier uniform, rồi đi qua negative softplus. Gamma thô bằng0 vẫn cho hệ số -log(2), nên không thể kết luận khởi tạo gần0 có nghĩa attention chuẩn không decay.
+
+Nhánh Rasch trong source thêm difficulty scalar theo pid, các embedding chênh lệch và L2 trên difficulty. NonRasch tắt nhánh đó khi n_pid≤0. KLTN hiện n_pid0 và separate_qaFalse. Việc wiki có trang Rasch không tạo thêm yêu cầu tự đổi baseline sang Rasch. Các quyết định model của KLTN tiếp tục dựa đề cương và experiment plan.
+
+Nguồn kiểm tra gồm [Architecture Class](https://deepwiki.com/arghosh/AKT/3.1.2-architecture-class), [Attention](https://deepwiki.com/arghosh/AKT/3.1.4-multiheadattention-and-distance-aware-attention) và [akt.py tại commit đã pin](https://github.com/arghosh/AKT/blob/01b7e8d7d7c862cabc9467108e3e7f2555653a88/akt.py).
