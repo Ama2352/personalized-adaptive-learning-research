@@ -1,0 +1,101 @@
+{
+  "kind": "TEST_ONLY_SYNTHETIC_PARQUET_MAIN_WORKER_IN_PROCESS",
+  "scope": "actual worker, split/loader/train/validation/checkpoint/export; fake external provenance/RAM; no watchdog/refit/realdata claim",
+  "split_hash": "1f7ad5d61d2c6916928db55673f6d43ccde0c64ace86948ebe1ac2ab5748dac3",
+  "parent_split_hash": "cbb4918de046f20ac7939d7fc728cb2f8b99005a849c55036ce89571245eb0c0",
+  "train_users": [
+    "synthetic-1",
+    "synthetic-5"
+  ],
+  "validation_users": [
+    "synthetic-3"
+  ],
+  "input_sha256_unchanged": {
+    "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-17-485e7fb4e147403687d2a0acc57621df\\wk0\\p\\SYNTHETIC_ONLY.json": "75464d112d767f03722ea2d520e52c90d236b033ecbde263b48f65c1f73ef4cf",
+    "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-17-485e7fb4e147403687d2a0acc57621df\\wk0\\p\\fixture-assignments.parquet": "7ee3f5a65cd4fc7363b202bf625b045b902cb044adcca35609341707adccd02a",
+    "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-17-485e7fb4e147403687d2a0acc57621df\\wk0\\p\\fixture-parquet\\events.parquet": "a3afd80fe9c8ed7e0d6a165f537a82b363f79922d2982bb089177f61cbfae85e",
+    "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-17-485e7fb4e147403687d2a0acc57621df\\wk0\\p\\fixture-canonical.json": "f4ed4e74b5a74ddc10ccf101b0ff13d7e09dbabc72083cea34678e20b04e8cf5",
+    "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-17-485e7fb4e147403687d2a0acc57621df\\wk0\\p\\fixture-split.json": "558d78517c6c0b7cf32147fdf7d921965674693fed511113eff050272288bea7"
+  },
+  "checkpoint_sha256": "ac83b584193b4ef3df56831eb1c7e6572bd1ce6659e2de481fe0637c107dbc19",
+  "training_targets": 8,
+  "validation_targets": 4,
+  "fitted_predictions": 3,
+  "unseen_predictions": 1,
+  "validation_loss": 0.7202878395716349,
+  "checkpoint_validation": {
+    "predicted_rows": 3,
+    "unseen_rows": 1,
+    "expected_rows": 4,
+    "windows": 2,
+    "sequence_length_counts": {
+      "1": 1,
+      "2": 1
+    },
+    "batch_shape_counts": {
+      "1x1": 1,
+      "1x2": 1
+    },
+    "valid_tokens": 3,
+    "target_tokens": 3,
+    "context_tokens": 0,
+    "padding_tokens": 0,
+    "elapsed_seconds": 0.022443699999712408
+  },
+  "approved_caps": {
+    "max_rss_bytes": 2147483648,
+    "max_seconds": 30,
+    "max_steps": 2,
+    "max_targets_per_side": 8,
+    "max_train_users": 2,
+    "max_val_users": 1,
+    "max_wall_seconds": 90,
+    "min_available_ram_bytes": 1073741824
+  },
+  "loader_stats": {
+    "train": {
+      "peak_fetch_rows": 2,
+      "peak_learner_events": 4,
+      "chronological_query_sort_and_materialize_seconds": 0.01663399999961257,
+      "query_rows_returned": 8,
+      "selected_learners": 2,
+      "selected_targets": 8
+    },
+    "validation": {
+      "peak_fetch_rows": 2,
+      "peak_learner_events": 4,
+      "chronological_query_sort_and_materialize_seconds": 0.017513300001155585,
+      "query_rows_returned": 4,
+      "selected_learners": 1,
+      "selected_targets": 4
+    }
+  },
+  "prediction_target_identities": [
+    [
+      "synthetic-3",
+      301,
+      "A",
+      0
+    ],
+    [
+      "synthetic-3",
+      302,
+      "SYNTHETIC_OOV",
+      1
+    ],
+    [
+      "synthetic-3",
+      303,
+      "A",
+      0
+    ],
+    [
+      "synthetic-3",
+      304,
+      "B",
+      1
+    ]
+  ],
+  "gate1_gate2_and_ram_are_test_fixtures": true,
+  "new_refit_or_recovery_runs": 0
+}

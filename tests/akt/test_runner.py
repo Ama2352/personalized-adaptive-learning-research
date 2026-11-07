@@ -643,8 +643,19 @@ def test_preflight_verifies_gate1_without_opening_dataset(tmp_path, monkeypatch)
     lock.write_text('synthetic lock',encoding='utf-8')
     source = {'commit': config.source_commit}
     report = tmp_path/'runtime.json'
-    report.write_text(json.dumps({'source':source,'lock_sha256':hashlib.sha256(lock.read_bytes()).hexdigest(),
-        'python':str((PROJECT_ROOT/'.venv/Scripts/python.exe').resolve())}),encoding='utf-8')
+    # Fixture runtime isolated, không chứng nhận origins thực của Colab inherited venv.
+    runtime_sys = runner.authorization_module.sys
+    executable = runner.authorization_module.validate_runtime_interpreter(
+        PROJECT_ROOT / '.venv', executable=runtime_sys.executable,
+        prefix=runtime_sys.prefix, platform_id=runtime_sys.platform)
+    report.write_text(json.dumps({'runtime_schema_version': 2,
+        'platform_id': runtime_sys.platform, 'source': source,
+        'lock_sha256': hashlib.sha256(lock.read_bytes()).hexdigest(),
+        'python': str(executable), 'python_prefix': str((PROJECT_ROOT / '.venv').resolve()),
+        'project_root': str(PROJECT_ROOT.resolve()), 'lock_file': str(lock.resolve()),
+        'device': 'cpu', 'cuda_available': False,
+        'torch_origin': str(PROJECT_ROOT / '.venv/fixture/torch/__init__.py'),
+        'numpy_origin': str(PROJECT_ROOT / '.venv/fixture/numpy/__init__.py')}), encoding='utf-8')
     monkeypatch.setattr(runner, 'LOCK_FILE', lock)
     monkeypatch.setattr(runner, 'RUNTIME_REPORT', report)
     monkeypatch.setattr(runner, 'GATE2_REPORT', tmp_path/'missing-gate2.json')

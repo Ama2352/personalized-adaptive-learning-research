@@ -7,6 +7,8 @@ import types
 import pytest
 
 import scripts.akt.check_runtime as runtime_module
+import knowledge_tracing.akt.authorization as authorization_module
+import knowledge_tracing.akt.config as config_module
 from scripts.akt.check_runtime import inspect_runtime, validate_output_path, write_lock_from_report
 
 
@@ -75,6 +77,8 @@ def test_probe_rejects_modules_imported_from_outside_isolated_environment(tmp_pa
     env = tmp_path / 'isolated'
     env.mkdir()
     monkeypatch.setattr(sys, 'prefix', str(env))
+    entry = env / ('Scripts/python.exe' if sys.platform == 'win32' else 'bin/python')
+    monkeypatch.setattr(sys, 'executable', str(entry))
     monkeypatch.setattr(runtime_module, 'verify_upstream', lambda *args: {})
     for name in ('torch', 'numpy'):
         module = types.ModuleType(name)
@@ -91,6 +95,8 @@ def test_probe_does_not_write_bytecode_into_upstream_checkout(tmp_path, monkeypa
     source.mkdir()
     (source / 'akt.py').write_text('class AKT: pass\n', encoding='utf-8')
     monkeypatch.setattr(sys, 'prefix', str(env))
+    entry = env / ('Scripts/python.exe' if sys.platform == 'win32' else 'bin/python')
+    monkeypatch.setattr(sys, 'executable', str(entry))
     monkeypatch.setattr(sys, 'dont_write_bytecode', False)
     monkeypatch.setattr(runtime_module, 'verify_upstream', lambda *args: {})
     numpy = types.ModuleType('numpy')
@@ -104,6 +110,222 @@ def test_probe_does_not_write_bytecode_into_upstream_checkout(tmp_path, monkeypa
     inspect_runtime(source, expected_env=env)
     assert not (source / '__pycache__').exists()
     assert sys.dont_write_bytecode is False
+
+
+def isolated_runtime_fixture(tmp_path, monkeypatch, platform_id):
+    """Giả lập module-local sys; không sửa os.name hoặc cấp/cài runtime thật."""
+    env = tmp_path / '.venv'
+    env.mkdir()
+    entry = env / ('Scripts/python.exe' if platform_id == 'win32' else 'bin/python')
+    interpreter = types.SimpleNamespace(executable=str(entry), prefix=str(env),
+                                       platform=platform_id, version='synthetic-python',
+                                       dont_write_bytecode=sys.dont_write_bytecode)
+    monkeypatch.setattr(runtime_module, 'sys', interpreter)
+    monkeypatch.setattr(authorization_module, 'sys', interpreter)
+    monkeypatch.setattr(config_module, 'PROJECT_ROOT', tmp_path)
+    source = {'commit': config_module.SOURCE_COMMIT, 'files': {'akt.py': 'synthetic-source'}}
+    monkeypatch.setattr(runtime_module, 'verify_upstream', lambda *args: source)
+    monkeypatch.setattr(authorization_module, 'verify_upstream', lambda *args: source)
+    upstream = tmp_path / 'upstream'
+    upstream.mkdir()
+    (upstream / 'akt.py').write_text('class AKT: pass\n', encoding='utf-8')
+    lock = tmp_path / 'requirements-linux-cuda.lock.txt'
+    lock.write_text('synthetic lock; không là artifact cài runtime\n', encoding='utf-8')
+    for name in ('torch', 'numpy'):
+        module = types.ModuleType(name)
+        module.__file__ = str(env / 'lib/site-packages' / name / '__init__.py')
+        module.__version__ = 'synthetic-version'
+        if name == 'torch':
+            module.device = lambda name: name
+            module.cuda = types.SimpleNamespace(is_available=lambda: False)
+        monkeypatch.setitem(sys.modules, name, module)
+    config = config_module.AKTConfig(project_root=tmp_path, source_root=upstream,
+                                     output_dir=tmp_path / 'artifacts/akt/preflight-fixture')
+    report = inspect_runtime(upstream, project_root=tmp_path, lock_file=lock)
+    report_path = tmp_path / 'runtime.json'
+    return config, report, report_path, lock, interpreter
+
+
+def preflight_fixture(config, report, report_path, lock):
+    report_path.write_text(json.dumps(report), encoding='utf-8')
+    return authorization_module.preflight(config, project_root=config.project_root,
+                                          runtime_report_path=report_path, lock_file=lock)
+
+
+@pytest.mark.parametrize('platform_id', ['win32', 'linux'])
+def test_fresh_runtime_report_binds_explicit_root_lock_and_actual_interpreter(tmp_path, monkeypatch, platform_id):
+    config, report, path, lock, interpreter = isolated_runtime_fixture(tmp_path, monkeypatch, platform_id)
+    assert report['runtime_schema_version'] == 2
+    assert report['platform_id'] == platform_id
+    assert report['python'] == interpreter.executable
+    assert report['python_prefix'] == str((tmp_path / '.venv').resolve())
+    assert report['project_root'] == str(tmp_path.resolve())
+    assert report['lock_file'] == str(lock.resolve())
+    assert report['lock_sha256'] == hashlib.sha256(lock.read_bytes()).hexdigest()
+    result = preflight_fixture(config, report, path, lock)
+    assert result['status'] == 'ready'
+    assert result['runtime_report_sha256'] == hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+@pytest.mark.parametrize('platform_id', ['win32', 'linux'])
+@pytest.mark.parametrize('module_name', ['torch', 'numpy'])
+def test_inherited_runtime_module_is_not_accepted_by_inspection_or_preflight(
+        tmp_path, monkeypatch, platform_id, module_name):
+    config, report, path, lock, _ = isolated_runtime_fixture(tmp_path, monkeypatch, platform_id)
+    outside = str(tmp_path / 'global/site-packages' / module_name / '__init__.py')
+    monkeypatch.setattr(sys.modules[module_name], '__file__', outside)
+    with pytest.raises(ValueError, match='origin'):
+        inspect_runtime(config.source_root, project_root=tmp_path, lock_file=lock)
+    report[module_name + '_origin'] = outside
+    with pytest.raises(ValueError, match='Gate 1'):
+        preflight_fixture(config, report, path, lock)
+
+
+def test_linux_symlink_entry_remains_distinct_from_base_interpreter(tmp_path, monkeypatch):
+    env = tmp_path / '.venv'
+    entry = env / 'bin/python'
+    base = tmp_path / 'global/bin/python'
+    original_resolve = Path.resolve
+
+    def simulated_symlink_resolution(path, *args, **kwargs):
+        return base if path == entry else original_resolve(path, *args, **kwargs)
+
+    # Không tạo symlink cần đặc quyền Windows; giả lập resolve của đúng executable entry.
+    with monkeypatch.context() as patch:
+        patch.setattr(Path, 'resolve', simulated_symlink_resolution)
+        assert entry.resolve() == base
+        result = authorization_module.validate_runtime_interpreter(
+            env, executable=str(entry), prefix=str(env), platform_id='linux')
+        assert result == entry
+        with pytest.raises(ValueError, match='interpreter'):
+            authorization_module.validate_runtime_interpreter(
+                env, executable=str(base), prefix=str(env), platform_id='linux')
+
+
+@pytest.mark.parametrize('platform_id', ['win32', 'linux'])
+@pytest.mark.parametrize('field', ['executable', 'prefix'])
+def test_actual_interpreter_binding_cannot_be_replaced_by_a_matching_report(
+        tmp_path, monkeypatch, platform_id, field):
+    config, report, path, lock, interpreter = isolated_runtime_fixture(tmp_path, monkeypatch, platform_id)
+    setattr(interpreter, field, str(tmp_path / 'global/python'))
+    with pytest.raises(ValueError, match='interpreter'):
+        preflight_fixture(config, report, path, lock)
+    with pytest.raises(ValueError, match='interpreter'):
+        inspect_runtime(config.source_root, project_root=tmp_path, lock_file=lock)
+
+
+@pytest.mark.parametrize(('field', 'bad_value'), [
+    ('runtime_schema_version', True), ('runtime_schema_version', 2.0),
+    ('runtime_schema_version', None), ('runtime_schema_version', 3),
+    ('platform_id', 'win32'), ('platform_id', True),
+    ('python', False), ('python_prefix', None), ('project_root', '.'),
+    ('lock_file', False), ('source', []), ('lock_sha256', True),
+    ('torch_origin', None), ('numpy_origin', '../global/numpy.py'),
+    ('device', True), ('cuda_available', 1),
+])
+def test_linux_report_schema_and_types_are_strict(tmp_path, monkeypatch, field, bad_value):
+    config, report, path, lock, _ = isolated_runtime_fixture(tmp_path, monkeypatch, 'linux')
+    report[field] = bad_value
+    with pytest.raises(ValueError, match='Gate 1'):
+        preflight_fixture(config, report, path, lock)
+
+
+@pytest.mark.parametrize('changed', ['python', 'python_prefix', 'project_root', 'lock_file', 'source', 'lock_sha256'])
+def test_fresh_report_rejects_changed_identity_even_when_types_are_valid(tmp_path, monkeypatch, changed):
+    config, report, path, lock, _ = isolated_runtime_fixture(tmp_path, monkeypatch, 'linux')
+    if changed == 'source':
+        report[changed] = {'commit': 'wrong-source'}
+    elif changed == 'lock_sha256':
+        report[changed] = '0' * 64
+    else:
+        report[changed] = str(tmp_path / 'different' / changed)
+    with pytest.raises(ValueError, match='Gate 1'):
+        preflight_fixture(config, report, path, lock)
+
+
+@pytest.mark.parametrize('platform_id', ['win32', 'linux'])
+def test_legacy_report_remains_windows_only_without_reusing_it_for_linux(tmp_path, monkeypatch, platform_id):
+    config, report, path, lock, _ = isolated_runtime_fixture(tmp_path, monkeypatch, platform_id)
+    for key in ('runtime_schema_version', 'platform_id', 'python_prefix', 'project_root', 'lock_file'):
+        del report[key]
+    report['platform'] = 'Windows-fixture'
+    if platform_id == 'win32':
+        assert preflight_fixture(config, report, path, lock)['status'] == 'ready'
+    else:
+        with pytest.raises(ValueError, match='Gate 1'):
+            preflight_fixture(config, report, path, lock)
+
+
+@pytest.mark.parametrize('field', ['torch_origin', 'numpy_origin', 'lock_sha256', 'python'])
+def test_legacy_windows_report_still_rejects_invalid_origin_lock_or_executable(tmp_path, monkeypatch, field):
+    config, report, path, lock, _ = isolated_runtime_fixture(tmp_path, monkeypatch, 'win32')
+    for key in ('runtime_schema_version', 'platform_id', 'python_prefix', 'project_root', 'lock_file'):
+        del report[key]
+    report['platform'] = 'Windows-fixture'
+    report[field] = '0' * 64 if field == 'lock_sha256' else str(tmp_path / 'global' / field)
+    with pytest.raises(ValueError, match='Gate 1'):
+        preflight_fixture(config, report, path, lock)
+
+
+@pytest.mark.parametrize('changed', ['source', 'lock'])
+def test_report_becomes_stale_when_actual_source_or_lock_changes(tmp_path, monkeypatch, changed):
+    config, report, path, lock, _ = isolated_runtime_fixture(tmp_path, monkeypatch, 'linux')
+    if changed == 'source':
+        monkeypatch.setattr(authorization_module, 'verify_upstream', lambda *args: {'commit': 'changed'})
+    else:
+        lock.write_text('changed lock', encoding='utf-8')
+    with pytest.raises(ValueError, match='Gate 1'):
+        preflight_fixture(config, report, path, lock)
+
+
+def test_unsupported_runtime_platform_is_rejected_before_source_load(tmp_path, monkeypatch):
+    interpreter = types.SimpleNamespace(executable=str(tmp_path / '.venv/bin/python'),
+                                       prefix=str(tmp_path / '.venv'), platform='darwin')
+    monkeypatch.setattr(runtime_module, 'sys', interpreter)
+    monkeypatch.setattr(runtime_module, 'verify_upstream', lambda *args: pytest.fail('source must not load'))
+    with pytest.raises(ValueError, match='platform'):
+        inspect_runtime(tmp_path, project_root=tmp_path)
+
+
+def test_runtime_cli_can_bind_an_explicit_linux_lock_with_trusted_output_guard(tmp_path, monkeypatch):
+    config, _, _, lock, interpreter = isolated_runtime_fixture(tmp_path, monkeypatch, 'linux')
+    monkeypatch.setattr(runtime_module, 'ROOT', tmp_path)
+    interpreter.argv = ['check_runtime', '--upstream', str(config.source_root), '--device', 'cpu',
+                        '--lock-file', str(lock), '--output', str(tmp_path / 'artifacts/akt/runtime-linux.json')]
+    monkeypatch.setattr(sys, 'argv', interpreter.argv)
+    runtime_module.main()
+    report = json.loads((tmp_path / 'artifacts/akt/runtime-linux.json').read_text(encoding='utf-8'))
+    assert report['runtime_schema_version'] == 2 and report['platform_id'] == 'linux'
+    assert report['lock_file'] == str(lock.resolve())
+    assert report['lock_sha256'] == hashlib.sha256(lock.read_bytes()).hexdigest()
+
+
+@pytest.mark.parametrize(('requested', 'reported', 'cuda_available', 'accepted'), [
+    ('cpu', 'cpu', False, True), ('cpu', 'cpu', True, True),
+    ('cuda', 'cpu', True, False), ('cpu', 'cuda', True, False),
+    ('cuda', 'cuda', False, False), ('cuda', 'cuda', True, True),
+])
+def test_report_device_binds_requested_mode_without_importing_torch_in_preflight(
+        tmp_path, monkeypatch, requested, reported, cuda_available, accepted):
+    from dataclasses import replace
+    import builtins
+
+    config, report, path, lock, _ = isolated_runtime_fixture(tmp_path, monkeypatch, 'linux')
+    config = replace(config, device=requested)
+    report.update(device=reported, cuda_available=cuda_available)
+    original_import = builtins.__import__
+
+    def no_heavy_import(name, *args, **kwargs):
+        if name.split('.')[0] in {'torch', 'numpy'}:
+            raise AssertionError('preflight phải giữ nhẹ, không import Torch/NumPy')
+        return original_import(name, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, '__import__', no_heavy_import)
+    if accepted:
+        assert preflight_fixture(config, report, path, lock)['status'] == 'ready'
+    else:
+        with pytest.raises(ValueError, match='Gate 1'):
+            preflight_fixture(config, report, path, lock)
 
 
 def test_cli_output_guard_rejects_protected_paths_without_creating_them(tmp_path):

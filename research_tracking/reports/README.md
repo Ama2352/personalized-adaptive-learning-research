@@ -64,3 +64,8 @@ Chỉ mục này không thêm GPU/runtime verdict khi chưa có evidence bundle 
 - [colab_cuda_acceptance_20261107.md](colab_cuda_acceptance_20261107.md): actual ColabT4 CPU505pass,400target lifecycle và controlled fresh-process CUDA recovery; trả đủ44outputs/SHA, không fulltraining/Gate4.
 - [colab_cuda_adversarial_review_20261107.md](colab_cuda_adversarial_review_20261107.md): kiểm độc lập source/coverage và các blockers Linuxruntime, mainworker lifecycle, throughput, Modal durability/budget.
 - [Bundle CUDA68outputs](../runs/colab-cuda-synthetic-20261107-01/README.md) giữ raw receipts/logs/JUnit/manifests/source snapshots, không heavy checkpoints trong Git. Các failures preflight vẫn giữ nguyên trong bundle lịch sử.
+
+## Runtime Linux, main worker CPU và SAKT inference — batch bắt đầu07/11
+
+- [Runtime contract](akt_linux_runtime_contract_20261107.md), [main worker](akt_main_worker_lifecycle_20261107.md), [bundle](../runs/cpu-linux-worker-20261107-01/README.md): targeted63cases và2newworker cases; fullGate513pass/269.98s, source-bound WindowsCPU. Linuxbranches mocked, chưa actualLinux/CUDA worker.
+- [SAKT adapter](sakt_adapter_readiness_20261107.md), [bundle ban đầu](../runs/sakt-inference-engineering-20261107-01/README.md), [checkpoint followup](../runs/sakt-checkpoint-payload-20261107-01/README.md):89CPUcases=37core+52adapter,0optimizersteps; random/unverifiedweights không fitted benchmark hoặc completeOnlineSessionbridge.

@@ -14,6 +14,13 @@
 
 Đọc [nghiệm thu CUDA](reports/colab_cuda_acceptance_20261107.md), [phản biện](reports/colab_cuda_adversarial_review_20261107.md), [RQ1/RQ2 synthesis](reports/rq12_evidence_synthesis_20261107.md) và [mục lục bằng chứng](EVIDENCE_INDEX.md). Heavy artifacts giữ tại `experiments/akt/results/colab-actual-cuda-20261107-01/`; không nhầm software acceptance với hoàn thành RQ. Next task làGPU06 trong backlog, chưa launch training/Modal.
 
+## Batch tiếp theo: runtime và worker đã được kiểm trên CPU
+
+- **Gate17:513pass,0fail/error/skip**,269,98s; tách với Gate16failed512pass1fail và giữ bằng chứng đường dẫn. Không actualLinux/CUDAworker pass từ mocks.
+- [Runtime report](reports/akt_linux_runtime_contract_20261107.md) và [worker report](reports/akt_main_worker_lifecycle_20261107.md): platform-aware strictvenv metadata; actualsyntheticParquet→8train targets→validation/checkpoint/export4rows. Chưa Junyi pilot hoặc fulltraining.
+- [SAKT adapter](reports/sakt_adapter_readiness_20261107.md):89CPUtests gồm payloadregressions; random/unverified weights không fitted baseline, trainer/completebridge còn thiếu.
+- Current backlog chuyển GPU07→GPU08→GPU09. Không dùng creditModal hoặc GPU trongbatch; kết quảT4trước đó thuộc frozenkitv12.
+
 ## Snapshot ngày04/11 và nhật ký cập nhật tiếp theo
 
 

@@ -43,3 +43,8 @@ Main worker chưa có hợp đồng Linux/CUDA tương đương: `authorization.
 Tiếp theo cần nghiệm thu lifecycle của **main worker** trên synthetic cohort, định danh dữ liệu/split/vocabulary, train/validation/best-checkpoint/export/resume; sau đó mới benchmark đủ train/validation/export/inference overhead để lập budget. Modal cần revalidation image/Volume/checkpoint durability riêng. Không sử dụng Windows CPU wheel lock trên Linux CUDA.
 
 `gate4_pass=false` trong cả hai CUDA reports. Chưa chạy Junyi/Grade10 training thật, không truy cập Holdout/Test, không fullCV, không chi tiền hoặc credit Modal. S04 mastery/calibration/controller và S05 phân bổ model–môi trường vẫn cần chốt trước các thí nghiệm kết luận; kết quả âm của graph vẫn được chấp nhận nếu bằng chứng hợp lệ.
+
+
+## Cập nhật sau snapshot sourcekitv12
+
+Batch runtime/mainworker sau đó đã sửa platform-aware executable/schema2 và kiểm syntheticParquet worker trên CPU (Gate17:513pass). Đọc [runtime](akt_linux_runtime_contract_20261107.md), [worker](akt_main_worker_lifecycle_20261107.md) và [contract20](../../docs/thesis_recovery/20_LINUX_CUDA_WORKER_CONTRACT.md). Phần blocker hardcodeWindows phía trên mô tả snapshotv12; component đó đã sửa, nhưng runtime-path wiring/publicGPUphase/LinuxCUDAhashlock và actualmainworkerCUDA vẫn chưa hoàn tất. BundleCUDAcũ giữ nguyên; không gán kết quảT4v12 cho source mới.

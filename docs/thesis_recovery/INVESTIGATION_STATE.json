@@ -81,7 +81,7 @@
     "mandatory baseline allocation pending",
     "Linux/Colab GPU publish/lifecycle chưa thực chạy, Windows local fix đã verified"
   ],
-  "next_recommended_investigation": "Đọc colab_cuda_acceptance_20261107.md và adversarial runtime blockers; làm Linux/GPU fullworker contract cục bộ trước bất kỳ Modal pilot có chi phí.",
+  "next_recommended_investigation": "Read20_LINUX_CUDA_WORKER_CONTRACT.md and latestruntime/mainworker reports; implementGPU07 runtime-path wiring + bounded phase without relaxing existingCPU/authorization checks.",
   "resume_instructions": "Đọc STATE, LOG,09 và03 trước. Không lặp PDF/source scans đã có nếu hashes không đổi. Đọc current test logs và staged status. Mọi sửa verdict append lý do vào LOG. Không launch training từ task existence.",
   "resolved_questions": {
     "Q09": "Map đủ28nodes,36unique IDs,8extra metadata IDs,0duplicates, planning_validation.json"
@@ -322,12 +322,11 @@
     "verification": "CRC/each SHA/current source parity; notebook originals unchanged; no actual isolated Linux/Colab/CUDA execution"
   },
   "next_bounded_engineering_batch": [
-    "Thiết kế rồi cài riêng Linux/CUDA runtime identity và bounded GPU worker phase: giữ Windows CPU guards, không dùng lock Windows/CPU cho Linux hoặc nới origin checks để Colab pass.",
-    "Chuẩn bị source-bound synthetic fullworker train/validation/checkpoint/export/resume contract, quota/runtime/VRAM budget và throughput benchmark; chưa real-data/fullCV/Modal allocation.",
-    "SAKT core37tests đã có, còn adapter/trainer/export/resume và final context/firsttarget/calibration protocol; GKT vẫn required, không tự bỏ.",
-    "S04 mastery/calibration/controller và S05 model/environment/corpus allocation cần chốt trước final evidence collection/training; Junyi và Grade10 phải riêng vocab/fits.",
-    "Paper1 exact submitted revision chưa local; cần source+inputs+actualseeds+perseed outputs để reproduction, không sửa historical results.",
-    "Modal30freecredits/net0 untouched; không auto paid fallback. Colab lifecycle/recovery pass không làm Gate4 đạt hoặc xác lập cost/target."
+    "GPU07: explicit bounded GPU phase, runtime report/lock path wiring across watchdog/worker, VRAM/time/target/auth caps; keep current CPU phase guards. Local implementation/negative tests only, no paid launch.",
+    "GPU08: separate LinuxCUDA requirements/image/wheelhashlock and installation/runtime manifest; no inheritedorigin bypass, noWindowsCPUlock substitution.",
+    "GPU09: actual Linux/CUDA MAINworker synthetic Parquet lifecycle once phase/runtime prerequisites pass; previousv12 probes do not certify this new source.",
+    "SAKT trainer/selected-fit/checkpoint provenance/OnlineSession bridge and S04/S05 protocols remain; random/unverified adapter scores cannot be benchmarked as fitted.",
+    "GKT and proposal-required comparisons remain. No fullCV, Holdout or Modal allocation from engineering test PASS."
   ],
   "simulator_interface_engineering_20261107": {
     "status": "COMPLETED_CPU_ENGINEERING",
@@ -360,15 +359,15 @@
   },
   "current_software_gate": {
     "status": "PASS",
-    "run_id": "20261107-parallel-portability-15",
-    "passed": 462,
+    "run_id": "20261107-linux-worker-17",
+    "passed": 513,
     "failed": 0,
     "errors": 0,
     "skipped": 0,
-    "pytest_seconds": 294.17,
-    "report_sha256": "7e15832f72632dd07f676ef277a8ad49d3f4a71ef35c8f40099492f5b9071f16",
-    "archive": "cpu-portability-gate-20261107-01",
-    "scope": "Local CPU tests/akt + tests/shared_kt, includes isolated graph kernel; excludes new SAKT package/tests. No full research/Gate4 acceptance."
+    "pytest_seconds": 269.98,
+    "report_sha256": "4501b75cad421b75987b959cf843b3edfa57334bb4e449db1aa0fbcf09198baa",
+    "archive": "cpu-linux-worker-20261107-01",
+    "scope": "WindowsCPU AKT/shared suite; explicitLinuxplatform fixtures, not actualLinux/CUDA mainworker; SAKT separately89cases"
   },
   "previous_software_gate": {
     "run_id": "20261107-simulator-batch-10",
@@ -777,15 +776,59 @@
     "RQ2": "PARTIAL_CONTROLLED_PILOTS_AND_CONFOUNDING_AUDIT",
     "RQ3": "GRAPH_KERNEL_ONLY_NOT_TRAINED_CGAKT",
     "AKT_CUDA": "BOUNDED_SYNTHETIC_ACCEPTED",
-    "AKT_MAIN_LINUX_GPU_WORKER": "NOT_READY_RUNTIME_PHASE_CONTRACT_MISSING",
-    "SAKT": "CORE_VERIFIED_TRAINER_ADAPTER_PENDING",
+    "AKT_MAIN_LINUX_GPU_WORKER": "PARTIAL_RUNTIME_COMPONENT_VERIFIED_CPU_PHASE_STILL_GPU_BLOCKED",
+    "SAKT": "CORE_AND_RANDOM_WEIGHT_FROZEN_INFERENCE_VERIFIED_TRAINER_FITTED_BRIDGE_PENDING",
     "GKT": "REQUIRED_PENDING",
     "Modal": "NO_COMPUTE_SPEND_NO_AUTOMATIC_ALLOCATION",
-    "primary_next_task": "GPU06",
+    "primary_next_task": "GPU07",
     "methodology_pending": [
       "S04",
       "S05"
     ],
     "supersedes": "Prior connection/kit/gate snapshots are historical; current_software_gate and colab_cuda_acceptance_20261107 govern current readiness"
+  },
+  "software_gate_before_linux_batch": {
+    "status": "PASS",
+    "run_id": "20261107-parallel-portability-15",
+    "passed": 462,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "pytest_seconds": 294.17,
+    "report_sha256": "7e15832f72632dd07f676ef277a8ad49d3f4a71ef35c8f40099492f5b9071f16",
+    "archive": "cpu-portability-gate-20261107-01",
+    "scope": "Local CPU tests/akt + tests/shared_kt, includes isolated graph kernel; excludes new SAKT package/tests. No full research/Gate4 acceptance."
+  },
+  "linux_worker_batch_20261107": {
+    "status": "COMPLETED_BOUNDED_LOCAL_BATCH",
+    "parent": "Integration, runtime-phase contract, Gate refresh/evidence/commit",
+    "agents": {
+      "platform_fixture_compat": "platform-aware isolated runtime report/preflight",
+      "graph_gate_prototype": "syntheticParquet mainworker lifecycle",
+      "rq12_evidence_synthesis": "SAKT frozen inference adapter"
+    },
+    "execution_limits": "LocalCPU fixtures only, noGPU/realdata/Holdout/Modal; .venvonly; noagentGit",
+    "contract": "20_LINUX_CUDA_WORKER_CONTRACT.md",
+    "prior_actual_cuda_scope": "Sourcekitv12 only; newworker changes not yet CUDAverified",
+    "gate16_failure": {
+      "passed": 512,
+      "failed": 1,
+      "seconds": 372.65,
+      "receipt": "artifacts/akt/local-tests/linux-gate16-failure-receipt.json",
+      "scope": "NoGatepromotion; deepfixturepath hypothesis pending contrast",
+      "resolution": "ControlledDuckDB path264FAIL/227,220,87PASS; fixture-onlycompactpath fix; Gate17PASS, failedGate16retained"
+    },
+    "bundles": {
+      "cpu-linux-worker-20261107-01": 131,
+      "sakt-inference-engineering-20261107-01": 37,
+      "sakt-checkpoint-payload-20261107-01": 38
+    },
+    "runtime_targeted_cases": 63,
+    "worker_new_cases": 2,
+    "sakt_initial_suite_cases": 87,
+    "sakt_suite_cases": 89,
+    "sakt_new_adapter_cases": 52,
+    "no_gpu_or_modal_execution": true,
+    "remaining": "Public GPU phase/runtime paths wiring/Linux environment hashlock and actual Linux/CUDA worker still pending"
   }
 }

@@ -1,0 +1,44 @@
+..................................................F............          [100%]
+================================== FAILURES ===================================
+_ test_runtime_cli_can_bind_an_explicit_linux_lock_with_trusted_output_guard __
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-linux-runtime-20261107-02/pytest-temp/test_runtime_cli_can_bind_an_e0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002B3D3D77070>
+
+    def test_runtime_cli_can_bind_an_explicit_linux_lock_with_trusted_output_guard(tmp_path, monkeypatch):
+        config, _, _, lock, interpreter = isolated_runtime_fixture(tmp_path, monkeypatch, 'linux')
+        monkeypatch.setattr(runtime_module, 'ROOT', tmp_path)
+        interpreter.argv = ['check_runtime', '--upstream', str(config.source_root), '--device', 'cpu',
+                            '--lock-file', str(lock), '--output', str(tmp_path / 'artifacts/akt/runtime-linux.json')]
+>       runtime_module.main()
+
+tests\akt\test_runtime.py:295: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\akt\check_runtime.py:152: in main
+    args = parser.parse_args()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\argparse.py:1902: in parse_args
+    self.error(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\argparse.py:2658: in error
+    self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = ArgumentParser(prog='__main__.py', usage=None, description=None, formatter_class=<class 'argparse.HelpFormatter'>, conflict_handler='error', add_help=True)
+status = 2
+message = '__main__.py: error: unrecognized arguments: -q -p no:cacheprovider --basetemp=artifacts/akt/local-tests/parallel-linu...pytest.xml tests/akt/test_runtime.py tests/akt/test_runner.py::test_preflight_verifies_gate1_without_opening_dataset\n'
+
+    def exit(self, status=0, message=None):
+        if message:
+            self._print_message(message, _sys.stderr)
+>       _sys.exit(status)
+E       SystemExit: 2
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\argparse.py:2645: SystemExit
+---------------------------- Captured stderr call -----------------------------
+usage: __main__.py [-h] [--resolution-report RESOLUTION_REPORT]
+                   [--write-lock WRITE_LOCK] [--upstream UPSTREAM]
+                   [--device DEVICE] [--lock-file LOCK_FILE] [--output OUTPUT]
+__main__.py: error: unrecognized arguments: -q -p no:cacheprovider --basetemp=artifacts/akt/local-tests/parallel-linux-runtime-20261107-02/pytest-temp --junitxml=artifacts/akt/local-tests/parallel-linux-runtime-20261107-02/pytest.xml tests/akt/test_runtime.py tests/akt/test_runner.py::test_preflight_verifies_gate1_without_opening_dataset
+=========================== short test summary info ===========================
+FAILED tests/akt/test_runtime.py::test_runtime_cli_can_bind_an_explicit_linux_lock_with_trusted_output_guard
+1 failed, 62 passed in 11.59s

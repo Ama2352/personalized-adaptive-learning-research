@@ -1,0 +1,71 @@
+{
+  "scope_vi": "Chỉ reuse historical actualColab CPU7cases đãPASS; không rerun hoặc cộng thành9newtests.",
+  "original_xml": "experiments/akt/results/colab-actual-cuda-20261107-01/cpu-tests.xml",
+  "original_xml_sha256": "a338f88d647aaa61a2da414be1098d002389923dd6a933f58be305459ab24878",
+  "source_checks": [
+    {
+      "path": "tests/akt/test_cli_recovery.py",
+      "sha256": "6da4e68e12edf1e5949daa992dcdf06d4c351450691e895eebe55cc695dc9fae",
+      "matches_actual_colab_sourcekit": true
+    },
+    {
+      "path": "tests/akt/cli_recovery_fixture.py",
+      "sha256": "2bb39db37873091ca91f4d6ce4b59e9ffb4765ae4fbd1b3dd6617ca59207f509",
+      "matches_actual_colab_sourcekit": true
+    },
+    {
+      "path": "tests/akt/test_selection_recovery.py",
+      "sha256": "5051905f8c5bd415987d0f8d51687e89a54387127c81b6f0fb916c058bcddf73",
+      "matches_actual_colab_sourcekit": true
+    },
+    {
+      "path": "tests/akt/test_refit_recovery.py",
+      "sha256": "fe1af152f458e572848469318e57fd373b3b1b447956159a19babcdf186f7215",
+      "matches_actual_colab_sourcekit": true
+    }
+  ],
+  "cases": [
+    {
+      "classname": "tests.akt.test_cli_recovery",
+      "name": "test_actual_cli_fresh_attempt_recovery_and_prediction_export[batch-exit]",
+      "time_seconds": 39.227,
+      "status": "passed_historical"
+    },
+    {
+      "classname": "tests.akt.test_cli_recovery",
+      "name": "test_actual_cli_fresh_attempt_recovery_and_prediction_export[export]",
+      "time_seconds": 39.489,
+      "status": "passed_historical"
+    },
+    {
+      "classname": "tests.akt.test_refit_recovery",
+      "name": "test_refit_recovery_matches_uninterrupted_weights_adam_rng",
+      "time_seconds": 0.385,
+      "status": "passed_historical"
+    },
+    {
+      "classname": "tests.akt.test_refit_recovery",
+      "name": "test_refit_recovery_rejects_changed_epoch_budget",
+      "time_seconds": 0.156,
+      "status": "passed_historical"
+    },
+    {
+      "classname": "tests.akt.test_selection_recovery",
+      "name": "test_epoch_recovery_preserves_weights_losses_and_stale_epochs",
+      "time_seconds": 0.685,
+      "status": "passed_historical"
+    },
+    {
+      "classname": "tests.akt.test_selection_recovery",
+      "name": "test_recovery_rejects_config_drift_and_changed_best_checkpoint",
+      "time_seconds": 0.314,
+      "status": "passed_historical"
+    },
+    {
+      "classname": "tests.akt.test_selection_recovery",
+      "name": "test_default_selection_keeps_existing_artifact_contract",
+      "time_seconds": 0.122,
+      "status": "passed_historical"
+    }
+  ]
+}

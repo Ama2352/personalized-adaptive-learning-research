@@ -1,0 +1,69 @@
+........................................................................ [ 14%]
+........................................................................ [ 28%]
+........................................................................ [ 42%]
+........................................................................ [ 56%]
+.................................................F...................... [ 70%]
+........................................................................ [ 84%]
+........................................................................ [ 98%]
+.........                                                                [100%]
+================================== FAILURES ===================================
+____ test_main_worker_reads_parquet_selects_validates_reloads_and_exports _____
+
+parquet_worker = (AKTConfig(project_root=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-20261107-linux-worker-16-30034a7c0dba...nux-worker-16-30034a7c0dba45ce9dd379581f20a438/test_main_worker_reads_parquet0/synthetic-project/fixture-split.json')])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA6AA07BD0>
+
+    def test_main_worker_reads_parquet_selects_validates_reloads_and_exports(parquet_worker, monkeypatch):
+        config, config_path, approval_path, parent_split, inputs = parquet_worker
+        before = {str(p): sha(p) for p in inputs}
+        loaded = []
+        actual_load = runner._load_phase_inputs
+    
+        def observe_real_loader(*args, **kwargs):
+            result = actual_load(*args, **kwargs)
+            loaded.append(result)
+            return result
+    
+        monkeypatch.setattr(runner, '_load_phase_inputs', observe_real_loader)
+>       assert runner._worker_main(['smoke', '--config', str(config_path),
+                                    '--authorization', str(approval_path)]) == 0
+
+tests\akt\test_worker_lifecycle.py:123: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\runner.py:762: in _worker_main
+    result = (run_smoke(config, authorization=authorization, _invocation=invocation) if phase == 'smoke'
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\runner.py:622: in run_smoke
+    return _run_phase(config, authorization, pilot=False, invocation=_invocation)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\runner.py:566: in _run_phase
+    export = export_predictions(records, prediction_dir,
+src\knowledge_tracing\akt\prediction.py:278: in export_predictions
+    finish_user()
+src\knowledge_tracing\akt\prediction.py:251: in finish_user
+    write_pending()
+src\knowledge_tracing\akt\prediction.py:242: in write_pending
+    _record_rows(temp, current_buffer)
+src\knowledge_tracing\akt\prediction.py:160: in _record_rows
+    with duckdb.connect() as con:
+         ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-20261107-linux-worker-16-30034a7c0dba45ce9dd379581f20a438/tes...ject/experiments/akt/results/synthetic-worker/predictions/.pending/346ee3eda44a4a3f8b305ac5b1ab85d3-00000.parquet.tmp')
+records = [PredictionRecord(source_row=301, user_id='synthetic-3', exercise='A', time_done=0, correct=0, suggested=0, fold=4, pr...54495246633e36feb22874395db29a9111', checkpoint_id='4dff3556c591767cc86098c56474d368fa7c338571157eb61dc741f6125276d9')]
+
+    def _record_rows(path: Path, records: list[PredictionRecord]) -> None:
+        frame = pd.DataFrame([asdict(record) for record in records], columns=_COLUMNS)
+        frame['prediction'] = pd.array(frame['prediction'], dtype='Float64')
+        with duckdb.connect() as con:
+            con.register('prediction_batch', frame)
+>           con.execute(f'COPY prediction_batch TO {_sql_path(path)} (FORMAT PARQUET, COMPRESSION ZSTD)')
+E           _duckdb.IOException: IO Error: Cannot open file "D:\Dev\KLTN\artifacts\akt\local-tests\gate2-20261107-linux-worker-16-30034a7c0dba45ce9dd379581f20a438\test_main_worker_reads_parquet0\synthetic-project\experiments\akt\results\synthetic-worker\predictions\.pending\346ee3eda44a4a3f8b305ac5b1ab85d3-00000.parquet.tmp": The system cannot find the path specified.
+
+src\knowledge_tracing\akt\prediction.py:162: IOException
+---------------------------- Captured stderr call -----------------------------
+{"event": "worker-after-runtime-import", "phase": "smoke", "pid": 29320, "process_peak_rss_bytes": 268435456, "process_rss_bytes": 268435456, "run_id": "synthetic-worker", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+{"event": "worker-before-data-load", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 29320, "process_peak_rss_bytes": 268435456, "process_rss_bytes": 268435456, "run_id": "synthetic-worker", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+{"event": "worker-before-data-load", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 29320, "process_peak_rss_bytes": 268435456, "process_rss_bytes": 268435456, "run_id": "synthetic-worker", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+=========================== short test summary info ===========================
+FAILED tests/akt/test_worker_lifecycle.py::test_main_worker_reads_parquet_selects_validates_reloads_and_exports
+1 failed, 512 passed in 372.65s (0:06:12)

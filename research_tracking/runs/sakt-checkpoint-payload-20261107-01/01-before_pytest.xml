@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="7.883" timestamp="2026-11-08T00:09:05.985128+07:00" hostname="Ama"><testcase classname="tests.sakt.test_adapter" name="test_checkpoint_path_a_b_a_cannot_deserialize_unhashed_replacement" time="0.372"><failure message="AssertionError: deserialized payload must have the authorized SHA&#10;assert ['0be3b96aabd...2734e2183b2c'] == ['3e621c5b821...ce49c15c2ae0']&#10;  &#10;  At index 0 diff: '0be3b96aabd4499334e068229a1d389604b40b111e76d111c4812734e2183b2c' != '3e621c5b821425089c7ad877284d81d9bf15d2c8c086ee7c15fece49c15c2ae0'&#10;  Use -v to get more diff">case = {'path': WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-sakt-payload-20261107-01-before/tmp/test_checkpoi...ncept_id='concept-C', difficulty=1200.0), SimulatorItem(item_id='D', concept_id='concept-D', difficulty=1300.0))), ...}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001CDBC7FAC40&gt;
+
+    def test_checkpoint_path_a_b_a_cannot_deserialize_unhashed_replacement(case, monkeypatch):
+        original = case['path'].read_bytes()
+        real_load = torch.load
+        original_state = real_load(io.BytesIO(original), map_location='cpu', weights_only=True)
+        changed_state = {name: value.clone() for name, value in original_state.items()}
+        changed_state['prediction.bias'] += 3
+        replacement = io.BytesIO()
+        torch.save(changed_state, replacement)
+        deserialized = []
+    
+        def racing_load(source, *args, **kwargs):
+            # Tái hiện A trước hash, B lúc deserialize, A trước post-check.
+            case['path'].write_bytes(replacement.getvalue())
+            try:
+                payload = source.getvalue() if isinstance(source, io.BytesIO) else Path(source).read_bytes()
+                deserialized.append(hashlib.sha256(payload).hexdigest())
+                return real_load(source, *args, **kwargs)
+            finally:
+                case['path'].write_bytes(original)
+    
+        monkeypatch.setattr(torch, 'load', racing_load)
+        adapter = load(case)
+&gt;       assert deserialized == [case['expected_sha256']], 'deserialized payload must have the authorized SHA'
+E       AssertionError: deserialized payload must have the authorized SHA
+E       assert ['0be3b96aabd...2734e2183b2c'] == ['3e621c5b821...ce49c15c2ae0']
+E         
+E         At index 0 diff: '0be3b96aabd4499334e068229a1d389604b40b111e76d111c4812734e2183b2c' != '3e621c5b821425089c7ad877284d81d9bf15d2c8c086ee7c15fece49c15c2ae0'
+E         Use -v to get more diff
+
+tests\sakt\test_adapter.py:394: AssertionError</failure></testcase><testcase classname="tests.sakt.test_adapter" name="test_checkpoint_read_budget_rejects_overflow_even_when_stat_underreports" time="0.180"><failure message="Failed: DID NOT RAISE ValueError">case = {'path': WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-sakt-payload-20261107-01-before/tmp/test_checkpoi...ncept_id='concept-C', difficulty=1200.0), SimulatorItem(item_id='D', concept_id='concept-D', difficulty=1300.0))), ...}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001CDBC7FAFD0&gt;
+
+    def test_checkpoint_read_budget_rejects_overflow_even_when_stat_underreports(case, monkeypatch):
+        original = case['path'].read_bytes()
+        state = torch.load(io.BytesIO(original), map_location='cpu', weights_only=True)
+        oversized = original + b'X'
+        case['path'].write_bytes(oversized)
+        real_stat = Path.stat
+    
+        def underreported_stat(path, *args, **kwargs):
+            result = real_stat(path, *args, **kwargs)
+            if path == case['path']:
+                values = list(result)
+                values[6] = len(original)
+                return os.stat_result(values)
+            return result
+    
+        calls = []
+        monkeypatch.setattr(Path, 'stat', underreported_stat)
+        monkeypatch.setattr(torch, 'load', lambda *args, **kwargs: calls.append(True) or state)
+&gt;       with pytest.raises(ValueError, match='byte budget'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\sakt\test_adapter.py:417: Failed</failure></testcase></testsuite></testsuites>

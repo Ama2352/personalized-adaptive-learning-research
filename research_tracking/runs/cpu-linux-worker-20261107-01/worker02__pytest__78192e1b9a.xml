@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="8.706" timestamp="2026-11-07T23:54:09.739268+07:00" hostname="Ama"><testcase classname="tests.akt.test_worker_lifecycle" name="test_main_worker_reads_parquet_selects_validates_reloads_and_exports" time="0.709"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">parquet_worker = (AKTConfig(project_root=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-worker-20261107-02/t/test_main_wor.../akt/local-tests/parallel-worker-20261107-02/t/test_main_worker_reads_parquet0/synthetic-project/fixture-split.json')])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000226C2935220&gt;
+
+    def test_main_worker_reads_parquet_selects_validates_reloads_and_exports(parquet_worker, monkeypatch):
+        config, config_path, approval_path, parent_split, inputs = parquet_worker
+        before = {str(p): sha(p) for p in inputs}
+        loaded = []
+        actual_load = runner._load_phase_inputs
+    
+        def observe_real_loader(*args, **kwargs):
+            result = actual_load(*args, **kwargs)
+            loaded.append(result)
+            return result
+    
+        monkeypatch.setattr(runner, '_load_phase_inputs', observe_real_loader)
+&gt;       assert runner._worker_main(['smoke', '--config', str(config_path),
+                                    '--authorization', str(approval_path)]) == 0
+
+tests\akt\test_worker_lifecycle.py:123: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\runner.py:762: in _worker_main
+    result = (run_smoke(config, authorization=authorization, _invocation=invocation) if phase == 'smoke'
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\runner.py:622: in run_smoke
+    return _run_phase(config, authorization, pilot=False, invocation=_invocation)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\runner.py:405: in _run_phase
+    selection = select_checkpoint(
+src\knowledge_tracing\akt\training.py:513: in select_checkpoint
+    adapter = AKTAdapter(config, encoding)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\model.py:22: in __init__
+    self.native = build_native(config, n_items=len(encoding.vocabulary.values))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = False, timeout = None, check = True
+popenargs = (['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD'],)
+kwargs = {'stdout': -1, 'text': True}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output &amp; stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+&gt;               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: CalledProcessError</failure></testcase><testcase classname="tests.akt.test_worker_lifecycle" name="test_main_worker_rejects_changed_parquet_identity_before_loading" time="0.181" /></testsuite></testsuites>

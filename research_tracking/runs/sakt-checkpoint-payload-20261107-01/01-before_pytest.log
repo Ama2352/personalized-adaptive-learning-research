@@ -1,0 +1,69 @@
+FF                                                                       [100%]
+================================== FAILURES ===================================
+_____ test_checkpoint_path_a_b_a_cannot_deserialize_unhashed_replacement ______
+
+case = {'path': WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-sakt-payload-20261107-01-before/tmp/test_checkpoi...ncept_id='concept-C', difficulty=1200.0), SimulatorItem(item_id='D', concept_id='concept-D', difficulty=1300.0))), ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001CDBC7FAC40>
+
+    def test_checkpoint_path_a_b_a_cannot_deserialize_unhashed_replacement(case, monkeypatch):
+        original = case['path'].read_bytes()
+        real_load = torch.load
+        original_state = real_load(io.BytesIO(original), map_location='cpu', weights_only=True)
+        changed_state = {name: value.clone() for name, value in original_state.items()}
+        changed_state['prediction.bias'] += 3
+        replacement = io.BytesIO()
+        torch.save(changed_state, replacement)
+        deserialized = []
+    
+        def racing_load(source, *args, **kwargs):
+            # Tái hiện A trước hash, B lúc deserialize, A trước post-check.
+            case['path'].write_bytes(replacement.getvalue())
+            try:
+                payload = source.getvalue() if isinstance(source, io.BytesIO) else Path(source).read_bytes()
+                deserialized.append(hashlib.sha256(payload).hexdigest())
+                return real_load(source, *args, **kwargs)
+            finally:
+                case['path'].write_bytes(original)
+    
+        monkeypatch.setattr(torch, 'load', racing_load)
+        adapter = load(case)
+>       assert deserialized == [case['expected_sha256']], 'deserialized payload must have the authorized SHA'
+E       AssertionError: deserialized payload must have the authorized SHA
+E       assert ['0be3b96aabd...2734e2183b2c'] == ['3e621c5b821...ce49c15c2ae0']
+E         
+E         At index 0 diff: '0be3b96aabd4499334e068229a1d389604b40b111e76d111c4812734e2183b2c' != '3e621c5b821425089c7ad877284d81d9bf15d2c8c086ee7c15fece49c15c2ae0'
+E         Use -v to get more diff
+
+tests\sakt\test_adapter.py:394: AssertionError
+__ test_checkpoint_read_budget_rejects_overflow_even_when_stat_underreports ___
+
+case = {'path': WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-sakt-payload-20261107-01-before/tmp/test_checkpoi...ncept_id='concept-C', difficulty=1200.0), SimulatorItem(item_id='D', concept_id='concept-D', difficulty=1300.0))), ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001CDBC7FAFD0>
+
+    def test_checkpoint_read_budget_rejects_overflow_even_when_stat_underreports(case, monkeypatch):
+        original = case['path'].read_bytes()
+        state = torch.load(io.BytesIO(original), map_location='cpu', weights_only=True)
+        oversized = original + b'X'
+        case['path'].write_bytes(oversized)
+        real_stat = Path.stat
+    
+        def underreported_stat(path, *args, **kwargs):
+            result = real_stat(path, *args, **kwargs)
+            if path == case['path']:
+                values = list(result)
+                values[6] = len(original)
+                return os.stat_result(values)
+            return result
+    
+        calls = []
+        monkeypatch.setattr(Path, 'stat', underreported_stat)
+        monkeypatch.setattr(torch, 'load', lambda *args, **kwargs: calls.append(True) or state)
+>       with pytest.raises(ValueError, match='byte budget'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\sakt\test_adapter.py:417: Failed
+=========================== short test summary info ===========================
+FAILED tests/sakt/test_adapter.py::test_checkpoint_path_a_b_a_cannot_deserialize_unhashed_replacement
+FAILED tests/sakt/test_adapter.py::test_checkpoint_read_budget_rejects_overflow_even_when_stat_underreports
+2 failed in 7.88s

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="2" failures="0" skipped="0" tests="2" time="38.537" timestamp="2026-11-07T23:52:29.710201+07:00" hostname="Ama"><testcase classname="tests.akt.test_worker_lifecycle" name="test_main_worker_reads_parquet_selects_validates_reloads_and_exports" time="0.281"><error message="failed on setup with &quot;ValueError: project root must be the trusted repository root&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-worker-20261107-01/t/test_main_worker_reads_parquet0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001C4FB401350&gt;
+
+    @pytest.fixture
+    def parquet_worker(tmp_path, monkeypatch):
+        """Chỉ ghi dưới pytest basetemp được invocation đặt trong artifacts/akt."""
+        root = tmp_path / 'synthetic-project'
+        root.mkdir()
+        marker = root / 'SYNTHETIC_ONLY.json'
+        marker.write_text(json.dumps({'synthetic_only': True, 'real_data_authorized': False}), encoding='utf-8')
+        canonical = root / 'fixture-parquet'
+        canonical.mkdir()
+        assignments = root / 'fixture-assignments.parquet'
+        con = duckdb.connect()
+        try:
+            con.execute('CREATE TABLE assignments(user_id VARCHAR, partition VARCHAR, fold INTEGER)')
+            con.executemany('INSERT INTO assignments VALUES (?, ?, ?)',
+                            [(f'synthetic-{i}', 'development', 0 if i == 0 else 1 + i % 4) for i in range(6)])
+            con.execute('COPY assignments TO ? (FORMAT PARQUET)', [str(assignments)])
+            frame = con.execute('SELECT user_id,fold FROM assignments').df()
+            split = runner.make_inner_split(frame, outer_fold=0, seed=42)
+            val_user = split.inner_val_users[0]
+            con.execute('CREATE TABLE events(user_id VARCHAR, exercise VARCHAR, time_done BIGINT, '
+                        'source_row BIGINT, correct INTEGER, suggested INTEGER)')
+            events = []
+            for index, row in frame.iterrows():
+                exercises = ['A', 'B', 'A', 'B']
+                if row.user_id == val_user:
+                    exercises[1] = 'SYNTHETIC_OOV'
+                if row.fold == 0:
+                    exercises = ['FORBIDDEN_OUTER_ITEM'] * 4
+                events.extend((row.user_id, exercise, position // 2, index * 100 + position + 1,
+                               position % 2, position % 2) for position, exercise in enumerate(exercises))
+            # Cố ý đảo thứ tự lưu; loader phải order timestamp/source_row và giữ learner.
+            con.executemany('INSERT INTO events VALUES (?, ?, ?, ?, ?, ?)', list(reversed(events)))
+            con.execute('COPY events TO ? (FORMAT PARQUET)', [str(canonical / 'events.parquet')])
+        finally:
+            con.close()
+        canonical_manifest = root / 'fixture-canonical.json'
+        split_manifest = root / 'fixture-split.json'
+        canonical_manifest.write_text(json.dumps({'kind': 'synthetic-main-worker-fixture', 'rows': 24}), encoding='utf-8')
+        split_manifest.write_text(json.dumps({'kind': 'synthetic-not-frozen-research-split', 'learners': 6}), encoding='utf-8')
+        assert json.loads(marker.read_text())['synthetic_only'] is True
+        for module in (config_module, runner, prediction_module, data_module):
+            monkeypatch.setattr(module, 'PROJECT_ROOT', root)
+        for name, value in [('CANONICAL', canonical), ('ASSIGNMENTS', assignments),
+                            ('CANONICAL_MANIFEST', canonical_manifest), ('SPLIT_MANIFEST', split_manifest)]:
+            monkeypatch.setattr(runner, name, value)
+        fixture_report = {'source': {'commit': runner.SOURCE_COMMIT, 'fixture_provenance_only': True},
+                          'lock_sha256': 'test-only-lock', 'runtime_report_sha256': 'test-only-runtime'}
+        monkeypatch.setattr(runner, 'preflight', lambda _: fixture_report)
+        monkeypatch.setattr(runner, '_require_gate2_evidence', lambda _: {
+            'status': 'PASS_CPU_TEST_FIXTURE_ONLY', 'fixture': True,
+            'report_sha256': 'test-only-gate', 'test_log_sha256': 'test-only-log',
+            'pointer_sha256': 'test-only-pointer'})
+        monkeypatch.setattr(runner, '_gate2_build_hashes', lambda: {
+            'synthetic-marker': sha(marker), 'worker-test-source': sha(Path(__file__))})
+        snapshot = lambda: {'pid': os.getpid(), 'process_rss_bytes': 256 * 1024**2,
+                            'process_peak_rss_bytes': 256 * 1024**2,
+                            'system_available_ram_bytes': 4 * 1024**3,
+                            'system_total_ram_bytes': 8 * 1024**3}
+        for module in (runner, training, watchdog):
+            monkeypatch.setattr(module, 'memory_snapshot', snapshot)
+&gt;       config = replace(load_config(PROJECT_ROOT / 'experiments/akt/configs/smoke.json'),
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                         project_root=root, source_root=PROJECT_ROOT / 'artifacts/akt/dependencies/upstream',
+                         run_id='synthetic-worker',
+                         output_dir=root / 'experiments/akt/results/synthetic-worker',
+                         execution_enabled=True, max_train_users=2, max_val_users=1,
+                         max_targets_per_side=8, max_steps=2, max_seconds=30, max_wall_seconds=90,
+                         fetch_rows=2)
+
+tests\akt\test_worker_lifecycle.py:88: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\config.py:182: in load_config
+    validate_config(config)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+config = AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/paral...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+
+    def validate_config(config: AKTConfig) -&gt; None:
+        if config.recovery is not None:
+            from .recovery import validate_options
+            validate_options(config)
+        if config.project_root.resolve() != PROJECT_ROOT.resolve():
+&gt;           raise ValueError('project root must be the trusted repository root')
+E           ValueError: project root must be the trusted repository root
+
+src\knowledge_tracing\akt\config.py:87: ValueError</error></testcase><testcase classname="tests.akt.test_worker_lifecycle" name="test_main_worker_rejects_changed_parquet_identity_before_loading" time="0.086"><error message="failed on setup with &quot;ValueError: project root must be the trusted repository root&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-worker-20261107-01/t/test_main_worker_rejects_chang0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001C4D8381810&gt;
+
+    @pytest.fixture
+    def parquet_worker(tmp_path, monkeypatch):
+        """Chỉ ghi dưới pytest basetemp được invocation đặt trong artifacts/akt."""
+        root = tmp_path / 'synthetic-project'
+        root.mkdir()
+        marker = root / 'SYNTHETIC_ONLY.json'
+        marker.write_text(json.dumps({'synthetic_only': True, 'real_data_authorized': False}), encoding='utf-8')
+        canonical = root / 'fixture-parquet'
+        canonical.mkdir()
+        assignments = root / 'fixture-assignments.parquet'
+        con = duckdb.connect()
+        try:
+            con.execute('CREATE TABLE assignments(user_id VARCHAR, partition VARCHAR, fold INTEGER)')
+            con.executemany('INSERT INTO assignments VALUES (?, ?, ?)',
+                            [(f'synthetic-{i}', 'development', 0 if i == 0 else 1 + i % 4) for i in range(6)])
+            con.execute('COPY assignments TO ? (FORMAT PARQUET)', [str(assignments)])
+            frame = con.execute('SELECT user_id,fold FROM assignments').df()
+            split = runner.make_inner_split(frame, outer_fold=0, seed=42)
+            val_user = split.inner_val_users[0]
+            con.execute('CREATE TABLE events(user_id VARCHAR, exercise VARCHAR, time_done BIGINT, '
+                        'source_row BIGINT, correct INTEGER, suggested INTEGER)')
+            events = []
+            for index, row in frame.iterrows():
+                exercises = ['A', 'B', 'A', 'B']
+                if row.user_id == val_user:
+                    exercises[1] = 'SYNTHETIC_OOV'
+                if row.fold == 0:
+                    exercises = ['FORBIDDEN_OUTER_ITEM'] * 4
+                events.extend((row.user_id, exercise, position // 2, index * 100 + position + 1,
+                               position % 2, position % 2) for position, exercise in enumerate(exercises))
+            # Cố ý đảo thứ tự lưu; loader phải order timestamp/source_row và giữ learner.
+            con.executemany('INSERT INTO events VALUES (?, ?, ?, ?, ?, ?)', list(reversed(events)))
+            con.execute('COPY events TO ? (FORMAT PARQUET)', [str(canonical / 'events.parquet')])
+        finally:
+            con.close()
+        canonical_manifest = root / 'fixture-canonical.json'
+        split_manifest = root / 'fixture-split.json'
+        canonical_manifest.write_text(json.dumps({'kind': 'synthetic-main-worker-fixture', 'rows': 24}), encoding='utf-8')
+        split_manifest.write_text(json.dumps({'kind': 'synthetic-not-frozen-research-split', 'learners': 6}), encoding='utf-8')
+        assert json.loads(marker.read_text())['synthetic_only'] is True
+        for module in (config_module, runner, prediction_module, data_module):
+            monkeypatch.setattr(module, 'PROJECT_ROOT', root)
+        for name, value in [('CANONICAL', canonical), ('ASSIGNMENTS', assignments),
+                            ('CANONICAL_MANIFEST', canonical_manifest), ('SPLIT_MANIFEST', split_manifest)]:
+            monkeypatch.setattr(runner, name, value)
+        fixture_report = {'source': {'commit': runner.SOURCE_COMMIT, 'fixture_provenance_only': True},
+                          'lock_sha256': 'test-only-lock', 'runtime_report_sha256': 'test-only-runtime'}
+        monkeypatch.setattr(runner, 'preflight', lambda _: fixture_report)
+        monkeypatch.setattr(runner, '_require_gate2_evidence', lambda _: {
+            'status': 'PASS_CPU_TEST_FIXTURE_ONLY', 'fixture': True,
+            'report_sha256': 'test-only-gate', 'test_log_sha256': 'test-only-log',
+            'pointer_sha256': 'test-only-pointer'})
+        monkeypatch.setattr(runner, '_gate2_build_hashes', lambda: {
+            'synthetic-marker': sha(marker), 'worker-test-source': sha(Path(__file__))})
+        snapshot = lambda: {'pid': os.getpid(), 'process_rss_bytes': 256 * 1024**2,
+                            'process_peak_rss_bytes': 256 * 1024**2,
+                            'system_available_ram_bytes': 4 * 1024**3,
+                            'system_total_ram_bytes': 8 * 1024**3}
+        for module in (runner, training, watchdog):
+            monkeypatch.setattr(module, 'memory_snapshot', snapshot)
+&gt;       config = replace(load_config(PROJECT_ROOT / 'experiments/akt/configs/smoke.json'),
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                         project_root=root, source_root=PROJECT_ROOT / 'artifacts/akt/dependencies/upstream',
+                         run_id='synthetic-worker',
+                         output_dir=root / 'experiments/akt/results/synthetic-worker',
+                         execution_enabled=True, max_train_users=2, max_val_users=1,
+                         max_targets_per_side=8, max_steps=2, max_seconds=30, max_wall_seconds=90,
+                         fetch_rows=2)
+
+tests\akt\test_worker_lifecycle.py:88: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\config.py:182: in load_config
+    validate_config(config)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+config = AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/paral...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+
+    def validate_config(config: AKTConfig) -&gt; None:
+        if config.recovery is not None:
+            from .recovery import validate_options
+            validate_options(config)
+        if config.project_root.resolve() != PROJECT_ROOT.resolve():
+&gt;           raise ValueError('project root must be the trusted repository root')
+E           ValueError: project root must be the trusted repository root
+
+src\knowledge_tracing\akt\config.py:87: ValueError</error></testcase></testsuite></testsuites>

@@ -20,3 +20,7 @@ User chấp thuận pilot factorial10seed/profile×120steps và Junyi32inner-tra
 ## D-20261107-CUDA — Probe đạt, chưa cấp quyền training chính thức
 
 **Bằng chứng:** [CUDA acceptance](reports/colab_cuda_acceptance_20261107.md), [independent review](reports/colab_cuda_adversarial_review_20261107.md), kitv12 và returned44outputs. Quyết định kỹ thuật: không rerun các probe đã đạt hoặc dùng Modal đểdebuglại; ưu tiên GPU06/Linuxruntime+boundedmainworkercontract và explicitnegativecontrols. Không đồng nhất controlledoptimizer-boundaryresume với hardkill/Volumeproof; không dự báo fullCV từ một synchronizedstep. Không thay approvedscientificmethodology, S04/S05 hoặc requiredmodels. Paidallocation/fullCV/Holdout vẫn gate riêng; 30free/net0 giữ nguyên.
+
+## D-GPU06-LOCAL — Không dùng probe PASS để nới runtime/main-worker guards
+
+Đã sửa interpreter/schema2 để hỗ trợ Linux đúng cách và kiểm actualParquetworker trên CPU, không đổi CPUphase/hypers/splits hoặc cho inheritedColabvenv thành runtime chính thức. Gate16fail do deepfixturepath được giữ riêng, Gate17PASS513 sau controlledcontrast vàfixture-onlyfix. SAKTcheckpointloader dùng một boundedpayload đãhash; giữ regressionfail/pass trongrunriêng. Các xác nhận chỉ là software contracts. Tiếp GPU07 bằng immutable worker-context và explicit dispatch/caps; không monkeypatch production globals, không tựapprove budget/fullCV hoặc bỏbaseline. Xem20_LINUX_CUDA_WORKER_CONTRACT.md và các báo cáo mới.

@@ -6,6 +6,7 @@ from dataclasses import asdict
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import sys
 from typing import Callable
@@ -20,6 +21,75 @@ CANONICAL_MANIFEST = PROJECT_ROOT / 'artifacts/bkt_baseline/derived/manifest.jso
 RUNTIME_REPORT = PROJECT_ROOT / 'artifacts/akt/preflight/runtime-v2.json'
 LOCK_FILE = PROJECT_ROOT / 'requirements-akt.lock.txt'
 GATE2_CURRENT = PROJECT_ROOT / 'artifacts/akt/preflight/gate2-current.json'
+
+
+def validate_runtime_interpreter(environment: Path, *, executable: str, prefix: str,
+                                 platform_id: str) -> Path:
+    """Bind lexical venv entry và prefix; không resolve symlink executable Linux."""
+    if platform_id == 'win32':
+        entry = environment / 'Scripts/python.exe'
+    elif platform_id == 'linux':
+        entry = environment / 'bin/python'
+    else:
+        raise ValueError('unsupported AKT runtime platform')
+    entry = Path(os.path.abspath(entry))
+    if (not isinstance(executable, str) or not Path(executable).is_absolute()
+            or not isinstance(prefix, str) or not Path(prefix).is_absolute()
+            or os.path.normcase(os.path.abspath(executable)) != os.path.normcase(str(entry))
+            or Path(prefix).resolve() != environment.resolve()):
+        raise ValueError('interpreter is not the isolated AKT environment')
+    return entry
+
+
+def _absolute_path_matches(value, expected: Path, *, resolve: bool) -> bool:
+    if not isinstance(value, str) or not value or not Path(value).is_absolute():
+        return False
+    if resolve:
+        return Path(value).resolve() == expected.resolve()
+    return os.path.normcase(os.path.abspath(value)) == os.path.normcase(os.path.abspath(expected))
+
+
+def _runtime_report_matches(report, *, source: dict, lock_hash: str, lock_file: Path,
+                            project_root: Path, executable: Path, platform_id: str,
+                            device: str) -> bool:
+    if (not isinstance(report, dict) or not isinstance(report.get('source'), dict)
+            or report['source'] != source or not isinstance(report.get('lock_sha256'), str)
+            or report['lock_sha256'] != lock_hash
+            or not _absolute_path_matches(report.get('python'), executable, resolve=False)):
+        return False
+    environment = project_root / '.venv'
+    if 'runtime_schema_version' in report:
+        if (type(report['runtime_schema_version']) is not int or report['runtime_schema_version'] != 2
+                or type(report.get('platform_id')) is not str or report['platform_id'] != platform_id
+                or not _absolute_path_matches(report.get('python_prefix'), environment, resolve=True)
+                or not _absolute_path_matches(report.get('project_root'), project_root, resolve=True)
+                or not _absolute_path_matches(report.get('lock_file'), lock_file, resolve=True)
+                or type(report.get('device')) is not str or report['device'] != device
+                or type(report.get('cuda_available')) is not bool):
+            return False
+        required_origins = True
+    else:
+        # Giữ report Windows lịch sử; Linux phải tạo report schema2 mới.
+        if (platform_id != 'win32'
+                or any(key in report for key in ('platform_id', 'python_prefix', 'project_root', 'lock_file'))
+                or ('platform' in report and (not isinstance(report['platform'], str)
+                                              or not report['platform'].startswith('Windows')))):
+            return False
+        required_origins = False
+        if (('device' in report and report['device'] != device)
+                or ('device' not in report and device != 'cpu')
+                or ('cuda_available' in report and type(report['cuda_available']) is not bool)):
+            return False
+    if device == 'cuda' and report.get('cuda_available') is not True:
+        return False
+    for name in ('torch', 'numpy'):
+        field = name + '_origin'
+        if required_origins or field in report:
+            origin = report.get(field)
+            if (not isinstance(origin, str) or not Path(origin).is_absolute()
+                    or not Path(origin).resolve().is_relative_to(environment.resolve())):
+                return False
+    return True
 
 
 def gate2_build_hashes(project_root: Path = PROJECT_ROOT) -> dict:
@@ -95,12 +165,15 @@ def preflight(config: AKTConfig, *, project_root: Path = PROJECT_ROOT,
               runtime_report_path: Path = RUNTIME_REPORT, lock_file: Path = LOCK_FILE) -> dict:
     """Verify pinned source/runtime/lock; never opens learner assignments or interactions."""
     validate_config(config)
+    project_root = project_root.resolve()
+    executable = validate_runtime_interpreter(project_root / '.venv', executable=sys.executable,
+                                              prefix=sys.prefix, platform_id=sys.platform)
     source = verify_upstream(config.source_root, config.source_commit)
     lock_hash = sha256_file(lock_file)
     report = json.loads(runtime_report_path.read_text(encoding='utf-8'))
-    if (report.get('source') != source or report.get('lock_sha256') != lock_hash
-            or report.get('python') != str((project_root / '.venv/Scripts/python.exe').resolve())
-            or Path(sys.prefix).resolve() != (project_root / '.venv').resolve()):
+    if not _runtime_report_matches(report, source=source, lock_hash=lock_hash, lock_file=lock_file,
+                                   project_root=project_root, executable=executable,
+                                   platform_id=sys.platform, device=config.device):
         raise ValueError('Gate 1 runtime/source evidence mismatch')
     return {
         'status': 'ready', 'phase': config.phase, 'source': source,

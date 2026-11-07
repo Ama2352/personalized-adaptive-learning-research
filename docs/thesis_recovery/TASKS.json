@@ -1830,6 +1830,159 @@
       "estimated_effort": "1–2 engineering days; no cloud runtime assumed",
       "compute_cost_category": "Local CPU / no training spend",
       "authorization_requirements": "Local contract design/implementation/negative-control tests already authorized; no realdata, methodology change, fullCV, Holdout or cloud allocation. Paid execution remains separately gated.",
+      "status": "PARTIALLY_VERIFIED",
+      "blockers": [
+        "GPU07: mainphase/runtimepath wiring",
+        "GPU08: LinuxCUDA hashlock/image",
+        "GPU09: actualmainGPU execution"
+      ],
+      "verification_evidence": [
+        "cpu-linux-worker-20261107-01",
+        "sakt-inference-engineering-20261107-01",
+        "sakt-checkpoint-payload-20261107-01"
+      ],
+      "verification_scope": "Platform-aware preflight/report and actualCPU Parquetworker verified; mainGPUphase/runtimepathwiring/LinuxCUDAenv not implemented"
+    },
+    {
+      "id": "GPU06A",
+      "research_objective": "Platform-aware isolated runtime manifest/preflight",
+      "rq": [],
+      "workstream": "gpu_readiness",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "COLAB05"
+      ],
+      "required_inputs": "cpu-linux-worker-20261107-01",
+      "files_components": "authorization.py;check_runtime.py;test_runtime.py;test_runner.py",
+      "implementation_objective": "Platform-aware isolated runtime manifest/preflight",
+      "acceptance_criteria": "Schema2 strictpaths/source/lock/device/origins; Linuxfreshreport; Windowslegacy preservesvalidchecks; targeted63+fullGate pass",
+      "verification_steps": "Review+scoped CPU synthetic/negative tests, source hashes and immutable artifacts; actualCUDA only in separately bounded stage",
+      "required_artifacts": "cpu-linux-worker-20261107-01",
+      "estimated_effort": "Completed boundedlocal batch",
+      "compute_cost_category": "LocalCPU now; GPU09 boundedfreeColab only after prerequisites",
+      "authorization_requirements": "Localengineering authorized; no methodology/fullCV/Holdout/Modal allocation from this task",
+      "status": "COMPLETED",
+      "blockers": []
+    },
+    {
+      "id": "GPU06B",
+      "research_objective": "SyntheticParquet through mainCPUworker selection/validation/export",
+      "rq": [],
+      "workstream": "gpu_readiness",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GPU06A"
+      ],
+      "required_inputs": "cpu-linux-worker-20261107-01",
+      "files_components": "tests/akt/test_worker_lifecycle.py",
+      "implementation_objective": "SyntheticParquet through mainCPUworker selection/validation/export",
+      "acceptance_criteria": "8train targets,4val=3fitted+1OOV, bestcheckpoint reload exact, assignmentidentitynegative beforeloader;2newcases",
+      "verification_steps": "Review+scoped CPU synthetic/negative tests, source hashes and immutable artifacts; actualCUDA only in separately bounded stage",
+      "required_artifacts": "cpu-linux-worker-20261107-01",
+      "estimated_effort": "Completed boundedlocal batch",
+      "compute_cost_category": "LocalCPU now; GPU09 boundedfreeColab only after prerequisites",
+      "authorization_requirements": "Localengineering authorized; no methodology/fullCV/Holdout/Modal allocation from this task",
+      "status": "COMPLETED",
+      "blockers": []
+    },
+    {
+      "id": "SAKT02",
+      "research_objective": "Frozen conditional inference SAKT with truthful weight roles",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "supporting_baselines",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "SAKT01"
+      ],
+      "required_inputs": "sakt-inference-engineering-20261107-01;sakt-checkpoint-payload-20261107-01",
+      "files_components": "src/knowledge_tracing/sakt/adapter.py;tests/sakt/test_adapter.py",
+      "implementation_objective": "Frozen conditional inference SAKT with truthful weight roles",
+      "acceptance_criteria": "52new+37coreCPUcases,rawstateSHA/domain/vocab/geometrybindings,causality/OOV/isolation; reject fitted/trainer/OnlineSession paths",
+      "verification_steps": "Review+scoped CPU synthetic/negative tests, source hashes and immutable artifacts; actualCUDA only in separately bounded stage",
+      "required_artifacts": "sakt-inference-engineering-20261107-01;sakt-checkpoint-payload-20261107-01",
+      "estimated_effort": "Completed boundedlocal batch",
+      "compute_cost_category": "LocalCPU now; GPU09 boundedfreeColab only after prerequisites",
+      "authorization_requirements": "Localengineering authorized; no methodology/fullCV/Holdout/Modal allocation from this task",
+      "status": "COMPLETED",
+      "blockers": []
+    },
+    {
+      "id": "GPU07",
+      "research_objective": "BoundedGPUphase and explicit runtime-path wiring",
+      "rq": [],
+      "workstream": "gpu_readiness",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GPU06A",
+        "GPU06B"
+      ],
+      "required_inputs": "20_LINUX_CUDA_WORKER_CONTRACT.md;runtime/mainworkerreports",
+      "files_components": "config/watchdog/runner/authorization/runtime context",
+      "implementation_objective": "BoundedGPUphase and explicit runtime-path wiring",
+      "acceptance_criteria": "CPUguardsunchanged; exactapprovedcapsinclVRAM; source/runtimepath identity matchesbothprocesses; no publicfullfold bypass",
+      "verification_steps": "Review+scoped CPU synthetic/negative tests, source hashes and immutable artifacts; actualCUDA only in separately bounded stage",
+      "required_artifacts": "20_LINUX_CUDA_WORKER_CONTRACT.md;runtime/mainworkerreports",
+      "estimated_effort": "1–2 engineeringdays; actualGPU elapsed unknown",
+      "compute_cost_category": "LocalCPU now; GPU09 boundedfreeColab only after prerequisites",
+      "authorization_requirements": "Localengineering authorized; no methodology/fullCV/Holdout/Modal allocation from this task",
+      "status": "PLANNED",
+      "blockers": []
+    },
+    {
+      "id": "GPU08",
+      "research_objective": "Reproducible isolatedLinuxCUDA environment",
+      "rq": [],
+      "workstream": "gpu_readiness",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GPU06A"
+      ],
+      "required_inputs": "20_LINUX_CUDA_WORKER_CONTRACT.md",
+      "files_components": "separateLinuxCUDA requirements+wheelhashlock+imagedigest+runtime manifest",
+      "implementation_objective": "Reproducible isolatedLinuxCUDA environment",
+      "acceptance_criteria": "Freshisolatedvenv; versions/wheelhashes/image/installreport; no WindowsCPUlock or inheritedorigin bypass",
+      "verification_steps": "Review+scoped CPU synthetic/negative tests, source hashes and immutable artifacts; actualCUDA only in separately bounded stage",
+      "required_artifacts": "20_LINUX_CUDA_WORKER_CONTRACT.md",
+      "estimated_effort": "1–2 engineeringdays; actualGPU elapsed unknown",
+      "compute_cost_category": "LocalCPU now; GPU09 boundedfreeColab only after prerequisites",
+      "authorization_requirements": "Localengineering authorized; no methodology/fullCV/Holdout/Modal allocation from this task",
+      "status": "PLANNED",
+      "blockers": []
+    },
+    {
+      "id": "GPU09",
+      "research_objective": "ActualboundedLinuxCUDA mainworker lifecycle",
+      "rq": [],
+      "workstream": "gpu_readiness",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GPU07",
+        "GPU08",
+        "GPU06B"
+      ],
+      "required_inputs": "NewsourceGate+GPUphase/Linuxenv contracts",
+      "files_components": "source-bound synthetic mainworkerkit/runner",
+      "implementation_objective": "ActualboundedLinuxCUDA mainworker lifecycle",
+      "acceptance_criteria": "Loader/train/validation/bestcheckpoint/export/resume artifacts verified; actual device; capnoexit0only; no realdata/Gate4claim",
+      "verification_steps": "Review+scoped CPU synthetic/negative tests, source hashes and immutable artifacts; actualCUDA only in separately bounded stage",
+      "required_artifacts": "NewsourceGate+GPUphase/Linuxenv contracts",
+      "estimated_effort": "1–2 engineeringdays; actualGPU elapsed unknown",
+      "compute_cost_category": "LocalCPU now; GPU09 boundedfreeColab only after prerequisites",
+      "authorization_requirements": "Localengineering authorized; no methodology/fullCV/Holdout/Modal allocation from this task",
       "status": "PLANNED",
       "blockers": []
     }

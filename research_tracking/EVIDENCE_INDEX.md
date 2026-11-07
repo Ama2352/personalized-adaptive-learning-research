@@ -127,3 +127,8 @@ Số outputs là inventory snapshot của các bundles, không chỉ số hoàn 
 - [Nghiệm thu](reports/colab_cuda_acceptance_20261107.md), [phản biện độc lập](reports/colab_cuda_adversarial_review_20261107.md) và [bundle68outputs](runs/colab-cuda-synthetic-20261107-01/README.md): agent tự chạy setup/CPU505pass/GPU400target1update và fresh-process recovery17targets5vs2+3; delta0 trong tolerance1e-5.44original outputSHA,144chunk receipts và139source-file hashes đã kiểm; CSV400rows là bản trích từ synthetic Parquet.
 - Checkpoints/binary giữ trong `experiments/akt/results/colab-actual-cuda-20261107-01/`, ZIP gốc28.657.701bytesSHA64392c70... ở artifacts/akt/colab. Không sửa historicalfailure435/7/8; bản mới có source/workspace/manifest riêng.
 - Gate4false, không realdata/fulltraining/RQ efficacy, không hardkill/preemption/ModalVolume proof hoặc representative cost forecast. Runtime thử nghiệm đã chấp nhận unassign sau nhận đủ artifacts; bridgeclosed. Không dùng credit Modal. GPU06/runtime-phase contract còn trước mainworker training.
+
+## Runtime Linux, main worker CPU và SAKT inference — batch bắt đầu07/11
+
+- [Runtime contract](reports/akt_linux_runtime_contract_20261107.md), [main worker](reports/akt_main_worker_lifecycle_20261107.md), [bundle](runs/cpu-linux-worker-20261107-01/README.md): targeted63cases và2newworker cases; fullGate513pass/269.98s, source-bound WindowsCPU. Linuxbranches mocked, chưa actualLinux/CUDA worker.
+- [SAKT adapter](reports/sakt_adapter_readiness_20261107.md), [bundle ban đầu](runs/sakt-inference-engineering-20261107-01/README.md), [checkpoint followup](runs/sakt-checkpoint-payload-20261107-01/README.md):89CPUcases=37core+52adapter,0optimizersteps; random/unverifiedweights không fitted benchmark hoặc completeOnlineSessionbridge.

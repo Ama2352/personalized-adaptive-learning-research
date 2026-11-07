@@ -1,0 +1,158 @@
+{
+  "copied_files": 124,
+  "all_copy_sha_exact": true,
+  "gate17_report_log_xml_pointer_binding": true,
+  "current_gate17_build_hashes_verified": 105,
+  "final_source_sha256": "fd583722bc3f3b97e990cfde83715601b49d4daae793c587603305dbc79ab225",
+  "failed_gate16_source_sha256": "734f28bd0aea487a67b364a83e3def69a3ca1cd34e3c658583055c5f8ec28b47",
+  "runtime_handoff_hashes_verified": 21,
+  "path_control": {
+    "scope": "Cheap one-row DuckDB COPY path-length diagnostic only; no model/dataset/GPU",
+    "duckdb": "1.5.6",
+    "actual_gate16_failed_path": "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-16-30034a7c0dba45ce9dd379581f20a438\\test_main_worker_reads_parquet0\\synthetic-project\\experiments\\akt\\results\\synthetic-worker\\predictions\\.pending\\346ee3eda44a4a3f8b305ac5b1ab85d3-00000.parquet.tmp",
+    "actual_failed_path_characters": 264,
+    "gate16_log_sha256": "340578e4ddf024ad9167f0fb58c08c18b5390239fff26d692ae37b45bb9cda0e",
+    "gate16_junit_sha256": "ccf574f90f132d699c0bd7ff0446b2a6f608c18fd4d33890b9e4e2c459cffa17",
+    "parent_failure_receipt_sha256": "f489fbece02ec1c075058c439b82c75e34f7129a7b29fa55845d07aace6a88c0",
+    "control_root_length_matches_gate16": true,
+    "cases": [
+      {
+        "case": "baseline",
+        "path": "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-worker-path-20261108-01\\baseline.parquet",
+        "path_characters": 87,
+        "parent_characters": 70,
+        "status": "PASS",
+        "elapsed_seconds": 1.296338599990122
+      },
+      {
+        "case": "same_parent_short_filename",
+        "path": "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-pc-00000000000000000000000000000000\\test_main_worker_reads_parquet0\\synthetic-project\\experiments\\akt\\results\\synthetic-worker\\predictions\\.pending\\a.parquet.tmp",
+        "path_characters": 227,
+        "parent_characters": 213,
+        "status": "PASS",
+        "elapsed_seconds": 0.01782349997665733
+      },
+      {
+        "case": "same_depth_original_filename_length",
+        "path": "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-pc-00000000000000000000000000000000\\test_main_worker_reads_parquet0\\synthetic-project\\experiments\\akt\\results\\synthetic-worker\\predictions\\.pending\\346ee3eda44a4a3f8b305ac5b1ab85d3-00000.parquet.tmp",
+        "path_characters": 264,
+        "parent_characters": 213,
+        "status": "ERROR",
+        "error_type": "IOException",
+        "error": "IO Error: Cannot open file \"D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-pc-00000000000000000000000000000000\\test_main_worker_reads_parquet0\\synthetic-project\\experiments\\akt\\results\\synthetic-worker\\predictions\\.pending\\346ee3eda44a4a3f8b305ac5b1ab85d3-00000.parquet.tmp\": The system cannot find the path specified.\r\n",
+        "elapsed_seconds": 0.027139100013300776
+      },
+      {
+        "case": "compact_fixture_full_filename",
+        "path": "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-pc-00000000000000000000000000000000\\wk0\\p\\experiments\\akt\\results\\synthetic-worker\\predictions\\.pending\\346ee3eda44a4a3f8b305ac5b1ab85d3-00000.parquet.tmp",
+        "path_characters": 220,
+        "parent_characters": 169,
+        "status": "PASS",
+        "elapsed_seconds": 0.01967989999684505
+      }
+    ],
+    "source_snapshot_sha256": "734f28bd0aea487a67b364a83e3def69a3ca1cd34e3c658583055c5f8ec28b47",
+    "interpretation_vi": "Long filename ở deep parent fail, cùng parent short filename và compact root full filename pass. Phù hợp Windows/DuckDB path-length limitation; không graph/model failure."
+  },
+  "worker_acceptance": {
+    "kind": "TEST_ONLY_SYNTHETIC_PARQUET_MAIN_WORKER_IN_PROCESS",
+    "scope": "actual worker, split/loader/train/validation/checkpoint/export; fake external provenance/RAM; no watchdog/refit/realdata claim",
+    "split_hash": "1f7ad5d61d2c6916928db55673f6d43ccde0c64ace86948ebe1ac2ab5748dac3",
+    "parent_split_hash": "cbb4918de046f20ac7939d7fc728cb2f8b99005a849c55036ce89571245eb0c0",
+    "train_users": [
+      "synthetic-1",
+      "synthetic-5"
+    ],
+    "validation_users": [
+      "synthetic-3"
+    ],
+    "input_sha256_unchanged": {
+      "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-dp-919f6cd39bec4493939349f9784fe6e4\\wk0\\p\\SYNTHETIC_ONLY.json": "75464d112d767f03722ea2d520e52c90d236b033ecbde263b48f65c1f73ef4cf",
+      "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-dp-919f6cd39bec4493939349f9784fe6e4\\wk0\\p\\fixture-assignments.parquet": "7ee3f5a65cd4fc7363b202bf625b045b902cb044adcca35609341707adccd02a",
+      "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-dp-919f6cd39bec4493939349f9784fe6e4\\wk0\\p\\fixture-parquet\\events.parquet": "a3afd80fe9c8ed7e0d6a165f537a82b363f79922d2982bb089177f61cbfae85e",
+      "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-dp-919f6cd39bec4493939349f9784fe6e4\\wk0\\p\\fixture-canonical.json": "f4ed4e74b5a74ddc10ccf101b0ff13d7e09dbabc72083cea34678e20b04e8cf5",
+      "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-dp-919f6cd39bec4493939349f9784fe6e4\\wk0\\p\\fixture-split.json": "558d78517c6c0b7cf32147fdf7d921965674693fed511113eff050272288bea7"
+    },
+    "checkpoint_sha256": "6a574ce31d0c480b66ea9b3b2ae8f1e932af747ebb345fd7e33e2bda738a5e34",
+    "training_targets": 8,
+    "validation_targets": 4,
+    "fitted_predictions": 3,
+    "unseen_predictions": 1,
+    "validation_loss": 0.7202878395716349,
+    "checkpoint_validation": {
+      "predicted_rows": 3,
+      "unseen_rows": 1,
+      "expected_rows": 4,
+      "windows": 2,
+      "sequence_length_counts": {
+        "1": 1,
+        "2": 1
+      },
+      "batch_shape_counts": {
+        "1x1": 1,
+        "1x2": 1
+      },
+      "valid_tokens": 3,
+      "target_tokens": 3,
+      "context_tokens": 0,
+      "padding_tokens": 0,
+      "elapsed_seconds": 0.022534600022481754
+    },
+    "approved_caps": {
+      "max_rss_bytes": 2147483648,
+      "max_seconds": 30,
+      "max_steps": 2,
+      "max_targets_per_side": 8,
+      "max_train_users": 2,
+      "max_val_users": 1,
+      "max_wall_seconds": 90,
+      "min_available_ram_bytes": 1073741824
+    },
+    "loader_stats": {
+      "train": {
+        "peak_fetch_rows": 2,
+        "peak_learner_events": 4,
+        "chronological_query_sort_and_materialize_seconds": 0.10656779998680577,
+        "query_rows_returned": 8,
+        "selected_learners": 2,
+        "selected_targets": 8
+      },
+      "validation": {
+        "peak_fetch_rows": 2,
+        "peak_learner_events": 4,
+        "chronological_query_sort_and_materialize_seconds": 0.02069070001016371,
+        "query_rows_returned": 4,
+        "selected_learners": 1,
+        "selected_targets": 4
+      }
+    },
+    "prediction_target_identities": [
+      [
+        "synthetic-3",
+        301,
+        "A",
+        0
+      ],
+      [
+        "synthetic-3",
+        302,
+        "SYNTHETIC_OOV",
+        1
+      ],
+      [
+        "synthetic-3",
+        303,
+        "A",
+        0
+      ],
+      [
+        "synthetic-3",
+        304,
+        "B",
+        1
+      ]
+    ],
+    "gate1_gate2_and_ram_are_test_fixtures": true,
+    "new_refit_or_recovery_runs": 0
+  }
+}

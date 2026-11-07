@@ -107,3 +107,7 @@ Chỉ di chuyển JSON bootstrap về nơi thống nhất, cập nhật locator/
 - [Graph kernel](../src/knowledge_tracing/graph_augmentation.py) cùng [báo cáo](../research_tracking/reports/graph_gate_prototype_20261107.md): độc lập, chưa CG-AKT trained. [SAKT core](../src/knowledge_tracing/sakt/) cùng [readiness](../research_tracking/reports/sakt_core_readiness_20261107.md):37CPUtests, chưa trainer/benchmark; không nằm trong kitv12/Gate15.
 
 Các mục count/inventory phía trên là snapshots có ngày, không tự cập nhật khi thêm run. Current deliverable status ở `research_tracking/RESEARCH_PROGRESS.md` và `docs/thesis_recovery/INVESTIGATION_STATE.json`; run manifests đã đóng luôn bất biến.
+
+## Runtime/worker batch tiếp theo
+
+[Hợp đồng20](thesis_recovery/20_LINUX_CUDA_WORKER_CONTRACT.md), [runtime report](../research_tracking/reports/akt_linux_runtime_contract_20261107.md), [worker report](../research_tracking/reports/akt_main_worker_lifecycle_20261107.md) và [SAKT inference report](../research_tracking/reports/sakt_adapter_readiness_20261107.md) là các điểm vào mới. Logs/failures/source snapshots nằm trong ba run có tên theo mục đích ở EVIDENCE_INDEX; không tạo thêm root reports hoặc chuyển historical artifacts. Gate17 nativeCPU513cases và SAKT89cases là suites riêng; Linux/CUDA main-worker execution chưa được xác nhận.

@@ -1,0 +1,17 @@
+--- Gate16_source734
++++ compact_fixture_source_fd58
+@@ -26,10 +26,12 @@
+ 
+ 
+ @pytest.fixture
+-def parquet_worker(tmp_path, monkeypatch):
++def parquet_worker(tmp_path_factory, monkeypatch):
+     """Chỉ ghi dưới pytest basetemp được invocation đặt trong artifacts/akt."""
+     template = load_config(PROJECT_ROOT / 'experiments/akt/configs/smoke.json')
+-    root = tmp_path / 'synthetic-project'
++    # UUID Gate basetemp đã dài: bỏ test-name nesting, không thoát basetemp.
++    root = tmp_path_factory.mktemp('wk') / 'p'
++    assert root.resolve().is_relative_to(tmp_path_factory.getbasetemp().resolve())
+     root.mkdir()
+     marker = root / 'SYNTHETIC_ONLY.json'
+     marker.write_text(json.dumps({'synthetic_only': True, 'real_data_authorized': False}), encoding='utf-8')

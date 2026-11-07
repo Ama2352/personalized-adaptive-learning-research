@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'src'))
 
 from knowledge_tracing.akt.config import SOURCE_COMMIT  # noqa: E402
+from knowledge_tracing.akt.authorization import validate_runtime_interpreter  # noqa: E402
 from knowledge_tracing.akt.provenance import sha256_file, verify_upstream  # noqa: E402
 
 
@@ -91,9 +92,13 @@ def write_lock_from_report(report_path: Path, output_path: Path, *,
 
 
 def inspect_runtime(upstream_root: Path, *, required_device: str = 'cpu',
-                    expected_env: Path = ROOT / '.venv') -> dict:
-    if Path(sys.prefix).resolve() != expected_env.resolve():
-        raise ValueError('interpreter is not the isolated AKT environment')
+                    expected_env: Path | None = None, project_root: Path = ROOT,
+                    lock_file: Path | None = None) -> dict:
+    project_root = project_root.resolve()
+    expected_env = expected_env if expected_env is not None else project_root / '.venv'
+    lock_file = lock_file if lock_file is not None else project_root / 'requirements-akt.lock.txt'
+    executable = validate_runtime_interpreter(expected_env, executable=sys.executable,
+                                              prefix=sys.prefix, platform_id=sys.platform)
     if required_device not in {'cpu', 'cuda'}:
         raise ValueError('unsupported device')
     source = verify_upstream(upstream_root, SOURCE_COMMIT)
@@ -121,11 +126,14 @@ def inspect_runtime(upstream_root: Path, *, required_device: str = 'cpu',
     module.device = torch.device(required_device)
     if not hasattr(module, 'AKT'):
         raise ValueError('upstream AKT class missing')
-    return {'python': sys.executable, 'python_version': sys.version,
+    return {'runtime_schema_version': 2, 'platform_id': sys.platform,
+            'python': str(executable), 'python_prefix': str(Path(sys.prefix).resolve()),
+            'project_root': str(project_root), 'lock_file': str(lock_file.resolve()),
+            'python_version': sys.version,
             'platform': platform.platform(),
-            'lock_sha256': sha256_file(ROOT / 'requirements-akt.lock.txt'),
+            'lock_sha256': sha256_file(lock_file),
             'available_ram_bytes': psutil.virtual_memory().available,
-            'disk_free_bytes': shutil.disk_usage(ROOT).free,
+            'disk_free_bytes': shutil.disk_usage(project_root).free,
             'torch_version': torch.__version__, 'torch_origin': torch.__file__,
             'numpy_version': numpy.__version__, 'numpy_origin': numpy.__file__,
             'device': required_device, 'cuda_available': torch.cuda.is_available(),
@@ -138,6 +146,8 @@ def main() -> None:
     parser.add_argument('--write-lock', type=Path)
     parser.add_argument('--upstream', type=Path)
     parser.add_argument('--device', default='cpu')
+    parser.add_argument('--lock-file', type=Path,
+                        help='lock đầu vào cho runtime report; không dùng lock Windows để cài Linux/CUDA')
     parser.add_argument('--output', type=Path)
     args = parser.parse_args()
     if args.resolution_report and args.write_lock:
@@ -146,7 +156,8 @@ def main() -> None:
                                requirements_path=ROOT / 'requirements-akt.in')
     elif args.upstream and args.output:
         output = validate_output_path(args.output, kind='runtime', project_root=ROOT)
-        result = inspect_runtime(args.upstream, required_device=args.device)
+        result = inspect_runtime(args.upstream, required_device=args.device,
+                                 project_root=ROOT, lock_file=args.lock_file)
         output.parent.mkdir(parents=True, exist_ok=True)
         with output.open('x', encoding='utf-8') as stream:
             json.dump(result, stream, indent=2)

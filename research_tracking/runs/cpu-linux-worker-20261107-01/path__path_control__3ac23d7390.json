@@ -1,0 +1,48 @@
+{
+  "scope": "Cheap one-row DuckDB COPY path-length diagnostic only; no model/dataset/GPU",
+  "duckdb": "1.5.6",
+  "actual_gate16_failed_path": "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-16-30034a7c0dba45ce9dd379581f20a438\\test_main_worker_reads_parquet0\\synthetic-project\\experiments\\akt\\results\\synthetic-worker\\predictions\\.pending\\346ee3eda44a4a3f8b305ac5b1ab85d3-00000.parquet.tmp",
+  "actual_failed_path_characters": 264,
+  "gate16_log_sha256": "340578e4ddf024ad9167f0fb58c08c18b5390239fff26d692ae37b45bb9cda0e",
+  "gate16_junit_sha256": "ccf574f90f132d699c0bd7ff0446b2a6f608c18fd4d33890b9e4e2c459cffa17",
+  "parent_failure_receipt_sha256": "f489fbece02ec1c075058c439b82c75e34f7129a7b29fa55845d07aace6a88c0",
+  "control_root_length_matches_gate16": true,
+  "cases": [
+    {
+      "case": "baseline",
+      "path": "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-worker-path-20261108-01\\baseline.parquet",
+      "path_characters": 87,
+      "parent_characters": 70,
+      "status": "PASS",
+      "elapsed_seconds": 1.296338599990122
+    },
+    {
+      "case": "same_parent_short_filename",
+      "path": "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-pc-00000000000000000000000000000000\\test_main_worker_reads_parquet0\\synthetic-project\\experiments\\akt\\results\\synthetic-worker\\predictions\\.pending\\a.parquet.tmp",
+      "path_characters": 227,
+      "parent_characters": 213,
+      "status": "PASS",
+      "elapsed_seconds": 0.01782349997665733
+    },
+    {
+      "case": "same_depth_original_filename_length",
+      "path": "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-pc-00000000000000000000000000000000\\test_main_worker_reads_parquet0\\synthetic-project\\experiments\\akt\\results\\synthetic-worker\\predictions\\.pending\\346ee3eda44a4a3f8b305ac5b1ab85d3-00000.parquet.tmp",
+      "path_characters": 264,
+      "parent_characters": 213,
+      "status": "ERROR",
+      "error_type": "IOException",
+      "error": "IO Error: Cannot open file \"D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-pc-00000000000000000000000000000000\\test_main_worker_reads_parquet0\\synthetic-project\\experiments\\akt\\results\\synthetic-worker\\predictions\\.pending\\346ee3eda44a4a3f8b305ac5b1ab85d3-00000.parquet.tmp\": The system cannot find the path specified.\r\n",
+      "elapsed_seconds": 0.027139100013300776
+    },
+    {
+      "case": "compact_fixture_full_filename",
+      "path": "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-20261107-linux-worker-pc-00000000000000000000000000000000\\wk0\\p\\experiments\\akt\\results\\synthetic-worker\\predictions\\.pending\\346ee3eda44a4a3f8b305ac5b1ab85d3-00000.parquet.tmp",
+      "path_characters": 220,
+      "parent_characters": 169,
+      "status": "PASS",
+      "elapsed_seconds": 0.01967989999684505
+    }
+  ],
+  "source_snapshot_sha256": "734f28bd0aea487a67b364a83e3def69a3ca1cd34e3c658583055c5f8ec28b47",
+  "interpretation_vi": "Long filename ở deep parent fail, cùng parent short filename và compact root full filename pass. Phù hợp Windows/DuckDB path-length limitation; không graph/model failure."
+}

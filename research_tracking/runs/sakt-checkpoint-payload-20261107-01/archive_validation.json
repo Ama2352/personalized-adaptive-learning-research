@@ -1,0 +1,108 @@
+{
+  "status": "passed_archive_validation",
+  "trials": [
+    {
+      "run_id": "parallel-sakt-payload-20261107-01-before",
+      "tests": 2,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0,
+      "by_class": {
+        "tests.sakt.test_adapter": 2
+      },
+      "run": {
+        "command": [
+          "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+          "-B",
+          "-m",
+          "pytest",
+          "-q",
+          "-p",
+          "no:cacheprovider",
+          "--basetemp=artifacts\\akt\\local-tests\\parallel-sakt-payload-20261107-01-before\\tmp",
+          "--junitxml=artifacts\\akt\\local-tests\\parallel-sakt-payload-20261107-01-before\\pytest.xml",
+          "tests/sakt/test_adapter.py::test_checkpoint_path_a_b_a_cannot_deserialize_unhashed_replacement",
+          "tests/sakt/test_adapter.py::test_checkpoint_read_budget_rejects_overflow_even_when_stat_underreports"
+        ],
+        "exit_code": 1,
+        "elapsed_seconds": 10.019660899997689,
+        "sources_unchanged": true,
+        "expected_outcome": "two_regression_failures_before_fix",
+        "optimizer_steps": 0,
+        "GPU_calls": 0
+      },
+      "source_sha256": {
+        "src/knowledge_tracing/sakt/adapter.py": "6df422532d78316c77d1963a3fdbb559ded3e794039c0bdcfa2ccaf6cb57c47a",
+        "tests/sakt/test_adapter.py": "7cbc75384c1a029523e43eba13949d2cf7b5baec22a5c7b6cf35ff378eccf8da",
+        "src/knowledge_tracing/sakt/model.py": "f3979c4daada1e0c7a5adc890938073e53d4064476207f44af81478dd33683dd",
+        "src/knowledge_tracing/sakt/config.py": "3e18b3ac018440599a1de10b8da4a82c8641160c3aaa79ea30dc0cd15e98ce8f",
+        "src/knowledge_tracing/sakt/tensors.py": "133ff25ef91f242505acf5fe9b48ae44fd9f3366f35ce45a1733e1f558c15b63",
+        "src/knowledge_tracing/shared_kt.py": "06922d5a6bfd6c806fd1abb61232f58a9ccd63826e30cefaf87ce3d3b36dffa8",
+        "src/knowledge_tracing/simulator_bridge.py": "b29105acd8de84b060ca27573bb7f7cf8e85599a4596e50e4a21ab63c82329d2"
+      },
+      "failure_messages": [
+        {
+          "test": "test_checkpoint_path_a_b_a_cannot_deserialize_unhashed_replacement",
+          "message": "AssertionError: deserialized payload must have the authorized SHA\nassert ['0be3b96aabd...2734e2183b2c'] == ['3e621c5b821...ce49c15c2ae0']\n  \n  At index 0 diff: '0be3b96aabd4499334e068229a1d389604b40b111e76d111c4812734e2183b2c' != '3e621c5b821425089c7ad877284d81d9bf15d2c8c086ee7c15fece49c15c2ae0'\n  Use -v to get more diff"
+        },
+        {
+          "test": "test_checkpoint_read_budget_rejects_overflow_even_when_stat_underreports",
+          "message": "Failed: DID NOT RAISE ValueError"
+        }
+      ]
+    },
+    {
+      "run_id": "parallel-sakt-payload-20261107-02-after",
+      "tests": 89,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "by_class": {
+        "tests.sakt.test_adapter": 52,
+        "tests.sakt.test_core": 37
+      },
+      "run": {
+        "command": [
+          "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+          "-B",
+          "-m",
+          "pytest",
+          "-q",
+          "-p",
+          "no:cacheprovider",
+          "--basetemp=artifacts\\akt\\local-tests\\parallel-sakt-payload-20261107-02-after\\tmp",
+          "--junitxml=artifacts\\akt\\local-tests\\parallel-sakt-payload-20261107-02-after\\pytest.xml",
+          "tests/sakt"
+        ],
+        "exit_code": 0,
+        "elapsed_seconds": 8.6776239000028,
+        "sources_unchanged": true,
+        "expected_outcome": "all_89_cases_pass_after_single_payload_fix",
+        "optimizer_steps": 0,
+        "GPU_calls": 0
+      },
+      "source_sha256": {
+        "src/knowledge_tracing/sakt/adapter.py": "5cd8c9aa50889df7fddd571f0374c64f5999d1580b84b18bf647a884fff8c428",
+        "tests/sakt/test_adapter.py": "7cbc75384c1a029523e43eba13949d2cf7b5baec22a5c7b6cf35ff378eccf8da",
+        "src/knowledge_tracing/sakt/model.py": "f3979c4daada1e0c7a5adc890938073e53d4064476207f44af81478dd33683dd",
+        "src/knowledge_tracing/sakt/config.py": "3e18b3ac018440599a1de10b8da4a82c8641160c3aaa79ea30dc0cd15e98ce8f",
+        "src/knowledge_tracing/sakt/tensors.py": "133ff25ef91f242505acf5fe9b48ae44fd9f3366f35ce45a1733e1f558c15b63",
+        "src/knowledge_tracing/shared_kt.py": "06922d5a6bfd6c806fd1abb61232f58a9ccd63826e30cefaf87ce3d3b36dffa8",
+        "src/knowledge_tracing/simulator_bridge.py": "b29105acd8de84b060ca27573bb7f7cf8e85599a4596e50e4a21ab63c82329d2"
+      },
+      "failure_messages": []
+    }
+  ],
+  "copies_verified": 29,
+  "all_copy_sha_match": true,
+  "checkpoints_inventory_only": 54,
+  "previous_bundle_integrity": {
+    "status": "verified",
+    "artifacts": 37,
+    "kind": "SAKT_FROZEN_INFERENCE_CPU_ENGINEERING_ARCHIVE",
+    "scope": "Output integrity only, scientific validity requires research review"
+  },
+  "previous_manifest_sha256": "a603dba833ff479af6e25b375bea15a1ee1a5d9df86eacc41e5575ed36eb346d",
+  "new_test_model_runs": 0,
+  "fitted_or_gate16_acceptance": false
+}
