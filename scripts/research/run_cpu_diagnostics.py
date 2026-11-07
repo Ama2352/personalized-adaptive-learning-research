@@ -28,8 +28,45 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def run(output, *, seeds=3, steps=60):
-    if not 1 <= seeds <= 5 or not 1 <= steps <= 120:
+def closed_loop_pilot(reference, empty, *, seed, profile, steps, stream):
+    """Dùng dynamics/selector gốc, paired latent starts và step-indexed uniforms."""
+    scope = reference['environment']
+    model = reference['estimator']
+    base = scope['persona_base_abilities'](profile, seed)
+    uniforms = np.random.default_rng(seed).random((steps, 2))
+    rows = []
+    factories = {'graph_free': lambda: model['GAMKTPolicy'](False),
+                 'graph_package': lambda: model['GAMKTPolicy'](True),
+                 'empty_graph_package': lambda: empty['estimator']['GAMKTPolicy'](True)}
+    for variant, factory in factories.items():
+        environment = scope['LatentStudentEnvironment'](base)
+        policy = factory()
+        timestamp = pd.Timestamp('2026-01-01', tz='UTC')
+        actions = []
+        for step in range(steps):
+            timestamp += pd.Timedelta(hours=72 if step > 0 and step % len(base) == 0 else 6)
+            cid, qid, difficulty = policy.select()
+            prediction = policy.predict(cid, qid, difficulty, timestamp)
+            outcome = environment.interact(cid, difficulty, timestamp, *uniforms[step])
+            stream.write(json.dumps({'seed': seed, 'profile': profile, 'variant': variant,
+                'step': step, 'concept': cid, 'question': qid, 'prediction': prediction,
+                'timestamp': timestamp.isoformat(), **outcome}, ensure_ascii=False) + '\n')
+            policy.update(cid, qid, difficulty, timestamp, outcome['y'], prediction)
+            actions.append(cid)
+        final = environment.snapshot(timestamp)
+        retained = environment.snapshot(timestamp + pd.Timedelta(days=14))
+        net_gain = float(np.mean([final[cid] - base[cid] for cid in base]))
+        retained_gain = float(np.mean([retained[cid] - base[cid] for cid in base]))
+        if abs(retained_gain - np.exp(-.06*14)*net_gain) > 1e-10:
+            raise ValueError('closed-loop retention identity failed')
+        rows.append({'seed': seed, 'profile': profile, 'variant': variant,
+                     'net_mean_theta_gain': net_gain, 'retained_mean_theta_gain': retained_gain,
+                     'concepts_covered': len(set(actions)), 'actions': actions})
+    return rows
+
+
+def run(output, *, seeds=3, steps=60, mode='fixed-stream'):
+    if mode not in {'fixed-stream', 'closed-loop'} or not 1 <= seeds <= 5 or not 1 <= steps <= 120:
         raise ValueError('diagnostic workload exceeds registered local cap')
     output = Path(output).resolve()
     allowed = (ROOT / 'research_tracking/runs').resolve()
@@ -41,6 +78,7 @@ def run(output, *, seeds=3, steps=60):
                 'kind': 'bounded_source_diagnostic', 'rq': ['RQ1', 'RQ2'],
                 'command': [sys.executable, *sys.argv], 'seeds': list(range(20000, 20000+seeds)),
                 'steps_per_profile': steps, 'python': sys.executable,
+                'mode': mode,
                 'git_head_before_run': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()}
     write = lambda name, payload: (output / name).write_text(json.dumps(payload, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     write('manifest.json', manifest)
@@ -53,6 +91,10 @@ def run(output, *, seeds=3, steps=60):
         with gzip.open(output / 'traces.jsonl.gz', 'wt', encoding='utf-8') as traces:
             for seed in manifest['seeds']:
                 for profile in env_scope['PERSONAS']:
+                    if mode == 'closed-loop':
+                        comparisons.extend(closed_loop_pilot(reference, empty, seed=seed,
+                                                            profile=profile, steps=steps, stream=traces))
+                        continue
                     base = env_scope['persona_base_abilities'](profile, seed)
                     environment = env_scope['LatentStudentEnvironment'](base)
                     policies = {'graph_free': model_scope['GAMKTPolicy'](False),
@@ -94,7 +136,7 @@ def run(output, *, seeds=3, steps=60):
                     for name in ('graph_package', 'empty_graph_package'):
                         comparisons.append({'seed': seed, 'profile': profile, 'candidate': name,
                             **compare_decision_traces(records['graph_free'], records[name], threshold=.5)})
-        write('comparisons.json', comparisons)
+        write('closed_loop_outcomes.json' if mode == 'closed-loop' else 'comparisons.json', comparisons)
         write('retention.json', check_retention_source())
         write('paper1_counterexample.json', check_paper1_reentry_source())
         graph = model_scope['graph']
@@ -123,6 +165,20 @@ def run(output, *, seeds=3, steps=60):
             'Chưa là closed-loop learning-outcome comparison, chưa là causal benefit trên Junyi, '
             'chưa có CI hoặc kiểm định kết luận. Action preview trong fixed stream không phải actual served action. '
             'Seed diagnostic được công khai, không dùng lại như final unseen test.\n', encoding='utf-8')
+        if mode == 'closed-loop':
+            (output / 'README.md').write_text(
+                '# Pilot closed-loop Paper2 trên CPU\n\n'
+                'Dùng definitions/dynamics/selector nguồn với graph môi trường và controller cố định. '
+                'Ba variant graph-free, full graph-package và empty-graph package dùng cùng latent starts, '
+                'cùng uniforms theo step. Khi actions khác nhau thì labels cũng có thể khác.\n\n'
+                'closed_loop_outcomes.json chứa net gain, retained gain, coverage và actual action sequences. '
+                'traces.jsonl.gz chứa events thật được phục vụ trong simulator trước update. '
+                'Lịch gap6h và72h mỗi28steps theo nguồn. Đây là pilot ngắn, chưa tái lập bảng500steps của Paper2.\n\n'
+                'Không diễn giải differences prediction như paired same-target metrics. '
+                'Không gán toàn bộ package effect cho edges. Retention theta gain sau14ngày được kiểm '
+                'bằng hệ số exp(-.84) trên từng run, nên không là outcome độc lập với final theta gain '
+                'trong điều kiện này. Chưa thực hiện inference/CI hoặc kết luận causal ngoài simulator.\n',
+                encoding='utf-8')
     except Exception as error:
         manifest.update(status='failed', error_type=type(error).__name__, error=str(error))
         raise
@@ -139,8 +195,9 @@ if __name__ == '__main__':
     parser.add_argument('--run-id', required=True)
     parser.add_argument('--seeds', type=int, default=3)
     parser.add_argument('--steps', type=int, default=60)
+    parser.add_argument('--mode', choices=('fixed-stream', 'closed-loop'), default='fixed-stream')
     args = parser.parse_args()
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,79}', args.run_id):
         parser.error('invalid run ID')
     print(json.dumps(run(ROOT / 'research_tracking/runs' / args.run_id,
-                         seeds=args.seeds, steps=args.steps), ensure_ascii=False, indent=2))
+                         seeds=args.seeds, steps=args.steps, mode=args.mode), ensure_ascii=False, indent=2))
