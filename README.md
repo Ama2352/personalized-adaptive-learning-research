@@ -1,6 +1,16 @@
 # KLTN — Knowledge Tracing
 
-Dự án nghiên cứu baseline Bayesian Knowledge Tracing (BKT) chuẩn cho Junyi Academy bằng CAHLR/pyBKT 1.4.3. Đây là mã nghiên cứu cho luận văn, không phải dịch vụ production.
+Dự án KLTN về Knowledge Tracing, thông tin tiên quyết và lựa chọn lộ trình học, dùng Junyi Academy và môi trường mô phỏng. Repository khởi đầu từ baseline BKT; phần hướng dẫn chạy bên dưới vẫn dành cho baseline đó.
+
+## Tìm báo cáo và bằng chứng
+
+Bắt đầu tại **[Bản đồ repository và bằng chứng KLTN](docs/REPOSITORY_MAP.md)**: vai trò từng thư mục, kết quả gốc ở đâu, báo cáo nào dùng để viết và cách truy ngược run/hash.
+
+- Kết quả baseline: [BKT](docs/bkt-baseline-results.md), [đối chiếu BKT–GAM-KT](docs/bkt-gam-kt-benchmark.md).
+- Phân tích RQ/pilot mới: [research_tracking/reports](research_tracking/reports/); bằng chứng theo run ở [research_tracking/runs](research_tracking/runs/).
+- Phạm vi RQ và kế hoạch hiện hành: [research traceability](docs/thesis_recovery/02_RESEARCH_TRACEABILITY.md), [task backlog](docs/thesis_recovery/TASKS.json).
+
+`reports/` ở gốc giữ output thống kê BKT–GAM cũ; `_context/` giữ ngữ cảnh baseline BKT. Hai thư mục này không đại diện toàn bộ trạng thái KLTN hiện tại. Nội dung trong `artifacts/` gồm cả đầu vào/source đang sử dụng, không chỉ cache.
 
 ## Bắt đầu
 

@@ -1,5 +1,9 @@
 # Theo dõi bằng chứng nghiên cứu KLTN
 
+**Điểm bắt đầu cho người viết báo cáo:** [Bản đồ repository](../docs/REPOSITORY_MAP.md). `reports/` bên trong thư mục này là các bản phân tích/audit; `runs/` là bundles bằng chứng theo run. Hai phần phục vụ diễn giải và kiểm chứng, chưa phải bản luận văn hoàn chỉnh. Root `../reports/` là vị trí output thống kê baseline cũ, có phạm vi khác.
+
+Nội dung theo run có thể là pilot nghiên cứu, kiểm phần mềm hoặc archive một lần kiểm; không dùng số thư mục hay số tests để tính số thí nghiệm trả lời RQ. Với run đã đóng gói, đọc README và manifest trước kết quả. Các mục phân công/audit ban đầu bên dưới được giữ để truy lịch sử; trạng thái triển khai mới xem [progress](RESEARCH_PROGRESS.md) và [investigation state](../docs/thesis_recovery/INVESTIGATION_STATE.json).
+
 ## Mục đích và phạm vi
 
 Thư mục này giữ dấu vết độc lập về tiến độ nghiên cứu Knowledge Tracing/adaptive learning. Đây là chỉ mục và bản diễn giải; artifact gốc vẫn ở vị trí ban đầu, kể cả khi Git ignore. Không chép dataset, predictions, checkpoints hay log lớn vào đây.
