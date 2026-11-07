@@ -36,9 +36,11 @@ Fixture hiện xác nhận post-T retained gain sau14ngày tỷ lệ `exp(-.06*1
 
 `sampler.ReplayableWindowCursor` tái tạo shuffle bằng cùng seed và kiểm prefix digest. Tests so trực tiếp với `_shuffle_windows` hiện hành ở buffer1/3/1024 và các vị trí cut. Replay không chạy lại optimizer và không dùng global Python RNG. Chi phí đọc/hash là O(prefix), memory bounded theo buffer, cần benchmark trước large-data runs. Factory phải xác định và không dùng model-global RNG.
 
-`resumable.train_resumable_epoch` là entrypoint Python cho bounded epoch, chưa thay CLI selection/refit. Nó dùng native `AKTAdapter.step`, cùng batch size và shuffle seed. Lưu recovery checkpoint sau mỗi batch, khôi phục counters và RNG, kiểm stream identity và giữ step/time caps cộng dồn. Checkpoint cadence mỗi batch phục vụ kiểm correctness, overhead/durable cloud storage chưa đo.
+`resumable.train_resumable_epoch` là entrypoint Python cho bounded epoch, chưa thay CLI selection/refit. Nó dùng native `AKTAdapter.step`, cùng batch size và shuffle seed. Khôi phục counters và RNG, kiểm stream identity và giữ step/time/target caps cộng dồn. `max_targets` giới hạn số scored targets, không cắt batch để đạt cap. Cursor trả về chỉ bao gồm windows đã optimizer-update. `checkpoint_every_steps` mặc định1, có thể tăng để giảm số lần ghi. Khi dừng bình thường, batch cuối chưa lưu được flush thành checkpoint. Nếu process bị kill giữa hai lần ghi, khôi phục từ snapshot durable gần nhất và chạy lại tối đa một khoảng cadence. Overhead/durable cloud storage chưa đo.
 
 Tests CPU ngắt sau step2, nạp checkpoint vào model mới và tiếp tục. Weights/loss khớp chính xác với original `train_epoch`, đủ17targets/9windows/5optimizersteps. Giới hạn khi resume không reset. Đây là correctness trên fixture nhỏ, chưa có CUDA/real-data interruption, process kill/Volume durability, early-stopper history integration hoặc full CLI recovery.
+
+Kiểm thêm target cap qua resume xác nhận pending batch chưa update không bị skip, rồi tiếp tục đủ epoch khớp original weights/loss. Cadence2 với stop ở step3 lưu steps2 và3. Suite resumable/sampler/recovery-checkpoint đạt24passed13.54s, `evidence/akt-recovery-budget-verified-tests.log`. Lệnh đầu gõ sai tên test module không collection được, log riêng được giữ tại `evidence/akt-recovery-budget-tests.log`.
 
 ## Việc tiếp theo
 

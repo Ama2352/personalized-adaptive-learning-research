@@ -63,3 +63,38 @@ def test_resume_caps_do_not_reset_and_stream_change_is_rejected(tmp_path, monkey
     assert result['optimizer_steps'] == 1 and result['stop_reason'] == 'step_budget'
     with pytest.raises(ValueError, match='identity'):
         train_resumable_epoch(clone, opt, factory, **{**args,'stream_identity':'changed'}, resume_checkpoint=path)
+
+
+def test_target_cap_preserves_only_committed_prefix_and_is_cumulative(tmp_path, monkeypatch):
+    monkeypatch.setattr(module, 'PROJECT_ROOT', tmp_path)
+    model, optimizer, factory = setup()
+    args = dict(epoch=1, stream_identity='fixed', identity={},
+                checkpoint_dir=tmp_path/'experiments/akt/results/run', max_steps=20, max_seconds=60,
+                max_targets=6, checkpoint_every_steps=10)
+    result = train_resumable_epoch(model, optimizer, factory, **args)
+    assert result['stop_reason'] == 'target_budget'
+    assert result['valid_targets'] <= 6
+    path = args['checkpoint_dir'] / f"recovery-epoch-1-step-{result['optimizer_steps']}.pt"
+    payload = torch.load(path, weights_only=True)
+    assert result['sampler_state'] == payload['resume_state']['sampler_state']
+    clone, opt, factory = setup()
+    capped = train_resumable_epoch(clone, opt, factory, **args, resume_checkpoint=path)
+    assert capped['optimizer_steps'] == result['optimizer_steps']
+    assert capped['valid_targets'] == result['valid_targets']
+    resumed = train_resumable_epoch(clone, opt, factory, **{**args, 'max_targets': 30}, resume_checkpoint=path)
+    original, original_opt, factory = setup()
+    expected = train_epoch(original, factory, optimizer=original_opt, epoch=1, budget={})
+    assert resumed['complete'] and resumed['loss_sum'] == expected.loss_sum
+    assert all(torch.equal(p, q) for p, q in zip(original.native.parameters(), clone.native.parameters()))
+
+
+def test_checkpoint_cadence_flushes_last_step_on_bounded_stop(tmp_path, monkeypatch):
+    monkeypatch.setattr(module, 'PROJECT_ROOT', tmp_path)
+    model, optimizer, factory = setup()
+    checkpoints = []
+    result = train_resumable_epoch(
+        model, optimizer, factory, epoch=1, stream_identity='fixed', identity={},
+        checkpoint_dir=tmp_path/'experiments/akt/results/run', max_steps=3, max_seconds=60,
+        checkpoint_every_steps=2, checkpoint_callback=lambda path, state: checkpoints.append(state['optimizer_steps']))
+    assert result['stop_reason'] == 'step_budget'
+    assert checkpoints == [2, 3]
