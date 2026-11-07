@@ -1,0 +1,54 @@
+......FF........................                                         [100%]
+================================== FAILURES ===================================
+_____ test_order_ties_use_source_row_and_assignments_are_not_regenerated ______
+
+    def test_order_ties_use_source_row_and_assignments_are_not_regenerated():
+        from knowledge_tracing.gam_kt.splits import order_user_events
+    
+        frame = pd.DataFrame({"user_id": ["b", "a", "a"], "time_done": [2, 5, 5], "source_row": [8, 7, 2]})
+        ordered = order_user_events(frame)
+        assert ordered.source_row.tolist() == [2, 7, 8]
+        frozen_path = __import__("pathlib").Path("artifacts/bkt_baseline/splits/assignments.parquet")
+>       assert frozen_path.is_file()
+E       AssertionError: assert False
+E        +  where False = is_file()
+E        +    where is_file = WindowsPath('artifacts/bkt_baseline/splits/assignments.parquet').is_file
+
+tests\gam_kt\test_core.py:143: AssertionError
+______ test_actual_frozen_assignments_are_unchanged_and_student_disjoint ______
+
+    def test_actual_frozen_assignments_are_unchanged_and_student_disjoint():
+        from pathlib import Path
+        import hashlib
+    
+        path = Path("artifacts/bkt_baseline/splits/assignments.parquet")
+>       digest = hashlib.sha256(path.read_bytes()).hexdigest()
+                                ^^^^^^^^^^^^^^^^^
+
+tests\gam_kt\test_core.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:625: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('artifacts/bkt_baseline/splits/assignments.parquet')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\bkt_baseline\\splits\\assignments.parquet'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/gam_kt/test_core.py::test_order_ties_use_source_row_and_assignments_are_not_regenerated
+FAILED tests/gam_kt/test_core.py::test_actual_frozen_assignments_are_unchanged_and_student_disjoint
+2 failed, 30 passed in 13.43s

@@ -1,0 +1,68 @@
+{
+  "kind": "approved_cpu_junyi_order_pilot",
+  "rq": [
+    "RQ2"
+  ],
+  "authorization": "User approved CPU09/CPU10 limits2026-11-07",
+  "outer_fold": 0,
+  "scope": "inner-train learners only",
+  "max_learners": 32,
+  "max_events_per_learner": 120,
+  "max_seconds": 120,
+  "cohort_sha256": "2b9ade130391ff747de7bb9702b7abda923ba08579bc41d310592f5b6d0a9c3d",
+  "graph_source": "catalog prerequisites, comma-delimited parent→exercise",
+  "uses_correct_labels": false,
+  "duckdb_memory": "512MB",
+  "duckdb_threads": 2,
+  "matched_controls": true,
+  "control_spec": {
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "requested_swaps": 10,
+    "support_bins": [
+      "0",
+      "1-2",
+      "3-5",
+      "6+"
+    ],
+    "support_scope": "same approved inner-train cohort prefix"
+  },
+  "status": "completed",
+  "started_utc": "2026-11-07T05:07:51.095194+00:00",
+  "python": "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+  "command": [
+    "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+    "scripts/research/run_approved_cpu_pilots.py",
+    "junyi-controls",
+    "--run-id",
+    "cpu-junyi-controls-20261107-01"
+  ],
+  "git_head_before_run": "a0bf2da9b270a703b6c04f38970b36ad5a677d3f",
+  "sources_sha256": {
+    "scripts/research/run_approved_cpu_pilots.py": "516965f4e6201a44979a41c48de8f60e18c525709bac86253ae423b1604e2db7",
+    "src/knowledge_tracing/evidence.py": "414e3d834c46d081c7d9c05beff17a3e2d9c479a0e121394aabe321929235e49",
+    "src/knowledge_tracing/gam_kt/practice_order.py": "7130399b256e4ee48b3268aed322b2aede6d5aa67c795601f713103ce74265b8",
+    "dataset/junyi_Exercise_table.csv": "13292cc2c809985abbacedaba434e39aeb02a7fcb2a32f17b60c4d3f4d769546",
+    "artifacts/bkt_baseline/splits/assignments.parquet": "ee588c5b72fc214295e6eef1839b5110c884f43ab52ab4a792ca82e35812be20",
+    "artifacts/bkt_baseline/derived/manifest.json": "035fb113fcbbd0f433fcda210d43ef279f6eb8163e0b3b4b72c9d4f066a02fb7",
+    "artifacts/bkt_baseline/splits/manifest.json": "a69c0b440ef7d206133470f13696e853cb237c35c56c2b9015c175edaa89f94c",
+    "src/knowledge_tracing/gam_kt/catalog_graph.py": "77e156146d979d40ecf214aeb570beb1ea9c5fe66dc722ea9ea170d0dc252798",
+    "src/knowledge_tracing/graph_controls.py": "3c66f5d98938906f467f02fb3b82f76146d60fb546408492b4967582f3394d5c",
+    "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/junyi_cycle_corrected_ablation_confirmation.ipynb": "26270cc8e2c057d9c15b7070cc01304b2646b9575e632eaee8b5eeb3de357f3c"
+  },
+  "elapsed_seconds": 5.753978599997936,
+  "outputs_sha256": {
+    "catalog_audit.json": "3133282b2231f13e9ea764b5536435445f4480ffa72f5b7bcc8ba9bb83d490eb",
+    "CONTROL_NOTE.md": "231cc1f1bc205a56bfee3fc80552de5cdcdc75ed0734e6358684448ea4590ed2",
+    "corrected_graph.json": "df7595b1437c46421cd7fea8cc2f3234ff9a69207961c4c34df4a78cae7f80b1",
+    "execution.log": "ed28c7de9b2a022d18254a32dee4bb5bfd9f7cc0381be7da9271e22d5c05a639",
+    "matched_controls.json": "14457ba148d64136380a67ca6fc6ef39fc65dbfb3a3c31527088855bcedcbe91",
+    "order_summary.json": "703353bddbe7c3f2f67a49ed87e8fe08cf7485455003d5ea31c703aa7c715711",
+    "README.md": "032439541211612fcf069dd76d79839d359ee6528bcac74aa6abe43476d6fffe",
+    "reverse_summary.json": "f49a215970a86ab5bfa0866aad4610516461c7f9120f9ba2f123b28c2ba636b2",
+    "support_strata.json": "434576ae2481d6739653d359a603c6f44eb020547839a3b697998b1d8263246a"
+  }
+}

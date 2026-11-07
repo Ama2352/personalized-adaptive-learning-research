@@ -1,0 +1,104 @@
+.......................................................F................ [ 30%]
+........................................................................ [ 60%]
+........................................................................ [ 90%]
+........................                                                 [100%]
+================================== FAILURES ===================================
+_ test_pilot_completed_cycle_reloads_checkpoint_and_exports_aligned_predictions _
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-20261107-support-cap-03-0b2c448488b0424d8eb1bc21e4ce886e/test_pilot_completed_cycle_rel0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F617688B50>
+
+    def test_pilot_completed_cycle_reloads_checkpoint_and_exports_aligned_predictions(
+            tmp_path, monkeypatch):
+        base_config = load_config(PROJECT_ROOT / 'experiments/akt/configs/pilot.json')
+        monkeypatch.setattr(config_module, 'PROJECT_ROOT', tmp_path)
+        monkeypatch.setattr(runner, 'PROJECT_ROOT', tmp_path)
+        monkeypatch.setattr(prediction_module, 'PROJECT_ROOT', tmp_path)
+        config = replace(
+            base_config,
+            project_root=tmp_path,
+            source_root=PROJECT_ROOT / 'artifacts/akt/dependencies/upstream',
+            run_id='pilot-synthetic-full',
+            output_dir=tmp_path / 'experiments/akt/results/pilot-synthetic-full',
+            execution_enabled=True,
+            max_train_users=4,
+            max_val_users=2,
+            max_total_targets=20,
+        )
+        train = make_learner('train', 1, ['A', 'B', 'A', 'B'], row_start=1)
+        val = make_learner('val', 2, ['A', 'B', 'A', 'OOV'], row_start=20)
+        caps = {'max_train_users': 4, 'max_val_users': 2, 'max_total_targets': 20,
+                'max_seconds': 30, 'max_wall_seconds': 60,
+                'max_rss_bytes': 2 * 1024**3, 'min_available_ram_bytes': 1024**3}
+        approved = {'caps': caps, 'approval_reference': 'synthetic pilot authorization'}
+        monkeypatch.setattr(runner, '_require_authorization', lambda *args: approved)
+        monkeypatch.setattr(runner, '_require_gate2_evidence', lambda _: {'status': 'PASS'})
+        monkeypatch.setattr(runner, '_check_resource_budget', lambda budget: 1)
+        monkeypatch.setattr(runner, '_load_phase_inputs', lambda _, **kwargs: (
+            {'runtime_report_sha256': 'runtime', 'source': {'commit': config.source_commit}},
+            InnerSplit(('train',), ('val',), 0, 'split'),
+            (train,), (val,),
+            {'selected_train_learners': 1, 'selected_validation_learners': 1,
+             'loaded_train_learners': 1, 'loaded_validation_learners': 1,
+             'selected_train_targets': 4, 'selected_validation_targets': 4,
+             'data_loading_seconds': 0.01,
+             'chronological_query_sort_and_materialize_seconds': 0.01},
+        ))
+    
+>       result = runner.run_pilot(config, authorization={'synthetic': True})
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_pilot.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\runner.py:589: in run_pilot
+    return _run_phase(config, authorization, pilot=True, invocation=_invocation)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\runner.py:371: in _run_phase
+    selection = select_checkpoint(
+src\knowledge_tracing\akt\training.py:489: in select_checkpoint
+    stats = train_epoch(adapter, factory, **train_kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\training.py:240: in train_epoch
+    if complete and not flush():
+                        ^^^^^^^
+src\knowledge_tracing\akt\training.py:222: in flush
+    rss = _check_resource_budget(budget, samples=resource_samples, observer=resource_callback)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+budget = {'max_steps': None, 'max_seconds': 30, 'max_targets': 20, 'max_rss_bytes': 2147483648, ...}
+samples = [{'pid': 18336, 'process_rss_bytes': 420859904, 'process_peak_rss_bytes': 420859904, 'system_available_ram_bytes': 108...6, 'process_rss_bytes': 452300800, 'process_peak_rss_bytes': 452300800, 'system_available_ram_bytes': 1048387584, ...}]
+observer = <function _run_phase.<locals>.<lambda> at 0x000001F61E656480>
+
+    def _check_resource_budget(budget: dict, *, samples: list[dict] | None = None,
+                               observer: Callable[[dict], None] | None = None) -> int:
+        snapshot = memory_snapshot()
+        if samples is not None:
+            samples.append(snapshot)
+        if observer is not None:
+            observer(snapshot)
+        rss = max(snapshot['process_rss_bytes'], snapshot['process_peak_rss_bytes'] or 0)
+        cap = budget.get('max_rss_bytes')
+        minimum = budget.get('min_available_ram_bytes')
+        phase = budget.get('phase', 'akt')
+        run_id = budget.get('run_id', 'unbound')
+        detail = (f"phase={phase}, run_id={run_id}, pid={snapshot['pid']}, "
+                  f"worker_rss_bytes={snapshot['process_rss_bytes']}, "
+                  f"worker_peak_rss_bytes={snapshot['process_peak_rss_bytes']}, "
+                  f"worker_cap_value_bytes={rss}, "
+                  f"system_available_ram_bytes={snapshot['system_available_ram_bytes']}, "
+                  f"system_total_ram_bytes={snapshot['system_total_ram_bytes']}, "
+                  f"max_rss_bytes={cap}, min_available_ram_bytes={minimum}")
+        if cap is not None and rss > cap:
+            raise MemoryError(f'AKT worker RSS ceiling exceeded: {detail}')
+        if minimum is not None and snapshot['system_available_ram_bytes'] < minimum:
+>           raise MemoryError(f'AKT system available-RAM floor violated: {detail}')
+E           MemoryError: AKT system available-RAM floor violated: phase=pilot, run_id=pilot-synthetic-full, pid=18336, worker_rss_bytes=452300800, worker_peak_rss_bytes=452300800, worker_cap_value_bytes=452300800, system_available_ram_bytes=1048387584, system_total_ram_bytes=16794759168, max_rss_bytes=2147483648, min_available_ram_bytes=1073741824
+
+src\knowledge_tracing\akt\training.py:86: MemoryError
+---------------------------- Captured stderr call -----------------------------
+{"event": "worker-before-data-load", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "pilot", "pid": 18336, "process_peak_rss_bytes": 414875648, "process_rss_bytes": 410136576, "run_id": "pilot-synthetic-full", "system_available_ram_bytes": 1046872064, "system_total_ram_bytes": 16794759168}
+{"event": "worker-before-data-load", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "pilot", "pid": 18336, "process_peak_rss_bytes": 414875648, "process_rss_bytes": 410136576, "run_id": "pilot-synthetic-full", "system_available_ram_bytes": 1046212608, "system_total_ram_bytes": 16794759168}
+=========================== short test summary info ===========================
+FAILED tests/akt/test_pilot.py::test_pilot_completed_cycle_reloads_checkpoint_and_exports_aligned_predictions
+1 failed, 239 passed in 117.46s (0:01:57)

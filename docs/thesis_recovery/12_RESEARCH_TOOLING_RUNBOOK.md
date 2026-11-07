@@ -32,6 +32,8 @@ Fixture hiện xác nhận post-T retained gain sau14ngày tỷ lệ `exp(-.06*1
 
 `graph_controls.perturb_graph` hỗ trợ delete/add/reverse với số cạnh tường minh và local seed. Giữ toàn node set, bao gồm isolated nodes, chỉ trả DAG hợp lệ, ghi requested/applied counts và before/after hashes. Nếu không đủ thay đổi hợp lệ, nó raise thay vì hạ noise âm thầm. Chưa cung cấp degree/chapter/support-matched null graph, learned graph hoặc Junyi order-control analysis. Không gọi các perturbations hiện tại là gold graph hoặc matched negative controls.
 
+Cập nhật07/11. `rewire_matched_graph` có optional node_strata để giữ joint topic/area/support-bin pair counts cùng degree và DAG. Caller cung cấp strata từ train-only data. Bounded Junyi control pilot đã dùng prefix learner-support bins0/1–2/3–5/6+, không gọi là full-train support. Báo cáo research_tracking/reports/cpu_matched_controls_20261107.md ghi low-exposure limits. Các perturbations delete/add/reverse vẫn là sensitivity operations riêng.
+
 ## AKT recovery
 
 `sampler.ReplayableWindowCursor` tái tạo shuffle bằng cùng seed và kiểm prefix digest. Tests so trực tiếp với `_shuffle_windows` hiện hành ở buffer1/3/1024 và các vị trí cut. Replay không chạy lại optimizer và không dùng global Python RNG. Chi phí đọc/hash là O(prefix), memory bounded theo buffer, cần benchmark trước large-data runs. Factory phải xác định và không dùng model-global RNG.

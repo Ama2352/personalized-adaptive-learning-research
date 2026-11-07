@@ -1,0 +1,321 @@
+........................................................................ [ 30%]
+..................................F...F....F....F....F.................. [ 60%]
+........................................................................ [ 90%]
+........................                                                 [100%]
+================================== FAILURES ===================================
+___ test_configs_are_disabled_namespaced_and_gate_pass_is_not_authorization ___
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001BD391460B0>
+
+    def test_configs_are_disabled_namespaced_and_gate_pass_is_not_authorization(monkeypatch):
+        configs = [load_config(PROJECT_ROOT / 'experiments/akt/configs' / name)
+                   for name in ('smoke.json', 'pilot.json', 'fold0.json')]
+        assert all(config.execution_enabled is False for config in configs)
+        assert len({config.run_id for config in configs}) == 3
+        assert configs[0].output_dir.parent == configs[1].output_dir.parent == PROJECT_ROOT / 'experiments/akt/results'
+        assert configs[2].output_dir.parent == PROJECT_ROOT / 'experiments/akt/readiness'
+        monkeypatch.setattr(runner, '_require_gate2_evidence', lambda _: {
+            'status': 'PASS', 'report_sha256': 'gate-report', 'test_log_sha256': 'gate-log',
+            'pointer_sha256': 'gate-pointer'})
+        gate = {'gate': 'PASS', 'status': 'PASS', 'source_commit': configs[0].source_commit}
+        with pytest.raises(PermissionError, match='authorization'):
+            runner._require_authorization(configs[0], gate)
+        enabled = replace(configs[0], execution_enabled=True)
+        approval = {
+            'approved': True, 'scope': 'development-inner-only', 'phase': 'smoke',
+            'run_id': enabled.run_id, 'source_commit': enabled.source_commit,
+            'config_sha256': config_hash(enabled),
+>           'identity': runner._authorization_identity(enabled),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'approval_reference': 'future-user-approval',
+            'caps': {'max_train_users': 32, 'max_val_users': 16, 'max_targets_per_side': 4096,
+                     'max_steps': 20, 'max_seconds': 120, 'max_wall_seconds': 300,
+                     'max_rss_bytes': 2147483648, 'min_available_ram_bytes': 1073741824},
+        }
+
+tests\akt\test_runner.py:261: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\runner.py:149: in _authorization_identity
+    identity = _identity(config, preflight(config))
+                                 ^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\runner.py:72: in preflight
+    return authorization_module.preflight(config, project_root=PROJECT_ROOT,
+src\knowledge_tracing\akt\authorization.py:99: in preflight
+    lock_hash = sha256_file(lock_file)
+                ^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:18: in sha256_file
+    with path.open('rb') as stream:
+         ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/colab/verify-v4-a1a0a12c76dd46458979191f28ce0be6/requirements-akt.lock.txt')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\colab\\verify-v4-a1a0a12c76dd46458979191f28ce0be6\\requirements-akt.lock.txt'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError
+___________ test_approved_lower_cohort_and_target_caps_reach_loader ___________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001BD39146970>
+
+    def test_approved_lower_cohort_and_target_caps_reach_loader(monkeypatch):
+        config = replace(load_config(PROJECT_ROOT / 'experiments/akt/configs/smoke.json'), execution_enabled=True)
+        monkeypatch.setattr(runner, '_require_gate2_evidence', lambda _: {
+            'status': 'PASS', 'report_sha256': 'gate-report', 'test_log_sha256': 'gate-log',
+            'pointer_sha256': 'gate-pointer'})
+        caps = {'max_train_users': 4, 'max_val_users': 2, 'max_targets_per_side': 20,
+                'max_steps': 2, 'max_seconds': 10, 'max_wall_seconds': 30,
+                'max_rss_bytes': config.max_rss_bytes, 'min_available_ram_bytes': config.min_available_ram_bytes}
+        approval = {'approved': True, 'scope': 'development-inner-only', 'phase': 'smoke',
+                    'run_id': config.run_id, 'source_commit': config.source_commit,
+                    'config_sha256': config_hash(config),
+>                   'identity': runner._authorization_identity(config),
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    'approval_reference': 'synthetic-test', 'caps': caps}
+
+tests\akt\test_runner.py:351: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\runner.py:149: in _authorization_identity
+    identity = _identity(config, preflight(config))
+                                 ^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\runner.py:72: in preflight
+    return authorization_module.preflight(config, project_root=PROJECT_ROOT,
+src\knowledge_tracing\akt\authorization.py:99: in preflight
+    lock_hash = sha256_file(lock_file)
+                ^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:18: in sha256_file
+    with path.open('rb') as stream:
+         ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/colab/verify-v4-a1a0a12c76dd46458979191f28ce0be6/requirements-akt.lock.txt')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\colab\\verify-v4-a1a0a12c76dd46458979191f28ce0be6\\requirements-akt.lock.txt'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError
+_________ test_cli_watchdog_reports_timeout_without_completed_result __________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/colab/verify-v4-a1a0a12c76dd46458979191f28ce0be6/pytest-temp-2/test_cli_watchdog_reports_time0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001BD391474D0>
+capsys = <_pytest.capture.CaptureFixture object at 0x000001BD3DBC70E0>
+
+    def test_cli_watchdog_reports_timeout_without_completed_result(tmp_path, monkeypatch, capsys):
+        config = replace(load_config(PROJECT_ROOT / 'experiments/akt/configs/smoke.json'), execution_enabled=True)
+        identity = {'source': {'commit': config.source_commit}, 'assignments_sha256': 'synthetic-data-hash'}
+        monkeypatch.setattr(watchdog, 'require_authorization', lambda *args: approval)
+        caps = {'max_train_users': 32, 'max_val_users': 16, 'max_targets_per_side': 4096,
+                'max_steps': 20, 'max_seconds': 120, 'max_wall_seconds': 300,
+                'max_rss_bytes': config.max_rss_bytes, 'min_available_ram_bytes': config.min_available_ram_bytes}
+        approval = {'approved': True, 'scope': 'development-inner-only', 'phase': 'smoke',
+                    'run_id': config.run_id, 'source_commit': config.source_commit,
+                    'config_sha256': config_hash(config),
+                    'identity': identity,
+                    'approval_reference': 'synthetic-test', 'caps': caps}
+        path = tmp_path / 'approval.json'
+        path.write_text(json.dumps(approval), encoding='utf-8')
+        monkeypatch.setattr(watchdog, 'load_config', lambda path: config)
+        class TimedOutWorker:
+            pid = 987
+            def __init__(self):
+                self.calls = 0
+                self.killed = False
+            def communicate(self, timeout=None):
+                assert timeout in (None, 300)
+                self.calls += 1
+                if self.calls == 1:
+                    raise subprocess.TimeoutExpired(['worker'], timeout, output='partial stdout', stderr='partial stderr')
+                return ('partial stdout', 'partial stderr')
+            def kill(self):
+                self.killed = True
+            def poll(self):
+                return None if not self.killed else -9
+        worker = TimedOutWorker()
+        def spawn(*args, **kwargs):
+            assert kwargs['stdout'] == subprocess.PIPE and kwargs['stderr'] == subprocess.PIPE
+            return worker
+        monkeypatch.setattr(watchdog.subprocess, 'Popen', spawn)
+        with pytest.raises(TimeoutError, match='watchdog'):
+>           watchdog.main(['smoke', '--config', 'unused.json', '--authorization', str(path)])
+
+tests\akt\test_runner.py:504: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+argv = ['smoke', '--config', 'unused.json', '--authorization', 'D:\\Dev\\KLTN\\artifacts\\akt\\colab\\verify-v4-a1a0a12c76dd46458979191f28ce0be6\\pytest-temp-2\\test_cli_watchdog_reports_time0\\approval.json']
+
+    def main(argv: list[str] | None = None) -> int:
+        if argv is None:
+            argv = sys.argv[1:]
+        if argv and argv[0] == '_execute':
+            phase, config_path, _authorization_path = _worker_args(argv[1:])
+            config = load_config(config_path)
+            _emit_memory_event('worker-before-runtime-import', phase, config.run_id)
+            from .runner import _worker_main
+            return _worker_main(argv[1:])
+    
+        args = _parser().parse_args(argv)
+        config = load_config(args.config)
+        if args.command == 'preflight':
+            print(json.dumps(preflight(config), indent=2, default=str))
+            return 0
+        if args.command == 'fold-readiness':
+            from .runner import prepare_fold_readiness
+            result = prepare_fold_readiness(config, pilot_result=args.pilot_result)
+            config.output_dir.mkdir(parents=True, exist_ok=True)
+            from .runner import _write_json
+            _write_json(config.output_dir / 'readiness.json', result)
+            print(json.dumps(result, indent=2))
+            return 0
+    
+        authorization = None
+        if args.authorization is not None:
+            authorization = json.loads(args.authorization.read_text(encoding='utf-8'))
+        require_authorization(config, authorization)
+        approved_caps = authorization['caps']
+        timeout = approved_caps['max_wall_seconds']
+        if timeout is None:
+            raise ValueError('smoke/pilot configuration must include a wall-clock cap')
+    
+        parent_events: list[dict] = []
+    
+        def emit(event: str, *, snapshot: dict | None = None, **extra) -> dict:
+            payload = _emit_memory_event(event, config.phase, config.run_id,
+                                         snapshot=snapshot, **extra)
+            parent_events.append(payload)
+            return payload
+    
+        parent_snapshot = memory_snapshot()
+        emit('watchdog-before-worker-spawn', snapshot=parent_snapshot,
+             max_rss_bytes=approved_caps['max_rss_bytes'],
+             min_available_ram_bytes=approved_caps['min_available_ram_bytes'])
+        floor = approved_caps['min_available_ram_bytes']
+        if floor is not None and parent_snapshot['system_available_ram_bytes'] < floor:
+>           raise MemoryError(
+                'AKT watchdog refused worker spawn: available-RAM floor violated: '
+                f"phase={config.phase}, run_id={config.run_id}, pid={parent_snapshot['pid']}, "
+                f"parent_rss_bytes={parent_snapshot['process_rss_bytes']}, "
+                f"parent_peak_rss_bytes={parent_snapshot['process_peak_rss_bytes']}, "
+                f"system_available_ram_bytes={parent_snapshot['system_available_ram_bytes']}, "
+                f"system_total_ram_bytes={parent_snapshot['system_total_ram_bytes']}, "
+                f"max_rss_bytes={approved_caps['max_rss_bytes']}, min_available_ram_bytes={floor}")
+E           MemoryError: AKT watchdog refused worker spawn: available-RAM floor violated: phase=smoke, run_id=smoke-001, pid=8280, parent_rss_bytes=424996864, parent_peak_rss_bytes=487456768, system_available_ram_bytes=807723008, system_total_ram_bytes=16794759168, max_rss_bytes=2147483648, min_available_ram_bytes=1073741824
+
+src\knowledge_tracing\akt\watchdog.py:132: MemoryError
+---------------------------- Captured stderr call -----------------------------
+{"event": "watchdog-before-worker-spawn", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 8280, "process_peak_rss_bytes": 487456768, "process_rss_bytes": 424996864, "run_id": "smoke-001", "system_available_ram_bytes": 807723008, "system_total_ram_bytes": 16794759168}
+____________ test_preflight_verifies_gate1_without_opening_dataset ____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001BD3EDB9320>
+
+    def test_preflight_verifies_gate1_without_opening_dataset(monkeypatch):
+        config = load_config(PROJECT_ROOT / 'experiments/akt/configs/smoke.json')
+        monkeypatch.setattr(runner, 'read_development_assignments',
+                            lambda *args, **kwargs: pytest.fail('preflight must not open assignments'))
+>       result = runner.preflight(config)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_runner.py:587: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\runner.py:72: in preflight
+    return authorization_module.preflight(config, project_root=PROJECT_ROOT,
+src\knowledge_tracing\akt\authorization.py:99: in preflight
+    lock_hash = sha256_file(lock_file)
+                ^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:18: in sha256_file
+    with path.open('rb') as stream:
+         ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/colab/verify-v4-a1a0a12c76dd46458979191f28ce0be6/requirements-akt.lock.txt')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\colab\\verify-v4-a1a0a12c76dd46458979191f28ce0be6\\requirements-akt.lock.txt'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError
+__________ test_probe_does_not_write_bytecode_into_upstream_checkout __________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/colab/verify-v4-a1a0a12c76dd46458979191f28ce0be6/pytest-temp-2/test_probe_does_not_write_byte0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001BD3EC418D0>
+
+    def test_probe_does_not_write_bytecode_into_upstream_checkout(tmp_path, monkeypatch):
+        env = tmp_path / 'isolated'
+        env.mkdir()
+        source = tmp_path / 'source'
+        source.mkdir()
+        (source / 'akt.py').write_text('class AKT: pass\n', encoding='utf-8')
+        monkeypatch.setattr(sys, 'prefix', str(env))
+        monkeypatch.setattr(sys, 'dont_write_bytecode', False)
+        monkeypatch.setattr(runtime_module, 'verify_upstream', lambda *args: {})
+        numpy = types.ModuleType('numpy')
+        numpy.__file__, numpy.__version__ = str(env / 'numpy.py'), '1'
+        torch = types.ModuleType('torch')
+        torch.__file__, torch.__version__ = str(env / 'torch.py'), '1'
+        torch.device = lambda name: name
+        torch.cuda = types.SimpleNamespace(is_available=lambda: False)
+        monkeypatch.setitem(sys.modules, 'numpy', numpy)
+        monkeypatch.setitem(sys.modules, 'torch', torch)
+>       inspect_runtime(source, expected_env=env)
+
+tests\akt\test_runtime.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\akt\check_runtime.py:126: in inspect_runtime
+    'lock_sha256': sha256_file(ROOT / 'requirements-akt.lock.txt'),
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:18: in sha256_file
+    with path.open('rb') as stream:
+         ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/colab/verify-v4-a1a0a12c76dd46458979191f28ce0be6/requirements-akt.lock.txt')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\colab\\verify-v4-a1a0a12c76dd46458979191f28ce0be6\\requirements-akt.lock.txt'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_runner.py::test_configs_are_disabled_namespaced_and_gate_pass_is_not_authorization
+FAILED tests/akt/test_runner.py::test_approved_lower_cohort_and_target_caps_reach_loader
+FAILED tests/akt/test_runner.py::test_cli_watchdog_reports_timeout_without_completed_result
+FAILED tests/akt/test_runner.py::test_preflight_verifies_gate1_without_opening_dataset
+FAILED tests/akt/test_runtime.py::test_probe_does_not_write_bytecode_into_upstream_checkout
+5 failed, 235 passed, 1 deselected in 106.42s (0:01:46)
