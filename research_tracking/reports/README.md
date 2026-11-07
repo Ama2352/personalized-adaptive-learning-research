@@ -85,3 +85,5 @@ Chỉ mục này không thêm GPU/runtime verdict khi chưa có evidence bundle 
 - [GPU08 environment proposal](../../docs/akt-linux-cuda-environment.md): official metadata và receipts đã archive; full Linux transitive hash lock/image/actual runtime còn thiếu. Không dùng Windows --platform để chứng nhận Linux markers.
 
 - [Model completion delta](model_completion_contract_20261108.md): required comparators vẫn giữ đủ; core/inference/trainer/fitted results/simulator bridge là các mức khác nhau. SAKT03 và SIMTRAIN01 tiếp tục synthetic-only, chưa adoption S04/S05.
+
+- [RQ1 score-vector diagnostic](rq1_score_vector_diagnostic_20261108.md) và [.sources.json](rq1_score_vector_diagnostic_20261108.sources.json):Sdiff1080/M90/A22, PG losses xấu hơn trongcả3seed-profile rows; no model/simulator rerun, không suy mastery calibration từ S.

@@ -148,3 +148,7 @@ Số outputs là inventory snapshot của các bundles, không chỉ số hoàn 
 - [demo-readonly-engineering-20261108-01](runs/demo-readonly-engineering-20261108-01/README.md): Read-only synthetic evidence demo; 93 outputs SHA verified; partial_demo_no_live_fitted_personalization.
 
 GKT archive force_add_paths.json rỗng do check-ignore stdin sai; danh sách explicit đúng là execution.log và trial01_pytest.log. Chỉ sửa locator ở chỉ mục này, không sửa bundle đóng. GPU08 dùng argv từng path. Source/code/testing hoàn tất không thay quyền thực thi nghiên cứu.
+
+## RQ1 bổ sung vector S08/11
+
+- [rq1-score-vector-20261108-01](runs/rq1-score-vector-20261108-01/README.md):7outputs verified, reanalysis cùng1.080pairs/candidate, không thêm samples. [Narrative](reports/rq1_score_vector_diagnostic_20261108.md) tách P/S/M/R/A, score-change không bảo đảm mastery/action change; pooled loss che PG worse. Không causal/CI/finalRQ.

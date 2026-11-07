@@ -235,3 +235,7 @@ Component commits: GKT661a44b(20outputs), environmentdc2b802(25), nativefbb0ed2(
 SAKTtrainer sử dụngtarget_block1 để đúng sliding_last_context, khôngcopy AKTblock100 và làm lệt historybudget. Reviewerđộc lập song song, artifactroleengineeringonly khôngfitpromote. AKTsimulator lifecycle riêng train/selection shards, khôngfakeJunyi fold và không dùngload_online_akt/OnlineScorefitted; giới hạn2train+1selection×12events,1epoch4steps60s/2GiBRAM, suite16steps90s. Hai modules mới là tiếp tụcengineering, chưa protocol/corpus/calibration/final/refit. Thêm native file/test sẽ làmGate18 cần refreshGate19; Gate18 immutable historical PASS.
 
 Mở1officialColabMCPbridgeTTL1800s để kiểm môi trườngLinuxCPU; frontend chưa kết nối, remote calls0. Đã hỏi userxácnhậnGoogleMCP khi tiện, giữCPU; khôngstalllocal, khôngtựallocateGPU/Modal. Không có credentials trongstate/reports.
+
+### RQ1 — vector score chứ không chỉ scalar P
+
+Reanalysis mới dùng boundedexistingvalidator, toàn bộoutputSHAfixedstreamverified. FullSvector đổi1080/1080snapshots (27017/30240conceptscorepairs) nhưngM90/A22; emptyS267/MRA0. HaiP-same/A-change có25Schanges, songmọifullsnapshotSchange nên khôngnecessity/mediationproof. PooledΔLL−0.00069357/Brier−0.00036471 cải thiệnmô tả; táchprofilePGΔLL+0.00255845/Brier+0.00116521 xấu ởcả3seed, PY/PYHâm. Independentstaticreview đãchỉnhnarrativeđểkhôngcheprofileharm/khônggánSthànhlatentprobability. 18legacycomparisons×2scalars match1e-12,0newmodel/events/realdata/Holdout/cloud. Sevenoutputbundleclosed, thêmRQDIAG03 làcompletedanalysis chứkhôngcompletedRQ1.

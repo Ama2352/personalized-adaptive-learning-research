@@ -48,3 +48,7 @@ Kitv6 có113source/fixture files, source-only notebook copies và project venv. 
 |cpu-sim-collector-20261107-04-portable|COMPLETED|65tests gồm already-stripped checkout; v1/v2oracle/queries/labels exact|Khôngfullcorpus/trainer/calibration/refit/final runner|
 
 Gate2-12 nguồn v1 đạt396tests374.84s; sau semantic fix cần source-bound gate mới. Gate counts là kiểm phần mềm, không số thí nghiệm RQ. Xem reports/simulator_collection_runner_20261107.md và investigation state cho current gate sau nghiệm thu.
+
+## RQ1 score-vector08/11 — phân tích lại cùng pilot
+
+rq1-score-vector-20261108-01 COMPLETED/7outputs verified. Đọc lại traces vàcomparisons của cpu-rq12-20261107-03, khôngnewlearner/events/model/simulator. Fullpackage1080S-change/90M-change/22A-preview-change, empty267S-change/0MRA;18legacygroups×2lossmetrics match1e-12. PG predictive losses dương ở3/3seed-profile rows trong khi pooleddelta âm; khôngclaimgraphhelpsmọiprofile/causality/mediation. 1080events khôngindependentn, chỉ3seedblocks. Bundle mới không được tính thành additional experiment samples.
