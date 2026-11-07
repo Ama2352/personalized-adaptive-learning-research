@@ -1,6 +1,6 @@
 # Kết nối Modal và giữ ngân sách30USD/tháng
 
-Ngày07/11/2026. User đã có Modal và nêu mức30USD/tháng. Chưa xác minh đây là free credits hay ngân sách trả thêm, workspace/balance/reset date chưa được cung cấp. Tạm giữ **trần tổng sử dụng30USD**, không cộng thêm credits hoặc vay ngân sách tháng sau. Chưa có per-run authorization; chưa tạo remote job, image hoặc Volume.
+Ngày07/11/2026. User xác nhận workspace **honguyenminhsang2005**, còn **30USD free credits**, kỳ bắt đầu07/11/2026 và reset vào tháng kế tiếp. Ràng buộc **không trả thêm tiền: out-of-pocket ceiling0USD**, gross usage ceiling tối đa30USD trong kỳ. Đây là thông tin user cung cấp, chưa đối chiếu account/dashboard. Ngày/giờ reset chính xác chưa được xác minh; không tự giả có credits kỳ sau hoặc ngày reset cụ thể. Chưa có per-run authorization; chưa tạo remote job, image hoặc Volume.
 
 ## Local đã chuẩn bị
 
@@ -12,10 +12,11 @@ Ngày07/11/2026. User đã có Modal và nêu mức30USD/tháng. Chưa xác minh
 
 ## Người dùng cần cung cấp
 
-1. Tên workspace cần dùng và plan hiện tại.
-2.30USD là free credits hay gồm tiền trả thêm; credits còn lại, usage đã dùng trong kỳ và ngày reset kỳ. Các workload khác trong cùng workspace cũng tiêu ngân sách chung.
-3. Giá trị Workspace usage limit và Spend limit đang đặt. Chỉ gửi số liệu không nhạy cảm, không gửi thông tin thẻ/token/password.
-4. Xác nhận account đã đủ điều kiện GPU hay chưa. Modal yêu cầu payment method cho GPU; việc thêm/xác minh thẻ do chủ tài khoản tự thao tác, không gửi thông tin thẻ cho agent. [Tài liệu chính thức](https://modal.com/docs/guide).
+Đã nhận: workspacehonguyenminhsang2005,30USDfreecredits remaining và bắt đầu07/11/2026. Không hỏi lại các thông tin này. Còn cần:
+
+1. Đăng nhập local theo phần dưới, chọn đúng workspace; projectprivateconfig chưa tồn tại ở lần kiểm local07/11 sau khi nhận câu trả lời.
+2. Xác nhận Workspace usage limit30USD và Spend limit0USD đã được áp dụng; dashboard là nguồn đối chiếu balance/currentusage và reset date chính xác. Các workload khác trong cùng workspace cũng tiêu ngân sách chung.
+3. Plan/quyền GPU thực tế khi kiểm account. Modal yêu cầu payment method cho GPU; việc thêm/xác minh thẻ do chủ tài khoản tự thao tác, không gửi thông tin thẻ cho agent. [Tài liệu chính thức](https://modal.com/docs/guide).
 
 ## Đăng nhập một lần trên máy này
 
@@ -32,7 +33,7 @@ Lệnh này tạo credentials local từ browser session, không phải lệnh c
 
 ## Giới hạn trên dashboard trước khi chạy
 
-Trong Usage & Billing, đặt **Workspace usage limit30USD** cho toàn kỳ. Nếu chỉ dùng freecredits và không trả thêm, đặt **Spend limit0USD** nếu tài khoản cho phép và xác minh đã áp dụng. Workspace budget tính gross trước credits; Spend limit tính net sau credits. Không coi notification/email là hard cap. Nếu UI/quyền không cho cấu hình hoặc chưa xác minh, chưa launch job. Các bước này chủ tài khoản tự thực hiện. [Budgets chính thức](https://modal.com/docs/guide/budgets).
+Trong Usage & Billing, đặt **Workspace usage limit30USD** cho toàn kỳ và **Spend limit0USD**, rồi xác minh đã áp dụng đúng workspacehonguyenminhsang2005. Workspace budget tính gross trước credits; Spend limit tính net sau credits. Không coi notification/email là hard cap. Nếu UI/quyền không cho đặt0USD hoặc chưa xác minh, chưa launch job; không tự đổi sang mức trả thêm. Các bước này chủ tài khoản tự thực hiện. [Budgets chính thức](https://modal.com/docs/guide/budgets).
 
 ## Cách dùng quỹ — đề xuất, chưa là quyền chạy
 
