@@ -29,8 +29,17 @@ def gate2_build_hashes(project_root: Path = PROJECT_ROOT) -> dict:
     paths += [project_root / 'src/knowledge_tracing/shared_kt.py',
               project_root / 'src/knowledge_tracing/paired_bootstrap.py',
               project_root / 'src/knowledge_tracing/gam_kt/evaluation.py']
+    paths += list((project_root / 'src/knowledge_tracing').glob('*.py'))
+    paths += list((project_root / 'scripts/research').glob('*.py'))
+    paths += list((project_root / 'scripts/akt').glob('*.py'))
+    paper = project_root / 'paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20'
+    paths += [path for path in (paper / 'data/simulator_inputs').glob('*.csv')]
+    paths += [path for path in (paper / 'source').glob('*.ipynb') if path.name in {
+        'adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb',
+        'junyi_cycle_corrected_ablation_confirmation.ipynb'}]
+    paths += list((project_root / 'paper1').glob('*.ipynb'))
     return {path.relative_to(project_root).as_posix(): sha256_file(path)
-            for path in sorted(paths)}
+            for path in sorted(set(paths))}
 
 
 def require_gate2_evidence(config: AKTConfig, *, project_root: Path = PROJECT_ROOT,
