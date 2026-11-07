@@ -1,6 +1,8 @@
 # Đặc tả chuẩn bị thí nghiệm CPU09 và CPU10
 
-Ngày07/11/2026. DRAFT cần chốt trước execution cho kết luận nghiên cứu. Các diagnostic lịch sử đã thực hiện không trở thành final evaluation. Thay đổi simulator chỉ ở variant có version riêng, giữ source lịch sử.
+Ngày07/11/2026. User đã chấp thuận bounded CPU pilot theo giới hạn dưới đây trong chat. Thiết kế confirmatory/final vẫn DRAFT cần chốt với advisor. Các diagnostic lịch sử đã thực hiện không trở thành final evaluation. Thay đổi simulator chỉ ở variant có version riêng, giữ source lịch sử.
+
+Pilot được thực thi bằng scripts/research/run_approved_cpu_pilots.py. Factorial cố định10seeds21000–21009,3profiles,4cells,120steps, tối đa14400events/120s. Treatment S=P=on so với S=P=off và L=off cả hai. Junyi cố định outer-fold0, hash-selected32inner-train learners, prefix120events, DuckDB512MB/threads2 và query timeout120s. Không thay split hoặc dùng Holdout. Phần five-cell ablation và final tests chưa được chạy trong pilot này.
 
 ## CPU09 — tách graph package và learner ability
 
