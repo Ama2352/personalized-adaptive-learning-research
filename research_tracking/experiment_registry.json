@@ -1,0 +1,654 @@
+{
+  "schema_version": "1.0.0",
+  "updated_on": "2026-11-04",
+  "scope_note": "Các experiment/milestone thực tế phát hiện trong workspace. Artifact lớn được tham chiếu theo path, không nhúng. Ngày chỉ ghi khi manifest/artifact/run ID hỗ trợ.",
+  "evidence_levels": [
+    "VERIFIED",
+    "REPORTED",
+    "INFERRED",
+    "MISSING",
+    "CONFLICTING",
+    "NOT APPLICABLE"
+  ],
+  "execution_lifecycle": [
+    "PLANNED",
+    "RUNNING",
+    "COMPLETED",
+    "FAILED",
+    "INTERRUPTED",
+    "UNKNOWN"
+  ],
+  "experiments": [
+    {
+      "id": "EXP-BKT-CV-20261015",
+      "model": "BKT",
+      "variant": "standard CAHLR/pyBKT 1.4.3 C++",
+      "objective": "5-fold student-disjoint Development evaluation",
+      "research_questions": [
+        "RQ1 baseline only",
+        "RQ2 baseline only",
+        "RQ3 baseline only"
+      ],
+      "sprint": "Sprint 2",
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED",
+      "dataset": {
+        "name": "Junyi Academy",
+        "development_rows": 20706208,
+        "development_learners": 198084,
+        "folds": 5,
+        "outcome": "correct",
+        "split_seed": 42,
+        "fingerprint_ref": "experiments/bkt_baseline/results/wsl_cpp/cv_cpp/run_manifest.json"
+      },
+      "protocol": {
+        "one_model_per": "exercise",
+        "num_fits": 1,
+        "forgets": false,
+        "tol": 0.005,
+        "maxiter": 100,
+        "base_seed": 42,
+        "prediction": "one-step-ahead then update",
+        "holdout_test_used": false
+      },
+      "configuration_ref": "_context/evaluation_protocol.md",
+      "code_ref": "src/knowledge_tracing/bkt_baseline/",
+      "metrics_ref": "experiments/bkt_baseline/results/wsl_cpp/cv_cpp/cv/cv.json#aggregate",
+      "evidence_refs": [
+        "E-002",
+        "E-003",
+        "E-006"
+      ],
+      "results": {
+        "auc_mean": 0.7834134107927653,
+        "auc_sample_sd": 0.0011584741219760302,
+        "log_loss_mean": 0.3756074974398662,
+        "log_loss_sample_sd": 0.0015747963998997052,
+        "brier_mean": 0.11510534239887318,
+        "brier_sample_sd": 0.0005760560410811493,
+        "ece_mean": 0.0022408926425045916,
+        "ece_sample_sd": 0.0007188307862958956,
+        "accuracy_mean": 0.8474159098322505,
+        "accuracy_sample_sd": 0.000748281088585296,
+        "validation_rows": 20706208,
+        "scored_rows": 20706014
+      },
+      "limitations": [
+        "Mean ± sample SD across folds is not a confidence interval.",
+        "Development CV only.",
+        "194 unseen rows have no fitted BKT prediction."
+      ],
+      "related_experiments": []
+    },
+    {
+      "id": "EXP-BKT-REFIT-20261015",
+      "model": "BKT",
+      "variant": "final Development refit",
+      "objective": "Fit final exercise models on all Development users",
+      "research_questions": [],
+      "sprint": "Sprint 2",
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED",
+      "dataset": {
+        "name": "Junyi Academy",
+        "development_learners": 198084,
+        "development_rows": 20706208,
+        "fingerprint_ref": "experiments/bkt_baseline/results/wsl_cpp/final_cpp/run_manifest.json"
+      },
+      "protocol": {
+        "holdout_test_used": false,
+        "num_fits": 1,
+        "forgets": false,
+        "tol": 0.005,
+        "maxiter": 100,
+        "base_seed": 42
+      },
+      "configuration_ref": "_context/evaluation_protocol.md",
+      "code_ref": "src/knowledge_tracing/bkt_baseline/",
+      "metrics_ref": "experiments/bkt_baseline/results/wsl_cpp/final_cpp/final.json#fits",
+      "evidence_refs": [
+        "E-004",
+        "E-006"
+      ],
+      "results": {
+        "exercises": 720,
+        "hit_maxiter": 11,
+        "stopped_by_tolerance": 709
+      },
+      "limitations": [
+        "11 exercise models reached maxiter without tolerance.",
+        "Refit is not a separate generalization metric."
+      ],
+      "related_experiments": [
+        "EXP-BKT-CV-20261015"
+      ]
+    },
+    {
+      "id": "EXP-BKT-TEST-20261015",
+      "model": "BKT",
+      "variant": "frozen holdout evaluation",
+      "objective": "One-time evaluation of final Development refit",
+      "research_questions": [],
+      "sprint": "Sprint 2",
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED",
+      "dataset": {
+        "name": "Junyi Academy",
+        "test_learners": 49522,
+        "test_rows": 5218345,
+        "scored_rows": 5218336,
+        "fingerprint_ref": "experiments/bkt_baseline/results/wsl_cpp/test_cpp/run_manifest.json"
+      },
+      "protocol": {
+        "holdout_test_used_for_fit_or_tuning": false,
+        "unseen_rows": 9
+      },
+      "configuration_ref": "_context/evaluation_protocol.md",
+      "code_ref": "src/knowledge_tracing/bkt_baseline/",
+      "metrics_ref": "experiments/bkt_baseline/results/wsl_cpp/test_cpp/test.json#overall.metrics",
+      "evidence_refs": [
+        "E-005",
+        "E-006"
+      ],
+      "results": {
+        "auc": 0.7853401389315783,
+        "log_loss": 0.37411719753644507,
+        "brier": 0.11467086826208853,
+        "ece": 0.002303197682958907,
+        "accuracy": 0.8476443448639567
+      },
+      "limitations": [
+        "Holdout has been evaluated; do not use for further selection.",
+        "Nine unseen rows excluded from fitted metrics."
+      ],
+      "related_experiments": [
+        "EXP-BKT-REFIT-20261015"
+      ]
+    },
+    {
+      "id": "EXP-GAM-PILOT-20261018",
+      "model": "GAM-KT",
+      "variant": "graph-free Junyi source model",
+      "objective": "Development fold-0 runtime/resource pilot",
+      "research_questions": [],
+      "sprint": "Sprint 2",
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED",
+      "dataset": {
+        "name": "Junyi Academy Development fold 0",
+        "learners": 2000,
+        "rows": 216677
+      },
+      "protocol": {
+        "cohort": "fixed seed",
+        "holdout_test_used": false
+      },
+      "configuration_ref": "docs/gam-kt-integration.md",
+      "code_ref": "src/knowledge_tracing/gam_kt/",
+      "metrics_ref": "experiments/gam_kt/results/wsl_cpp/pilot/pilot.json",
+      "evidence_refs": [
+        "E-007",
+        "E-008"
+      ],
+      "results": {
+        "auc": 0.7721864534211456,
+        "brier": 0.11702559330062247,
+        "wall_seconds": 65.3,
+        "peak_rss_bytes": 2820399104
+      },
+      "limitations": [
+        "Pilot only; not full CV."
+      ],
+      "related_experiments": [
+        "EXP-GAM-CV-20261018"
+      ]
+    },
+    {
+      "id": "EXP-GAM-CV-20261018",
+      "model": "GAM-KT",
+      "variant": "graph-free Junyi model",
+      "objective": "5-fold Development benchmark and BKT common-row comparison",
+      "research_questions": [
+        "RQ1 baseline only",
+        "RQ2 baseline only",
+        "RQ3 baseline only"
+      ],
+      "sprint": "Sprint 2",
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED",
+      "dataset": {
+        "name": "Junyi Academy",
+        "development_rows": 20706208,
+        "common_rows": 20706014,
+        "folds": 5,
+        "outcome": "correct",
+        "split_seed": 42,
+        "fingerprint_ref": "experiments/gam_kt/results/wsl_cpp/cv/cv.json#protocol"
+      },
+      "protocol": {
+        "student_disjoint": true,
+        "chronological_online_state": true,
+        "holdout_test_used": false,
+        "fallback_rows": 194,
+        "common_row_join": "source_row; BKT fitted population"
+      },
+      "configuration_ref": "docs/gam-kt-integration.md",
+      "code_ref": "src/knowledge_tracing/gam_kt/",
+      "metrics_ref": "experiments/gam_kt/results/wsl_cpp/cv/cv.json#aggregate_mean_sample_sd.common_row_gam",
+      "evidence_refs": [
+        "E-007",
+        "E-008",
+        "E-009",
+        "E-011"
+      ],
+      "results": {
+        "common_row_gam": {
+          "auc": 0.7748662971439921,
+          "log_loss": 0.3948808855161685,
+          "brier": 0.12037155187421189,
+          "ece": 0.05554197784523786,
+          "accuracy": 0.8414529934200823
+        },
+        "common_row_bkt": {
+          "auc": 0.7834134107927653,
+          "log_loss": 0.3756074974398662,
+          "brier": 0.11510534239887317,
+          "ece": 0.0022408926425045825,
+          "accuracy": 0.8474159098322505
+        }
+      },
+      "limitations": [
+        "Native GAM includes 194 fallback rows; use common/supported metrics for matched comparison.",
+        "Does not test graph or policy effects."
+      ],
+      "related_experiments": [
+        "EXP-BKT-CV-20261015",
+        "EXP-GAM-BKT-BOOT-20261030"
+      ]
+    },
+    {
+      "id": "EXP-GAM-BKT-BOOT-20261030",
+      "model": "GAM-KT vs BKT",
+      "variant": "paired learner-clustered bootstrap",
+      "objective": "Uncertainty in fold-mean paired Development differences",
+      "research_questions": [
+        "RQ1 baseline only"
+      ],
+      "sprint": "Sprint 2",
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED",
+      "dataset": {
+        "name": "Junyi Development",
+        "folds": 5,
+        "common_rows": 20706014
+      },
+      "protocol": {
+        "replicates": 1000,
+        "seed": 20261030,
+        "ci": "percentile 95%",
+        "estimand": "unweighted mean of five fold-level GAM-KT minus BKT differences; learners sampled with replacement within fold"
+      },
+      "configuration_ref": "reports/paired_cluster_bootstrap_bkt_gam.json",
+      "code_ref": "scripts/bootstrap_bkt_gam_cv.py; src/knowledge_tracing/paired_bootstrap.py",
+      "metrics_ref": "reports/paired_cluster_bootstrap_bkt_gam.json#metrics",
+      "evidence_refs": [
+        "E-010",
+        "E-011"
+      ],
+      "results": {
+        "log_loss": {
+          "estimate": 0.01927338807630231,
+          "ci95": [
+            0.01877985121496039,
+            0.019729975709771537
+          ]
+        },
+        "brier": {
+          "estimate": 0.005266209475338718,
+          "ci95": [
+            0.005095943691713719,
+            0.005412828935142605
+          ]
+        },
+        "ece": {
+          "estimate": 0.0533010852027333,
+          "ci95": [
+            0.052169595268879654,
+            0.05382637666200834
+          ]
+        },
+        "accuracy": {
+          "estimate": -0.0059629164121681785,
+          "ci95": [
+            -0.0062013687903859525,
+            -0.005701726892075646
+          ]
+        }
+      },
+      "limitations": [
+        "No paired AUC interval.",
+        "No Holm correction recorded.",
+        "Does not include retraining/split variability."
+      ],
+      "related_experiments": [
+        "EXP-GAM-CV-20261018"
+      ]
+    },
+    {
+      "id": "EXP-AKT-GATE2-20261104",
+      "model": "AKT",
+      "variant": "synthetic technical validation",
+      "objective": "Validate hash-bound integration snapshot before authorized data runs",
+      "research_questions": [],
+      "sprint": "Sprint 2",
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED",
+      "dataset": {
+        "name": "synthetic fixtures; not Junyi benchmark"
+      },
+      "protocol": {
+        "command": "pytest tests/akt tests/shared_kt -q -p no:cacheprovider",
+        "source_commit": "01b7e8d7d7c862cabc9467108e3e7f2555653a88",
+        "lock_sha256": "3e721fdb49543ad0888cf02a863826ebc6144c0d1dd670f2490ebcc0d69b8c0a"
+      },
+      "configuration_ref": "artifacts/akt/preflight/gate2.json",
+      "code_ref": "src/knowledge_tracing/akt/; tests/akt/; tests/shared_kt/",
+      "metrics_ref": "artifacts/akt/preflight/gate2-tests.log",
+      "evidence_refs": [
+        "E-012"
+      ],
+      "results": {
+        "status": "PASS",
+        "tests": "155 passed in 66.20s"
+      },
+      "limitations": [
+        "Synthetic checks do not establish generalization/predictive quality.",
+        "Evidence applies to recorded source/build hashes."
+      ],
+      "related_experiments": [
+        "EXP-AKT-SMOKE-20261101-03"
+      ]
+    },
+    {
+      "id": "EXP-AKT-SMOKE-20261031-01",
+      "model": "AKT",
+      "variant": "bounded smoke attempt",
+      "objective": "Exercise authorized train/validation/checkpoint/export flow",
+      "research_questions": [],
+      "sprint": "Sprint 2",
+      "execution_status": "FAILED",
+      "verification_status": "VERIFIED",
+      "dataset": {
+        "name": "Junyi Development bounded cohort",
+        "train_targets": 4096,
+        "validation_targets": 549
+      },
+      "protocol": {
+        "phase": "smoke",
+        "run_id": "smoke-task13-20261031-01"
+      },
+      "configuration_ref": "experiments/akt/configs/smoke-task13-20261031-01.json",
+      "code_ref": "src/knowledge_tracing/akt/",
+      "metrics_ref": "experiments/akt/results/smoke-task13-20261031-01/manifest.json",
+      "evidence_refs": [
+        "E-015",
+        "E-016"
+      ],
+      "results": {
+        "manifest_status": "incomplete"
+      },
+      "limitations": [
+        "Prediction export failed on learner ordering; partial artifact is not complete evaluation."
+      ],
+      "related_experiments": [
+        "EXP-AKT-GATE2-20261104",
+        "EXP-AKT-SMOKE-20261101-03"
+      ]
+    },
+    {
+      "id": "EXP-AKT-SMOKE-20261031-02",
+      "model": "AKT",
+      "variant": "authorized retry blocked by resource guard",
+      "objective": "Retry bounded smoke after export fix",
+      "research_questions": [],
+      "sprint": "Sprint 2",
+      "execution_status": "FAILED",
+      "verification_status": "REPORTED",
+      "dataset": {
+        "name": "Junyi Development",
+        "cohort_read": false
+      },
+      "protocol": {
+        "phase": "smoke",
+        "run_id": "smoke-task13-20261031-02",
+        "minimum_available_ram_bytes": 1073741824
+      },
+      "configuration_ref": "experiments/akt/configs/smoke-task13-20261031-02.json",
+      "code_ref": "src/knowledge_tracing/akt/",
+      "metrics_ref": "artifacts/akt/preflight/task13-run02-cli.log",
+      "evidence_refs": [
+        "E-016",
+        "E-017"
+      ],
+      "results": {
+        "status": "blocked before cohort loading"
+      },
+      "limitations": [
+        "No training, validation, checkpoint or export."
+      ],
+      "related_experiments": [
+        "EXP-AKT-SMOKE-20261031-01",
+        "EXP-AKT-SMOKE-20261101-03"
+      ]
+    },
+    {
+      "id": "EXP-AKT-SMOKE-20261101-03",
+      "model": "AKT",
+      "variant": "bounded end-to-end smoke",
+      "objective": "Verify bounded Development train/checkpoint/validation/export pipeline",
+      "research_questions": [],
+      "sprint": "Sprint 2",
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED",
+      "dataset": {
+        "name": "Junyi Development",
+        "train_learners": 11,
+        "train_targets": 4096,
+        "validation_learners": 16,
+        "validation_targets": 549
+      },
+      "protocol": {
+        "phase": "smoke",
+        "run_id": "smoke-task13-20261101-03",
+        "optimizer_steps": 12,
+        "windows": 48,
+        "holdout_test_used": false
+      },
+      "configuration_ref": "experiments/akt/configs/smoke-task13-20261101-03.json",
+      "code_ref": "src/knowledge_tracing/akt/",
+      "metrics_ref": "experiments/akt/results/smoke-task13-20261101-03/manifest.json#summary",
+      "evidence_refs": [
+        "E-013",
+        "E-014",
+        "E-016"
+      ],
+      "results": {
+        "status": "completed",
+        "expected_rows": 549,
+        "prediction_rows": 549,
+        "fitted_rows": 441,
+        "unseen_rows": 108,
+        "checkpoint_reload_state_exact": true
+      },
+      "limitations": [
+        "Smoke is a technical milestone, not a benchmark.",
+        "Small cohort unseen fraction cannot be generalized."
+      ],
+      "related_experiments": [
+        "EXP-AKT-GATE2-20261104",
+        "EXP-AKT-PILOT-20261104-02"
+      ]
+    },
+    {
+      "id": "EXP-AKT-PILOT-20261104-01",
+      "model": "AKT",
+      "variant": "bounded pilot preflight attempt",
+      "objective": "Assess intended pilot readiness",
+      "research_questions": [],
+      "sprint": "Sprint 2",
+      "execution_status": "FAILED",
+      "verification_status": "REPORTED",
+      "dataset": {
+        "name": "Junyi Development",
+        "cohort_read": false
+      },
+      "protocol": {
+        "phase": "pilot",
+        "run_id": "pilot-task14-20261104-01"
+      },
+      "configuration_ref": "experiments/akt/configs/pilot-task14-20261104-01.json",
+      "code_ref": "src/knowledge_tracing/akt/",
+      "metrics_ref": "docs/akt-pilot-readiness.md",
+      "evidence_refs": [
+        "E-018"
+      ],
+      "results": {
+        "status": "preflight blocked by available-RAM floor"
+      },
+      "limitations": [
+        "No training launched; not a completed pilot."
+      ],
+      "related_experiments": [
+        "EXP-AKT-PILOT-20261104-02"
+      ]
+    },
+    {
+      "id": "EXP-AKT-PILOT-20261104-02",
+      "model": "AKT",
+      "variant": "bounded partial pilot",
+      "objective": "Measure Development pilot training/resource behavior",
+      "research_questions": [],
+      "sprint": "Sprint 2",
+      "execution_status": "FAILED",
+      "verification_status": "VERIFIED",
+      "dataset": {
+        "name": "Junyi Development",
+        "train_learners_loaded": 417,
+        "train_targets": 50000,
+        "validation_learners_loaded": 256,
+        "validation_targets": 29199,
+        "targets_kept": 79199
+      },
+      "protocol": {
+        "phase": "pilot",
+        "run_id": "pilot-task14-20261104-02",
+        "complete_epoch": false,
+        "holdout_test_used": false,
+        "optimizer_steps": 32,
+        "optimized_targets": 7346,
+        "windows": 128
+      },
+      "configuration_ref": "experiments/akt/configs/pilot-task14-20261104-02.json",
+      "code_ref": "src/knowledge_tracing/akt/",
+      "metrics_ref": "experiments/akt/results/pilot-task14-20261104-02/pilot.json",
+      "evidence_refs": [
+        "E-018",
+        "E-019"
+      ],
+      "results": {
+        "error_type": "PermissionError",
+        "error": "WinError 5 while replacing pilot-progress.json.tmp with pilot-progress.json",
+        "training_wall_seconds": 10.868,
+        "peak_rss_bytes": 732065792
+      },
+      "limitations": [
+        "Partial epoch only; no validation, checkpoint reload/parity, export or predictive metrics.",
+        "Partial progress is not a completed epoch."
+      ],
+      "related_experiments": [
+        "EXP-AKT-SMOKE-20261101-03"
+      ]
+    },
+    {
+      "id": "cpu-closedloop-20261107-01",
+      "model": "GAM/Graph-GAM source package",
+      "rq": [
+        "RQ1",
+        "RQ2"
+      ],
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED_OUTPUT_INTEGRITY",
+      "evidence_refs": [
+        "runs\\cpu-closedloop-20261107-01\\manifest.json"
+      ],
+      "limitations": [
+        "Diagnostic/pilot only, no final causal or inferential conclusion"
+      ]
+    },
+    {
+      "id": "cpu-rq12-20261107-01",
+      "model": "GAM/Graph-GAM source package",
+      "rq": [
+        "RQ1",
+        "RQ2"
+      ],
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED_OUTPUT_INTEGRITY",
+      "evidence_refs": [
+        "runs\\cpu-rq12-20261107-01\\manifest.json"
+      ],
+      "limitations": [
+        "Diagnostic/pilot only",
+        "Run01 superseded for selector history"
+      ]
+    },
+    {
+      "id": "cpu-rq12-20261107-02",
+      "model": "GAM/Graph-GAM source package",
+      "rq": [
+        "RQ1",
+        "RQ2"
+      ],
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED_OUTPUT_INTEGRITY",
+      "evidence_refs": [
+        "runs\\cpu-rq12-20261107-02\\manifest.json"
+      ],
+      "limitations": [
+        "Diagnostic/pilot only, no final causal or inferential conclusion"
+      ]
+    },
+    {
+      "id": "cpu-rq12-20261107-03",
+      "model": "GAM/Graph-GAM source package",
+      "rq": [
+        "RQ1",
+        "RQ2"
+      ],
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED_OUTPUT_INTEGRITY",
+      "evidence_refs": [
+        "runs\\cpu-rq12-20261107-03\\manifest.json"
+      ],
+      "limitations": [
+        "Diagnostic/pilot only, no final causal or inferential conclusion"
+      ]
+    },
+    {
+      "id": "cpu-rq12-20261107-04-replay",
+      "model": "GAM/Graph-GAM source package",
+      "rq": [
+        "RQ1",
+        "RQ2"
+      ],
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED_OUTPUT_INTEGRITY",
+      "evidence_refs": [
+        "runs\\cpu-rq12-20261107-04-replay\\manifest.json"
+      ],
+      "limitations": [
+        "Diagnostic/pilot only, no final causal or inferential conclusion"
+      ]
+    }
+  ]
+}
