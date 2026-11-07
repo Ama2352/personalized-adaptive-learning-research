@@ -8,14 +8,14 @@ Ngày07/11/2026. User xác nhận workspace **honguyenminhsang2005**, còn **30U
 - `requirements-modal-client.in` và `requirements-modal-client.lock.txt` là phần bổ sung cho controller Windows hiện tại, pin public wheel hashes. Nó dựa trên projectvenv đã có các shared dependencies; không là standalone lock cho Linux/CUDA training image.
 - Bằng chứng tại `research_tracking/runs/cpu-modal-client-20261107-01/`. Source-bound CPU Gate401 vẫn hợp lệ; suite đó chạy trước SDKinstall. Sauinstall đã kiểm versions/source/lock và localSDK, không claim rerun401.
 - [Kiểm Git cuối](../research_tracking/reports/git_evidence_verification_modal_20261107.json) đối chiếu nguyên bytes của bundles và xác nhận privateconfig không tracked. Đây không là xác nhận tài khoản hoặc cloud budget đã được cấu hình.
-- Private config dùng `artifacts/akt/private/modal.toml`, Gitignored đã kiểm. Chưa có token được tạo. Không đưa credentials vào logs, source, registry hoặc chat.
+- Private config dùng `artifacts/akt/private/modal.toml`, Gitignored đã kiểm. User đã hoàn tất browser login; kiểm SDK chỉ đọc xác nhận profilekltn/workspacehonguyenminhsang2005, token hết hạn14/11/2026 lúc17:37:38 giờ Việt Nam. Không đưa credentials vào logs, source, registry hoặc chat. [Kết quả kiểm](../research_tracking/reports/modal_access_readiness_20261107.md).
 
 ## Người dùng cần cung cấp
 
 Đã nhận: workspacehonguyenminhsang2005,30USDfreecredits remaining và bắt đầu07/11/2026. Không hỏi lại các thông tin này. Còn cần:
 
-1. Đăng nhập local theo phần dưới, chọn đúng workspace; projectprivateconfig chưa tồn tại ở lần kiểm local07/11 sau khi nhận câu trả lời.
-2. Xác nhận Workspace usage limit30USD và Spend limit0USD đã được áp dụng; dashboard là nguồn đối chiếu balance/currentusage và reset date chính xác. Các workload khác trong cùng workspace cũng tiêu ngân sách chung.
+1. Đăng nhập local đã hoàn tất và workspace được API xác minh; không yêu cầu user tạo token lại khi còn hiệu lực.
+2. User đã báo hoàn tất bước1 đặt limits theo hướng dẫn. Ghi nhận usage30/spend0 là user-reported, chưa API/dashboard readback. Dashboard vẫn là nguồn đối chiếu balance/currentusage và reset date chính xác; các workload khác trong workspace cũng tiêu ngân sách chung.
 3. Plan/quyền GPU thực tế khi kiểm account. Modal yêu cầu payment method cho GPU; việc thêm/xác minh thẻ do chủ tài khoản tự thao tác, không gửi thông tin thẻ cho agent. [Tài liệu chính thức](https://modal.com/docs/guide).
 
 ## Đăng nhập một lần trên máy này
