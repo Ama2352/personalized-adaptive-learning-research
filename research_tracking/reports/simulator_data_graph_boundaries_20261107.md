@@ -41,3 +41,11 @@ Mỗi bundle có README, manifest source/output SHA-256, execution log, proof JS
 Gate2 cũ296tests không áp dụng cho source mới. Runner cho phép ngân sách CPU suite explicit1–600giây, mặc định vẫn300; dự toán420giây cho suite mở rộng (lần trước292giây). Không đổi budget training/smoke/pilot; vẫn reject zero tests, failure/error/skip. Gate2 mới chỉ được công nhận sau source-bound report kiểm thành công.
 
 Để có evidence RQ3 vẫn cần generator có manifest/seeds thật, trajectory coverage theo policy, simulator role-aware trainer/evaluator, graph residual/gate, confidence estimator/controls và protocol đã chốt. Hợp đồng mới chỉ loại bớt rủi ro leakage/incompatible history trước các bước đó.
+
+## Nghiệm thu cuối
+
+Gate2-11 (`20261107-simulator-data-11`) **361passed,0failed/error/skipped**, pytest152.84giây, source/lock/upstream stable, current pointer kiểm lại thành công. Timeout420giây chỉ cho CPU software suite. Report SHA `1d29261a5716368c71fd3da1cbbee7806a5f259af308cdc33a5691e785e78628`. Archive nguyên bytes ở [cpu-sim-data-context-gate-20261107-01](../runs/cpu-sim-data-context-gate-20261107-01/README.md), không thay Gate2/bundles lịch sử.
+
+Inspection bổ sung trước collector (notebook Paper2 cell9/15/17/19): initial ability được parent-smoothing, replay chọn difficulty theo latent theta, closed-loop dùng paired uniforms theo timestep. Chi tiết và điều kiện giữ nguyên latent realization/oracle sidecar/clock unit ở mục collector của19. Đây là source evidence về thiết kế, chưa là kết quả chạy collector mới.
+
+Để giữ evidence qua Git, bundle giữ bytes gốc kể cả CRLF; whitespace attribute chỉ công nhận CRLF hợp lệ tại runs. Logs bị ignore mặc định phải add explicit theo manifest; không normalize hoặc sửa logs đã đóng để qua kiểm tra. Portable kitv9 vẫn là snapshot trước gói này, không đại diện source361tests và chưa chạy Colab/CUDA.

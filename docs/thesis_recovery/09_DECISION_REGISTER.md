@@ -44,3 +44,9 @@ D17 supported: model-domain/item-bank/vocab/recipe identity và predict-before-u
 D18 proposed: chốt graph-context history scope trong S04/S05. A0 chỉ nhìn effective window dù session giữ full replay history. Default đề xuất primary cùng effective window; full-cache cần graph-free information-matched control, không chỉ real-vs-noisy edges. Không silently adopt phần này.
 
 Q03 được thu hẹp: AKT item84 query bridge đã kiểm, không có numeric difficulty1250 ngoài trained items. Calibrator/reference weights/threshold/controller vẫn chưaaccepted. Q04 diversity/split/coverage của generated training trajectories chưa giải quyết bằng arithmetic engineering labels. Q06 chưa đo GPU hoặc d256 closed-loop inference; include reference-query workload trong budget.
+
+## Data/graph-boundary engineering07/11
+
+D19 supported: split/schema4roles và graph-context effective-window audit có70targeted tests, không là trained CG-AKT; xem19 và report simulator_data_graph_boundaries_20261107.md. Full-history context có thể dùng thông tin baseline không có; D18 vẫn proposed về primary comparison.
+
+D20 supported/source: Paper2 persona_base_abilities có parent-smoothed latent ability; replay item difficulty được chọn từ theta thật (notebook cell9/17). Collector mới phải tách oracle sidecar và ghi logging-policy provenance, không tự tái dùng replay generator làm corpus deployment-like. Paired mechanism comparisons cần giữ base realization khi thay learning-edge mechanism; exact protocol vẫn S03/S05. Clock unit và response/learning RNG channels là prerequisite bổ sung ở19.

@@ -66,3 +66,7 @@ REC01–REC06 và CPU11 completed **CPU synthetic only**. Source-bound Gate2-08 
 ## Interface simulator–KT và batching, cuối07/11
 
 SIM01–SIM05 completed CPU engineering: source bank28concept/84item,168synthetic train targets/1update cho fixture, predict-before-update/session/reset/snapshot/domain guards, fixed duplicate-window export và independent batching84→42calls. Gate2-10 296pass/no fail/error/skip. Xem reports/simulator_kt_interface_20261107.md và runs/cpu-sim-kt-batch-gate-20261107-01. Raw correctness score chưa là mastery, native AKT không nhận elapsed time; research/CG-AKT/GPU readiness không nâng theo software pass. V9 kit ZIP-only, khôngremoteexecution.
+
+## DATA01–04: split/schema và graph-context boundaries, cập nhật cuối07/11
+
+Completed CPU engineering,70targeted tests và Gate2-11 mới361pass0fail/error/skip152.84giây. Có4-role split với explicit namespaces/RNG, observable schema/oracle guards và role-shard coverage; graph context reuse AKT effective-window/OOV, full-history sensitivity riêng, confidence provenance/off/empty/zero controls. Bundles cpu-sim-data-context-20261107-01/02/03 và cpu-sim-data-context-gate-20261107-01 giữ logs/proofs/hashes. Source-only finding: Paper2 latent base parent-smoothed và replay item chọn theo theta thật; collector phải giữ base realization và tách oracle sidecar. Xem report simulator_data_graph_boundaries_20261107.md và contract19. Chưa generate research cohort/train CG-AKT hoặc đo GPU; S04/S05 vẫn pending. V9 không chứa source mới.

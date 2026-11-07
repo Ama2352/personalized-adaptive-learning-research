@@ -319,13 +319,14 @@
     "path": "artifacts/akt/colab/akt-synthetic-20261107-v9.zip",
     "files": 125,
     "sha256": "7e8caab24cb7b2b92cf46fa04f37109a9419146d94b313152cee5de8e3a955fd",
-    "verification": "ZIP_INTEGRITY_ONLY;main source Gate2 verified separately;isolated v9/Colab/CUDA not executed"
+    "verification": "ZIP_INTEGRITY_ONLY; v9 predates DATA01–04/current361-source; isolated/Colab/CUDA not executed"
   },
   "next_bounded_engineering_batch": [
-    "Complete DATA04 fresh source-bound Gate2 using explicit420s CPU software budget; archive/test/commit",
-    "Review simulated collection generator manifest and role-aware trainer contracts; do not fake Junyi folds",
-    "S04 calibration/reference/threshold/controller and S05 model-environment allocation remain pending; no full simulation/training/Holdout/cloud",
-    "Portable v9 excludes these source changes; do not claim latest parity or Colab/CUDA execution"
+    "Read19collector prerequisites and current source-bound Gate2-11; DATA01–04 complete, do not repeat cleanup/recovery/interface",
+    "DATA05: bounded train-only collector fixture <=2learners×12events; source/base/uniform/policy/clock manifest; observable schema and oracle sidecar; no original Paper2 changes or research cohort",
+    "DATA06: role-aware simulated KT runner contract/fixtures, no fake Junyi folds; no actual training in this package",
+    "S04 calibration/reference/threshold/controller and S05 model-environment allocation remain pending; no full simulation/training, Holdout or paid GPU",
+    "v9 is a historical portable kit; refresh/check package only when needed for actual connected runtime; no CUDA claim"
   ],
   "simulator_interface_engineering_20261107": {
     "status": "COMPLETED_CPU_ENGINEERING",
@@ -357,11 +358,16 @@
     "gpu_executed": false
   },
   "current_software_gate": {
-    "status": "STALE_AFTER_SOURCE_CHANGES",
-    "previous_run_id": "20261107-simulator-batch-10",
-    "next_run_id": "20261107-simulator-data-11",
-    "planned_cpu_test_timeout_seconds": 420,
-    "scope": "No training caps changed; source-bound refresh required"
+    "run_id": "20261107-simulator-data-11",
+    "passed": 361,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "pytest_seconds": 152.84,
+    "timeout_seconds": 420,
+    "report_sha256": "1d29261a5716368c71fd3da1cbbee7806a5f259af308cdc33a5691e785e78628",
+    "archive": "cpu-sim-data-context-gate-20261107-01",
+    "scope": "CPU synthetic software only; no CUDA or research efficacy"
   },
   "previous_software_gate": {
     "run_id": "20261107-simulator-batch-10",
@@ -375,20 +381,26 @@
     "past_gate_fields": "Historical snapshots; this top-level field is current"
   },
   "simulator_data_boundary_engineering_20261107": {
-    "status": "TARGETED_VERIFIED_PENDING_FULL_GATE",
+    "status": "COMPLETED_CPU_ENGINEERING",
     "contract": "19_SIMULATOR_DATA_AND_GRAPH_BOUNDARIES.md",
     "completed": [
       "DATA01",
       "DATA02",
-      "DATA03"
+      "DATA03",
+      "DATA04"
     ],
-    "in_progress": "DATA04",
+    "in_progress": null,
     "bundles": [
       "cpu-sim-data-context-20261107-01",
       "cpu-sim-data-context-20261107-02",
       "cpu-sim-data-context-20261107-03"
     ],
     "latest_targeted_passed": 70,
-    "scientific_limit": "Arithmetic schema/context fixture; no training or RQ benefit; S04/S05 pending"
+    "scientific_limit": "Arithmetic schema/context fixture; no training or RQ benefit; S04/S05 pending",
+    "gate_archive": "cpu-sim-data-context-gate-20261107-01",
+    "next": [
+      "DATA05",
+      "DATA06"
+    ]
   }
 }

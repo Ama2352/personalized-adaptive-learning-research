@@ -1487,10 +1487,68 @@
       "estimated_effort": "0.25–0.5 engineering day per task; CPU tests separate",
       "compute_cost_category": "bounded local CPU synthetic; no cloud spend",
       "authorization_requirements": "Safe engineering authorized; no adopted methodology/splits/thresholds/refit or paid run",
-      "status": "IN_PROGRESS",
+      "status": "COMPLETED",
       "blockers": [],
-      "verification_evidence": "cpu-sim-data-context-20261107-03:70targeted tests;report simulator_data_graph_boundaries_20261107.md",
+      "verification_evidence": "cpu-sim-data-context-20261107-03:70targeted;cpu-sim-data-context-gate-20261107-01:361source-bound;report simulator_data_graph_boundaries_20261107.md",
       "verification_scope": "Schema and history-boundary engineering only; no generated research cohort or trained CG-AKT"
+    },
+    {
+      "id": "DATA05",
+      "research_objective": "Prototype collector mô phỏng với manifest và observable/oracle boundary",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "simulator_data_boundaries",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "DATA04"
+      ],
+      "required_inputs": "Recipe explicit, Paper2source/input SHA,19collector prerequisites",
+      "files_components": "paper2_reference.py;simulator_data.py;new collector in src/knowledge_tracing;tests/shared_kt",
+      "implementation_objective": "Prototype collector mô phỏng với manifest và observable/oracle boundary",
+      "acceptance_criteria": "Không đổi Paper2 environment; fixed base/state/uniform hashes, declared logging policy và clock unit; train fixture tối đa2learners×12events, không final cohort; schema audit và repeat/parity tests",
+      "verification_steps": "Project .venv bounded fixture; source/input/state/output SHA; targeted tests then fresh source-bound Gate2",
+      "required_artifacts": "New immutable run with logs and manifest, Vietnamese report update",
+      "estimated_effort": "0.5–1 engineering day; not GPU training duration",
+      "compute_cost_category": "bounded local CPU",
+      "authorization_requirements": "Small synthetic/reference-environment fixture only; no model training, real dataset, cloud or final cohort; changing scientific distribution needs separate protocol approval",
+      "status": "PLANNED",
+      "blockers": [
+        "Scientific cohort allocation/refit/calibration remain S04/S05; do not silently select defaults"
+      ]
+    },
+    {
+      "id": "DATA06",
+      "research_objective": "Hợp đồng simulator role-aware KT training/evaluation runner",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "simulator_data_boundaries",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "DATA05"
+      ],
+      "required_inputs": "DATA05manifest;19;AKT existing recipe/checkpoint interfaces;S04/S05 pending",
+      "files_components": "simulator_data.py;akt/types.py;akt/windows.py;docs/thesis_recovery",
+      "implementation_objective": "Hợp đồng simulator role-aware KT training/evaluation runner",
+      "acceptance_criteria": "Role guards/predict-before-update/vocab/OOV/window target accounting explicit; không gán Junyi folds giả, không train thật; calibration/refit/final roles excluded until protocol accepted",
+      "verification_steps": "Project .venv bounded fixture; source/input/state/output SHA; targeted tests then fresh source-bound Gate2",
+      "required_artifacts": "New immutable run with logs and manifest, Vietnamese report update",
+      "estimated_effort": "0.5–1 engineering day; not GPU training duration",
+      "compute_cost_category": "bounded local CPU",
+      "authorization_requirements": "Safe contract/adaptor fixtures; no model architecture/optimization/protocol adoption or full training",
+      "status": "PLANNED",
+      "blockers": [
+        "Scientific cohort allocation/refit/calibration remain S04/S05; do not silently select defaults"
+      ]
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",
