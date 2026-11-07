@@ -1,0 +1,73 @@
+{
+  "estimand": "unweighted mean of five fold-level GAM-KT minus BKT differences; learners sampled with replacement within each fold",
+  "replicates": 1000,
+  "seed": 20261030,
+  "ci": "percentile 95%",
+  "fold_audit": [
+    {
+      "fold": 0,
+      "joined_rows": 4198649,
+      "supported_rows": 4198615,
+      "learners": 39617,
+      "fallback_rows": 34
+    },
+    {
+      "fold": 1,
+      "joined_rows": 4061255,
+      "supported_rows": 4061239,
+      "learners": 39617,
+      "fallback_rows": 16
+    },
+    {
+      "fold": 2,
+      "joined_rows": 4182390,
+      "supported_rows": 4182390,
+      "learners": 39617,
+      "fallback_rows": 0
+    },
+    {
+      "fold": 3,
+      "joined_rows": 4126864,
+      "supported_rows": 4126864,
+      "learners": 39617,
+      "fallback_rows": 0
+    },
+    {
+      "fold": 4,
+      "joined_rows": 4137050,
+      "supported_rows": 4136906,
+      "learners": 39616,
+      "fallback_rows": 144
+    }
+  ],
+  "metrics": {
+    "log_loss": {
+      "estimate": 0.01927338807630231,
+      "ci95": [
+        0.01877985121496039,
+        0.019729975709771537
+      ]
+    },
+    "brier": {
+      "estimate": 0.005266209475338718,
+      "ci95": [
+        0.005095943691713719,
+        0.005412828935142605
+      ]
+    },
+    "ece": {
+      "estimate": 0.0533010852027333,
+      "ci95": [
+        0.052169595268879654,
+        0.05382637666200834
+      ]
+    },
+    "accuracy": {
+      "estimate": -0.0059629164121681785,
+      "ci95": [
+        -0.0062013687903859525,
+        -0.005701726892075646
+      ]
+    }
+  }
+}

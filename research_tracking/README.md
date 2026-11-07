@@ -1,6 +1,6 @@
 # Theo dõi bằng chứng nghiên cứu KLTN
 
-**Điểm bắt đầu cho người viết báo cáo:** [Bản đồ repository](../docs/REPOSITORY_MAP.md). `reports/` bên trong thư mục này là các bản phân tích/audit; `runs/` là bundles bằng chứng theo run. Hai phần phục vụ diễn giải và kiểm chứng, chưa phải bản luận văn hoàn chỉnh. Root `../reports/` là vị trí output thống kê baseline cũ, có phạm vi khác.
+**Điểm bắt đầu cho người viết báo cáo:** [Bản đồ repository](../docs/REPOSITORY_MAP.md) và [mục lục báo cáo](reports/README.md). `reports/` là nơi thống nhất bản phân tích/số liệu tổng hợp; `runs/` là bundles bằng chứng theo run. Hai phần phục vụ diễn giải và kiểm chứng, chưa phải bản luận văn hoàn chỉnh. Output bootstrap baseline đã chuyển từ root `reports/` vào đây, có [hồ sơ relocation](reports/report_relocation_20261107.json).
 
 Nội dung theo run có thể là pilot nghiên cứu, kiểm phần mềm hoặc archive một lần kiểm; không dùng số thư mục hay số tests để tính số thí nghiệm trả lời RQ. Với run đã đóng gói, đọc README và manifest trước kết quả. Các mục phân công/audit ban đầu bên dưới được giữ để truy lịch sử; trạng thái triển khai mới xem [progress](RESEARCH_PROGRESS.md) và [investigation state](../docs/thesis_recovery/INVESTIGATION_STATE.json).
 

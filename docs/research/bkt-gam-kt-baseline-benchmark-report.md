@@ -1,5 +1,7 @@
 # Báo cáo nghiên cứu baseline BKT–GAM-KT trên Junyi Academy
 
+> Điều hướng cập nhật07/11/2026: JSON bootstrap chuyển vào research_tracking/reports với SHA/bytes giữ nguyên, xem [relocation manifest](../../research_tracking/reports/report_relocation_20261107.json). Chỉ đổi locator, không tính lại số liệu. Các mô tả audit/Git30/10 là snapshot lịch sử. Lệnh tái lập cần thay NEW_RUN_ID bằng ID mới và kiểm đích chưa tồn tại; không dùng nó để chạy lại thí nghiệm trong đợt sắp xếp này.
+
 **Bản ghi benchmark Sprint 2**<br>
 **Ngày tổng hợp:** 30-10-2026<br>
 **Phạm vi:** Development 5-fold cross-validation; không đánh giá Holdout trong công việc tổng hợp này.
@@ -141,7 +143,7 @@ Số predictions native của cả hai hệ bằng tổng validation rows; commo
 | 4 | 39.616 | 4.137.050 | 4.136.906 | 4.137.050 | 144 | 99,99652% |
 | **Tổng** | **198.084** | **20.706.208** | **20.706.014** | **20.706.208** | **194** | **99,99906%** |
 
-Không có unmatched `source_row`, duplicate `source_row`, identity mismatch hoặc support mismatch trong kiểm tra common-row. Các số kiểm tra lại bằng `scripts/bootstrap_bkt_gam_cv.py` và lưu audit theo fold trong `reports/paired_cluster_bootstrap_bkt_gam.json`.
+Không có unmatched `source_row`, duplicate `source_row`, identity mismatch hoặc support mismatch trong kiểm tra common-row. Các số kiểm tra lại bằng `scripts/bootstrap_bkt_gam_cv.py` và lưu audit theo fold trong `research_tracking/reports/paired_cluster_bootstrap_bkt_gam.json`.
 
 ### 6.2. Common-row scores theo fold
 
@@ -192,7 +194,7 @@ GAM-KT native CV có 20.706.208 prediction rows, trong đó 194 fallback. Mean n
 
 Các interaction của cùng learner có phụ thuộc do lịch sử, state update và hành vi lặp. Bootstrap từng interaction độc lập sẽ phá cấu trúc chuỗi và đánh giá thấp sự phụ thuộc trong cùng learner. Do đó đơn vị resampling là learner: trong mỗi fold, lấy learner có hoàn lại và giữ toàn bộ common fitted interaction của learner được chọn. Resample độc lập trong từng fold để giữ nguyên thiết kế 5-fold; ở mỗi replicate tính fold-level metric differences rồi lấy mean không trọng số giữa 5 fold.
 
-Phân tích dùng 1.000 replicate, seed 20261030, percentile 95% interval. Script tổng hợp per-learner sufficient statistics một lượt từ predictions Parquet trong DuckDB; không nạp toàn bộ event table vào RAM. Kết quả dưới đây được kiểm tra với JSON `reports/paired_cluster_bootstrap_bkt_gam.json`.
+Phân tích dùng 1.000 replicate, seed 20261030, percentile 95% interval. Script tổng hợp per-learner sufficient statistics một lượt từ predictions Parquet trong DuckDB; không nạp toàn bộ event table vào RAM. Kết quả dưới đây được kiểm tra với JSON `research_tracking/reports/paired_cluster_bootstrap_bkt_gam.json`.
 
 | Metric difference (GAM-KT − BKT) | Estimate | Percentile CI 95% |
 |---|---:|---:|
@@ -294,7 +296,7 @@ Mốc AKT graph-free tạo comparator attention-based không dùng graph và gi�
 - GAM-KT CV: [`cv.json`](../../experiments/gam_kt/results/wsl_cpp/cv/cv.json), `fold=0.json` … `fold=4.json`, [`report_vi.md`](../../experiments/gam_kt/results/wsl_cpp/cv/report_vi.md); configuration and provenance are recorded trong `cv.json`.
 - Metric definitions: [`metrics.py`](../../src/knowledge_tracing/bkt_baseline/metrics.py) và [`evaluation.py`](../../src/knowledge_tracing/gam_kt/evaluation.py).
 - GAM-KT configuration/source: [`model.py`](../../src/knowledge_tracing/gam_kt/model.py), [`difficulty.py`](../../src/knowledge_tracing/gam_kt/difficulty.py), [`replay.py`](../../src/knowledge_tracing/gam_kt/replay.py), [`original_junyi.py`](../../src/knowledge_tracing/gam_kt/original_junyi.py); integration note: [`docs/gam-kt-integration.md`](../gam-kt-integration.md).
-- Bootstrap: [`bootstrap_bkt_gam_cv.py`](../../scripts/bootstrap_bkt_gam_cv.py), [`paired_bootstrap.py`](../../src/knowledge_tracing/paired_bootstrap.py), [`paired_cluster_bootstrap_bkt_gam.json`](../../reports/paired_cluster_bootstrap_bkt_gam.json).
+- Bootstrap: [`bootstrap_bkt_gam_cv.py`](../../scripts/bootstrap_bkt_gam_cv.py), [`paired_bootstrap.py`](../../src/knowledge_tracing/paired_bootstrap.py), [`paired_cluster_bootstrap_bkt_gam.json`](../../research_tracking/reports/paired_cluster_bootstrap_bkt_gam.json).
 - Shared contracts: [`shared_kt.py`](../../src/knowledge_tracing/shared_kt.py), tests ở [`tests/shared_kt/`](../../tests/shared_kt/).
 - Research context locally available: `papers/KT Papers Survey Report.md`, `papers/Deep Knowledge Tracing.pdf`, `papers/A Survey of KT.pdf`. Không tìm thấy registered thesis outline hoặc advisor feedback trong `docs/`, `papers/` hoặc `_context/`.
 
@@ -313,13 +315,15 @@ Kết quả kiểm tra gần nhất trong workspace: **43 passed**. Kiểm tra w
 git diff --check
 ```
 
-Bootstrap command đã dùng với artifact Development CV đã lưu:
+Lệnh tái lập theo vị trí hiện tại, dùng artifact Development CV đã lưu. Lệnh gốc ngày30/10 ghi vào root reports; locator được cập nhật07/11 theo relocation manifest, không chạy lại bootstrap:
 
 ```powershell
-.\venv\Scripts\python.exe scripts/bootstrap_bkt_gam_cv.py --replicates 1000 --seed 20261030 --output reports/paired_cluster_bootstrap_bkt_gam.json
+$bootstrapReport = 'research_tracking/reports/paired_cluster_bootstrap_bkt_gam_RECHECK_NEW_RUN_ID.json'
+if (Test-Path -LiteralPath $bootstrapReport) { throw 'Output already exists; choose a new run ID' }
+.\.venv\Scripts\python.exe scripts/bootstrap_bkt_gam_cv.py --replicates 1000 --seed 20261030 --output $bootstrapReport
 ```
 
-Lệnh bootstrap đọc predictions đã lưu; nó không fit model hay chạy lại CV. JSON giữ số dòng join/common-row/fallback theo fold cùng estimate và CI.
+Thay NEW_RUN_ID bằng ID mới trước khi tái lập trong phạm vi được duyệt. Lệnh bootstrap đọc predictions đã lưu; nó không fit model hay chạy lại CV. JSON giữ số dòng join/common-row/fallback theo fold cùng estimate và CI; JSON lịch sử giữ bất biến.
 
 ### Commit và trạng thái thay đổi
 

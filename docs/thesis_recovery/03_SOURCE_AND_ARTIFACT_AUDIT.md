@@ -21,7 +21,7 @@ Gọi P2 là `paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/`
 | SAKT | NOT STARTED trong repo sources đã tìm | Chưa model/tests/experiment | Comparator proposal required. KEEP, chạy budget nhỏ hơn CG sensitivity, bỏ cần duyệt |
 | GKT | NOT STARTED trong repo sources đã tìm | Chưa model/tests/experiment | Chốt variant graph/message semantics, upstream provenance. KEEP required |
 | Simulator integration | INCOMPLETE | P2 có BKT/GAM/Elo policies, AKT dùng Junyi LearnerEvents | Vocabulary và mastery adapter chưa tương thích. MODIFY, hai môi trường train riêng. Critical |
-| Statistics | PARTIALLY VERIFIED | P2 STATISTICAL_PROTOCOL, frozen CSV, reports/paired_cluster_bootstrap_bkt_gam.json | Historical paired learner CI 1.000 reps, chưa AUC CI, chưa new RQ families. REUSE/MODIFY |
+| Statistics | PARTIALLY VERIFIED | P2 STATISTICAL_PROTOCOL, frozen CSV, research_tracking/reports/paired_cluster_bootstrap_bkt_gam.json | Historical paired learner CI 1.000 reps, chưa AUC CI, chưa new RQ families. REUSE/MODIFY |
 | Demo | NOT STARTED trong phạm vi tìm | Proposal trang4 và5 yêu cầu rõ | Build sau contract, viewer có thể sớm dùng fixture. KEEP. Critical delivery |
 | Thesis/docs | INCOMPLETE | research_tracking và docs/research baseline report, proposal và papers có | Chưa tìm thesis manuscript, advisor feedback riêng. KEEP viết từ tuần1, thêm article draft |
 

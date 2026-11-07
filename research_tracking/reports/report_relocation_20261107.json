@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "status": "COMPLETED",
+  "prepared_utc": "2026-11-07T08:51:34.396415+00:00",
+  "authorization": "User approved bounded repository organization and maintaining structure2026-11-07",
+  "git_head_before": "989294678cec9e2e4e1b3b62fd0cd9371d5604e9",
+  "reason": "Thống nhất báo cáo tại research_tracking/reports, không sửa kết quả thống kê",
+  "files": [
+    {
+      "old_path": "reports/paired_cluster_bootstrap_bkt_gam.json",
+      "new_path": "research_tracking/reports/paired_cluster_bootstrap_bkt_gam.json",
+      "size_bytes": 1621,
+      "sha256_before": "e7c89371429068b9cbe6c3b0029dd9f531417425e510823fa84336087f68c017",
+      "git_blob_sha256_before": "5fd24f98eef3fdf2f71573ee8b32a511c4a2999cc0c991c07298a948a7937bdc",
+      "original_worktree_matches_git_bytes": false,
+      "sha256_after": "e7c89371429068b9cbe6c3b0029dd9f531417425e510823fa84336087f68c017",
+      "bytes_verified": true,
+      "statistical_content_matches_original_git": true,
+      "git_checkout_policy": "-text; giữ raw bytes gốc, khác biệt EOL so với Git cũ đã được ghi riêng"
+    }
+  ],
+  "immutable_evidence_policy": "Không sửa models/predictions/manifests hoặc bundles cũ; relocation manifest giải thích đường dẫn lịch sử",
+  "protected_paths_untouched": [
+    "dataset/",
+    "artifacts/bkt_baseline/",
+    "venv/",
+    ".wsl/JunyiBKT-Ubuntu/"
+  ],
+  "cache_cleanup": {
+    "path": ".pytest_cache",
+    "exists_before": true,
+    "policy": "Chỉ xóa directory nếu thực sự rỗng; không xóa file/cache không được kiểm",
+    "enumeration_status": "ACCESS_DENIED_UNVERIFIED",
+    "action": "KEPT",
+    "reason": "PowerShell Get-ChildItem/Remove-Item từ chối quyền; Python rglob không trả entry không đủ chứng minh directory rỗng. Không retry hoặc đổi ACL.",
+    "initial_python_observation": []
+  },
+  "events": [
+    {
+      "action": "inventory_before_move",
+      "sha256_recorded": true
+    },
+    {
+      "action": "move_file",
+      "old_path": "reports/paired_cluster_bootstrap_bkt_gam.json",
+      "new_path": "research_tracking/reports/paired_cluster_bootstrap_bkt_gam.json",
+      "bytes_verified": true
+    },
+    {
+      "action": "remove_empty_reports_directory",
+      "completed": true
+    },
+    {
+      "action": "optional_cache_cleanup",
+      "completed": false,
+      "reason": "access denied, preserved"
+    },
+    {
+      "action": "references_and_integrity_verified",
+      "local_links": 109,
+      "new_report_index": "research_tracking/reports/README.md",
+      "durable_policy": "AGENTS.md"
+    },
+    {
+      "action": "preserve_original_crlf_in_git",
+      "note": "Raw CRLF bytes giữ nguyên; per-file whitespace cr-at-eol nhận biết EOL gốc, không đổi global Git config hoặc tắt kiểm whitespace cho code."
+    }
+  ],
+  "updated_utc": "2026-11-07T08:54:54.410093+00:00",
+  "completed_utc": "2026-11-07T08:56:09.243562+00:00",
+  "validation": {
+    "local_links_checked": 109,
+    "missing_links": 0,
+    "registry_changes": "Only2location refs; statistical results/protocol unchanged",
+    "historical_bundles_verified": 20,
+    "historical_outputs_verified": 196,
+    "source_gate_status": "PASS",
+    "experiment_or_holdout_rerun": false,
+    "models_predictions_or_old_manifests_modified": false
+  }
+}

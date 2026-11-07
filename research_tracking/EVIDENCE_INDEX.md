@@ -13,7 +13,7 @@ Git class dựa trên repo-local ignore và status trong lượt audit. Ignored 
 | E-007 | experiments/gam_kt/results/wsl_cpp/cv/cv.json | ignored | GAM fold/common-row metrics | VERIFIED | Completed, 5 folds, 194 fallback, no holdout. |
 | E-008 | experiments/gam_kt/results/wsl_cpp/cv/report_vi.md; pilot/report_vi.md | ignored | GAM reports | VERIFIED đối chiếu JSON | Fold/runtime/pilot summaries. |
 | E-009 | docs/gam-kt-integration.md; src/knowledge_tracing/gam_kt/; tests/gam_kt/test_model_parity.py | tracked | Protocol/model parity refs | VERIFIED | Test không chạy lại. |
-| E-010 | reports/paired_cluster_bootstrap_bkt_gam.json | tracked | Paired learner bootstrap | VERIFIED | 1,000 resamples, seed, estimates/CI bốn metric; không AUC. |
+| E-010 | research_tracking/reports/paired_cluster_bootstrap_bkt_gam.json | tracked | Paired learner bootstrap | VERIFIED | 1,000 resamples, seed, estimates/CI bốn metric; không AUC. |
 | E-011 | docs/research/bkt-gam-kt-baseline-benchmark-report.md | tracked | Research interpretation | VERIFIED đối chiếu result/bootstrap JSON | Kết luận giới hạn ở Development/stored folds. |
 | E-012 | artifacts/akt/preflight/gate2.json; gate2-tests.log | ignored | AKT technical Gate 2 | VERIFIED từ report/log | PASS; 155 pass, source/build/lock/log hashes. |
 | E-013 | experiments/akt/results/smoke-task13-20261101-03/manifest.json | ignored | AKT smoke | VERIFIED | Status completed; caps/summary. |

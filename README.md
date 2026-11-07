@@ -10,7 +10,7 @@ Bắt đầu tại **[Bản đồ repository và bằng chứng KLTN](docs/REPOS
 - Phân tích RQ/pilot mới: [research_tracking/reports](research_tracking/reports/); bằng chứng theo run ở [research_tracking/runs](research_tracking/runs/).
 - Phạm vi RQ và kế hoạch hiện hành: [research traceability](docs/thesis_recovery/02_RESEARCH_TRACEABILITY.md), [task backlog](docs/thesis_recovery/TASKS.json).
 
-`reports/` ở gốc giữ output thống kê BKT–GAM cũ; `_context/` giữ ngữ cảnh baseline BKT. Hai thư mục này không đại diện toàn bộ trạng thái KLTN hiện tại. Nội dung trong `artifacts/` gồm cả đầu vào/source đang sử dụng, không chỉ cache.
+Báo cáo tổng hợp đã thống nhất ở [research_tracking/reports](research_tracking/reports/README.md); output BKT–GAM từ root `reports/` đã chuyển vào đây với hash giữ nguyên. `_context/` giữ ngữ cảnh baseline BKT, không đại diện toàn bộ ba RQ. Nội dung trong `artifacts/` gồm cả đầu vào/source đang sử dụng, không chỉ cache. Quy ước duy trì được ghi trong `AGENTS.md`.
 
 ## Bắt đầu
 

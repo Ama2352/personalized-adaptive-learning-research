@@ -54,7 +54,9 @@ AUC được tính chính xác trên từng fold và nằm trong bảng common-r
 ## Tái lập bootstrap
 
 ```powershell
-.\venv\Scripts\python.exe scripts/bootstrap_bkt_gam_cv.py --replicates 1000 --seed 20261030 --output reports/paired_cluster_bootstrap_bkt_gam.json
+$bootstrapReport = 'research_tracking/reports/paired_cluster_bootstrap_bkt_gam_RECHECK_NEW_RUN_ID.json'
+if (Test-Path -LiteralPath $bootstrapReport) { throw 'Output already exists; choose a new run ID' }
+.\.venv\Scripts\python.exe scripts/bootstrap_bkt_gam_cv.py --replicates 1000 --seed 20261030 --output $bootstrapReport
 ```
 
-Script chỉ đọc Parquet predictions theo fold đã lưu, kiểm tra join/alignment/coverage, tổng hợp sufficient statistics theo learner trong DuckDB rồi bootstrap. Nó không nạp toàn bộ bảng predictions vào RAM. JSON kết quả mới được ghi vào `reports/`, không ghi đè report hay artifacts CV cũ.
+Thay `NEW_RUN_ID` bằng ID mới trước khi chạy trong phạm vi được duyệt. Script chỉ đọc Parquet predictions theo fold đã lưu, kiểm tra join/alignment/coverage, tổng hợp sufficient statistics theo learner trong DuckDB rồi bootstrap. Nó không nạp toàn bộ bảng predictions vào RAM. JSON mới dùng output riêng trong `research_tracking/reports/`, không ghi đè [JSON lịch sử](../research_tracking/reports/paired_cluster_bootstrap_bkt_gam.json) hoặc artifacts CV cũ. JSON lịch sử chỉ được chuyển vị trí ngày07/11, không tính lại; xem [relocation manifest](../research_tracking/reports/report_relocation_20261107.json).
