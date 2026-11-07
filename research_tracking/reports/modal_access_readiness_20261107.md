@@ -8,6 +8,8 @@ Chỉ gọi handshake ClientHello, TokenInfoGet và WorkspaceSettings. Không g�
 
 Nguồn: [bundle5outputs](../runs/cpu-modal-access-20261107-01/README.md), có exact probe source, manifest nguồn/output hashes, log kiểm và sanitized API result. [Bản tổng hợp JSON](modal_access_readiness_20261107.json) tham chiếu SHA của API result và local audit. Kiểm prefix credential trong bundle không phát hiện chuỗi giống token; private config vẫn Gitignored và không tracked.
 
+Sau commitbac8662, đối chiếu manifest và5outputs với bytes trong Git đềuPASS; không có credential file tracked. Chỉ mục tách phần collector khỏi phần xác thực vận hành để không phân loại nhầm evidence. Không chạy lại suite401 vì không sửa source pipeline; đã kiểm source/lock binding,24links và state/registry consistency.
+
 ## Tách xác thực khỏi GPU readiness
 
 | Điều kiện | Trạng thái và nguồn |

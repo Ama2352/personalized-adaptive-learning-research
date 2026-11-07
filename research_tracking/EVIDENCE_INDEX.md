@@ -83,12 +83,12 @@ Kitv6 có113source/fixture files, source-only notebook copies và project venv. 
 
 ## Collector và KT simulator windows07/11
 
-## Modal access chỉ đọc07/11 — vận hành, không thí nghiệm RQ
-
-`runs/cpu-modal-access-20261107-01`:5outputs gồm exact read-only probe và sanitized result; API xác nhận profilekltn/workspacehonguyenminhsang2005, environmentmain, builder2026.10, expiry14/11/2026 17:37:38 Asia/Saigon. Không lưu tokenID/secret/raw SDKoutput hoặc privateconfig hash; không compute/image/Volume/settings mutation. Đọc `reports/modal_access_readiness_20261107.md` về những gì API chưa xác minh: credit/spendlimits và actualCUDA/training readiness.
-
 `runs/cpu-sim-collector-20261107-02`:60targeted tests/no fail/error/skip, Paper2-equation train-only2×12fixture, repeat/source replay exact,24target rows/12windows,0NN/optimizer. Observable/oracle/manifest tách riêng. `...-01` giữ failedpytestcollection vì trùng tên modules; không sửa historical bundle. Xem report simulator_collection_runner_20261107.md; corpus/training/calibration/refit/final research runner chưa hoàn thành.
 
 `...-03-semantic` và `...-04-portable`: collectorv2,64/65tests, domain từsemantic definitions/constants/inputs/clock, giữ RNGnamespacev1. `cpu-sim-collector-trials-20261107-01` archive12outputs có failedlocaltrials/source/static domain audit. V10 source kit135files SHA db6b122df8297135db04ad63835b3d96909b403467456983b9c04b5082049eab; report colab_bundle_v10_verification_20261107.json chỉ ZIP integrity/source parity, không actual runtime execution. Registry mới backfill terminal manifest indices, không thêm claimed RQ experiments.
 
 `runs/cpu-sim-collector-gate-20261107-01`:14outputs, Gate2-13 **401pass374.53s** nofail/error/skip, source-bound current;396gatev1 chỉsnapshot. V1/v2/finalfixture oracle/RNG exact, testsource v1snapshot đúnghash; runtime/CUDA chưa kiểm. Report simulator_collection_runner_20261107.md có giới hạn và nextscope.
+
+## Modal access chỉ đọc07/11 — vận hành, không thí nghiệm RQ
+
+`runs/cpu-modal-access-20261107-01`:5outputs gồm exact read-only probe và sanitized result; API xác nhận profilekltn/workspacehonguyenminhsang2005, environmentmain, builder2026.10, expiry14/11/2026 17:37:38 Asia/Saigon. Không lưu tokenID/secret/raw SDKoutput hoặc privateconfig hash; không compute/image/Volume/settings mutation. Đọc `reports/modal_access_readiness_20261107.md` về những gì API chưa xác minh: credit/spendlimits và actualCUDA/training readiness.
