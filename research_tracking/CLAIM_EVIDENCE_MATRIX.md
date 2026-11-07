@@ -36,3 +36,7 @@ Run32learner và run mở rộng256learner có notes/manifests riêng. Xem repor
 ## CPU-RQ2-COMMON — Coverage và learner weighting
 
 `runs/cpu-junyi-common-20261107-01/common_population.json` kiểm fixed-denominator learner/child diagnostic và identity negative control0. Chỉ1–7/239eligible learners có prior score đổi dưới mỗi control. Low exposure làm null comparison yếu; không suy graph neutral hoặc instructional benefit. `reports/cpu_common_population_20261107.md` ghi scope/estimand/attrition.
+
+## CPU-SIM-KT-INTERFACE — Causal query/probe plumbing
+
+Native AKT online/offline/geometry/OOV và session isolation được kiểm bằng synthetic fixtures và Paper2 bank metadata. Không là CG-AKT efficacy. Delayed-query invariance cho thấy native model không biết elapsed calendar time, không chứng minh latent retention bất biến. Source/export bug H3/T2 được tái hiện/sửa; historical predictions giữ nguyên. Xem simulator_kt_interface_20261107.md và runs/cpu-sim-kt-interface-20261107-01/02.

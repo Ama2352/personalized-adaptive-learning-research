@@ -187,3 +187,14 @@ def test_default_100_100_geometry_keeps_legacy_window_predictions_and_online_bou
         score=backend.predict_next(history,ItemQuery(event.exercise,event.time_done,event.source_row),learner_id='eval')
         assert score.probability == pytest.approx(exported[rank].prediction,abs=1e-6,rel=0)
         assert score.history_used == exported[rank].history_used
+
+
+def test_original_akt_has_no_elapsed_time_feature_despite_timestamped_api(tmp_path):
+    fixture=fitted_fixture(tmp_path)
+    backend=load(fixture)
+    session=OnlineSession(backend,fixture[0],learner_id='eval',max_events=10)
+    session.observe(session.predict(ItemQuery('A',0,1)),1)
+    immediate=session.probe(ItemQuery('B',1,2))
+    delayed=session.probe(ItemQuery('B',14*86400,2))
+    assert immediate == delayed
+    # Đây là giới hạn architecture nguồn; không gọi delayed p là retained latent mastery.

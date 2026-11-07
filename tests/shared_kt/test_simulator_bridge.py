@@ -135,3 +135,15 @@ def test_domain_and_item_bank_mapping_are_not_numeric_index_transfer():
     session.backend.model_id='new-checkpoint'
     with pytest.raises(ValueError,match='binding'):
         session.snapshot()
+    with pytest.raises(ValueError,match='binding'):
+        session.probe(ItemQuery('A',0,1))
+
+
+def test_reference_weights_and_metadata_are_canonical_immutable_values():
+    mutable=[['A',.5],['B',.5]]
+    reference=ReferenceSet('C',mutable)
+    mutable[0][1]=.9
+    assert reference.item_weights == (('A',.5),('B',.5))
+    first=SimulatorBank('sim',(SimulatorItem('A','C',1000),))
+    second=SimulatorBank('sim',(SimulatorItem('A','C',1000.),))
+    assert first.identity == second.identity

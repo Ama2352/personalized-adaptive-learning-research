@@ -66,3 +66,7 @@ Kitv6 có113source/fixture files, source-only notebook copies và project venv. 
 ## AKT recovery source-bound Gate2, cập nhật cuối07/11
 
 `runs/cpu-akt-recovery-20261107-01` archive24outputs: Gate2-07 failure, Gate2-08 success274tests và `lifecycle_proof.json`. Model/Adam/RNG/predictions của2actual CLI synthetic cases khớp exact. Không real-data/GPU. Xem `docs/thesis_recovery/17_AKT_RECOVERY_ENGINEERING_LOG.md`.
+
+## Simulator–KT interface07/11
+
+`runs/cpu-sim-kt-interface-20261107-01` và `...-02`: complete synthetic engineering lifecycle,28concept/84item,168targets/1update, noJunyi/Holdout/GPU. Checkpoint ngoài bundle, source/output SHA trong manifest. Đọc `reports/simulator_kt_interface_20261107.md` về semantics, double-window bug và pending calibration/mastery protocol.

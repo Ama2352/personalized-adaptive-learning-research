@@ -8,6 +8,7 @@ from dataclasses import asdict, dataclass
 import hashlib
 import json
 import math
+from numbers import Real
 from typing import Protocol
 import uuid
 
@@ -31,8 +32,10 @@ class SimulatorItem:
     def __post_init__(self):
         _identifier(self.item_id)
         _identifier(self.concept_id)
-        if isinstance(self.difficulty, bool) or not math.isfinite(self.difficulty):
+        if (isinstance(self.difficulty, bool) or not isinstance(self.difficulty, Real)
+                or not math.isfinite(self.difficulty)):
             raise ValueError('invalid item difficulty')
+        object.__setattr__(self, 'difficulty', float(self.difficulty))
 
 
 @dataclass(frozen=True)
@@ -95,9 +98,11 @@ class OnlineScore:
         if self.prediction_kind == 'unseen_item':
             if self.probability is not None:
                 raise ValueError('unseen item cannot have a fitted probability')
-        elif (self.probability is None or isinstance(self.probability, bool)
+        elif (self.probability is None or isinstance(self.probability, bool) or not isinstance(self.probability, Real)
               or not math.isfinite(self.probability) or not 0 <= self.probability <= 1):
             raise ValueError('invalid online probability')
+        if self.probability is not None:
+            object.__setattr__(self, 'probability', float(self.probability))
         if (any(type(value) is not int or value < 0 for value in
                 (self.history_available, self.history_used, self.global_rank))
                 or self.history_used > self.history_available or type(self.context_reset) is not bool):
@@ -167,8 +172,8 @@ class OnlineSession:
 
     def probe(self, query: ItemQuery) -> OnlineScore:
         self._check_query(query, self._history)
-        if self.backend.domain != self.bank.identity:
-            raise ValueError('backend domain changed during session')
+        if self.backend.domain != self.bank.identity or self.backend.model_id != self._model_id:
+            raise ValueError('backend binding changed during session')
         score = self.backend.predict_next(self._history, query, learner_id=self.learner_id)
         if not isinstance(score, OnlineScore) or score.global_rank != len(self._history):
             raise ValueError('backend returned inconsistent online score')
@@ -241,7 +246,8 @@ class ReferenceSet:
                        or not math.isfinite(weight) or weight <= 0 for item, weight in self.item_weights)
                 or not math.isclose(sum(weight for _, weight in self.item_weights), 1, rel_tol=0, abs_tol=1e-12)):
             raise ValueError('invalid or unnormalized reference weights')
-        object.__setattr__(self, 'item_weights', tuple(sorted(self.item_weights)))
+        object.__setattr__(self, 'item_weights', tuple(sorted((item, float(weight))
+                                                            for item, weight in self.item_weights)))
 
 
 def probe_references(session: OnlineSession, references: tuple[ReferenceSet, ...], *,

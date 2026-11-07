@@ -52,7 +52,8 @@ class AKTOnlineBackend:
         self._adapter, self._bank = adapter, bank
         self._checkpoint_id = checkpoint_id
         self._recipe = inference_recipe(adapter.config)
-        self._parameter_versions = tuple((name, parameter._version)
+        self._vocabulary = tuple(adapter.encoding.vocabulary.values)
+        self._parameter_versions = tuple((name, id(parameter), parameter._version)
             for name, parameter in adapter.native.named_parameters())
 
     @property
@@ -65,7 +66,8 @@ class AKTOnlineBackend:
 
     def predict_next(self, history: tuple[Observation, ...], query: ItemQuery, *, learner_id: str) -> OnlineScore:
         if (inference_recipe(self._adapter.config) != self._recipe
-                or self._parameter_versions != tuple((name, parameter._version)
+                or tuple(self._adapter.encoding.vocabulary.values) != self._vocabulary
+                or self._parameter_versions != tuple((name, id(parameter), parameter._version)
                     for name, parameter in self._adapter.native.named_parameters())):
             raise ValueError('frozen inference model changed during online use')
         if not isinstance(query, ItemQuery) or not learner_id or query.item_id not in self._bank.item_ids:

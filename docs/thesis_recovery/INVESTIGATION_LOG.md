@@ -117,3 +117,7 @@ Gate2-07 271pass2fail do Windows long temp path, khôngpublish; sửa short temp
 ## 07/11/2026 — Native online parity và double re-anchor bug
 
 SIM02 actual AKT fixture train8events≤2updates, SHA/domain/recipe/vocab/selected-checkpoint guards; frozen model and RNG, snapshot/reset/crosslearner verified. New regression xác nhận export double-window bug H3/T2,3/11predictions maxabs0.00178698. Direct predict_window sửa semantics, default H100/T100205events+OOV legacy/direct parity1e-6.36tests pass24.80s sau fake adapter API update; failed logs giữ. Không realdata/GPU/Holdout hoặc sửa historical artifacts.
+
+## 07/11/2026 — Paper2 bank lifecycle và architecture boundary
+
+SIM03 dùng28concept/84item, arithmetic labels,168targets1epoch1update d16CPU. Run01 11.99s, run02 11.07s sau metadata/binding hardening, cả2complete. Native state và reference scores trùng exact; full JSON khác vì checkpoint SHA/telemetry/provenance, repeat proof tách đúng layers.19native/contract tests pass19.86s gồm delayed-query invariance: original AKT không nhận elapsed time. Không dùng raw reference score làm mastery/retention. Report simulator_kt_interface_20261107.md. Gate2-09 đangchạy, không claimPASS sớm.

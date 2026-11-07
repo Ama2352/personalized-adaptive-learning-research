@@ -30,3 +30,9 @@ Pure contract10tests pass. Actual AKT fixture train8events, tối đa2updates; k
 Phát hiện bug export: `iter_predictions` gọi `adapter.predict` trên window đã có geometry, làm re-anchor lần2. Fixture H3/T2 cho3/11predictions khác, maxabs0.00178698 (`sim-parity-02.log`). Thêm `predict_window` chấm trực tiếp, online và export cùng dùng. Đây là software bug ở cấu hình hợp lệ, không đổi hyperparameters/selection protocol. Fixture H100/T100 với205events vàOOV xác minh old-local-window và direct-window parity abs1e-6, cùng online boundaries. Không suy tất cả run cũ hỏng hoặc sửa historical predictions.
 
 Lưu failures: `sim-online-01`14pass1fail do test setup dùng strict shared vocabulary cho OOV; sửa fixture encoding, không nới shared API. `sim-export-03`25pass10fail do FakeAdapter chưa cập nhật interface mới; đổi fixture sang `predict_window`, không fallback production sang re-anchor cũ. Logs giữ nguyên. Gate2 full build còn cần refresh sau SIM03 ổn định.
+
+## SIM03 và review
+
+Hai Paper2 bank integration runs train168synthetic targets/1epoch/1update, đủ28concept/84items. Run01/02 đạt lifecycle trong11.99s/11.07s; không là KT benchmark hoặc predictor of learning gain. Run02 dùng canonical immutable difficulty/weights và binding checks đã harden, frozen model state/reference scores trùng run01. Full checkpoint SHA khác do telemetry, nên history fingerprints khác là đúng. Xem report `research_tracking/reports/simulator_kt_interface_20261107.md` và repeat-proof JSON.
+
+Review thêm direct-probe binding drift và nested reference mutability; sửa trước final gate.19native/contract tests passed19.86s (`sim-binding-05.log`), gồm timestamp-gap invariance của original AKT. Query timestamp không là elapsed-time feature: không dùng KT score14ngày làm retained latent mastery. Đây là architecture limitation, không phải bug cần sửa model. S04/S05 và simulator-training-data validation vẫn chờ protocol.
