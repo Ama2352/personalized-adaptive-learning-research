@@ -1060,7 +1060,165 @@
       "status": "IN_PROGRESS",
       "blockers": [
         "See15_CPU_ENGINEERING_PLAN.md and cpu report"
+      ],
+      "subtasks": [
+        "REC01",
+        "REC02",
+        "REC03",
+        "REC04",
+        "REC05",
+        "REC06"
       ]
+    },
+    {
+      "id": "REC01",
+      "research_objective": "Recovery request schema, default off",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "akt_recovery",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "CPU01"
+      ],
+      "required_inputs": "16_AKT_CLI_RECOVERY_CONTRACT.md, current source-bound Gate2, checkpoint/authorization fixtures",
+      "files_components": "src/knowledge_tracing/akt/{config,authorization,training,resumable,runner,watchdog}.py; tests/akt",
+      "implementation_objective": "Recovery request schema, default off",
+      "acceptance_criteria": "Schema/hash/path được kiểm trước data load, caller hiện tại giữ hành vi",
+      "verification_steps": "Unit/synthetic CPU, then actual CLI subprocess tests, refresh Gate2 after stable changes",
+      "required_artifacts": "Run manifest, source/input hashes, interrupted/continuous/resumed comparison, failed attempt logs",
+      "estimated_effort": "0.5–1 engineering day each, revise after interface review",
+      "compute_cost_category": "local CPU synthetic",
+      "authorization_requirements": "Safe engineering authorized; real-data/GPU/full-fold needs run-specific authorization",
+      "status": "PLANNED",
+      "blockers": []
+    },
+    {
+      "id": "REC02",
+      "research_objective": "Bind authorization với checkpoint và semantic identity",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "akt_recovery",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "REC01"
+      ],
+      "required_inputs": "16_AKT_CLI_RECOVERY_CONTRACT.md, current source-bound Gate2, checkpoint/authorization fixtures",
+      "files_components": "src/knowledge_tracing/akt/{config,authorization,training,resumable,runner,watchdog}.py; tests/akt",
+      "implementation_objective": "Bind authorization với checkpoint và semantic identity",
+      "acceptance_criteria": "Thay checkpoint/config/split/budget bị chặn trước data load",
+      "verification_steps": "Unit/synthetic CPU, then actual CLI subprocess tests, refresh Gate2 after stable changes",
+      "required_artifacts": "Run manifest, source/input hashes, interrupted/continuous/resumed comparison, failed attempt logs",
+      "estimated_effort": "0.5–1 engineering day each, revise after interface review",
+      "compute_cost_category": "local CPU synthetic",
+      "authorization_requirements": "Safe engineering authorized; real-data/GPU/full-fold needs run-specific authorization",
+      "status": "PLANNED",
+      "blockers": []
+    },
+    {
+      "id": "REC03",
+      "research_objective": "Resume-fork complete-epoch selection/refit",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "akt_recovery",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "REC02"
+      ],
+      "required_inputs": "16_AKT_CLI_RECOVERY_CONTRACT.md, current source-bound Gate2, checkpoint/authorization fixtures",
+      "files_components": "src/knowledge_tracing/akt/{config,authorization,training,resumable,runner,watchdog}.py; tests/akt",
+      "implementation_objective": "Resume-fork complete-epoch selection/refit",
+      "acceptance_criteria": "Weights/selected epoch/stale epochs khớp continuous, giữ source run immutable",
+      "verification_steps": "Unit/synthetic CPU, then actual CLI subprocess tests, refresh Gate2 after stable changes",
+      "required_artifacts": "Run manifest, source/input hashes, interrupted/continuous/resumed comparison, failed attempt logs",
+      "estimated_effort": "0.5–1 engineering day each, revise after interface review",
+      "compute_cost_category": "local CPU synthetic",
+      "authorization_requirements": "Safe engineering authorized; real-data/GPU/full-fold needs run-specific authorization",
+      "status": "PLANNED",
+      "blockers": []
+    },
+    {
+      "id": "REC04",
+      "research_objective": "Nối batch recovery vào accounting chung",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "akt_recovery",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "REC03"
+      ],
+      "required_inputs": "16_AKT_CLI_RECOVERY_CONTRACT.md, current source-bound Gate2, checkpoint/authorization fixtures",
+      "files_components": "src/knowledge_tracing/akt/{config,authorization,training,resumable,runner,watchdog}.py; tests/akt",
+      "implementation_objective": "Nối batch recovery vào accounting chung",
+      "acceptance_criteria": "Không skip/duplicate target, counters/budget không reset khi resume",
+      "verification_steps": "Unit/synthetic CPU, then actual CLI subprocess tests, refresh Gate2 after stable changes",
+      "required_artifacts": "Run manifest, source/input hashes, interrupted/continuous/resumed comparison, failed attempt logs",
+      "estimated_effort": "0.5–1 engineering day each, revise after interface review",
+      "compute_cost_category": "local CPU synthetic",
+      "authorization_requirements": "Safe engineering authorized; real-data/GPU/full-fold needs run-specific authorization",
+      "status": "PLANNED",
+      "blockers": []
+    },
+    {
+      "id": "REC05",
+      "research_objective": "Watchdog attempt và cumulative workload",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "akt_recovery",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "REC04"
+      ],
+      "required_inputs": "16_AKT_CLI_RECOVERY_CONTRACT.md, current source-bound Gate2, checkpoint/authorization fixtures",
+      "files_components": "src/knowledge_tracing/akt/{config,authorization,training,resumable,runner,watchdog}.py; tests/akt",
+      "implementation_objective": "Watchdog attempt và cumulative workload",
+      "acceptance_criteria": "Retry không tự tăng budget, mỗi attempt có manifest/log riêng",
+      "verification_steps": "Unit/synthetic CPU, then actual CLI subprocess tests, refresh Gate2 after stable changes",
+      "required_artifacts": "Run manifest, source/input hashes, interrupted/continuous/resumed comparison, failed attempt logs",
+      "estimated_effort": "0.5–1 engineering day each, revise after interface review",
+      "compute_cost_category": "local CPU synthetic",
+      "authorization_requirements": "Safe engineering authorized; real-data/GPU/full-fold needs run-specific authorization",
+      "status": "PLANNED",
+      "blockers": []
+    },
+    {
+      "id": "REC06",
+      "research_objective": "Public CLI synthetic interruption lifecycle",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "akt_recovery",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "REC05"
+      ],
+      "required_inputs": "16_AKT_CLI_RECOVERY_CONTRACT.md, current source-bound Gate2, checkpoint/authorization fixtures",
+      "files_components": "src/knowledge_tracing/akt/{config,authorization,training,resumable,runner,watchdog}.py; tests/akt",
+      "implementation_objective": "Public CLI synthetic interruption lifecycle",
+      "acceptance_criteria": "Subprocess CLI thật ngắt/resume/export khớp tolerance, gates giữ nguyên",
+      "verification_steps": "Unit/synthetic CPU, then actual CLI subprocess tests, refresh Gate2 after stable changes",
+      "required_artifacts": "Run manifest, source/input hashes, interrupted/continuous/resumed comparison, failed attempt logs",
+      "estimated_effort": "0.5–1 engineering day each, revise after interface review",
+      "compute_cost_category": "local CPU synthetic",
+      "authorization_requirements": "Safe engineering authorized; real-data/GPU/full-fold needs run-specific authorization",
+      "status": "PLANNED",
+      "blockers": []
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",
