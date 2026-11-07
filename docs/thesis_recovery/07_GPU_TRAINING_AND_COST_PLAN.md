@@ -85,3 +85,15 @@ Stop khi source/data/graph identity mismatch, NaN/Inf, duplicate targets, covera
 ## Chi phí inference sau interface07/11
 
 Training GPU không là toàn bộ compute matrix. Reference bank3items×28concepts cần84counterfactual queries mỗi lần đo đầy đủ. Workload inference xấp xỉ learner×steps×conditions×seeds×reference_queries, cộng action queries chưa reuse trong cùng revision. Stage5 phải benchmark query throughput và controller/serialization overhead, tách train/validation/export. SIM05 giữ training batchcap, gom independent windows; fixture d16CPU84queries giảm84→42native calls,0.815→0.393s, không ngoại suy GPU. Không nối candidates thành fake history hoặc cache qua observe để tiết kiệm; global AKT history có thể đổi mọi concept scores. S04 reference-bank choice và numerical threshold convention ảnh hưởng cả scientific estimand lẫn cost, phải freeze trước train/evaluate.
+
+## Readiness engineering cập nhật07/11 — không thay bảng giá snapshot06/11
+
+Các mục missing trong phần đầu là audit snapshot. REC01–06 hiện đã có CPU synthetic sampler/model/Adam/RNG/CLI selection/refit recovery proof, archive `cpu-akt-recovery-20261107-01`; không còn coi đây là toàn bộ code chưa cài. Linux/CUDA/Volume durability chưa được chứng minh, vẫn thuộc T14. DATA05/06 có collector train-only fixture và simulator role-aware windows/collation, không là complete simulated training runner hoặc full research corpus. Report `simulator_collection_runner_20261107.md` ghi scope và trials.
+
+Ba chốt cần xử lý trước remote lifecycle:
+
+1. `requirements-akt.lock.txt` chứa Windows cp313 wheels và CPU Torch. Không dùng nó để install Linux/CUDA image. Cần lock/image digest riêng theo runtime thật trong project environment; không sửa dependency global hoặc thay file lock lịch sử để làm hash trông hợp lệ.
+2. `scripts/akt/check_runtime.py::inspect_runtime` yêu cầu Torch/NumPy origin bên trong project venv. Colab notebook dùng `--system-site-packages` để tận dụng Torch sẵn có: hai chế độ này có contract khác nhau. Không lấy Colab probe thay cho main pipeline runtime authorization; cần explicit remote-runtime contract và provenance trước real-data worker. Không nới origin check âm thầm.
+3. Portable bundle strip notebook outputs/metadata: full notebook storage SHA sẽ khác, dù source equations giống nhau. Collector domain identity phải dựa semantic definitions/constants/input/clock, còn storage SHA giữ ở integrity provenance. Static audit đã xác nhận v1 mismatch trước cloud; sửa và test trước checkpoint handoff. Domain cũ không được tự sửa trong historical checkpoints/bundles.
+
+Hiện `synthetic_device_probe.py --device cuda --output-dir <new>` là bounded synthetic400targets/1step với reload/export/causality checks, **không** là real-data/full-training/Gate4 pass hoặc mid-epoch CUDA recovery proof. Chưa chạy nó trong invocation này. Lệnh GPU còn cần runtime/account/budget được kết nối và allocation explicit; không provision trong khi làm CPU engineering.

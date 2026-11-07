@@ -57,3 +57,11 @@ Return tách trajectories observable, oracle sidecar và manifest. Oracle lưu i
 - Adapter này chưa là complete training/epoch-selection/checkpoint runner. Native CPU collator nhận được windows và đúng24unique target rows trong integration fixture; không instantiate NN/optimizer.
 
 Fixture `cpu-sim-collector-20261107-02` và60targeted tests kiểm exact source-environment replay, repeat observable/oracle, profile-independent logging/RNG, global RNG invariance, caps/clock/role/oracle guards, OOV, source-bound vocabulary, target accounting và existing-window/collator parity. `...-01` failed vì tên hai pytest modules trùng nhau: giữ cả failed bundle, đổi tên test mới, không xóa cache để che lỗi. Trial local đầu lỗi Windows provenance path cũng được lưu source/log riêng. Software gate361 cũ stale sau source changes; cần Gate2 mới trước final acceptance.
+
+### Review portability trước paid run
+
+Static audit dùng đúng `build_colab_bundle.py::bundle_contents` xác nhận notebook original SHA353f487a... và output-stripped bundle-copy SHA53c2c814... khác nhau, nhưng mọi cell source identical. Domain v1 hash toàn provenance nên hai môi trường bị coi khác nhau dù phương trình/input không đổi. Đây là compatibility bug trong collector mới, không là bug của Paper2 hoặc evidence sai về learning.
+
+Sửa cần thiết: domain semantic identity dùng definition source hashes, constants được loader bind, immutable input hashes và clock unit; full notebook SHA vẫn giữ ở provenance/artifact integrity. Collector version mới phải giữ RNG namespace v1 riêng để không đổi responses chỉ vì sửa identity. Test phải kiểm metadata/output stripping giữ domain; đổi equation hash/constants/true-graph inputs phải đổi domain. Actual Linux/CUDA execution vẫn cần ladder riêng. Không sửa domain trong bundle v1 lịch sử hoặc tự chấp nhận checkpoint có binding khác.
+
+DATA07 đã cài collectorv2 semantic identity, giữ RNG_NAMESPACEv1, negative controls equation/constants/graph và idempotent stripped-checkout test. Run03/04 đạt64/65targeted tests; v1→v2oracle/RNG/queries/labels khớp exact. Gate2-12v1 đạt396tests374.84s; finalsource sau fix cần Gate2-13 riêng với explicit540sCPUsoftware budget (khôngtrainingcap). Nguồn/results v1 giữ nguyên, không gán lại domain trong artifacts lịch sử.

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="3" failures="2" skipped="0" tests="13" time="2.531" timestamp="2026-11-07T16:30:53.728523+07:00" hostname="Ama"><testcase classname="tests.shared_kt.test_simulator_collection" name="test_deterministic_collection_and_observable_oracle_separation" time="0.120"><error message="failed on setup with &quot;StopIteration&quot;">@pytest.fixture(scope='module')
+    def collected():
+        plan, profiles, recipe = setup()
+&gt;       return collect_training_fixture(plan, profiles=profiles, recipe=recipe)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_simulator_collection.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+plan = SimulatorSplitPlan(namespace='collector-unit-fixture-only', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+profiles = {'sim-b3e288933943312eeaa26e90ffd7d4a4afe4eb09625290300fde6d2c3f2f2b49': 'PY', 'sim-408038319dd39767b066b69a96ba97cfc237f0cead8c77aaf9a4fa4dab60efac': 'PG'}
+recipe = CollectionRecipe(policy='uniform_items', events_per_learner=12, start_unix_seconds=1767225600, gap_seconds=1800, max_wall_seconds=30)
+
+    def collect_training_fixture(plan: SimulatorSplitPlan, *, profiles: dict[str, str], recipe: CollectionRecipe):
+        """Sinh train-only; profiles và uniforms không đi vào observable schema.
+    
+    Không có tham số estimator/controller graph. True graph/source giữ cố định.
+    Role khác chỉ có assignments trong plan, không sinh trajectory hay oracle state.
+    """
+        started = time.perf_counter()
+        if type(recipe) is not CollectionRecipe:
+            raise ValueError('explicit collection recipe required')
+        assignments = plan.assignments('train')
+        if len(assignments) &gt; MAX_LEARNERS:
+            raise ValueError('fixture learner cap exceeded; full cohort needs separate protocol/entrypoint')
+        if not isinstance(profiles, dict) or set(profiles) != {a.learner_id for a in assignments}:
+            raise ValueError('profile metadata must match exactly train learners')
+    
+        def deadline():
+            if time.perf_counter() - started &gt; recipe.max_wall_seconds:
+                raise TimeoutError('collector fixture wall budget exhausted')
+    
+        reference = load_reference()
+        env_scope = reference['environment']
+        if any(profile not in env_scope['PERSONAS'] for profile in profiles.values()):
+            raise ValueError('unknown Paper2 profile')
+        provenance = reference['provenance']
+        # Domain gắn source/true-graph/item-bank/clock; behavior distribution thuộc recipe.
+        domain = identity_hash({'source': provenance, 'timestamp_unit': CLOCK_UNIT})
+&gt;       question_path = next(ROOT / name for name in provenance['inputs'] if name.endswith('/question_bank.csv'))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+src\knowledge_tracing\simulator_collection.py:105: StopIteration</error></testcase><testcase classname="tests.shared_kt.test_simulator_collection" name="test_original_environment_replay_exact_state_outcome_and_clock" time="0.001"><error message="failed on setup with &quot;StopIteration&quot;">@pytest.fixture(scope='module')
+    def collected():
+        plan, profiles, recipe = setup()
+&gt;       return collect_training_fixture(plan, profiles=profiles, recipe=recipe)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_simulator_collection.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+plan = SimulatorSplitPlan(namespace='collector-unit-fixture-only', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+profiles = {'sim-b3e288933943312eeaa26e90ffd7d4a4afe4eb09625290300fde6d2c3f2f2b49': 'PY', 'sim-408038319dd39767b066b69a96ba97cfc237f0cead8c77aaf9a4fa4dab60efac': 'PG'}
+recipe = CollectionRecipe(policy='uniform_items', events_per_learner=12, start_unix_seconds=1767225600, gap_seconds=1800, max_wall_seconds=30)
+
+    def collect_training_fixture(plan: SimulatorSplitPlan, *, profiles: dict[str, str], recipe: CollectionRecipe):
+        """Sinh train-only; profiles và uniforms không đi vào observable schema.
+    
+    Không có tham số estimator/controller graph. True graph/source giữ cố định.
+    Role khác chỉ có assignments trong plan, không sinh trajectory hay oracle state.
+    """
+        started = time.perf_counter()
+        if type(recipe) is not CollectionRecipe:
+            raise ValueError('explicit collection recipe required')
+        assignments = plan.assignments('train')
+        if len(assignments) &gt; MAX_LEARNERS:
+            raise ValueError('fixture learner cap exceeded; full cohort needs separate protocol/entrypoint')
+        if not isinstance(profiles, dict) or set(profiles) != {a.learner_id for a in assignments}:
+            raise ValueError('profile metadata must match exactly train learners')
+    
+        def deadline():
+            if time.perf_counter() - started &gt; recipe.max_wall_seconds:
+                raise TimeoutError('collector fixture wall budget exhausted')
+    
+        reference = load_reference()
+        env_scope = reference['environment']
+        if any(profile not in env_scope['PERSONAS'] for profile in profiles.values()):
+            raise ValueError('unknown Paper2 profile')
+        provenance = reference['provenance']
+        # Domain gắn source/true-graph/item-bank/clock; behavior distribution thuộc recipe.
+        domain = identity_hash({'source': provenance, 'timestamp_unit': CLOCK_UNIT})
+&gt;       question_path = next(ROOT / name for name in provenance['inputs'] if name.endswith('/question_bank.csv'))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+src\knowledge_tracing\simulator_collection.py:105: StopIteration</error></testcase><testcase classname="tests.shared_kt.test_simulator_collection" name="test_profile_changes_do_not_change_behavior_or_response_rng" time="0.000"><error message="failed on setup with &quot;StopIteration&quot;">@pytest.fixture(scope='module')
+    def collected():
+        plan, profiles, recipe = setup()
+&gt;       return collect_training_fixture(plan, profiles=profiles, recipe=recipe)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_simulator_collection.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+plan = SimulatorSplitPlan(namespace='collector-unit-fixture-only', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+profiles = {'sim-b3e288933943312eeaa26e90ffd7d4a4afe4eb09625290300fde6d2c3f2f2b49': 'PY', 'sim-408038319dd39767b066b69a96ba97cfc237f0cead8c77aaf9a4fa4dab60efac': 'PG'}
+recipe = CollectionRecipe(policy='uniform_items', events_per_learner=12, start_unix_seconds=1767225600, gap_seconds=1800, max_wall_seconds=30)
+
+    def collect_training_fixture(plan: SimulatorSplitPlan, *, profiles: dict[str, str], recipe: CollectionRecipe):
+        """Sinh train-only; profiles và uniforms không đi vào observable schema.
+    
+    Không có tham số estimator/controller graph. True graph/source giữ cố định.
+    Role khác chỉ có assignments trong plan, không sinh trajectory hay oracle state.
+    """
+        started = time.perf_counter()
+        if type(recipe) is not CollectionRecipe:
+            raise ValueError('explicit collection recipe required')
+        assignments = plan.assignments('train')
+        if len(assignments) &gt; MAX_LEARNERS:
+            raise ValueError('fixture learner cap exceeded; full cohort needs separate protocol/entrypoint')
+        if not isinstance(profiles, dict) or set(profiles) != {a.learner_id for a in assignments}:
+            raise ValueError('profile metadata must match exactly train learners')
+    
+        def deadline():
+            if time.perf_counter() - started &gt; recipe.max_wall_seconds:
+                raise TimeoutError('collector fixture wall budget exhausted')
+    
+        reference = load_reference()
+        env_scope = reference['environment']
+        if any(profile not in env_scope['PERSONAS'] for profile in profiles.values()):
+            raise ValueError('unknown Paper2 profile')
+        provenance = reference['provenance']
+        # Domain gắn source/true-graph/item-bank/clock; behavior distribution thuộc recipe.
+        domain = identity_hash({'source': provenance, 'timestamp_unit': CLOCK_UNIT})
+&gt;       question_path = next(ROOT / name for name in provenance['inputs'] if name.endswith('/question_bank.csv'))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+src\knowledge_tracing\simulator_collection.py:105: StopIteration</error></testcase><testcase classname="tests.shared_kt.test_simulator_collection" name="test_response_channel_prefix_stable_and_global_rng_untouched" time="0.088"><failure message="StopIteration">def test_response_channel_prefix_stable_and_global_rng_untouched():
+        plan, profiles, recipe = setup('cyclic_items')
+        assignment = plan.assignments('train')[0]
+        a, _ = response_channels(assignment, 4)
+        b, _ = response_channels(assignment, 12)
+        assert all(np.array_equal(a[name], b[name][:4]) for name in a)
+        assert not np.array_equal(b['outcome'], b['learning'])
+        state = np.random.get_state()
+&gt;       result = collect_training_fixture(plan, profiles=profiles, recipe=recipe)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_simulator_collection.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+plan = SimulatorSplitPlan(namespace='collector-unit-fixture-only', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+profiles = {'sim-b3e288933943312eeaa26e90ffd7d4a4afe4eb09625290300fde6d2c3f2f2b49': 'PY', 'sim-408038319dd39767b066b69a96ba97cfc237f0cead8c77aaf9a4fa4dab60efac': 'PG'}
+recipe = CollectionRecipe(policy='cyclic_items', events_per_learner=12, start_unix_seconds=1767225600, gap_seconds=1800, max_wall_seconds=30)
+
+    def collect_training_fixture(plan: SimulatorSplitPlan, *, profiles: dict[str, str], recipe: CollectionRecipe):
+        """Sinh train-only; profiles và uniforms không đi vào observable schema.
+    
+    Không có tham số estimator/controller graph. True graph/source giữ cố định.
+    Role khác chỉ có assignments trong plan, không sinh trajectory hay oracle state.
+    """
+        started = time.perf_counter()
+        if type(recipe) is not CollectionRecipe:
+            raise ValueError('explicit collection recipe required')
+        assignments = plan.assignments('train')
+        if len(assignments) &gt; MAX_LEARNERS:
+            raise ValueError('fixture learner cap exceeded; full cohort needs separate protocol/entrypoint')
+        if not isinstance(profiles, dict) or set(profiles) != {a.learner_id for a in assignments}:
+            raise ValueError('profile metadata must match exactly train learners')
+    
+        def deadline():
+            if time.perf_counter() - started &gt; recipe.max_wall_seconds:
+                raise TimeoutError('collector fixture wall budget exhausted')
+    
+        reference = load_reference()
+        env_scope = reference['environment']
+        if any(profile not in env_scope['PERSONAS'] for profile in profiles.values()):
+            raise ValueError('unknown Paper2 profile')
+        provenance = reference['provenance']
+        # Domain gắn source/true-graph/item-bank/clock; behavior distribution thuộc recipe.
+        domain = identity_hash({'source': provenance, 'timestamp_unit': CLOCK_UNIT})
+&gt;       question_path = next(ROOT / name for name in provenance['inputs'] if name.endswith('/question_bank.csv'))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+src\knowledge_tracing\simulator_collection.py:105: StopIteration</failure></testcase><testcase classname="tests.shared_kt.test_simulator_collection" name="test_collector_cannot_generate_final_or_exceed_learner_cap" time="0.002" /><testcase classname="tests.shared_kt.test_simulator_collection" name="test_recipe_fails_before_collection[events_per_learner-13]" time="0.001" /><testcase classname="tests.shared_kt.test_simulator_collection" name="test_recipe_fails_before_collection[events_per_learner-True]" time="0.001" /><testcase classname="tests.shared_kt.test_simulator_collection" name="test_recipe_fails_before_collection[start_unix_seconds--1]" time="0.001" /><testcase classname="tests.shared_kt.test_simulator_collection" name="test_recipe_fails_before_collection[gap_seconds-0]" time="0.001" /><testcase classname="tests.shared_kt.test_simulator_collection" name="test_recipe_fails_before_collection[max_wall_seconds-31]" time="0.001" /><testcase classname="tests.shared_kt.test_simulator_collection" name="test_recipe_fails_before_collection[policy-oracle_theta]" time="0.001" /><testcase classname="tests.shared_kt.test_simulator_collection" name="test_unknown_profile_and_response_cap_rejected" time="0.218" /><testcase classname="tests.shared_kt.test_simulator_collection" name="test_wall_timeout_checked_and_preserves_failure" time="0.274"><failure message="StopIteration">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000012B418D0B00&gt;
+
+    def test_wall_timeout_checked_and_preserves_failure(monkeypatch):
+        import knowledge_tracing.simulator_collection as module
+        plan, profiles, recipe = setup()
+        ticks = iter([0, 31])
+        monkeypatch.setattr(module.time, 'perf_counter', lambda: next(ticks))
+        with pytest.raises(TimeoutError, match='wall budget'):
+&gt;           collect_training_fixture(plan, profiles=profiles, recipe=recipe)
+
+tests\shared_kt\test_simulator_collection.py:122: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+plan = SimulatorSplitPlan(namespace='collector-unit-fixture-only', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+profiles = {'sim-b3e288933943312eeaa26e90ffd7d4a4afe4eb09625290300fde6d2c3f2f2b49': 'PY', 'sim-408038319dd39767b066b69a96ba97cfc237f0cead8c77aaf9a4fa4dab60efac': 'PG'}
+recipe = CollectionRecipe(policy='uniform_items', events_per_learner=12, start_unix_seconds=1767225600, gap_seconds=1800, max_wall_seconds=30)
+
+    def collect_training_fixture(plan: SimulatorSplitPlan, *, profiles: dict[str, str], recipe: CollectionRecipe):
+        """Sinh train-only; profiles và uniforms không đi vào observable schema.
+    
+    Không có tham số estimator/controller graph. True graph/source giữ cố định.
+    Role khác chỉ có assignments trong plan, không sinh trajectory hay oracle state.
+    """
+        started = time.perf_counter()
+        if type(recipe) is not CollectionRecipe:
+            raise ValueError('explicit collection recipe required')
+        assignments = plan.assignments('train')
+        if len(assignments) &gt; MAX_LEARNERS:
+            raise ValueError('fixture learner cap exceeded; full cohort needs separate protocol/entrypoint')
+        if not isinstance(profiles, dict) or set(profiles) != {a.learner_id for a in assignments}:
+            raise ValueError('profile metadata must match exactly train learners')
+    
+        def deadline():
+            if time.perf_counter() - started &gt; recipe.max_wall_seconds:
+                raise TimeoutError('collector fixture wall budget exhausted')
+    
+        reference = load_reference()
+        env_scope = reference['environment']
+        if any(profile not in env_scope['PERSONAS'] for profile in profiles.values()):
+            raise ValueError('unknown Paper2 profile')
+        provenance = reference['provenance']
+        # Domain gắn source/true-graph/item-bank/clock; behavior distribution thuộc recipe.
+        domain = identity_hash({'source': provenance, 'timestamp_unit': CLOCK_UNIT})
+&gt;       question_path = next(ROOT / name for name in provenance['inputs'] if name.endswith('/question_bank.csv'))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+src\knowledge_tracing\simulator_collection.py:105: StopIteration</failure></testcase></testsuite></testsuites>

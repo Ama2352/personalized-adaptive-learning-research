@@ -1,7 +1,10 @@
 """Collector fixture: reuse phương trình nguồn, không cần model/GPU."""
 
 from dataclasses import replace
+import copy
+import hashlib
 import json
+import runpy
 
 import numpy as np
 import pandas as pd
@@ -10,7 +13,7 @@ import pytest
 from knowledge_tracing.paper2_reference import load_reference
 from knowledge_tracing.simulator_bridge import identity_hash
 from knowledge_tracing.simulator_collection import (CollectionRecipe, collect_training_fixture, response_channels,
-                                                    canonical_source_provenance)
+                                                    canonical_source_provenance, environment_semantics)
 from knowledge_tracing.simulator_data import ROLES, SimulatorSplitPlan, ObservableTrajectory
 
 
@@ -129,3 +132,42 @@ def test_source_identity_uses_same_paths_on_windows_and_linux():
     linux = {'notebook': 'paper2/source.ipynb', 'inputs': {'paper2/data/question_bank.csv': 'hash'},
              'definitions': windows['definitions']}
     assert canonical_source_provenance(windows) == canonical_source_provenance(linux)
+
+
+@pytest.mark.parametrize('already_stripped', [False, True])
+def test_actual_bundle_and_already_stripped_copy_preserve_semantic_environment_identity(already_stripped):
+    from knowledge_tracing.paper2_reference import ROOT, NOTEBOOK
+    reference = load_reference()
+    contents, _ = runpy.run_path(str(ROOT / 'scripts/akt/build_colab_bundle.py'))['bundle_contents']()
+    packaged = contents[NOTEBOOK.relative_to(ROOT).as_posix()]
+    original = NOTEBOOK.read_bytes()
+    assert [c['source'] for c in json.loads(original)['cells']] == [c['source'] for c in json.loads(packaged)['cells']]
+    before = packaged if already_stripped else original
+    after = packaged
+    # Portable checkout có thể đã strip: không buộc transform idempotent phải đổi bytes.
+    if hashlib.sha256(before).digest() == hashlib.sha256(after).digest():
+        metadata_only = json.loads(after)
+        metadata_only['metadata']['domain_identity_test'] = True
+        after = json.dumps(metadata_only).encode('utf-8')
+    assert [c['source'] for c in json.loads(before)['cells']] == [c['source'] for c in json.loads(after)['cells']]
+    assert hashlib.sha256(before).digest() != hashlib.sha256(after).digest()
+    left = {**reference, 'provenance': copy.deepcopy(reference['provenance'])}
+    right = {**reference, 'provenance': copy.deepcopy(reference['provenance'])}
+    left['provenance']['notebook_sha256'] = hashlib.sha256(before).hexdigest()
+    right['provenance']['notebook_sha256'] = hashlib.sha256(after).hexdigest()
+    assert environment_semantics(left) == environment_semantics(right)
+
+
+@pytest.mark.parametrize('change', ['equation', 'constant', 'graph_input'])
+def test_semantic_identity_detects_scientific_changes(change):
+    reference = load_reference()
+    changed = {**reference, 'environment': dict(reference['environment']),
+               'provenance': copy.deepcopy(reference['provenance'])}
+    if change == 'equation':
+        changed['provenance']['definitions']['LatentStudentEnvironment']['sha256'] = '0'*64
+    elif change == 'constant':
+        changed['environment']['TRUE_GAIN_SCALE'] += 1
+    else:
+        key = next(name for name in changed['provenance']['inputs'] if name.replace('\\', '/').endswith('/edges.csv'))
+        changed['provenance']['inputs'][key] = '0'*64
+    assert identity_hash(environment_semantics(changed)) != identity_hash(environment_semantics(reference))

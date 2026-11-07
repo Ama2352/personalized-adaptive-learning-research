@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "collector_version": "paper2-train-fixture-v2",
+  "role": "train",
+  "scope": "bounded engineering fixture; not approved research corpus",
+  "source": {
+    "notebook": "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb",
+    "notebook_sha256": "353f487a3d6ed3826f2546d03c0aa2ad2279cf5c4b7fe8e375f4cafb0408280f",
+    "definitions": {
+      "ConceptDAG": {
+        "cell": 5,
+        "sha256": "e955793c1be68a7d281e8c6c0e71859b74e56c2dba8ed9ce1727a8e0ebc77358"
+      },
+      "question_level": {
+        "cell": 7,
+        "sha256": "bb7573fbcb134385c4460795566af87e53dbad90ef85b5a95a94a0cb63b1a29e"
+      },
+      "item_feature": {
+        "cell": 7,
+        "sha256": "eb703650381d17a4dfdd45019d6ca8fa3eb2265a77ad20218503f4920262a795"
+      },
+      "elo_probability": {
+        "cell": 9,
+        "sha256": "23c2f76a39550fbed2233b9b84fb3fde0049ce0ba012bd9ddddc79b81e509cf0"
+      },
+      "persona_base_abilities": {
+        "cell": 9,
+        "sha256": "8cab175aa3141d7d2b29d9ec3ac790c50fb314248feff768425cef98e83ecc62"
+      },
+      "LatentStudentEnvironment": {
+        "cell": 9,
+        "sha256": "67fb971727abb954d5ca03170267afa3074e0ba5a148649b7c95246071457831"
+      },
+      "dynamic_k": {
+        "cell": 11,
+        "sha256": "ac8f0eb4913e6b2c3fd8f870d954a1617b599fd08238d9025757d6403fe11792"
+      },
+      "choose_question": {
+        "cell": 11,
+        "sha256": "3d23ea41b59f07bfa7180984ffd9a1dc1bb389e68ac141cd106435d40b78fab7"
+      },
+      "CoverageAwareSelectorMixin": {
+        "cell": 11,
+        "sha256": "fc616cb9d5067419950cfc4a5e0ae0c2a02afc0d78b6ae86dd72f87224f42310"
+      },
+      "sigmoid": {
+        "cell": 11,
+        "sha256": "75e9aa99dedc3589c3e75834c32881201483c75ce9c93317ab52fd9453a228cf"
+      },
+      "clip_norm": {
+        "cell": 11,
+        "sha256": "506e3b8589cff94f63651256cc9fa01e3a43ac1463e87a4c6d6ab448c3151be3"
+      },
+      "AdaptiveLMSPolicy": {
+        "cell": 13,
+        "sha256": "0db01b24d9349c7f53a8993a692d62fed6fec71600267f623bc99cc52f953a30"
+      },
+      "MemoryState": {
+        "cell": 13,
+        "sha256": "d00805e34f08c7dc47e6ea7d7931e27d62b1a788e8a489b3d7440c39dad95f47"
+      },
+      "GAMKTPolicy": {
+        "cell": 13,
+        "sha256": "99d10d26d5c3eee9bf48c6530c8a7ed5ea885d1585750316dd6d0db41f8925f1"
+      }
+    },
+    "inputs": {
+      "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/data/simulator_inputs/nodes.csv": "6db464d1fd3df5d4215d51c9f90dc0f7e24f252517252784c80bdb5fa6291650",
+      "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/data/simulator_inputs/edges.csv": "ecd910d8df52f8790997391de657ea0f9e8357446212c168b73e500d0facc2fb",
+      "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/data/simulator_inputs/question_bank.csv": "fb5924ac0d19049ef1a5be23352592e30dfa3a4bde3e3fa07f10979fe0887e4d",
+      "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/data/simulator_inputs/concept_to_chapter_map.csv": "aa99cffb251ce6757258d2e87fe707455bc74b6b3917ead1acf48c5e96ee0a17"
+    }
+  },
+  "domain": {
+    "schema_version": 1,
+    "environment_id": "paper2-grade10-collector-81d863fb1d452ef79e15ba9c93b9b16c0050f08870887b13e582b940958ddb06",
+    "input_unit": "item_id",
+    "item_bank_sha256": "2bd1d9ca7efe0f83006d797aa760022f82c35029fbc1ad01fd380e4146cd18c0"
+  },
+  "environment_semantics": {
+    "schema_version": 1,
+    "kind": "paper2-reference-semantics-v1",
+    "definition_sha256": {
+      "ConceptDAG": "e955793c1be68a7d281e8c6c0e71859b74e56c2dba8ed9ce1727a8e0ebc77358",
+      "question_level": "bb7573fbcb134385c4460795566af87e53dbad90ef85b5a95a94a0cb63b1a29e",
+      "item_feature": "eb703650381d17a4dfdd45019d6ca8fa3eb2265a77ad20218503f4920262a795",
+      "elo_probability": "23c2f76a39550fbed2233b9b84fb3fde0049ce0ba012bd9ddddc79b81e509cf0",
+      "persona_base_abilities": "8cab175aa3141d7d2b29d9ec3ac790c50fb314248feff768425cef98e83ecc62",
+      "LatentStudentEnvironment": "67fb971727abb954d5ca03170267afa3074e0ba5a148649b7c95246071457831",
+      "dynamic_k": "ac8f0eb4913e6b2c3fd8f870d954a1617b599fd08238d9025757d6403fe11792",
+      "choose_question": "3d23ea41b59f07bfa7180984ffd9a1dc1bb389e68ac141cd106435d40b78fab7",
+      "CoverageAwareSelectorMixin": "fc616cb9d5067419950cfc4a5e0ae0c2a02afc0d78b6ae86dd72f87224f42310",
+      "sigmoid": "75e9aa99dedc3589c3e75834c32881201483c75ce9c93317ab52fd9453a228cf",
+      "clip_norm": "506e3b8589cff94f63651256cc9fa01e3a43ac1463e87a4c6d6ab448c3151be3",
+      "AdaptiveLMSPolicy": "0db01b24d9349c7f53a8993a692d62fed6fec71600267f623bc99cc52f953a30",
+      "MemoryState": "d00805e34f08c7dc47e6ea7d7931e27d62b1a788e8a489b3d7440c39dad95f47",
+      "GAMKTPolicy": "99d10d26d5c3eee9bf48c6530c8a7ed5ea885d1585750316dd6d0db41f8925f1"
+    },
+    "constants": {
+      "GLOBAL_SEED": 20260721,
+      "PERSONAS": [
+        "PG",
+        "PY",
+        "PYH"
+      ],
+      "MASTERY_ELO": 1250.0,
+      "PREREQUISITE_READY_ELO": 1150.0,
+      "MODEL_INITIAL_ELO": 1200.0,
+      "TRUE_GAIN_SCALE": 12.0,
+      "TRUE_FORGET_RATE": 0.06,
+      "MAX_CONSECUTIVE_CONCEPT": 3,
+      "MIN_PREREQUISITE_EXPOSURES": 6
+    },
+    "inputs_sha256": {
+      "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/data/simulator_inputs/nodes.csv": "6db464d1fd3df5d4215d51c9f90dc0f7e24f252517252784c80bdb5fa6291650",
+      "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/data/simulator_inputs/edges.csv": "ecd910d8df52f8790997391de657ea0f9e8357446212c168b73e500d0facc2fb",
+      "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/data/simulator_inputs/question_bank.csv": "fb5924ac0d19049ef1a5be23352592e30dfa3a4bde3e3fa07f10979fe0887e4d",
+      "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/data/simulator_inputs/concept_to_chapter_map.csv": "aa99cffb251ce6757258d2e87fe707455bc74b6b3917ead1acf48c5e96ee0a17"
+    },
+    "timestamp_unit": "unix_seconds_utc"
+  },
+  "plan_sha256": "0ce6669bcc54efa8cc8d918ea5a4315efb532a4c037ad0c07128473cd26f6127",
+  "recipe": {
+    "policy": "uniform_items",
+    "events_per_learner": 12,
+    "start_unix_seconds": 1767225600,
+    "gap_seconds": 1800,
+    "max_wall_seconds": 30
+  },
+  "recipe_sha256": "586b9c7ee7e2b1cadced3770f11e64f956316758513d4a002b779ff612df3b81",
+  "timestamp_unit": "unix_seconds_utc",
+  "timezone": "UTC",
+  "first_event": "start + gap",
+  "logging_policy_oracle_access": false,
+  "rng": "NumPy PCG64; separate derived outcome/learning channels; behavior independent",
+  "rng_namespace": "paper2-train-fixture-v1",
+  "numpy_version": "2.5.4",
+  "pandas_version": "3.0.6",
+  "audit": {
+    "schema_version": 1,
+    "role": "train",
+    "plan_sha256": "0ce6669bcc54efa8cc8d918ea5a4315efb532a4c037ad0c07128473cd26f6127",
+    "domain_sha256": "a4f4a9931ccddd85b6a87b84c9f1fff9a602b03ef36e53d65fcaa658a7c44e37",
+    "learners": 2,
+    "targets": 24,
+    "observed_items": [
+      "CacPhepToanTrenTapHop_TH_01",
+      "DauCuaTamThucBacHai_TH_01",
+      "DauCuaTamThucBacHai_VD_01",
+      "GiaiBatPhuongTrinhBacHaiMotAn_VD_01",
+      "HamSoBacHaiVaDoThi_TH_01",
+      "HamSoBacHaiVaDoThi_VD_01",
+      "HamSoBacHai_NB_01",
+      "HamSoBacHai_VD_01",
+      "HamSoVaDoThi_NB_01",
+      "MenhDeVaTapHop_VD_01",
+      "NhanBietDinhNghiaDuocHamSo_NB_01",
+      "NhanBietDinhNghiaDuocHamSo_VD_01",
+      "NhanBietHinhDangCuaDoThiParabol_TH_01",
+      "PhuongTrinhQuyVePhuongTrinhBacHai_NB_01",
+      "PhuongTrinhQuyVePhuongTrinhBacHai_VD_01",
+      "ThucHienPhepToanTrenTapHop_VD_01",
+      "VanDungDuocBatPhuongTrinhBacHai_TH_01",
+      "VanDungDuocBatPhuongTrinhBacHai_VD_01",
+      "VanDungHamSoBacHaiDeGiaiBaiToanThucTien_VD_01",
+      "VanDungHamSoDeGiaiQuyetVaiBaiToan_VD_01",
+      "VanDungPhepToanTapHop_VD_01",
+      "VeDoThiParabolCuaHamSoBacHai_TH_01"
+    ],
+    "unobserved_bank_items": [
+      "BatPhuongTrinhBacHaiMotAn_NB_01",
+      "BatPhuongTrinhBacHaiMotAn_TH_01",
+      "BatPhuongTrinhBacHaiMotAn_VD_01",
+      "CacPhepToanTrenTapHop_NB_01",
+      "CacPhepToanTrenTapHop_VD_01",
+      "DauCuaTamThucBacHai_NB_01",
+      "GiaiBatPhuongTrinhBacHaiMotAn_NB_01",
+      "GiaiBatPhuongTrinhBacHaiMotAn_TH_01",
+      "GiaiDuocBatPhuongTrinhBacHai_NB_01",
+      "GiaiDuocBatPhuongTrinhBacHai_TH_01",
+      "GiaiDuocBatPhuongTrinhBacHai_VD_01",
+      "GiaiPhuongTrinhChuaCanThuc_NB_01",
+      "GiaiPhuongTrinhChuaCanThuc_TH_01",
+      "GiaiPhuongTrinhChuaCanThuc_VD_01",
+      "GiaiThichDinhLyVeDau_NB_01",
+      "GiaiThichDinhLyVeDau_TH_01",
+      "GiaiThichDinhLyVeDau_VD_01",
+      "HamSoBacHaiVaDoThi_NB_01",
+      "HamSoBacHai_TH_01",
+      "HamSoVaDoThi_TH_01",
+      "HamSoVaDoThi_VD_01",
+      "HieuKhaiNiemCoBanVeHamSo_NB_01",
+      "HieuKhaiNiemCoBanVeHamSo_TH_01",
+      "HieuKhaiNiemCoBanVeHamSo_VD_01",
+      "HieuMenhDeVaDieuKienLogic_NB_01",
+      "HieuMenhDeVaDieuKienLogic_TH_01",
+      "HieuMenhDeVaDieuKienLogic_VD_01",
+      "MenhDeVaTapHop_NB_01",
+      "MenhDeVaTapHop_TH_01",
+      "MenhDe_NB_01",
+      "MenhDe_TH_01",
+      "MenhDe_VD_01",
+      "NhanBietCacTrungBinhHoc_NB_01",
+      "NhanBietCacTrungBinhHoc_TH_01",
+      "NhanBietCacTrungBinhHoc_VD_01",
+      "NhanBietDinhNghiaDuocHamSo_TH_01",
+      "NhanBietHinhDangCuaDoThiParabol_NB_01",
+      "NhanBietHinhDangCuaDoThiParabol_VD_01",
+      "NhanBietKhaiNiemCoBanVeTapHop_NB_01",
+      "NhanBietKhaiNiemCoBanVeTapHop_TH_01",
+      "NhanBietKhaiNiemCoBanVeTapHop_VD_01",
+      "PhuongTrinhQuyVePhuongTrinhBacHai_TH_01",
+      "TapHop_NB_01",
+      "TapHop_TH_01",
+      "TapHop_VD_01",
+      "ThucHienPhepToanTrenTapHop_NB_01",
+      "ThucHienPhepToanTrenTapHop_TH_01",
+      "TimTapGiaTriCuaHamSoBacHai_NB_01",
+      "TimTapGiaTriCuaHamSoBacHai_TH_01",
+      "TimTapGiaTriCuaHamSoBacHai_VD_01",
+      "VanDungDuocBatPhuongTrinhBacHai_NB_01",
+      "VanDungHamSoBacHaiDeGiaiBaiToanThucTien_NB_01",
+      "VanDungHamSoBacHaiDeGiaiBaiToanThucTien_TH_01",
+      "VanDungHamSoDeGiaiQuyetVaiBaiToan_NB_01",
+      "VanDungHamSoDeGiaiQuyetVaiBaiToan_TH_01",
+      "VanDungPhepToanTapHop_NB_01",
+      "VanDungPhepToanTapHop_TH_01",
+      "VeDoThiParabolCuaHamSoBacHai_NB_01",
+      "VeDoThiParabolCuaHamSoBacHai_VD_01",
+      "XacDinhTinhDungSaiCuaMenhDe_NB_01",
+      "XacDinhTinhDungSaiCuaMenhDe_TH_01",
+      "XacDinhTinhDungSaiCuaMenhDe_VD_01"
+    ],
+    "collection_policy_ids": [
+      "paper2-train-fixture-v2:uniform_items"
+    ],
+    "shard_sha256": "edaaf198fbeb17418fba9828a838d27f87a90f1739bb90f8528d01a2f08e1b6f",
+    "scope": "schema/coverage only; no empirical independence, calibration or model metrics"
+  },
+  "profile_metadata_sha256": "615af62b21468e67ff2539fe2594581b43cec47ea462c4cfcb643b5321dced00",
+  "oracle_sidecar_sha256": "9b72e16ef1ea4e7cf30e7ec02a90dc92bc54a62bc4e2bc27237d41bc0e4298e2",
+  "elapsed_seconds": 0.14957320000394247
+}

@@ -1521,7 +1521,7 @@
       "authorization_requirements": "Small synthetic/reference-environment fixture only; no model training, real dataset, cloud or final cohort; changing scientific distribution needs separate protocol approval",
       "status": "COMPLETED",
       "blockers": [],
-      "verification_evidence": "cpu-sim-collector-20261107-02:60targeted pass;source environment exact replay;24unique targets/collator;19 contract; final source-bound Gate2 pending",
+      "verification_evidence": "cpu-sim-collector-20261107-04-portable:65tests;24unique targets;source replay; earlier v1Gate396 preserved, final sourceGate pending",
       "verification_scope": "Bounded train-only collector and windows adapter; NOT full corpus/NN trainer/calibrator/refit/final runner"
     },
     {
@@ -1550,8 +1550,37 @@
       "authorization_requirements": "Safe contract/adaptor fixtures; no model architecture/optimization/protocol adoption or full training",
       "status": "COMPLETED",
       "blockers": [],
-      "verification_evidence": "cpu-sim-collector-20261107-02:60targeted pass;source environment exact replay;24unique targets/collator;19 contract; final source-bound Gate2 pending",
+      "verification_evidence": "cpu-sim-collector-20261107-04-portable:65tests;24unique targets;source replay; earlier v1Gate396 preserved, final sourceGate pending",
       "verification_scope": "Bounded train-only collector and windows adapter; NOT full corpus/NN trainer/calibrator/refit/final runner"
+    },
+    {
+      "id": "DATA07",
+      "research_objective": "Sửa semantic domain identity cho portable notebook copy",
+      "rq": [
+        "RQ1",
+        "RQ3"
+      ],
+      "workstream": "simulator_data_boundaries",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "DATA05",
+        "DATA06"
+      ],
+      "required_inputs": "Actual bundle output-strip audit;sourcev1 Gate2-12 identities;19 contract",
+      "files_components": "simulator_collection.py;test_simulator_collection.py;research_tracking/runs",
+      "implementation_objective": "Version collector domain từ scientific definitions/constants/input/clock, giữ full storage provenance và RNGnamespacev1",
+      "acceptance_criteria": "Metadata/output-only copy giữ domain; equation/constant/graph changes đổi domain; v1/v2fixture oracle/RNG/query/labels exact; no historical mutation",
+      "verification_steps": "Actual bundler+idempotent stripped-copy controls,65targeted tests, final source-bound Gate2-13",
+      "required_artifacts": "Static defect proof; v1source snapshots; v1/v2parity; tests/logs/hash manifests",
+      "estimated_effort": "0.25–0.5 engineering day plus CPU suite",
+      "compute_cost_category": "bounded local CPU; no paid compute",
+      "authorization_requirements": "Safe compatibility fix on fixture; no architecture/hyperparameter/approved methodology change",
+      "status": "COMPLETED",
+      "blockers": [],
+      "verification_evidence": "cpu-sim-collector-20261107-03-semantic/04-portable;cpu-sim-collector-trials-20261107-01; finalGate pending",
+      "verification_scope": "Identity and fixture compatibility only; no actual Linux/Colab/CUDA"
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

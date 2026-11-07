@@ -30,3 +30,13 @@ Trial local trước đó (`artifacts/akt/local-tests/collector-01.*`) có2faile
 24events rất ít so với84items: đây chỉ là kỹ thuật, chưa kiểm đủ history/profile/item coverage cho AKT. Counts/profiles/policy/gap của fixture không là protocol train chính thức. RQ1/RQ2 cần confirmatory controls/interpretation; RQ3 còn graph variants, confidence/gate training và controlled evaluation. S04/S05 về calibration/controller/model-environment scope vẫn pending.
 
 Các phần không tự nối vào Junyi runner: simulator selection/epoch rule, refit policy, artifact/checkpoint authorization và final evaluation runner. Source compatibility của windows không tự cấp quyền chạy các bước đó. Kitv9 cũ chưa có collector/adapter mới; chưa chạy Linux/Colab/CUDA.
+
+## Review bổ sung và sửa domain portability
+
+Static audit dùng chính bundler xác nhận code cells unchanged nhưng raw notebook SHA353f487a... thành53c2c814... do strip outputs/metadata. Domainv1 khác nhau vì hash full storage provenance. Đây là incompatibility của collector mới cần sửa trước remote training, không là lỗi Paper2 và không sửa historical checkpoints. [Archive trials](../runs/cpu-sim-collector-trials-20261107-01/README.md) giữ12outputs gồm local failed logs/source và audit JSON.
+
+Collector **v2** dùng semantic identity của allowlisted definition hashes/constants/immutable input hashes/clock; full notebook storage SHA vẫn ở integrity provenance. RNG namespace giữv1. [run03-semantic](../runs/cpu-sim-collector-20261107-03-semantic/README.md) đạt64tests; [run04-portable](../runs/cpu-sim-collector-20261107-04-portable/README.md) đạt**65tests,0fail/error/skip,7.48s**, thêm trường hợp checkout đã strip outputs (transform idempotent). Các negative controls thay equation/constant/true-graph input đều làm domain đổi. Chưa chạy actual Linux/CUDA từ các tests này.
+
+Đối chiếu v1run02 vớiv2run03: **oracle sidecar gồm RNG states/uniforms và learner queries/labels identical**. Domain/policy/recipe identities đổi có chủ đích theo version; không tự migrate model cũ. Fixture vẫn22observed/62unobserved items,24targets và0optimizer steps.
+
+Gate2-12 của sourcev1 đạt396tests,0fail/error/skip374.84giây (wall378.92s), timeout420s. Sau semantic fix phải coi gate này là snapshot; source mới cần Gate2-13. Dự toán software suite mới540s (hard maximum600s ở runner) vì measured runtime biến động lớn so với gate361/152.84s trước; không đổi smoke/pilot/training/cloud budgets hoặc bỏ tests.

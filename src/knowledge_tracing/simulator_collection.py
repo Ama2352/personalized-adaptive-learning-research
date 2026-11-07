@@ -12,7 +12,7 @@ import time
 import numpy as np
 import pandas as pd
 
-from .paper2_reference import ROOT, load_reference
+from .paper2_reference import CONSTANTS, ROOT, load_reference
 from .simulator_bridge import ItemQuery, Observation, SimulatorBank, SimulatorItem, identity_hash
 from .simulator_data import ObservableTrajectory, SimulatorSplitPlan, validate_role_shard
 
@@ -20,13 +20,28 @@ from .simulator_data import ObservableTrajectory, SimulatorSplitPlan, validate_r
 MAX_LEARNERS = 2
 MAX_EVENTS = 12
 CLOCK_UNIT = 'unix_seconds_utc'
-COLLECTOR_VERSION = 'paper2-train-fixture-v1'
+COLLECTOR_VERSION = 'paper2-train-fixture-v2'
+# Identity fix không được làm đổi uniforms/labels của fixture đã kiểm.
+RNG_NAMESPACE = 'paper2-train-fixture-v1'
 
 
 def canonical_source_provenance(provenance):
     """Path identity chung Windows/Linux; giữ nguyên source bytes/hash lịch sử."""
     return {**provenance, 'notebook': provenance['notebook'].replace('\\', '/'),
             'inputs': {name.replace('\\', '/'): digest for name, digest in provenance['inputs'].items()}}
+
+
+def environment_semantics(reference):
+    """Scientific domain tách storage SHA notebook (có thể strip outputs).
+
+Giữ conservative identity của mọi allowlisted definitions/constants/inputs.
+Full storage hash vẫn ở manifest.source và được kiểm lúc collection kết thúc.
+"""
+    provenance = canonical_source_provenance(reference['provenance'])
+    return {'schema_version': 1, 'kind': 'paper2-reference-semantics-v1',
+            'definition_sha256': {name: value['sha256'] for name, value in provenance['definitions'].items()},
+            'constants': {name: reference['environment'][name] for name in CONSTANTS},
+            'inputs_sha256': provenance['inputs'], 'timestamp_unit': CLOCK_UNIT}
 
 
 @dataclass(frozen=True)
@@ -72,7 +87,7 @@ Nguồn environment nhận uniforms như cũ; không claim identical published r
     root = dict(assignment.stream_seeds)['response']
     channels, provenance = {}, {}
     for name in ('outcome', 'learning'):
-        seed = int(identity_hash([COLLECTOR_VERSION, root, name])[:16], 16)
+        seed = int(identity_hash([RNG_NAMESPACE, root, name])[:16], 16)
         rng = np.random.Generator(np.random.PCG64(seed))
         before = rng.bit_generator.state
         values = rng.random(count)
@@ -107,7 +122,8 @@ Role khác chỉ có assignments trong plan, không sinh trajectory hay oracle s
         raise ValueError('unknown Paper2 profile')
     provenance = canonical_source_provenance(reference['provenance'])
     # Domain gắn source/true-graph/item-bank/clock; behavior distribution thuộc recipe.
-    domain = identity_hash({'source': provenance, 'timestamp_unit': CLOCK_UNIT})
+    semantics = environment_semantics(reference)
+    domain = identity_hash(semantics)
     question_path = next(ROOT / name for name in provenance['inputs'] if name.endswith('/question_bank.csv'))
     with question_path.open(encoding='utf-8-sig', newline='') as stream:
         items = tuple(SimulatorItem(row['question_id'], row['concept_id'], float(row['elo_difficulty']))
@@ -161,10 +177,12 @@ Role khác chỉ có assignments trong plan, không sinh trajectory hay oracle s
     sidecar = {'scope': 'oracle evaluation/replay only; forbidden as model input', 'learners': oracle}
     manifest = {'schema_version': 1, 'collector_version': COLLECTOR_VERSION, 'role': 'train',
         'scope': 'bounded engineering fixture; not approved research corpus', 'source': provenance,
-        'domain': bank.identity, 'plan_sha256': plan.identity, 'recipe': asdict(recipe),
+        'domain': bank.identity, 'environment_semantics': semantics,
+        'plan_sha256': plan.identity, 'recipe': asdict(recipe),
         'recipe_sha256': recipe.identity, 'timestamp_unit': CLOCK_UNIT, 'timezone': 'UTC',
         'first_event': 'start + gap', 'logging_policy_oracle_access': False,
         'rng': 'NumPy PCG64; separate derived outcome/learning channels; behavior independent',
+        'rng_namespace': RNG_NAMESPACE,
         'numpy_version': np.__version__, 'pandas_version': pd.__version__, 'audit': audit,
         'profile_metadata_sha256': identity_hash(profiles), 'oracle_sidecar_sha256': identity_hash(sidecar),
         'elapsed_seconds': time.perf_counter()-started}

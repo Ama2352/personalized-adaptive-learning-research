@@ -322,7 +322,7 @@
     "verification": "ZIP_INTEGRITY_ONLY; v9 predates DATA01–04/current361-source; isolated/Colab/CUDA not executed"
   },
   "next_bounded_engineering_batch": [
-    "Close source-bound Gate2-12/archive/Git byte verification for DATA05/06; preserve both failure diagnoses",
+    "Close final source-bound Gate2-13/archive/Git bytes for DATA05–07; preserve396snapshot and all failed trials",
     "Prepare reviewable S04/S05 choices and explicit acceptance of simulated training/evaluation recipe; no quiet adoption",
     "Safe next independent engineering: inspect/pin cloud preflight entrypoint contract without provisioning; or demo fixture using verified interfaces",
     "Full simulator corpus T10 and graph architecture/training remain gated by explicit scientific protocol; no Junyi fake folds, Holdout or paid GPU",
@@ -358,10 +358,11 @@
     "gpu_executed": false
   },
   "current_software_gate": {
-    "status": "STALE_AFTER_DATA05_DATA06_SOURCE_CHANGES",
-    "previous_run_id": "20261107-simulator-data-11",
-    "next_run_id": "20261107-simulator-collector-12",
-    "planned_cpu_test_timeout_seconds": 420
+    "status": "STALE_AFTER_DATA07_SEMANTIC_DOMAIN_FIX",
+    "previous_run_id": "20261107-simulator-collector-12",
+    "next_run_id": "20261107-simulator-semantic-13",
+    "planned_cpu_test_timeout_seconds": 540,
+    "reason": "Measured v1wall378.92s and source identity fix; no training cap changed"
   },
   "previous_software_gate": {
     "run_id": "20261107-simulator-batch-10",
@@ -413,16 +414,32 @@
     "status": "TARGETED_VERIFIED_PENDING_GATE",
     "completed": [
       "DATA05",
-      "DATA06"
+      "DATA06",
+      "DATA07"
     ],
-    "positive_bundle": "cpu-sim-collector-20261107-02",
+    "positive_bundle": "cpu-sim-collector-20261107-04-portable",
     "failed_bundle_preserved": "cpu-sim-collector-20261107-01",
-    "targeted_passed": 60,
+    "targeted_passed": 65,
     "targets": 24,
     "observed_bank_items": 22,
     "unobserved_bank_items": 62,
     "model_instantiated": false,
     "optimizer_steps": 0,
-    "remaining": "full research corpus and complete simulated training/calibration/refit/final runner remain pending"
+    "remaining": "full research corpus and complete simulated training/calibration/refit/final runner remain pending",
+    "collector_version": "paper2-train-fixture-v2",
+    "rng_namespace": "paper2-train-fixture-v1",
+    "v1_v2_oracle_queries_labels": "EXACT",
+    "portability_scope": "Static/fixture only; actual Linux/Colab/CUDA pending"
+  },
+  "software_gate_history_before_semantic_fix": {
+    "run_id": "20261107-simulator-collector-12",
+    "passed": 396,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "pytest_seconds": 374.84,
+    "elapsed_seconds": 378.9164111999853,
+    "timeout_seconds": 420,
+    "report_sha256": "c96c26d6ea5f91cb58e24c6d4fbe18a4053395ed4816e8422008710211e1de9a"
   }
 }
