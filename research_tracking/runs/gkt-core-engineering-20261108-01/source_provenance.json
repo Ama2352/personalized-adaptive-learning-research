@@ -1,0 +1,138 @@
+{
+  "evidence_role": "GKT_partial_static_kernel_no_author_code_parity",
+  "source_audit_sha256": "bfbbcfb25b65fc150869028a4b077511c3aefa67bd8fec3ea2174a3e9a324169",
+  "external_primary_sources": [
+    {
+      "id": "RLiGM_SITE",
+      "url": "https://rlgm.github.io/papers/",
+      "kind": "primary workshop host accepted list",
+      "checked": "ICLR2019 Workshop; GKT poster authors and PDF link",
+      "raw_bytes_sha256": null
+    },
+    {
+      "id": "GKT_WORKSHOP2019",
+      "url": "https://rlgm.github.io/papers/70.pdf",
+      "kind": "primary author manuscript at workshop host",
+      "checked": [
+        "p2 section2.1 aggregate/update Eq1",
+        "p3 section2.2 Eq2 and six graph variants",
+        "p6-7 AppendixB capacity/training details"
+      ],
+      "pages_reported_by_web": 8,
+      "access": "web extracted PDF text; screenshot tool returned references but no viewable image bytes; local DNS download failed",
+      "raw_bytes_sha256": null,
+      "not_verified": [
+        "visual layout",
+        "camera-ready WI byte equivalence",
+        "author checkpoint parity"
+      ]
+    },
+    {
+      "id": "GKT_WI2019",
+      "url": "https://doi.org/10.1145/3350546.3352513",
+      "kind": "publisher DOI citation target",
+      "access": "publisher ACM open returned403; full text not retrieved",
+      "raw_bytes_sha256": null
+    },
+    {
+      "id": "GKT_JOURNAL2021",
+      "url": "https://journals.sagepub.com/doi/10.3233/WEB-210458",
+      "kind": "primary paper on publisher site",
+      "authors": [
+        "Hiromi Nakagawa",
+        "Yusuke Iwasawa",
+        "Yutaka Matsuo"
+      ],
+      "checked": [
+        "3.1 problem",
+        "3.2 aggregate/update Eq1/predict",
+        "3.3 static and learned graph Eq2",
+        "4.3 implementation details",
+        "5.4 single-hop and dependency/causality caveat"
+      ],
+      "access": "publisher full HTML via web tool",
+      "raw_bytes_sha256": null
+    },
+    {
+      "id": "DKVMN_V2",
+      "url": "https://arxiv.org/html/1611.08108",
+      "kind": "primary referenced paper, author-uploaded arXiv1611.08108v2",
+      "authors": [
+        "Jiani Zhang",
+        "Xingjian Shi",
+        "Irwin King",
+        "Dit-Yan Yeung"
+      ],
+      "checked": [
+        "3.2.3 write Eq6-9",
+        "3.2.4 training",
+        "read-before-write sequence"
+      ],
+      "access": "arXiv HTML via web tool",
+      "raw_bytes_sha256": null
+    },
+    {
+      "id": "UNVERIFIED_AUTHOR_CODE_CANDIDATE",
+      "url": "https://github.com/jhljx/GKT/blob/master/models.py",
+      "kind": "repository own code-author metadata only; not GKT-author official spec",
+      "checked": "search excerpt header code-author jhljx; no authorship connection verified",
+      "used_for_algorithm": false,
+      "code_copied_or_executed": false,
+      "raw_bytes_sha256": null
+    }
+  ],
+  "source_audit_local_inputs": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "f5b91f6ad84e6eb1925f134aa229a8009cb7bcd5ea7f6c86ce068420b0e729bf"
+    },
+    {
+      "path": "docs/REPOSITORY_MAP.md",
+      "sha256": "d8a3a7d0cdb72c6778da5e15beab4905e8d80b3c52c52dbfd0c1263bf9ced8b0"
+    },
+    {
+      "path": "docs/thesis_recovery/evidence/proposal.txt",
+      "sha256": "a22de46c58b1b4e8dbcb7dd0b7140086f605c2dc3e07c7d9cc3c2638370710e0"
+    },
+    {
+      "path": "docs/thesis_recovery/05_EXPERIMENT_MATRIX.md",
+      "sha256": "635f5ea0ea8e069bdd3f9c2fa51763587c594d54ff4ae344612a595b1059dd0d"
+    },
+    {
+      "path": "docs/thesis_recovery/06_AKT_CGAKT_ARCHITECTURE_PLAN.md",
+      "sha256": "5567e851211741ff5085260e92dfef0c6fd733f123683a4baafa723ed62e7d2c"
+    },
+    {
+      "path": "src/knowledge_tracing/shared_kt.py",
+      "sha256": "06922d5a6bfd6c806fd1abb61232f58a9ccd63826e30cefaf87ce3d3b36dffa8"
+    },
+    {
+      "path": "src/knowledge_tracing/sakt/model.py",
+      "sha256": "f3979c4daada1e0c7a5adc890938073e53d4064476207f44af81478dd33683dd"
+    },
+    {
+      "path": "src/knowledge_tracing/sakt/config.py",
+      "sha256": "3e18b3ac018440599a1de10b8da4a82c8641160c3aaa79ea30dc0cd15e98ce8f"
+    },
+    {
+      "path": "src/knowledge_tracing/sakt/tensors.py",
+      "sha256": "133ff25ef91f242505acf5fe9b48ae44fd9f3366f35ce45a1733e1f558c15b63"
+    }
+  ],
+  "under_specified": [
+    "erase-add unary GKT mapping vs DKVMN prior memory/write weights",
+    "GKT initial hidden state",
+    "sparse disconnected-node mask",
+    "MLP/BatchNorm placement and axes",
+    "cold/first-target benchmark accounting"
+  ],
+  "kernel_source_sha256": {
+    "src/knowledge_tracing/gkt/config.py": "8785a608e017ed4f6f77f8bd027ed3b3ee8a57d6e5b34bbb6d787acd9952c5d2",
+    "src/knowledge_tracing/gkt/core.py": "4663e25d158a08d344d2f5f85735d8db927f96e14199b5d16f40b8e32701b3e1",
+    "src/knowledge_tracing/gkt/__init__.py": "90c9db6ea986694aa9e5b7a9aa6bf1c54f7afa9f8e449d3a6d30880d24c3a1aa",
+    "tests/gkt/test_core.py": "3897ff7b82d04a316b201894623b6c3b1f73f626ab280c6a178a354b6c958ab6"
+  },
+  "raw_external_hashes_deliberately_null": true,
+  "caller_chronology_origin_and_transform_isolation_not_attested": true,
+  "S04_S05_approved": false
+}

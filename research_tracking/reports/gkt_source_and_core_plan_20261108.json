@@ -1,0 +1,210 @@
+{
+  "kind": "GKT_PRIMARY_SOURCE_AUDIT_AND_PROPOSED_CORE_PLAN_NO_IMPLEMENTATION",
+  "date_local": "2026-11-08",
+  "report": "research_tracking/reports/gkt_source_and_core_plan_20261108.md",
+  "report_sha256": "3dcdd00714b1e310a27de5461ae9f6ae1237ecbbde685faf5aabf344119ab299",
+  "scope_vi": "Chỉ audit và plan; không train/model/simulator/GPU/cloud/raw dataset/Holdout; không source/tests/nativeAKT/index/state/Git mutations hoặc dependency install.",
+  "local_inventory_scope": [
+    "ref-papers",
+    "paper1",
+    "paper2",
+    "docs",
+    "src",
+    "tests"
+  ],
+  "inventory_limit_vi": "Filename inventory + targeted text search, không full-text mọi generic-name PDF. Không chứng minh global absence.",
+  "source_files_read": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "f5b91f6ad84e6eb1925f134aa229a8009cb7bcd5ea7f6c86ce068420b0e729bf"
+    },
+    {
+      "path": "docs/REPOSITORY_MAP.md",
+      "sha256": "d8a3a7d0cdb72c6778da5e15beab4905e8d80b3c52c52dbfd0c1263bf9ced8b0"
+    },
+    {
+      "path": "docs/thesis_recovery/evidence/proposal.txt",
+      "sha256": "a22de46c58b1b4e8dbcb7dd0b7140086f605c2dc3e07c7d9cc3c2638370710e0"
+    },
+    {
+      "path": "docs/thesis_recovery/05_EXPERIMENT_MATRIX.md",
+      "sha256": "635f5ea0ea8e069bdd3f9c2fa51763587c594d54ff4ae344612a595b1059dd0d"
+    },
+    {
+      "path": "docs/thesis_recovery/06_AKT_CGAKT_ARCHITECTURE_PLAN.md",
+      "sha256": "5567e851211741ff5085260e92dfef0c6fd733f123683a4baafa723ed62e7d2c"
+    },
+    {
+      "path": "src/knowledge_tracing/shared_kt.py",
+      "sha256": "06922d5a6bfd6c806fd1abb61232f58a9ccd63826e30cefaf87ce3d3b36dffa8"
+    },
+    {
+      "path": "src/knowledge_tracing/sakt/model.py",
+      "sha256": "f3979c4daada1e0c7a5adc890938073e53d4064476207f44af81478dd33683dd"
+    },
+    {
+      "path": "src/knowledge_tracing/sakt/config.py",
+      "sha256": "3e18b3ac018440599a1de10b8da4a82c8641160c3aaa79ea30dc0cd15e98ce8f"
+    },
+    {
+      "path": "src/knowledge_tracing/sakt/tensors.py",
+      "sha256": "133ff25ef91f242505acf5fe9b48ae44fd9f3366f35ce45a1733e1f558c15b63"
+    }
+  ],
+  "external_sources": [
+    {
+      "id": "RLiGM_SITE",
+      "url": "https://rlgm.github.io/papers/",
+      "kind": "primary workshop host accepted list",
+      "checked": "ICLR2019 Workshop; GKT poster authors and PDF link",
+      "raw_bytes_sha256": null
+    },
+    {
+      "id": "GKT_WORKSHOP2019",
+      "url": "https://rlgm.github.io/papers/70.pdf",
+      "kind": "primary author manuscript at workshop host",
+      "checked": [
+        "p2 section2.1 aggregate/update Eq1",
+        "p3 section2.2 Eq2 and six graph variants",
+        "p6-7 AppendixB capacity/training details"
+      ],
+      "pages_reported_by_web": 8,
+      "access": "web extracted PDF text; screenshot tool returned references but no viewable image bytes; local DNS download failed",
+      "raw_bytes_sha256": null,
+      "not_verified": [
+        "visual layout",
+        "camera-ready WI byte equivalence",
+        "author checkpoint parity"
+      ]
+    },
+    {
+      "id": "GKT_WI2019",
+      "url": "https://doi.org/10.1145/3350546.3352513",
+      "kind": "publisher DOI citation target",
+      "access": "publisher ACM open returned403; full text not retrieved",
+      "raw_bytes_sha256": null
+    },
+    {
+      "id": "GKT_JOURNAL2021",
+      "url": "https://journals.sagepub.com/doi/10.3233/WEB-210458",
+      "kind": "primary paper on publisher site",
+      "authors": [
+        "Hiromi Nakagawa",
+        "Yusuke Iwasawa",
+        "Yutaka Matsuo"
+      ],
+      "checked": [
+        "3.1 problem",
+        "3.2 aggregate/update Eq1/predict",
+        "3.3 static and learned graph Eq2",
+        "4.3 implementation details",
+        "5.4 single-hop and dependency/causality caveat"
+      ],
+      "access": "publisher full HTML via web tool",
+      "raw_bytes_sha256": null
+    },
+    {
+      "id": "DKVMN_V2",
+      "url": "https://arxiv.org/html/1611.08108",
+      "kind": "primary referenced paper, author-uploaded arXiv1611.08108v2",
+      "authors": [
+        "Jiani Zhang",
+        "Xingjian Shi",
+        "Irwin King",
+        "Dit-Yan Yeung"
+      ],
+      "checked": [
+        "3.2.3 write Eq6-9",
+        "3.2.4 training",
+        "read-before-write sequence"
+      ],
+      "access": "arXiv HTML via web tool",
+      "raw_bytes_sha256": null
+    },
+    {
+      "id": "UNVERIFIED_AUTHOR_CODE_CANDIDATE",
+      "url": "https://github.com/jhljx/GKT/blob/master/models.py",
+      "kind": "repository own code-author metadata only; not GKT-author official spec",
+      "checked": "search excerpt header code-author jhljx; no authorship connection verified",
+      "used_for_algorithm": false,
+      "code_copied_or_executed": false,
+      "raw_bytes_sha256": null
+    }
+  ],
+  "failures_or_limits": [
+    {
+      "action": "Invoke-WebRequest primary PDF to artifacts/gkt/source-audit/20261108-01/gkt_rlgm_2019.pdf",
+      "observed": "No such host is known; file not created; no raw bytes SHA available"
+    },
+    {
+      "action": "web open ACM publisher DOI",
+      "observed": "403 Forbidden; no full WI manuscript claim"
+    },
+    {
+      "action": "web PDF screenshots",
+      "observed": "page references returned without viewable image bytes; page8 attempt Cache miss; no visual verification claim"
+    }
+  ],
+  "revision_distinctions": {
+    "workshop_gkt_lr": 0.01,
+    "journal_gkt_lr": 0.001,
+    "status": "historical paper descriptions, NOT selected KLTN hyperparameters"
+  },
+  "verified_equation_scope": [
+    "concept-specific state and concept/response embeddings",
+    "self message",
+    "static directed adjacency outgoing+incoming message Eq2",
+    "readout for next target, reindexed predict-before-observe"
+  ],
+  "under_specified": [
+    "erase-add unary GKT mapping vs DKVMN prior memory/write weights",
+    "GKT initial hidden state",
+    "sparse disconnected-node mask",
+    "MLP/BatchNorm placement and axes",
+    "cold/first-target benchmark accounting"
+  ],
+  "proposal": {
+    "stage_A": "static adjacency validation + pure embeddings/message/readout kernel; Dense finite fixtures; caller state; no recurrent closure, trainer or checkpoint loader",
+    "stage_B": "only after reviewer accepts explicit erase_add_recipe/initialization/mask/normalization; documented convention, not exact author-code reproduction",
+    "new_code_created": false,
+    "await_parent_review": true,
+    "required_baseline_not_removed": true,
+    "S04_S05_pending": true
+  },
+  "planned_acceptance": [
+    "hand-computed asymmetric incoming/outgoing messages",
+    "Dense diagonal and N1 guard",
+    "current-label independence and correct prior-event pairing",
+    "causal prefix invariance",
+    "learner/state isolation and immutable inputs",
+    "domain/vocab/graph/node-order mismatch rejects",
+    "padding and OOV semantics explicit",
+    "bounded CPU <=120s only after code authorization; random fixtures 0optimizer steps no efficacy"
+  ],
+  "link_validation": [
+    {
+      "target": "../../docs/thesis_recovery/06_AKT_CGAKT_ARCHITECTURE_PLAN.md",
+      "exists": true
+    },
+    {
+      "target": "../../docs/thesis_recovery/evidence/proposal.txt",
+      "exists": true
+    },
+    {
+      "target": "gkt_source_and_core_plan_20261108.json",
+      "exists": true
+    },
+    {
+      "target": "../../src/knowledge_tracing/shared_kt.py",
+      "exists": true
+    }
+  ],
+  "checks": {
+    "json_parse": "checked after serialization",
+    "local_inputs_sha_recorded": 9,
+    "source_download_hash_claim": false,
+    "author_code_reproduction_claim": false,
+    "tests_or_training_run": false,
+    "local_links_exist": true
+  }
+}
