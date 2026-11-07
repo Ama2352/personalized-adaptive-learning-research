@@ -1,0 +1,133 @@
+{
+  "approval_reference": "",
+  "approved": false,
+  "authorization_to_execute_created": false,
+  "caps": {
+    "max_rss_bytes": 2147483648,
+    "max_seconds": 900,
+    "max_total_targets": 100000,
+    "max_train_users": 1024,
+    "max_val_users": 256,
+    "max_wall_seconds": 1200,
+    "min_available_ram_bytes": 1073741824
+  },
+  "cohort": {
+    "outer_fold": 0,
+    "partition_query": "WHERE partition='development'",
+    "selected_train_learners": 1024,
+    "selected_validation_learners": 256,
+    "split_hash": "ecbb3d3b4282d723f9e8c62cbd8d6cd2e63f16e6988f0d418028fc565101f9d6",
+    "train_users_sha256": "71cbda08a7cd3ab1f34191fd3bf6aede8c705fd6947864204857201936de5dcd",
+    "validation_users_sha256": "2395ae73b64991d0b29fcc5d8c96904eb2c2348364eb7f51fb29fb5b75dd1b70"
+  },
+  "command_after_explicit_approval": "& .\\.venv\\Scripts\\python.exe -B -m knowledge_tracing.akt.cli pilot --config experiments/akt/configs/pilot-task14-20261105-01-authorized.json --authorization experiments/akt/authorizations/pilot-task14-20261105-01.json",
+  "config_file": "experiments/akt/configs/pilot-task14-20261105-01-authorized.json",
+  "config_file_sha256": "3c77354074d382b8f474ca08a53b557183ce95f5ac4a7beb4769ece59356d30b",
+  "config_sha256": "0b26c0f36639e3d33e31e0b0f2c747f81777166f4c1ed7f46e90ed86026987a2",
+  "dataset_identity": {
+    "assignments_sha256": "ee588c5b72fc214295e6eef1839b5110c884f43ab52ab4a792ca82e35812be20",
+    "canonical_manifest_sha256": "035fb113fcbbd0f433fcda210d43ef279f6eb8163e0b3b4b72c9d4f066a02fb7",
+    "split_manifest_sha256": "a69c0b440ef7d206133470f13696e853cb237c35c56c2b9015c175edaa89f94c"
+  },
+  "execution_limits": {
+    "device": "cpu",
+    "max_epochs": 1,
+    "optimizer_step_cap": null,
+    "precision": "FP32",
+    "training_time_cap_seconds": 900,
+    "wall_time_cap_seconds": 1200
+  },
+  "expected_lifecycle": [
+    "bounded Development data load",
+    "one-epoch/time-bounded train",
+    "validation",
+    "checkpoint save/load parity",
+    "Development inner-validation prediction export and coverage verification"
+  ],
+  "identity": {
+    "assignments_sha256": "ee588c5b72fc214295e6eef1839b5110c884f43ab52ab4a792ca82e35812be20",
+    "build_hashes": {
+      "src/knowledge_tracing/akt/__init__.py": "03a3e9c1a2030b62b050c846fccb4349066ff247864484683f4acf8f5b725986",
+      "src/knowledge_tracing/akt/authorization.py": "15e7553d956b5fd57fe0798b173a772a6ff3378e3c85b7a5338c8d68a4044adc",
+      "src/knowledge_tracing/akt/checkpoint.py": "beb383a84b296fcb4cd6fb7143e0d46b6697e8acaa8ae5ae52cd165ef83b5523",
+      "src/knowledge_tracing/akt/cli.py": "a0b6ca1e57f8b7d7507f078b85aec8caad3431bc5bf28c94f6c0452b91751c82",
+      "src/knowledge_tracing/akt/config.py": "eea29d8be53af80b0edb11b18170ac21a031490717020c2f100c52f4d5979966",
+      "src/knowledge_tracing/akt/data.py": "0f898de8edb17c188364839d9f44952071ec5c2c5bd507a13a4da99971242a94",
+      "src/knowledge_tracing/akt/encoding.py": "4b8288b9e50fd0763f9ee15db39775a8d3b7b42bb72540a644cbf8a177d351f8",
+      "src/knowledge_tracing/akt/evaluation.py": "1a8f684985e8e653adf1eaa0008185890535479ac16130995bb76869fe5ff8f3",
+      "src/knowledge_tracing/akt/model.py": "260a33bc97e1be9aa75c7f9fd42892bfcba7de394f3e0e58f95948d162adf0fd",
+      "src/knowledge_tracing/akt/prediction.py": "07445f8b476e143b7f25013cfd465c6fc10426d808da6da607b5ce92e9c9060d",
+      "src/knowledge_tracing/akt/provenance.py": "493d82af749baefcacec9ece0a7abe3297e64398eb4cd93c1d639ca41752cb59",
+      "src/knowledge_tracing/akt/resources.py": "8c1e5970efb6aa9966a8f583e11172632426f3318d396c3e28d24b5d16b9c5ba",
+      "src/knowledge_tracing/akt/runner.py": "d4e806199cf10f3ab73cd7725acd90956b197b8a59a37719b3640e243b2012ea",
+      "src/knowledge_tracing/akt/splits.py": "c37757f75291de5ed9c3320b632e1b502fb705a40dd3f5daf3371003ffe15e27",
+      "src/knowledge_tracing/akt/tensors.py": "688fb915f8aa4958f47ee541e9ed92be577c0e14bc9c29e1d969be94863a4867",
+      "src/knowledge_tracing/akt/training.py": "a6d1d9d62b99730b86ee44a0ab1cdf021e275a020c1c35cff8ebb2fa2d943506",
+      "src/knowledge_tracing/akt/types.py": "312e57e4fa507f12b449841969b3a9c2b35c592909178b3040102b254aa20304",
+      "src/knowledge_tracing/akt/upstream.py": "c31715c7659470b6d2e839512f2f9ac1f9b83023a9ba1dbfb6db12d4dd687515",
+      "src/knowledge_tracing/akt/watchdog.py": "08da99e0c44e91d039e081921945db6f5ac8e5dfff32c41d0de6bbaa0b6b48aa",
+      "src/knowledge_tracing/akt/windows.py": "e8d00ea0f8b9d07bdc979575109c1f1fc22498d55410bff05a12559bebdb2068",
+      "src/knowledge_tracing/gam_kt/evaluation.py": "c39b6ca9c87dc92f9e3a6dc7636f5249c7c33f69549284bdcf844c4958acaa65",
+      "src/knowledge_tracing/paired_bootstrap.py": "52c2bd06edf980c6a8f3a94a849a47dedaf2a91e19d74dfc33febf0f4efc8559",
+      "src/knowledge_tracing/shared_kt.py": "06922d5a6bfd6c806fd1abb61232f58a9ccd63826e30cefaf87ce3d3b36dffa8",
+      "tests/akt/test_causality.py": "fb1fb2eb9cb39541eee590cead665a5190d4fa8733147d3d32f668e9a382c7a5",
+      "tests/akt/test_checkpoint.py": "712d39dbe6864b6238023e230d95ffd2945139916177aa224331d7958348c83e",
+      "tests/akt/test_data.py": "49bf9c3378d76607002ef3d330964359febf0676f6c928ee5f890024d48ce058",
+      "tests/akt/test_encoding.py": "f7adb42e85c5037ffa1fc82eb93ab3bf9629e807434e1395058d0dddebfb69a8",
+      "tests/akt/test_evaluation.py": "947cce9cf896b05cd78d1d95e041eb0b57f29e10ac1082f0d41a1e745d96f141",
+      "tests/akt/test_model.py": "944f4e8af67addfdb4764f599841ec9e53b03b0732d310725de7afc5d2068ab0",
+      "tests/akt/test_pilot.py": "4d973301d9695fb80daa90e6d17aaec102ba5a75248a340013441dd986b92de3",
+      "tests/akt/test_prediction.py": "82850f7298745e2daefde8321df7859dedd53da782be2ec540545c1d568310b7",
+      "tests/akt/test_provenance.py": "6630686d1d9683ae9ec63da7e0f86e561d0ab30a08fe81d8761aa839179bd54a",
+      "tests/akt/test_runner.py": "838f877b17387ea6ce8bed656b0638d50ac1bbe703c5e088bcb5f44f8eb66a2c",
+      "tests/akt/test_runtime.py": "f148f82ed2bf91a42d3973713368aab9a7d80a40fd29782b1e260ee6c130a870",
+      "tests/akt/test_training.py": "74ce7e97f38c8df7b93ff231749160227eea8a0210db98164d1e475b647cfa5f",
+      "tests/akt/test_upstream_parity.py": "2e595a9c724b6e5b5d9f8060c557f3658d802a2e4e0c21288b2384e58470ac8f",
+      "tests/akt/test_watchdog.py": "7260c27b8b92acdae4cab593d4220a6b0942b1d48d8a3a79925876652c50626f",
+      "tests/akt/test_windows.py": "2f78b90305e81679f3c91861f1940f1ff139fbad0cd5d186fbd56e9874c3e74a",
+      "tests/shared_kt/test_bootstrap.py": "d19399ecf562d3a9be6846132e0df2f50f8c551f163e994f940e2ae11474f80b",
+      "tests/shared_kt/test_contracts.py": "b74b0c9797e3fb943b1745a567248c942527b78a824f37681414948792c46926"
+    },
+    "canonical_manifest_sha256": "035fb113fcbbd0f433fcda210d43ef279f6eb8163e0b3b4b72c9d4f066a02fb7",
+    "config_sha256": "0b26c0f36639e3d33e31e0b0f2c747f81777166f4c1ed7f46e90ed86026987a2",
+    "gate2_pointer_sha256": "8b2bf26a77915ef7cdcf6c6d8724b895cc02e9a693f0b30b4667be965f4cdd47",
+    "gate2_report_sha256": "01444456ffe01ff0b1a5447b236cec0019cea73365ccdfe554d5fd5a8bfe9443",
+    "gate2_test_log_sha256": "15b1df8841a0c88424d71655e1ef210d91318ea1c41ef64e58f57338b7ea9f71",
+    "lock_sha256": "3e721fdb49543ad0888cf02a863826ebc6144c0d1dd670f2490ebcc0d69b8c0a",
+    "protocol": "akt-nr-exercise-v1",
+    "runtime_report_sha256": "259c171fe63e39a14d9bdf42793bd854a5be73ded19a7a800a2e8a982906f1b4",
+    "source": {
+      "commit": "01b7e8d7d7c862cabc9467108e3e7f2555653a88",
+      "files": {
+        "LICENSE": "891133edce0d8693f5b916d4257ce70b71a02aa110cb02cc5d47326544ea4522",
+        "README.md": "df8eea9919dcdb343f3a841540af18e2039b8b0c33af449ca9c752d11f56ee8b",
+        "akt.py": "be2788c20cac602e86ef3a51e5294b37dd7b200f818be4e173dbd69069a3ec6d"
+      },
+      "remote": "https://github.com/arghosh/AKT.git",
+      "tree": "904863502337ef2eefd1769d14836b62e3c3804a"
+    },
+    "split_manifest_sha256": "a69c0b440ef7d206133470f13696e853cb237c35c56c2b9015c175edaa89f94c"
+  },
+  "model": {
+    "batch_size": 4,
+    "blocks": 1,
+    "context_prefix_H": 100,
+    "d_ff": 1024,
+    "d_model": 256,
+    "final_fc": 512,
+    "heads": 8,
+    "target_block_T": 100
+  },
+  "phase": "pilot",
+  "request_status": "PENDING_EXPLICIT_USER_AUTHORIZATION",
+  "run_id": "pilot-task14-20261105-01",
+  "schema_version": 1,
+  "scope": "development-inner-only",
+  "source_commit": "01b7e8d7d7c862cabc9467108e3e7f2555653a88",
+  "target_limits": {
+    "actual_targets_to_be_measured_after_authorized_load": true,
+    "max_total_targets": 100000,
+    "max_training_targets": 50000,
+    "max_validation_targets": 50000
+  }
+}
