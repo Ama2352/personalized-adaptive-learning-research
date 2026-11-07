@@ -1,0 +1,20 @@
+...............................................F.....                    [100%]
+================================== FAILURES ===================================
+________________ test_head_and_no_mutations_or_foreign_origin _________________
+
+serving = 57857
+
+    def test_head_and_no_mutations_or_foreign_origin(serving):
+        assert request(serving,"/",method="HEAD")[2]==b""
+        for method in ("POST","PUT","PATCH","DELETE","OPTIONS"):
+            assert request(serving,"/api/catalog",method=method)[0]==405
+        assert request(serving,"/api/catalog",headers={"Host":f"evil.example:{serving}"})[0]==403
+        assert request(serving,"/api/catalog",headers={"Origin":"http://evil.example"})[0]==403
+        assert request(serving,"/api/catalog",headers={"Origin":f"http://127.0.0.1:{serving}"})[0]==200
+>       assert request(serving,"http://evil.example/api/catalog")[0]==400
+E       assert 403 == 400
+
+tests\demo\test_viewer.py:167: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/demo/test_viewer.py::test_head_and_no_mutations_or_foreign_origin
+1 failed, 52 passed in 1.88s

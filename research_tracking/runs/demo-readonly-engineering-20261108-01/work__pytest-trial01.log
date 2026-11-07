@@ -1,0 +1,2349 @@
+....FEEEEEE.............FFFFFFFFFFFFFFFFFFFFFFFF.....                    [100%]
+=================================== ERRORS ====================================
+_____ ERROR at setup of test_startup_tamper_fails_closed[0-manifest.json] _____
+
+cls = <class '_pytest.runner.CallInfo'>
+func = <function call_and_report.<locals>.<lambda> at 0x0000019E0BAD1580>
+when = 'setup'
+reraise = (<class '_pytest.outcomes.Exit'>, <class 'KeyboardInterrupt'>)
+
+    @classmethod
+    def from_call(
+        cls,
+        func: Callable[[], TResult],
+        when: Literal["collect", "setup", "call", "teardown"],
+        reraise: type[BaseException] | tuple[type[BaseException], ...] | None = None,
+    ) -> CallInfo[TResult]:
+        """Call func, wrapping the result in a CallInfo.
+    
+        :param func:
+            The function to call. Called without arguments.
+        :type func: Callable[[], _pytest.runner.TResult]
+        :param when:
+            The phase in which the function is called.
+        :param reraise:
+            Exception or exceptions that shall propagate if raised by the
+            function, instead of being wrapped in the CallInfo.
+        """
+        excinfo = None
+        instant = timing.Instant()
+        try:
+>           result: TResult | None = func()
+                                     ^^^^^^
+
+.venv\Lib\site-packages\_pytest\runner.py:361: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\runner.py:250: in <lambda>
+    lambda: runtest_hook(item=item, **kwds),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\logging.py:858: in pytest_runtest_setup
+    yield
+.venv\Lib\site-packages\_pytest\capture.py:895: in pytest_runtest_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\runner.py:170: in pytest_runtest_setup
+    item.session._setupstate.setup(item)
+.venv\Lib\site-packages\_pytest\runner.py:536: in setup
+    col.setup()
+.venv\Lib\site-packages\_pytest\python.py:1710: in setup
+    self._request._fillfixtures()
+.venv\Lib\site-packages\_pytest\fixtures.py:806: in _fillfixtures
+    item.funcargs[argname] = self.getfixturevalue(argname)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:630: in getfixturevalue
+    fixturedef = self._get_active_fixturedef(argname)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:726: in _get_active_fixturedef
+    fixturedef.execute(request=subrequest)
+.venv\Lib\site-packages\_pytest\fixtures.py:1232: in execute
+    result: FixtureValue = ihook.pytest_fixture_setup(
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:64: in run_old_style_hookwrapper
+    return result.get_result()
+           ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:49: in run_old_style_hookwrapper
+    res = yield
+          ^^^^^
+.venv\Lib\site-packages\_pytest\setuponly.py:36: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:1328: in pytest_fixture_setup
+    result = call_fixture_func(fixturefunc, request, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:998: in call_fixture_func
+    fixture_result = next(generator)
+                     ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:300: in tmp_path
+    path = _mk_tmp(request, tmp_path_factory)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:287: in _mk_tmp
+    return factory.mktemp(name, numbered=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{cf774f94-c1b9-4ec8-bbf9-22ad0fcc58d0}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{cf774f94-c1b9-4ec8-bbf9-22ad0fcc58d0}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+____ ERROR at setup of test_startup_tamper_fails_closed[0-traces.jsonl.gz] ____
+
+cls = <class '_pytest.runner.CallInfo'>
+func = <function call_and_report.<locals>.<lambda> at 0x0000019E0BAD16C0>
+when = 'setup'
+reraise = (<class '_pytest.outcomes.Exit'>, <class 'KeyboardInterrupt'>)
+
+    @classmethod
+    def from_call(
+        cls,
+        func: Callable[[], TResult],
+        when: Literal["collect", "setup", "call", "teardown"],
+        reraise: type[BaseException] | tuple[type[BaseException], ...] | None = None,
+    ) -> CallInfo[TResult]:
+        """Call func, wrapping the result in a CallInfo.
+    
+        :param func:
+            The function to call. Called without arguments.
+        :type func: Callable[[], _pytest.runner.TResult]
+        :param when:
+            The phase in which the function is called.
+        :param reraise:
+            Exception or exceptions that shall propagate if raised by the
+            function, instead of being wrapped in the CallInfo.
+        """
+        excinfo = None
+        instant = timing.Instant()
+        try:
+>           result: TResult | None = func()
+                                     ^^^^^^
+
+.venv\Lib\site-packages\_pytest\runner.py:361: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\runner.py:250: in <lambda>
+    lambda: runtest_hook(item=item, **kwds),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\logging.py:858: in pytest_runtest_setup
+    yield
+.venv\Lib\site-packages\_pytest\capture.py:895: in pytest_runtest_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\runner.py:170: in pytest_runtest_setup
+    item.session._setupstate.setup(item)
+.venv\Lib\site-packages\_pytest\runner.py:536: in setup
+    col.setup()
+.venv\Lib\site-packages\_pytest\python.py:1710: in setup
+    self._request._fillfixtures()
+.venv\Lib\site-packages\_pytest\fixtures.py:806: in _fillfixtures
+    item.funcargs[argname] = self.getfixturevalue(argname)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:630: in getfixturevalue
+    fixturedef = self._get_active_fixturedef(argname)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:726: in _get_active_fixturedef
+    fixturedef.execute(request=subrequest)
+.venv\Lib\site-packages\_pytest\fixtures.py:1232: in execute
+    result: FixtureValue = ihook.pytest_fixture_setup(
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:64: in run_old_style_hookwrapper
+    return result.get_result()
+           ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:49: in run_old_style_hookwrapper
+    res = yield
+          ^^^^^
+.venv\Lib\site-packages\_pytest\setuponly.py:36: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:1328: in pytest_fixture_setup
+    result = call_fixture_func(fixturefunc, request, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:998: in call_fixture_func
+    fixture_result = next(generator)
+                     ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:300: in tmp_path
+    path = _mk_tmp(request, tmp_path_factory)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:287: in _mk_tmp
+    return factory.mktemp(name, numbered=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{cf774f94-c1b9-4ec8-bbf9-22ad0fcc58d0}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{cf774f94-c1b9-4ec8-bbf9-22ad0fcc58d0}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+_____ ERROR at setup of test_startup_tamper_fails_closed[1-analysis.json] _____
+
+cls = <class '_pytest.runner.CallInfo'>
+func = <function call_and_report.<locals>.<lambda> at 0x0000019E0BAD3BA0>
+when = 'setup'
+reraise = (<class '_pytest.outcomes.Exit'>, <class 'KeyboardInterrupt'>)
+
+    @classmethod
+    def from_call(
+        cls,
+        func: Callable[[], TResult],
+        when: Literal["collect", "setup", "call", "teardown"],
+        reraise: type[BaseException] | tuple[type[BaseException], ...] | None = None,
+    ) -> CallInfo[TResult]:
+        """Call func, wrapping the result in a CallInfo.
+    
+        :param func:
+            The function to call. Called without arguments.
+        :type func: Callable[[], _pytest.runner.TResult]
+        :param when:
+            The phase in which the function is called.
+        :param reraise:
+            Exception or exceptions that shall propagate if raised by the
+            function, instead of being wrapped in the CallInfo.
+        """
+        excinfo = None
+        instant = timing.Instant()
+        try:
+>           result: TResult | None = func()
+                                     ^^^^^^
+
+.venv\Lib\site-packages\_pytest\runner.py:361: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\runner.py:250: in <lambda>
+    lambda: runtest_hook(item=item, **kwds),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\logging.py:858: in pytest_runtest_setup
+    yield
+.venv\Lib\site-packages\_pytest\capture.py:895: in pytest_runtest_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\runner.py:170: in pytest_runtest_setup
+    item.session._setupstate.setup(item)
+.venv\Lib\site-packages\_pytest\runner.py:536: in setup
+    col.setup()
+.venv\Lib\site-packages\_pytest\python.py:1710: in setup
+    self._request._fillfixtures()
+.venv\Lib\site-packages\_pytest\fixtures.py:806: in _fillfixtures
+    item.funcargs[argname] = self.getfixturevalue(argname)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:630: in getfixturevalue
+    fixturedef = self._get_active_fixturedef(argname)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:726: in _get_active_fixturedef
+    fixturedef.execute(request=subrequest)
+.venv\Lib\site-packages\_pytest\fixtures.py:1232: in execute
+    result: FixtureValue = ihook.pytest_fixture_setup(
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:64: in run_old_style_hookwrapper
+    return result.get_result()
+           ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:49: in run_old_style_hookwrapper
+    res = yield
+          ^^^^^
+.venv\Lib\site-packages\_pytest\setuponly.py:36: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:1328: in pytest_fixture_setup
+    result = call_fixture_func(fixturefunc, request, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:998: in call_fixture_func
+    fixture_result = next(generator)
+                     ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:300: in tmp_path
+    path = _mk_tmp(request, tmp_path_factory)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:287: in _mk_tmp
+    return factory.mktemp(name, numbered=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{cf774f94-c1b9-4ec8-bbf9-22ad0fcc58d0}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{cf774f94-c1b9-4ec8-bbf9-22ad0fcc58d0}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+____ ERROR at setup of test_startup_tamper_fails_closed[2-conditions.json] ____
+
+cls = <class '_pytest.runner.CallInfo'>
+func = <function call_and_report.<locals>.<lambda> at 0x0000019E0BAD3CE0>
+when = 'setup'
+reraise = (<class '_pytest.outcomes.Exit'>, <class 'KeyboardInterrupt'>)
+
+    @classmethod
+    def from_call(
+        cls,
+        func: Callable[[], TResult],
+        when: Literal["collect", "setup", "call", "teardown"],
+        reraise: type[BaseException] | tuple[type[BaseException], ...] | None = None,
+    ) -> CallInfo[TResult]:
+        """Call func, wrapping the result in a CallInfo.
+    
+        :param func:
+            The function to call. Called without arguments.
+        :type func: Callable[[], _pytest.runner.TResult]
+        :param when:
+            The phase in which the function is called.
+        :param reraise:
+            Exception or exceptions that shall propagate if raised by the
+            function, instead of being wrapped in the CallInfo.
+        """
+        excinfo = None
+        instant = timing.Instant()
+        try:
+>           result: TResult | None = func()
+                                     ^^^^^^
+
+.venv\Lib\site-packages\_pytest\runner.py:361: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\runner.py:250: in <lambda>
+    lambda: runtest_hook(item=item, **kwds),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\logging.py:858: in pytest_runtest_setup
+    yield
+.venv\Lib\site-packages\_pytest\capture.py:895: in pytest_runtest_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\runner.py:170: in pytest_runtest_setup
+    item.session._setupstate.setup(item)
+.venv\Lib\site-packages\_pytest\runner.py:536: in setup
+    col.setup()
+.venv\Lib\site-packages\_pytest\python.py:1710: in setup
+    self._request._fillfixtures()
+.venv\Lib\site-packages\_pytest\fixtures.py:806: in _fillfixtures
+    item.funcargs[argname] = self.getfixturevalue(argname)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:630: in getfixturevalue
+    fixturedef = self._get_active_fixturedef(argname)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:726: in _get_active_fixturedef
+    fixturedef.execute(request=subrequest)
+.venv\Lib\site-packages\_pytest\fixtures.py:1232: in execute
+    result: FixtureValue = ihook.pytest_fixture_setup(
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:64: in run_old_style_hookwrapper
+    return result.get_result()
+           ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:49: in run_old_style_hookwrapper
+    res = yield
+          ^^^^^
+.venv\Lib\site-packages\_pytest\setuponly.py:36: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:1328: in pytest_fixture_setup
+    result = call_fixture_func(fixturefunc, request, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:998: in call_fixture_func
+    fixture_result = next(generator)
+                     ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:300: in tmp_path
+    path = _mk_tmp(request, tmp_path_factory)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:287: in _mk_tmp
+    return factory.mktemp(name, numbered=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{cf774f94-c1b9-4ec8-bbf9-22ad0fcc58d0}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{cf774f94-c1b9-4ec8-bbf9-22ad0fcc58d0}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+______ ERROR at setup of test_missing_source_and_path_escape_fail_closed ______
+
+cls = <class '_pytest.runner.CallInfo'>
+func = <function call_and_report.<locals>.<lambda> at 0x0000019E0C3ED580>
+when = 'setup'
+reraise = (<class '_pytest.outcomes.Exit'>, <class 'KeyboardInterrupt'>)
+
+    @classmethod
+    def from_call(
+        cls,
+        func: Callable[[], TResult],
+        when: Literal["collect", "setup", "call", "teardown"],
+        reraise: type[BaseException] | tuple[type[BaseException], ...] | None = None,
+    ) -> CallInfo[TResult]:
+        """Call func, wrapping the result in a CallInfo.
+    
+        :param func:
+            The function to call. Called without arguments.
+        :type func: Callable[[], _pytest.runner.TResult]
+        :param when:
+            The phase in which the function is called.
+        :param reraise:
+            Exception or exceptions that shall propagate if raised by the
+            function, instead of being wrapped in the CallInfo.
+        """
+        excinfo = None
+        instant = timing.Instant()
+        try:
+>           result: TResult | None = func()
+                                     ^^^^^^
+
+.venv\Lib\site-packages\_pytest\runner.py:361: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\runner.py:250: in <lambda>
+    lambda: runtest_hook(item=item, **kwds),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\logging.py:858: in pytest_runtest_setup
+    yield
+.venv\Lib\site-packages\_pytest\capture.py:895: in pytest_runtest_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\runner.py:170: in pytest_runtest_setup
+    item.session._setupstate.setup(item)
+.venv\Lib\site-packages\_pytest\runner.py:536: in setup
+    col.setup()
+.venv\Lib\site-packages\_pytest\python.py:1710: in setup
+    self._request._fillfixtures()
+.venv\Lib\site-packages\_pytest\fixtures.py:806: in _fillfixtures
+    item.funcargs[argname] = self.getfixturevalue(argname)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:630: in getfixturevalue
+    fixturedef = self._get_active_fixturedef(argname)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:726: in _get_active_fixturedef
+    fixturedef.execute(request=subrequest)
+.venv\Lib\site-packages\_pytest\fixtures.py:1232: in execute
+    result: FixtureValue = ihook.pytest_fixture_setup(
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:64: in run_old_style_hookwrapper
+    return result.get_result()
+           ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:49: in run_old_style_hookwrapper
+    res = yield
+          ^^^^^
+.venv\Lib\site-packages\_pytest\setuponly.py:36: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:1328: in pytest_fixture_setup
+    result = call_fixture_func(fixturefunc, request, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:998: in call_fixture_func
+    fixture_result = next(generator)
+                     ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:300: in tmp_path
+    path = _mk_tmp(request, tmp_path_factory)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:287: in _mk_tmp
+    return factory.mktemp(name, numbered=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{cf774f94-c1b9-4ec8-bbf9-22ad0fcc58d0}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{cf774f94-c1b9-4ec8-bbf9-22ad0fcc58d0}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+________________ ERROR at setup of test_bounded_file_and_gzip _________________
+
+cls = <class '_pytest.runner.CallInfo'>
+func = <function call_and_report.<locals>.<lambda> at 0x0000019E0C3ED940>
+when = 'setup'
+reraise = (<class '_pytest.outcomes.Exit'>, <class 'KeyboardInterrupt'>)
+
+    @classmethod
+    def from_call(
+        cls,
+        func: Callable[[], TResult],
+        when: Literal["collect", "setup", "call", "teardown"],
+        reraise: type[BaseException] | tuple[type[BaseException], ...] | None = None,
+    ) -> CallInfo[TResult]:
+        """Call func, wrapping the result in a CallInfo.
+    
+        :param func:
+            The function to call. Called without arguments.
+        :type func: Callable[[], _pytest.runner.TResult]
+        :param when:
+            The phase in which the function is called.
+        :param reraise:
+            Exception or exceptions that shall propagate if raised by the
+            function, instead of being wrapped in the CallInfo.
+        """
+        excinfo = None
+        instant = timing.Instant()
+        try:
+>           result: TResult | None = func()
+                                     ^^^^^^
+
+.venv\Lib\site-packages\_pytest\runner.py:361: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\runner.py:250: in <lambda>
+    lambda: runtest_hook(item=item, **kwds),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\logging.py:858: in pytest_runtest_setup
+    yield
+.venv\Lib\site-packages\_pytest\capture.py:895: in pytest_runtest_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\runner.py:170: in pytest_runtest_setup
+    item.session._setupstate.setup(item)
+.venv\Lib\site-packages\_pytest\runner.py:536: in setup
+    col.setup()
+.venv\Lib\site-packages\_pytest\python.py:1710: in setup
+    self._request._fillfixtures()
+.venv\Lib\site-packages\_pytest\fixtures.py:806: in _fillfixtures
+    item.funcargs[argname] = self.getfixturevalue(argname)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:630: in getfixturevalue
+    fixturedef = self._get_active_fixturedef(argname)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:726: in _get_active_fixturedef
+    fixturedef.execute(request=subrequest)
+.venv\Lib\site-packages\_pytest\fixtures.py:1232: in execute
+    result: FixtureValue = ihook.pytest_fixture_setup(
+.venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+.venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:64: in run_old_style_hookwrapper
+    return result.get_result()
+           ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pluggy\_execution.py:49: in run_old_style_hookwrapper
+    res = yield
+          ^^^^^
+.venv\Lib\site-packages\_pytest\setuponly.py:36: in pytest_fixture_setup
+    return (yield)
+            ^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:1328: in pytest_fixture_setup
+    result = call_fixture_func(fixturefunc, request, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\fixtures.py:998: in call_fixture_func
+    fixture_result = next(generator)
+                     ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:300: in tmp_path
+    path = _mk_tmp(request, tmp_path_factory)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:287: in _mk_tmp
+    return factory.mktemp(name, numbered=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{cf774f94-c1b9-4ec8-bbf9-22ad0fcc58d0}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{cf774f94-c1b9-4ec8-bbf9-22ad0fcc58d0}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+================================== FAILURES ===================================
+_________ test_curated_catalog_synthetic_only_and_missing_confidence __________
+
+store = <src.research_demo.evidence.EvidenceStore object at 0x0000019E0B9370E0>
+
+    def test_curated_catalog_synthetic_only_and_missing_confidence(store):
+        catalog = store.catalog()
+        assert catalog["graph_confidence_gate"]["available"] is False
+        assert {r["candidate"]:r["changed_action_preview_events"] for r in catalog["rq1"]} == {"graph_package":22,"empty_graph_package":0}
+        assert {r["profile"]:r["seed_blocks"] for r in catalog["rq2_synthetic"]["profiles"]} == {"PG":10,"PY":10,"PYH":10}
+>       assert "junyi" not in json.dumps(catalog).lower()
+E       assert 'junyi' not in '{"profiles"...5c7ffc61"}]}'
+E         
+E         'junyi' is contained here:
+E         ?           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           tr\u00ean junyi ho\u1eb7c ng\u01b0\u1eddi h\u1ecdc th\u1eadt; seeds pilot \u0111\u00e3 c\u00f4ng khai.", "kh\u00f4ng causal ability effect, final efficacy, equivalence, p-value ho\u1eb7c formal ci.", "kh\u00f4ng pooling \u0111\u01a1n v\u1ecb seed, event, edge ho\u1eb7c learner gi\u1eefa hai h\u1ec7.", "kh\u00f4ng per-seed mechanism exposure ho\u1eb7c per-learner contrasts trong selected inputs.", "profile dynamics/initialization v\u00e0 graph correlation c\u1ee7a ngu\u1ed3n \u0111\u01b0\u1ee3c gi\u1eef; kh\u00f4ng gi...
+E         
+E         ...Full output truncated (2 lines hidden), use '-vv' to show
+
+tests\demo\test_viewer.py:73: AssertionError
+________ test_real_http_fixed_routes_and_security_headers[/-text/html] ________
+
+serving = 57815, route = '/', mime = 'text/html'
+
+    @pytest.mark.parametrize("route,mime",[("/","text/html"),("/assets/demo.css","text/css"),("/assets/demo.js","text/javascript"),("/api/catalog","application/json"),("/api/replay?profile=PG&seed=20000&variant=graph_package&step=0","application/json")])
+    def test_real_http_fixed_routes_and_security_headers(serving,route,mime):
+>       status,headers,body=request(serving,route)
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_real_http_fixed_routes_and_security_headers[/assets/demo.css-text/css] _
+
+serving = 57815, route = '/assets/demo.css', mime = 'text/css'
+
+    @pytest.mark.parametrize("route,mime",[("/","text/html"),("/assets/demo.css","text/css"),("/assets/demo.js","text/javascript"),("/api/catalog","application/json"),("/api/replay?profile=PG&seed=20000&variant=graph_package&step=0","application/json")])
+    def test_real_http_fixed_routes_and_security_headers(serving,route,mime):
+>       status,headers,body=request(serving,route)
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_real_http_fixed_routes_and_security_headers[/assets/demo.js-text/javascript] _
+
+serving = 57815, route = '/assets/demo.js', mime = 'text/javascript'
+
+    @pytest.mark.parametrize("route,mime",[("/","text/html"),("/assets/demo.css","text/css"),("/assets/demo.js","text/javascript"),("/api/catalog","application/json"),("/api/replay?profile=PG&seed=20000&variant=graph_package&step=0","application/json")])
+    def test_real_http_fixed_routes_and_security_headers(serving,route,mime):
+>       status,headers,body=request(serving,route)
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_real_http_fixed_routes_and_security_headers[/api/catalog-application/json] _
+
+serving = 57815, route = '/api/catalog', mime = 'application/json'
+
+    @pytest.mark.parametrize("route,mime",[("/","text/html"),("/assets/demo.css","text/css"),("/assets/demo.js","text/javascript"),("/api/catalog","application/json"),("/api/replay?profile=PG&seed=20000&variant=graph_package&step=0","application/json")])
+    def test_real_http_fixed_routes_and_security_headers(serving,route,mime):
+>       status,headers,body=request(serving,route)
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_real_http_fixed_routes_and_security_headers[/api/replay?profile=PG&seed=20000&variant=graph_package&step=0-application/json] _
+
+serving = 57815
+route = '/api/replay?profile=PG&seed=20000&variant=graph_package&step=0'
+mime = 'application/json'
+
+    @pytest.mark.parametrize("route,mime",[("/","text/html"),("/assets/demo.css","text/css"),("/assets/demo.js","text/javascript"),("/api/catalog","application/json"),("/api/replay?profile=PG&seed=20000&variant=graph_package&step=0","application/json")])
+    def test_real_http_fixed_routes_and_security_headers(serving,route,mime):
+>       status,headers,body=request(serving,route)
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_________________________ test_http_query_allowlist[] _________________________
+
+serving = 57815, query = ''
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=-1] _
+
+serving = 57815, query = 'profile=PG&seed=20000&variant=graph_free&step=-1'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=120] _
+
+serving = 57815, query = 'profile=PG&seed=20000&variant=graph_free&step=120'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=00] _
+
+serving = 57815, query = 'profile=PG&seed=20000&variant=graph_free&step=00'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=1&file=secret] _
+
+serving = 57815
+query = 'profile=PG&seed=20000&variant=graph_free&step=1&file=secret'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=1&step=2] _
+
+serving = 57815
+query = 'profile=PG&seed=20000&variant=graph_free&step=1&step=2'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+____ test_http_query_allowlist[profile=PG&seed=20000&variant=other&step=1] ____
+
+serving = 57815, query = 'profile=PG&seed=20000&variant=other&step=1'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_http_query_allowlist[profile=unknown&seed=20000&variant=graph_free&step=1] _
+
+serving = 57815, query = 'profile=unknown&seed=20000&variant=graph_free&step=1'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+___ test_http_query_allowlist[profile=PG&seed=42&variant=graph_free&step=1] ___
+
+serving = 57815, query = 'profile=PG&seed=42&variant=graph_free&step=1'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91] _
+
+serving = 57815
+query = 'profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=1.0] _
+
+serving = 57815, query = 'profile=PG&seed=20000&variant=graph_free&step=1.0'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+___________ test_no_filesystem_or_export_routes[/../dataset/secret] ___________
+
+serving = 57815, route = '/../dataset/secret'
+
+    @pytest.mark.parametrize("route",["/../dataset/secret","/%2e%2e/dataset/secret","/assets/../evidence.py","/api/file?path=dataset","/assets/demo.js?x=1","/api/catalog?x=1","/exports"])
+    def test_no_filesystem_or_export_routes(serving,route):
+>       assert request(serving,route)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_________ test_no_filesystem_or_export_routes[/%2e%2e/dataset/secret] _________
+
+serving = 57815, route = '/%2e%2e/dataset/secret'
+
+    @pytest.mark.parametrize("route",["/../dataset/secret","/%2e%2e/dataset/secret","/assets/../evidence.py","/api/file?path=dataset","/assets/demo.js?x=1","/api/catalog?x=1","/exports"])
+    def test_no_filesystem_or_export_routes(serving,route):
+>       assert request(serving,route)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_________ test_no_filesystem_or_export_routes[/assets/../evidence.py] _________
+
+serving = 57815, route = '/assets/../evidence.py'
+
+    @pytest.mark.parametrize("route",["/../dataset/secret","/%2e%2e/dataset/secret","/assets/../evidence.py","/api/file?path=dataset","/assets/demo.js?x=1","/api/catalog?x=1","/exports"])
+    def test_no_filesystem_or_export_routes(serving,route):
+>       assert request(serving,route)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_________ test_no_filesystem_or_export_routes[/api/file?path=dataset] _________
+
+serving = 57815, route = '/api/file?path=dataset'
+
+    @pytest.mark.parametrize("route",["/../dataset/secret","/%2e%2e/dataset/secret","/assets/../evidence.py","/api/file?path=dataset","/assets/demo.js?x=1","/api/catalog?x=1","/exports"])
+    def test_no_filesystem_or_export_routes(serving,route):
+>       assert request(serving,route)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+__________ test_no_filesystem_or_export_routes[/assets/demo.js?x=1] ___________
+
+serving = 57815, route = '/assets/demo.js?x=1'
+
+    @pytest.mark.parametrize("route",["/../dataset/secret","/%2e%2e/dataset/secret","/assets/../evidence.py","/api/file?path=dataset","/assets/demo.js?x=1","/api/catalog?x=1","/exports"])
+    def test_no_filesystem_or_export_routes(serving,route):
+>       assert request(serving,route)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+____________ test_no_filesystem_or_export_routes[/api/catalog?x=1] ____________
+
+serving = 57815, route = '/api/catalog?x=1'
+
+    @pytest.mark.parametrize("route",["/../dataset/secret","/%2e%2e/dataset/secret","/assets/../evidence.py","/api/file?path=dataset","/assets/demo.js?x=1","/api/catalog?x=1","/exports"])
+    def test_no_filesystem_or_export_routes(serving,route):
+>       assert request(serving,route)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+________________ test_no_filesystem_or_export_routes[/exports] ________________
+
+serving = 57815, route = '/exports'
+
+    @pytest.mark.parametrize("route",["/../dataset/secret","/%2e%2e/dataset/secret","/assets/../evidence.py","/api/file?path=dataset","/assets/demo.js?x=1","/api/catalog?x=1","/exports"])
+    def test_no_filesystem_or_export_routes(serving,route):
+>       assert request(serving,route)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+________________ test_head_and_no_mutations_or_foreign_origin _________________
+
+serving = 57815
+
+    def test_head_and_no_mutations_or_foreign_origin(serving):
+>       assert request(serving,"/",method="HEAD")[2]==b""
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:36: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 57815), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+============================== warnings summary ===============================
+.venv\Lib\site-packages\_pytest\cacheprovider.py:469
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:469: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\nodeids: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+.venv\Lib\site-packages\_pytest\cacheprovider.py:423
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:423: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\lastfailed: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/lastfailed", self.lastfailed)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/demo/test_viewer.py::test_curated_catalog_synthetic_only_and_missing_confidence
+FAILED tests/demo/test_viewer.py::test_real_http_fixed_routes_and_security_headers[/-text/html]
+FAILED tests/demo/test_viewer.py::test_real_http_fixed_routes_and_security_headers[/assets/demo.css-text/css]
+FAILED tests/demo/test_viewer.py::test_real_http_fixed_routes_and_security_headers[/assets/demo.js-text/javascript]
+FAILED tests/demo/test_viewer.py::test_real_http_fixed_routes_and_security_headers[/api/catalog-application/json]
+FAILED tests/demo/test_viewer.py::test_real_http_fixed_routes_and_security_headers[/api/replay?profile=PG&seed=20000&variant=graph_package&step=0-application/json]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[] - PermissionErr...
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=-1]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=120]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=00]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=1&file=secret]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=1&step=2]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=20000&variant=other&step=1]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=unknown&seed=20000&variant=graph_free&step=1]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=42&variant=graph_free&step=1]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=1.0]
+FAILED tests/demo/test_viewer.py::test_no_filesystem_or_export_routes[/../dataset/secret]
+FAILED tests/demo/test_viewer.py::test_no_filesystem_or_export_routes[/%2e%2e/dataset/secret]
+FAILED tests/demo/test_viewer.py::test_no_filesystem_or_export_routes[/assets/../evidence.py]
+FAILED tests/demo/test_viewer.py::test_no_filesystem_or_export_routes[/api/file?path=dataset]
+FAILED tests/demo/test_viewer.py::test_no_filesystem_or_export_routes[/assets/demo.js?x=1]
+FAILED tests/demo/test_viewer.py::test_no_filesystem_or_export_routes[/api/catalog?x=1]
+FAILED tests/demo/test_viewer.py::test_no_filesystem_or_export_routes[/exports]
+FAILED tests/demo/test_viewer.py::test_head_and_no_mutations_or_foreign_origin
+ERROR tests/demo/test_viewer.py::test_startup_tamper_fails_closed[0-manifest.json]
+ERROR tests/demo/test_viewer.py::test_startup_tamper_fails_closed[0-traces.jsonl.gz]
+ERROR tests/demo/test_viewer.py::test_startup_tamper_fails_closed[1-analysis.json]
+ERROR tests/demo/test_viewer.py::test_startup_tamper_fails_closed[2-conditions.json]
+ERROR tests/demo/test_viewer.py::test_missing_source_and_path_escape_fail_closed
+ERROR tests/demo/test_viewer.py::test_bounded_file_and_gzip - OSError: could ...
+25 failed, 22 passed, 2 warnings, 6 errors in 3.81s
