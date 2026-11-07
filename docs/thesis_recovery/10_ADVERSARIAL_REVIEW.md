@@ -56,3 +56,9 @@ Trap3 thêm diagnostic trên cùng learner/child opportunities, không thay fina
 Biggest research blocker vẫn là accepted Junyi/simulator mastery/training contract và confirmatory protocol. Hoàn tất engineering recovery không hoàn tất RQ3; RQ1/RQ2 diagnostic evidence không tự hoàn tất research questions. Các baseline/deliverable bắt buộc trong proposal vẫn giữ. Full CV, Holdout, CUDA và thay scientific methodology vẫn cần đúng gate; phần safe CPU được user cho phép tiếp tục.
 
 Nghiệm thu sau review: Gate2-08 274passed, nofail/error/skip, source-bound pointerverified. Hai lỗi mới đã có regression tests và artifact proof trong cpu-akt-recovery-20261107-01. Software readiness CPU đã cập nhật; research/GPU readiness không nâng theo.
+
+## Review interface simulator–KT
+
+SIM01–03 đã có typed observation/query/session, SHA/domain/recipe binding và native parity. Gate2-09 đạt293pass/no failures/errors/skips264.44s. Raw reference correctness không được tự đổi thành P(K) hoặc boolean mastery; S04 vẫn cần chốt. Source defect double re-anchor có failing/passing regression, không sửa artifacts cũ. Native elapsed-time invariance là architecture limitation; retention phải lấy latent environment, không suy từ delayed KT score.
+
+Phản biện mới: “graph cache past-only nên fair”. Không đủ: bridge full history phục vụ replay, nhưng AKT A0 chỉ nhìn effective window. CG cache dài hơn sẽ thêm information/history ngoài graph. Sửa design06/decision register: primary cùng effective window, hoặc thêm graph-free matched-cache control nếu chọn full cache. Đây là đề xuất cần chốt, chưa sửa model hoặc method. Chi phí closed-loop reference queries cũng phải tính ngoài chi phí train; fixture d16/168targets không là throughput d256/GPU.

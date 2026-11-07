@@ -28,6 +28,8 @@ Mastery adapter queries fixed reference items per concept (ví dụ bank1050/120
 
 ## Training fairness và checkpoints
 
+Review sau interface07/11: session giữ full history để replay/snapshot nhưng A0 chỉ dùng window theo global anchors. CG branch dùng full-history concept cache trong khi A0 bị cắt window sẽ trộn graph effect với thêm lịch sử. Default **đề xuất, chưaadopt**: primary graph context dùng cùng effective causal window; nếu dùng cache dài hơn thì thêm graph-free cache/information-matched control và báo thành thiết kế khác. Chốt scope này cùng S04/S05 trước implementation/training graph variants, không xem “past-only” là đã đủ fairness.
+
 A0/A1/A2/A3 cùng random backbone initialization theo seed, same training logs, optimizer/backbone hyperparams/budget. Branch parameters extra report count. Train riêng mỗi variant là primary ablation. Warm-start từ A0 được phép thiết kế riêng với cùng pretraining exposure và fine-tune budget cho cả A0 control, không so pretrained CG với scratch A0. Noise inference-only sensitivity có thể reuse frozen checkpoints nhưng không gọi robustness-under-noisy-training. Candidate graph học thay train data thì graph hash và confidence construction nằm trong fold train.
 
 Chi phí tối thiểu main4 fits mỗi simulator seed, 3 seed core là12 fits, thêm oracle/shuffled/gate-off inference ablation không luôn cần retrain. Fixed/no-confidence/gate variants được retrain cho causal architecture ablation. Gate-off same-backbone cần inference-only. Không reuse inner checkpoint làm outer refit nếu vocab/loss exposure khác. Reuse deterministic encoded windows cùng mapping và semantic hash, không share train-fitted calibrator across outer folds.

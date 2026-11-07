@@ -121,3 +121,7 @@ SIM02 actual AKT fixture train8events≤2updates, SHA/domain/recipe/vocab/select
 ## 07/11/2026 — Paper2 bank lifecycle và architecture boundary
 
 SIM03 dùng28concept/84item, arithmetic labels,168targets1epoch1update d16CPU. Run01 11.99s, run02 11.07s sau metadata/binding hardening, cả2complete. Native state và reference scores trùng exact; full JSON khác vì checkpoint SHA/telemetry/provenance, repeat proof tách đúng layers.19native/contract tests pass19.86s gồm delayed-query invariance: original AKT không nhận elapsed time. Không dùng raw reference score làm mastery/retention. Report simulator_kt_interface_20261107.md. Gate2-09 đangchạy, không claimPASS sớm.
+
+## 07/11/2026 — Interface gate293 và bước hiệu năng có kiểm soát
+
+Gate2-09 293passed0fail/error/skip264.44s, pointerverified. Archive20outputs, sourcev1script khôi phục bỏ metadata bổ sung và verify exact recordedSHA; dependencies refGit3c3d5a5. SIM04 complete. Kitv8 125files43f6a091888e75fccaf875c464b60e4bb4c6747c004c9a47f49eba06734dbea8, ZIPintegrityonly. NextSIM05: batch independent reference windows under existing batchcap, same history perquery, no fabricatedevents; target equivalence before performanceclaim.

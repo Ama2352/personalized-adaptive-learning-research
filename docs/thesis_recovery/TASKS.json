@@ -1344,8 +1344,37 @@
       "estimated_effort": "0.5–1 engineering day per task; not GPU runtime",
       "compute_cost_category": "bounded local CPU synthetic",
       "authorization_requirements": "Safe engineering authorized; no final mastery threshold/controller/methodology adoption; no cloud/full experiment",
+      "status": "COMPLETED",
+      "blockers": [],
+      "verification_evidence": "cpu-sim-kt-gate-20261107-01; Gate2-09 293pass, source/lock stable"
+    },
+    {
+      "id": "SIM05",
+      "research_objective": "Batch independent reference probes without fictitious interactions",
+      "rq": [
+        "RQ1",
+        "RQ3"
+      ],
+      "workstream": "simulator_kt_interface",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "SIM04"
+      ],
+      "required_inputs": "18_SIMULATOR_KT_INTERFACE.md;06 architecture draft; immutable simulator item bank",
+      "files_components": "simulator_bridge.py;akt/model.py;akt/online.py; tests",
+      "implementation_objective": "Batch windows for candidate queries from identical history, preserve sequential probabilities and caps",
+      "acceptance_criteria": "Sequential/batched probabilities agree abs1e-6 CPU, source targets/chronology/OOV unchanged, no query commits or cross-candidate leakage; use existing configured inference batch cap",
+      "verification_steps": "Synthetic native fixtures, Paper2 bank lifecycle, forward-call accounting and final source-bound gate",
+      "required_artifacts": "Test logs, source/fixture/checkpoint identities, Vietnamese note, immutable evidence bundle",
+      "estimated_effort": "0.5–1 engineering day per task; not GPU runtime",
+      "compute_cost_category": "bounded local CPU synthetic",
+      "authorization_requirements": "Safe engineering authorized; no final mastery threshold/controller/methodology adoption; no cloud/full experiment",
       "status": "IN_PROGRESS",
-      "blockers": []
+      "blockers": [],
+      "verification_evidence": "Pending",
+      "verification_scope": "CPU engineering only"
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

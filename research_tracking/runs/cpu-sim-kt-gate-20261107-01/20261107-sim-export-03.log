@@ -1,0 +1,620 @@
+..............FFFFFFFF.FF..........                                      [100%]
+================================== FAILURES ===================================
+________ test_iter_predictions_preserves_each_source_row_and_oov_null _________
+
+    def test_iter_predictions_preserves_each_source_row_and_oov_null():
+        source = learner()
+>       records = ready_records(source)
+                  ^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_prediction.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_prediction.py:34: in ready_records
+    return list(iter_predictions(FakeAdapter(), [user]))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+adapter = <test_prediction.FakeAdapter object at 0x0000024714E927B0>
+learners = [LearnerEvents(user_id='u', fold=0, events=(KTEvent(user_id='u', exercise='A', time_done=1000, source_row=1, correct=0...ested=0, fold=0), KTEvent(user_id='u', exercise='A', time_done=1200, source_row=201, correct=0, suggested=1, fold=0)))]
+
+    def iter_predictions(adapter: AKTAdapter, learners: Iterable[LearnerEvents]) -> Iterator[PredictionRecord]:
+        """Predict every requested row once; current OOV rows remain explicit nulls."""
+        checkpoint_id = _checkpoint_id(adapter)
+        support = adapter.encoding.train_support_students
+        previous_user = None
+        for learner in learners:
+            if (not learner.user_id or not learner.events or learner.user_id == previous_user
+                    or any(event.user_id != learner.user_id or event.fold != learner.fold
+                           or event.correct not in (0, 1) or event.suggested not in (0, 1)
+                           for event in learner.events)):
+                raise ValueError('invalid or repeated prediction learner')
+            if previous_user is not None and learner.user_id < previous_user:
+                raise ValueError('prediction learners must be sorted by user_id')
+            rows = [event.source_row for event in learner.events]
+            if any(row <= 0 for row in rows) or len(rows) != len(set(rows)):
+                raise ValueError('source_row must be positive and unique per learner')
+            if any((left.time_done, left.source_row) > (right.time_done, right.source_row)
+                   for left, right in zip(learner.events, learner.events[1:])):
+                raise ValueError('learner events are not in canonical chronological order')
+            event_by_row = {event.source_row: event for event in learner.events}
+            for entry in iter_windows(learner, adapter.encoding, context=adapter.config.context,
+                                      target_block=adapter.config.target_block, training=False):
+                if isinstance(entry, UnseenTarget):
+                    event = entry.event
+                    block_start = (entry.global_rank // adapter.config.target_block) * adapter.config.target_block
+                    base = max(0, block_start - adapter.config.context)
+                    yield PredictionRecord(
+                        event.source_row, event.user_id, event.exercise, event.time_done,
+                        event.correct, event.suggested, event.fold, None, 'unseen', False, 0,
+                        entry.global_rank - base, 0, True,
+                        hashlib.sha256(f'{event.user_id}\0{entry.global_rank}\0unseen'.encode()).hexdigest(),
+                        checkpoint_id)
+                    continue
+>               probabilities = np.asarray(adapter.predict_window(entry), dtype=np.float64)
+                                           ^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'FakeAdapter' object has no attribute 'predict_window'
+
+src\knowledge_tracing\akt\prediction.py:79: AttributeError
+_________ test_export_writes_complete_parquet_with_accounted_coverage _________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/sim-export-a10de87ccc974802ae5e179686e84a0d/test_export_writes_complete_pa0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000247107DCE90>
+
+    def test_export_writes_complete_parquet_with_accounted_coverage(tmp_path, monkeypatch):
+        source = learner()
+>       records = ready_records(source)
+                  ^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_prediction.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_prediction.py:34: in ready_records
+    return list(iter_predictions(FakeAdapter(), [user]))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+adapter = <test_prediction.FakeAdapter object at 0x0000024714EA3890>
+learners = [LearnerEvents(user_id='u', fold=0, events=(KTEvent(user_id='u', exercise='A', time_done=1000, source_row=1, correct=0...ested=0, fold=0), KTEvent(user_id='u', exercise='A', time_done=1200, source_row=201, correct=0, suggested=1, fold=0)))]
+
+    def iter_predictions(adapter: AKTAdapter, learners: Iterable[LearnerEvents]) -> Iterator[PredictionRecord]:
+        """Predict every requested row once; current OOV rows remain explicit nulls."""
+        checkpoint_id = _checkpoint_id(adapter)
+        support = adapter.encoding.train_support_students
+        previous_user = None
+        for learner in learners:
+            if (not learner.user_id or not learner.events or learner.user_id == previous_user
+                    or any(event.user_id != learner.user_id or event.fold != learner.fold
+                           or event.correct not in (0, 1) or event.suggested not in (0, 1)
+                           for event in learner.events)):
+                raise ValueError('invalid or repeated prediction learner')
+            if previous_user is not None and learner.user_id < previous_user:
+                raise ValueError('prediction learners must be sorted by user_id')
+            rows = [event.source_row for event in learner.events]
+            if any(row <= 0 for row in rows) or len(rows) != len(set(rows)):
+                raise ValueError('source_row must be positive and unique per learner')
+            if any((left.time_done, left.source_row) > (right.time_done, right.source_row)
+                   for left, right in zip(learner.events, learner.events[1:])):
+                raise ValueError('learner events are not in canonical chronological order')
+            event_by_row = {event.source_row: event for event in learner.events}
+            for entry in iter_windows(learner, adapter.encoding, context=adapter.config.context,
+                                      target_block=adapter.config.target_block, training=False):
+                if isinstance(entry, UnseenTarget):
+                    event = entry.event
+                    block_start = (entry.global_rank // adapter.config.target_block) * adapter.config.target_block
+                    base = max(0, block_start - adapter.config.context)
+                    yield PredictionRecord(
+                        event.source_row, event.user_id, event.exercise, event.time_done,
+                        event.correct, event.suggested, event.fold, None, 'unseen', False, 0,
+                        entry.global_rank - base, 0, True,
+                        hashlib.sha256(f'{event.user_id}\0{entry.global_rank}\0unseen'.encode()).hexdigest(),
+                        checkpoint_id)
+                    continue
+>               probabilities = np.asarray(adapter.predict_window(entry), dtype=np.float64)
+                                           ^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'FakeAdapter' object has no attribute 'predict_window'
+
+src\knowledge_tracing\akt\prediction.py:79: AttributeError
+_ test_export_rejects_row_or_identity_mismatch_without_complete_manifest[duplicate] _
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/sim-export-a10de87ccc974802ae5e179686e84a0d/test_export_rejects_row_or_ide0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024719AF3230>
+mutation = 'duplicate'
+
+    @pytest.mark.parametrize('mutation', ['duplicate', 'missing', 'extra', 'identity', 'nan'])
+    def test_export_rejects_row_or_identity_mismatch_without_complete_manifest(tmp_path, monkeypatch, mutation):
+        source = learner(n=3, oov=())
+>       rows = ready_records(source)
+               ^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_prediction.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_prediction.py:34: in ready_records
+    return list(iter_predictions(FakeAdapter(), [user]))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+adapter = <test_prediction.FakeAdapter object at 0x0000024719AF6990>
+learners = [LearnerEvents(user_id='u', fold=0, events=(KTEvent(user_id='u', exercise='A', time_done=1000, source_row=1, correct=0...ggested=0, fold=0), KTEvent(user_id='u', exercise='A', time_done=1002, source_row=3, correct=0, suggested=1, fold=0)))]
+
+    def iter_predictions(adapter: AKTAdapter, learners: Iterable[LearnerEvents]) -> Iterator[PredictionRecord]:
+        """Predict every requested row once; current OOV rows remain explicit nulls."""
+        checkpoint_id = _checkpoint_id(adapter)
+        support = adapter.encoding.train_support_students
+        previous_user = None
+        for learner in learners:
+            if (not learner.user_id or not learner.events or learner.user_id == previous_user
+                    or any(event.user_id != learner.user_id or event.fold != learner.fold
+                           or event.correct not in (0, 1) or event.suggested not in (0, 1)
+                           for event in learner.events)):
+                raise ValueError('invalid or repeated prediction learner')
+            if previous_user is not None and learner.user_id < previous_user:
+                raise ValueError('prediction learners must be sorted by user_id')
+            rows = [event.source_row for event in learner.events]
+            if any(row <= 0 for row in rows) or len(rows) != len(set(rows)):
+                raise ValueError('source_row must be positive and unique per learner')
+            if any((left.time_done, left.source_row) > (right.time_done, right.source_row)
+                   for left, right in zip(learner.events, learner.events[1:])):
+                raise ValueError('learner events are not in canonical chronological order')
+            event_by_row = {event.source_row: event for event in learner.events}
+            for entry in iter_windows(learner, adapter.encoding, context=adapter.config.context,
+                                      target_block=adapter.config.target_block, training=False):
+                if isinstance(entry, UnseenTarget):
+                    event = entry.event
+                    block_start = (entry.global_rank // adapter.config.target_block) * adapter.config.target_block
+                    base = max(0, block_start - adapter.config.context)
+                    yield PredictionRecord(
+                        event.source_row, event.user_id, event.exercise, event.time_done,
+                        event.correct, event.suggested, event.fold, None, 'unseen', False, 0,
+                        entry.global_rank - base, 0, True,
+                        hashlib.sha256(f'{event.user_id}\0{entry.global_rank}\0unseen'.encode()).hexdigest(),
+                        checkpoint_id)
+                    continue
+>               probabilities = np.asarray(adapter.predict_window(entry), dtype=np.float64)
+                                           ^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'FakeAdapter' object has no attribute 'predict_window'
+
+src\knowledge_tracing\akt\prediction.py:79: AttributeError
+_ test_export_rejects_row_or_identity_mismatch_without_complete_manifest[missing] _
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/sim-export-a10de87ccc974802ae5e179686e84a0d/test_export_rejects_row_or_ide1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002476C83A210>
+mutation = 'missing'
+
+    @pytest.mark.parametrize('mutation', ['duplicate', 'missing', 'extra', 'identity', 'nan'])
+    def test_export_rejects_row_or_identity_mismatch_without_complete_manifest(tmp_path, monkeypatch, mutation):
+        source = learner(n=3, oov=())
+>       rows = ready_records(source)
+               ^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_prediction.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_prediction.py:34: in ready_records
+    return list(iter_predictions(FakeAdapter(), [user]))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+adapter = <test_prediction.FakeAdapter object at 0x0000024719AF6210>
+learners = [LearnerEvents(user_id='u', fold=0, events=(KTEvent(user_id='u', exercise='A', time_done=1000, source_row=1, correct=0...ggested=0, fold=0), KTEvent(user_id='u', exercise='A', time_done=1002, source_row=3, correct=0, suggested=1, fold=0)))]
+
+    def iter_predictions(adapter: AKTAdapter, learners: Iterable[LearnerEvents]) -> Iterator[PredictionRecord]:
+        """Predict every requested row once; current OOV rows remain explicit nulls."""
+        checkpoint_id = _checkpoint_id(adapter)
+        support = adapter.encoding.train_support_students
+        previous_user = None
+        for learner in learners:
+            if (not learner.user_id or not learner.events or learner.user_id == previous_user
+                    or any(event.user_id != learner.user_id or event.fold != learner.fold
+                           or event.correct not in (0, 1) or event.suggested not in (0, 1)
+                           for event in learner.events)):
+                raise ValueError('invalid or repeated prediction learner')
+            if previous_user is not None and learner.user_id < previous_user:
+                raise ValueError('prediction learners must be sorted by user_id')
+            rows = [event.source_row for event in learner.events]
+            if any(row <= 0 for row in rows) or len(rows) != len(set(rows)):
+                raise ValueError('source_row must be positive and unique per learner')
+            if any((left.time_done, left.source_row) > (right.time_done, right.source_row)
+                   for left, right in zip(learner.events, learner.events[1:])):
+                raise ValueError('learner events are not in canonical chronological order')
+            event_by_row = {event.source_row: event for event in learner.events}
+            for entry in iter_windows(learner, adapter.encoding, context=adapter.config.context,
+                                      target_block=adapter.config.target_block, training=False):
+                if isinstance(entry, UnseenTarget):
+                    event = entry.event
+                    block_start = (entry.global_rank // adapter.config.target_block) * adapter.config.target_block
+                    base = max(0, block_start - adapter.config.context)
+                    yield PredictionRecord(
+                        event.source_row, event.user_id, event.exercise, event.time_done,
+                        event.correct, event.suggested, event.fold, None, 'unseen', False, 0,
+                        entry.global_rank - base, 0, True,
+                        hashlib.sha256(f'{event.user_id}\0{entry.global_rank}\0unseen'.encode()).hexdigest(),
+                        checkpoint_id)
+                    continue
+>               probabilities = np.asarray(adapter.predict_window(entry), dtype=np.float64)
+                                           ^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'FakeAdapter' object has no attribute 'predict_window'
+
+src\knowledge_tracing\akt\prediction.py:79: AttributeError
+_ test_export_rejects_row_or_identity_mismatch_without_complete_manifest[extra] _
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/sim-export-a10de87ccc974802ae5e179686e84a0d/test_export_rejects_row_or_ide2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024719BC28B0>
+mutation = 'extra'
+
+    @pytest.mark.parametrize('mutation', ['duplicate', 'missing', 'extra', 'identity', 'nan'])
+    def test_export_rejects_row_or_identity_mismatch_without_complete_manifest(tmp_path, monkeypatch, mutation):
+        source = learner(n=3, oov=())
+>       rows = ready_records(source)
+               ^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_prediction.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_prediction.py:34: in ready_records
+    return list(iter_predictions(FakeAdapter(), [user]))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+adapter = <test_prediction.FakeAdapter object at 0x0000024719AF5950>
+learners = [LearnerEvents(user_id='u', fold=0, events=(KTEvent(user_id='u', exercise='A', time_done=1000, source_row=1, correct=0...ggested=0, fold=0), KTEvent(user_id='u', exercise='A', time_done=1002, source_row=3, correct=0, suggested=1, fold=0)))]
+
+    def iter_predictions(adapter: AKTAdapter, learners: Iterable[LearnerEvents]) -> Iterator[PredictionRecord]:
+        """Predict every requested row once; current OOV rows remain explicit nulls."""
+        checkpoint_id = _checkpoint_id(adapter)
+        support = adapter.encoding.train_support_students
+        previous_user = None
+        for learner in learners:
+            if (not learner.user_id or not learner.events or learner.user_id == previous_user
+                    or any(event.user_id != learner.user_id or event.fold != learner.fold
+                           or event.correct not in (0, 1) or event.suggested not in (0, 1)
+                           for event in learner.events)):
+                raise ValueError('invalid or repeated prediction learner')
+            if previous_user is not None and learner.user_id < previous_user:
+                raise ValueError('prediction learners must be sorted by user_id')
+            rows = [event.source_row for event in learner.events]
+            if any(row <= 0 for row in rows) or len(rows) != len(set(rows)):
+                raise ValueError('source_row must be positive and unique per learner')
+            if any((left.time_done, left.source_row) > (right.time_done, right.source_row)
+                   for left, right in zip(learner.events, learner.events[1:])):
+                raise ValueError('learner events are not in canonical chronological order')
+            event_by_row = {event.source_row: event for event in learner.events}
+            for entry in iter_windows(learner, adapter.encoding, context=adapter.config.context,
+                                      target_block=adapter.config.target_block, training=False):
+                if isinstance(entry, UnseenTarget):
+                    event = entry.event
+                    block_start = (entry.global_rank // adapter.config.target_block) * adapter.config.target_block
+                    base = max(0, block_start - adapter.config.context)
+                    yield PredictionRecord(
+                        event.source_row, event.user_id, event.exercise, event.time_done,
+                        event.correct, event.suggested, event.fold, None, 'unseen', False, 0,
+                        entry.global_rank - base, 0, True,
+                        hashlib.sha256(f'{event.user_id}\0{entry.global_rank}\0unseen'.encode()).hexdigest(),
+                        checkpoint_id)
+                    continue
+>               probabilities = np.asarray(adapter.predict_window(entry), dtype=np.float64)
+                                           ^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'FakeAdapter' object has no attribute 'predict_window'
+
+src\knowledge_tracing\akt\prediction.py:79: AttributeError
+_ test_export_rejects_row_or_identity_mismatch_without_complete_manifest[identity] _
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/sim-export-a10de87ccc974802ae5e179686e84a0d/test_export_rejects_row_or_ide3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024714EB2BE0>
+mutation = 'identity'
+
+    @pytest.mark.parametrize('mutation', ['duplicate', 'missing', 'extra', 'identity', 'nan'])
+    def test_export_rejects_row_or_identity_mismatch_without_complete_manifest(tmp_path, monkeypatch, mutation):
+        source = learner(n=3, oov=())
+>       rows = ready_records(source)
+               ^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_prediction.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_prediction.py:34: in ready_records
+    return list(iter_predictions(FakeAdapter(), [user]))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+adapter = <test_prediction.FakeAdapter object at 0x0000024714EA3890>
+learners = [LearnerEvents(user_id='u', fold=0, events=(KTEvent(user_id='u', exercise='A', time_done=1000, source_row=1, correct=0...ggested=0, fold=0), KTEvent(user_id='u', exercise='A', time_done=1002, source_row=3, correct=0, suggested=1, fold=0)))]
+
+    def iter_predictions(adapter: AKTAdapter, learners: Iterable[LearnerEvents]) -> Iterator[PredictionRecord]:
+        """Predict every requested row once; current OOV rows remain explicit nulls."""
+        checkpoint_id = _checkpoint_id(adapter)
+        support = adapter.encoding.train_support_students
+        previous_user = None
+        for learner in learners:
+            if (not learner.user_id or not learner.events or learner.user_id == previous_user
+                    or any(event.user_id != learner.user_id or event.fold != learner.fold
+                           or event.correct not in (0, 1) or event.suggested not in (0, 1)
+                           for event in learner.events)):
+                raise ValueError('invalid or repeated prediction learner')
+            if previous_user is not None and learner.user_id < previous_user:
+                raise ValueError('prediction learners must be sorted by user_id')
+            rows = [event.source_row for event in learner.events]
+            if any(row <= 0 for row in rows) or len(rows) != len(set(rows)):
+                raise ValueError('source_row must be positive and unique per learner')
+            if any((left.time_done, left.source_row) > (right.time_done, right.source_row)
+                   for left, right in zip(learner.events, learner.events[1:])):
+                raise ValueError('learner events are not in canonical chronological order')
+            event_by_row = {event.source_row: event for event in learner.events}
+            for entry in iter_windows(learner, adapter.encoding, context=adapter.config.context,
+                                      target_block=adapter.config.target_block, training=False):
+                if isinstance(entry, UnseenTarget):
+                    event = entry.event
+                    block_start = (entry.global_rank // adapter.config.target_block) * adapter.config.target_block
+                    base = max(0, block_start - adapter.config.context)
+                    yield PredictionRecord(
+                        event.source_row, event.user_id, event.exercise, event.time_done,
+                        event.correct, event.suggested, event.fold, None, 'unseen', False, 0,
+                        entry.global_rank - base, 0, True,
+                        hashlib.sha256(f'{event.user_id}\0{entry.global_rank}\0unseen'.encode()).hexdigest(),
+                        checkpoint_id)
+                    continue
+>               probabilities = np.asarray(adapter.predict_window(entry), dtype=np.float64)
+                                           ^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'FakeAdapter' object has no attribute 'predict_window'
+
+src\knowledge_tracing\akt\prediction.py:79: AttributeError
+_ test_export_rejects_row_or_identity_mismatch_without_complete_manifest[nan] _
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/sim-export-a10de87ccc974802ae5e179686e84a0d/test_export_rejects_row_or_ide4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024719BBDA50>
+mutation = 'nan'
+
+    @pytest.mark.parametrize('mutation', ['duplicate', 'missing', 'extra', 'identity', 'nan'])
+    def test_export_rejects_row_or_identity_mismatch_without_complete_manifest(tmp_path, monkeypatch, mutation):
+        source = learner(n=3, oov=())
+>       rows = ready_records(source)
+               ^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_prediction.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_prediction.py:34: in ready_records
+    return list(iter_predictions(FakeAdapter(), [user]))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+adapter = <test_prediction.FakeAdapter object at 0x0000024714EA2FD0>
+learners = [LearnerEvents(user_id='u', fold=0, events=(KTEvent(user_id='u', exercise='A', time_done=1000, source_row=1, correct=0...ggested=0, fold=0), KTEvent(user_id='u', exercise='A', time_done=1002, source_row=3, correct=0, suggested=1, fold=0)))]
+
+    def iter_predictions(adapter: AKTAdapter, learners: Iterable[LearnerEvents]) -> Iterator[PredictionRecord]:
+        """Predict every requested row once; current OOV rows remain explicit nulls."""
+        checkpoint_id = _checkpoint_id(adapter)
+        support = adapter.encoding.train_support_students
+        previous_user = None
+        for learner in learners:
+            if (not learner.user_id or not learner.events or learner.user_id == previous_user
+                    or any(event.user_id != learner.user_id or event.fold != learner.fold
+                           or event.correct not in (0, 1) or event.suggested not in (0, 1)
+                           for event in learner.events)):
+                raise ValueError('invalid or repeated prediction learner')
+            if previous_user is not None and learner.user_id < previous_user:
+                raise ValueError('prediction learners must be sorted by user_id')
+            rows = [event.source_row for event in learner.events]
+            if any(row <= 0 for row in rows) or len(rows) != len(set(rows)):
+                raise ValueError('source_row must be positive and unique per learner')
+            if any((left.time_done, left.source_row) > (right.time_done, right.source_row)
+                   for left, right in zip(learner.events, learner.events[1:])):
+                raise ValueError('learner events are not in canonical chronological order')
+            event_by_row = {event.source_row: event for event in learner.events}
+            for entry in iter_windows(learner, adapter.encoding, context=adapter.config.context,
+                                      target_block=adapter.config.target_block, training=False):
+                if isinstance(entry, UnseenTarget):
+                    event = entry.event
+                    block_start = (entry.global_rank // adapter.config.target_block) * adapter.config.target_block
+                    base = max(0, block_start - adapter.config.context)
+                    yield PredictionRecord(
+                        event.source_row, event.user_id, event.exercise, event.time_done,
+                        event.correct, event.suggested, event.fold, None, 'unseen', False, 0,
+                        entry.global_rank - base, 0, True,
+                        hashlib.sha256(f'{event.user_id}\0{entry.global_rank}\0unseen'.encode()).hexdigest(),
+                        checkpoint_id)
+                    continue
+>               probabilities = np.asarray(adapter.predict_window(entry), dtype=np.float64)
+                                           ^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'FakeAdapter' object has no attribute 'predict_window'
+
+src\knowledge_tracing\akt\prediction.py:79: AttributeError
+____ test_export_resumes_completed_users_once_and_rejects_changed_identity ____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/sim-export-a10de87ccc974802ae5e179686e84a0d/test_export_resumes_completed_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024719BBDD50>
+
+    def test_export_resumes_completed_users_once_and_rejects_changed_identity(tmp_path, monkeypatch):
+        first = learner('a', n=3, oov=(), offset=10)
+        second = learner('b', n=3, oov=(), offset=20)
+>       full = ready_records(first) + ready_records(second)
+               ^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_prediction.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_prediction.py:34: in ready_records
+    return list(iter_predictions(FakeAdapter(), [user]))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+adapter = <test_prediction.FakeAdapter object at 0x0000024714EA2990>
+learners = [LearnerEvents(user_id='a', fold=0, events=(KTEvent(user_id='a', exercise='A', time_done=1000, source_row=11, correct=...gested=0, fold=0), KTEvent(user_id='a', exercise='A', time_done=1002, source_row=13, correct=0, suggested=1, fold=0)))]
+
+    def iter_predictions(adapter: AKTAdapter, learners: Iterable[LearnerEvents]) -> Iterator[PredictionRecord]:
+        """Predict every requested row once; current OOV rows remain explicit nulls."""
+        checkpoint_id = _checkpoint_id(adapter)
+        support = adapter.encoding.train_support_students
+        previous_user = None
+        for learner in learners:
+            if (not learner.user_id or not learner.events or learner.user_id == previous_user
+                    or any(event.user_id != learner.user_id or event.fold != learner.fold
+                           or event.correct not in (0, 1) or event.suggested not in (0, 1)
+                           for event in learner.events)):
+                raise ValueError('invalid or repeated prediction learner')
+            if previous_user is not None and learner.user_id < previous_user:
+                raise ValueError('prediction learners must be sorted by user_id')
+            rows = [event.source_row for event in learner.events]
+            if any(row <= 0 for row in rows) or len(rows) != len(set(rows)):
+                raise ValueError('source_row must be positive and unique per learner')
+            if any((left.time_done, left.source_row) > (right.time_done, right.source_row)
+                   for left, right in zip(learner.events, learner.events[1:])):
+                raise ValueError('learner events are not in canonical chronological order')
+            event_by_row = {event.source_row: event for event in learner.events}
+            for entry in iter_windows(learner, adapter.encoding, context=adapter.config.context,
+                                      target_block=adapter.config.target_block, training=False):
+                if isinstance(entry, UnseenTarget):
+                    event = entry.event
+                    block_start = (entry.global_rank // adapter.config.target_block) * adapter.config.target_block
+                    base = max(0, block_start - adapter.config.context)
+                    yield PredictionRecord(
+                        event.source_row, event.user_id, event.exercise, event.time_done,
+                        event.correct, event.suggested, event.fold, None, 'unseen', False, 0,
+                        entry.global_rank - base, 0, True,
+                        hashlib.sha256(f'{event.user_id}\0{entry.global_rank}\0unseen'.encode()).hexdigest(),
+                        checkpoint_id)
+                    continue
+>               probabilities = np.asarray(adapter.predict_window(entry), dtype=np.float64)
+                                           ^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'FakeAdapter' object has no attribute 'predict_window'
+
+src\knowledge_tracing\akt\prediction.py:79: AttributeError
+_ test_ordered_hash_prediction_export_aligns_different_expected_order_and_oov _
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/sim-export-a10de87ccc974802ae5e179686e84a0d/test_ordered_hash_prediction_e0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024719C16F30>
+
+    def test_ordered_hash_prediction_export_aligns_different_expected_order_and_oov(tmp_path, monkeypatch):
+        hash_cohort = (
+            learner('a', n=201, oov=(100, 150), fold=1, offset=0),
+            learner('c', n=3, oov=(), fold=2, offset=1000),
+            learner('b', n=3, oov=(1,), fold=3, offset=2000),
+        )
+        prediction_users = prediction_module.order_prediction_learners(hash_cohort)
+        assert [user.user_id for user in prediction_users] == ['a', 'b', 'c']
+        assert [user.user_id for user in hash_cohort] == ['a', 'c', 'b']
+        output = prediction_root(tmp_path, monkeypatch)
+>       result = export_predictions(
+            iter_predictions(FakeAdapter(), prediction_users), output,
+            expected_learners_factory=lambda: iter(hash_cohort),
+            identity={'run': 'hash-cohort-adapter'}, shard_rows=50)
+
+tests\akt\test_prediction.py:168: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\prediction.py:258: in export_predictions
+    for record in records:
+                  ^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+adapter = <test_prediction.FakeAdapter object at 0x0000024714EA39D0>
+learners = (LearnerEvents(user_id='a', fold=1, events=(KTEvent(user_id='a', exercise='A', time_done=1000, source_row=1, correct=0...sted=0, fold=2), KTEvent(user_id='c', exercise='A', time_done=1002, source_row=1003, correct=0, suggested=1, fold=2))))
+
+    def iter_predictions(adapter: AKTAdapter, learners: Iterable[LearnerEvents]) -> Iterator[PredictionRecord]:
+        """Predict every requested row once; current OOV rows remain explicit nulls."""
+        checkpoint_id = _checkpoint_id(adapter)
+        support = adapter.encoding.train_support_students
+        previous_user = None
+        for learner in learners:
+            if (not learner.user_id or not learner.events or learner.user_id == previous_user
+                    or any(event.user_id != learner.user_id or event.fold != learner.fold
+                           or event.correct not in (0, 1) or event.suggested not in (0, 1)
+                           for event in learner.events)):
+                raise ValueError('invalid or repeated prediction learner')
+            if previous_user is not None and learner.user_id < previous_user:
+                raise ValueError('prediction learners must be sorted by user_id')
+            rows = [event.source_row for event in learner.events]
+            if any(row <= 0 for row in rows) or len(rows) != len(set(rows)):
+                raise ValueError('source_row must be positive and unique per learner')
+            if any((left.time_done, left.source_row) > (right.time_done, right.source_row)
+                   for left, right in zip(learner.events, learner.events[1:])):
+                raise ValueError('learner events are not in canonical chronological order')
+            event_by_row = {event.source_row: event for event in learner.events}
+            for entry in iter_windows(learner, adapter.encoding, context=adapter.config.context,
+                                      target_block=adapter.config.target_block, training=False):
+                if isinstance(entry, UnseenTarget):
+                    event = entry.event
+                    block_start = (entry.global_rank // adapter.config.target_block) * adapter.config.target_block
+                    base = max(0, block_start - adapter.config.context)
+                    yield PredictionRecord(
+                        event.source_row, event.user_id, event.exercise, event.time_done,
+                        event.correct, event.suggested, event.fold, None, 'unseen', False, 0,
+                        entry.global_rank - base, 0, True,
+                        hashlib.sha256(f'{event.user_id}\0{entry.global_rank}\0unseen'.encode()).hexdigest(),
+                        checkpoint_id)
+                    continue
+>               probabilities = np.asarray(adapter.predict_window(entry), dtype=np.float64)
+                                           ^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'FakeAdapter' object has no attribute 'predict_window'
+
+src\knowledge_tracing\akt\prediction.py:79: AttributeError
+_________ test_unsorted_hash_export_keeps_partial_manifest_incomplete _________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/sim-export-a10de87ccc974802ae5e179686e84a0d/test_unsorted_hash_export_keep0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024719C154F0>
+
+    def test_unsorted_hash_export_keeps_partial_manifest_incomplete(tmp_path, monkeypatch):
+        hash_cohort = (
+            learner('a', n=201, oov=(100,), fold=1, offset=0),
+            learner('c', n=3, oov=(), fold=2, offset=1000),
+            learner('b', n=3, oov=(), fold=3, offset=2000),
+        )
+        output = prediction_root(tmp_path, monkeypatch)
+        identity = {'run': 'partial-order-failure'}
+        with pytest.raises(ValueError, match='sorted by user_id'):
+>           export_predictions(iter_predictions(FakeAdapter(), hash_cohort), output,
+                               expected_learners_factory=lambda: iter(hash_cohort),
+                               identity=identity, shard_rows=50)
+
+tests\akt\test_prediction.py:199: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\prediction.py:258: in export_predictions
+    for record in records:
+                  ^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+adapter = <test_prediction.FakeAdapter object at 0x0000024715438050>
+learners = (LearnerEvents(user_id='a', fold=1, events=(KTEvent(user_id='a', exercise='A', time_done=1000, source_row=1, correct=0...sted=0, fold=3), KTEvent(user_id='b', exercise='A', time_done=1002, source_row=2003, correct=0, suggested=1, fold=3))))
+
+    def iter_predictions(adapter: AKTAdapter, learners: Iterable[LearnerEvents]) -> Iterator[PredictionRecord]:
+        """Predict every requested row once; current OOV rows remain explicit nulls."""
+        checkpoint_id = _checkpoint_id(adapter)
+        support = adapter.encoding.train_support_students
+        previous_user = None
+        for learner in learners:
+            if (not learner.user_id or not learner.events or learner.user_id == previous_user
+                    or any(event.user_id != learner.user_id or event.fold != learner.fold
+                           or event.correct not in (0, 1) or event.suggested not in (0, 1)
+                           for event in learner.events)):
+                raise ValueError('invalid or repeated prediction learner')
+            if previous_user is not None and learner.user_id < previous_user:
+                raise ValueError('prediction learners must be sorted by user_id')
+            rows = [event.source_row for event in learner.events]
+            if any(row <= 0 for row in rows) or len(rows) != len(set(rows)):
+                raise ValueError('source_row must be positive and unique per learner')
+            if any((left.time_done, left.source_row) > (right.time_done, right.source_row)
+                   for left, right in zip(learner.events, learner.events[1:])):
+                raise ValueError('learner events are not in canonical chronological order')
+            event_by_row = {event.source_row: event for event in learner.events}
+            for entry in iter_windows(learner, adapter.encoding, context=adapter.config.context,
+                                      target_block=adapter.config.target_block, training=False):
+                if isinstance(entry, UnseenTarget):
+                    event = entry.event
+                    block_start = (entry.global_rank // adapter.config.target_block) * adapter.config.target_block
+                    base = max(0, block_start - adapter.config.context)
+                    yield PredictionRecord(
+                        event.source_row, event.user_id, event.exercise, event.time_done,
+                        event.correct, event.suggested, event.fold, None, 'unseen', False, 0,
+                        entry.global_rank - base, 0, True,
+                        hashlib.sha256(f'{event.user_id}\0{entry.global_rank}\0unseen'.encode()).hexdigest(),
+                        checkpoint_id)
+                    continue
+>               probabilities = np.asarray(adapter.predict_window(entry), dtype=np.float64)
+                                           ^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'FakeAdapter' object has no attribute 'predict_window'
+
+src\knowledge_tracing\akt\prediction.py:79: AttributeError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_prediction.py::test_iter_predictions_preserves_each_source_row_and_oov_null
+FAILED tests/akt/test_prediction.py::test_export_writes_complete_parquet_with_accounted_coverage
+FAILED tests/akt/test_prediction.py::test_export_rejects_row_or_identity_mismatch_without_complete_manifest[duplicate]
+FAILED tests/akt/test_prediction.py::test_export_rejects_row_or_identity_mismatch_without_complete_manifest[missing]
+FAILED tests/akt/test_prediction.py::test_export_rejects_row_or_identity_mismatch_without_complete_manifest[extra]
+FAILED tests/akt/test_prediction.py::test_export_rejects_row_or_identity_mismatch_without_complete_manifest[identity]
+FAILED tests/akt/test_prediction.py::test_export_rejects_row_or_identity_mismatch_without_complete_manifest[nan]
+FAILED tests/akt/test_prediction.py::test_export_resumes_completed_users_once_and_rejects_changed_identity
+FAILED tests/akt/test_prediction.py::test_ordered_hash_prediction_export_aligns_different_expected_order_and_oov
+FAILED tests/akt/test_prediction.py::test_unsorted_hash_export_keeps_partial_manifest_incomplete
+10 failed, 25 passed in 27.65s

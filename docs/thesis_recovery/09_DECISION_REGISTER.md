@@ -36,3 +36,11 @@ Q01 đúng Paper1 code+outputs+seed manifest ở đâu, deadline12/11, Dương. 
 Rebuild simulator toàn bộ bị loại vì mất lịch sử và effort. Merge P1/P2 dynamics bị loại vì semantics khác. Junyi checkpoint numeric-index mapping sang simulator bị loại vì không semantic crosswalk. High/Low observational DiD bị loại vì counterfactual assumption không bảo đảm. Inner5fold nested mỗi outer bị hoãn vì không requirement và compute lớn. Full hyperparameter sweep, learned neural confidence, third dataset, production LMS bị hoãn vì proposal không đòi và làm trễ evidence. Bỏ SAKT/GKT chỉ vì tiện là REMOVE-WITH-APPROVAL, chưa được quyết định.
 
 Kiểm chứng cuối Q09 đã giải quyết. `evidence/planning_validation.json` xác nhận map36ID duy nhất, đủ28nodes,8extraIDs, không missing/duplicate. Advanced31edges=28intra+3cross, baseline25intra, không missing endpoints/isolated nodes trong inputs P2. Không suy provenance Paper1 từ việc graph counts giống PDF.
+
+## Interface engineering07/11
+
+D17 supported: model-domain/item-bank/vocab/recipe identity và predict-before-update/session/probe contracts đã kiểm CPU, xem18 và report simulator_kt_interface_20261107.md. Không lấy implementation acceptance làm phê duyệt mastery protocol. D08 filesystem và Q02 có engineering remediation/Gate2 mới; historical failure records giữ nguyên.
+
+D18 proposed: chốt graph-context history scope trong S04/S05. A0 chỉ nhìn effective window dù session giữ full replay history. Default đề xuất primary cùng effective window; full-cache cần graph-free information-matched control, không chỉ real-vs-noisy edges. Không silently adopt phần này.
+
+Q03 được thu hẹp: AKT item84 query bridge đã kiểm, không có numeric difficulty1250 ngoài trained items. Calibrator/reference weights/threshold/controller vẫn chưaaccepted. Q04 diversity/split/coverage của generated training trajectories chưa giải quyết bằng arithmetic engineering labels. Q06 chưa đo GPU hoặc d256 closed-loop inference; include reference-query workload trong budget.
