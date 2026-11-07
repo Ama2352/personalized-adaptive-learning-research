@@ -322,6 +322,7 @@
     "verification": "CRC/each SHA/current source parity; notebook originals unchanged; no actual isolated Linux/Colab/CUDA execution"
   },
   "next_bounded_engineering_batch": [
+    "Current priorityCOLAB05: actualColab MCP now works/TeslaT4 directly captured; CPU450cases=435pass/7fail/8errors/0skip,2deselected115.86s. Fix12DuckDBfixture API cases and3Windows/Linux assumptions with controls, no skips/gate bypass. Preserve run01/02ZIPs; new source Gate/kit before rerunGPU. Bridge52627 may remain active, verify status; no install/auth repetition.",
     "User pasted actual cell01 CONNECTED_GPU/TeslaT4/Python3.13.16/Torch2.14.1+cu130 output. Hardware discovery only; run bounded notebook interactively and inspect returned ZIP, no full model/Gate4/throughput claim.",
     "User selected VSCode handoff: notebook8cells now self-contained embeddedv11,20localchecks; no ZIP upload. Wait for actual kernel/device output and verify returned artifact ZIP. Agent terminal kernel bridge remains unverified; do not claim remote execution from mocks.",
     "Official Colab CLI/MCP routes now discovered: inspect interactive MCP/client compatibility first; CLI Linux/macOS only, no Windows support promised. Do not equate installed VSCode extension with agent access. No runtime allocated.",
@@ -532,14 +533,15 @@
     "generic_cuda_tests_preferred_provider": "colab_free",
     "modal_generic_debug_before_colab_allowed": false,
     "colab_unavailable_auto_modal_fallback": false,
-    "colab_actual_execution_verified": false,
+    "colab_actual_execution_verified": true,
     "current_colab_workload": "Lifecycle d256/400targets/1update plus separate recovery d32/17targets per branch/continuous5 vs2+3 (10total updates), worker60s/controller180s; software portability first",
     "mid_epoch_cuda_resume_verified": false,
     "modal_platform_revalidation_required": true,
     "source": "User07/11: kiểm thử GPU trênColab trước vìModal tính phí",
     "runbook": "docs/akt-colab-synthetic-runbook.md",
     "notebook": "notebooks/akt_colab_synthetic.ipynb",
-    "local_guard_evidence": "cpu-colab-first-20261107-01"
+    "local_guard_evidence": "cpu-colab-first-20261107-01",
+    "colab_actual_execution_scope": "Actual MCP device/setup/CPU suite; NOT CUDA model lifecycle or training acceptance"
   },
   "software_gate_before_colab_recovery": {
     "run_id": "20261107-simulator-semantic-13",
@@ -573,21 +575,21 @@
     "git_output_sha_verified": 38
   },
   "colab_connection_investigation_20261107": {
-    "status": "VSCODE_DEVICE_CONNECTED_USER_REPORTED_NO_AGENT_KERNEL_BRIDGE",
+    "status": "OFFICIAL_MCP_CONNECTED_THROUGH_TERMINAL_CLIENT",
     "official_cli": "https://github.com/googlecolab/google-colab-cli",
     "official_mcp": "https://github.com/googlecolab/colab-mcp",
     "cli_platform_support": "Linux/macOS only per current README; Windows unsupported; WSL not verified",
     "project_python": "3.13.5",
     "cli_installed": false,
-    "mcp_installed": false,
+    "mcp_installed": true,
     "vscode_colab_version_listed": "0.9.7",
     "vscode_auth_or_kernel_verified": false,
-    "mcp_client_handshake_verified": false,
-    "next": "VSCode one-file notebook handoff ready; actual OAuth/kernel/device execution requires user interaction. MCP/CLI optional followup, neither installed/connected.",
+    "mcp_client_handshake_verified": true,
+    "next": "Do not repeat auth/SDK setup. Use existing bridge; CPU portability failure must be resolved before GPU model calls.",
     "correction": "Prior no-direct-tool statement was session-specific; official terminal/agent routes do exist"
   },
   "vscode_colab_handoff_20261107": {
-    "status": "DEVICE_CONNECTED_USER_REPORTED_CHECKS_PENDING",
+    "status": "MCP_AGENT_EXECUTION_VERIFIED_PORTABILITY_FAILED",
     "notebook": "notebooks/akt_colab_synthetic.ipynb",
     "cells": 8,
     "embedded_bundle": "akt-synthetic-20261107-v11.zip",
@@ -600,10 +602,10 @@
     "actual_remote_execution": true,
     "evidence": "cpu-vscode-colab-notebook-20261107-01",
     "handoff": "User opens notebook, selects Colab GPU kernel and authenticates; cell01 device discovery then RunAll bounded checks; final ZIP+SHA downloaded via Colab Contents",
-    "agent_terminal_kernel_bridge_verified": false,
+    "agent_terminal_kernel_bridge_verified": true,
     "core_source_gate_407_still_valid": true,
     "full_suite_rerun": false,
-    "actual_remote_execution_scope": "User-reported device discovery only; model checks not verified",
+    "actual_remote_execution_scope": "Agent executed cells and captured T4 directly; Colab CPU suite435pass/7fail/8errors, CUDA model stages gated off",
     "actual_model_checks_verified": false
   },
   "colab_device_discovery_20261107": {
@@ -622,5 +624,54 @@
     "verification_source": "User-pasted cell01 output; independent returned artifact ZIP not received",
     "model_cuda_execution_verified": false,
     "next": "RunAll bounded notebook, then verify CPU acceptance and both CUDA probe artifacts; no automatic Modal fallback"
+  },
+  "colab_mcp_engineering_20261107": {
+    "status": "CONNECTED_ACTUAL_REMOTE_EXECUTION_VERIFIED_CPU_PORTABILITY_FAILED",
+    "evidence": "colab-mcp-preflight-20261107-01",
+    "client": "scripts/colab_mcp_client.py",
+    "upstream_commit": "b9ab3899e0f1fa493390b1fd6d54aa2e464ecdf1",
+    "installed_package": "colab-mcp1.0.1",
+    "local_new_distributions": 88,
+    "previous_versions_unchanged": 57,
+    "project_venv_only": true,
+    "pip_check": "PASS",
+    "local_client_guards": 12,
+    "local_notebook_checks_after_venv_fix": 20,
+    "native_mcp_smoke_arithmetic": 4,
+    "gpu_directly_observed": "Tesla T4",
+    "torch_remote": "2.14.1+cu130",
+    "colab_setup02": "PASS_WITH_VENV_TARGET_CHECK",
+    "cpu_tests": {
+      "passed": 435,
+      "failed": 7,
+      "errors": 8,
+      "skipped": 0,
+      "deselected": 2,
+      "pytest_seconds": 115.86
+    },
+    "cuda_model_checks_executed": false,
+    "agent_terminal_kernel_bridge_verified": true,
+    "modal_compute_or_credits_used": false,
+    "bridge_exec_session_id": 52627,
+    "bridge_private_state": "artifacts/akt/private/colab-bridge/current.json",
+    "ttl_seconds": 7200,
+    "resume": "Check write_stdin status on52627 before assuming connection; if expired start client with local network permission and official browser, no reinstall and no automatic experiment retry. Cell map in artifacts/akt/colab/mcp-cell-map.json; all failures exported locally with hashes.",
+    "next": "COLAB05: dependency and OS-explicit fixture fixes; new source-bound Gate/kit then rerun bounded portability before GPU model stages"
+  },
+  "kaggle_alternative_20261107": {
+    "status": "EVALUATED_NOT_CONFIGURED",
+    "source": "https://github.com/Kaggle/kaggle-cli/blob/main/docs/kernels.md",
+    "official_cli_support": [
+      "kernels push",
+      "kernels status",
+      "kernels output",
+      "timeout",
+      "no-run"
+    ],
+    "account_gpu_quota_verified": false,
+    "sdk_installed_by_agent": false,
+    "uploaded_or_provisioned": false,
+    "recommendation": "Fix observed dependency/platform portability failures first; Kaggle optional batch-job fallback, not an automatic cure for15testissues",
+    "user_concern": "Too much time spent on Colab setup; stop expanding connection infrastructure now that native execution is verified"
   }
 }

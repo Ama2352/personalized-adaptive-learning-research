@@ -437,7 +437,7 @@
       "authorization_requirements": "EXPLICIT_CLOUD_AND_DATA_APPROVAL",
       "status": "PLANNED",
       "blockers": [
-        "Actual Colab reports missing; new recovery probe prepared but not executed on CUDA; Modal-specific image/Volume/launcher pending; freecredits30/net0"
+        "ColabT4/MCP connection now verified; actualCPUportability failed before GPUmodel; Modal image/Volume/launcher still pending,30freecredits/net0 unchanged"
       ],
       "execution_owner": "Codex",
       "verification_evidence": "cpu-colab-recovery-20261107-01:CPU3process exact proof and19mockguards; Gate407; no actualCUDA"
@@ -1636,10 +1636,10 @@
       "authorization_requirements": "Free interactive Colab already requested by user; no paid tier/Modal fallback/real data; no SSH/tunnel",
       "status": "PARTIALLY_VERIFIED",
       "blockers": [
-        "Actual bounded model-check artifacts not received; agent terminal-to-kernel bridge unverified. Interactive RunAll prepared; no fulltraining or Modal fallback."
+        "450caseColab portability gate failed:12DuckDBCOPYTO? cases on1.3.2 and3Windows/Linux assumptions; resolve without skipping or relaxing validators before CUDA lifecycle/recovery"
       ],
-      "verification_scope": "User-reported cell01 GPU discovery only; CPU portability/CUDA model/lifecycle/recovery results pending",
-      "verification_evidence": "colab-device-discovery-20261107-01"
+      "verification_scope": "Direct agent MCP execution onT4 verified; setup fixed; actualCPU portability failed435pass/7fail/8errors, GPU model stages not run",
+      "verification_evidence": "colab-mcp-preflight-20261107-01"
     },
     {
       "id": "COLAB03",
@@ -1664,6 +1664,54 @@
       "status": "COMPLETED",
       "blockers": [],
       "verification_scope": "Notebook preparation only; actual remote lifecycle remains COLAB02/T14"
+    },
+    {
+      "rq": [],
+      "workstream": "gpu_readiness",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "id": "COLAB04",
+      "research_objective": "Cho agent tự chạy notebook bằng officialColabMCP",
+      "dependencies": [
+        "COLAB03"
+      ],
+      "required_inputs": "User setup authorization;officialGoogleMCP source;project.venv;Googlebrowser",
+      "files_components": "scripts/colab_mcp_client.py;requirements-colab-client.lock.txt;notebooks/akt_colab_synthetic.ipynb;docs/akt-colab-mcp.md",
+      "implementation_objective": "Install hashed client preserving existingversions;actualhandshake/read/edit/run;preservefailure and fixvenvensurepipbootstrap",
+      "acceptance_criteria": "57oldversions unchanged,pipcheck;actual2+2=4 andT4captured viaMCP;no globalinstall/noModal;no promotion fromdeviceonly evidence",
+      "verification_steps": "12localguards,20notebookchecks,nativeMCPselftest,actualtoolresponses,exportedfailure ZIP hashes",
+      "required_artifacts": "colab-mcp-preflight-20261107-01;actualMCPreceipts;package/wheelinventory",
+      "estimated_effort": "Completed setup/engineering batch; fulltraining time not estimated from this",
+      "compute_cost_category": "LocalCPU and user-selectedfreeColab; noModal",
+      "authorization_requirements": "User explicitly requested setup/execution; nofullCV/Holdout/paidallocation",
+      "status": "COMPLETED",
+      "blockers": [],
+      "verification_scope": "MCP connection/client andvenv setup only; compatibility/model stages stillCOLAB05/COLAB02"
+    },
+    {
+      "rq": [],
+      "workstream": "gpu_readiness",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "id": "COLAB05",
+      "research_objective": "Khắc phục portable preflight trước GPU model checks",
+      "dependencies": [
+        "COLAB04"
+      ],
+      "required_inputs": "colab-mcp-preflight-20261107-01 colab-cpu-tests.xml/log;runtimeversions;frozenWindows expectations",
+      "files_components": "notebooksetup;tests/akt/test_runner.py;tests/akt/test_runtime.py;tests/akt/test_data.py;tests/gam_kt/test_core.py;kitbuilder/Gate2",
+      "implementation_objective": "Test competing causes:pin validatedDuckDB API inremotevenv;makeWindows-specifictestfixtures explicit while preserving productionretry andruntimevalidator semantics;refresh sourceGate/kit after sourcechanges",
+      "acceptance_criteria": "Same declaredportable targetpopulation, no unexplainedskip/exclusion;fixtureAPI versionsproved;platformguards preserved;localregressions and source-boundGate pass;remoteportable suite zeroerrors/failures before CUDA model calls",
+      "verification_steps": "Cheap fixtureCOPYTO? version probe;explicitPOSIX/Windowserrorcases;Linux/Windowswheelcontrols;localtargetedtests/Gate then newkit boundedColab run",
+      "required_artifacts": "New immutable before/afterfailures/logs anddependency/platformidentity;sourceSHA andtargetcounts;no historicaloverwrite",
+      "estimated_effort": "0.5–1 engineeringday including boundedverification,not unmeasuredGPUtraining",
+      "compute_cost_category": "LocalCPU/freeColab, noModal fallback",
+      "authorization_requirements": "Safecompatibilityengineering alreadyauthorized;no data/split/modelhyperparameter or scientificmethodology change",
+      "status": "PLANNED",
+      "blockers": [],
+      "verification_scope": "Engineeringcompatibility only;doesnotcloseRQ/Gate4"
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

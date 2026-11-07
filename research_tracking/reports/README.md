@@ -22,6 +22,8 @@ JSON bootstrap chuyển từ root `reports/` với bytes/SHA giữ nguyên. [H�
 
 ## Kỹ thuật và tính tái lập
 
+- [Agent chạy Colab MCP](../../docs/akt-colab-mcp.md): kết nối/thực thiT4 đã xác nhận trực tiếp; [44outputs](../runs/colab-mcp-preflight-20261107-01/README.md) giữ failedpreflight435pass/7fail/8errors, chưa CUDAmodel/Gate4.
+
 - [Colab recovery readiness](colab_recovery_readiness_20261107.md): sửa CUDA RNG restore từ source/regression, CPU recovery qua3processes exact,19mockguards và Gate407. Kitv11; cập nhật notebookVSCode mộtfile/20localchecks, chưa actualColab/CUDA, không dùng Modal credits.
 - [Modal setup](../../docs/akt-modal-setup.md): kết nối local và trần30USD/tháng; [SDK proof](../runs/cpu-modal-client-20261107-01/README.md) chỉ kiểm projectvenv/CLI/dependencies, chưa auth hoặc cloud execution.
 - [Modal access readiness](modal_access_readiness_20261107.md): token/workspace/environment đã kiểm bằng API chỉ đọc; vẫn chưa chạy compute hoặc xác minh CUDA/budget bằng API.
