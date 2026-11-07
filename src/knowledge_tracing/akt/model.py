@@ -100,21 +100,30 @@ class AKTAdapter:
 
     def predict_window(self, window: WindowInputs) -> np.ndarray:
         """Chấm một window đã có global geometry, không cắt/re-anchor lần nữa."""
-        size = len(window.inputs.item_ids)
-        if (not 1 <= size <= self.config.max_length or len(window.inputs.user_ids) != size
-                or len(set(window.inputs.user_ids)) != 1
-                or not np.array_equal(window.inputs.sequence_offsets, [0, size])):
-            raise ValueError('invalid prebuilt prediction window')
-        batch = collate_windows([window], n_items=len(self.encoding.vocabulary.values), device=self.config.device)
+        return self.predict_windows([window])[0]
+
+    def predict_windows(self, windows: Sequence[WindowInputs]) -> list[np.ndarray]:
+        """Batch các window độc lập, không vượt batch_size đã cấu hình."""
+        for window in windows:
+            size = len(window.inputs.item_ids)
+            if (not 1 <= size <= self.config.max_length or len(window.inputs.user_ids) != size
+                    or len(set(window.inputs.user_ids)) != 1
+                    or not np.array_equal(window.inputs.sequence_offsets, [0, size])):
+                raise ValueError('invalid prebuilt prediction window')
         previous_mode = self.native.training
+        output = []
         try:
             self.native.eval()
             with torch.no_grad():
-                _, probabilities, _ = self.native(batch.q_data, batch.qa_data, batch.loss_targets)
-                result = probabilities.reshape(batch.q_data.shape)[0].cpu().numpy().astype(np.float64)
-                if not np.isfinite(result).all() or np.any((result < 0) | (result > 1)):
-                    raise ValueError('invalid prebuilt window probabilities')
-                return result
+                for start in range(0, len(windows), self.config.batch_size):
+                    group = windows[start:start+self.config.batch_size]
+                    batch = collate_windows(group, n_items=len(self.encoding.vocabulary.values), device=self.config.device)
+                    _, probabilities, _ = self.native(batch.q_data, batch.qa_data, batch.loss_targets)
+                    result = probabilities.reshape(batch.q_data.shape).cpu().numpy().astype(np.float64)
+                    if not np.isfinite(result).all() or np.any((result < 0) | (result > 1)):
+                        raise ValueError('invalid prebuilt window probabilities')
+                    output.extend(result[index,:len(window.inputs.item_ids)].copy() for index,window in enumerate(group))
+            return output
         finally:
             self.native.train(previous_mode)
 

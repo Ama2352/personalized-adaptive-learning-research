@@ -62,3 +62,7 @@ AKT public smoke/pilot recovery đã nối và kiểm trên actual CPU model/par
 ### Nghiệm thu engineering cuối07/11
 
 REC01–REC06 và CPU11 completed **CPU synthetic only**. Source-bound Gate2-08 đạt274pass, pointerverified; GAM riêng45pass. HaiCLI cases có artifact-level exact model/Adam/RNG/prediction proof,85targets/3steps/9predictions/case. Source Paper1/2 và historical results giữ nguyên. RQ1/RQ2 vẫn PARTIAL; fixed/CG-AKT, required comparators và controlled final experiments chưa được hoàn tất từ software tests. Kitv7 mới chỉ ZIP integrity, chưaactualColab/CUDA.
+
+## Interface simulator–KT và batching, cuối07/11
+
+SIM01–SIM05 completed CPU engineering: source bank28concept/84item,168synthetic train targets/1update cho fixture, predict-before-update/session/reset/snapshot/domain guards, fixed duplicate-window export và independent batching84→42calls. Gate2-10 296pass/no fail/error/skip. Xem reports/simulator_kt_interface_20261107.md và runs/cpu-sim-kt-batch-gate-20261107-01. Raw correctness score chưa là mastery, native AKT không nhận elapsed time; research/CG-AKT/GPU readiness không nâng theo software pass. V9 kit ZIP-only, khôngremoteexecution.

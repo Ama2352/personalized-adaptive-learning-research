@@ -54,3 +54,7 @@ Những nhận định lỗi I/O, untracked source và chưađượcphépcommit 
 | Demo/viết thesis | Chưa nghiệm thu sản phẩm/bản thảo hoàn chỉnh | Audit03 và proposal deliverables vẫn áp dụng; report modules có thể trích dẫn |
 
 Critical path kế tiếp: chốt simulator training/mastery + primary estimands → implement/test minimal graph variants → bounded CUDA lifecycle/throughput → approved train/evaluate → analysis/writing/demo. Graph-control null không là equivalence; Junyi predictive benchmark không thay Grade10closed-loop evidence. Chi tiết recovery ở17, common-population ởresearch_tracking/reports/cpu_common_population_20261107.md.
+
+### Engineering snapshot mới nhất07/11
+
+Gate2-10 đạt296pass/no fail/error/skip, source-bound. Simulator query/session/item-bank/checkpoint interface và independent batching đã verified CPU; 84queries84→42calls dưới batchcap2, không thay training protocol. Raw reference correctness vẫn chưa thành mastery decision/calibration/controller integration. Model d16/168target arithmetic fixture không là training evidence RQ3. RQ1/RQ2 PARTIAL, RQ3 còn thiếu graph variants/data/training/evaluation. Current critical path: chốt S04/S05 và simulated data contract/coverage → minimal graph variants → bounded CUDA/throughput → approved experiments; writing/demo vẫn deliverables chưa nghiệm thu. Chi tiết report simulator_kt_interface_20261107.md.

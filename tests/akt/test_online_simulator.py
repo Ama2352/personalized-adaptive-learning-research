@@ -198,3 +198,49 @@ def test_original_akt_has_no_elapsed_time_feature_despite_timestamped_api(tmp_pa
     delayed=session.probe(ItemQuery('B',14*86400,2))
     assert immediate == delayed
     # Đây là giới hạn architecture nguồn; không gọi delayed p là retained latent mastery.
+
+
+def test_batched_counterfactual_queries_match_sequential_without_cross_candidate_history(tmp_path):
+    fixture=fitted_fixture(tmp_path)
+    backend=load(fixture)
+    session=OnlineSession(backend,fixture[0],learner_id='eval',max_events=10)
+    for i,item in enumerate(['R','A','B']):
+        session.observe(session.predict(ItemQuery(item,i,i+1)),i%2)
+    before=session.snapshot()
+    queries=tuple(ItemQuery(item,3,4) for item in ['A','R','B','C','A'])
+    shapes=[]
+    hook=backend._adapter.native.register_forward_hook(lambda module,args,result: shapes.append(tuple(args[0].shape)))
+    try:
+        sequential=tuple(session.probe(query) for query in queries)
+        sequential_calls=len(shapes);shapes.clear()
+        batched=session.probe_many(queries)
+        batch_calls=len(shapes)
+        assert sequential_calls==4 and batch_calls==2
+        assert max(shape[0] for shape in shapes)<=fixture[1].batch_size==2
+        for expected,actual in zip(sequential,batched):
+            assert replace(actual,probability=expected.probability)==expected
+            if expected.probability is not None:
+                assert actual.probability==pytest.approx(expected.probability,abs=1e-6,rel=0)
+        reversed_scores=session.probe_many(tuple(reversed(queries)))
+        for first,second in zip(batched,reversed(reversed_scores)):
+            assert first.prediction_kind==second.prediction_kind
+            if first.probability is not None:
+                assert first.probability==pytest.approx(second.probability,abs=1e-6,rel=0)
+        assert session.snapshot()==before
+    finally:
+        hook.remove()
+
+
+def test_native_batched_windows_keep_padding_and_per_window_shapes_separate(tmp_path):
+    fixture=fitted_fixture(tmp_path)
+    model=fixture[2]
+    windows=[]
+    for n in (1,5,8):
+        learner=LearnerEvents('eval',2,tuple(KTEvent('eval',['A','B','C'][i%3],i,i+1,i%2,0,2)
+                                             for i in range(n)))
+        windows.append(list(iter_windows(learner,model.encoding,context=3,target_block=2,training=False))[-1])
+    expected=[model.predict_window(window) for window in windows]
+    actual=model.predict_windows(windows)
+    assert [len(values) for values in actual]==[len(window.inputs.item_ids) for window in windows]
+    for left,right in zip(expected,actual):
+        np.testing.assert_allclose(left,right,atol=1e-6,rtol=0)

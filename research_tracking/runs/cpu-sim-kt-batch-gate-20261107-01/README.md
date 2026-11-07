@@ -1,0 +1,3 @@
+# Batch independent reference queries
+
+Gate2-10 final296passed/no failures/errors/skips, source/lock/upstream stable. Targeted41tests;84reference queries84→42native calls, same history per candidate, configuredbatch2, maxabsdelta5.96e-8. CPU fixture timings không là GPU/d256 estimate. Giữ raw scores, missing/OOV và history integrity; không fake interactions hoặc mastery decisions. Model freeze/session/dataset domain contracts giữ nguyên. Review S04 vẫn cần inference batching/numerical threshold convention, graph history information matching và calibration. Archive bản09 và run01/02 giữ riêng, không sửa.

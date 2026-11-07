@@ -125,3 +125,7 @@ SIM03 dùng28concept/84item, arithmetic labels,168targets1epoch1update d16CPU. R
 ## 07/11/2026 — Interface gate293 và bước hiệu năng có kiểm soát
 
 Gate2-09 293passed0fail/error/skip264.44s, pointerverified. Archive20outputs, sourcev1script khôi phục bỏ metadata bổ sung và verify exact recordedSHA; dependencies refGit3c3d5a5. SIM04 complete. Kitv8 125files43f6a091888e75fccaf875c464b60e4bb4c6747c004c9a47f49eba06734dbea8, ZIPintegrityonly. NextSIM05: batch independent reference windows under existing batchcap, same history perquery, no fabricatedevents; target equivalence before performanceclaim.
+
+## 07/11/2026 — Independent batching và final software gate296
+
+SIM05 native predict_windows/predict_many và generic probe_many giữ samehistory riêng cho mỗi candidate, OOV/null đúngvịtrí, nofakeevents.41targeted tests pass29.45s. Run03-batch train168targets1update,84coldqueries84→42nativecalls cap2, maxabsdelta5.96e-8,0.815→0.393s d16fixture; khôngGPUextrapolation. Gate2-10 final296pass0fail/error/skip292.02s, source/lock/upstream stable, pointerverified. Archive cpu-sim-kt-batch-gate-20261107-01 có11outputs, gate09archive20outputs giữ riêng. Kitv9 125files7e8caab24cb7b2b92cf46fa04f37109a9419146d94b313152cee5de8e3a955fd ZIPintegrityonly. SIM01–05completeCPU, S04/S05 và simulatedtrainingdataquality còn mở.

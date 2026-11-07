@@ -42,3 +42,15 @@ Vì vậy retention phải đo từ latent environment ở thời điểm đánh
 Reference weights1/3 của integration chỉ là fixture, không phải primary mastery definition đã được duyệt. S04 vẫn cần chốt reference population/weights, calibration trên simulator Development, threshold và mapping vào controller. S05 cần model×environment allocation. Simulator training trajectories phải có learner-disjoint train/selection/calibration/final seed families, coverage và diversity được kiểm trước train thật. BKT/GAM/SAKT/GKT phải có adapter/semantics phù hợp, không tự coi BKT P(K), Elo và p(correct) là cùng đại lượng.
 
 RQ1/RQ2 có thêm source-level/engineering evidence về đường từ prediction sang state query và giới hạn thời gian. RQ3 chưa có phương pháp CG-AKT được train/evaluate hoặc learning-benefit evidence từ gói này. Không tự nâng overall thesis readiness lên READY.
+
+## Bổ sung batching có kiểm chứng
+
+Run `cpu-sim-kt-interface-20261107-03-batch` giữ bank84items và training168targets/1update.41targeted tests đạt29.45s. Với84counterfactual cold queries, cùnghistory/rank/source-row, batchcap2:84native calls tuần tự thành42calls, maxabs probability delta5.960464477539063e-8. Cold d16 CPU timing0.815s tuần tự và0.393s batch trong đúng run này; toànlifecycle9.59s. Đây là overhead fixture, không đo throughput GPU hoặc đưa cost estimate full experiment.
+
+Không thêm fictitious interactions, không cập nhật lịch sử giữa candidates. Các queries OOV được giữ None đúng vị trí. Không cần mọi comparator có batching giống nhau, nhưng phải giữ information boundaries/target population, record batching và numerical tolerance. Near-threshold boolean decisions có thể nhạy với floating-point differences; S04 cần ghi convention/sensitivity trước confirmatory rollouts. Không reuse cached reference score sau observe dù khác concept vì AKT attention dùng global learner history.
+
+## Nghiệm thu phần mềm cuối
+
+Gate2-10 source-bound296passed/no failed/errors/skips,292.02s; report/hash/log/XML và nguồn trong `runs/cpu-sim-kt-batch-gate-20261107-01`. `runs/cpu-sim-kt-gate-20261107-01` giữ Gate2-09 293tests trước batching và sourcev1script đã khôi phục đúng recordedSHA. Sourcev2/script và code dependencies tiếp tục có trong Git. Các bundles cũ bất biến.
+
+Trạng thái: query/session/bank/checkpoint bridge và independent batching verified CPU; research methodology/mastery mapping/GPU chưa nghiệm thu. Kitv9 build125files, ZIP integrity-only; không có remote execution trong gói này.

@@ -188,6 +188,21 @@ class OnlineSession:
         self._issued[ticket.nonce] = ticket
         return ticket
 
+    def probe_many(self, queries: tuple[ItemQuery, ...]) -> tuple[OnlineScore, ...]:
+        if len(queries) > self.max_pending_queries:
+            raise ValueError('probe batch exceeds query budget')
+        for query in queries:
+            self._check_query(query, self._history)
+        before = self.history_sha256
+        predict_many = getattr(self.backend, 'predict_many', None)
+        scores = (tuple(predict_many(self._history, queries, learner_id=self.learner_id))
+                  if predict_many is not None else tuple(self.probe(query) for query in queries))
+        if (len(scores) != len(queries) or any(not isinstance(score,OnlineScore)
+                or score.global_rank != len(self._history) for score in scores)
+                or before != self.history_sha256):
+            raise ValueError('backend returned inconsistent probe batch')
+        return scores
+
     def observe(self, ticket: PredictionTicket, correct: int):
         if (not isinstance(ticket, PredictionTicket) or ticket.session_key != self._session_key
                 or ticket.revision != self._revision or self._issued.get(ticket.nonce) != ticket
@@ -259,10 +274,13 @@ def probe_references(session: OnlineSession, references: tuple[ReferenceSet, ...
         if any(mapping.get(item) != entry.concept_id for item, _ in entry.item_weights):
             raise ValueError('reference item/concept mismatch')
     before = session.history_sha256
+    item_ids = tuple(item for entry in references for item,_ in entry.item_weights)
+    queries = tuple(ItemQuery(item,timestamp,source_row) for item in item_ids)
+    predictions = session.probe_many(queries)
+    probabilities = {item:score.probability for item,score in zip(item_ids,predictions)}
     scores = {}
     for entry in references:
-        values = {item: session.probe(ItemQuery(item, timestamp, source_row)).probability
-                  for item, _ in entry.item_weights}
+        values = {item: probabilities[item] for item,_ in entry.item_weights}
         missing = tuple(item for item, value in values.items() if value is None)
         scores[entry.concept_id] = {'score_kind': 'mean_reference_correctness',
             'score': None if missing else sum(weight * values[item] for item, weight in entry.item_weights),

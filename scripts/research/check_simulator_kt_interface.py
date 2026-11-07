@@ -105,7 +105,26 @@ Reference weights1/3 chỉ để kiểm API, chưa là mastery protocol. Probes 
         a = OnlineSession(backend, bank, learner_id='fixture-eval-a', max_events=8)
         b = OnlineSession(backend, bank, learner_id='fixture-eval-b', max_events=8)
         before = a.snapshot()
-        cold = probe_references(a, refs, timestamp=0, source_row=10001)
+        forward_shapes = []
+        hook = native.register_forward_hook(lambda module,args,result: forward_shapes.append(tuple(args[0].shape)))
+        try:
+            sequential_started = time.perf_counter()
+            sequential_probs = {item.item_id:a.probe(ItemQuery(item.item_id,0,10001)).probability for item in bank.items}
+            sequential_seconds = time.perf_counter()-sequential_started
+            sequential_calls = len(forward_shapes)
+            forward_shapes.clear()
+            batched_started = time.perf_counter()
+            cold = probe_references(a, refs, timestamp=0, source_row=10001)
+            batch_seconds = time.perf_counter()-batched_started
+            batch_calls = len(forward_shapes)
+            max_batch = max(shape[0] for shape in forward_shapes)
+        finally:
+            hook.remove()
+        batched_probs = {item:probability for value in cold['scores'].values()
+                         for item,probability in value['probabilities'].items()}
+        max_delta = max(abs(sequential_probs[item]-batched_probs[item]) for item in sequential_probs)
+        if (max_delta>1e-6 or sequential_calls!=84 or batch_calls!=42 or max_batch>config.batch_size):
+            raise ValueError('independent reference batch equivalence/call budget failed')
         if a.snapshot() != before or any(value['supported_items']!=3 for value in cold['scores'].values()):
             raise ValueError('cold reference probe changed history or coverage')
         for index, item in enumerate(bank.items[:8]):
@@ -152,6 +171,11 @@ Reference weights1/3 chỉ để kiểm API, chưa là mastery protocol. Probes 
             'weights_unchanged':True,'torch_rng_unchanged':True,'reference_queries_do_not_commit':True,
             'snapshot_roundtrip_exact':True,'reset_exact':True,'cross_learner_isolated':True,
             'incompatible_checkpoint_rejected':rejections,'elapsed_seconds':elapsed,
+            'independent_batch_check':{'queries':84,'sequential_forward_calls':sequential_calls,
+                'batched_forward_calls':batch_calls,'max_batch':max_batch,'configured_batch_cap':config.batch_size,
+                'max_abs_probability_delta':max_delta,'cpu_tolerance':1e-6,
+                'sequential_seconds':sequential_seconds,'batch_seconds':batch_seconds,
+                'timing_scope':'Cold d16 CPU fixture only, not full training or GPU throughput'},
             'inference_features':{'item_id':True,'past_responses':True,'interaction_positions':True,
                                   'elapsed_calendar_time':False,'raw_difficulty_numeric':False,'latent_theta':False},
             'scope':'Engineering fixture; no calibration/mastery/learning-benefit claim'}

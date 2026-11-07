@@ -64,7 +64,7 @@ class AKTOnlineBackend:
     def domain(self):
         return self._bank.identity
 
-    def predict_next(self, history: tuple[Observation, ...], query: ItemQuery, *, learner_id: str) -> OnlineScore:
+    def _prepare_query(self, history: tuple[Observation, ...], query: ItemQuery, *, learner_id: str):
         if (inference_recipe(self._adapter.config) != self._recipe
                 or tuple(self._adapter.encoding.vocabulary.values) != self._vocabulary
                 or self._parameter_versions != tuple((name, id(parameter), parameter._version)
@@ -106,9 +106,25 @@ class AKTOnlineBackend:
         if geometry is None or geometry.unseen:
             raise ValueError('missing supported next-item window')
         window = slice_causal_inputs(inputs, geometry)
-        probability = float(self._adapter.predict_window(window)[-1])
-        return OnlineScore(probability, 'fitted', int(window.history_available[-1]),
-                           int(window.history_used[-1]), bool(window.context_reset[-1]), rank)
+        return window
+
+    def predict_many(self, history: tuple[Observation, ...], queries: tuple[ItemQuery, ...], *,
+                     learner_id: str) -> tuple[OnlineScore, ...]:
+        prepared = [self._prepare_query(history, query, learner_id=learner_id) for query in queries]
+        windows = [entry for entry in prepared if not isinstance(entry, OnlineScore)]
+        values = iter(self._adapter.predict_windows(windows))
+        results = []
+        for entry in prepared:
+            if isinstance(entry, OnlineScore):
+                results.append(entry)
+            else:
+                prediction = next(values)
+                results.append(OnlineScore(float(prediction[-1]),'fitted',int(entry.history_available[-1]),
+                    int(entry.history_used[-1]),bool(entry.context_reset[-1]),len(history)))
+        return tuple(results)
+
+    def predict_next(self, history: tuple[Observation, ...], query: ItemQuery, *, learner_id: str) -> OnlineScore:
+        return self.predict_many(history,(query,),learner_id=learner_id)[0]
 
 
 def load_online_akt(path: Path, config: AKTConfig, bank: SimulatorBank, *,

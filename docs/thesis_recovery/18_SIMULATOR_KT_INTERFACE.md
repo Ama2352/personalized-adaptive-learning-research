@@ -36,3 +36,17 @@ Lưu failures: `sim-online-01`14pass1fail do test setup dùng strict shared voca
 Hai Paper2 bank integration runs train168synthetic targets/1epoch/1update, đủ28concept/84items. Run01/02 đạt lifecycle trong11.99s/11.07s; không là KT benchmark hoặc predictor of learning gain. Run02 dùng canonical immutable difficulty/weights và binding checks đã harden, frozen model state/reference scores trùng run01. Full checkpoint SHA khác do telemetry, nên history fingerprints khác là đúng. Xem report `research_tracking/reports/simulator_kt_interface_20261107.md` và repeat-proof JSON.
 
 Review thêm direct-probe binding drift và nested reference mutability; sửa trước final gate.19native/contract tests passed19.86s (`sim-binding-05.log`), gồm timestamp-gap invariance của original AKT. Query timestamp không là elapsed-time feature: không dùng KT score14ngày làm retained latent mastery. Đây là architecture limitation, không phải bug cần sửa model. S04/S05 và simulator-training-data validation vẫn chờ protocol.
+
+## SIM05 — Batch các counterfactual queries độc lập
+
+Thêm `predict_windows`/`predict_many`/`probe_many`, mỗi candidate giữ riêng window từ cùng history. Chỉ dùng batch_size đã cấu hình, không đổi optimizer/training population. Backend không hỗ trợ batch được fallback tuần tự. Không concatenate reference items thành fake interactions, không commit ticket/history khi probe. Backend/session hiện sử dụng tuần tự trong một worker; không chạy training đồng thời trên model object đang inference.
+
+Targeted41tests pass29.45s, kiểm OOV ở giữa query list, permutation, padding/variable-window length, wrong coverage, query cap và unchanged history. Run `cpu-sim-kt-interface-20261107-03-batch` cùng168synthetic training targets:84cold reference queries giảm native forward calls84→42 với batchcap2; maxabs probability delta5.96e-8 (<CPU tolerance1e-6). Cold probe CPU0.815s→0.393s trong fixture d16; cả lifecycle9.59s. Không ngoại suy d256/GPU/full-fold cost từ các timing này. Final source-bound Gate2-10 còn đang kiểm.
+
+Batch tolerance không bảo đảm boolean mastery giống hệt nếu score nằm sát ngưỡng trong mức sai số số học. Protocol sau phải ghi inference batching/numerical convention và phân tích near-threshold sensitivity; không tự đổi threshold ở đây. Không cache score qua `observe`: global attention có thể đổi mọi candidate probabilities, không chỉ concept vừa practice.
+
+## Nghiệm thu cuối
+
+Gate2-10 đạt296passed,0failed,0errors,0skipped,292.02s. Source/lock/upstream trước–sau không đổi, current pointer verified. Report SHA256a7416bd1ab431fa650712ec63bb9ad77a096a5f0ec5f56abf56084505fcd0f46. Archive `research_tracking/runs/cpu-sim-kt-batch-gate-20261107-01` giữ source/test logs/proofs; archive gate09 giữ snapshot trước batching. Suite gần cap300s: gói tests sau cần dự toán resource/test budget, không skip tests để lấy PASS.
+
+SIM01–SIM05 hoàn tất trong phạm vi engineering CPU. Source bank và artifacts lịch sử giữ nguyên; không hoàn tất calibration/mastery/controller hoặc CG-AKT research bằng các tests này. Kitv9 ZIP125files đã kiểm integrity, chưa chạy actual Colab/CUDA. Next: simulated training-data/split contract và graph-context information-boundary fixtures, trước khi generate/train/evaluate theo protocol đã duyệt.

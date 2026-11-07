@@ -70,3 +70,7 @@ Kitv6 có113source/fixture files, source-only notebook copies và project venv. 
 ## Simulator–KT interface07/11
 
 `runs/cpu-sim-kt-interface-20261107-01` và `...-02`: complete synthetic engineering lifecycle,28concept/84item,168targets/1update, noJunyi/Holdout/GPU. Checkpoint ngoài bundle, source/output SHA trong manifest. Đọc `reports/simulator_kt_interface_20261107.md` về semantics, double-window bug và pending calibration/mastery protocol.
+
+## Latest simulator bridge/batch gate07/11
+
+`runs/cpu-sim-kt-batch-gate-20261107-01` có11outputs nguồn/source-bound Gate2-10 296tests, local source hashes; `runs/cpu-sim-kt-interface-20261107-03-batch` giữ measured call/tolerance/timing proof. Earlier gate09 và runs01/02 giữ nguyên. Read report simulator_kt_interface_20261107.md, không suy learning efficacy/GPU readiness.

@@ -1,0 +1,128 @@
+{
+  "status": "passed_cpu_interface_fixture",
+  "concepts": 28,
+  "items": 84,
+  "training": {
+    "loss_sum": 116.31625366210938,
+    "valid_targets": 168,
+    "optimizer_steps": 1,
+    "complete": true,
+    "resource": {
+      "wall_seconds": 0.07087090000277385,
+      "peak_rss_bytes": 308527104,
+      "samples": [
+        {
+          "pid": 25220,
+          "process_rss_bytes": 296697856,
+          "process_peak_rss_bytes": 296697856,
+          "system_available_ram_bytes": 2411937792,
+          "system_total_ram_bytes": 16794759168
+        },
+        {
+          "pid": 25220,
+          "process_rss_bytes": 308527104,
+          "process_peak_rss_bytes": 308527104,
+          "system_available_ram_bytes": 2395537408,
+          "system_total_ram_bytes": 16794759168
+        }
+      ]
+    },
+    "nonzero_gradient_steps": 1,
+    "parameter_update_steps": 1,
+    "max_pre_clip_grad_norm": 0.0880628451704979,
+    "max_post_clip_grad_norm": 0.0880628451704979,
+    "windows_processed": 2,
+    "processed_target_rows": 168,
+    "optimized_target_rows": 168,
+    "batches": 1,
+    "collated_windows": 2,
+    "sequence_length_counts": {
+      "84": 2
+    },
+    "batch_shape_counts": {
+      "2x84": 1
+    },
+    "valid_tokens": 168,
+    "target_tokens": 168,
+    "context_tokens": 0,
+    "padding_tokens": 0,
+    "forward_seconds": 0.034434500004863366,
+    "backward_seconds": 0.01762379999854602,
+    "gradient_clip_seconds": 0.002246399992145598,
+    "optimizer_seconds": 0.009481299988692626,
+    "clipped_steps": 0,
+    "stop_reason": "epoch_complete"
+  },
+  "observed_eval_events": 8,
+  "reference_items_per_concept": 3,
+  "checkpoint": "experiments\\akt\\results\\cpu-sim-kt-interface-20261107-03-batch\\synthetic-final.pt",
+  "checkpoint_sha256": "e7e62cd63f80b651f355a5b596e33bccfae796ef152ef3ff7d37b23f72a09034",
+  "checkpoint_identity": {
+    "training_domain": {
+      "schema_version": 1,
+      "environment_id": "paper2-grade10-interface-fixture-v1",
+      "input_unit": "item_id",
+      "item_bank_sha256": "2bd1d9ca7efe0f83006d797aa760022f82c35029fbc1ad01fd380e4146cd18c0"
+    },
+    "inference_recipe": {
+      "schema_version": 1,
+      "model": "upstream_akt_nonrasch",
+      "source_commit": "01b7e8d7d7c862cabc9467108e3e7f2555653a88",
+      "d_model": 16,
+      "heads": 2,
+      "blocks": 1,
+      "d_ff": 32,
+      "final_fc": 16,
+      "dropout": 0.2,
+      "kq_same": 1,
+      "separate_qa": false,
+      "n_pid": 0,
+      "graph": false,
+      "device": "cpu",
+      "context": 100,
+      "target_block": 100,
+      "max_length": 200
+    },
+    "vocabulary_sha256": "7fdc5dffdb228b0b90596c4f5e4c0d36d4e80aae0f606e784806f9636b6a4345",
+    "artifact_role": "synthetic_interface_fixture",
+    "seed": 42,
+    "training_targets": 168,
+    "input_sources_sha256": {
+      "question_bank.csv": "fb5924ac0d19049ef1a5be23352592e30dfa3a4bde3e3fa07f10979fe0887e4d",
+      "nodes.csv": "6db464d1fd3df5d4215d51c9f90dc0f7e24f252517252784c80bdb5fa6291650"
+    }
+  },
+  "frozen_state_sha256": "5c1431cf3dc7fddcbf93f6ff96260701df281ea61d6a546e9df3644b516dbe06",
+  "weights_unchanged": true,
+  "torch_rng_unchanged": true,
+  "reference_queries_do_not_commit": true,
+  "snapshot_roundtrip_exact": true,
+  "reset_exact": true,
+  "cross_learner_isolated": true,
+  "incompatible_checkpoint_rejected": {
+    "cross_environment": true,
+    "window_recipe_drift": true
+  },
+  "elapsed_seconds": 9.589558200008469,
+  "independent_batch_check": {
+    "queries": 84,
+    "sequential_forward_calls": 84,
+    "batched_forward_calls": 42,
+    "max_batch": 2,
+    "configured_batch_cap": 2,
+    "max_abs_probability_delta": 5.960464477539063e-08,
+    "cpu_tolerance": 1e-06,
+    "sequential_seconds": 0.8149941999872681,
+    "batch_seconds": 0.39314359999843873,
+    "timing_scope": "Cold d16 CPU fixture only, not full training or GPU throughput"
+  },
+  "inference_features": {
+    "item_id": true,
+    "past_responses": true,
+    "interaction_positions": true,
+    "elapsed_calendar_time": false,
+    "raw_difficulty_numeric": false,
+    "latent_theta": false
+  },
+  "scope": "Engineering fixture; no calibration/mastery/learning-benefit claim"
+}

@@ -147,3 +147,16 @@ def test_reference_weights_and_metadata_are_canonical_immutable_values():
     first=SimulatorBank('sim',(SimulatorItem('A','C',1000),))
     second=SimulatorBank('sim',(SimulatorItem('A','C',1000.),))
     assert first.identity == second.identity
+
+
+def test_batch_probe_falls_back_without_committing_and_rejects_wrong_coverage():
+    session=setup()
+    queries=(ItemQuery('A',0,1),ItemQuery('R',0,1),ItemQuery('B',0,1))
+    before=session.snapshot()
+    assert session.probe_many(queries)==tuple(session.probe(query) for query in queries)
+    assert session.snapshot()==before
+    session.backend.predict_many=lambda *args,**kwargs: []
+    with pytest.raises(ValueError,match='inconsistent'):
+        session.probe_many(queries)
+    with pytest.raises(ValueError,match='budget'):
+        session.probe_many(queries*400)

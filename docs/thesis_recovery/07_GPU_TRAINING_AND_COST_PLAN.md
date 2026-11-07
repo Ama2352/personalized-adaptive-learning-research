@@ -81,3 +81,7 @@ Một epoch outer train 16.565m/rtr seconds, val1.6565m/rval seconds, outer eval
 |AMP |Có thể nhanh hơn, vừa |DEFER đến sau FP32 CUDA lifecycle, numerics/calibration tests và protocol approval |
 
 Stop khi source/data/graph identity mismatch, NaN/Inf, duplicate targets, coverage mismatch, RAM/VRAM ceiling, no progress heartbeat quá120s, quota/cost cap reached hoặc projected remaining spend vượt allocation. Reserve cost trước mỗi job, deduct elapsed telemetry, stop sớm đủ margin để checkpoint. Người dùng duyệt full budget và exact experiment config, advisor duyệt methodology. Alerts chỉ supplementary.
+
+## Chi phí inference sau interface07/11
+
+Training GPU không là toàn bộ compute matrix. Reference bank3items×28concepts cần84counterfactual queries mỗi lần đo đầy đủ. Workload inference xấp xỉ learner×steps×conditions×seeds×reference_queries, cộng action queries chưa reuse trong cùng revision. Stage5 phải benchmark query throughput và controller/serialization overhead, tách train/validation/export. SIM05 giữ training batchcap, gom independent windows; fixture d16CPU84queries giảm84→42native calls,0.815→0.393s, không ngoại suy GPU. Không nối candidates thành fake history hoặc cache qua observe để tiết kiệm; global AKT history có thể đổi mọi concept scores. S04 reference-bank choice và numerical threshold convention ảnh hưởng cả scientific estimand lẫn cost, phải freeze trước train/evaluate.
