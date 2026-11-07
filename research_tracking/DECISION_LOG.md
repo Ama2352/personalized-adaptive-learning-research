@@ -12,3 +12,7 @@ Chỉ ghi quyết định rõ trong tài liệu/config/run evidence. Không suy 
 | DEC-006 | 2026-11-01 theo retry report | Mỗi AKT smoke cần run ID/config/authorization riêng; smoke không đồng nghĩa CV/full fold. | docs/akt-task13-smoke-retry-20261101.md; experiments/akt/README.md. | Preserve failed attempts; không mở rộng auth ngầm. |
 | DEC-007 | 2026-11-04 theo config/auth | AKT pilot bounded trên Development, caps cohort/targets/time/RSS/RAM; không holdout/CV. | docs/akt-pilot-readiness.md và pilot config/auth. | Run14-02 failed; authorization không phải result. |
 | DEC-008 | 2026-11-04 | Agent 2 chỉ tạo tracking trong research_tracking; không sửa code/data/artifacts, không chạy experiment/test. | Yêu cầu audit và repo rules. | Gaps chuyển cho nhóm xử lý riêng. |
+
+## DEC-CPU-20261107
+
+User chấp thuận pilot factorial10seed/profile×120steps và Junyi32inner-train×120prefix. Runs đã completed. Catalog thô Junyi có self-loops/cycle, cần graph-version decision, không tự cắt cạnh. Confirmatory inference và final scope vẫn pending.

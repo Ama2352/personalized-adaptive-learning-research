@@ -42,3 +42,7 @@
 ## Cập nhật CPU07/11/2026
 
 Adapter nguồn Paper2, explicit mastery trace, matched graph và integrity verifier đã được kiểm. RQ1/RQ2 còn thiếu controlled factorial, Junyi order analysis và inference.
+
+## Pilot CPU09/10 và refit07/11/2026
+
+User chấp thuận bounded pilot trước execution. Xem reports/cpu_pilots_20261107.md về factorial và Junyi order, gồm cơ chế PG không hoạt động trong cohort và cycle witness của catalog thô. Engineering snapshot ở runs/cpu-readiness-pathways-20261107-01, không đồng nghĩa GPU/full-training acceptance.

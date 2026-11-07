@@ -42,3 +42,11 @@ Git global exclude tại C:\Users\AmaDev\.config\git\ignore không đọc đư�
 ## Cập nhật CPU07/11/2026
 
 Điểm vào cho evidence CPU mới là [báo cáo CPU](reports/cpu_rq12_20261107.md). Run03 fixed-stream, run04 replay, closed-loop01 pilot downstream. Run01 superseded cho selector history, artifact giữ nguyên.
+
+## Pilot CPU09/10 và refit07/11/2026
+
+User chấp thuận bounded pilot trước execution. Xem reports/cpu_pilots_20261107.md về factorial và Junyi order, gồm cơ chế PG không hoạt động trong cohort và cycle witness của catalog thô. Engineering snapshot ở runs/cpu-readiness-pathways-20261107-01, không đồng nghĩa GPU/full-training acceptance.
+
+### Bổ sung cuối batch CPU07/11
+
+SCC reconstruction ở runs/cpu-junyi-graph-reconstruction-20261107-01 tái dựng976-edge DAG từ current catalog theo source Paper2; không chứng minh identical historical edge bytes. Gate2 hiện hành237test ở runs/cpu-pilots-gate2-20261107-02. Report cpu_pilots_20261107.md ghi cả kết luận thay đổi sau truy nguồn.

@@ -24,3 +24,7 @@
 ## Cập nhật CPU07/11/2026
 
 CPU-RQ1-CHAIN, CPU-RQ1-PACKAGE, CPU-RQ2-RETENTION, CPU-RQ2-REENTRY, CPU-RQ2-NULL và CPU-REPRO được định nghĩa tại reports/cpu_rq12_20261107.md. Chưa là final instructional benefit.
+
+## Pilot CPU09/10 và refit07/11/2026
+
+User chấp thuận bounded pilot trước execution. Xem reports/cpu_pilots_20261107.md về factorial và Junyi order, gồm cơ chế PG không hoạt động trong cohort và cycle witness của catalog thô. Engineering snapshot ở runs/cpu-readiness-pathways-20261107-01, không đồng nghĩa GPU/full-training acceptance.
