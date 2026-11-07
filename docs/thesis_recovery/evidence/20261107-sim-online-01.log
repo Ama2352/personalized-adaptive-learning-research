@@ -1,0 +1,57 @@
+.F.............                                                          [100%]
+================================== FAILURES ===================================
+_ test_online_matches_offline_with_global_blocks_oov_partial_and_future_invariance[sequence1] _
+
+self = StableVocabulary(values=('A', 'B', 'C'))
+values = ['R', 'A', 'B', 'R', 'C', 'A', ...]
+
+    def encode(self, values: Sequence[Any]) -> np.ndarray:
+        lookup = {value: index for index, value in enumerate(self.values)}
+        try:
+>           return np.asarray([lookup[str(value)] for value in values], dtype=np.int64)
+                               ^^^^^^^^^^^^^^^^^^
+E           KeyError: 'R'
+
+src\knowledge_tracing\shared_kt.py:24: KeyError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/sim-online-0978f2d1979142198565b94a6fb55cac/test_online_matches_offline_wi1')
+sequence = ['R', 'A', 'B', 'R', 'C', 'A', ...]
+
+    @pytest.mark.parametrize('sequence',[
+        ['A','B','C','A','B','C','A','B','C','A','B'],
+        ['R','A','B','R','C','A','B','R','C','A','B'],
+    ])
+    def test_online_matches_offline_with_global_blocks_oov_partial_and_future_invariance(tmp_path,sequence):
+        fixture=fitted_fixture(tmp_path)
+        bank,config,model,optimizer,path,identity=fixture
+        backend=load(fixture)
+        session=OnlineSession(backend,bank,learner_id='eval',max_events=len(sequence))
+        rows=[dict(user_id='eval',exercise=item,time_done=i//2,source_row=i+1,correct=i%2)
+              for i,item in enumerate(sequence)]
+>       inputs,_=build_causal_sequence_inputs(rows,item_key='exercise',item_vocabulary=model.encoding.vocabulary)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_online_simulator.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\shared_kt.py:132: in build_causal_sequence_inputs
+    item_ids = item_vocab.encode([row[item_key] for row in ordered])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = StableVocabulary(values=('A', 'B', 'C'))
+values = ['R', 'A', 'B', 'R', 'C', 'A', ...]
+
+    def encode(self, values: Sequence[Any]) -> np.ndarray:
+        lookup = {value: index for index, value in enumerate(self.values)}
+        try:
+            return np.asarray([lookup[str(value)] for value in values], dtype=np.int64)
+        except KeyError as exc:
+>           raise ValueError(f"unknown vocabulary value: {exc.args[0]}") from exc
+E           ValueError: unknown vocabulary value: R
+
+src\knowledge_tracing\shared_kt.py:26: ValueError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_online_simulator.py::test_online_matches_offline_with_global_blocks_oov_partial_and_future_invariance[sequence1]
+1 failed, 14 passed in 26.24s

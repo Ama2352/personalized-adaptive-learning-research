@@ -1239,6 +1239,110 @@
       "verification_evidence": "research_tracking/runs/cpu-akt-recovery-20261107-01; Gate2-08 274pass; lifecycle_proof.json;17_AKT_RECOVERY_ENGINEERING_LOG.md",
       "verification_scope": "CPU synthetic software only; not real-data/GPU acceptance",
       "downstream_limits": "Full-fold disabled; real-data/GPU lifecycle needs source-bound run authorization and resource evidence"
+    },
+    {
+      "id": "SIM01",
+      "research_objective": "Hợp đồng domain/item/session/ticket/reference không oracle",
+      "rq": [
+        "RQ1",
+        "RQ3"
+      ],
+      "workstream": "simulator_kt_interface",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "CPU11"
+      ],
+      "required_inputs": "18_SIMULATOR_KT_INTERFACE.md;06 architecture draft; immutable simulator item bank",
+      "files_components": "src/knowledge_tracing/simulator_bridge.py;tests/shared_kt/test_simulator_bridge.py",
+      "implementation_objective": "Hợp đồng domain/item/session/ticket/reference không oracle",
+      "acceptance_criteria": "Reject domain/ticket/chronology/budget drift; query pure; no implicit mastery;10tests pass",
+      "verification_steps": "Project .venv unit/native synthetic CPU, no dataset/Holdout; source-bound software gate",
+      "required_artifacts": "Test logs, source/fixture/checkpoint identities, Vietnamese note, immutable evidence bundle",
+      "estimated_effort": "0.5–1 engineering day per task; not GPU runtime",
+      "compute_cost_category": "bounded local CPU synthetic",
+      "authorization_requirements": "Safe engineering authorized; no final mastery threshold/controller/methodology adoption; no cloud/full experiment",
+      "status": "COMPLETED",
+      "blockers": []
+    },
+    {
+      "id": "SIM02",
+      "research_objective": "AKT next-item và selected-checkpoint binding",
+      "rq": [
+        "RQ1",
+        "RQ3"
+      ],
+      "workstream": "simulator_kt_interface",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "SIM01"
+      ],
+      "required_inputs": "18_SIMULATOR_KT_INTERFACE.md;06 architecture draft; immutable simulator item bank",
+      "files_components": "src/knowledge_tracing/akt/online.py;tests/akt/test_online_simulator.py",
+      "implementation_objective": "AKT next-item và selected-checkpoint binding",
+      "acceptance_criteria": "Offline parity cold/block/OOV; SHA/domain/recipe/vocab; weights/RNG unchanged",
+      "verification_steps": "Project .venv unit/native synthetic CPU, no dataset/Holdout; source-bound software gate",
+      "required_artifacts": "Test logs, source/fixture/checkpoint identities, Vietnamese note, immutable evidence bundle",
+      "estimated_effort": "0.5–1 engineering day per task; not GPU runtime",
+      "compute_cost_category": "bounded local CPU synthetic",
+      "authorization_requirements": "Safe engineering authorized; no final mastery threshold/controller/methodology adoption; no cloud/full experiment",
+      "status": "IN_PROGRESS",
+      "blockers": []
+    },
+    {
+      "id": "SIM03",
+      "research_objective": "Integration trên28concept84item nguồn Paper2",
+      "rq": [
+        "RQ1",
+        "RQ3"
+      ],
+      "workstream": "simulator_kt_interface",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "SIM02"
+      ],
+      "required_inputs": "18_SIMULATOR_KT_INTERFACE.md;06 architecture draft; immutable simulator item bank",
+      "files_components": "scripts/research; Paper2 simulator CSV read-only",
+      "implementation_objective": "Integration trên28concept84item nguồn Paper2",
+      "acceptance_criteria": "Bounded synthetic-trained native AKT; probes do not commit; raw source unchanged; no learning-benefit claim",
+      "verification_steps": "Project .venv unit/native synthetic CPU, no dataset/Holdout; source-bound software gate",
+      "required_artifacts": "Test logs, source/fixture/checkpoint identities, Vietnamese note, immutable evidence bundle",
+      "estimated_effort": "0.5–1 engineering day per task; not GPU runtime",
+      "compute_cost_category": "bounded local CPU synthetic",
+      "authorization_requirements": "Safe engineering authorized; no final mastery threshold/controller/methodology adoption; no cloud/full experiment",
+      "status": "PLANNED",
+      "blockers": []
+    },
+    {
+      "id": "SIM04",
+      "research_objective": "Đóng gói evidence/Gate2 và handoff simulator interface",
+      "rq": [
+        "RQ1",
+        "RQ3"
+      ],
+      "workstream": "simulator_kt_interface",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "SIM03"
+      ],
+      "required_inputs": "18_SIMULATOR_KT_INTERFACE.md;06 architecture draft; immutable simulator item bank",
+      "files_components": "docs/thesis_recovery;research_tracking/runs",
+      "implementation_objective": "Đóng gói evidence/Gate2 và handoff simulator interface",
+      "acceptance_criteria": "Immutable bundle/logs/source hashes; fresh Gate2; task DAG and Git output hashes verified",
+      "verification_steps": "Project .venv unit/native synthetic CPU, no dataset/Holdout; source-bound software gate",
+      "required_artifacts": "Test logs, source/fixture/checkpoint identities, Vietnamese note, immutable evidence bundle",
+      "estimated_effort": "0.5–1 engineering day per task; not GPU runtime",
+      "compute_cost_category": "bounded local CPU synthetic",
+      "authorization_requirements": "Safe engineering authorized; no final mastery threshold/controller/methodology adoption; no cloud/full experiment",
+      "status": "PLANNED",
+      "blockers": []
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

@@ -109,3 +109,7 @@ Kiểm10pure order tests, rồi45GAM tests6.29s. Tái dùng nguyên3controls; đ
 ## 07/11/2026 — Nghiệm thu cuối recovery và lưu bằng chứng
 
 Gate2-07 271pass2fail do Windows long temp path, khôngpublish; sửa short temp names. Review sửa early-failure budget lineage;51parent/runner pass14.68s. Gate2-08 final274pass0fail/error/skip217.71s, source/lock/upstream stable, pointerverified. Archive cpu-akt-recovery-20261107-01 có24outputs và exact model/Adam/RNG/prediction proof cho2CLI cases. V7 kit120files SHA018888bbee3718f0c9ce9222ae079315aefca67d176e4d2be8ec49d78f69c9cc verified ZIP only. REC01–06/CPU11 complete trong phạm vi CPU synthetic; khôngreal-data AKT/GPU/Holdout. RQ1/2 PARTIAL, RQ3 chưatraining/evaluation. Next: simulator/mastery interface and confirmatory protocol, remote lifecycle when runtime ready.
+
+## 07/11/2026 — Simulator interface bắt đầu
+
+Đọc state và source KT/window/selector. Không lấy Junyi checkpoint gán sang simulator, không chọn threshold. SIM01 có domain/bank identity, predict ticket→observe, pure probes, snapshot/reset, missing-reference coverage;10contract tests pass0.18s. SIM02 native tests đang chạy; fixture đầu14pass1fail vì shared strict vocabulary rejects OOV trong test setup, sửa fixture dùng explicit AKT OOV encoding, không nới production vocabulary. Source mới làm Gate2 cũ stale; full refresh sau stable batch.
