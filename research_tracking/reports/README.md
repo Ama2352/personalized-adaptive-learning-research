@@ -69,3 +69,9 @@ Chỉ mục này không thêm GPU/runtime verdict khi chưa có evidence bundle 
 
 - [Runtime contract](akt_linux_runtime_contract_20261107.md), [main worker](akt_main_worker_lifecycle_20261107.md), [bundle](../runs/cpu-linux-worker-20261107-01/README.md): targeted63cases và2newworker cases; fullGate513pass/269.98s, source-bound WindowsCPU. Linuxbranches mocked, chưa actualLinux/CUDA worker.
 - [SAKT adapter](sakt_adapter_readiness_20261107.md), [bundle ban đầu](../runs/sakt-inference-engineering-20261107-01/README.md), [checkpoint followup](../runs/sakt-checkpoint-payload-20261107-01/README.md):89CPUcases=37core+52adapter,0optimizersteps; random/unverifiedweights không fitted benchmark hoặc completeOnlineSessionbridge.
+
+## Gói gửi GVHD và phân tích RQ mới08/11
+
+- [BAO_CAO_TIEN_DO_GVHD_20261108.md](BAO_CAO_TIEN_DO_GVHD_20261108.md): bản tổng hợp đọc độc lập, nguồn/giới hạn/những điểm cần GVHD chốt. JSON đi cùng lưu claim→artifact và SHA; chưa tự gửi ra ngoài.
+- [rq1_transition_evidence_20261108.md](rq1_transition_evidence_20261108.md): conditional event tables và trường hợp cụ thể từ stored synthetic traces,25unitcases; không biến scalar-P/preview thành causal full-chain.
+- [rq2_conditions_evidence_20261108.md](rq2_conditions_evidence_20261108.md): profile-pair LOO, graph-control exposure và đổi dấu theo weighting/population,27unitcases. [Primary](../runs/rq2-conditions-evidence-20261108-01/README.md) và [validation](../runs/rq2-conditions-validation-20261108-01/README.md) có vai trò khác nhau; không tăng n bằng việc archive/reproduce.

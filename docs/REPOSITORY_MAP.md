@@ -111,3 +111,7 @@ Các mục count/inventory phía trên là snapshots có ngày, không tự cậ
 ## Runtime/worker batch tiếp theo
 
 [Hợp đồng20](thesis_recovery/20_LINUX_CUDA_WORKER_CONTRACT.md), [runtime report](../research_tracking/reports/akt_linux_runtime_contract_20261107.md), [worker report](../research_tracking/reports/akt_main_worker_lifecycle_20261107.md) và [SAKT inference report](../research_tracking/reports/sakt_adapter_readiness_20261107.md) là các điểm vào mới. Logs/failures/source snapshots nằm trong ba run có tên theo mục đích ở EVIDENCE_INDEX; không tạo thêm root reports hoặc chuyển historical artifacts. Gate17 nativeCPU513cases và SAKT89cases là suites riêng; Linux/CUDA main-worker execution chưa được xác nhận.
+
+## Báo cáo GVHD08/11
+
+Mở [báo cáo GVHD](../research_tracking/reports/BAO_CAO_TIEN_DO_GVHD_20261108.md) để xem các claim đã có bằng chứng và agenda phương pháp. [RQ1 transitions](../research_tracking/reports/rq1_transition_evidence_20261108.md) và [RQ2 conditions](../research_tracking/reports/rq2_conditions_evidence_20261108.md) có scripts tái tính ở scripts/research và bundles theo run trong research_tracking/runs; reuse dữ liệu đã lưu, không rerun tất cả paper hoặc dùng software pass làm efficacy.

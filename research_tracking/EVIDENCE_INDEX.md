@@ -132,3 +132,10 @@ Số outputs là inventory snapshot của các bundles, không chỉ số hoàn 
 
 - [Runtime contract](reports/akt_linux_runtime_contract_20261107.md), [main worker](reports/akt_main_worker_lifecycle_20261107.md), [bundle](runs/cpu-linux-worker-20261107-01/README.md): targeted63cases và2newworker cases; fullGate513pass/269.98s, source-bound WindowsCPU. Linuxbranches mocked, chưa actualLinux/CUDA worker.
 - [SAKT adapter](reports/sakt_adapter_readiness_20261107.md), [bundle ban đầu](runs/sakt-inference-engineering-20261107-01/README.md), [checkpoint followup](runs/sakt-checkpoint-payload-20261107-01/README.md):89CPUcases=37core+52adapter,0optimizersteps; random/unverifiedweights không fitted benchmark hoặc completeOnlineSessionbridge.
+
+## Thành quả RQ1/RQ2 và báo cáo GVHD — 08/11/2026
+
+- [Báo cáo có thể dùng cho GVHD](reports/BAO_CAO_TIEN_DO_GVHD_20261108.md), [kiểm nguồn/claims](reports/BAO_CAO_TIEN_DO_GVHD_20261108.json): tổng hợp proposal, baselines Development và evidence mới; không tự gửi, không fullresearch/fittedCG-AKT claim. S01/S04/S05 và allocation còn cần chốt.
+- [RQ1](reports/rq1_transition_evidence_20261108.md), [run12outputs](runs/cpu-rq1-transitions-20261108-01/README.md): join stored synthetic snapshots;944/964 scalar-P-changed giữ concept preview,2/116 scalar-P-same đổi preview; conditional co-occurrence không causal mediation. Empty graph-package37Pchanges/0MRA; closed-loop thiếu M/R nên không suy fullchain.
+- [RQ2](reports/rq2_conditions_evidence_20261108.md), [primary6outputs](runs/rq2-conditions-evidence-20261108-01/README.md), [validation21outputs](runs/rq2-conditions-validation-20261108-01/README.md): paired-profile contrast/LOO và Junyi control exposure/denominator decomposition. Mean PYH−PY không robust sign dưới LOO; controls chỉ thay20/976baseedges,40removed/addedentries. Không causal benefit/equivalence hoặc populationCI.
+- Cả hai reuse stored artifacts, không train/simulator rerun hoặc query Junyi/Holdout outcomes mới;52newsynthetic analyzer tests pass. Analysis primary và validation archive không là các thí nghiệm độc lập.

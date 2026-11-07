@@ -1,0 +1,12 @@
+{
+  "command": [
+    "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport hashlib,json\nfrom scripts.research.analyze_rq2_controls import load_inputs,analyze_loaded\nroot=Path.cwd()\ndata,manifests,inventory=load_inputs(root)\nresult=analyze_loaded(data,manifests); result['input_sha256']=inventory\nout=root/'artifacts/akt/local-tests/parallel-rq2-controls-20261108-01/reproduced_conditions.json'\nwith out.open('x',encoding='utf-8') as stream:stream.write(json.dumps(result,ensure_ascii=False,indent=2,allow_nan=False)+'\\n')\noriginal=root/'research_tracking/runs/rq2-conditions-evidence-20261108-01/conditions.json'\nassert out.read_bytes()==original.read_bytes()\nprint(json.dumps({'status':'EXACT_REPRODUCTION','sha256':hashlib.sha256(out.read_bytes()).hexdigest(),'input_hashes':len(inventory),'PYTHONHASHSEED':'17'}))\n"
+  ],
+  "timeout_seconds": 60,
+  "elapsed_seconds": 0.14995300001464784,
+  "exit_code": 0,
+  "scope_vi": "Tái lập cùng arithmetic từ13selectedinputs; không raw/graph/model/simulator."
+}

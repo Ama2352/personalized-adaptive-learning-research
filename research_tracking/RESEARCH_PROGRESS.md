@@ -21,6 +21,10 @@
 - [SAKT adapter](reports/sakt_adapter_readiness_20261107.md):89CPUtests gồm payloadregressions; random/unverified weights không fitted baseline, trainer/completebridge còn thiếu.
 - Current backlog chuyển GPU07→GPU08→GPU09. Không dùng creditModal hoặc GPU trongbatch; kết quảT4trước đó thuộc frozenkitv12.
 
+## Thành quả báo cáo GVHD08/11
+
+[Báo cáo tiến độ](reports/BAO_CAO_TIEN_DO_GVHD_20261108.md) đã có claim/source/limitations và S01/S04/S05. RQ1 mới xác minh944/964 scalar-probability-changed snapshots giữ concept preview; RQ2 mới cho thấy PYH−PY không robust dưới LOO và Junyi pooled-rate sensitivity do denominator. Đây là descriptive/exploratory diagnosis, chưa hoàn thành RQs. Hai analyzer có25+27synthetic tests đạt, stored-input SHA/reproduction checks đã lưu. Nhánh AKT đang triển khai immutable worker context và bounded CUDA phase; chưa có actualCUDA-mainworker hoặc creditModal run mới.
+
 ## Snapshot ngày04/11 và nhật ký cập nhật tiếp theo
 
 
