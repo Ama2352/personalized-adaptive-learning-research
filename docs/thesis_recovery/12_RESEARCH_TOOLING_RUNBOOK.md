@@ -42,6 +42,16 @@ Tests CPU ngắt sau step2, nạp checkpoint vào model mới và tiếp tục. 
 
 ## Việc tiếp theo
 
+### Khôi phục selection sau epoch đã validation
+
+`training.select_checkpoint(..., save_recovery=True)` ghi `inner-recovery-epoch-N.pt` sau mỗi epoch hoàn chỉnh đã validation. Truyền `resume_checkpoint=Path(...)` cùng config, identity và budget để tiếp tục. Snapshot chứa model/Adam/RNG, toàn history, selected epoch và hash của best checkpoint. Early stopping được dựng lại từ history theo đúng thứ tự, kể cả các epoch không cải thiện. Best checkpoint phải còn nguyên cùng thư mục snapshot. Snapshot đã đạt patience trả kết quả mà không train thêm.
+
+Config hash bao gồm output_dir và budget được khóa trong recovery identity. Resume dùng cùng thư mục run. Tên best checkpoint ở chế độ recovery có UUID để lần chạy lại sau crash giữa best-save và recovery-save không đè artifact cũ. Mặc định `save_recovery=False` giữ contract tên file và hành vi callers hiện tại. Snapshot epoch hoàn chỉnh là nhánh riêng với recovery giữa batch.
+
+Kiểm actual AKT CPU có dropout so continuous với interruption sau validation epoch2. Weights, Adam state, torch RNG, validation losses và selected epoch trùng chính xác, cùng dừng epoch3 theo patience2. Có kiểm config drift, best checkpoint corruption và default artifact contract. Suite selection/training/checkpoint đạt34passed27.55s trong `evidence/akt-selection-recovery-tests.log`.
+
+Giới hạn hiện tại là Python selection API. CLI watchdog/authorization chưa nhận tùy chọn recovery, refit và giữa batch chưa nối vào selection. Checkpoints được giữ immutable, cần tính dung lượng và cadence trước chạy lớn.
+
 1. Nối resumable epoch với selection/refit orchestration và early-stopper/best-checkpoint state, giữ full authorization/resource gates.
 2. Thêm export paired trace vào adapter đã chốt mastery, rồi chạy bounded synthetic integration.
 3. Bổ sung graph triple identity manifests và degree/chapter/support-matched controls.
