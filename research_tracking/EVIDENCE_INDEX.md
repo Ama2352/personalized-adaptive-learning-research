@@ -96,3 +96,9 @@ Kitv6 có113source/fixture files, source-only notebook copies và project venv. 
 ## Colab-first notebook07/11 — local guard evidence
 
 `runs/cpu-colab-first-20261107-01`:8outputs,8mockguardcases và1actualbundlepytest; AST/CPUflag/JUnit/sourcechange guards pass, khôngactualColab/Linux/CUDA. NotebookCPUtimeout600s thay300s để chứa suite hiện tại, GPUprobe400targets/1step khôngđổi. Xem docs/akt-colab-synthetic-runbook.md;v10kit135files vẫnZIP/sourceparity-only. Không coi localguardPASS thànhmid-epochCUDAresume hoặcđượcquyềndùngModalcredits.
+
+## Colab recovery readiness — 07/11/2026
+
+- [Báo cáo](reports/colab_recovery_readiness_20261107.md): technical CPU evidence, không research improvement.
+- [Regression/trials/probe/guards](runs/cpu-colab-recovery-20261107-01/README.md):31outputs vớiSHA, giữ failures/source cũ; actual CPU3processes exact,19mockcases.
+- [Gate407](runs/cpu-colab-recovery-gate-20261107-01/README.md):7outputs,0fail/error/skip,169.05s; noCUDA/fulltraining/Gate4.

@@ -74,3 +74,7 @@ Completed CPU engineering,70targeted tests và Gate2-11 mới361pass0fail/error/
 ## DATA05–07: collector/adapter và domain portability, current software gate07/11
 
 Completed CPU engineering: train-only collector≤2×12fixture, source-environment replay và oracle separation, role-aware KT windows/collator khôngfoldJunyi, versionedsemantic domain đểstripnotebookoutputs không đổi môi trường. Giữ RNGnamespacev1, v1/v2oracle/RNG/query/labels exact.65targeted tests và finalGate2-13 **401pass/no fail/error/skip374.53s**; prior396 là snapshotv1. Archive cpu-sim-collector-gate-20261107-01 và report simulator_collection_runner_20261107.md. V10sourcekit135files ZIP/sourceparity-only, chưaactualLinux/Colab/CUDA.24targets chỉ22/84items, không fullcorpus/T10/fulltrainer hoặc graphmodels/RQbenefit. S04/S05 vẫnpending; các comparator/model/confirmatory deliverables chưa được bỏ.
+
+## COLAB01 — current software gate và recovery,07/11
+
+Gate2-14 **407passed,0fail/error/skip169.05s**, thay401current sau sửa CPU-normalization CUDA RNG state. Probe production train_epoch chạy CPU3processes5vs2+3updates/17targets: model/Adam/RNG/sampler/predictions exact, khôngskip/duplicate.19notebookguardcases giả lập đạt,kitv11 137files cóSHA/CRC/sourceparity. Xem [báo cáo](reports/colab_recovery_readiness_20261107.md), bundles cpu-colab-recovery-20261107-01 và cpu-colab-recovery-gate-20261107-01. Không actualColab/CUDA/Modal compute hoặc credits; chưa hard-kill/Volume durability/Gate4/RQefficacy. RQ1/2 vẫnPARTIAL,RQ3model/evaluation chưahoàn tất.

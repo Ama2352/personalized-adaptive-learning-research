@@ -100,7 +100,8 @@ def _restore_payload(adapter, optimizer, payload):
     torch.set_rng_state(payload['torch_rng'].cpu())
     cuda_states = payload.get('cuda_rng', [])
     if torch.cuda.is_available() and cuda_states:
-        torch.cuda.set_rng_state_all(cuda_states)
+        # map_location=cuda cũng chuyển RNG byte tensors lên GPU; generator cần CPU state.
+        torch.cuda.set_rng_state_all([state.cpu() for state in cuda_states])
 
 
 def _validate_resume_state(state: dict) -> None:

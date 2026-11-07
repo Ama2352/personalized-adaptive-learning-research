@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="4.347" timestamp="2026-11-07T18:38:43.723959+07:00" hostname="Ama"><testcase classname="tests.akt.test_checkpoint" name="test_cuda_rng_restore_returns_remapped_state_to_cpu" time="2.387"><failure message="AssertionError: assert (1 == 1 and False)&#10; +  where 1 = len([&lt;test_checkpoint.test_cuda_rng_restore_returns_remapped_state_to_cpu.&lt;locals&gt;.RemappedState object at 0x00000208E75CB4D0&gt;])&#10; +  and   False = isinstance(&lt;test_checkpoint.test_cuda_rng_restore_returns_remapped_state_to_cpu.&lt;locals&gt;.RemappedState object at 0x00000208E75CB4D0&gt;, &lt;class 'torch.Tensor'&gt;)&#10; +    where &lt;class 'torch.Tensor'&gt; = torch.Tensor">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/cuda-rng-before2/test_cuda_rng_restore_returns_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000208DFA07820&gt;
+
+    def test_cuda_rng_restore_returns_remapped_state_to_cpu(tmp_path, monkeypatch):
+        """Mô phỏng map_location=cuda; không giả là actual CUDA execution."""
+        model = adapter()
+        optimizer = torch.optim.Adam(model.native.parameters(), lr=.001)
+        path = tmp_path / 'rng.pt'
+        save_checkpoint(path, model, optimizer, identity={}, progress={'epoch': 1, 'complete': True})
+        payload = load_checkpoint(path, expected_identity={}, device='cpu')
+        state = torch.arange(16, dtype=torch.uint8)
+        calls = []
+        class RemappedState:
+            def cpu(self):
+                calls.append('cpu')
+                return state
+        payload['cuda_rng'] = [RemappedState()]
+        monkeypatch.setattr(torch.cuda, 'is_available', lambda: True)
+        def restore(states):
+            assert len(states) == 1 and isinstance(states[0], torch.Tensor)
+            assert states[0].device.type == 'cpu' and states[0].dtype == torch.uint8
+            assert torch.equal(states[0], state)
+            calls.append('restore')
+        monkeypatch.setattr(torch.cuda, 'set_rng_state_all', restore)
+&gt;       restore_checkpoint(model, optimizer, payload)
+
+tests\akt\test_checkpoint.py:113: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\checkpoint.py:86: in restore_checkpoint
+    _restore_payload(adapter, optimizer, payload)
+src\knowledge_tracing\akt\checkpoint.py:103: in _restore_payload
+    torch.cuda.set_rng_state_all(cuda_states)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+states = [&lt;test_checkpoint.test_cuda_rng_restore_returns_remapped_state_to_cpu.&lt;locals&gt;.RemappedState object at 0x00000208E75CB4D0&gt;]
+
+    def restore(states):
+&gt;       assert len(states) == 1 and isinstance(states[0], torch.Tensor)
+E       AssertionError: assert (1 == 1 and False)
+E        +  where 1 = len([&lt;test_checkpoint.test_cuda_rng_restore_returns_remapped_state_to_cpu.&lt;locals&gt;.RemappedState object at 0x00000208E75CB4D0&gt;])
+E        +  and   False = isinstance(&lt;test_checkpoint.test_cuda_rng_restore_returns_remapped_state_to_cpu.&lt;locals&gt;.RemappedState object at 0x00000208E75CB4D0&gt;, &lt;class 'torch.Tensor'&gt;)
+E        +    where &lt;class 'torch.Tensor'&gt; = torch.Tensor
+
+tests\akt\test_checkpoint.py:108: AssertionError</failure></testcase></testsuite></testsuites>

@@ -245,7 +245,7 @@
       ],
       "execution_owner": "Codex",
       "verification_evidence": "cpu-modal-client-20261107-01:SDK1.6.3/27newpackages/30existingversionsunchanged/pipcheck;docs/akt-modal-setup.md;cpu-modal-access-20261107-01:workspace/tokenexpiry/defaultenvironment verified without compute",
-      "verification_scope": "Local controller only; no remote compute/auth or paidrun"
+      "verification_scope": "Local SDK/controller and read-only auth verified; no remote compute or paid run"
     },
     {
       "id": "T09",
@@ -422,7 +422,8 @@
       "owner": "Sang",
       "dependencies": [
         "T08",
-        "T11"
+        "T11",
+        "COLAB02"
       ],
       "required_inputs": "signed run-spec, image, synthetic+approved Dev cohort",
       "files_components": "future modal_plan_runner.py",
@@ -436,10 +437,10 @@
       "authorization_requirements": "EXPLICIT_CLOUD_AND_DATA_APPROVAL",
       "status": "PLANNED",
       "blockers": [
-        "Colab interactive runtime/evidence not yetavailable;400targetprobe only notCUDAmid-epochresume; Modal-specific image/Volume/launcher stillpending; freecredits-only30/net0"
+        "Actual Colab reports missing; new recovery probe prepared but not executed on CUDA; Modal-specific image/Volume/launcher pending; freecredits30/net0"
       ],
       "execution_owner": "Codex",
-      "verification_evidence": "cpu-colab-first-20261107-01:8localmockguardcases+1bundlepytest; no actual Colab/CUDA execution"
+      "verification_evidence": "cpu-colab-recovery-20261107-01:CPU3process exact proof and19mockguards; Gate407; no actualCUDA"
     },
     {
       "id": "T15",
@@ -1587,6 +1588,56 @@
       "blockers": [],
       "verification_evidence": "cpu-sim-collector-20261107-04-portable:65targeted;cpu-sim-collector-gate-20261107-01:401source-bound;v1/v2oracle/RNG exact",
       "verification_scope": "Identity and fixture compatibility only; no actual Linux/Colab/CUDA"
+    },
+    {
+      "rq": [],
+      "workstream": "gpu_readiness",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "compute_cost_category": "local CPU / free Colab only",
+      "id": "COLAB01",
+      "research_objective": "Ngăn lỗi recovery có thể phát hiện trước GPU",
+      "dependencies": [
+        "REC06"
+      ],
+      "required_inputs": "Pinned upstream, production train_epoch/checkpoint, synthetic17targets",
+      "files_components": "checkpoint.py;synthetic_recovery_probe.py;notebooks/akt_colab_synthetic.ipynb",
+      "implementation_objective": "CPU-normalize CUDA RNG, fresh-process bounded recovery CLI và Colab acceptance guards",
+      "acceptance_criteria": "Regression expected-fail then pass; continuous5 vs2+3 exact ledger/model/Adam/RNG/predictions CPU; notebook guards and source-bound Gate",
+      "verification_steps": "12checkpoint/recovery tests,10unit tests,actual3process CPU run,19mockguards,407full Gate",
+      "required_artifacts": "cpu-colab-recovery-20261107-01;cpu-colab-recovery-gate-20261107-01;kitv11",
+      "estimated_effort": "Completed bounded engineering batch; CPU probe19.99s, full pytest169.05s",
+      "authorization_requirements": "User local/Colab instruction; synthetic only; no cloud compute/real data/methodology adoption",
+      "status": "COMPLETED",
+      "blockers": [],
+      "verification_scope": "CPU engineering and package only; actual CUDA remains COLAB02"
+    },
+    {
+      "rq": [],
+      "workstream": "gpu_readiness",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "compute_cost_category": "local CPU / free Colab only",
+      "id": "COLAB02",
+      "research_objective": "Kiểm CUDA miễn phí trước Modal",
+      "dependencies": [
+        "COLAB01"
+      ],
+      "required_inputs": "Standard Colab interactive GPU runtime; current7cell notebook + exactv11ZIP",
+      "files_components": "notebooks/akt_colab_synthetic.ipynb;docs/akt-colab-synthetic-runbook.md",
+      "implementation_objective": "Run CPU portability then lifecycle400targets/1update and separate17target recovery; export full result ZIP even failures",
+      "acceptance_criteria": "Nonempty zero-failure/error/skip portability suite; finite lifecycle/reload/current-future invariance; exact ledger/RNG/sampler, CUDA model/Adam/prediction tolerance1e-5, complete inventories; no Gate4 claim",
+      "verification_steps": "Inspect reports/source/runtime IDs, every output SHA and checkpoint certificates; do not accept exit0 alone",
+      "required_artifacts": "Returned resultZIP; immutable evidence run with Vietnamese interpretation and failure classification",
+      "estimated_effort": "Setup+review0.25day; CPU portability cap600s,lifecycle600s,recoverycontroller180s; actual runtime unmeasured",
+      "authorization_requirements": "Free interactive Colab already requested by user; no paid tier/Modal fallback/real data; no SSH/tunnel",
+      "status": "PLANNED",
+      "blockers": [
+        "No direct Colab runtime execution tool in current session; user standard notebook execution required"
+      ],
+      "verification_scope": "Generic CUDA only; Modal image/Volume/cancellation still T14"
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

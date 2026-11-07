@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\scripts\akt\synthetic_recovery_probe.py", line 260, in <module>
+    if args._worker_phase:_worker(args)
+                          ~~~~~~~^^^^^^
+  File "D:\Dev\KLTN\scripts\akt\synthetic_recovery_probe.py", line 167, in _worker
+    report['predictions']=[r.prediction for r in iter_predictions(model,(learner,))]
+                                                 ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\src\knowledge_tracing\akt\prediction.py", line 48, in iter_predictions
+    checkpoint_id = _checkpoint_id(adapter)
+  File "D:\Dev\KLTN\src\knowledge_tracing\akt\prediction.py", line 41, in _checkpoint_id
+    raise ValueError('adapter has no checkpoint identity')
+ValueError: adapter has no checkpoint identity

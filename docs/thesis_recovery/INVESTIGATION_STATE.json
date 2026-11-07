@@ -76,12 +76,12 @@
   "critical_blockers": [
     "Paper1 provenance unresolved",
     "simulator vocabulary/mastery/training contract chưa accepted",
-    "CUDA lifecycle chưa kiểm, CPU synthetic epoch resume đã verified, CLI integration pending",
+    "CUDA lifecycle chưa kiểm; CPU fresh-process recovery/CLI integration đã verified, Modal durability chưa kiểm",
     "no measured throughput/approved full matrix budget",
     "mandatory baseline allocation pending",
     "Linux/Colab GPU publish/lifecycle chưa thực chạy, Windows local fix đã verified"
   ],
-  "next_recommended_investigation": "T01/T03/T04/T07 reviewable local batch, chốt contracts T02/T05 trước real data và GPU",
+  "next_recommended_investigation": "Read latest colab_recovery report; continue independent graph/protocol engineering, execute Colab only through an available standard runtime, no credit spend",
   "resume_instructions": "Đọc STATE, LOG,09 và03 trước. Không lặp PDF/source scans đã có nếu hashes không đổi. Đọc current test logs và staged status. Mọi sửa verdict append lý do vào LOG. Không launch training từ task existence.",
   "resolved_questions": {
     "Q09": "Map đủ28nodes,36unique IDs,8extra metadata IDs,0duplicates, planning_validation.json"
@@ -316,20 +316,18 @@
     "critical_limit": "Weak exposure; common populations differ across controls; no causal/instructional conclusion"
   },
   "portable_bundle_latest": {
-    "path": "artifacts/akt/colab/akt-synthetic-20261107-v10.zip",
-    "files": 135,
-    "sha256": "db6b122df8297135db04ad63835b3d96909b403467456983b9c04b5082049eab",
-    "verification": "ZIP integrity and current raw-source parity only; notebook copies stripped, Windows lock hash fixture; not executed inside ZIP/Linux/Colab/CUDA"
+    "path": "artifacts/akt/colab/akt-synthetic-20261107-v11.zip",
+    "files": 137,
+    "sha256": "0d4d59a973b4909b26837f795ead499f3b0da6375db3dd6f58096c57530a9f09",
+    "verification": "CRC/each SHA/current source parity; notebook originals unchanged; no actual isolated Linux/Colab/CUDA execution"
   },
   "next_bounded_engineering_batch": [
-    "GPU policy now localCPU→Colabfree→Modal. Notebook/v10 ready for user interactive Colab run; no actual Colab GPU connected/executed, no automatic paid fallback if quota unavailable. Inspect returned artifact ZIP before credit spend.",
-    "Current notebook guards locally checked:8mockcases and1realbundlepytest PASS; CPU portability timeout600s/JUnit/nonempty/noerrors/noskips, CPU/source guards beforeGPU; current400target probe still no CUDA mid-epoch resume or Gate4 claim.",
-    "Modal profilekltn/workspacehonguyenminhsang2005 authenticated and read-only verified; expiry2026-11-14T17:37:38+07:00. Do not repeat login or request secrets. Gross30/freecredits only/net0, dashboardcaps userreported not APIreadback; no compute launched.",
-    "Read current state and collector report/19; DATA01–07 and Gate13 archived, do not repeat completed recovery/interface/collector fixtures",
-    "Next safe engineering: isolated graph-variant prototype per06 with graph-off equivalence and explicit oracle/history boundaries; main architecture/evaluation adoption must remain separately tracked",
-    "Prepare remote runtime contract for Linux CUDA lock/venv origin/source/Volume durability; no provisioning or spend without allocation",
-    "S04 mastery/calibration/controller and S05 model/environment/full corpus allocation remain pending; T10 is not completed by2×12fixture",
-    "v10 source kit135files verified ZIP/source parity only; actual isolated/Linux/Colab/CUDA ladder not run"
+    "Actual Colab not connected/executed: current7cell notebook + v11 ready for standard interactive run; user already authorized free Colab; preserve returned ZIP, no automatic paid fallback.",
+    "Do not rerun completed CPU recovery/regression/collector fixtures without source changes or a specific unresolved concern; current source-bound Gate14 is407pass.",
+    "Independent local work: isolated graph-variant prototype per06 with graph-off equivalence/history/oracle boundaries; separately track main architecture and accepted evaluation protocol.",
+    "Prepare Linux CUDA image/lock/runtime-origin/Modal bounded run-spec locally without provisioning. Colab pass will not prove Modal Volume/preemption/durability.",
+    "S04 mastery/calibration/controller and S05 model/environment/full corpus allocation remain pending; no final training/data collection from fixture acceptance.",
+    "Modal authenticated workspace honguyenminhsang2005, token expires2026-11-14T17:37:38+07:00; credit-only30/net0, no compute launched."
   ],
   "simulator_interface_engineering_20261107": {
     "status": "COMPLETED_CPU_ENGINEERING",
@@ -361,16 +359,18 @@
     "gpu_executed": false
   },
   "current_software_gate": {
-    "run_id": "20261107-simulator-semantic-13",
-    "passed": 401,
+    "status": "PASS",
+    "run_id": "20261107-colab-recovery-14",
+    "passed": 407,
     "failed": 0,
     "errors": 0,
     "skipped": 0,
-    "pytest_seconds": 374.53,
+    "pytest_seconds": 169.05,
+    "wrapper_seconds": 171.19081980001647,
     "timeout_seconds": 540,
-    "report_sha256": "fddb2fe0e8efb15002f35a2079ebada2bace12aacfbf21d3cefde8ce9df6c546",
-    "archive": "cpu-sim-collector-gate-20261107-01",
-    "scope": "CPU synthetic/software only; no CUDA/real-data/full research acceptance"
+    "report_sha256": "4ed716224778b069816e0ba22370bfc4ad5c60326a89cfc5d7b832133716d961",
+    "archive": "cpu-colab-recovery-gate-20261107-01",
+    "scope": "CPU synthetic/software only; no actual CUDA/Colab/full research acceptance"
   },
   "previous_software_gate": {
     "run_id": "20261107-simulator-batch-10",
@@ -530,12 +530,41 @@
     "modal_generic_debug_before_colab_allowed": false,
     "colab_unavailable_auto_modal_fallback": false,
     "colab_actual_execution_verified": false,
-    "current_colab_workload": "400synthetic targets/1optimizerstep,600s GPU subprocess cap",
+    "current_colab_workload": "Lifecycle d256/400targets/1update plus separate recovery d32/17targets per branch/continuous5 vs2+3 (10total updates), worker60s/controller180s; software portability first",
     "mid_epoch_cuda_resume_verified": false,
     "modal_platform_revalidation_required": true,
     "source": "User07/11: kiểm thử GPU trênColab trước vìModal tính phí",
     "runbook": "docs/akt-colab-synthetic-runbook.md",
     "notebook": "notebooks/akt_colab_synthetic.ipynb",
     "local_guard_evidence": "cpu-colab-first-20261107-01"
+  },
+  "software_gate_before_colab_recovery": {
+    "run_id": "20261107-simulator-semantic-13",
+    "passed": 401,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "pytest_seconds": 374.53,
+    "timeout_seconds": 540,
+    "report_sha256": "fddb2fe0e8efb15002f35a2079ebada2bace12aacfbf21d3cefde8ce9df6c546",
+    "archive": "cpu-sim-collector-gate-20261107-01",
+    "scope": "CPU synthetic/software only; no CUDA/real-data/full research acceptance"
+  },
+  "colab_recovery_engineering_20261107": {
+    "status": "COMPLETED_LOCAL_ONLY",
+    "scope": "CPU bounded synthetic engineering and Colab package only; no connected runtime or cloudspend",
+    "finding": "torch.load(map_location=cuda) remaps RNG tensors; CUDA generator requires CPU byte state",
+    "failure_logs": [
+      "artifacts/akt/local-tests/cuda-rng-before.log (Git ownership blocker)",
+      "artifacts/akt/local-tests/cuda-rng-before2.log (expected regression failure)"
+    ],
+    "source_snapshot": "artifacts/akt/local-tests/checkpoint-before-cuda-rng-fix.py",
+    "next": "User interactive Colab notebook run when runtime available; inspect result ZIP, no automatic Modal fallback",
+    "evidence": "cpu-colab-recovery-20261107-01",
+    "gate_evidence": "cpu-colab-recovery-gate-20261107-01",
+    "cpu_recovery_run": "experiments/akt/results/cpu-colab-recovery-20261107-02",
+    "cpu_exact_model_optimizer_rng_predictions": true,
+    "actual_cuda_executed": false,
+    "guard_cases_mocked": 19
   }
 }

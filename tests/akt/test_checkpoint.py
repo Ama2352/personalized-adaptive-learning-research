@@ -87,3 +87,28 @@ def test_save_load_resume_reproduces_next_optimizer_step(tmp_path):
     assert actual_draws[1:] == expected_draws[1:]
     assert all(torch.equal(actual, expected)
                for actual, expected in zip(resumed.native.parameters(), expected_parameters))
+
+
+def test_cuda_rng_restore_returns_remapped_state_to_cpu(tmp_path, monkeypatch):
+    """Mô phỏng map_location=cuda; không giả là actual CUDA execution."""
+    model = adapter()
+    optimizer = torch.optim.Adam(model.native.parameters(), lr=.001)
+    path = tmp_path / 'rng.pt'
+    save_checkpoint(path, model, optimizer, identity={}, progress={'epoch': 1, 'complete': True})
+    payload = load_checkpoint(path, expected_identity={}, device='cpu')
+    state = torch.arange(16, dtype=torch.uint8)
+    calls = []
+    class RemappedState:
+        def cpu(self):
+            calls.append('cpu')
+            return state
+    payload['cuda_rng'] = [RemappedState()]
+    monkeypatch.setattr(torch.cuda, 'is_available', lambda: True)
+    def restore(states):
+        assert len(states) == 1 and isinstance(states[0], torch.Tensor)
+        assert states[0].device.type == 'cpu' and states[0].dtype == torch.uint8
+        assert torch.equal(states[0], state)
+        calls.append('restore')
+    monkeypatch.setattr(torch.cuda, 'set_rng_state_all', restore)
+    restore_checkpoint(model, optimizer, payload)
+    assert calls == ['cpu', 'restore']
