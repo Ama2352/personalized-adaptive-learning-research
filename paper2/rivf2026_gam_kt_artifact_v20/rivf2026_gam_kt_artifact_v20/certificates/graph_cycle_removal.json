@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "artifact_version": 20,
+  "certificate_type": "Junyi graph cycle-removal provenance",
+  "status": "historical-run assertion corroborated by frozen manifest, executed notebook output, and source logic; not independently reconstructable from released graph bytes",
+  "method": {
+    "description": "Remove every directed edge whose source and target belong to the same non-trivial strongly connected component; retain cross-component edges.",
+    "uses_response_targets": false,
+    "source_code_location": "source/junyi_cycle_corrected_ablation_confirmation.ipynb, code cell index 23"
+  },
+  "reported_and_cross_consistent_counts": {
+    "raw_nodes": 835,
+    "raw_edges": 979,
+    "raw_is_dag": false,
+    "cyclic_sccs": 1,
+    "nodes_in_cyclic_sccs": 3,
+    "removed_internal_edges": 3,
+    "corrected_edges": 976,
+    "corrected_is_dag": true,
+    "arithmetic_check_raw_minus_removed_equals_corrected": true
+  },
+  "evidence": [
+    {
+      "path": "frozen/junyi/junyi_confirmation_manifest.json",
+      "sha256": "2476ac86a576d204800cf1815cc74c0e43c66902c1ca84ff2b0475ff074c630a",
+      "observed": "graph_correction records the method and all counts above"
+    },
+    {
+      "path": "source/junyi_cycle_corrected_ablation_confirmation.ipynb",
+      "sha256": "26270cc8e2c057d9c15b7070cc01304b2646b9575e632eaee8b5eeb3de357f3c",
+      "observed": "executed code cell 23 prints the same counts and successful corrected-DAG assertion"
+    },
+    {
+      "path": "source/build_junyi_cycle_corrected_confirmation.py",
+      "sha256": "449c83f91be9efe167943bce89560eff646a1f21a8134f8864413d1e0e7d5743",
+      "observed": "builder source contains the same topology-only SCC removal procedure"
+    }
+  ],
+  "independent_reconstruction": {
+    "status": "not possible from artifact v20 alone",
+    "missing_inputs": [
+      "the raw Junyi exercise-prerequisite table bytes",
+      "a released raw edge list",
+      "a released corrected edge list"
+    ],
+    "removed_edge_identities": "not recoverable from the released v18 files without the raw Junyi exercise table",
+    "edge_set_sha256_before": null,
+    "edge_set_sha256_after": null
+  },
+  "claim_boundary": "This certificate supports consistency and outcome-blind procedure provenance. It does not independently prove the semantic correctness of the remaining prerequisite directions."
+}
+
+
