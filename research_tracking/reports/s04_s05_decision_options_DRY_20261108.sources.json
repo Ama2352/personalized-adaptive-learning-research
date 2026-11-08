@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "status": "PROPOSED_DECISION_ADDENDUM_NOT_ADOPTED",
+  "report_path": "research_tracking/reports/s04_s05_decision_options_DRY_20261108.md",
+  "report_sha256": "38b22244a0e396c44433fdf12d13c90ecdbf0c972e10bae1d7169b700e280fca",
+  "metadata_only_checks": {
+    "bank_rows": 84,
+    "concepts": 28,
+    "each_has_exact_three_difficulties": [
+      1050,
+      1200,
+      1350
+    ],
+    "question_ids_unique": true,
+    "constants": {
+      "MASTERY_ELO": 1250.0,
+      "PREREQUISITE_READY_ELO": 1150.0,
+      "MAX_CONSECUTIVE_CONCEPT": 3,
+      "MIN_PREREQUISITE_EXPOSURES": 6
+    },
+    "probabilities_at_theta1250": [
+      0.7597469266479578,
+      0.5714631174083814,
+      0.35993500019711494
+    ],
+    "equal_weight_tau1250": 0.5637150147511514,
+    "equal_weight_score_at_theta1200": 0.5,
+    "interpretation": "Algebra/design-informed threshold proposal; not model calibration/fit/mastery proof"
+  },
+  "notebook_static_anchors": {
+    "9": {
+      "source_sha256": "0835c1561871662a9b00aa2dd3c1e2f237c778ea7d203451ba7d1106c13a809b",
+      "matches": [
+        {
+          "line": 1,
+          "text": "def elo_probability(theta: float, difficulty: float) -> float:"
+        },
+        {
+          "line": 48,
+          "text": "        p_true = elo_probability(theta_before, difficulty)"
+        }
+      ]
+    },
+    "11": {
+      "source_sha256": "457e65832d94615aca9c52a42fa6d9fc2501a186108ad7a39465b8feea9e327e",
+      "matches": [
+        {
+          "line": 22,
+          "text": "    def ready_set(self):"
+        },
+        {
+          "line": 28,
+          "text": "                or self.selection_counts[p] >= MIN_PREREQUISITE_EXPOSURES"
+        },
+        {
+          "line": 45,
+          "text": "    def select(self):"
+        },
+        {
+          "line": 57,
+          "text": "                        or self.selection_counts[p] >= MIN_PREREQUISITE_EXPOSURES"
+        },
+        {
+          "line": 69,
+          "text": "                self.mastery_score(x),"
+        }
+      ]
+    },
+    "13": {
+      "source_sha256": "d28eafe23b97110f8582d2e0ba51d5f27ba45f26001e90dd801b1111398aa28b",
+      "matches": [
+        {
+          "line": 10,
+          "text": "    def is_mastered(self, cid): return self.theta[cid] >= MASTERY_ELO"
+        },
+        {
+          "line": 11,
+          "text": "    def mastery_score(self, cid): return elo_probability(self.theta[cid], MASTERY_ELO)"
+        },
+        {
+          "line": 50,
+          "text": "    def is_mastered(self, cid):"
+        },
+        {
+          "line": 104,
+          "text": "    def mastery_score(self, cid):"
+        },
+        {
+          "line": 189,
+          "text": "    def is_mastered(self, cid):"
+        },
+        {
+          "line": 192,
+          "text": "    def mastery_score(self, cid):"
+        }
+      ]
+    },
+    "19": {
+      "source_sha256": "93f953a776a3d2e742dc19552ff40fbe362a58ac5be60f5bbeed0585f5658654",
+      "matches": [
+        {
+          "line": 45,
+          "text": "                    cid, qid, difficulty = policy.select()"
+        }
+      ]
+    }
+  },
+  "source_inventory": {
+    "docs/thesis_recovery/evidence/proposal.txt": {
+      "sha256": "a22de46c58b1b4e8dbcb7dd0b7140086f605c2dc3e07c7d9cc3c2638370710e0",
+      "bytes": 19087,
+      "read_scope": "Primary proposal pages1–5, especially model/environment/calibration/graph/fallback requirements pages2–4"
+    },
+    "docs/thesis_recovery/05_EXPERIMENT_MATRIX.md": {
+      "sha256": "635f5ea0ea8e069bdd3f9c2fa51763587c594d54ff4ae344612a595b1059dd0d",
+      "bytes": 11532,
+      "read_scope": "Full proposed matrix E01–E12 and minimum allocation/inference boundaries"
+    },
+    "docs/thesis_recovery/06_AKT_CGAKT_ARCHITECTURE_PLAN.md": {
+      "sha256": "a7dca3925d46794aa5f367fbef5b0840befb734fa5dc6d277d1beeb8164d09f7",
+      "bytes": 10299,
+      "read_scope": "Full architecture/A0–A3/reference/calibration/history/fallback plan including current engineering note"
+    },
+    "docs/thesis_recovery/09_DECISION_REGISTER.md": {
+      "sha256": "6b272e1e13956b0590ec14a6c20e490a92c5769e80a549cc56b46c80f08e0de3",
+      "bytes": 13160,
+      "read_scope": "Full decisions/open S04/S05/D11/D15/D25–29 and budget authority"
+    },
+    "docs/thesis_recovery/07_GPU_TRAINING_AND_COST_PLAN.md": {
+      "sha256": "d57f9a561f97b21be06e23aee59e75e83020672b6538dfdcdb9051fa71fb1a5c",
+      "bytes": 26601,
+      "read_scope": "Targeted current cap/readiness, staged cost and inference-query workload; no live-price lookup"
+    },
+    "docs/thesis_recovery/02_RESEARCH_TRACEABILITY.md": {
+      "sha256": "a31a395f8dc549cdcc8543303bc361e2cfbb8566eb77b21de52889ffc8868db9",
+      "bytes": 5511,
+      "read_scope": "Requirement/model coverage and fivefold/split limitations"
+    },
+    "docs/thesis_recovery/04_PAPER1_PAPER2_DIAGNOSTIC_PLAN.md": {
+      "sha256": "c4d6a680bd8698c2710e25e1dd764039826f3927c468fd4a93b2550d45fdc381",
+      "bytes": 9510,
+      "read_scope": "Full historical/diagnostic traps/retention/mechanism/order scope"
+    },
+    "docs/thesis_recovery/18_SIMULATOR_KT_INTERFACE.md": {
+      "sha256": "512ab6a9e108f6484c5ce91c96e7b04dd06e7f5520fdd041d5dd8ae9fd59498f",
+      "bytes": 10052,
+      "read_scope": "Targeted bank/refscore/session/counterfactual queries/OOV/first-target boundaries"
+    },
+    "docs/thesis_recovery/19_SIMULATOR_DATA_AND_GRAPH_BOUNDARIES.md": {
+      "sha256": "01805b1a0a237585e2facd3a62b691a8117b3ff7125666d87d9ee6caf34d8c0c",
+      "bytes": 12180,
+      "read_scope": "Targeted oracle logging policy/roles/source/history/clock boundaries"
+    },
+    "src/knowledge_tracing/shared_kt.py": {
+      "sha256": "06922d5a6bfd6c806fd1abb61232f58a9ccd63826e30cefaf87ce3d3b36dffa8",
+      "bytes": 9569,
+      "read_scope": "Targeted stable vocabulary/causal inputs/coverage/SequenceKTModel"
+    },
+    "src/knowledge_tracing/simulator_bridge.py": {
+      "sha256": "b29105acd8de84b060ca27573bb7f7cf8e85599a4596e50e4a21ab63c82329d2",
+      "bytes": 13634,
+      "read_scope": "Targeted bank/session/OnlineScore/ReferenceSet/probe_references contracts"
+    },
+    "src/knowledge_tracing/simulator_collection.py": {
+      "sha256": "b80fa3e21836f5bea93d2dc4351601708438ee851092bdee6548f684f1824256",
+      "bytes": 10500,
+      "read_scope": "Targeted CollectionRecipe/collect_training_fixture, train-only and policy constraints"
+    },
+    "src/knowledge_tracing/paper2_reference.py": {
+      "sha256": "a12edc72a00ad980799ec50ff26f0cb68f2529e3699e8a57e4f11295693c2cd1",
+      "bytes": 5784,
+      "read_scope": "Targeted definition loading and three separate graph scopes"
+    },
+    "src/knowledge_tracing/graph_context.py": {
+      "sha256": "3db94ec43271d336898f61f81f12aeb569c6de52219eeed535af709711c97264",
+      "bytes": 7367,
+      "read_scope": "EdgeConfidence kind/provenance/effective-window/oracle restrictions"
+    },
+    "src/knowledge_tracing/graph_augmentation.py": {
+      "sha256": "105aa918f1dc5d8fcfae22c9d8e7d2e13c1832b71d8b6a7ce8deed67d443ff08",
+      "bytes": 6979,
+      "read_scope": "Targeted confidence/gate role and residual support guards"
+    },
+    "src/knowledge_tracing/akt/simulator_engineering.py": {
+      "sha256": "abeff620df572bb1438dfa681c0fa4f322a2a7416580b3777fb7abd12f8704fb",
+      "bytes": 30630,
+      "read_scope": "Targeted validate_scope/train-selection-only/epoch/checkpoint/export engineering boundaries"
+    },
+    "src/knowledge_tracing/sakt/adapter.py": {
+      "sha256": "5cd8c9aa50889df7fddd571f0374c64f5999d1580b84b18bf647a884fff8c428",
+      "bytes": 17986,
+      "read_scope": "Targeted inference spec/vocab/random roles/query/cold/OOV/OnlineSession reject"
+    },
+    "src/knowledge_tracing/sakt/training.py": {
+      "sha256": "6a05c6c20a910c0d8cf50a1def4fbdfb6e72f709ff0b5462adbc2538aa58b826",
+      "bytes": 14614,
+      "read_scope": "Targeted synthetic-only resource cap/lifecycle and evaluation role"
+    },
+    "src/knowledge_tracing/gkt/config.py": {
+      "sha256": "8785a608e017ed4f6f77f8bd027ed3b3ee8a57d6e5b34bbb6d787acd9952c5d2",
+      "bytes": 2225,
+      "read_scope": "Node units and fixed/Dense kernel semantics"
+    },
+    "src/knowledge_tracing/gkt/training_data.py": {
+      "sha256": "db5a9c41d29eaf5ccb834965cfe1e7952a3b9dfe2a4dca573d91791909403339",
+      "bytes": 12817,
+      "read_scope": "Targeted tiny shard/recipe/full_prefix/static provenance/caller mapping contracts"
+    },
+    "src/knowledge_tracing/gkt/adapter.py": {
+      "sha256": "2e6c4ed64433dac63f54344710303cf0908b0c66cc63735a71f3f6d23f42c0f4",
+      "bytes": 17871,
+      "read_scope": "Targeted engineering geometry/fitted-role/mapping/OnlineSession restrictions"
+    },
+    "src/knowledge_tracing/gkt/pipeline.py": {
+      "sha256": "59c256fbcde715934041f911fb3ad5a6b6ae9bd63d2304cacd3ae4d0c4e235ec",
+      "bytes": 26183,
+      "read_scope": "Targeted tiny epoch/selection/checkpoint/export engineering role"
+    },
+    "research_tracking/reports/akt_graph_training_readiness_20261108.md": {
+      "sha256": "20443207f9cbb76514a6738560ef1d671cd619b4794add0203d4606ca1191b41",
+      "bytes": 8039,
+      "read_scope": "Actual GRAPH04 lifecycle evidence/failures/resources and limitations"
+    },
+    "research_tracking/reports/gkt_epoch_pipeline_readiness_20261108.md": {
+      "sha256": "fc23dc4ec8ccddf00f4579aad9ea2103dab87b5803233742b1dd4d6fba83d6e1",
+      "bytes": 9401,
+      "read_scope": "GKT06 implementation role/actual bounded evidence limits"
+    },
+    "research_tracking/reports/akt_gpu_host_preparation_20261108.md": {
+      "sha256": "7d492666e657d72d067de46e1046479d62b21eeceed24c67361dbc58c635f568",
+      "bytes": 11110,
+      "read_scope": "Actual local mock/metadata scopes and missing fresh-host runtime evidence"
+    },
+    "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb": {
+      "sha256": "353f487a3d6ed3826f2546d03c0aa2ad2279cf5c4b7fe8e375f4cafb0408280f",
+      "bytes": 69017,
+      "read_scope": "Static selected cell9/11/13/19 excerpts and literal constants cell3; no exec"
+    },
+    "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/data/simulator_inputs/question_bank.csv": {
+      "sha256": "fb5924ac0d19049ef1a5be23352592e30dfa3a4bde3e3fa07f10979fe0887e4d",
+      "bytes": 5160,
+      "read_scope": "Source bank metadata only: question/concept IDs and difficulty, not learner events"
+    }
+  },
+  "links_checked": [
+    "../../docs/thesis_recovery/evidence/proposal.txt",
+    "../../docs/thesis_recovery/05_EXPERIMENT_MATRIX.md",
+    "../../docs/thesis_recovery/06_AKT_CGAKT_ARCHITECTURE_PLAN.md",
+    "../../docs/thesis_recovery/06_AKT_CGAKT_ARCHITECTURE_PLAN.md",
+    "../../docs/thesis_recovery/05_EXPERIMENT_MATRIX.md",
+    "../../docs/thesis_recovery/09_DECISION_REGISTER.md",
+    "../../src/knowledge_tracing/simulator_bridge.py",
+    "../../src/knowledge_tracing/paper2_reference.py",
+    "../../src/knowledge_tracing/graph_context.py",
+    "../../src/knowledge_tracing/gkt/training_data.py",
+    "../../src/knowledge_tracing/gkt/adapter.py",
+    "../../src/knowledge_tracing/sakt/adapter.py",
+    "../../src/knowledge_tracing/sakt/training.py",
+    "../../src/knowledge_tracing/simulator_collection.py",
+    "akt_graph_training_readiness_20261108.md",
+    "gkt_epoch_pipeline_readiness_20261108.md",
+    "akt_gpu_host_preparation_20261108.md"
+  ],
+  "all_links_exist": true,
+  "proposed_matrix_arithmetic": {
+    "simulator_A0_A3_neural_fits": 21,
+    "simulator_plus_SAKT_GKT_neural_fits": 23,
+    "Junyi_modern_primary_select_refit_phases": 50,
+    "Junyi_modern_secondary_select_refit_phases": 8,
+    "Junyi_modern_total_phases": 58,
+    "excludes": "GraphGAM/graph learner/confidence/calibration/inference/learningcurve; no actual cost/runtime forecast",
+    "optional_amendment_PlanB": {
+      "sim_neural_fits": 9,
+      "Junyi_modern_select_refit_phases": 18,
+      "requires": "S05S07 approval; no automatic scope reduction; conditional one training seed and one outer fold only"
+    }
+  },
+  "approved_method_or_register_modified": false,
+  "tests_models_events_Holdout_network_spend": false,
+  "source_inventory_limit": "Targeted source reads as labeled, not full repository inventory; no human approval inferred",
+  "revision_reason": "DRY04 parent-requested symbolic closed-loop reference workload and inference-inclusive budget stop; matrices/thresholds/method approval unchanged",
+  "previous_draft_sha256": "1c7ed055a177d7acd9a5491f3c8a5a3c0fdb9a3bba7886e5788e953221ed1f78",
+  "previous_sources_sha256": "359d011a53b411f2d3abb91cad8348fd630b5ca320afa3c4190ff9516ceee958",
+  "source_bindings_changed_on_refresh": [],
+  "closed_loop_reference_resource_proposal": {
+    "formula": "Q=W_model_instances*B_seed_blocks*P_profiles*H_steps*R_reference_items",
+    "B_seed_blocks": 50,
+    "P_profiles": 3,
+    "R_reference_items": 84,
+    "allocation_A_W": 23,
+    "allocation_A_Q_per_H": 289800,
+    "allocation_B_W": 9,
+    "allocation_B_Q_per_H": 113400,
+    "illustrative_H_not_approved_final_horizon": 120,
+    "allocation_A_illustrative_logical_responses": 34776000,
+    "allocation_B_illustrative_logical_responses": 13608000,
+    "not_independent_observations_or_sequential_kernel_calls": true,
+    "excluded_extra_work": [
+      "legacy references",
+      "noise conditions",
+      "calibration",
+      "served-item predictions/export",
+      "Junyi"
+    ],
+    "no_measured_runtime_or_cost_forecast": true
+  }
+}
