@@ -734,3 +734,9 @@ Graph10metadata dryRoot phát hiện archiver chưa chạy đòi ownedacceptedTr
 ### 09/11 — commit Adam và đóng kernel statistical50
 
 G10closed48/test5bd/reportc017 commit5e1eb40,51rawGitblobsverified; outputinventory4379→4427 khôngresearchN. Kernel0e3/testc2b/report4919 closed50 manifestac942db6...00976, source/controller/log/6formula fixtures/01failure held; chưaexternalfreeze. Chuẩn bịcommitkernelđã8purePASS, khôngstageshaycheckpointWIP. Graphonlinegap đãtách16/17 đểkhôngnhầm offlinecachevớihistoryquerycontroller. Allcurrent RQs vẫnpartial; noModal/browser/fullCV/Holdout.
+
+### 09/11 — đối chiếu Git kernel thống kê và tiếp tục checkpoint
+
+- Đối chiếu lại 54 raw Git blobs ở commit859617f với bytes local: 50 outputs bundle, manifest và ba source/test/report. Chỉ số inventory tăng4427→4477; không là cỡ mẫu hoặc phần trăm tiến độ.
+- Đính chính nhãn failure pure01 trong state: nguyên nhân quan sát là phép so sánh quantile quá chặt ở test, không có bằng chứng bool exit gây lỗi. Giữ nguyên raw failure và code kernel.
+- GRAPH11 vẫn chưa thực thi: xử lý review về RNG/mode, dtype và binding protocol trước allocation. Main selection/fitted online/GPU và nghiên cứu đầy đủ còn thiếu.

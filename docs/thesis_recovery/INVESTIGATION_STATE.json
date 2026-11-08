@@ -916,7 +916,7 @@
       "out_of_pocket_limit_usd": 0,
       "new_spending_authorized": false
     },
-    "latest_verified_commit": "5e1eb40",
+    "latest_verified_commit": "859617f",
     "commit_evidence": "docs/thesis_recovery/evidence/cgakt_actual_adam_raw_git_20261109.json",
     "closed_science_outputs": 39,
     "current_main": "Hotpath context/model đã135pure+25nativePASS, closed41outputs/f8b90fb/rawGit47. Không optimizerfit/CUDA. Chuẩn bị operationalcachebenchmark vàactualAdam, mainstagegap đã cụ thể hóa plan27.",
@@ -980,7 +980,7 @@
       "cgakt_context_api_cost": "c77e88a",
       "cgakt_actual_adam": "5e1eb40"
     },
-    "verified_new_output_blobs": 4427,
+    "verified_new_output_blobs": 4477,
     "colab_connection": {
       "status": "OLD_SESSION_EXPIRED_NOT_REQUIRED_FOR_CURRENT_LOCAL_WORK",
       "session_id": 17125,
@@ -2791,7 +2791,7 @@
       "report": "artifacts/akt/local-tests/akt-research-runner-20261108-01/reporting-loss-parity01.json"
     },
     "selection_kernel_pure01": {
-      "status": "REJECTED_MANUFACTURED_TEST_EXPECTATION_AND_EXITCODE_HARNESS",
+      "status": "REJECTED_MANUFACTURED_QUANTILE_EXPECTATION_NOT_KERNEL_MATH",
       "terminal_seconds": 0.8424742000061087,
       "cap_seconds": 30,
       "unittest_cases_observed": 8,
@@ -2799,11 +2799,12 @@
       "failed_observed": 1,
       "kernel_sha256": "0e3cf12d15626a76000c6cdc04779ac769806aae2a5e52f769d4c70f3580a348",
       "test_sha256": "3aad1836195b65824d342a766673ab664e584f0fd6328468bb4098487e191839",
-      "reason": "type7 floating .7500000000000001 vs exact .75; unittest bool SystemExit needsnormalization before02",
+      "reason": "Type7 trả .7500000000000001 so với test đòi đúng .75; 7 PASS/1 FAIL. Raw unittest exit của lượt02 là int0. Không có bằng chứng bool exit gây failure01; normalization chỉ là tương thích harness.",
       "kernel_math_changed": false,
       "actual_model_calls": 0,
       "new_real_selection": false,
-      "next": "Preserve01;fixonlyknownanswerquantiletolerance andRootexitcodehandling; noeligibilityepsilon."
+      "next": "Failure01 được giữ nguyên; known-answer quantile tolerance sửa trong02, không thêm epsilon eligibility.",
+      "previous_status_label": "REJECTED_MANUFACTURED_TEST_EXPECTATION_AND_EXITCODE_HARNESS"
     },
     "selection_kernel_pure02": {
       "status": "ACCEPTED_8_MANUFACTURED_STATISTICS_CASES_NOT_EXTERNAL_FREEZE",
@@ -2817,10 +2818,13 @@
       "prior_failure_preserved": true,
       "whole_matrix_or_freeze_authority": false,
       "actual_nn_calls": 0,
-      "archive_status": "CLOSED50_PENDING_COMMIT",
+      "archive_status": "CLOSED50_COMMITTED_RAW_GIT_VERIFIED",
       "bundle": "research_tracking/runs/research-selection-kernel-engineering-20261109-01",
       "bundle_outputs": 50,
-      "manifest_sha256": "ac942db640bbcde951fb1b4398ac47bf8e7c1f609e694badaacf50640a800976"
+      "manifest_sha256": "ac942db640bbcde951fb1b4398ac47bf8e7c1f609e694badaacf50640a800976",
+      "commit": "859617f",
+      "raw_git_blobs_verified": 54,
+      "raw_git_proof": "docs/thesis_recovery/evidence/research_selection_raw_git_20261109.json"
     }
   },
   "cgakt_research_recipe": {
@@ -2867,5 +2871,12 @@
     "evidence_vi": "A0backend dựngwindow từhistorymới; GraphAdapter sealedofflineindex kiểmknownwindow/inputhash. Không có actualfitted graphonline conformance từhaiAPIhiện hành.",
     "no_new_model_or_experiment_run": true
   },
-  "current_plan27_sha256": "7794963246fc958a3b6f3c4d685d3ec977d96c82b19746f6a5a0f7dcb5edecbc"
+  "current_plan27_sha256": "7794963246fc958a3b6f3c4d685d3ec977d96c82b19746f6a5a0f7dcb5edecbc",
+  "goal_turn_audit_20261109_followup": {
+    "previous_goal_turn": "PROGRESS",
+    "basis": "Kiểm tra và đóng browser test; GRAPH10/GRAPH13 đã commit và raw Git được đối chiếu. Không phiên native nào được coi là đang chạy từ intent hoặc state cũ.",
+    "current_action": "Review và hoàn thiện GRAPH11 checkpoint, song song GRAPH16 query interface và GRAPH12/13 admission.",
+    "research_complete": false,
+    "cloud_spending": false
+  }
 }
