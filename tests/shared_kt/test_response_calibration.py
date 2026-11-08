@@ -178,6 +178,44 @@ def test_missing_reference_null_concept_no_renormalization():
     assert score['item_calibrated_probabilities']['C0-d1050'] is None
 
 
+@pytest.mark.parametrize('boundary', ('truncated', 'untyped', 'rank'))
+def test_reference_probe_rejects_invalid_rows_before_aggregation(monkeypatch, boundary):
+    result, binding, bank = fit()
+    session = session_for(bank, binding)
+    actual_probe = session.probe_many
+
+    def invalid_probe(queries):
+        rows = actual_probe(queries)
+        assert len(rows) == len(queries) == 84
+        if boundary == 'truncated':
+            return rows[:-1]
+        if boundary == 'untyped':
+            return (*rows[:-1], object())
+        return (*rows[:-1], replace(rows[-1], global_rank=rows[-1].global_rank + 1))
+
+    def aggregation_must_not_start(*args):
+        raise AssertionError('invalid reference rows reached aggregation')
+
+    monkeypatch.setattr(session, 'probe_many', invalid_probe)
+    monkeypatch.setattr('knowledge_tracing.response_calibration._sigmoid', aggregation_must_not_start)
+    before = session.snapshot()
+    with pytest.raises(ValueError, match='reference probe'):
+        score_reference_bank(session, calibration=result, binding=binding, timestamp=0, source_row=1)
+    assert session.snapshot() == before
+
+
+def test_reference_probe_requires_online_session():
+    result, binding, bank = fit()
+    actual = session_for(bank, binding)
+
+    class DuckSession:
+        def __getattr__(self, name):
+            return getattr(actual, name)
+
+    with pytest.raises(ValueError, match='OnlineSession'):
+        score_reference_bank(DuckSession(), calibration=result, binding=binding, timestamp=0, source_row=1)
+
+
 def test_reference_bank_requires_actual_three_items_no_synthetic1250():
     _, _, bank = fit()
     with pytest.raises(ValueError, match='28concepts'): reference_bank_v1(replace(bank, items=bank.items[:-1]))

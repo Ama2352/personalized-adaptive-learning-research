@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="0.284" timestamp="2026-11-08T16:47:48.160193+07:00" hostname="Ama"><testcase classname="tests.shared_kt.test_response_calibration" name="test_reference_probe_rejects_invalid_rows_before_aggregation[truncated]" time="0.019"><failure message="AssertionError: invalid reference rows reached aggregation">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B175583230&gt;
+boundary = 'truncated'
+
+    @pytest.mark.parametrize('boundary', ('truncated', 'untyped', 'rank'))
+    def test_reference_probe_rejects_invalid_rows_before_aggregation(monkeypatch, boundary):
+        result, binding, bank = fit()
+        session = session_for(bank, binding)
+        actual_probe = session.probe_many
+    
+        def invalid_probe(queries):
+            rows = actual_probe(queries)
+            assert len(rows) == len(queries) == 84
+            if boundary == 'truncated':
+                return rows[:-1]
+            if boundary == 'untyped':
+                return (*rows[:-1], object())
+            return (*rows[:-1], replace(rows[-1], global_rank=rows[-1].global_rank + 1))
+    
+        def aggregation_must_not_start(*args):
+            raise AssertionError('invalid reference rows reached aggregation')
+    
+        monkeypatch.setattr(session, 'probe_many', invalid_probe)
+        monkeypatch.setattr('knowledge_tracing.response_calibration._sigmoid', aggregation_must_not_start)
+        before = session.snapshot()
+        with pytest.raises(ValueError, match='reference probe'):
+&gt;           score_reference_bank(session, calibration=result, binding=binding, timestamp=0, source_row=1)
+
+tests\shared_kt\test_response_calibration.py:203: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\response_calibration.py:286: in score_reference_bank
+    calibrated = {item: None if p is None else _sigmoid(_logit(p) / calibration.temperature) for item, p in raw.items()}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (0.40546509043399814,)
+
+    def aggregation_must_not_start(*args):
+&gt;       raise AssertionError('invalid reference rows reached aggregation')
+E       AssertionError: invalid reference rows reached aggregation
+
+tests\shared_kt\test_response_calibration.py:197: AssertionError</failure></testcase><testcase classname="tests.shared_kt.test_response_calibration" name="test_reference_probe_rejects_invalid_rows_before_aggregation[untyped]" time="0.020"><failure message="AssertionError: invalid reference rows reached aggregation">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B173C73100&gt;
+boundary = 'untyped'
+
+    @pytest.mark.parametrize('boundary', ('truncated', 'untyped', 'rank'))
+    def test_reference_probe_rejects_invalid_rows_before_aggregation(monkeypatch, boundary):
+        result, binding, bank = fit()
+        session = session_for(bank, binding)
+        actual_probe = session.probe_many
+    
+        def invalid_probe(queries):
+            rows = actual_probe(queries)
+            assert len(rows) == len(queries) == 84
+            if boundary == 'truncated':
+                return rows[:-1]
+            if boundary == 'untyped':
+                return (*rows[:-1], object())
+            return (*rows[:-1], replace(rows[-1], global_rank=rows[-1].global_rank + 1))
+    
+        def aggregation_must_not_start(*args):
+            raise AssertionError('invalid reference rows reached aggregation')
+    
+        monkeypatch.setattr(session, 'probe_many', invalid_probe)
+        monkeypatch.setattr('knowledge_tracing.response_calibration._sigmoid', aggregation_must_not_start)
+        before = session.snapshot()
+        with pytest.raises(ValueError, match='reference probe'):
+&gt;           score_reference_bank(session, calibration=result, binding=binding, timestamp=0, source_row=1)
+
+tests\shared_kt\test_response_calibration.py:203: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\response_calibration.py:286: in score_reference_bank
+    calibrated = {item: None if p is None else _sigmoid(_logit(p) / calibration.temperature) for item, p in raw.items()}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (0.40546509043399814,)
+
+    def aggregation_must_not_start(*args):
+&gt;       raise AssertionError('invalid reference rows reached aggregation')
+E       AssertionError: invalid reference rows reached aggregation
+
+tests\shared_kt\test_response_calibration.py:197: AssertionError</failure></testcase><testcase classname="tests.shared_kt.test_response_calibration" name="test_reference_probe_rejects_invalid_rows_before_aggregation[rank]" time="0.019"><failure message="AssertionError: invalid reference rows reached aggregation">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B1754F55B0&gt;
+boundary = 'rank'
+
+    @pytest.mark.parametrize('boundary', ('truncated', 'untyped', 'rank'))
+    def test_reference_probe_rejects_invalid_rows_before_aggregation(monkeypatch, boundary):
+        result, binding, bank = fit()
+        session = session_for(bank, binding)
+        actual_probe = session.probe_many
+    
+        def invalid_probe(queries):
+            rows = actual_probe(queries)
+            assert len(rows) == len(queries) == 84
+            if boundary == 'truncated':
+                return rows[:-1]
+            if boundary == 'untyped':
+                return (*rows[:-1], object())
+            return (*rows[:-1], replace(rows[-1], global_rank=rows[-1].global_rank + 1))
+    
+        def aggregation_must_not_start(*args):
+            raise AssertionError('invalid reference rows reached aggregation')
+    
+        monkeypatch.setattr(session, 'probe_many', invalid_probe)
+        monkeypatch.setattr('knowledge_tracing.response_calibration._sigmoid', aggregation_must_not_start)
+        before = session.snapshot()
+        with pytest.raises(ValueError, match='reference probe'):
+&gt;           score_reference_bank(session, calibration=result, binding=binding, timestamp=0, source_row=1)
+
+tests\shared_kt\test_response_calibration.py:203: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\response_calibration.py:286: in score_reference_bank
+    calibrated = {item: None if p is None else _sigmoid(_logit(p) / calibration.temperature) for item, p in raw.items()}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (0.40546509043399814,)
+
+    def aggregation_must_not_start(*args):
+&gt;       raise AssertionError('invalid reference rows reached aggregation')
+E       AssertionError: invalid reference rows reached aggregation
+
+tests\shared_kt\test_response_calibration.py:197: AssertionError</failure></testcase><testcase classname="tests.shared_kt.test_response_calibration" name="test_reference_probe_requires_online_session" time="0.022"><failure message="Failed: DID NOT RAISE ValueError">def test_reference_probe_requires_online_session():
+        result, binding, bank = fit()
+        actual = session_for(bank, binding)
+    
+        class DuckSession:
+            def __getattr__(self, name):
+                return getattr(actual, name)
+    
+&gt;       with pytest.raises(ValueError, match='OnlineSession'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\shared_kt\test_response_calibration.py:215: Failed</failure></testcase></testsuite></testsuites>

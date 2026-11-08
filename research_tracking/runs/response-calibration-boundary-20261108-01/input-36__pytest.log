@@ -1,0 +1,162 @@
+FFFF                                                                     [100%]
+================================== FAILURES ===================================
+___ test_reference_probe_rejects_invalid_rows_before_aggregation[truncated] ___
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001B175583230>
+boundary = 'truncated'
+
+    @pytest.mark.parametrize('boundary', ('truncated', 'untyped', 'rank'))
+    def test_reference_probe_rejects_invalid_rows_before_aggregation(monkeypatch, boundary):
+        result, binding, bank = fit()
+        session = session_for(bank, binding)
+        actual_probe = session.probe_many
+    
+        def invalid_probe(queries):
+            rows = actual_probe(queries)
+            assert len(rows) == len(queries) == 84
+            if boundary == 'truncated':
+                return rows[:-1]
+            if boundary == 'untyped':
+                return (*rows[:-1], object())
+            return (*rows[:-1], replace(rows[-1], global_rank=rows[-1].global_rank + 1))
+    
+        def aggregation_must_not_start(*args):
+            raise AssertionError('invalid reference rows reached aggregation')
+    
+        monkeypatch.setattr(session, 'probe_many', invalid_probe)
+        monkeypatch.setattr('knowledge_tracing.response_calibration._sigmoid', aggregation_must_not_start)
+        before = session.snapshot()
+        with pytest.raises(ValueError, match='reference probe'):
+>           score_reference_bank(session, calibration=result, binding=binding, timestamp=0, source_row=1)
+
+tests\shared_kt\test_response_calibration.py:203: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\response_calibration.py:286: in score_reference_bank
+    calibrated = {item: None if p is None else _sigmoid(_logit(p) / calibration.temperature) for item, p in raw.items()}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (0.40546509043399814,)
+
+    def aggregation_must_not_start(*args):
+>       raise AssertionError('invalid reference rows reached aggregation')
+E       AssertionError: invalid reference rows reached aggregation
+
+tests\shared_kt\test_response_calibration.py:197: AssertionError
+____ test_reference_probe_rejects_invalid_rows_before_aggregation[untyped] ____
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001B173C73100>
+boundary = 'untyped'
+
+    @pytest.mark.parametrize('boundary', ('truncated', 'untyped', 'rank'))
+    def test_reference_probe_rejects_invalid_rows_before_aggregation(monkeypatch, boundary):
+        result, binding, bank = fit()
+        session = session_for(bank, binding)
+        actual_probe = session.probe_many
+    
+        def invalid_probe(queries):
+            rows = actual_probe(queries)
+            assert len(rows) == len(queries) == 84
+            if boundary == 'truncated':
+                return rows[:-1]
+            if boundary == 'untyped':
+                return (*rows[:-1], object())
+            return (*rows[:-1], replace(rows[-1], global_rank=rows[-1].global_rank + 1))
+    
+        def aggregation_must_not_start(*args):
+            raise AssertionError('invalid reference rows reached aggregation')
+    
+        monkeypatch.setattr(session, 'probe_many', invalid_probe)
+        monkeypatch.setattr('knowledge_tracing.response_calibration._sigmoid', aggregation_must_not_start)
+        before = session.snapshot()
+        with pytest.raises(ValueError, match='reference probe'):
+>           score_reference_bank(session, calibration=result, binding=binding, timestamp=0, source_row=1)
+
+tests\shared_kt\test_response_calibration.py:203: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\response_calibration.py:286: in score_reference_bank
+    calibrated = {item: None if p is None else _sigmoid(_logit(p) / calibration.temperature) for item, p in raw.items()}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (0.40546509043399814,)
+
+    def aggregation_must_not_start(*args):
+>       raise AssertionError('invalid reference rows reached aggregation')
+E       AssertionError: invalid reference rows reached aggregation
+
+tests\shared_kt\test_response_calibration.py:197: AssertionError
+_____ test_reference_probe_rejects_invalid_rows_before_aggregation[rank] ______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001B1754F55B0>
+boundary = 'rank'
+
+    @pytest.mark.parametrize('boundary', ('truncated', 'untyped', 'rank'))
+    def test_reference_probe_rejects_invalid_rows_before_aggregation(monkeypatch, boundary):
+        result, binding, bank = fit()
+        session = session_for(bank, binding)
+        actual_probe = session.probe_many
+    
+        def invalid_probe(queries):
+            rows = actual_probe(queries)
+            assert len(rows) == len(queries) == 84
+            if boundary == 'truncated':
+                return rows[:-1]
+            if boundary == 'untyped':
+                return (*rows[:-1], object())
+            return (*rows[:-1], replace(rows[-1], global_rank=rows[-1].global_rank + 1))
+    
+        def aggregation_must_not_start(*args):
+            raise AssertionError('invalid reference rows reached aggregation')
+    
+        monkeypatch.setattr(session, 'probe_many', invalid_probe)
+        monkeypatch.setattr('knowledge_tracing.response_calibration._sigmoid', aggregation_must_not_start)
+        before = session.snapshot()
+        with pytest.raises(ValueError, match='reference probe'):
+>           score_reference_bank(session, calibration=result, binding=binding, timestamp=0, source_row=1)
+
+tests\shared_kt\test_response_calibration.py:203: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\response_calibration.py:286: in score_reference_bank
+    calibrated = {item: None if p is None else _sigmoid(_logit(p) / calibration.temperature) for item, p in raw.items()}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (0.40546509043399814,)
+
+    def aggregation_must_not_start(*args):
+>       raise AssertionError('invalid reference rows reached aggregation')
+E       AssertionError: invalid reference rows reached aggregation
+
+tests\shared_kt\test_response_calibration.py:197: AssertionError
+________________ test_reference_probe_requires_online_session _________________
+
+    def test_reference_probe_requires_online_session():
+        result, binding, bank = fit()
+        actual = session_for(bank, binding)
+    
+        class DuckSession:
+            def __getattr__(self, name):
+                return getattr(actual, name)
+    
+>       with pytest.raises(ValueError, match='OnlineSession'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\shared_kt\test_response_calibration.py:215: Failed
+============================== warnings summary ===============================
+.venv\Lib\site-packages\_pytest\cacheprovider.py:469
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:469: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\nodeids: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+.venv\Lib\site-packages\_pytest\cacheprovider.py:423
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:423: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\lastfailed: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/lastfailed", self.lastfailed)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/shared_kt/test_response_calibration.py::test_reference_probe_rejects_invalid_rows_before_aggregation[truncated]
+FAILED tests/shared_kt/test_response_calibration.py::test_reference_probe_rejects_invalid_rows_before_aggregation[untyped]
+FAILED tests/shared_kt/test_response_calibration.py::test_reference_probe_rejects_invalid_rows_before_aggregation[rank]
+FAILED tests/shared_kt/test_response_calibration.py::test_reference_probe_requires_online_session
+4 failed, 2 warnings in 0.44s

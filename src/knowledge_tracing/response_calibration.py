@@ -11,7 +11,7 @@ import hashlib
 import math
 from numbers import Real
 
-from .simulator_bridge import ItemQuery, ReferenceSet, SimulatorBank, identity_hash
+from .simulator_bridge import ItemQuery, OnlineScore, OnlineSession, ReferenceSet, SimulatorBank, identity_hash
 
 CLIP = 1e-6
 T_MIN, T_MAX = .05, 20.
@@ -271,13 +271,19 @@ def score_reference_bank(session, *, calibration, binding, timestamp: int, sourc
     chọn ready/action và không nhận latent theta hoặc labels reference.
     """
     _validate_calibration(calibration, binding)
+    if not isinstance(session, OnlineSession):
+        raise ValueError('reference probe requires OnlineSession')
     refs = reference_bank_v1(session.bank)
     if (binding.model_id != session.backend.model_id or binding.bank_sha256 != session.bank.identity['item_bank_sha256']
             or binding.domain_sha256 != identity_hash(session.bank.identity) or binding.reference_sha256 != reference_identity(refs)):
         raise ValueError('reference model/bank/domain binding mismatch')
     before = session.history_sha256
+    expected_rank = len(session.history)
     queries = tuple(ItemQuery(item, timestamp, source_row) for ref in refs for item, _ in ref.item_weights)
     results = session.probe_many(queries)
+    if (not isinstance(results, (tuple, list)) or len(results) != len(queries)
+            or any(not isinstance(row, OnlineScore) or row.global_rank != expected_rank for row in results)):
+        raise ValueError('reference probe result count/type/rank mismatch')
     scores = {}; offset = 0
     for ref in refs:
         rows = results[offset:offset+3]; offset += 3
