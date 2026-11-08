@@ -1,0 +1,31 @@
+{
+  "status": "PASS_AST_UNCHANGED_SCOPES",
+  "unchanged_assignments": [
+    "ROOT",
+    "VENV",
+    "TARGET",
+    "BASE",
+    "CAP_SECONDS",
+    "CAP_WORKSPACE",
+    "FLOOR_FREE",
+    "CAP_LOGS",
+    "PINS",
+    "PROBE",
+    "AUDIT",
+    "CPU_IMPORT"
+  ],
+  "unchanged_functions": [
+    "parse_inputs",
+    "read_owned",
+    "write_json",
+    "digest",
+    "normalize"
+  ],
+  "entire_Stage_AST_identical": true,
+  "source_diff_sha256": "9f88a62bbe3e19b449673b231f3431d50ce53f8d725478d45fe71b0645e807aa",
+  "prior_static_check_failure": {
+    "reason": "Reviewer used ast.literal_eval on ROOT Path constructor, raising ValueError malformed ast.Call; source/controller never executed.",
+    "correction": "Compare AST expressions directly instead of evaluating call expressions."
+  },
+  "remote_install_network_model_calls": 0
+}

@@ -1,0 +1,155 @@
+test_duplicate_flat (__main__.ConfigGuardTests.test_duplicate_flat) ... FAIL
+test_duplicate_nested (__main__.ConfigGuardTests.test_duplicate_nested) ... ok
+test_empty_nested (__main__.ConfigGuardTests.test_empty_nested) ... ok
+test_env_even_ignored_pip_flag (__main__.ConfigGuardTests.test_env_even_ignored_pip_flag) ... FAIL
+test_env_index (__main__.ConfigGuardTests.test_env_index) ... ok
+test_env_target (__main__.ConfigGuardTests.test_env_target) ... ok
+test_exact_flat (__main__.ConfigGuardTests.test_exact_flat) ... ok
+test_file_config_file_suffix (__main__.ConfigGuardTests.test_file_config_file_suffix) ... FAIL
+test_file_section (__main__.ConfigGuardTests.test_file_section) ... ok
+test_flat_index (__main__.ConfigGuardTests.test_flat_index) ... ok
+test_flat_target (__main__.ConfigGuardTests.test_flat_target) ... ok
+test_iterator_not_consumed_twice (__main__.ConfigGuardTests.test_iterator_not_consumed_twice) ... ERROR
+test_missing_effective_entry (__main__.ConfigGuardTests.test_missing_effective_entry) ... FAIL
+test_missing_env (__main__.ConfigGuardTests.test_missing_env) ... FAIL
+test_mixed_flat_nested (__main__.ConfigGuardTests.test_mixed_flat_nested) ... ok
+test_nested_index (__main__.ConfigGuardTests.test_nested_index) ... ok
+test_nested_target (__main__.ConfigGuardTests.test_nested_target) ... ok
+test_no_values_in_audit (__main__.ConfigGuardTests.test_no_values_in_audit) ... ERROR
+test_non_pair_item (__main__.ConfigGuardTests.test_non_pair_item) ... ok
+test_non_string_key (__main__.ConfigGuardTests.test_non_string_key) ... ERROR
+test_observed_nested_false_positive_in_old_guard (__main__.ConfigGuardTests.test_observed_nested_false_positive_in_old_guard) ... ERROR
+test_unknown_section (__main__.ConfigGuardTests.test_unknown_section) ... ok
+test_wrong_env_path (__main__.ConfigGuardTests.test_wrong_env_path) ... FAIL
+test_wrong_nested_key (__main__.ConfigGuardTests.test_wrong_nested_key) ... ok
+test_wrong_nested_path (__main__.ConfigGuardTests.test_wrong_nested_path) ... ok
+test_wrong_nested_value (__main__.ConfigGuardTests.test_wrong_nested_value) ... ok
+test_wrong_scalar_path (__main__.ConfigGuardTests.test_wrong_scalar_path) ... ok
+test_wrong_scalar_type (__main__.ConfigGuardTests.test_wrong_scalar_type) ... ok
+
+======================================================================
+ERROR: test_iterator_not_consumed_twice (__main__.ConfigGuardTests.test_iterator_not_consumed_twice)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_install_attempt02_config.py", line 59, in test_iterator_not_consumed_twice
+    self.assertEqual(verify(iter(NESTED),ENV,DEVNULL)['effective_config_keys'],[':env:.config-file'])
+                     ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\install_stage.py", line 6, in verify_old
+    import sys
+    
+ValueError: unexpected effective pip config; values not logged
+
+======================================================================
+ERROR: test_no_values_in_audit (__main__.ConfigGuardTests.test_no_values_in_audit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_install_attempt02_config.py", line 86, in test_no_values_in_audit
+    audit=verify(NESTED,ENV,DEVNULL)
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\install_stage.py", line 6, in verify_old
+    import sys
+    
+ValueError: unexpected effective pip config; values not logged
+
+======================================================================
+ERROR: test_non_string_key (__main__.ConfigGuardTests.test_non_string_key)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_install_attempt02_config.py", line 84, in test_non_string_key
+    def test_non_string_key(self):self.reject([(123,DEVNULL)])
+                                  ~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_install_attempt02_config.py", line 47, in reject
+    with self.assertRaises(ValueError):verify(items,ENV if env is None else env,DEVNULL)
+                                       ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\install_stage.py", line 6, in verify_old
+    import sys
+             ^
+AttributeError: 'int' object has no attribute 'endswith'
+
+======================================================================
+ERROR: test_observed_nested_false_positive_in_old_guard (__main__.ConfigGuardTests.test_observed_nested_false_positive_in_old_guard)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_install_attempt02_config.py", line 53, in test_observed_nested_false_positive_in_old_guard
+    self.assertEqual(verify(NESTED,ENV,DEVNULL)['config_api_shape'],'nested')
+                     ~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\install_stage.py", line 6, in verify_old
+    import sys
+    
+ValueError: unexpected effective pip config; values not logged
+
+======================================================================
+FAIL: test_duplicate_flat (__main__.ConfigGuardTests.test_duplicate_flat)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_install_attempt02_config.py", line 69, in test_duplicate_flat
+    def test_duplicate_flat(self):self.reject(FLAT+FLAT)
+                                  ~~~~~~~~~~~^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_install_attempt02_config.py", line 47, in reject
+    with self.assertRaises(ValueError):verify(items,ENV if env is None else env,DEVNULL)
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_env_even_ignored_pip_flag (__main__.ConfigGuardTests.test_env_even_ignored_pip_flag)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_install_attempt02_config.py", line 82, in test_env_even_ignored_pip_flag
+    def test_env_even_ignored_pip_flag(self):self.reject(FLAT,{'PIP_CONFIG_FILE':DEVNULL,'PIP_HELP':'1'})
+                                             ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_install_attempt02_config.py", line 47, in reject
+    with self.assertRaises(ValueError):verify(items,ENV if env is None else env,DEVNULL)
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_file_config_file_suffix (__main__.ConfigGuardTests.test_file_config_file_suffix)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_install_attempt02_config.py", line 66, in test_file_config_file_suffix
+    def test_file_config_file_suffix(self):self.reject([('global.config-file',DEVNULL)])
+                                           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_install_attempt02_config.py", line 47, in reject
+    with self.assertRaises(ValueError):verify(items,ENV if env is None else env,DEVNULL)
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_missing_effective_entry (__main__.ConfigGuardTests.test_missing_effective_entry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_install_attempt02_config.py", line 72, in test_missing_effective_entry
+    def test_missing_effective_entry(self):self.reject([])
+                                           ~~~~~~~~~~~^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_install_attempt02_config.py", line 47, in reject
+    with self.assertRaises(ValueError):verify(items,ENV if env is None else env,DEVNULL)
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_missing_env (__main__.ConfigGuardTests.test_missing_env)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_install_attempt02_config.py", line 78, in test_missing_env
+    def test_missing_env(self):self.reject(FLAT,{})
+                               ~~~~~~~~~~~^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_install_attempt02_config.py", line 47, in reject
+    with self.assertRaises(ValueError):verify(items,ENV if env is None else env,DEVNULL)
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_wrong_env_path (__main__.ConfigGuardTests.test_wrong_env_path)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_install_attempt02_config.py", line 79, in test_wrong_env_path
+    def test_wrong_env_path(self):self.reject(FLAT,{'PIP_CONFIG_FILE':'/tmp/pip.conf'})
+                                  ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_install_attempt02_config.py", line 47, in reject
+    with self.assertRaises(ValueError):verify(items,ENV if env is None else env,DEVNULL)
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 28 tests in 0.008s
+
+FAILED (failures=6, errors=4)

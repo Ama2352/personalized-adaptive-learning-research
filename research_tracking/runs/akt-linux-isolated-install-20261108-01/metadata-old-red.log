@@ -1,0 +1,81 @@
+test_bin_script_inside_venv (__main__.MetadataTests.test_bin_script_inside_venv) ... ok
+test_duplicate_root (__main__.MetadataTests.test_duplicate_root) ... ok
+test_missing_root (__main__.MetadataTests.test_missing_root) ... ok
+test_multiple_root (__main__.MetadataTests.test_multiple_root) ... ok
+test_nested_extra_depth (__main__.MetadataTests.test_nested_extra_depth) ... FAIL
+test_nested_only (__main__.MetadataTests.test_nested_only) ... ok
+test_nested_order_independent (__main__.MetadataTests.test_nested_order_independent) ... FAIL
+test_nested_record_escape (__main__.MetadataTests.test_nested_record_escape) ... ok
+test_nonmetadata_record_escape (__main__.MetadataTests.test_nonmetadata_record_escape) ... ok
+test_observed_thirteen_all_depth_one_root (__main__.MetadataTests.test_observed_thirteen_all_depth_one_root) ... FAIL
+test_plain_root (__main__.MetadataTests.test_plain_root) ... ok
+test_root_escape (__main__.MetadataTests.test_root_escape) ... ok
+test_root_in_venv_wrong_purelib (__main__.MetadataTests.test_root_in_venv_wrong_purelib) ... FAIL
+test_root_plus_one_nested (__main__.MetadataTests.test_root_plus_one_nested) ... FAIL
+test_wrong_metadata_case (__main__.MetadataTests.test_wrong_metadata_case) ... ok
+test_wrong_root_directory_suffix (__main__.MetadataTests.test_wrong_root_directory_suffix) ... ok
+
+======================================================================
+FAIL: test_nested_extra_depth (__main__.MetadataTests.test_nested_extra_depth)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_post_install_metadata.py", line 58, in test_nested_extra_depth
+    def test_nested_extra_depth(self):self.reject(['pkg/data/'+ROOT])
+                                      ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_post_install_metadata.py", line 40, in reject
+    with self.assertRaises((ValueError,AssertionError)):select(files,locate if mapping is None else mapping,VENV,PURE)
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_nested_order_independent (__main__.MetadataTests.test_nested_order_independent)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_post_install_metadata.py", line 44, in test_nested_order_independent
+    def test_nested_order_independent(self):self.assertEqual(select([*NESTED,ROOT],locate,VENV,PURE),PURE/ROOT)
+                                                             ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\install_stage_attempt02.py", line 3, in old
+    Stdlib only in controller; exact44direct-wheel lock, one exclusive attempt.
+            ^^^^^^^^^^^^^^^^
+AssertionError
+
+======================================================================
+FAIL: test_observed_thirteen_all_depth_one_root (__main__.MetadataTests.test_observed_thirteen_all_depth_one_root)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_post_install_metadata.py", line 43, in test_observed_thirteen_all_depth_one_root
+    def test_observed_thirteen_all_depth_one_root(self):self.assertEqual(select([ROOT,*NESTED],locate,VENV,PURE),PURE/ROOT)
+                                                                         ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\install_stage_attempt02.py", line 3, in old
+    Stdlib only in controller; exact44direct-wheel lock, one exclusive attempt.
+            ^^^^^^^^^^^^^^^^
+AssertionError
+
+======================================================================
+FAIL: test_root_in_venv_wrong_purelib (__main__.MetadataTests.test_root_in_venv_wrong_purelib)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_post_install_metadata.py", line 55, in test_root_in_venv_wrong_purelib
+    def test_root_in_venv_wrong_purelib(self):self.reject([ROOT],lambda name:VENV/'wrong-site'/name)
+                                              ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_post_install_metadata.py", line 40, in reject
+    with self.assertRaises((ValueError,AssertionError)):select(files,locate if mapping is None else mapping,VENV,PURE)
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_root_plus_one_nested (__main__.MetadataTests.test_root_plus_one_nested)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\test_post_install_metadata.py", line 42, in test_root_plus_one_nested
+    def test_root_plus_one_nested(self):self.assertEqual(select([ROOT,NESTED[0]],locate,VENV,PURE),PURE/ROOT)
+                                                         ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\install_stage_attempt02.py", line 3, in old
+    Stdlib only in controller; exact44direct-wheel lock, one exclusive attempt.
+            ^^^^^^^^^^^^^^^^
+AssertionError
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.049s
+
+FAILED (failures=5)

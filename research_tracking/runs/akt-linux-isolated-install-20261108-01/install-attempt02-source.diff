@@ -1,0 +1,65 @@
+--- frozen01
++++ proposal02
+@@ -1,4 +1,4 @@
+-"""Draft GPU08 isolated CPU install controller. DO NOT EXECUTE before peer review.
++"""Proposal GPU08 attempt02 isolated CPU install. Review/archive01 before execution.
+ 
+ Stdlib only in controller; exact44direct-wheel lock, one exclusive attempt.
+ Storage monitoring is cooperative, not a filesystem quota or network byte cap.
+@@ -25,7 +25,7 @@
+ VENV=ROOT/".venv"
+ TARGET=VENV/"bin/python"  # Keep raw venv entrypoint; do not replace by resolved base.
+ BASE=Path("/usr/bin/python3")
+-ATTEMPT=ROOT/"install-attempt01"
++ATTEMPT=ROOT/"install-attempt02"
+ CAP_SECONDS=600
+ CAP_WORKSPACE=20*1024**3
+ FLOOR_FREE=30*1024**3
+@@ -164,13 +164,28 @@
+ BASE_PIP="""import hashlib,json,os,pip
+ from pathlib import Path
+ from pip._internal.configuration import Configuration
++def verify_effective_config(items,environ,devnull):
++ # Accept only the two exact observed API shapes; never flatten arbitrary sections.
++ pip_env={k:v for k,v in environ.items() if k.startswith('PIP_')}
++ if pip_env!={'PIP_CONFIG_FILE':devnull}:raise ValueError('unexpected pip environment; values not logged')
++ rows=list(items)
++ if len(rows)!=1:raise ValueError('unexpected effective pip config cardinality; values not logged')
++ row=rows[0]
++ if not isinstance(row,(tuple,list)) or len(row)!=2:raise ValueError('unexpected pip config item shape')
++ key,value=row
++ if type(key) is not str:raise ValueError('unexpected pip config key type')
++ if key==':env:.config-file' and type(value) is str and value==devnull:
++  shape='flat'
++ elif key==':env:' and type(value) is dict and len(value)==1 and set(value)=={':env:.config-file'} and type(value[':env:.config-file']) is str and value[':env:.config-file']==devnull:
++  shape='nested'
++ else:raise ValueError('unexpected effective pip config; values not logged')
++ return {'effective_config_keys':[':env:.config-file'],'config_api_shape':shape,'pip_environment_names':['PIP_CONFIG_FILE']}
+ c=Configuration(isolated=False);c.load()
+-for key,value in c.items():
+- if not (key.endswith('config-file') and value==os.devnull):raise ValueError('unexpected effective pip config; values not logged')
++audit=verify_effective_config(c.items(),os.environ,os.devnull)
+ p=Path(pip.__file__);assert pip.__version__=='26.2.2'
+ assert str(p).startswith('/usr/local/lib/python3.13/dist-packages/pip/')
+ print(json.dumps({'version':pip.__version__,'file':str(p),'source_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),
+- 'effective_config_keys':sorted(key for key,_ in c.items()),'config_files_disabled_by_devnull':True}))
++ **audit,'config_files_disabled_by_devnull':True}))
+ """
+ 
+ AUDIT="""import hashlib,importlib.metadata as m,json,re,sys,sysconfig
+@@ -252,13 +267,13 @@
+     assert Path(sys.executable)==BASE and sys.prefix=="/usr"
+     ATTEMPT.mkdir(exist_ok=False)
+     stage=Stage(args.expected_source_sha256,args.approval_reference)
+-    result={"stage":"GPU08_ISOLATED_CPU_INSTALL_ATTEMPT01","status":"FAILED","gpu_model_steps":0,"optimizer_steps":0,"modal_calls":0,
++    result={"stage":"GPU08_ISOLATED_CPU_INSTALL_ATTEMPT02","status":"FAILED","gpu_model_steps":0,"optimizer_steps":0,"modal_calls":0,
+             "hard_storage_quota":False,"network_byte_cap":False,"approval_reference":args.approval_reference}
+     error=None
+     try:
+         if not args.approval_reference.strip() or not re.fullmatch(r"[a-f0-9]{64}",args.expected_source_sha256):raise ValueError("explicit source/approval required")
+         source_path=Path(__file__).absolute()
+-        assert source_path==ROOT/"install_stage.py"
++        assert source_path==ROOT/"install_stage_attempt02.py"
+         source=read_owned(source_path,128*1024)
+         assert digest(source)==args.expected_source_sha256
+         if os.environ.get("COLAB_GPU") not in (None,"","0") or os.environ.get("COLAB_TPU_ADDR") or list(Path('/dev').glob('nvidia[0-9]*')):

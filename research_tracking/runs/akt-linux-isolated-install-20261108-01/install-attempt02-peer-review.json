@@ -1,0 +1,21 @@
+{
+  "status": "PROPOSAL_REVIEW_READY_NOT_EXECUTED",
+  "source": "install_stage_attempt02.py",
+  "source_sha256": "021dcbe8a4a4a994d56572eb0ac76743c9a1bb3854cb56ca205da7017cb1a21f",
+  "frozen_attempt01_source_sha256": "28927535b16b66167e4c71a42a406d9a1c138b388806df093434cba6c0010a87",
+  "basis_vi": "Actual readonly probe02 do parent cung cấp xác nhận pip26.2.2 items có đúng nested :env: -> {:env:.config-file: /dev/null}; local pip25.1.1 source chỉ làm ngữ cảnh flat API, không chứng nhận source26.2.2.",
+  "change_scope_vi": "Đổi source entrypoint/attempt directory/result label sang02; thay suffix wildcard bằng whitelist đúng một config item flat hoặc nested và đúng một PIP_CONFIG_FILE=/dev/null. Không flatten section tùy ý, không bỏ guard index/target.",
+  "old_guard_red": {"tests": 28, "failures": 6, "errors": 4, "passed": 18, "log": "config-old-red.log", "scope": "AST-extracted original guard loop inside synthetic test wrapper; not actual pip/controller/install invocation"},
+  "new_guard_green": {"tests": 28, "failures": 0, "errors": 0, "log": "config-attempt02-green.log"},
+  "cleanup_peer": {"checks": 6, "status": "PASS_MOCKED_CLEANUP_ONLY", "source": "test_install_cleanup_peer.py", "log": "cleanup-peer-persisted.log", "scope": "Reproduced persisted review using virtual paths/processes; original previous unpersisted tool check also passed; no real child processes."},
+  "unchanged_scopes_vi": "AST comparison xác nhận toàn Stage cleanup/resource code, parse_inputs/44hash binding, PROBE/AUDIT/CPU_IMPORT và constants600s/20GiB/min30GiB/32MiB log không đổi.",
+  "validation_receipt": "install-attempt02-peer-validation.json",
+  "validation_receipt_sha256": "bbbb388447b611cd85ca9caf4edbaf42010cf6c235b70a9cb4c6eae84686a764",
+  "ast_comparison_receipt": "install-attempt02-static-comparison.json",
+  "ast_comparison_receipt_sha256": "7bf30f763dba30f2821ccc5a3a3c9e527e2b11e6b4db5c9183f093fe3d22cc97",
+  "next_acceptance_vi": "Parent phải đóng actual failure evidence01 và independent peer review correctedSHA trước khi quyết định attempt02. Các tests chỉ xác nhận guard/cleanup giả lập; không chứng nhận actual installation hoặc CUDA. Giữ attempt01 bất biến, fail02 giữ partial/no-auto-retry.",
+  "real_stage_processes": 0,
+  "actual_pip_calls": 0,
+  "install_calls": 0,
+  "network_remote_model_calls": 0
+}

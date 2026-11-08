@@ -1,0 +1,76 @@
+{
+  "status": "PASS_PROPOSAL_MOCKS_ONLY_NOT_EXECUTED",
+  "source_sha256": {
+    "install_stage.py": "28927535b16b66167e4c71a42a406d9a1c138b388806df093434cba6c0010a87",
+    "install_stage_attempt02.py": "021dcbe8a4a4a994d56572eb0ac76743c9a1bb3854cb56ca205da7017cb1a21f",
+    "test_install_attempt02_config.py": "2bc0db3a52e0e82496dc8b2dc2edbd6d1bd23d877ed64e8081c21fcf63cb3438",
+    "test_install_cleanup_peer.py": "3b7b62583b37f29acbd2136a992c8be7621afd1c1d4f9b8134638784083eeb56"
+  },
+  "controller_and_child_ast_pass": 5,
+  "cases_per_config_invocation": 28,
+  "attempt01_immutable": true,
+  "tests": [
+    {
+      "name": "config-old-red",
+      "command": [
+        "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+        "-B",
+        "artifacts\\akt\\colab\\gpu08-linux-20261108-01\\test_install_attempt02_config.py",
+        "--old-guard"
+      ],
+      "returncode": 1,
+      "elapsed_seconds": 0.31073810000088997,
+      "log": "artifacts\\akt\\colab\\gpu08-linux-20261108-01\\config-old-red.log",
+      "log_sha256": "fdb68c146997842e05ac9c6a1c6d2bb6f7976ea3b9ff1367302509644e1aa756",
+      "stdout": "",
+      "stderr_tail": [
+        "----------------------------------------------------------------------",
+        "Ran 28 tests in 0.008s",
+        "",
+        "FAILED (failures=6, errors=4)"
+      ]
+    },
+    {
+      "name": "config-attempt02-green",
+      "command": [
+        "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+        "-B",
+        "artifacts\\akt\\colab\\gpu08-linux-20261108-01\\test_install_attempt02_config.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.2858059999998659,
+      "log": "artifacts\\akt\\colab\\gpu08-linux-20261108-01\\config-attempt02-green.log",
+      "log_sha256": "f40c3ea079051b0a0b387446b5044c55899ef3aa7348769e47ab707d28611fb0",
+      "stdout": "",
+      "stderr_tail": [
+        "----------------------------------------------------------------------",
+        "Ran 28 tests in 0.001s",
+        "",
+        "OK"
+      ]
+    },
+    {
+      "name": "cleanup-peer-persisted",
+      "command": [
+        "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+        "-B",
+        "artifacts\\akt\\colab\\gpu08-linux-20261108-01\\test_install_cleanup_peer.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.15707840002141893,
+      "log": "artifacts\\akt\\colab\\gpu08-linux-20261108-01\\cleanup-peer-persisted.log",
+      "log_sha256": "ea242e1d8203067cc2400a171a73296b80ac3783ffa88629660b539e03648260",
+      "stdout": "{\"status\": \"PASS_MOCKED_CLEANUP_ONLY\", \"checks\": 6, \"source_sha256\": \"28927535b16b66167e4c71a42a406d9a1c138b388806df093434cba6c0010a87\", \"real_stage_subprocesses\": 0, \"installs\": 0, \"network_calls\": 0, \"model_calls\": 0}",
+      "stderr_tail": []
+    }
+  ],
+  "real_stage_processes": 0,
+  "actual_pip_calls": 0,
+  "install_calls": 0,
+  "network_remote_model_calls": 0,
+  "acceptance_limits": [
+    "Localpip25.1.1 source is flatAPI context, not proof of remote26.2.2 source.",
+    "Remote26.2.2 nestedshape provided by parent readonly diagnostic02; proposal accepts only exactobservednested/flat shapes.",
+    "No retry/installuntilfailureevidence archived and correctedsource independentlyreviewed."
+  ]
+}
