@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**CG-AKT nghiên cứu:** [condition metadata](cgakt_research_condition_readiness_20261109.md),66PASS/0FES và [bundle13outputs](../runs/cgakt-research-condition-engineering-20261109-01/README.md). Theo Recipe26; chưa context/forward/training.
+
+**RQ1 — lượt trace chưa đạt:** [hai failures](rq1_prediction_mastery_trace_failures_20261109.md) / [bundle63outputs](../runs/rq1-prediction-mastery-trace-failures-20261109-01/README.md). Lượt01 lỗi metadata Windows, lượt02 timeout/Job0; partial không dùng làm kết quả. Không chạy lại trong allocation60s đã dừng.
+
 **SAKT — bổ sung counter:** [delta33fixtures](sakt_checkpoint_counter_delta_20261109.md), chấp nhận boundary epoch2 và từ chối Adam step cũ trước mutation. [Bundle43outputs](../runs/sakt-research-checkpoint-counter-delta-20261109-01/README.md) đã đóng, tham chiếu bundle70 cũ;3tiny Adamsteps trong lượt mới, chưa baseline fitted.
 
 **Kiểm phần mềm hiện hành09/11:** [AKT/shared KT trên Windows CPU](akt_windows_gate_readiness_20261109.md),1.418 PASS/0 failure/error/skip; [bundle đã đóng](../runs/akt-windows-gate-readiness-20261109-01/README.md) giữ cả lỗi trước sửa và log nghiệm thu. Đây chưa là CUDA hoặc kết quả mô hình nghiên cứu. Các dòng chưa full Gate bên dưới là mốc lịch sử trước lượt03.
