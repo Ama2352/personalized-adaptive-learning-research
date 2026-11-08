@@ -1,5 +1,12 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**Cập nhật sau chỉ thị user:** [Protocol21 Development đã được chọn](../../docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md), supersede trạng thái chờ phương pháp trong snapshot bên dưới; không cấp quyền chi Modal/fullCV/Holdout.
+
+- [Research-data contract](simulator_research_data_contract_20261108.md):76PASS, chưa corpus generator.
+- [Response calibration](response_calibration_readiness_20261108.md):39PASS, chưa research-fitted neural model.
+- [Reference controller](reference_controller_readiness_20261108.md):36PASS, chưa outer runner.
+- [Cross-module151PASS](../runs/reference-pipeline-integration-20261108-01/README.md): kiểm cùng phiên bản hiện hành; không151quan sát hoặc cộng với targeted suites.
+
 **Cần review phương pháp trước research fit:** [S04/S05 — lựa chọn cụ thể, chưa áp dụng](s04_s05_decision_options_DRY_20261108.md), [27 nguồn và kiểm metadata](s04_s05_decision_options_DRY_20261108.sources.json), commit `762bb20`. Bao gồm reference/mastery/calibration/controller, split/refit, required model×environment matrix, Plan B cần duyệt và chi phí logical reference queries. Đây là proposal, không kết quả nghiên cứu hoặc quyền chạy CV/Modal. Câu hỏi duyệt đã được gửi cho user; việc chuẩn bị môi trường vẫn tiếp tục độc lập.
 
 

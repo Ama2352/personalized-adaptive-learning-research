@@ -434,3 +434,8 @@ MCPCPU03đãchạymộtlượtreadonly, native0.175275s/launcher0.343111s≤30,b
 User giao chọn phương pháp an toàn/tiết kiệm; parent đã đọc Protocol21, kiểm SHA31 input và chuyển decision-register từ snapshot trước adoption sang D30–33, giữ nguyên phần lịch sử. S04-A/S05-B/H_dev30 là development, không final proposal waiver hoặc paid/fullCV/Holdout authorization. Các source hashes trong companion là pre-adoption read snapshot; transition before/after được lưu trong state.
 
 Chuyển source ZIP c934 sang Colab bị automatic approval review từ chối vì chưa có permission cụ thể xuất mã nguồn riêng tư. Batch0006–0008 bị gián đoạn, không suy đã hoàn tất; chưa materialize/execute ZIP, không retry/bypass. Local role-aware corpus và calibration tiếp tục độc lập.
+
+
+### 08/11 — Research data/calibration/controller local đã kiểm và commit
+
+RESDATA01 76PASS(afeaa72), CALIB01 39PASS(b4cd8d0), CTRL01 36PASS(3548f6d); rawGit14+36+34outputs đã kiểm. Cross-module151PASS/1,1700695s≤30 với11source/test/protocol SHA trước=sau; không cộng repeated testcounts. Giữ exact snapshots intermediate8f controller trong calibration bundle; currenta955 đã qua cross-suite. Independent reviewer phát hiện float-distance tie và recent-state inconsistency; đã sửa bằng tolerance1e-12/counter-chapter guards cùng regression. Research corpus chưa sinh, neural research fits chưa có, outerrunner chưa nối; không tăng statusRQ vì tests. Không Modal/fullCV/Holdout/remote tiếp tục sau export rejection.

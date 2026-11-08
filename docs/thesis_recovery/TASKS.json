@@ -3025,6 +3025,166 @@
       "verified_targeted_tests": 83,
       "optimizer_steps": 0,
       "new_independent_N": 0
+    },
+    {
+      "id": "RESDATA01",
+      "research_objective": "Split80/10/10, provenance/support và refit90 giữ role gốc; chưa sinh corpus",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "research_pipeline",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "SIMTRAIN01"
+      ],
+      "required_inputs": "Protocol21, synthetic observable fixtures, declared bank/split/source bindings",
+      "files_components": [
+        "research_tracking/reports/simulator_research_data_contract_20261108.md",
+        "research_tracking/runs/simulator-research-data-engineering-20261108-01/README.md",
+        "research_tracking/runs/simulator-research-data-engineering-20261108-01/manifest.json"
+      ],
+      "implementation_objective": "Split80/10/10, provenance/support và refit90 giữ role gốc; chưa sinh corpus",
+      "acceptance_criteria": "76 targeted PASS trong scope đã ghi; output SHA đúng, không model/optimizer/research outcome claim",
+      "verification_steps": "Đọc source/log/XML/receipts và verify raw Git blobs sau commit; không rerun dữ liệu thật",
+      "required_artifacts": [
+        "research_tracking/reports/simulator_research_data_contract_20261108.md",
+        "research_tracking/runs/simulator-research-data-engineering-20261108-01/README.md",
+        "research_tracking/runs/simulator-research-data-engineering-20261108-01/manifest.json"
+      ],
+      "estimated_effort": "Đã thực hiện08/11; không dự báo runtime training",
+      "compute_cost_category": "local CPU synthetic, cloud0",
+      "authorization_requirements": "Safe engineering được user giao; không chi cloud/fullCV/Holdout",
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": [],
+      "completion_commit": "afeaa72",
+      "verified_targeted_tests": 76,
+      "verified_bundle_outputs": 36,
+      "manifest_sha256": "f37b5c0659c3260d437bcd7389d27eece66438838243489c95bfb99887145d68",
+      "optimizer_steps": 0,
+      "new_research_observations": 0
+    },
+    {
+      "id": "CALIB01",
+      "research_objective": "Fit temperature hữu hạn và84reference probes có full bindings; nhãn tổng hợp, chưa fitted neural model",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "research_pipeline",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RESDATA01"
+      ],
+      "required_inputs": "Protocol21, synthetic observable fixtures, declared bank/split/source bindings",
+      "files_components": [
+        "research_tracking/reports/response_calibration_readiness_20261108.md",
+        "research_tracking/runs/response-calibration-engineering-20261108-01/README.md",
+        "research_tracking/runs/response-calibration-engineering-20261108-01/manifest.json"
+      ],
+      "implementation_objective": "Fit temperature hữu hạn và84reference probes có full bindings; nhãn tổng hợp, chưa fitted neural model",
+      "acceptance_criteria": "39 targeted PASS trong scope đã ghi; output SHA đúng, không model/optimizer/research outcome claim",
+      "verification_steps": "Đọc source/log/XML/receipts và verify raw Git blobs sau commit; không rerun dữ liệu thật",
+      "required_artifacts": [
+        "research_tracking/reports/response_calibration_readiness_20261108.md",
+        "research_tracking/runs/response-calibration-engineering-20261108-01/README.md",
+        "research_tracking/runs/response-calibration-engineering-20261108-01/manifest.json"
+      ],
+      "estimated_effort": "Đã thực hiện08/11; không dự báo runtime training",
+      "compute_cost_category": "local CPU synthetic, cloud0",
+      "authorization_requirements": "Safe engineering được user giao; không chi cloud/fullCV/Holdout",
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": [],
+      "completion_commit": "b4cd8d0",
+      "verified_targeted_tests": 39,
+      "verified_bundle_outputs": 34,
+      "manifest_sha256": "04b90b099fa7a2882dd66f253d6288cac69488d890e2cd323bd685210be8082d",
+      "optimizer_steps": 0,
+      "new_research_observations": 0
+    },
+    {
+      "id": "CTRL01",
+      "research_objective": "ControllerV1 trace/ties/escape/support và snapshot adapter; chưa outer runner",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "research_pipeline",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "CALIB01"
+      ],
+      "required_inputs": "Protocol21, synthetic observable fixtures, declared bank/split/source bindings",
+      "files_components": [
+        "research_tracking/reports/reference_controller_readiness_20261108.md",
+        "research_tracking/runs/reference-controller-engineering-20261108-01/README.md",
+        "research_tracking/runs/reference-controller-engineering-20261108-01/manifest.json"
+      ],
+      "implementation_objective": "ControllerV1 trace/ties/escape/support và snapshot adapter; chưa outer runner",
+      "acceptance_criteria": "36 targeted PASS trong scope đã ghi; output SHA đúng, không model/optimizer/research outcome claim",
+      "verification_steps": "Đọc source/log/XML/receipts và verify raw Git blobs sau commit; không rerun dữ liệu thật",
+      "required_artifacts": [
+        "research_tracking/reports/reference_controller_readiness_20261108.md",
+        "research_tracking/runs/reference-controller-engineering-20261108-01/README.md",
+        "research_tracking/runs/reference-controller-engineering-20261108-01/manifest.json"
+      ],
+      "estimated_effort": "Đã thực hiện08/11; không dự báo runtime training",
+      "compute_cost_category": "local CPU synthetic, cloud0",
+      "authorization_requirements": "Safe engineering được user giao; không chi cloud/fullCV/Holdout",
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": [],
+      "completion_commit": "3548f6d",
+      "verified_targeted_tests": 36,
+      "verified_bundle_outputs": 14,
+      "manifest_sha256": "78debea6db6cbc006a10249f3338b983a5bc7b9a8c173ff722af4b78f9c4016c",
+      "optimizer_steps": 0,
+      "new_research_observations": 0
+    },
+    {
+      "id": "REFINT01",
+      "research_objective": "Cross-module151PASS, source11before=after; không research effect/fullGate/CUDA",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "research_pipeline",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RESDATA01",
+        "CALIB01",
+        "CTRL01"
+      ],
+      "required_inputs": "Protocol21, synthetic observable fixtures, declared bank/split/source bindings",
+      "files_components": [
+        "research_tracking/runs/reference-pipeline-integration-20261108-01/README.md",
+        "research_tracking/runs/reference-pipeline-integration-20261108-01/manifest.json"
+      ],
+      "implementation_objective": "Cross-module151PASS, source11before=after; không research effect/fullGate/CUDA",
+      "acceptance_criteria": "151 targeted PASS trong scope đã ghi; output SHA đúng, không model/optimizer/research outcome claim",
+      "verification_steps": "Đọc source/log/XML/receipts và verify raw Git blobs sau commit; không rerun dữ liệu thật",
+      "required_artifacts": [
+        "research_tracking/runs/reference-pipeline-integration-20261108-01/README.md",
+        "research_tracking/runs/reference-pipeline-integration-20261108-01/manifest.json"
+      ],
+      "estimated_effort": "Đã thực hiện08/11; không dự báo runtime training",
+      "compute_cost_category": "local CPU synthetic, cloud0",
+      "authorization_requirements": "Safe engineering được user giao; không chi cloud/fullCV/Holdout",
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": [],
+      "completion_commit": null,
+      "verified_targeted_tests": 151,
+      "verified_bundle_outputs": 7,
+      "manifest_sha256": "aacf465cad46e612433c88452d1d76ac4970561e29a03775971430adce71105c",
+      "optimizer_steps": 0,
+      "new_research_observations": 0
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",
@@ -3053,5 +3213,6 @@
     "generic_cuda_debug_before_colab_on_modal": false,
     "automatic_paid_fallback": false,
     "source": "User07/11 Colab-first instruction"
-  }
+  },
+  "method_adoption_override_20261108": "S04-A/S05-B development đã được user giao nhóm chọn; old pending snapshots giữ lịch sử. Không expensive execution authority."
 }

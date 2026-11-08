@@ -1,5 +1,7 @@
 # Tiến độ nghiên cứu
 
+**Mốc Development08/11 mới:** [Protocol21 đã adopt](../docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md); split/refit contract76PASS, calibration39PASS, controller36PASS và [lượt kiểm chung151PASS](runs/reference-pipeline-integration-20261108-01/README.md). Các con số có overlap, không cộng thành independent experiments. Chưa sinh research corpus/train neural models hoặc chứng minh graph tốt hơn; Modal0USD. Các chữ S04/S05 pending bên dưới là snapshot trước adoption.
+
 
 ## Mốc mới08/11 — graph lifecycle, GPU-host preparation và demo closed-loop
 
