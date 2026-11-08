@@ -1,0 +1,33 @@
+Traceback (most recent call last):
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\platform.py", line 987, in uname
+    system, node, release, version, machine = infos = os.uname()
+                                                      ^^^^^^^^
+AttributeError: module 'os' has no attribute 'uname'. Did you mean: 'name'?
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\prediction_mastery_trace_worker01.py", line 219, in main
+    import pandas as pd
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\pandas\__init__.py", line 34, in <module>
+    from pandas.compat import (
+        is_numpy_dev as _is_numpy_dev,  # pyright: ignore[reportUnusedImport] # noqa: F401
+    )
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\pandas\compat\__init__.py", line 18, in <module>
+    from pandas.compat._constants import (
+    ...<8 lines>...
+    )
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\pandas\compat\_constants.py", line 20, in <module>
+    WASM = (sys.platform == "emscripten") or (platform.machine() in ["wasm32", "wasm64"])
+                                              ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\platform.py", line 1110, in machine
+    return uname().machine
+           ~~~~~^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\platform.py", line 990, in uname
+    node = _node()
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\platform.py", line 698, in _node
+    return socket.gethostname()
+           ~~~~~~~~~~~~~~~~~~^^
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\prediction_mastery_trace_worker01.py", line 193, in audit
+    raise RuntimeError('no child/network during trace')
+RuntimeError: no child/network during trace

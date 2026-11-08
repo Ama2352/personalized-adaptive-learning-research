@@ -1,0 +1,7 @@
+# RQ1 — hai native trace attempts chưa nghiệm thu
+
+Native01 local Windows metadata setupfailure trước policy/update. Native02 owned active deadline hardtimeout; cleanup Job0 accepted nhưng research bị từ chối. Pure12/14 softwarefixtures không là26researchsamples. Chỉ2/18trajectory receipts hoàn tất, nên actualupdate total UNKNOWN trong[240,2160], predict UNKNOWN trong[720,6480]. Reservation/caps không là actualtotal. Không giải nén/phân tích/repair partialgzip, CRC chưa nghiệm thu; chỉ giữSHA/reference trong inventory, raw gốc nguyênvị trí.
+
+Original60s charged56.3709122 còn3.6290878; batchSTOP, không retry/reset. Không có findings θ/pi/calibration hoặc causal/newN từ partial. Metadata02 fields/helpercounts không persist trước hardkill nên unavailable; không tự điền0. Report snapshot phân biệt source-overhead hypotheses với measurement, và đề nghị operational microbenchmark chưa chạy.
+
+Archive completed/verify chỉ xác nhận đóng gói failure bytes; không là native scientificPASS/currentGate/benchmark. Không copy lại cached3240gzip/notebooks/CSV/Gate154: source_references.json giữexactSHA vào immutablebundles/nguồn. Ownpartialgzip không copy vào bundle; SHA/size/path giữ trong frozeninventory vàsource_references, raw gốc vẫn nguyên vị trí. Copyinventory trước/sau + sourceprepost giữ nguồn đã chạy. Canonical report: ../../reports/rq1_prediction_mastery_trace_failures_20261109.md.
