@@ -1,0 +1,1873 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="39" failures="0" skipped="0" tests="40" time="12.269" timestamp="2026-11-08T12:55:46.216419+07:00" hostname="Ama"><testcase classname="tests.gkt.test_training_checkpoint" name="test_completed_weights_reload_exact_graph_predictions_no_resume" time="6.754"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_cpu_default_meta_and_constructor_rng_preserved" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_identity_drift_rejected_before_deserialize[domain]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_identity_drift_rejected_before_deserialize[nodes]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_identity_drift_rejected_before_deserialize[vocabulary]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_identity_drift_rejected_before_deserialize[graph]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_identity_drift_rejected_before_deserialize[config]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_identity_drift_rejected_before_deserialize[source]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_identity_drift_rejected_before_deserialize[recipe]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_identity_drift_rejected_before_deserialize[optimizer_saved]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_identity_drift_rejected_before_deserialize[rng_saved]" time="0.001"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_identity_drift_rejected_before_deserialize[hidden_saved]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_identity_drift_rejected_before_deserialize[resume]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_identity_drift_rejected_before_deserialize[fitted]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_identity_drift_rejected_before_deserialize[numeric_false]" time="0.001"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_identity_drift_rejected_before_deserialize[epoch]" time="0.001"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_identity_drift_rejected_before_deserialize[steps]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_identity_drift_rejected_before_deserialize[role]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_serialized_state_strict_tensor_contract[missing_key]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_serialized_state_strict_tensor_contract[extra_key]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_serialized_state_strict_tensor_contract[shape]" time="0.001"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_serialized_state_strict_tensor_contract[dtype]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_serialized_state_strict_tensor_contract[nonfinite]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_serialized_state_strict_tensor_contract[not_tensor]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_serialized_state_strict_tensor_contract[graph]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_digest_validation_checks_bound_buffer_and_payload" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_manifest_allowlist_and_rows_before_deserialize[path]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_manifest_allowlist_and_rows_before_deserialize[row_bool]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_manifest_allowlist_and_rows_before_deserialize[oversize]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_save_requires_unchanged_ordinary_trained_receipt[bounded]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_save_requires_unchanged_ordinary_trained_receipt[zero]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_save_requires_unchanged_ordinary_trained_receipt[untrained]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_save_requires_unchanged_ordinary_trained_receipt[mutated_model]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_save_requires_unchanged_ordinary_trained_receipt[training_source]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_save_requires_unchanged_ordinary_trained_receipt[bad_loss]" time="0.001"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_save_exclusive_and_bounds" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_symlink_parent_contract_is_simulated_fail_closed" time="0.001"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_partial_failure_before_complete_is_retained_and_rejected" time="0.001"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase><testcase classname="tests.gkt.test_training_checkpoint" name="test_atomic_publish_never_overwrites_existing_destination" time="0.027" /><testcase classname="tests.gkt.test_training_checkpoint" name="test_source_drift_before_load_and_actual_weights_only_cpu_call" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'&quot;">tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01.../KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def artifact(tmp_path_factory):
+        c = GKTKernelConfig(3, 2, 2, 2, 'static', 'concept', True, True)
+        binding = GKTBinding('toy-checkpoint-not-research-domain', 'a' * 64, ('A', 'B', 'C'), 'concept')
+        adjacency = torch.tensor([[0., .5, 0.], [.2, 0., .3], [0., .4, 0.]], dtype=torch.float64, device='cpu')
+        model = GKTStaticRecurrentCandidate(c, binding, adjacency, recipe_id=RECIPE_ID, mlp_hidden_dim=3,
+            normalization='none', dropout=0, initial_state_policy='zeros', gru_variant=GRU_VARIANT)
+        settings = tr.GKTTrainingSettings('adam', .01, (.8, .9), 1e-7, 0., .5,
+                                          'mean_bce_on_explicit_loss_mask', 'float64')
+        optimizer = torch.optim.Adam(model.parameters(), lr=settings.lr, betas=settings.betas, eps=settings.eps,
+                                      weight_decay=settings.weight_decay, foreach=False, fused=False)
+        ids = torch.tensor([[0, 1, 2, 0]], device='cpu'); mask = torch.ones_like(ids, dtype=torch.bool)
+        batch = tr.bind_train_batch(query_ids=ids, responses=torch.tensor([[0, 1, 1, 0]], device='cpu'),
+            event_valid_mask=mask, loss_mask=mask, initial_state=model.initial_state(1, binding=binding, graph_sha256=model.graph_sha256),
+            learner_ids=('handmade-one',), source_rows=torch.tensor([[1, 2, 3, 4]], device='cpu'),
+            global_ranks=torch.tensor([[0, 1, 2, 3]], device='cpu'), binding=binding,
+            graph_sha256=model.graph_sha256, recipe_sha256=model.recipe_sha256,
+            initial_state_model_sha256=tr.model_digest(model), role=tr.TRAIN_ROLE, synthetic_only=True,
+            source_sha256=tr.source_identity())
+        result = tr.train_gkt_batch(model, optimizer, batch, settings=settings,
+            budget=tr.GKTStepBudget(4, 16, 60., 0, 0, time.perf_counter()))
+        parent = tmp_path_factory.mktemp('weights')
+&gt;       saved = cp.save_engineering_weights(parent / 'completed', model, result,
+            approval_reference='USER_GKT04_TOY_ENGINEERING_NOT_FITTED', max_checkpoint_bytes=1_000_000)
+
+tests\gkt\test_training_checkpoint.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\training_checkpoint.py:197: in save_engineering_weights
+    _publish(directory, 'weights.pt', payload)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+directory = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed')
+name = 'weights.pt'
+payload = b'PK\x03\x04\x00\x00\x08\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x12\x00ar...0%\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00PK\x05\x06\x00\x00\x00\x00!\x00!\x00\xf8\x07\x00\x00\xb8\x1d\x00\x00\x00\x00'
+
+    def _publish(directory, name, payload):
+        """Atomic no-clobber link; failure giữ pending/partial, không replace overwrite."""
+        temporary = directory / (name + '.pending')
+        with temporary.open('xb') as stream:
+            stream.write(payload); stream.flush(); os.fsync(stream.fileno())
+        if _read(temporary, len(payload)) != payload:
+            raise ValueError('postwrite byte verification failed')
+&gt;       os.link(temporary, directory / name)  # Atomic creation, fails if destination exists.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt.pending' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\parallel-gkt-checkpoint-20261108-01\\tmp\\weights0\\completed\\weights.pt'
+
+src\knowledge_tracing\gkt\training_checkpoint.py:77: PermissionError</error></testcase></testsuite></testsuites>

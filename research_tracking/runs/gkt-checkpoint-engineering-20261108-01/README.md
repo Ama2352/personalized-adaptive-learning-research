@@ -1,0 +1,3 @@
+# GKT weights-only checkpoint engineering — 08/11/2026
+
+Trial02:40PASS,1new Adam update; trial01:1PASS/39fixtureERROR vì hard-link WinError5,1update. Default/escalated owned-file controls phân biệt execution permission, không source bugfix. Giữ nguyên source/test hai lượt,24 snapshots, raw logs/JUnit/ledgers, contract và successful metadata. Tổng2/4updates, conservative24,609858/60giây. Parent actual review, không dựng independent-agent verdict. Không optimizer/RNG/hidden-state restore/resume/fitted research/epoch/corpus/adapter/S04S05 adoption. Binaries giữ ở artifact paths, bundle chỉ SHA/size references. Không sửa sau closure.
