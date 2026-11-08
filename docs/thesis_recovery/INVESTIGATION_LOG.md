@@ -505,3 +505,5 @@ Gói GVHD mới:17cặp nguồn/bản sao SHA kiểm,158links kiểm trước b�
 ### 08/11 — A0 runner/Method24 pure verification
 
 Root ONE actualpytest dispatch accepted101PASS after2controller failures beforepytest (platformAPI missing, -S hidvenvsitepackages); sourcebefore/after6pins unchanged. Native/solver/model0, noheavyimports/actualPopenattempt. 3.6554365controllercum/30, conservativetoolbound4.2683491/30; explicitnarrowWinAPItestfixture, cooperativeTimer nothardquota. NewNaN/Infunsupported serializationfix covered, selectedepoch owncheckpoint/nullnonbest andphaseprivacy fixed. Bundle44outputs closed. Canonicalpostcalibration reportingmetrics stillmissing, noactualfit/actualconfidences/noRQcompletion. DatedGVHDsnapshot2e63cd9 unchanged; tracking4indexes refreshed separately.
+
+Codecommit a935008 giữ6testedsource pins exactGit. RawGit archivecheck phát hiện2ignoredlogs thiếu trong commit; force-add đúngexecution.log+input-22__pytest.log ở221d518, không sửa nội dung. Verify221d51844/44outputs+manifest PASS; integritycounter2741→2785, không N/tiến độ. Repo không còn WIP saubatch; mainnext canonicalcalibratedmetrics+freshnativeexecutionprofile,0researchfits/Modal.
