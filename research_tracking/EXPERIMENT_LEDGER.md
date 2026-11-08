@@ -12,6 +12,12 @@ Mốc vận hành hiện tại là **Linux Gate24 771 PASS, 0 fail/error/skip** 
 
 **Lịch sử giữ nguyên:** Windows Gate22 768 PASS là **STALE sau test-only `dd80006`**; Gate23 763 PASS/5 FAIL và các failure loader/transport vẫn giữ verdict gốc. Các dòng “current”, “pending archive”, “chưa Linux Gate/mainworker” trong snapshot cũ phía dưới mô tả thời điểm trước mốc này. GPU09 còn **actual CUDA pending**; immutable image, CUDA lifecycle/resume và protocol S01/S04/S05 chưa được đóng bằng CPU proof. Không đánh dấu RQ hoàn tất hoặc GPU ready.
 
+## Bổ sung08/11 — GKT04 và bản thảo C13 đã đóng
+
+- **GKT04 — `2d8aaf8`:** [weights-only checkpoint report](reports/gkt_checkpoint_readiness_20261108.md), [bundle60outputs](runs/gkt-checkpoint-engineering-20261108-01/README.md), [manifest](runs/gkt-checkpoint-engineering-20261108-01/manifest.json). Final **40 PASS/0 fail/error/skip**; **2 actual Adam updates tổng hai trials** (1/trial), conservative **24,609858s ≤ 60s**, toàn bộ60outputSHA và source/test SHA đã kiểm lại. Trial01 vẫn **1PASS/39fixtureERROR** do quyền hard-link `WinError5`; trial02 cùng source/test được chạy trong bounded process đã được phép. Không đổi failure thành PASS hoặc gọi đây là source bugfix.
+- **Phạm vi GKT:** GKT03 (`b67eba0`) vẫn là one train-batch/45tests/4updates/32outputs. GKT04 là followup hoàn tất weights-only save/load riêng, không thay giới hạn lịch sử của GKT03. Không optimizer/RNG/hidden-state restoration, resume, epoch/corpus, refit/selection hoặc fitted inference; scientific S04/S05 và baseline nghiên cứu đầy đủ vẫn pending.
+- **WRITE02 hiện tại — `1b3d3f9`:** [bản thảo RQ1–RQ2](reports/THESIS_RQ12_DIAGNOSTIC_RESULTS_DRAFT_20261108.md) và [source map](reports/THESIS_RQ12_DIAGNOSTIC_RESULTS_DRAFT_20261108.sources.json) có **13 claims/80 JSON pointers/21 inputs** được kiểm. C13 chỉ tích hợp observability reproduction: **944/964 P changes giữ full preview**, **2/116 P-same rows đổi preview**, **22/1.080 full-preview changes**, actual shared queries1.080keys; ba seed families, **new independent N=0**. C01–C12/16inputs cũ và snapshot `d30dafe` giữ nguyên lịch sử; không backfill trace, causal/served-action/calibration claim hoặc RQ completion. Mốc Linux Gate24/CPU worker phía trên giữ nguyên.
+
 ## Hiện hành08/11 — vận hành Linux CPU, không thí nghiệm efficacy
 
 Đã kiểm124output SHA của hai bundle mới. Các mục Gate21/pending archive hoặc resolution-only phía sau là snapshot lịch sử; giữ nguyên các hàng baseline/thí nghiệm đã ghi.

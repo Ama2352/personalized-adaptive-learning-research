@@ -1838,6 +1838,42 @@
         "194 output là hồ sơ/source/log nhỏ; 4 binary nằm ngoài Git trong canonical run, 9 copy được hash/size check, không model hoặc Parquet load để xác minh.",
         "CPU caps 2 steps/120 train seconds/300 wall seconds/RSS 2 GiB; quan sát process scope không phải hard quota hoặc dự báo CUDA/cost."
       ]
+    },
+    {
+      "id": "gkt-checkpoint-engineering-20261108-01",
+      "model": "GKT weights-only checkpoint engineering",
+      "rq": [],
+      "evidence_role": "weights_only_train_step_engineering_not_resume_or_research_fitted",
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED_OUTPUT_INTEGRITY",
+      "output_count": 60,
+      "manifest_sha256": "0e0f0a19e466fd9c334e7fc279a1ebe4669babd0c2b8dd000542c009207b4cac",
+      "completion_commit": "2d8aaf8",
+      "verified_targeted_tests": 40,
+      "optimizer_steps": 2,
+      "optimizer_limit": 4,
+      "cumulative_controller_seconds_conservative": 24.609858000010718,
+      "cap_seconds": 60,
+      "evidence_refs": [
+        "runs/gkt-checkpoint-engineering-20261108-01/README.md",
+        "runs/gkt-checkpoint-engineering-20261108-01/manifest.json",
+        "reports/gkt_checkpoint_readiness_20261108.md"
+      ],
+      "checkpoint_flags": {
+        "weights_only": true,
+        "optimizer_saved": false,
+        "rng_saved": false,
+        "hidden_state_saved": false,
+        "resume_supported": false,
+        "fitted_research_model": false,
+        "completion_unit": "train_step"
+      },
+      "limitations": [
+        "Trial01 giữ1PASS/39fixtureERROR do hard-link WinError5; trial02 40PASS cùng source/test sau exact process permission approval. Không relabel failure hoặc fake source bugfix.",
+        "Weights/buffers only, COMPLETE-last/no-clobber; không optimizer/RNG/hidden-state restoration hoặc interruption resume.",
+        "Cooperative identity/source bindings không chống forged/resealed caller metadata; không production untrusted-pickle certificate.",
+        "Không epoch/corpus/refit/selection/fitted inference, scientific S04/S05/author parity/required baseline completion hoặc RQ efficacy."
+      ]
     }
   ]
 }
