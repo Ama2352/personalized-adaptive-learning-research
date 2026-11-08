@@ -1,5 +1,7 @@
 # Tiến độ nghiên cứu
 
+**Cập nhật mới nhất:** [báo cáo GVHD hiện hành](reports/BAO_CAO_TIEN_DO_GVHD_20261108.md) đã phản ánh collector/native12, AKT research-data và notebook có outputs. RQ1/RQ2 vẫn diagnostic/pilot, RQ3 chưa research-fitted comparison; không dùng testcounts làm phần trăm nghiên cứu.
+
 **Mốc Development08/11 mới:** [Protocol21 đã adopt](../docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md); split/refit contract76PASS, calibration39PASS, controller36PASS và [lượt kiểm chung151PASS](runs/reference-pipeline-integration-20261108-01/README.md). Các con số có overlap, không cộng thành independent experiments. Chưa sinh research corpus/train neural models hoặc chứng minh graph tốt hơn; Modal0USD. Các chữ S04/S05 pending bên dưới là snapshot trước adoption.
 
 

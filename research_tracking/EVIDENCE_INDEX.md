@@ -1,5 +1,7 @@
 # Chỉ mục bằng chứng
 
+**Mốc hiện hành:** [báo cáo GVHD](reports/BAO_CAO_TIEN_DO_GVHD_20261108.md) và [notebook cached evidence](../notebooks/thesis_evidence_report.ipynb). Collector45mock+12native smoke (chưa corpus-ready), AKT research-data25pure và reference guard67targeted có bundle/source riêng; không thay các snapshot lịch sử hoặc báo RQ hoàn tất.
+
 
 ## Mốc mới08/11 — graph lifecycle, GPU-host preparation và demo closed-loop
 

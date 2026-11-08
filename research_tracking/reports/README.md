@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**Báo cáo GVHD hiện hành:** [tiến độ08/11](BAO_CAO_TIEN_DO_GVHD_20261108.md) / [source/revision](BAO_CAO_TIEN_DO_GVHD_20261108.json). [Notebook báo cáo](../../notebooks/thesis_evidence_report.ipynb) đã có outputs cached; [integrity bổ sung](thesis_evidence_notebook_integrity_20261108.md), chưa Jupyter-kernel/visual QA.
+
 **Cập nhật sau chỉ thị user:** [Protocol21 Development đã được chọn](../../docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md), supersede trạng thái chờ phương pháp trong snapshot bên dưới; không cấp quyền chi Modal/fullCV/Holdout.
 
 - [Research-data contract](simulator_research_data_contract_20261108.md):76PASS, chưa corpus generator.

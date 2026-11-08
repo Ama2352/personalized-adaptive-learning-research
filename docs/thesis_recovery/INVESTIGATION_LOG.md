@@ -439,3 +439,10 @@ Chuyển source ZIP c934 sang Colab bị automatic approval review từ chối v
 ### 08/11 — Research data/calibration/controller local đã kiểm và commit
 
 RESDATA01 76PASS(afeaa72), CALIB01 39PASS(b4cd8d0), CTRL01 36PASS(3548f6d); rawGit14+36+34outputs đã kiểm. Cross-module151PASS/1,1700695s≤30 với11source/test/protocol SHA trước=sau; không cộng repeated testcounts. Giữ exact snapshots intermediate8f controller trong calibration bundle; currenta955 đã qua cross-suite. Independent reviewer phát hiện float-distance tie và recent-state inconsistency; đã sửa bằng tolerance1e-12/counter-chapter guards cùng regression. Research corpus chưa sinh, neural research fits chưa có, outerrunner chưa nối; không tăng statusRQ vì tests. Không Modal/fullCV/Holdout/remote tiếp tục sau export rejection.
+
+
+### 08/11 — Báo cáo GVHD hiện hành, notebook và native collector
+
+User yêu cầu tiếp tục RQ và duy trì report để trao đổi GVHD. Đã cập nhật cùng BAO_CAO_TIEN_DO_GVHD_20261108.md/.json revision2; trước sửa xác nhận exact Git e4a44e9 cho cả hai bytes, giữ local backups. Report kiểm16inputs/18links/203bundleoutputs, không gửi ra ngoài. Notebook commit99e2c24 có outputs7cells/14claims/104pointers; integrity3RED→12GREEN và regenerated cùng7outputs, không kernel/visualQA hoặc plotpublication. Hai bundle35outputs rawGitverified.
+
+Reference boundaryfa05b6f67PASS/4RED giữ nguyên; AKT-data149279125PASS/0Torch; collector5caffbd45mockPASS và actualnative12attempts/returns/1,3233694s≤30 (roles8/2/2, missing76/82/82items), chưa researchcorpusready. Thêm112rawGitoutputs của3batch và35notebookoutputs, tổngcounter2265bao gồm91batchtrước; counterchỉintegrity, khôngN/tiếnđộRQ. Next codeguardresearch/firstcorpusfreeze và RQ2source-formulareadoutcounterexample. Colabexportvẫnchờpermissioncụthể;0Modal/fullCV/Holdout.

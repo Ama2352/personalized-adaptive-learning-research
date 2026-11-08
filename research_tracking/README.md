@@ -1,5 +1,7 @@
 # Theo dõi bằng chứng nghiên cứu KLTN
 
+**Báo cáo tiến độ để trao đổi GVHD:** [bản hiện hành08/11](reports/BAO_CAO_TIEN_DO_GVHD_20261108.md), [nguồn/revision](reports/BAO_CAO_TIEN_DO_GVHD_20261108.json) và [notebook có outputs](../notebooks/thesis_evidence_report.ipynb). Duy trì một bản báo cáo hiện hành; lịch sử trong Git và run bundles, không tự gửi ra ngoài.
+
 **Protocol Development hiện hành:** [S04-A/S05-B V1](../docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md) đã được nhóm chọn theo quyền user giao ngày08/11. Các snapshot chờ S04/S05 cũ được giữ làm lịch sử; việc chọn phương pháp không cấp quyền chi Modal, fullCV hoặc Holdout.
 
 **Điểm bắt đầu cho người viết báo cáo:** [Bản đồ repository](../docs/REPOSITORY_MAP.md) và [mục lục báo cáo](reports/README.md). `reports/` là nơi thống nhất bản phân tích/số liệu tổng hợp; `runs/` là bundles bằng chứng theo run. Hai phần phục vụ diễn giải và kiểm chứng, chưa phải bản luận văn hoàn chỉnh. Output bootstrap baseline đã chuyển từ root `reports/` vào đây, có [hồ sơ relocation](reports/report_relocation_20261107.json).

@@ -3179,12 +3179,172 @@
       "authorization_requirements": "Safe engineering được user giao; không chi cloud/fullCV/Holdout",
       "status": "COMPLETED_ENGINEERING_ONLY",
       "blockers": [],
-      "completion_commit": null,
+      "completion_commit": "4033cc9",
       "verified_targeted_tests": 151,
       "verified_bundle_outputs": 7,
       "manifest_sha256": "aacf465cad46e612433c88452d1d76ac4970561e29a03775971430adce71105c",
       "optimizer_steps": 0,
       "new_research_observations": 0
+    },
+    {
+      "id": "CALIB02",
+      "research_objective": "Guard đủ84results/type/rank trước aggregate; RED4→GREEN67, không thay solver",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "research_pipeline",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "CALIB01"
+      ],
+      "required_inputs": "Protocol21 và source/receipt của batch đã ghim SHA",
+      "files_components": [
+        "research_tracking/reports/response_calibration_boundary_20261108.md",
+        "research_tracking/runs/response-calibration-boundary-20261108-01/README.md",
+        "research_tracking/runs/response-calibration-boundary-20261108-01/manifest.json"
+      ],
+      "implementation_objective": "Guard đủ84results/type/rank trước aggregate; RED4→GREEN67, không thay solver",
+      "acceptance_criteria": "Guard đủ84results/type/rank trước aggregate; RED4→GREEN67, không thay solver; outputSHA và rawGit blobs đúng, giữ failures, không final RQ claim",
+      "verification_steps": "Đọc source/receipts/logs/manifest và verify rawGit sau commit, không rerun model",
+      "required_artifacts": [
+        "research_tracking/reports/response_calibration_boundary_20261108.md",
+        "research_tracking/runs/response-calibration-boundary-20261108-01/README.md",
+        "research_tracking/runs/response-calibration-boundary-20261108-01/manifest.json"
+      ],
+      "estimated_effort": "Đã thực hiện08/11, không training runtime forecast",
+      "compute_cost_category": "local CPU, no cloud",
+      "authorization_requirements": "Safe engineering; không paid/fullCV/Holdout",
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": [],
+      "completion_commit": "fa05b6f",
+      "verified_targeted_checks": 67,
+      "verified_bundle_outputs": 26,
+      "manifest_sha256": "f1f44e1d8d48ee50548a0d50a4444caa68c2b77ccc8a2e490d0c06b77453e637",
+      "optimizer_steps": 0,
+      "new_research_effect_estimates": 0
+    },
+    {
+      "id": "AKTDATA01",
+      "research_objective": "Geometry/target ledger4research scopes; không optimizer hoặc trainer",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "research_pipeline",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RESDATA01"
+      ],
+      "required_inputs": "Protocol21 và source/receipt của batch đã ghim SHA",
+      "files_components": [
+        "research_tracking/reports/akt_research_data_readiness_20261108.md",
+        "research_tracking/runs/akt-research-data-engineering-20261108-01/README.md",
+        "research_tracking/runs/akt-research-data-engineering-20261108-01/manifest.json"
+      ],
+      "implementation_objective": "Geometry/target ledger4research scopes; không optimizer hoặc trainer",
+      "acceptance_criteria": "Geometry/target ledger4research scopes; không optimizer hoặc trainer; outputSHA và rawGit blobs đúng, giữ failures, không final RQ claim",
+      "verification_steps": "Đọc source/receipts/logs/manifest và verify rawGit sau commit, không rerun model",
+      "required_artifacts": [
+        "research_tracking/reports/akt_research_data_readiness_20261108.md",
+        "research_tracking/runs/akt-research-data-engineering-20261108-01/README.md",
+        "research_tracking/runs/akt-research-data-engineering-20261108-01/manifest.json"
+      ],
+      "estimated_effort": "Đã thực hiện08/11, không training runtime forecast",
+      "compute_cost_category": "local CPU, no cloud",
+      "authorization_requirements": "Safe engineering; không paid/fullCV/Holdout",
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": [],
+      "completion_commit": "1492791",
+      "verified_targeted_checks": 25,
+      "verified_bundle_outputs": 31,
+      "manifest_sha256": "7cb6a453578f9d1acaf4ee69f2a1ab607e9f116eacd01a7af8361174af1c15b5",
+      "optimizer_steps": 0,
+      "new_research_effect_estimates": 0
+    },
+    {
+      "id": "RESCOL01",
+      "research_objective": "Collector riêng45mockPASS+native12events; thiếu coverage nên chưa corpus-ready",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "research_pipeline",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RESDATA01"
+      ],
+      "required_inputs": "Protocol21 và source/receipt của batch đã ghim SHA",
+      "files_components": [
+        "research_tracking/reports/simulator_research_collection_readiness_20261108.md",
+        "research_tracking/runs/simulator-research-collection-engineering-20261108-01/README.md",
+        "research_tracking/runs/simulator-research-collection-engineering-20261108-01/manifest.json"
+      ],
+      "implementation_objective": "Collector riêng45mockPASS+native12events; thiếu coverage nên chưa corpus-ready",
+      "acceptance_criteria": "Collector riêng45mockPASS+native12events; thiếu coverage nên chưa corpus-ready; outputSHA và rawGit blobs đúng, giữ failures, không final RQ claim",
+      "verification_steps": "Đọc source/receipts/logs/manifest và verify rawGit sau commit, không rerun model",
+      "required_artifacts": [
+        "research_tracking/reports/simulator_research_collection_readiness_20261108.md",
+        "research_tracking/runs/simulator-research-collection-engineering-20261108-01/README.md",
+        "research_tracking/runs/simulator-research-collection-engineering-20261108-01/manifest.json"
+      ],
+      "estimated_effort": "Đã thực hiện08/11, không training runtime forecast",
+      "compute_cost_category": "local CPU, no cloud",
+      "authorization_requirements": "Safe engineering; không paid/fullCV/Holdout",
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": [],
+      "completion_commit": "5caffbd",
+      "verified_targeted_checks": 45,
+      "verified_bundle_outputs": 55,
+      "manifest_sha256": "2a893d00706b6ea6d39d37fdfc3e67b238f8b09bd57c4377df2415943e7c3d91",
+      "optimizer_steps": 0,
+      "new_research_effect_estimates": 0
+    },
+    {
+      "id": "WRITE03",
+      "research_objective": "Notebook cached results7cells/28inputs/14claims/104pointers; chưa kernel/visualQA",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "writing",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "WRITE02"
+      ],
+      "required_inputs": "Protocol21 và source/receipt của batch đã ghim SHA",
+      "files_components": [
+        "research_tracking/reports/thesis_evidence_notebook_integrity_20261108.md",
+        "research_tracking/runs/thesis-evidence-notebook-20261108-02/README.md",
+        "research_tracking/runs/thesis-evidence-notebook-20261108-02/manifest.json"
+      ],
+      "implementation_objective": "Notebook cached results7cells/28inputs/14claims/104pointers; chưa kernel/visualQA",
+      "acceptance_criteria": "Notebook cached results7cells/28inputs/14claims/104pointers; chưa kernel/visualQA; outputSHA và rawGit blobs đúng, giữ failures, không final RQ claim",
+      "verification_steps": "Đọc source/receipts/logs/manifest và verify rawGit sau commit, không rerun model",
+      "required_artifacts": [
+        "research_tracking/reports/thesis_evidence_notebook_integrity_20261108.md",
+        "research_tracking/runs/thesis-evidence-notebook-20261108-02/README.md",
+        "research_tracking/runs/thesis-evidence-notebook-20261108-02/manifest.json"
+      ],
+      "estimated_effort": "Đã thực hiện08/11, không training runtime forecast",
+      "compute_cost_category": "local CPU, no cloud",
+      "authorization_requirements": "Safe engineering; không paid/fullCV/Holdout",
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": [],
+      "completion_commit": "99e2c24",
+      "verified_targeted_checks": 12,
+      "verified_bundle_outputs": 28,
+      "manifest_sha256": "bb53649474ad5ec3b2d782535a49bff92fc9a8a7417f4678bcf6c4f18d4eb9c5",
+      "optimizer_steps": 0,
+      "new_research_effect_estimates": 0
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",
