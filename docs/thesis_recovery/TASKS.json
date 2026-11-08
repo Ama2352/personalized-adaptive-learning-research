@@ -648,9 +648,21 @@
       "authorization_requirements": "SAFE_ENGINEERING_AFTER_INSTRUCTION",
       "status": "IN_PROGRESS",
       "blockers": [
-        "Chưa có UI"
+        "Đã có readonly verified artifact UI DEMO01/DEMO02; live fitted model/graph/confidence và đầy đủ proposal acceptance còn thiếu, không hoàn tất T21 hoặc RQ3."
       ],
-      "execution_owner": "Codex"
+      "execution_owner": "Codex",
+      "historical_tracking_notes": [
+        {
+          "prior_blockers": [
+            "Chưa có UI"
+          ],
+          "reason": "DEMO01 và DEMO02 đã cung cấp partial E11 UI; cập nhật blocker, không nghiệm thu toàn T21."
+        }
+      ],
+      "current_evidence_refs": [
+        "research_tracking/reports/demo_closed_loop_readiness_20261108.md",
+        "research_tracking/runs/demo-closed-loop-engineering-20261108-01/README.md"
+      ]
     },
     {
       "id": "T22",
@@ -2872,7 +2884,147 @@
       "completion_commit": "4a256a4",
       "verified_bundle_outputs": 37,
       "manifest_sha256": "76d75fa826c98b318e0712cb32020f9d41b3795f19b9316771cf24bc6251ed37",
+      "optimizer_steps": 0,
+      "followup_scope_note": "GRAPH04 nối toy train/selection/checkpoint/export; chỉ scope followup engineering, không sửa giới hạn lịch sử của GRAPH03 hoặc gọi actual02 toàn suite PASS. S04/S05/calibration/fullcorpus/freshGate/CUDA còn mở."
+    },
+    {
+      "id": "GRAPH04",
+      "research_objective": "Nối graph prototype vào shared lifecycle bằng consume-once batch adapter và kiểm toy train–selection–checkpoint/reload/export",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "model_engineering",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GRAPH03"
+      ],
+      "required_inputs": "SHA-bound committed reports/closed manifests; không dữ liệu nghiên cứu mới",
+      "files_components": [
+        "research_tracking/reports/akt_graph_training_readiness_20261108.md",
+        "research_tracking/runs/akt-graph-training-engineering-20261108-01/README.md",
+        "research_tracking/runs/akt-graph-training-engineering-20261108-01/manifest.json"
+      ],
+      "implementation_objective": "Nối graph prototype vào shared lifecycle bằng consume-once batch adapter và kiểm toy train–selection–checkpoint/reload/export",
+      "acceptance_criteria": "Actual02 vẫn45PASS/1FAIL, sáu graph tests PASS; inventory fixture sửa riêng và kiểm một direct test-function bằng stored artifact/0fit, không full-suite PASS mới.34adapter purePASS và8callback purePASS là hai scopes riêng.4actual optimizer reservations/body returns tổng base+graph complete+partial;46.6888821s≤60. Complete graph1update/8targets, selection4=3scored+1OOV; strict reload delta0. Partial graph1update không checkpoint/export/COMPLETE. Không research fitted/causal/benefit/S04/S05/confidence calibration/context100/fullGate/CUDA/resume.",
+      "verification_steps": "Review raw receipts/source snapshots và outputSHA; không rerun model/tests để tracking",
+      "required_artifacts": [
+        "research_tracking/reports/akt_graph_training_readiness_20261108.md",
+        "research_tracking/runs/akt-graph-training-engineering-20261108-01/README.md",
+        "research_tracking/runs/akt-graph-training-engineering-20261108-01/manifest.json"
+      ],
+      "estimated_effort": "Deliverable engineering08/11; không ngoại suy runtime nghiên cứu",
+      "compute_cost_category": "LocalCPU engineering; không GPU/paid/cloud execution trong batch",
+      "authorization_requirements": "User safe bounded engineering; không approval S01/S04/S05, realdata/fullCV/Holdout/Modal",
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": [],
+      "evidence_refs": [
+        "research_tracking/reports/akt_graph_training_readiness_20261108.md",
+        "research_tracking/runs/akt-graph-training-engineering-20261108-01/README.md",
+        "research_tracking/runs/akt-graph-training-engineering-20261108-01/manifest.json"
+      ],
+      "completion_commit": "f8e9ab0",
+      "verified_bundle_outputs": 89,
+      "manifest_sha256": "f8b66f4d9de791bb645a3b2ae49924ef0deca01ba8263df813a9ecd2b2361e2d",
+      "completion_scope": "Actual02 vẫn45PASS/1FAIL, sáu graph tests PASS; inventory fixture sửa riêng và kiểm một direct test-function bằng stored artifact/0fit, không full-suite PASS mới.34adapter purePASS và8callback purePASS là hai scopes riêng.4actual optimizer reservations/body returns tổng base+graph complete+partial;46.6888821s≤60. Complete graph1update/8targets, selection4=3scored+1OOV; strict reload delta0. Partial graph1update không checkpoint/export/COMPLETE. Không research fitted/causal/benefit/S04/S05/confidence calibration/context100/fullGate/CUDA/resume.",
+      "actual_suite_tests": 46,
+      "actual_suite_passed": 45,
+      "actual_suite_failed": 1,
+      "separate_corrected_function_passed": 1,
+      "optimizer_reservations": 4,
+      "optimizer_body_returns": 4,
+      "resume_supported": false
+    },
+    {
+      "id": "GPU09HOST",
+      "research_objective": "Chuẩn bị fresh-host discovery/warm hidden audit/cold bootstrap/packet validator fail-closed, không thực thi GPU-host",
+      "rq": [],
+      "workstream": "gpu_readiness",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GPU09DISC"
+      ],
+      "required_inputs": "SHA-bound committed reports/closed manifests; không dữ liệu nghiên cứu mới",
+      "files_components": [
+        "research_tracking/reports/akt_gpu_host_preparation_20261108.md",
+        "research_tracking/runs/akt-gpu-host-preparation-20261108-01/README.md",
+        "research_tracking/runs/akt-gpu-host-preparation-20261108-01/manifest.json"
+      ],
+      "implementation_objective": "Chuẩn bị fresh-host discovery/warm hidden audit/cold bootstrap/packet validator fail-closed, không thực thi GPU-host",
+      "acceptance_criteria": "Local final warm20/generic9/cold24/packet41 methods PASS là bốn scopes riêng, không cộng thành fullGate/independent observations.478Requires-Dist rows:46active/432inactive dựa historical CPU markers và synthetic selected-tag union; không actual target tags/wheel bytes/install/CUDA proof.0model/optimizer/remote/install/hardware change trong batch. Fresh-host discovery/startup/hidden audit hoặc cold install/actual CUDA/public worker vẫn pending.",
+      "verification_steps": "Review raw receipts/source snapshots và outputSHA; không rerun model/tests để tracking",
+      "required_artifacts": [
+        "research_tracking/reports/akt_gpu_host_preparation_20261108.md",
+        "research_tracking/runs/akt-gpu-host-preparation-20261108-01/README.md",
+        "research_tracking/runs/akt-gpu-host-preparation-20261108-01/manifest.json"
+      ],
+      "estimated_effort": "Deliverable engineering08/11; không ngoại suy runtime nghiên cứu",
+      "compute_cost_category": "LocalCPU engineering; không GPU/paid/cloud execution trong batch",
+      "authorization_requirements": "User safe bounded engineering; không approval S01/S04/S05, realdata/fullCV/Holdout/Modal",
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": [],
+      "evidence_refs": [
+        "research_tracking/reports/akt_gpu_host_preparation_20261108.md",
+        "research_tracking/runs/akt-gpu-host-preparation-20261108-01/README.md",
+        "research_tracking/runs/akt-gpu-host-preparation-20261108-01/manifest.json"
+      ],
+      "completion_commit": "c1d93ec",
+      "verified_bundle_outputs": 102,
+      "manifest_sha256": "3ed52942e2b17ad665848e8be240afc32434bd03a451cad744180d7e50acc305",
+      "completion_scope": "Local final warm20/generic9/cold24/packet41 methods PASS là bốn scopes riêng, không cộng thành fullGate/independent observations.478Requires-Dist rows:46active/432inactive dựa historical CPU markers và synthetic selected-tag union; không actual target tags/wheel bytes/install/CUDA proof.0model/optimizer/remote/install/hardware change trong batch. Fresh-host discovery/startup/hidden audit hoặc cold install/actual CUDA/public worker vẫn pending.",
+      "actual_fresh_gpu_host": false,
+      "actual_install": false,
       "optimizer_steps": 0
+    },
+    {
+      "id": "DEMO02",
+      "research_objective": "Cùng trang chọn trajectory/common-prefix/first-break, hiển thị source-local CID ranking và bảy negatives từ artifact đã committed",
+      "rq": [
+        "demo"
+      ],
+      "workstream": "demo",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "DEMO01",
+        "RQDIAG05"
+      ],
+      "required_inputs": "SHA-bound committed reports/closed manifests; không dữ liệu nghiên cứu mới",
+      "files_components": [
+        "research_tracking/reports/demo_closed_loop_readiness_20261108.md",
+        "research_tracking/runs/demo-closed-loop-engineering-20261108-01/README.md",
+        "research_tracking/runs/demo-closed-loop-engineering-20261108-01/manifest.json"
+      ],
+      "implementation_objective": "Cùng trang chọn trajectory/common-prefix/first-break, hiển thị source-local CID ranking và bảy negatives từ artifact đã committed",
+      "acceptance_criteria": "83PASS/0fail/error/skip, cumulative36.1590131s≤60; trial01 47PASS/36HTTP failures WinError10013 giữ nguyên, trial02 cùng source. UI QA firstbreak61/membershipbreak27/empty negative/back-to-preview; actual mobile390×844 không pageoverflow,0consoleerror; desktop filename1366 thực tế1037×683.0model/optimizer/replay/newN. POST-HOC/CID-only/native Bscore noncalibrated/Pafterselect/package≠edges; không pairedΔP sau divergence, live fitted personalization hoặc RQ completion.",
+      "verification_steps": "Review raw receipts/source snapshots và outputSHA; không rerun model/tests để tracking",
+      "required_artifacts": [
+        "research_tracking/reports/demo_closed_loop_readiness_20261108.md",
+        "research_tracking/runs/demo-closed-loop-engineering-20261108-01/README.md",
+        "research_tracking/runs/demo-closed-loop-engineering-20261108-01/manifest.json"
+      ],
+      "estimated_effort": "Deliverable engineering08/11; không ngoại suy runtime nghiên cứu",
+      "compute_cost_category": "LocalCPU engineering; không GPU/paid/cloud execution trong batch",
+      "authorization_requirements": "User safe bounded engineering; không approval S01/S04/S05, realdata/fullCV/Holdout/Modal",
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": [],
+      "evidence_refs": [
+        "research_tracking/reports/demo_closed_loop_readiness_20261108.md",
+        "research_tracking/runs/demo-closed-loop-engineering-20261108-01/README.md",
+        "research_tracking/runs/demo-closed-loop-engineering-20261108-01/manifest.json"
+      ],
+      "completion_commit": "b9eaaab",
+      "verified_bundle_outputs": 66,
+      "manifest_sha256": "fa6041e6b79cdd5f57a7dfb2b35152c7625bc38fc802fc2416c55ffbf10efa02",
+      "completion_scope": "83PASS/0fail/error/skip, cumulative36.1590131s≤60; trial01 47PASS/36HTTP failures WinError10013 giữ nguyên, trial02 cùng source. UI QA firstbreak61/membershipbreak27/empty negative/back-to-preview; actual mobile390×844 không pageoverflow,0consoleerror; desktop filename1366 thực tế1037×683.0model/optimizer/replay/newN. POST-HOC/CID-only/native Bscore noncalibrated/Pafterselect/package≠edges; không pairedΔP sau divergence, live fitted personalization hoặc RQ completion.",
+      "source_commit": "22b3522",
+      "verified_targeted_tests": 83,
+      "optimizer_steps": 0,
+      "new_independent_N": 0
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",
