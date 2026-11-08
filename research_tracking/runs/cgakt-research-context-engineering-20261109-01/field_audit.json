@@ -1,0 +1,69 @@
+{
+  "kind": "READ_ONLY_SOURCE_DATACLASS_FIELD_AUDIT_NOT_RUNTIME_TEST",
+  "scope_vi": "Đọc định nghĩa source, không import/AST execution/model/test",
+  "reason": "CausalSequenceInputs không có labels; sửa exacttype và native item-only schema, không getattr fallback",
+  "definitions": {
+    "ResearchPhaseData": [
+      "scope",
+      "shards",
+      "selection_freeze",
+      "identity",
+      "trajectories",
+      "assert_integrity"
+    ],
+    "ItemQuery": [
+      "item_id",
+      "timestamp",
+      "source_row"
+    ],
+    "Observation": [
+      "query",
+      "correct"
+    ],
+    "CausalSequenceInputs": [
+      "item_ids",
+      "timestamps",
+      "prior_responses",
+      "source_rows",
+      "sequence_offsets",
+      "user_ids",
+      "concept_ids"
+    ],
+    "WindowInputs": [
+      "inputs",
+      "target_mask",
+      "global_ranks",
+      "history_available",
+      "history_used",
+      "context_reset",
+      "window_id"
+    ],
+    "ResearchUnseenTarget": [
+      "learner_id",
+      "query",
+      "global_rank",
+      "phase_sha256",
+      "support_reason"
+    ],
+    "ResearchAKTEncoding": [
+      "optimization_scope",
+      "origin_shard_sha256",
+      "identity",
+      "exercise_encoding",
+      "assert_integrity"
+    ]
+  },
+  "definition_source_sha256": {
+    "src/knowledge_tracing/shared_kt.py": "06922d5a6bfd6c806fd1abb61232f58a9ccd63826e30cefaf87ce3d3b36dffa8",
+    "src/knowledge_tracing/akt/research_simulator_data.py": "9596c2dc5ae86cdf89e5f68c15224a6794b6056093dabee6b26502dfabdf092b",
+    "src/knowledge_tracing/graph_context.py": "3db94ec43271d336898f61f81f12aeb569c6de52219eeed535af709711c97264",
+    "src/knowledge_tracing/akt/types.py": "312e57e4fa507f12b449841969b3a9c2b35c592909178b3040102b254aa20304",
+    "src/knowledge_tracing/simulator_bridge.py": "b29105acd8de84b060ca27573bb7f7cf8e85599a4596e50e4a21ab63c82329d2"
+  },
+  "current_source_sha256": "5a5ada91a78a5d7de2b4d5021dc3cf34e6c97de2e46931509b8f6faf5c56c4d5",
+  "current_test_sha256": "ac6bff7187ef37aa9b4455706992763681ccd9f433fd93965cf93d7ce7c9dd52",
+  "expected_context_cases_static": 43,
+  "expected_combined_cases_static": 109,
+  "execution_performed": false,
+  "historical_actual02": "67 PASS,39 SETUPERROR; unchanged"
+}

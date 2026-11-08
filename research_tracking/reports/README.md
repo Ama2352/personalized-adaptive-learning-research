@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**Context CG-AKT:** [109ca chung](cgakt_research_context_readiness_20261109.md),66condition+43context; [bundle52](../runs/cgakt-research-context-engineering-20261109-01/README.md) giữ hai lỗi trước sửa, kiểm cửa sổ/OOV và cold imports. NumPy dữ liệu, chưa training.
+
+**Chi phí observer:** [microbenchmark](mastery_observer_cost_microbenchmark_20261109.md) / [bundle24](../runs/mastery-observer-cost-engineering-20261109-01/README.md). Chỉ fixture dựng sẵn; không dùng tỷ số này dự báo tốc độ GAM/GPU.
+
 **CG-AKT nghiên cứu:** [condition metadata](cgakt_research_condition_readiness_20261109.md),66PASS/0FES và [bundle13outputs](../runs/cgakt-research-condition-engineering-20261109-01/README.md). Theo Recipe26; chưa context/forward/training.
 
 **RQ1 — lượt trace chưa đạt:** [hai failures](rq1_prediction_mastery_trace_failures_20261109.md) / [bundle63outputs](../runs/rq1-prediction-mastery-trace-failures-20261109-01/README.md). Lượt01 lỗi metadata Windows, lượt02 timeout/Job0; partial không dùng làm kết quả. Không chạy lại trong allocation60s đã dừng.

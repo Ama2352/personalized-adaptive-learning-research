@@ -1,5 +1,7 @@
 # Chỉ mục bằng chứng
 
+**Context graph nghiên cứu:** [109ca condition/context](reports/cgakt_research_context_readiness_20261109.md), [bundle52](runs/cgakt-research-context-engineering-20261109-01/README.md). **Observer overhead:** [fixture benchmark](reports/mastery_observer_cost_microbenchmark_20261109.md), [bundle24](runs/mastery-observer-cost-engineering-20261109-01/README.md); không native runtime forecast hoặc scientificN.
+
 **CG-AKT condition:** [66ca metadata](reports/cgakt_research_condition_readiness_20261109.md) / [bundle13](runs/cgakt-research-condition-engineering-20261109-01/README.md), chưa model fitted. **RQ1 trace failures:** [báo cáo giới hạn](reports/rq1_prediction_mastery_trace_failures_20261109.md) / [bundle63](runs/rq1-prediction-mastery-trace-failures-20261109-01/README.md); không nhận partial hoặc suy0updates từ timeout.
 
 **SAKT counter delta09/11:** [33CPUfixtures](reports/sakt_checkpoint_counter_delta_20261109.md) / [bundle43outputs](runs/sakt-research-checkpoint-counter-delta-20261109-01/README.md). Counter phải khớp bước Adam tích lũy; giữ lịch sử31fixtures cũ. Chưa actual corpus fit hoặc full research orchestration.

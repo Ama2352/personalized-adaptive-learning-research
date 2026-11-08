@@ -15,6 +15,8 @@ from knowledge_tracing.edge_confidence_artifact import (LoadedEdgePredictiveScor
     LoadedMethod24Scores, Method24TrainingBinding, PUBLIC, SEMANTICS)
 from knowledge_tracing.simulator_bridge import SimulatorBank, SimulatorItem, identity_hash
 
+HELD_CONDITION_CLASS = condition.ResearchGraphCondition
+
 
 def h(label):
     return hashlib.sha256(label.encode()).hexdigest()
@@ -75,8 +77,12 @@ def learned(case):
     return edges, loaded
 
 
-def test_import_is_stdlib_only():
-    importlib.reload(condition)
+def test_cached_import_preserves_class_identity_without_optional_imports():
+    # Fresh-import canary thuộc controller riêng; không reload production module
+    # và làm stale class aliases của các test/model modules đã được collection.
+    cached = importlib.import_module('knowledge_tracing.akt.research_graph_condition')
+    assert cached is condition
+    assert cached.ResearchGraphCondition is HELD_CONDITION_CLASS
 
 
 def test_supported_zero_and_unsupported_null_stay_distinct(case):
