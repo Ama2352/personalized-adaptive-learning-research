@@ -38,12 +38,37 @@ def validate_timeout(seconds):
     return seconds
 
 
-def refresh(run_id, *, publish_current=False, timeout_seconds=300):
+def selected_lock_file(lock_file=None):
+    """Lock có sẵn trong project; default Windows fixture giữ nguyên."""
+    root = ROOT.resolve()
+    if lock_file is None:
+        candidate = root / 'requirements-akt.lock.txt'
+    elif isinstance(lock_file, (str, Path)):
+        candidate = Path(lock_file)
+        if not candidate.is_absolute():
+            candidate = root / candidate
+    else:
+        raise ValueError('Gate2 lock path must be a string or Path')
+    resolved = candidate.resolve()
+    protected = (root / 'dataset', root / 'artifacts/bkt_baseline', root / 'venv',
+                 root / '.wsl', root / 'artifacts/akt/private')
+    allowed = ((resolved.is_relative_to(root / 'artifacts/akt') and resolved != root / 'artifacts/akt')
+               or (resolved.parent == root and resolved.name.startswith('requirements-akt')
+                   and resolved.name.endswith('.txt')))
+    if (not resolved.is_relative_to(root) or not allowed
+            or any(resolved.is_relative_to(path) for path in protected)
+            or candidate.is_symlink() or candidate.is_junction() or not resolved.is_file()):
+        raise ValueError('Gate2 lock must be an existing allowed project file')
+    return resolved
+
+
+def refresh(run_id, *, publish_current=False, timeout_seconds=300, lock_file=None):
     validate_timeout(timeout_seconds)
     if Path(sys.prefix).resolve() != (ROOT / '.venv').resolve():
         raise ValueError('use the project .venv interpreter')
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,79}', run_id):
         raise ValueError('invalid Gate2 run ID')
+    lock_path = selected_lock_file(lock_file)
     directory = ROOT / 'artifacts/akt/preflight'
     directory.mkdir(parents=True, exist_ok=True)
     report = directory / f'gate2-evidence-{run_id}.json'
@@ -58,7 +83,7 @@ def refresh(run_id, *, publish_current=False, timeout_seconds=300):
     os.environ['GIT_CONFIG_COUNT'] = str(count + 1)
     source = verify_upstream(ROOT / 'artifacts/akt/dependencies/upstream', SOURCE_COMMIT)
     before = gate2_build_hashes()
-    lock_before = sha256_file(ROOT / 'requirements-akt.lock.txt')
+    lock_before = sha256_file(lock_path)
     env = {**os.environ, 'PYTHONPATH': str(ROOT / 'src') + os.pathsep + str(ROOT / 'third_party'),
            'CUDA_VISIBLE_DEVICES': '', 'PYTHONDONTWRITEBYTECODE': '1',
            'OMP_NUM_THREADS': '2', 'MKL_NUM_THREADS': '2', 'OPENBLAS_NUM_THREADS': '2'}
@@ -73,14 +98,15 @@ def refresh(run_id, *, publish_current=False, timeout_seconds=300):
     if result.returncode:
         raise RuntimeError(f'Gate2 tests failed, inspect {log}')
     counts = test_result(junit)
-    if before != gate2_build_hashes() or lock_before != sha256_file(ROOT / 'requirements-akt.lock.txt'):
+    if (before != gate2_build_hashes()
+            or lock_before != sha256_file(selected_lock_file(lock_path))):
         raise ValueError('source or lock changed during Gate2 execution')
     if source != verify_upstream(ROOT / 'artifacts/akt/dependencies/upstream', SOURCE_COMMIT):
         raise ValueError('upstream source changed during Gate2 execution')
     elapsed = time.perf_counter() - started
     payload = {'schema_version': 1, 'status': 'PASS', 'source_commit': SOURCE_COMMIT,
                'source': source, 'suite': 'tests/akt tests/shared_kt', 'test_result': counts,
-               'lock_sha256': lock_before, 'build_hashes': before,
+               'lock_file': str(lock_path), 'lock_sha256': lock_before, 'build_hashes': before,
                'test_log_sha256': sha256_file(log), 'junit_sha256': sha256_file(junit),
                'command': command, 'python': sys.executable,
                'elapsed_seconds': elapsed, 'timeout_seconds': timeout_seconds,
@@ -118,7 +144,7 @@ def refresh(run_id, *, publish_current=False, timeout_seconds=300):
             stream.flush()
             os.fsync(stream.fileno())
         temp.replace(pointer)
-        require_gate2_evidence(AKTConfig())
+        require_gate2_evidence(AKTConfig(), project_root=ROOT, lock_file=lock_path)
     return {'report': str(report.relative_to(ROOT)), 'test_result': counts,
             'published_current': publish_current, 'report_sha256': sha256_file(report)}
 
@@ -129,6 +155,9 @@ if __name__ == '__main__':
     parser.add_argument('--publish-current', action='store_true')
     parser.add_argument('--timeout-seconds', type=int, default=300,
                         help='CPU software suite only, explicit maximum 600 seconds; default 300')
+    parser.add_argument('--lock-file', type=Path,
+                        help='existing project AKT lock; default requirements-akt.lock.txt remains unchanged')
     args = parser.parse_args()
     print(json.dumps(refresh(args.run_id, publish_current=args.publish_current,
-                             timeout_seconds=args.timeout_seconds), ensure_ascii=False, indent=2))
+                             timeout_seconds=args.timeout_seconds, lock_file=args.lock_file),
+                     ensure_ascii=False, indent=2))

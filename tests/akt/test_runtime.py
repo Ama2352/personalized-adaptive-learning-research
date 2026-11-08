@@ -30,6 +30,25 @@ def test_lock_report_requires_wheel_hashes_and_exact_urls(tmp_path):
             write_lock_from_report(report, tmp_path / 'bad.txt')
 
 
+def test_lock_report_uses_public_packaging_without_target_pip(tmp_path, monkeypatch):
+    """Target runtime deliberately has no pip; tooling must use pinned packaging."""
+    import builtins
+    original = builtins.__import__
+
+    def without_pip(name, *args, **kwargs):
+        if name == 'pip' or name.startswith('pip.'):
+            raise ModuleNotFoundError('target pip intentionally unavailable')
+        return original(name, *args, **kwargs)
+
+    report = tmp_path / 'report.json'
+    report.write_text(json.dumps({'install': [report_entry(
+        'https://files.pythonhosted.org/example-1.2.3-py3-none-any.whl')]}), encoding='utf-8')
+    monkeypatch.setattr(builtins, '__import__', without_pip)
+    lock = tmp_path / 'without-pip.lock.txt'
+    write_lock_from_report(report, lock)
+    assert lock.read_text().startswith('Example @ https://files.pythonhosted.org/')
+
+
 def test_probe_rejects_wrong_interpreter_before_loading_source(tmp_path):
     with pytest.raises(ValueError, match='interpreter'):
         inspect_runtime(tmp_path, expected_env=tmp_path / 'not-current-env')
@@ -37,7 +56,7 @@ def test_probe_rejects_wrong_interpreter_before_loading_source(tmp_path):
 
 @pytest.mark.parametrize('platform_tag', ['win_amd64', 'manylinux_2_17_x86_64'])
 def test_lock_accepts_percent_encoded_wheel_name(tmp_path, monkeypatch, platform_tag):
-    from pip._vendor.packaging import tags
+    from packaging import tags
 
     # Chọn môi trường resolver giả lập rõ ràng, độc lập Python/OS của host chạy test.
     monkeypatch.setattr(tags, 'sys_tags', lambda: iter([tags.Tag('cp313', 'cp313', platform_tag)]))
@@ -57,7 +76,7 @@ def test_lock_accepts_percent_encoded_wheel_name(tmp_path, monkeypatch, platform
 ])
 def test_lock_rejects_percent_encoded_wheel_for_incompatible_platform(
         tmp_path, monkeypatch, wheel_platform, runtime_platform):
-    from pip._vendor.packaging import tags
+    from packaging import tags
 
     monkeypatch.setattr(tags, 'sys_tags', lambda: iter([tags.Tag('cp313', 'cp313', runtime_platform)]))
     url = f'https://download-r2.pytorch.org/torch-2.7.1%2Bcpu-cp313-cp313-{wheel_platform}.whl'

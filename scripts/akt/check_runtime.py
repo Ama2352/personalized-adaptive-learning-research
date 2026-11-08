@@ -39,9 +39,9 @@ def validate_output_path(path: Path, *, kind: str, project_root: Path = ROOT) ->
 
 def write_lock_from_report(report_path: Path, output_path: Path, *,
                            requirements_path: Path | None = None) -> None:
-    from pip._vendor.packaging.requirements import Requirement
-    from pip._vendor.packaging.tags import sys_tags
-    from pip._vendor.packaging.utils import canonicalize_name, parse_wheel_filename
+    from packaging.requirements import Requirement
+    from packaging.tags import sys_tags
+    from packaging.utils import canonicalize_name, parse_wheel_filename
 
     report = json.loads(report_path.read_text(encoding='utf-8'))
     entries = report.get('install')

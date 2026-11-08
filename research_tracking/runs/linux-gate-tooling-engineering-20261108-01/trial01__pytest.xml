@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="11" skipped="0" tests="118" time="12.807" timestamp="2026-11-08T09:44:39.539657+07:00" hostname="Ama"><testcase classname="tests.akt.test_runtime" name="test_lock_report_requires_wheel_hashes_and_exact_urls" time="0.261" /><testcase classname="tests.akt.test_runtime" name="test_lock_report_uses_public_packaging_without_target_pip" time="0.004"><failure message="ModuleNotFoundError: target pip intentionally unavailable">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_lock_report_uses_public_p0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000022572A10C30&gt;
+
+    def test_lock_report_uses_public_packaging_without_target_pip(tmp_path, monkeypatch):
+        """Target runtime deliberately has no pip; tooling must use pinned packaging."""
+        import builtins
+        original = builtins.__import__
+    
+        def without_pip(name, *args, **kwargs):
+            if name == 'pip' or name.startswith('pip.'):
+                raise ModuleNotFoundError('target pip intentionally unavailable')
+            return original(name, *args, **kwargs)
+    
+        report = tmp_path / 'report.json'
+        report.write_text(json.dumps({'install': [report_entry(
+            'https://files.pythonhosted.org/example-1.2.3-py3-none-any.whl')]}), encoding='utf-8')
+        monkeypatch.setattr(builtins, '__import__', without_pip)
+        lock = tmp_path / 'without-pip.lock.txt'
+&gt;       write_lock_from_report(report, lock)
+
+tests\akt\test_runtime.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\akt\check_runtime.py:42: in write_lock_from_report
+    from pip._vendor.packaging.requirements import Requirement
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'pip._vendor.packaging.requirements'
+args = ({'__name__': 'scripts.akt.check_runtime', '__doc__': 'Kiểm tra runtime AKT hoặc tạo lock file từ báo cáo resolver của...loader__': &lt;_frozen_importlib_external.SourceFileLoader object at 0x00000225728EBEF0&gt;, ...}, None, ('Requirement',), 0)
+kwargs = {}
+
+    def without_pip(name, *args, **kwargs):
+        if name == 'pip' or name.startswith('pip.'):
+&gt;           raise ModuleNotFoundError('target pip intentionally unavailable')
+E           ModuleNotFoundError: target pip intentionally unavailable
+
+tests\akt\test_runtime.py:40: ModuleNotFoundError</failure></testcase><testcase classname="tests.akt.test_runtime" name="test_probe_rejects_wrong_interpreter_before_loading_source" time="0.003" /><testcase classname="tests.akt.test_runtime" name="test_lock_accepts_percent_encoded_wheel_name[win_amd64]" time="0.014" /><testcase classname="tests.akt.test_runtime" name="test_lock_accepts_percent_encoded_wheel_name[manylinux_2_17_x86_64]" time="0.026" /><testcase classname="tests.akt.test_runtime" name="test_lock_rejects_percent_encoded_wheel_for_incompatible_platform[win_amd64-manylinux_2_17_x86_64]" time="0.006" /><testcase classname="tests.akt.test_runtime" name="test_lock_rejects_percent_encoded_wheel_for_incompatible_platform[manylinux_2_17_x86_64-win_amd64]" time="0.005" /><testcase classname="tests.akt.test_runtime" name="test_probe_rejects_modules_imported_from_outside_isolated_environment" time="0.031" /><testcase classname="tests.akt.test_runtime" name="test_probe_does_not_write_bytecode_into_upstream_checkout" time="0.031" /><testcase classname="tests.akt.test_runtime" name="test_fresh_runtime_report_binds_explicit_root_lock_and_actual_interpreter[win32]" time="0.038" /><testcase classname="tests.akt.test_runtime" name="test_fresh_runtime_report_binds_explicit_root_lock_and_actual_interpreter[linux]" time="0.039" /><testcase classname="tests.akt.test_runtime" name="test_inherited_runtime_module_is_not_accepted_by_inspection_or_preflight[torch-win32]" time="0.037" /><testcase classname="tests.akt.test_runtime" name="test_inherited_runtime_module_is_not_accepted_by_inspection_or_preflight[torch-linux]" time="0.036" /><testcase classname="tests.akt.test_runtime" name="test_inherited_runtime_module_is_not_accepted_by_inspection_or_preflight[numpy-win32]" time="0.038" /><testcase classname="tests.akt.test_runtime" name="test_inherited_runtime_module_is_not_accepted_by_inspection_or_preflight[numpy-linux]" time="0.045" /><testcase classname="tests.akt.test_runtime" name="test_linux_symlink_entry_remains_distinct_from_base_interpreter" time="0.004" /><testcase classname="tests.akt.test_runtime" name="test_actual_interpreter_binding_cannot_be_replaced_by_a_matching_report[executable-win32]" time="0.018" /><testcase classname="tests.akt.test_runtime" name="test_actual_interpreter_binding_cannot_be_replaced_by_a_matching_report[executable-linux]" time="0.019" /><testcase classname="tests.akt.test_runtime" name="test_actual_interpreter_binding_cannot_be_replaced_by_a_matching_report[prefix-win32]" time="0.021" /><testcase classname="tests.akt.test_runtime" name="test_actual_interpreter_binding_cannot_be_replaced_by_a_matching_report[prefix-linux]" time="0.022" /><testcase classname="tests.akt.test_runtime" name="test_linux_report_schema_and_types_are_strict[runtime_schema_version-True]" time="0.031" /><testcase classname="tests.akt.test_runtime" name="test_linux_report_schema_and_types_are_strict[runtime_schema_version-2.0]" time="0.034" /><testcase classname="tests.akt.test_runtime" name="test_linux_report_schema_and_types_are_strict[runtime_schema_version-None]" time="0.030" /><testcase classname="tests.akt.test_runtime" name="test_linux_report_schema_and_types_are_strict[runtime_schema_version-3]" time="0.034" /><testcase classname="tests.akt.test_runtime" name="test_linux_report_schema_and_types_are_strict[platform_id-win32]" time="0.033" /><testcase classname="tests.akt.test_runtime" name="test_linux_report_schema_and_types_are_strict[platform_id-True]" time="0.037" /><testcase classname="tests.akt.test_runtime" name="test_linux_report_schema_and_types_are_strict[python-False]" time="0.042" /><testcase classname="tests.akt.test_runtime" name="test_linux_report_schema_and_types_are_strict[python_prefix-None]" time="0.034" /><testcase classname="tests.akt.test_runtime" name="test_linux_report_schema_and_types_are_strict[project_root-.]" time="0.036" /><testcase classname="tests.akt.test_runtime" name="test_linux_report_schema_and_types_are_strict[lock_file-False]" time="0.037" /><testcase classname="tests.akt.test_runtime" name="test_linux_report_schema_and_types_are_strict[source-bad_value10]" time="0.034" /><testcase classname="tests.akt.test_runtime" name="test_linux_report_schema_and_types_are_strict[lock_sha256-True]" time="0.035" /><testcase classname="tests.akt.test_runtime" name="test_linux_report_schema_and_types_are_strict[torch_origin-None]" time="0.035" /><testcase classname="tests.akt.test_runtime" name="test_linux_report_schema_and_types_are_strict[numpy_origin-../global/numpy.py]" time="0.038" /><testcase classname="tests.akt.test_runtime" name="test_linux_report_schema_and_types_are_strict[device-True]" time="0.047" /><testcase classname="tests.akt.test_runtime" name="test_linux_report_schema_and_types_are_strict[cuda_available-1]" time="0.038" /><testcase classname="tests.akt.test_runtime" name="test_fresh_report_rejects_changed_identity_even_when_types_are_valid[python]" time="0.043" /><testcase classname="tests.akt.test_runtime" name="test_fresh_report_rejects_changed_identity_even_when_types_are_valid[python_prefix]" time="0.036" /><testcase classname="tests.akt.test_runtime" name="test_fresh_report_rejects_changed_identity_even_when_types_are_valid[project_root]" time="0.053" /><testcase classname="tests.akt.test_runtime" name="test_fresh_report_rejects_changed_identity_even_when_types_are_valid[lock_file]" time="0.067" /><testcase classname="tests.akt.test_runtime" name="test_fresh_report_rejects_changed_identity_even_when_types_are_valid[source]" time="0.076" /><testcase classname="tests.akt.test_runtime" name="test_fresh_report_rejects_changed_identity_even_when_types_are_valid[lock_sha256]" time="0.076" /><testcase classname="tests.akt.test_runtime" name="test_legacy_report_remains_windows_only_without_reusing_it_for_linux[win32]" time="0.065" /><testcase classname="tests.akt.test_runtime" name="test_legacy_report_remains_windows_only_without_reusing_it_for_linux[linux]" time="0.077" /><testcase classname="tests.akt.test_runtime" name="test_legacy_windows_report_still_rejects_invalid_origin_lock_or_executable[torch_origin]" time="0.072" /><testcase classname="tests.akt.test_runtime" name="test_legacy_windows_report_still_rejects_invalid_origin_lock_or_executable[numpy_origin]" time="0.076" /><testcase classname="tests.akt.test_runtime" name="test_legacy_windows_report_still_rejects_invalid_origin_lock_or_executable[lock_sha256]" time="0.063" /><testcase classname="tests.akt.test_runtime" name="test_legacy_windows_report_still_rejects_invalid_origin_lock_or_executable[python]" time="0.069" /><testcase classname="tests.akt.test_runtime" name="test_report_becomes_stale_when_actual_source_or_lock_changes[source]" time="0.069" /><testcase classname="tests.akt.test_runtime" name="test_report_becomes_stale_when_actual_source_or_lock_changes[lock]" time="0.070" /><testcase classname="tests.akt.test_runtime" name="test_unsupported_runtime_platform_is_rejected_before_source_load" time="0.010" /><testcase classname="tests.akt.test_runtime" name="test_runtime_cli_can_bind_an_explicit_linux_lock_with_trusted_output_guard" time="0.096" /><testcase classname="tests.akt.test_runtime" name="test_report_device_binds_requested_mode_without_importing_torch_in_preflight[cpu-cpu-False-True]" time="0.084" /><testcase classname="tests.akt.test_runtime" name="test_report_device_binds_requested_mode_without_importing_torch_in_preflight[cpu-cpu-True-True]" time="0.078" /><testcase classname="tests.akt.test_runtime" name="test_report_device_binds_requested_mode_without_importing_torch_in_preflight[cuda-cpu-True-False]" time="0.075" /><testcase classname="tests.akt.test_runtime" name="test_report_device_binds_requested_mode_without_importing_torch_in_preflight[cpu-cuda-True-False]" time="0.078" /><testcase classname="tests.akt.test_runtime" name="test_report_device_binds_requested_mode_without_importing_torch_in_preflight[cuda-cuda-False-False]" time="0.076" /><testcase classname="tests.akt.test_runtime" name="test_report_device_binds_requested_mode_without_importing_torch_in_preflight[cuda-cuda-True-True]" time="0.083" /><testcase classname="tests.akt.test_runtime" name="test_cli_output_guard_rejects_protected_paths_without_creating_them" time="0.020" /><testcase classname="tests.akt.test_runtime" name="test_lock_rejects_untrusted_wheel_host" time="0.022" /><testcase classname="tests.akt.test_runtime" name="test_lock_rejects_report_missing_direct_requirement" time="0.015" /><testcase classname="tests.akt.test_runtime" name="test_cli_writes_only_to_approved_lock_path" time="0.041" /><testcase classname="tests.akt.test_runtime" name="test_native_akt_import_cpu" time="7.820" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_timeout_rejects_unbounded_or_invalid_values[0]" time="0.005" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_timeout_rejects_unbounded_or_invalid_values[-1]" time="0.005" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_timeout_rejects_unbounded_or_invalid_values[601]" time="0.007" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_timeout_rejects_unbounded_or_invalid_values[True]" time="0.009" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_timeout_rejects_unbounded_or_invalid_values[4.2]" time="0.007" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_timeout_rejects_unbounded_or_invalid_values[420]" time="0.006" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_timeout_is_explicit_bounded_and_default_unchanged" time="0.007" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_refresh_rejects_incomplete_suite[tests=&quot;0&quot;]" time="0.016" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_refresh_rejects_incomplete_suite[tests=&quot;2&quot; failures=&quot;1&quot;]" time="0.030" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_refresh_rejects_incomplete_suite[tests=&quot;2&quot; skipped=&quot;1&quot;]" time="0.012" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_refresh_rejects_incomplete_suite[tests=&quot;2&quot; errors=&quot;1&quot;]" time="0.013" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_refresh_accepts_complete_suite" time="0.013" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_exit_zero_clock_overrun_rejected_without_pointer_change" time="0.072" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_inbudget_publisher_retains_counts_and_bounds_child_threads" time="0.095" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_publisher_rejects_invalid_elapsed_and_preserves_strict_json[-1.0]" time="0.063" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_publisher_rejects_invalid_elapsed_and_preserves_strict_json[nan]" time="0.060" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_publisher_rejects_invalid_elapsed_and_preserves_strict_json[inf]" time="0.054" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource0]" time="0.047" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource1]" time="0.040" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource2]" time="0.022" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource3]" time="0.022" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource4]" time="0.022" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource5]" time="0.025" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource6]" time="0.024" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource7]" time="0.025" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource8]" time="0.029" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource9]" time="0.023" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource10]" time="0.040" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource11]" time="0.023" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource12]" time="0.022" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource13]" time="0.019" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource14]" time="0.041" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource15]" time="0.021" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource16]" time="0.018" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource17]" time="0.016" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource18]" time="0.039" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource19]" time="0.015" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource20]" time="0.037" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource21]" time="0.037" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource22]" time="0.015" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource23]" time="0.017" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_accepts_finite_elapsed_within_declared_budget[1.0-30]" time="0.020" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_accepts_finite_elapsed_within_declared_budget[30.0-30]" time="0.040" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_accepts_finite_elapsed_within_declared_budget[0-1]" time="0.018" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_reader_accepts_finite_elapsed_within_declared_budget[600.0-600]" time="0.020" /><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_explicit_linux_lock_is_bound_to_report_and_reader[False]" time="0.011"><failure message="TypeError: refresh() got an unexpected keyword argument 'lock_file'">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_explicit_linux_lock0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002257C973540&gt;
+relative = False
+
+    @pytest.mark.parametrize('relative', [False, True])
+    def test_gate2_explicit_linux_lock_is_bound_to_report_and_reader(tmp_path, monkeypatch, relative):
+        refresh, directory, _, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        selected = root / 'artifacts/akt/runtime/linux/candidate-linux-cuda.lock.txt'
+        selected.parent.mkdir(parents=True)
+        selected.write_bytes(b'example @ https://files.pythonhosted.org/example.whl --hash=sha256:fixture\n')
+        argument = selected.relative_to(root) if relative else selected
+&gt;       refresh('synthetic-linux', publish_current=True, timeout_seconds=30, lock_file=argument)
+E       TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:183: TypeError</failure></testcase><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_explicit_linux_lock_is_bound_to_report_and_reader[True]" time="0.011"><failure message="TypeError: refresh() got an unexpected keyword argument 'lock_file'">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_explicit_linux_lock1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002257C987F50&gt;
+relative = True
+
+    @pytest.mark.parametrize('relative', [False, True])
+    def test_gate2_explicit_linux_lock_is_bound_to_report_and_reader(tmp_path, monkeypatch, relative):
+        refresh, directory, _, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        selected = root / 'artifacts/akt/runtime/linux/candidate-linux-cuda.lock.txt'
+        selected.parent.mkdir(parents=True)
+        selected.write_bytes(b'example @ https://files.pythonhosted.org/example.whl --hash=sha256:fixture\n')
+        argument = selected.relative_to(root) if relative else selected
+&gt;       refresh('synthetic-linux', publish_current=True, timeout_seconds=30, lock_file=argument)
+E       TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:183: TypeError</failure></testcase><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_default_lock_provenance_remains_windows_fixture" time="0.062"><failure message="KeyError: 'lock_file'">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_default_lock_proven0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002257C9842F0&gt;
+
+    def test_gate2_default_lock_provenance_remains_windows_fixture(tmp_path, monkeypatch):
+        refresh, directory, _, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        expected = directory.parents[2] / 'requirements-akt.lock.txt'
+        refresh('synthetic-default', publish_current=True, timeout_seconds=30)
+        payload = json.loads((directory / 'gate2-evidence-synthetic-default.json').read_text())
+&gt;       assert payload['lock_file'] == str(expected.resolve())
+               ^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'lock_file'
+
+tests\akt\test_gate2_refresh.py:197: KeyError</failure></testcase><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_invalid_selected_lock_rejects_before_child[outside]" time="0.016"><failure message="TypeError: refresh() got an unexpected keyword argument 'lock_file'">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_invalid_selected_lo0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002257C987310&gt;
+case = 'outside'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+&gt;           refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+E           TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:220: TypeError</failure></testcase><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_invalid_selected_lock_rejects_before_child[missing]" time="0.022"><failure message="TypeError: refresh() got an unexpected keyword argument 'lock_file'">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_invalid_selected_lo1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002257C9E16A0&gt;
+case = 'missing'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+&gt;           refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+E           TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:220: TypeError</failure></testcase><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_invalid_selected_lock_rejects_before_child[private]" time="0.030"><failure message="TypeError: refresh() got an unexpected keyword argument 'lock_file'">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_invalid_selected_lo2')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002257C9E2270&gt;
+case = 'private'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+&gt;           refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+E           TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:220: TypeError</failure></testcase><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_invalid_selected_lock_rejects_before_child[protected]" time="0.025"><failure message="TypeError: refresh() got an unexpected keyword argument 'lock_file'">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_invalid_selected_lo3')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002257C9E2F20&gt;
+case = 'protected'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+&gt;           refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+E           TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:220: TypeError</failure></testcase><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_invalid_selected_lock_rejects_before_child[directory]" time="0.020"><failure message="TypeError: refresh() got an unexpected keyword argument 'lock_file'">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_invalid_selected_lo4')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002257C9E3AF0&gt;
+case = 'directory'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+&gt;           refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+E           TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:220: TypeError</failure></testcase><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_invalid_selected_lock_rejects_before_child[unapproved_root]" time="0.016"><failure message="TypeError: refresh() got an unexpected keyword argument 'lock_file'">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_invalid_selected_lo5')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002257C9E2C80&gt;
+case = 'unapproved_root'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+&gt;           refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+E           TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:220: TypeError</failure></testcase><testcase classname="tests.akt.test_gate2_refresh" name="test_gate2_selected_lock_drift_rejects_before_publication" time="0.030"><failure message="TypeError: refresh() got an unexpected keyword argument 'lock_file'">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_selected_lock_drift0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002257C9E3EE0&gt;
+
+    def test_gate2_selected_lock_drift_rejects_before_publication(tmp_path, monkeypatch):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        selected = directory.parents[2] / 'artifacts/akt/runtime/linux.lock.txt'
+        selected.parent.mkdir(parents=True)
+        selected.write_bytes(b'original selected Linux lock')
+        namespace = refresh.__globals__
+        child = namespace['subprocess'].run
+    
+        def drift(*args, **kwargs):
+            result = child(*args, **kwargs)
+            selected.write_bytes(b'changed during synthetic child')
+            return result
+    
+        monkeypatch.setitem(namespace, 'subprocess', SimpleNamespace(run=drift, STDOUT=-2))
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='source or lock changed'):
+&gt;           refresh('synthetic-drift', publish_current=True, timeout_seconds=30, lock_file=selected)
+E           TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:241: TypeError</failure></testcase></testsuite></testsuites>

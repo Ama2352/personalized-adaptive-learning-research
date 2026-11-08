@@ -67,7 +67,10 @@ def _publisher(tmp_path, monkeypatch, *, elapsed):
     monkeypatch.setitem(namespace, 'subprocess', SimpleNamespace(run=child, STDOUT=-2))
     monkeypatch.setitem(namespace, 'verify_upstream', lambda *args: {'commit': 'synthetic source'})
     monkeypatch.setitem(namespace, 'gate2_build_hashes', lambda: {'fixture.py': 'source hash'})
-    monkeypatch.setitem(namespace, 'require_gate2_evidence', lambda *args: {'status': 'PASS'})
+    def reader(*args, **kwargs):
+        observed['reader_kwargs'] = kwargs
+        return {'status': 'PASS'}
+    monkeypatch.setitem(namespace, 'require_gate2_evidence', reader)
     # Track/revert keys changed by the real function; never alter Git config on disk.
     monkeypatch.setenv('GIT_CONFIG_COUNT', '0')
     monkeypatch.setenv('GIT_CONFIG_KEY_0', 'fixture.previous')
@@ -167,3 +170,74 @@ def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resour
 @pytest.mark.parametrize('elapsed,timeout', [(1.0, 30), (30.0, 30), (0, 1), (600.0, 600)])
 def test_gate2_reader_accepts_finite_elapsed_within_declared_budget(tmp_path, elapsed, timeout):
     assert _reader_report(tmp_path, elapsed_seconds=elapsed, timeout_seconds=timeout)()['status'] == 'PASS'
+
+
+@pytest.mark.parametrize('relative', [False, True])
+def test_gate2_explicit_linux_lock_is_bound_to_report_and_reader(tmp_path, monkeypatch, relative):
+    refresh, directory, _, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+    root = directory.parents[2]
+    selected = root / 'artifacts/akt/runtime/linux/candidate-linux-cuda.lock.txt'
+    selected.parent.mkdir(parents=True)
+    selected.write_bytes(b'example @ https://files.pythonhosted.org/example.whl --hash=sha256:fixture\n')
+    argument = selected.relative_to(root) if relative else selected
+    refresh('synthetic-linux', publish_current=True, timeout_seconds=30, lock_file=argument)
+    payload = json.loads((directory / 'gate2-evidence-synthetic-linux.json').read_text())
+    assert payload['lock_sha256'] == hashlib.sha256(selected.read_bytes()).hexdigest()
+    assert payload['lock_sha256'] != hashlib.sha256((root / 'requirements-akt.lock.txt').read_bytes()).hexdigest()
+    assert payload['lock_file'] == str(selected.resolve())
+    assert observed['reader_kwargs']['lock_file'] == selected.resolve()
+    assert observed['reader_kwargs']['project_root'] == root.resolve()
+
+
+def test_gate2_default_lock_provenance_remains_windows_fixture(tmp_path, monkeypatch):
+    refresh, directory, _, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+    expected = directory.parents[2] / 'requirements-akt.lock.txt'
+    refresh('synthetic-default', publish_current=True, timeout_seconds=30)
+    payload = json.loads((directory / 'gate2-evidence-synthetic-default.json').read_text())
+    assert payload['lock_file'] == str(expected.resolve())
+    assert payload['lock_sha256'] == hashlib.sha256(expected.read_bytes()).hexdigest()
+    assert observed['reader_kwargs']['lock_file'] == expected.resolve()
+
+
+@pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+    refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+    root = directory.parents[2]
+    paths = {'outside': tmp_path / 'outside.lock.txt',
+             'missing': root / 'artifacts/akt/missing.lock.txt',
+             'private': root / 'artifacts/akt/private/lock.txt',
+             'protected': root / 'dataset/lock.txt',
+             'directory': root / 'artifacts/akt/runtime',
+             'unapproved_root': root / 'other.lock.txt'}
+    selected = paths[case]
+    if case == 'directory':
+        selected.mkdir(parents=True)
+    elif case != 'missing':
+        selected.parent.mkdir(parents=True, exist_ok=True)
+        selected.write_bytes(b'not an allowed lock')
+    original = pointer.read_bytes()
+    with pytest.raises(ValueError, match='lock'):
+        refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+    assert not observed and pointer.read_bytes() == original
+    assert not (directory / 'gate2-evidence-synthetic-invalid.json').exists()
+
+
+def test_gate2_selected_lock_drift_rejects_before_publication(tmp_path, monkeypatch):
+    refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+    selected = directory.parents[2] / 'artifacts/akt/runtime/linux.lock.txt'
+    selected.parent.mkdir(parents=True)
+    selected.write_bytes(b'original selected Linux lock')
+    namespace = refresh.__globals__
+    child = namespace['subprocess'].run
+
+    def drift(*args, **kwargs):
+        result = child(*args, **kwargs)
+        selected.write_bytes(b'changed during synthetic child')
+        return result
+
+    monkeypatch.setitem(namespace, 'subprocess', SimpleNamespace(run=drift, STDOUT=-2))
+    original = pointer.read_bytes()
+    with pytest.raises(ValueError, match='source or lock changed'):
+        refresh('synthetic-drift', publish_current=True, timeout_seconds=30, lock_file=selected)
+    assert observed and pointer.read_bytes() == original
+    assert not (directory / 'gate2-evidence-synthetic-drift.json').exists()

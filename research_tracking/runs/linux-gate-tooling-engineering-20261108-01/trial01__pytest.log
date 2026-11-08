@@ -1,0 +1,298 @@
+.F...................................................................... [ 61%]
+....................................FFFFFFFFFF                           [100%]
+================================== FAILURES ===================================
+__________ test_lock_report_uses_public_packaging_without_target_pip __________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_lock_report_uses_public_p0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000022572A10C30>
+
+    def test_lock_report_uses_public_packaging_without_target_pip(tmp_path, monkeypatch):
+        """Target runtime deliberately has no pip; tooling must use pinned packaging."""
+        import builtins
+        original = builtins.__import__
+    
+        def without_pip(name, *args, **kwargs):
+            if name == 'pip' or name.startswith('pip.'):
+                raise ModuleNotFoundError('target pip intentionally unavailable')
+            return original(name, *args, **kwargs)
+    
+        report = tmp_path / 'report.json'
+        report.write_text(json.dumps({'install': [report_entry(
+            'https://files.pythonhosted.org/example-1.2.3-py3-none-any.whl')]}), encoding='utf-8')
+        monkeypatch.setattr(builtins, '__import__', without_pip)
+        lock = tmp_path / 'without-pip.lock.txt'
+>       write_lock_from_report(report, lock)
+
+tests\akt\test_runtime.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\akt\check_runtime.py:42: in write_lock_from_report
+    from pip._vendor.packaging.requirements import Requirement
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'pip._vendor.packaging.requirements'
+args = ({'__name__': 'scripts.akt.check_runtime', '__doc__': 'Kiểm tra runtime AKT hoặc tạo lock file từ báo cáo resolver của...loader__': <_frozen_importlib_external.SourceFileLoader object at 0x00000225728EBEF0>, ...}, None, ('Requirement',), 0)
+kwargs = {}
+
+    def without_pip(name, *args, **kwargs):
+        if name == 'pip' or name.startswith('pip.'):
+>           raise ModuleNotFoundError('target pip intentionally unavailable')
+E           ModuleNotFoundError: target pip intentionally unavailable
+
+tests\akt\test_runtime.py:40: ModuleNotFoundError
+_____ test_gate2_explicit_linux_lock_is_bound_to_report_and_reader[False] _____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_explicit_linux_lock0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002257C973540>
+relative = False
+
+    @pytest.mark.parametrize('relative', [False, True])
+    def test_gate2_explicit_linux_lock_is_bound_to_report_and_reader(tmp_path, monkeypatch, relative):
+        refresh, directory, _, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        selected = root / 'artifacts/akt/runtime/linux/candidate-linux-cuda.lock.txt'
+        selected.parent.mkdir(parents=True)
+        selected.write_bytes(b'example @ https://files.pythonhosted.org/example.whl --hash=sha256:fixture\n')
+        argument = selected.relative_to(root) if relative else selected
+>       refresh('synthetic-linux', publish_current=True, timeout_seconds=30, lock_file=argument)
+E       TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:183: TypeError
+_____ test_gate2_explicit_linux_lock_is_bound_to_report_and_reader[True] ______
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_explicit_linux_lock1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002257C987F50>
+relative = True
+
+    @pytest.mark.parametrize('relative', [False, True])
+    def test_gate2_explicit_linux_lock_is_bound_to_report_and_reader(tmp_path, monkeypatch, relative):
+        refresh, directory, _, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        selected = root / 'artifacts/akt/runtime/linux/candidate-linux-cuda.lock.txt'
+        selected.parent.mkdir(parents=True)
+        selected.write_bytes(b'example @ https://files.pythonhosted.org/example.whl --hash=sha256:fixture\n')
+        argument = selected.relative_to(root) if relative else selected
+>       refresh('synthetic-linux', publish_current=True, timeout_seconds=30, lock_file=argument)
+E       TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:183: TypeError
+_________ test_gate2_default_lock_provenance_remains_windows_fixture __________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_default_lock_proven0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002257C9842F0>
+
+    def test_gate2_default_lock_provenance_remains_windows_fixture(tmp_path, monkeypatch):
+        refresh, directory, _, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        expected = directory.parents[2] / 'requirements-akt.lock.txt'
+        refresh('synthetic-default', publish_current=True, timeout_seconds=30)
+        payload = json.loads((directory / 'gate2-evidence-synthetic-default.json').read_text())
+>       assert payload['lock_file'] == str(expected.resolve())
+               ^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'lock_file'
+
+tests\akt\test_gate2_refresh.py:197: KeyError
+_______ test_gate2_invalid_selected_lock_rejects_before_child[outside] ________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_invalid_selected_lo0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002257C987310>
+case = 'outside'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+>           refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+E           TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:220: TypeError
+_______ test_gate2_invalid_selected_lock_rejects_before_child[missing] ________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_invalid_selected_lo1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002257C9E16A0>
+case = 'missing'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+>           refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+E           TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:220: TypeError
+_______ test_gate2_invalid_selected_lock_rejects_before_child[private] ________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_invalid_selected_lo2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002257C9E2270>
+case = 'private'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+>           refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+E           TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:220: TypeError
+______ test_gate2_invalid_selected_lock_rejects_before_child[protected] _______
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_invalid_selected_lo3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002257C9E2F20>
+case = 'protected'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+>           refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+E           TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:220: TypeError
+______ test_gate2_invalid_selected_lock_rejects_before_child[directory] _______
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_invalid_selected_lo4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002257C9E3AF0>
+case = 'directory'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+>           refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+E           TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:220: TypeError
+___ test_gate2_invalid_selected_lock_rejects_before_child[unapproved_root] ____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_invalid_selected_lo5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002257C9E2C80>
+case = 'unapproved_root'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+>           refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+E           TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:220: TypeError
+__________ test_gate2_selected_lock_drift_rejects_before_publication __________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/linux-gate-tooling-trial-20261108-01/t/test_gate2_selected_lock_drift0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002257C9E3EE0>
+
+    def test_gate2_selected_lock_drift_rejects_before_publication(tmp_path, monkeypatch):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        selected = directory.parents[2] / 'artifacts/akt/runtime/linux.lock.txt'
+        selected.parent.mkdir(parents=True)
+        selected.write_bytes(b'original selected Linux lock')
+        namespace = refresh.__globals__
+        child = namespace['subprocess'].run
+    
+        def drift(*args, **kwargs):
+            result = child(*args, **kwargs)
+            selected.write_bytes(b'changed during synthetic child')
+            return result
+    
+        monkeypatch.setitem(namespace, 'subprocess', SimpleNamespace(run=drift, STDOUT=-2))
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='source or lock changed'):
+>           refresh('synthetic-drift', publish_current=True, timeout_seconds=30, lock_file=selected)
+E           TypeError: refresh() got an unexpected keyword argument 'lock_file'
+
+tests\akt\test_gate2_refresh.py:241: TypeError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_runtime.py::test_lock_report_uses_public_packaging_without_target_pip
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_explicit_linux_lock_is_bound_to_report_and_reader[False]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_explicit_linux_lock_is_bound_to_report_and_reader[True]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_default_lock_provenance_remains_windows_fixture
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_invalid_selected_lock_rejects_before_child[outside]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_invalid_selected_lock_rejects_before_child[missing]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_invalid_selected_lock_rejects_before_child[private]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_invalid_selected_lock_rejects_before_child[protected]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_invalid_selected_lock_rejects_before_child[directory]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_invalid_selected_lock_rejects_before_child[unapproved_root]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_selected_lock_drift_rejects_before_publication
+11 failed, 107 passed in 12.84s
