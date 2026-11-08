@@ -410,3 +410,8 @@ Bundleb9eaaab:66outputs rawGitverified; source/report22b3522:83testsPASS vàbrow
 ### 08/11 — Tracking8847bc8 và source kit mới
 
 Đãparentapplydry03theosáubase/candidateSHA vàcommit8847bc8:96tasks/88registry,ba followupsGRAPH04/GPU09HOST/DEMO02;T21vẫnIN_PROGRESS,khôngfinalE11. Sourcebuilderthật chạy.venv-I-S-B sinhZIP509171B/c934e86f…0cffad/178files+manifest;parentkiểmCRC,all178SHA,124Gatepaths vànotebookcodecellpreserved. No upload/remote/test/install/cloud. RAM snapshot3.064GB<planned4GiB fullsoftwareGatepreflight,nênkhônglaunch/collection/publishpointer;khônghạfloor. 836cases chỉsourceprojection,Gate25chưachạy. Concrete S04/S05choices delegatedchoRQagent;khôngadoptmethodology.
+
+
+### 08/11 — Ưu tiên scientific gap thay vì thêm framework
+
+FreshRAM snapshot3.546GB<4GiBGatefloor,khônglaunchGate. 06architectuređãđốichiếuA0–A3/lifecycleactual vớiS04/S05cònmở. Sourceauditdiagnostics xácnhậnchỉ2fixed-stream/reconciliationcallers,closedloopkhônggọi;khôngevidence đểsửaoldpairedmetrics/claimcalibrationmisuse. 04diagnosticplanbổsungfuturetarget/history/timing/readysemantics vàgiữallhistoricalresults. No sourcecode/model/tests/data/cloudchange. AgentđangsoạnS04/S05explicitchoices đểchuyểntừtoyengineeringsangresearchprotocolđượcduyệt.
