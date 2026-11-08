@@ -1,5 +1,7 @@
 # Chỉ mục bằng chứng
 
+**Main9 consistency:** [báo cáo](reports/research_admission_core_readiness_20261109.md) / [bundle27](runs/research-admission-core-engineering-20261109-01/README.md), 8 manufactured cases/0 model calls. Core giữ đủ chín mô hình, coverage và common-U statistics; actual selected-only producer, kiểm file thật và external freeze vẫn chưa hoàn tất.
+
 **CG-AKT dynamic query:** [báo cáo](reports/cgakt_online_query_context_20261109.md) / [bundle25](runs/cgakt-online-query-context-engineering-20261109-01/README.md), 35 NumPy cases/0 Torch. Past-only geometry, counterfactual item identity, domain/OOV và ownership; GRAPH16 còn model parity, GRAPH17 còn fitted integration.
 
 **RQ1 — query/decision overlap:** [báo cáo](reports/rq1_query_decision_overlap_20261109.md) / [bundle24](runs/rq1-query-decision-overlap-20261109-01/README.md). Tám fixtures đạt và join đủ 1.080 cặp cũ: hai marginal22 chỉ trùng2. Query-M một khái niệm khác M-set28; không temporal crossing, calibration truth hoặc causal mediation. Kiểm chéo pooled độc lập khớp đủ8ô.

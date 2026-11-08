@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**Main selection — kiểm tính nhất quán:** [admission core8](research_admission_core_readiness_20261109.md), [bundle27](../runs/research-admission-core-engineering-20261109-01/README.md). Đủ chín claims trước phép join, kiểm toàn bộ targets/nhãn và tập chung năm mô hình; typed fixtures chưa xác nhận chín file kết quả thật hoặc cho phép refit.
+
 **CG-AKT online — chuẩn bị dữ liệu:** [35 kiểm tra history/geometry/OOV](cgakt_online_query_context_20261109.md), [bundle25](../runs/cgakt-online-query-context-engineering-20261109-01/README.md). Đã có evidence riêng cho từng query Grade10, không nới guard offline; chưa inference parity trên graph model hoặc fitted backend.
 
 **RQ1 — nối readout với quyết định:** [đối chiếu từng snapshot](rq1_query_decision_overlap_20261109.md). Hai nhóm cùng có 22 thay đổi (tiêu chí xác suất tham chiếu và CID) chỉ trùng 2 snapshot; 20 trường hợp mỗi phía không trùng. Cùng 1.080 cặp cũ, không model call hoặc mẫu độc lập mới, không kết luận nhân quả. [Bundle bằng chứng](../runs/rq1-query-decision-overlap-20261109-01/README.md).

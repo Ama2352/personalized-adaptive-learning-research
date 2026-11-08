@@ -752,3 +752,9 @@ G10closed48/test5bd/reportc017 commit5e1eb40,51rawGitblobsverified; outputinvent
 - Dựng dữ liệu query động theo Grade10 namespace, giữ geometry/OOV và binding lịch sử/item/domain/encoding. Offline indexguard không đổi.
 - Actual35NumPy cases đạt, không Torch/model/backend/corpus; ownedJob0 và source/runtime pre/post khớp. Bundle25 đã đóng; current record tách thời gian prewrite, printed và terminal.
 - GRAPH16 vẫn PARTIAL: chưa dynamic graph-model parity; GRAPH17 fitted loader/calibration/controller chưa được suy ra từ test data helper.
+
+### 09/11 — main9 typed consistency và failure checkpoint cần sửa observer
+
+- Core đủ9claims/9K-y, commonU5, full/perlearner/unsupportedcoverage đạt8fixtures, không realfile admission/freeze. Bundle27 đóng; source/kernel cũ giữ nguyên.
+- RawGit của RQ1/online đã đối chiếu57blobs/49outputs tại e02d38b/bf2ca6c; inventory4526 không nghiên cứuN.
+- Nativecheckpoint01 thực sự chạy3Adam/4forward rồi observer stat trúng pendingfile vừađổi tên; RAM574MB/free4,53GB trong giới hạn. JUnit/result chưa có, không nghiệm thu checkpoint, không suy0updates. Child125/outer1, cleanupJob0. Giữ raw và kiểm canary trước retry riêng, không mở ngân sách lúc job đang chạy.
