@@ -1,5 +1,17 @@
 # Sổ cái thí nghiệm
 
+## Hiện hành08/11 — Linux CPU worker đã đóng (`1c52043`)
+
+Mốc vận hành hiện tại là **Linux Gate24 771 PASS, 0 fail/error/skip** và **native CPU dummy 48 train targets / 8 validation predictions / 2 optimizer updates thật**, với **9 file đã lưu bền vững và khớp SHA**. [báo cáo](reports/akt_linux_worker_readiness_20261108.md), [bundle đã đóng](runs/akt-linux-worker-readiness-20261108-01/README.md), [manifest](runs/akt-linux-worker-readiness-20261108-01/manifest.json). Đã kiểm lại toàn bộ **194 output SHA** của bundle và 9 bản sao artifact. GKT03 (`b67eba0`) và các kết quả nghiên cứu phía dưới giữ nguyên phạm vi.
+
+| Bằng chứng hiện tại | Kết quả đã xác minh | Phạm vi |
+|---|---|---|
+| Linux native Gate24 | 268.092342194s ≤ 600s; 771 PASS; Linux lock `60dad3de…35cc45a` | Software/source gate trên Linux CPU, không CUDA readiness. |
+| Native CPU dummy | Phase 26.110794024s; 48 train targets/6 windows; 8/8 validation predictions, 0 unseen; 2 nonzero-gradient và 2 parameter-update steps; reload exact | Synthetic engineering, không research fitted efficacy, model selection/refit/resume hoặc RQ completion. |
+| [Durable copy inventory](../experiments/akt/results/ctx-linux-20261108-01/transfer-copy-inventory.json) | 4 binary (448378 B) + 5 native text = 9 file khớp SHA/size trước–sau; checkpoint `f77b39c6…de8cc6` | Artifact Colab CPU đã hoàn tất, không local fit hoặc model/Parquet load. Binary giữ ngoài Git. |
+
+**Lịch sử giữ nguyên:** Windows Gate22 768 PASS là **STALE sau test-only `dd80006`**; Gate23 763 PASS/5 FAIL và các failure loader/transport vẫn giữ verdict gốc. Các dòng “current”, “pending archive”, “chưa Linux Gate/mainworker” trong snapshot cũ phía dưới mô tả thời điểm trước mốc này. GPU09 còn **actual CUDA pending**; immutable image, CUDA lifecycle/resume và protocol S01/S04/S05 chưa được đóng bằng CPU proof. Không đánh dấu RQ hoàn tất hoặc GPU ready.
+
 ## Hiện hành08/11 — vận hành Linux CPU, không thí nghiệm efficacy
 
 Đã kiểm124output SHA của hai bundle mới. Các mục Gate21/pending archive hoặc resolution-only phía sau là snapshot lịch sử; giữ nguyên các hàng baseline/thí nghiệm đã ghi.
@@ -96,3 +108,7 @@ Mốc này bổ sung kernel GKT01; giữ các trial/source versions riêng, khô
 ## RQDIAG04 observability08/11 — reproduction cùng pilot
 
 `rq1-query-observability-reproduction-20261108-01`, commit `7dd8338`: **12spyPASS/40outputs**, controller71,9959014s≤120s,0optimizer, **new independentN=0**. [Report](reports/rq1_query_observability_reproduction_20261108.md); manifest SHA `112cd15f69b63fec730a4b4a67acf98650986adc58138f68ef4a5105adbf81d7`. Parent review độc lập kiểm1.080sharedquery keys và flags: fullpackage22full-preview-tuple differences, empty0; không additionalitemchange khi conceptgiữ trong reproduction này. Hai passes giữ exactlegacyobservables/comparisons/state-RNG identity; đây không additionalresearchsample, historicalmetadata backfill, served-action/closedloop hoặc causalefficacy/RQcompletion.
+
+## GKT03 train-batch08/11 — engineering, chưa epoch/corpus
+
+`gkt-training-engineering-20261108-01`, commit `b67eba0`: **45CPUtests/32outputs/4actual Adam updates**, controller9,8446043s; conservative cumulative10,8446043s≤60 gồm1s dự trữ cho controller-only pre-import SyntaxError (0updates, retained). [Report](reports/gkt_training_readiness_20261108.md), [bundle](runs/gkt-training-engineering-20261108-01/README.md); manifest SHA `c1194df13f6f8f6efa41469264e6ced6447135bf389c2d03729a755d1ed14e0f`. Parent actual review, không independent reviewer agent. Source training `6def666d82cf02dfefcf8980c2670ac24f3a137a86e9093e66cb87bc2cabc4e5`, tests `1d4a9869d6b167e972c719df637b593171343e6d93fd55395925c7e0268392e0`. One explicit Adam batch/caller masks/preupdate-state binding; cooperative identities không nonresettable authorization; exception sau step không rollback/checkpoint. Chưa checkpoint/resume, epoch/corpus runner, fitted adapter/selection/refit/scientific S04/S05; không realdata/Holdout/GPU hoặc research efficacy/RQ completion. Không rerun model trong cập nhật chỉ mục.

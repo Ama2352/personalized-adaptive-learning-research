@@ -1961,14 +1961,17 @@
       "authorization_requirements": "Localengineering authorized; no methodology/fullCV/Holdout/Modal allocation from this task",
       "status": "PARTIALLY_VERIFIED",
       "blockers": [
-        "Actual isolated44 distributions/8CPUimports đã qua audit riêng; freshLinuxGate, immutableimage và actualCUDA worker còn thiếu."
+        "Linux CPU: 44 distributions/8 CPU imports, runtime02 và full software Gate24 771 PASS đã xác minh. Immutable image và actual CUDA worker còn thiếu; CPU proof không đóng GPU08."
       ],
       "evidence_refs": [
         "research_tracking/runs/gpu08-environment-proposal-20261108-01/README.md",
         "artifacts/akt/colab/gpu08-linux-20261108-01/transfer/acceptance.json",
         "research_tracking/runs/akt-linux-dependency-resolution-20261108-01/README.md",
         "research_tracking/reports/akt_linux_dependency_resolution_20261108_addendum.md",
-        "research_tracking/runs/akt-linux-isolated-install-20261108-01/README.md"
+        "research_tracking/runs/akt-linux-isolated-install-20261108-01/README.md",
+        "research_tracking/reports/akt_linux_worker_readiness_20261108.md",
+        "research_tracking/runs/akt-linux-worker-readiness-20261108-01/README.md",
+        "research_tracking/runs/akt-linux-worker-readiness-20261108-01/manifest.json"
       ]
     },
     {
@@ -1983,7 +1986,8 @@
         "GPU07",
         "GPU08",
         "GPU06B",
-        "GATETOOL01"
+        "GATETOOL01",
+        "GPU09CPU"
       ],
       "required_inputs": "NewsourceGate+GPUphase/Linuxenv contracts",
       "files_components": "source-bound synthetic mainworkerkit/runner",
@@ -1995,7 +1999,14 @@
       "compute_cost_category": "LocalCPU now; GPU09 boundedfreeColab only after prerequisites",
       "authorization_requirements": "Localengineering authorized; no methodology/fullCV/Holdout/Modal allocation from this task",
       "status": "PLANNED",
-      "blockers": []
+      "blockers": [
+        "GPU09CPU đã hoàn tất engineering Linux CPU synthetic; actual Linux CUDA lifecycle/device/bounded resources và resume riêng chưa được xác minh. Không dùng CPU checkpoint hoặc Gate24 để tuyên bố GPU ready."
+      ],
+      "evidence_refs": [
+        "research_tracking/reports/akt_linux_worker_readiness_20261108.md",
+        "research_tracking/runs/akt-linux-worker-readiness-20261108-01/README.md"
+      ],
+      "completion_scope": "Chưa hoàn tất GPU09. CPU subtask đã đóng ở GPU09CPU; không có actual CUDA, full CV, Holdout, Modal, research fitted efficacy hoặc RQ completion từ hồ sơ này."
     },
     {
       "id": "RQDIAG01",
@@ -2456,6 +2467,94 @@
         "research_tracking/reports/rq1_query_observability_reproduction_20261108.md": "d0b8eeee20723ad31b03415f816c707a71cd234cf69a0c281fade10dac36c28f"
       },
       "scientific_adoption_pending": "Không historical metadata backfill, served-action/closedloop proof, causal mediation/ability/learningbenefit hoặc finalRQ1completion."
+    },
+    {
+      "id": "GKT03",
+      "research_objective": "Một explicit GKT train-batch engineering; chưa epoch/corpus/fitted research baseline",
+      "rq": [
+        "RQ3 supporting comparator"
+      ],
+      "workstream": "model_core_readiness",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "estimated_effort": "Đã hoàn tất deliverable08/11; không xếp lịch nghiên cứu mới",
+      "compute_cost_category": "CPU local/bằng chứng đã lưu; không paidGPU",
+      "authorization_requirements": "User local engineering/writing loop; không chấp thuận methodology, data/cloud allocation hoặc final selection.",
+      "dependencies": [
+        "GKT02"
+      ],
+      "required_inputs": "Unchanged GKT recurrent candidate; caller-explicit handmade observable toy batch/state/masks/settings; approved engineering plan",
+      "files_components": "src/knowledge_tracing/gkt/training.py;tests/gkt/test_training.py",
+      "implementation_objective": "One explicit Adam step trên sequence.logits/masked BCE; pre-forward binding/state-version/optimizer guards; detached preupdate diagnostic state, cooperative cumulative budget.",
+      "acceptance_criteria": "45CPUtests/4actual Adam updates;32immutable outputs;conservative cumulative10.8446043s<=60; source before/after exact.",
+      "verification_steps": "Đối chiếu manifest32outputSHA,45caseJUnit/4updateledger/controller-onlySyntaxError và sourceSHA; không model/test rerun.",
+      "required_artifacts": [
+        "research_tracking/reports/gkt_training_readiness_20261108.md",
+        "research_tracking/runs/gkt-training-engineering-20261108-01/manifest.json"
+      ],
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": [],
+      "evidence_refs": [
+        "research_tracking/runs/gkt-training-engineering-20261108-01/README.md"
+      ],
+      "verified_targeted_tests": 45,
+      "verified_bundle_outputs": 32,
+      "completion_commit": "b67eba0",
+      "source_sha256": {
+        "src/knowledge_tracing/gkt/training.py": "6def666d82cf02dfefcf8980c2670ac24f3a137a86e9093e66cb87bc2cabc4e5",
+        "tests/gkt/test_training.py": "1d4a9869d6b167e972c719df637b593171343e6d93fd55395925c7e0268392e0"
+      },
+      "scientific_adoption_pending": "Checkpoint/load/resume, epoch/corpus runner, fitted inference adapter/selection/refit và scientific S04/S05/node mapping/graph variants còn thiếu; không efficacy/RQ completion.",
+      "manifest_sha256": "c1194df13f6f8f6efa41469264e6ced6447135bf389c2d03729a755d1ed14e0f",
+      "optimizer_steps": 4,
+      "cumulative_controller_seconds_conservative": 10.844604299985804,
+      "cap_seconds": 60
+    },
+    {
+      "id": "GPU09CPU",
+      "research_objective": "Xác minh mainworker Linux CPU synthetic qua native context, Gate và artifact durability",
+      "rq": [],
+      "workstream": "gpu_readiness",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GPU07",
+        "GPU06B",
+        "GATETOOL01"
+      ],
+      "required_inputs": "44 distributions đã audit CPU; runtime02; Linux lock 60dad3de; Gate24 từ source delta dd80006; explicit synthetic context/config/authorization.",
+      "files_components": "Native AKT Linux CPU worker/context/watchdog; canonical synthetic artifact copies và immutable evidence bundle.",
+      "implementation_objective": "Chứng minh bounded CPU engineering lifecycle, không thay protocol nghiên cứu hoặc mặc định mô hình.",
+      "acceptance_criteria": "Linux Gate24 771 PASS/0 fail/error/skip trong 600s; native CPU worker hoàn tất 48 train targets, 8 validation predictions, 2 optimizer/nonzero-gradient/parameter-update steps; reload exact; 9 durable copies khớp SHA trước/sau.",
+      "verification_steps": "Đối chiếu native report/XML/result/watchdog/context, manifest 194 output SHA và 9 durable copy SHA/size; không load model/Parquet hoặc chạy lại job.",
+      "required_artifacts": [
+        "research_tracking/reports/akt_linux_worker_readiness_20261108.md",
+        "research_tracking/runs/akt-linux-worker-readiness-20261108-01/README.md",
+        "research_tracking/runs/akt-linux-worker-readiness-20261108-01/manifest.json",
+        "experiments/akt/results/ctx-linux-20261108-01/transfer-copy-inventory.json"
+      ],
+      "estimated_effort": "Đã thực thi: Gate native 268.092342194s; worker phase 26.110794024s; không suy thời gian actual GPU.",
+      "compute_cost_category": "Free Colab CPU, synthetic engineering; không GPU/Modal/paid allocation.",
+      "authorization_requirements": "Engineering CPU synthetic theo authorization đã có; không tự approve S01/S04/S05, realdata, full CV hoặc Holdout.",
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": [],
+      "evidence_refs": [
+        "research_tracking/reports/akt_linux_worker_readiness_20261108.md",
+        "research_tracking/runs/akt-linux-worker-readiness-20261108-01/README.md",
+        "research_tracking/runs/akt-linux-worker-readiness-20261108-01/manifest.json",
+        "experiments/akt/results/ctx-linux-20261108-01/transfer-copy-inventory.json"
+      ],
+      "completion_commit": "1c52043",
+      "manifest_sha256": "3c0ee306f12ce9e92f5b1493f5d955b11db1caed6e4dff2be397e36583bd91c6",
+      "completion_scope": "Actual Linux CPU only: Gate24 771 PASS, 48 train/8 validation/2 genuine optimizer updates, 9 durable files (4 binary + 5 native text). Không CUDA/image/refit/resume/new research fitted baseline/RQ completion. Windows Gate22 là lịch sử, STALE sau dd80006.",
+      "verified_software_tests": 771,
+      "optimizer_steps": 2,
+      "train_targets": 48,
+      "validation_predictions": 8,
+      "durable_copy_count": 9,
+      "dependency_scope_note": "Dùng các prerequisites engineering đã hoàn tất và proof CPU cụ thể; không giả định toàn bộ GPU08 (image/CUDA) đã hoàn tất. GPU09 vẫn phụ thuộc GPU08 và chưa chạy CUDA."
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

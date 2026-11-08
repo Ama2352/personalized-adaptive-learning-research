@@ -1,6 +1,20 @@
 # Chỉ mục bằng chứng
 
+## Hiện hành08/11 — Linux CPU worker đã đóng (`1c52043`)
+
+Mốc vận hành hiện tại là **Linux Gate24 771 PASS, 0 fail/error/skip** và **native CPU dummy 48 train targets / 8 validation predictions / 2 optimizer updates thật**, với **9 file đã lưu bền vững và khớp SHA**. [báo cáo](reports/akt_linux_worker_readiness_20261108.md), [bundle đã đóng](runs/akt-linux-worker-readiness-20261108-01/README.md), [manifest](runs/akt-linux-worker-readiness-20261108-01/manifest.json). Đã kiểm lại toàn bộ **194 output SHA** của bundle và 9 bản sao artifact. GKT03 (`b67eba0`) và các kết quả nghiên cứu phía dưới giữ nguyên phạm vi.
+
+| Bằng chứng hiện tại | Kết quả đã xác minh | Phạm vi |
+|---|---|---|
+| Linux native Gate24 | 268.092342194s ≤ 600s; 771 PASS; Linux lock `60dad3de…35cc45a` | Software/source gate trên Linux CPU, không CUDA readiness. |
+| Native CPU dummy | Phase 26.110794024s; 48 train targets/6 windows; 8/8 validation predictions, 0 unseen; 2 nonzero-gradient và 2 parameter-update steps; reload exact | Synthetic engineering, không research fitted efficacy, model selection/refit/resume hoặc RQ completion. |
+| [Durable copy inventory](../experiments/akt/results/ctx-linux-20261108-01/transfer-copy-inventory.json) | 4 binary (448378 B) + 5 native text = 9 file khớp SHA/size trước–sau; checkpoint `f77b39c6…de8cc6` | Artifact Colab CPU đã hoàn tất, không local fit hoặc model/Parquet load. Binary giữ ngoài Git. |
+
+**Lịch sử giữ nguyên:** Windows Gate22 768 PASS là **STALE sau test-only `dd80006`**; Gate23 763 PASS/5 FAIL và các failure loader/transport vẫn giữ verdict gốc. Các dòng “current”, “pending archive”, “chưa Linux Gate/mainworker” trong snapshot cũ phía dưới mô tả thời điểm trước mốc này. GPU09 còn **actual CUDA pending**; immutable image, CUDA lifecycle/resume và protocol S01/S04/S05 chưa được đóng bằng CPU proof. Không đánh dấu RQ hoàn tất hoặc GPU ready.
+
 ## Bổ sung08/11 — GKT02/WRITE02/RQDIAG04
+
+- **GKT03 — `b67eba0`:** [train-batch readiness](reports/gkt_training_readiness_20261108.md),45CPUtests/4actual Adam updates/32outputs; conservative cumulative10,844604s≤60. Manifest `c1194df13f6f8f6efa41469264e6ced6447135bf389c2d03729a755d1ed14e0f`; COMPLETED_ENGINEERING_ONLY sau GKT02. Chưa checkpoint/resume/epoch/corpus/fitted adapter hoặc S04/S05; cooperative budget/state/source không là nonresettable authorization.
 
 | Mốc | Evidence đã đối chiếu | Source identity và giới hạn |
 |---|---|---|
