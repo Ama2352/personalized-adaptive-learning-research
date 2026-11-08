@@ -4,7 +4,7 @@
 
 ## Khi viết báo cáo, mở gì trước?
 
-**Để xem tiến độ với GVHD:** mở [báo cáo theo ngày](../research_tracking/supervisor_reports/README.md). Đợt08/11 hiện có một bản tóm tắt và một báo cáo HTML độc lập, chứa diễn giải thí nghiệm, bảng và biểu đồ; người đọc không cần mở repository để hiểu nội dung. Notebook của đợt này đã được thay bằng HTML, bản cũ vẫn giữ trong lịch sử Git. `research_tracking/reports/` tiếp tục giữ phân tích chuyên sâu; `runs/` giữ bằng chứng gốc.
+**Để xem tiến độ với GVHD:** mở [báo cáo theo ngày](../research_tracking/supervisor_reports/README.md). Bản hiện hành09/11 giữ đúng một bản tóm tắt và một HTML độc lập với mười biểu đồ; đi từ ngữ cảnh hai paper qua tiến độ và diễn tiến nghiên cứu đến phần chưa chứng minh. Bản08/11 và notebook trước chuyển đổi được bảo toàn trong lịch sử. `research_tracking/reports/` tiếp tục giữ phân tích chuyên sâu; `runs/` giữ bằng chứng gốc.
 
 | Cần viết/kiểm tra | Đọc bản diễn giải | Đối chiếu bằng chứng gốc |
 |---|---|---|

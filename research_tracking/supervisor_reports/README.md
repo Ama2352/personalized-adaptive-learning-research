@@ -2,7 +2,7 @@
 
 **Bản hiện hành:** [Tóm tắt ngày 09/11](2026-11-09/01_tien_do/BAO_CAO.md) và [báo cáo nghiên cứu HTML](2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html).
 
-[Bản ngày 08/11](2026-11-08/01_tien_do/BAO_CAO.md) được giữ để đối chiếu diễn tiến. Bản 09/11 bổ sung phân tích đồng xuất hiện giữa thay đổi tập cho phép và đề xuất thử trên cùng 1.080 tình huống; không tạo thêm mẫu độc lập.
+[Bản ngày 08/11](2026-11-08/01_tien_do/BAO_CAO.md) được giữ để đối chiếu diễn tiến. Bản09/11 đã nối thêm phép tái dựng bộ lọc vào phân tích1.080tình huống:4khác biệt bị bước cân bằng loại,51tập cuối khác vẫn cùng khái niệm thắng và17tập giữ nguyên đổi khái niệm. Mười biểu đồ đã kiểm desktop/mobile; đóng browser sau kiểm. Không tạo thêm mẫu độc lập.
 
 Mỗi đợt giữ hai file: bản tóm tắt và báo cáo minh họa chi tiết. HTML tự chứa nội dung, bảng và hình; người đọc không cần repository, notebook hoặc thư viện để xem. Nguồn nền được ghi bằng tên tài liệu và trang, không dẫn đường dẫn nội bộ.
 

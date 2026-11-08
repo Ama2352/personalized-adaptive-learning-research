@@ -1,6 +1,6 @@
 # Tiến độ nghiên cứu
 
-**RQ1 mới09/11:** [Tái dựng controller từ log cũ](reports/rq1_fixed_controller_candidates_20261109.md) đã khớp đủ2.160ready memberships và2.160CID trên1.080cặp. Trong55ready-change/preview-kept:4khác biệt bị visits-balance loại,51tập cuối vẫn khác nhưng cùng CID thắng;17cặp cùng tập cuối đổi CID. Nguồn tái dựng được đối chiếu, không C/B raw-observed hoặc causal learning benefit; bundle67outputs đã đóng. Bản HTML09/11 đang chuẩn bị bổ sung này, chưa tự coi là đã xuất bản.
+**RQ1 mới09/11:** [Tái dựng controller từ log cũ](reports/rq1_fixed_controller_candidates_20261109.md) đã khớp đủ2.160ready memberships và2.160CID trên1.080cặp. Trong55ready-change/preview-kept:4khác biệt bị visits-balance loại,51tập cuối vẫn khác nhưng cùng CID thắng;17cặp cùng tập cuối đổi CID. Nguồn tái dựng được đối chiếu, không C/B raw-observed hoặc causal learning benefit; bundle67outputs đã đóng. [HTML09/11 đã bổ sung diễn giải](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html): giữ9SVG cũ và thêm bảng minh họa tập cuối/lựa chọn, tổng10SVG; đã kiểm không chồng chữ hoặc tràn khung và đóng browser.
 
 **SAKT mới09/11:** [Persistence cuối epoch](reports/sakt_research_checkpoint_readiness_20261109.md) có31PASS/27,729s,3logicalAdamsteps, model+optimizer+RNG+counter parity; bundle70outputs đã đóng. Chưa fullresearchresume/selected-fit/refit/calibration; SGD format chỉ source-supported, chưa thực chạy.
 
