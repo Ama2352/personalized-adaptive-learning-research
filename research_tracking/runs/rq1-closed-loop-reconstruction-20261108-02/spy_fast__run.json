@@ -1,0 +1,92 @@
+{
+  "status": "PASS_FAST_SPY_BENCH_ONLY_NO_NATIVE_MODEL",
+  "command": [
+    "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+    "-B",
+    "-m",
+    "pytest",
+    "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\rq1-observability-preparation-20261108-01\\test_closed_loop_observer_fast.py",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp",
+    "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\rq1-observability-preparation-20261108-01\\closed-loop-fast-spy-attempt01\\tmp",
+    "--junitxml",
+    "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\rq1-observability-preparation-20261108-01\\closed-loop-fast-spy-attempt01\\pytest.xml"
+  ],
+  "counts": {
+    "tests": 10,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "returncode": 0,
+  "failure": null,
+  "controller_seconds": 3.377852300007362,
+  "spy_benchmark_cap_seconds": 10,
+  "source_sha256": {
+    "artifacts/akt/local-tests/rq1-observability-preparation-20261108-01/closed_loop_observer_fast.py": "e871cd9c8738051c021b973c6649afe9503cc57cb92e963e0c01cdeeea991836",
+    "artifacts/akt/local-tests/rq1-observability-preparation-20261108-01/run_closed_loop_reconstruction_fast.py": "f5808835c957aabf94e562d0c41221b85837534dc756ed36d8d36532909d2785",
+    "artifacts/akt/local-tests/rq1-observability-preparation-20261108-01/test_closed_loop_observer_fast.py": "4f2eb1519af715073d3055527d079618a166cc936fae4d487d058b041d933803",
+    "artifacts/akt/local-tests/rq1-observability-preparation-20261108-01/benchmark_closed_loop_callbacks_fast.py": "5c38428511ccfe7e43ea6eb7c2efc0e6e93faa522f6dbda9a24d28880dce97e2"
+  },
+  "source_sha256_after": {
+    "artifacts/akt/local-tests/rq1-observability-preparation-20261108-01/closed_loop_observer_fast.py": "e871cd9c8738051c021b973c6649afe9503cc57cb92e963e0c01cdeeea991836",
+    "artifacts/akt/local-tests/rq1-observability-preparation-20261108-01/run_closed_loop_reconstruction_fast.py": "f5808835c957aabf94e562d0c41221b85837534dc756ed36d8d36532909d2785",
+    "artifacts/akt/local-tests/rq1-observability-preparation-20261108-01/test_closed_loop_observer_fast.py": "4f2eb1519af715073d3055527d079618a166cc936fae4d487d058b041d933803",
+    "artifacts/akt/local-tests/rq1-observability-preparation-20261108-01/benchmark_closed_loop_callbacks_fast.py": "5c38428511ccfe7e43ea6eb7c2efc0e6e93faa522f6dbda9a24d28880dce97e2"
+  },
+  "original26_bindings_unchanged": true,
+  "original_failed7files_unchanged": true,
+  "prior_failed_seconds": 120.02970600000117,
+  "prior_diagnostic_seconds": 0.18320319999475032,
+  "new_revision_cap_seconds": 300,
+  "overall_cap_seconds": 430,
+  "native_model_calls": 0,
+  "optimizer_steps": 0,
+  "replay_dispatches": 0,
+  "benchmark": {
+    "kind": "SYNTHETIC_CALLBACK_OVERHEAD_NOT_NATIVE_RUNTIME_FORECAST",
+    "records": [
+      {
+        "mode": "baseline",
+        "rounds": 1000,
+        "elapsed_seconds": 0.017821700021158904,
+        "deterministic_result": 1501500,
+        "uniform_fingerprints": [],
+        "native_model_calls": 0
+      },
+      {
+        "mode": "original_all_event_dispatch",
+        "rounds": 1000,
+        "elapsed_seconds": 0.08080620001419447,
+        "deterministic_result": 1501500,
+        "uniform_fingerprints": [
+          {
+            "seed": 20000,
+            "profile": "PG",
+            "uniforms_sha256": "cb25638bd4597f1edd29b9bf081e27b89e2d36ec55dd5e88297bdba51a3d92e3"
+          }
+        ],
+        "native_model_calls": 0
+      },
+      {
+        "mode": "fast_code_ID_prefilter",
+        "rounds": 1000,
+        "elapsed_seconds": 0.04326849998324178,
+        "deterministic_result": 1501500,
+        "uniform_fingerprints": [
+          {
+            "seed": 20000,
+            "profile": "PG",
+            "uniforms_sha256": "cb25638bd4597f1edd29b9bf081e27b89e2d36ec55dd5e88297bdba51a3d92e3"
+          }
+        ],
+        "native_model_calls": 0
+      }
+    ],
+    "native_model_calls": 0,
+    "optimizer_steps": 0,
+    "limit_vi": "Workload chỉ json/list/int cố định; không dự báo replay300s sẽ đủ hoặc RQ efficacy."
+  }
+}

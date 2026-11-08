@@ -1,0 +1,176 @@
+{
+  "status": "SOURCE_LEVEL_CONTRACT_ONLY_NO_MODEL_TEST_OR_REPLAY_EXECUTION",
+  "historical_run": "research_tracking/runs/cpu-closedloop-20261107-01",
+  "historical_manifest_sha256": "871394b525163418880a00b829fb534d6fa98d8622a4f5b13cc77d0d3c27896f",
+  "historical_outputs_verified": 8,
+  "historical_runner_sha256": "a585d5f3b98215838c3970471daee67c142783dd625428caa3e889ba34785b35",
+  "historical_whole_runner_bytes_recovered": false,
+  "candidate_runner_sha256": "d8892fc3ce8d9c6f03c99a807c0efbd80844b292c77c835d0dceaa3a7a95657e",
+  "candidate_function": {
+    "name": "closed_loop_pilot",
+    "lines_1based": [
+      31,
+      65
+    ],
+    "excerpt_sha256": "1ec763f6065bd8e098b8a8d8e2caf9f7b5af10917908bd6828184b249198fea0",
+    "source_excerpt": "def closed_loop_pilot(reference, empty, *, seed, profile, steps, stream):\n    \"\"\"Dùng dynamics/selector gốc, paired latent starts và step-indexed uniforms.\"\"\"\n    scope = reference['environment']\n    model = reference['estimator']\n    base = scope['persona_base_abilities'](profile, seed)\n    uniforms = np.random.default_rng(seed).random((steps, 2))\n    rows = []\n    factories = {'graph_free': lambda: model['GAMKTPolicy'](False),\n                 'graph_package': lambda: model['GAMKTPolicy'](True),\n                 'empty_graph_package': lambda: empty['estimator']['GAMKTPolicy'](True)}\n    for variant, factory in factories.items():\n        environment = scope['LatentStudentEnvironment'](base)\n        policy = factory()\n        timestamp = pd.Timestamp('2026-01-01', tz='UTC')\n        actions = []\n        for step in range(steps):\n            timestamp += pd.Timedelta(hours=72 if step > 0 and step % len(base) == 0 else 6)\n            cid, qid, difficulty = policy.select()\n            prediction = policy.predict(cid, qid, difficulty, timestamp)\n            outcome = environment.interact(cid, difficulty, timestamp, *uniforms[step])\n            stream.write(json.dumps({'seed': seed, 'profile': profile, 'variant': variant,\n                'step': step, 'concept': cid, 'question': qid, 'prediction': prediction,\n                'timestamp': timestamp.isoformat(), **outcome}, ensure_ascii=False) + '\\n')\n            policy.update(cid, qid, difficulty, timestamp, outcome['y'], prediction)\n            actions.append(cid)\n        final = environment.snapshot(timestamp)\n        retained = environment.snapshot(timestamp + pd.Timedelta(days=14))\n        net_gain = float(np.mean([final[cid] - base[cid] for cid in base]))\n        retained_gain = float(np.mean([retained[cid] - base[cid] for cid in base]))\n        if abs(retained_gain - np.exp(-.06*14)*net_gain) > 1e-10:\n            raise ValueError('closed-loop retention identity failed')\n        rows.append({'seed': seed, 'profile': profile, 'variant': variant,\n                     'net_mean_theta_gain': net_gain, 'retained_mean_theta_gain': retained_gain,\n                     'concepts_covered': len(set(actions)), 'actions': actions})\n    return rows"
+  },
+  "git_source_candidates_read": [
+    {
+      "git_revision": "04c36169f3c5491b6d5f5e3aeac317b960d73926",
+      "path": "scripts/research/run_cpu_diagnostics.py",
+      "sha256": "d8892fc3ce8d9c6f03c99a807c0efbd80844b292c77c835d0dceaa3a7a95657e",
+      "bytes": 13576,
+      "has_closed_loop_function": true,
+      "function_AST_matches_current": true
+    },
+    {
+      "git_revision": "e4e6a262bddcdd3b6b6de8c1115ef0eb54b3240a",
+      "path": "scripts/research/run_cpu_diagnostics.py",
+      "sha256": "402dca905694d850f126e41f3b5dcc91b327e986ae2cfbb240dda739eed8dd45",
+      "bytes": 9465,
+      "has_closed_loop_function": false,
+      "function_AST_matches_current": false
+    }
+  ],
+  "native_method_anchors": [
+    {
+      "cell_zero_based": 11,
+      "class": "CoverageAwareSelectorMixin",
+      "method": "ready_set",
+      "cell_lines_1based": [
+        22,
+        43
+      ],
+      "sha256": "c69a9f34e51da55d5ed4b166df7c9f7497e8be669f349dd141b42bf5fa7c7e88"
+    },
+    {
+      "cell_zero_based": 11,
+      "class": "CoverageAwareSelectorMixin",
+      "method": "select",
+      "cell_lines_1based": [
+        45,
+        81
+      ],
+      "sha256": "6161859234e1b401c7c0fea9292815117b4fa3dd49b9da883588cb2049de0b60"
+    },
+    {
+      "cell_zero_based": 13,
+      "class": "GAMKTPolicy",
+      "method": "is_mastered",
+      "cell_lines_1based": [
+        50,
+        52
+      ],
+      "sha256": "1022a9987c51478e156e5a1e2c377ba61223d47c493695dfa2ed1ffb662fbe5b"
+    },
+    {
+      "cell_zero_based": 13,
+      "class": "GAMKTPolicy",
+      "method": "mastery_score",
+      "cell_lines_1based": [
+        104,
+        115
+      ],
+      "sha256": "8bb8cb2a1df1d655dad12a166aa83f6e10ea189b04f49e36b65e9f8fb1719e62"
+    },
+    {
+      "cell_zero_based": 13,
+      "class": "GAMKTPolicy",
+      "method": "predict",
+      "cell_lines_1based": [
+        117,
+        127
+      ],
+      "sha256": "b582b389663e6579621c40e9beab7b3bd30b5d1617941ade7f8667a3710f6dfe"
+    },
+    {
+      "cell_zero_based": 13,
+      "class": "GAMKTPolicy",
+      "method": "update",
+      "cell_lines_1based": [
+        129,
+        149
+      ],
+      "sha256": "3b079eaa6bfef68eaf497e1cd8324b759812d2c96b9d60d901440627f87e5180"
+    }
+  ],
+  "native_definition_hashes_verified": 14,
+  "simulator_input_byte_hashes_verified": 4,
+  "source_inventory": {
+    "scripts/research/run_cpu_diagnostics.py": {
+      "sha256": "d8892fc3ce8d9c6f03c99a807c0efbd80844b292c77c835d0dceaa3a7a95657e",
+      "bytes": 13576
+    },
+    "src/knowledge_tracing/paper2_reference.py": {
+      "sha256": "a12edc72a00ad980799ec50ff26f0cb68f2529e3699e8a57e4f11295693c2cd1",
+      "bytes": 5784
+    },
+    "research_tracking/runs/cpu-closedloop-20261107-01/manifest.json": {
+      "sha256": "871394b525163418880a00b829fb534d6fa98d8622a4f5b13cc77d0d3c27896f",
+      "bytes": 2122
+    },
+    "research_tracking/runs/cpu-closedloop-20261107-01/source_provenance.json": {
+      "sha256": "8b296d89d869e90696be04592a5dc627e617af6c39055a863b9eb88b6cd5560d",
+      "bytes": 2935
+    },
+    "research_tracking/runs/cpu-closedloop-20261107-01/README.md": {
+      "sha256": "3ae18fbe1f317a9ece058f2ef5a56f9bde0c5cb759be108f81075f70257a7181",
+      "bytes": 1012
+    },
+    "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb": {
+      "sha256": "353f487a3d6ed3826f2546d03c0aa2ad2279cf5c4b7fe8e375f4cafb0408280f",
+      "bytes": 69017
+    },
+    "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/data/simulator_inputs/nodes.csv": {
+      "sha256": "6db464d1fd3df5d4215d51c9f90dc0f7e24f252517252784c80bdb5fa6291650",
+      "bytes": 728
+    },
+    "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/data/simulator_inputs/edges.csv": {
+      "sha256": "ecd910d8df52f8790997391de657ea0f9e8357446212c168b73e500d0facc2fb",
+      "bytes": 1494
+    },
+    "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/data/simulator_inputs/question_bank.csv": {
+      "sha256": "fb5924ac0d19049ef1a5be23352592e30dfa3a4bde3e3fa07f10979fe0887e4d",
+      "bytes": 5160
+    },
+    "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/data/simulator_inputs/concept_to_chapter_map.csv": {
+      "sha256": "aa99cffb251ce6757258d2e87fe707455bc74b6b3917ead1acf48c5e96ee0a17",
+      "bytes": 2156
+    }
+  },
+  "proposed_replay": {
+    "seeds": [
+      20000,
+      20001,
+      20002
+    ],
+    "profiles": [
+      "PG",
+      "PY",
+      "PYH"
+    ],
+    "variants": [
+      "graph_free",
+      "graph_package",
+      "empty_graph_package"
+    ],
+    "steps": 120,
+    "passes": [
+      "native_control",
+      "native_observed"
+    ],
+    "legacy_rows_per_pass": 3240,
+    "aggregate_outcome_rows_per_pass": 27,
+    "observed_sidecar_rows": 3240,
+    "new_independent_N": 0,
+    "maximum_native_predict_update_and_environment_interactions_each": 6480,
+    "optimizer_steps": 0,
+    "proposed_cumulative_seconds_cap": 120
+  },
+  "approval_boundary_vi": "Safe bounded local instrumentation/reproduction không tự là methodology change. Parent review exact source/caps/legacy parity trước quyết định run; không mặc định yêu cầu human approval và không có confirmatory authority.",
+  "source_limitation_vi": "a585 historical whole-run bytes chưa tìm được trong hai Git revisions và tracking/docs hash lookup. Current candidate closed_loop_pilot tại d889/04c361 được pin riêng; không gọi exact historical source. Strict complete legacy-output parity cần đạt nếu parent quyết định replay, nhưng không biến thành source identity proof.",
+  "RNG_limit_vi": "default_rng(seed).random tạo Generator tạm, function không giữ nó. Có thể bind/so uniforms bytes; không claim historical hoặc final local Generator state được lưu.",
+  "new_model_test_RNG_calls": 0,
+  "new_scientific_metrics_or_inference": false
+}

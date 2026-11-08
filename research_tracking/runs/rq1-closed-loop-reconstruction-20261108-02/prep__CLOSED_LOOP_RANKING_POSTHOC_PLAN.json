@@ -1,0 +1,29 @@
+{
+  "role": "EXPLICIT_POST_HOC_EXPLORATORY_SOURCE_LEVEL_CONCEPT_RANK_EXPLANATION",
+  "frozen_before_actual_B_scores_read": true,
+  "scope": "ALL27trajectories/3240rows ranking validation;ALL18firstcommon-prefix comparisons including negatives; no model calls.",
+  "key": [
+    "captured B mastery_score",
+    "0 if chapter_map[cid]==previous_chapter else1",
+    "all prior served concept visits",
+    "lexical cid"
+  ],
+  "coverage": "score calls unique and same order as B; min must equal recorded served concept; missing assumptions stop individualclaim nofill",
+  "tiecontext": "Counter initializedzero/currentchapterNone; only native select increments count andsets chapter afterchoice; deriveALLpastservedcids; commonpast tuple/time/y impliessamevisits/chapter",
+  "classification": [
+    "sameB+non_scorekeys+differentloggedscores explainsdifferentconceptkeywinner",
+    "Bmembershipdifference separate",
+    "questiononlytuplebreak notexplainedbyconceptkey",
+    "no commonprefixbreak retainednegative",
+    "capture/contextmissing unsupported"
+  ],
+  "source_order": "select(nativeBscorekey)→predict(servedP afterbookkeeping)→interact→update(y,P)→futurestate",
+  "limits": [
+    "Posthoc notpreregistered effect; no causalmediation/learningbenefit/edge-only/newN.",
+    "No fullS28 needed for localBconcept ranking; fullS/calibration/referenceprobe remain separateS04.",
+    "Key replay validatesCIDonly, not choose_question/qid/difficulty mechanism.",
+    "Emptyestimator/commoncontrollerG/commonenvironmentG unchanged."
+  ],
+  "cap_seconds_including_purefixtures": 15,
+  "canonical_report_or_exante_edits": false
+}

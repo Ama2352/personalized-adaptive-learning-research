@@ -1,0 +1,15 @@
+# Freeze implementation closed-loop — 08/11/2026
+
+**Spy-only PASS17; chưa native model/replay.** Trial01 pytest0,54s, controller2,052558s,0fail/error/skip;0native Paper2 model/data replay/optimizer. Raw log/XML/run và3source snapshots trước/sau tại `closed-loop-spy-attempt01/`. `closed_loop_spy_receipt.json` là byte-identical copy của actual run receipt, SHA trước/sau đã kiểm.
+
+Role bắt buộc: **current-source diagnostic reconstruction with exact stored legacy parity nếu đạt**, không exact historical/same-source reproduction. Original whole runner a585… MISSING; candidate d889… và function excerpt pin riêng. New metadata chỉ thuộc attempt mới; không historical backfill.
+
+Nguồn đã freeze: `closed_loop_observer.py`, `run_closed_loop_reconstruction.py`, `test_closed_loop_observer.py`; tất cả inputs/dependency/notebook/historical8 SHA trong `closed_loop_source_inventory.json`. Proposed command tại `closed_loop_proposed_command.ps1.txt`; **không dispatch trong batch này**. Budget cumulative120s gồm actualspy2,052558s +control+observed+controller; remaining trước dispatch overhead117,947442s. Source/methods/classes/globals/dynamics/graphs/seeds giữ nguyên.
+
+Spy tests kiểm native-return identity/constructor count/state và call parity, M coverage không fill, R khác eligible candidates, full served tuple, phase order/current y update pairing, missing legacy/target mismatch, existing profiler STOP/preservation, unknown object state rejection, row/deadline bounds và CLI no implicit model dispatch. Chúng là handwritten synthetic spies, chưa native source/parity efficacy proof.
+
+Clarification từ source review: control và observed đều dùng same lightweight outer-function return hook để đọc existing uniforms; chỉ observed xử lý native method call/return frames. Không native method override/subclass, thêm predictor/mastery/ready/select hoặc RNG calls. Full S28 không được source tính; cached/currently_mastered hoặc environment latent state không thay M. Temporary Generator không còn reference: không final Generator state claim.
+
+P0 interpretation: M/R trong selection trước bookkeeping; P sau selection bookkeeping, trước interact/current y. Raw R khác final candidates khi escape; actual served tuple khác fixed-preview. Across variants histories/targets/labels diverge; chỉ descriptive different-exposure counts per trajectory, không paired ΔP/loss/currentquery crossings theo ordinal timestep, funnel mediation hoặc causal effect. Final state/environment hashes chỉ kiểm observer không đổi dynamics, không reference calibration/mastery oracle.
+
+Nếu parent cho phép chạy: exact3.240legacy rows +27outcome rows/pass và control/observed27state/9uniform fingerprints phải match; không tolerance/drop/repair/newseed/newcondition/corrected simulator. Missing/source/phase/parity/resource failure giữ immutable attempt và STOP. Child timeout/owned cleanup và postelapsed checks là engineering guards; không host hard quota hoặc scientific protocol approval. Không RQ completion, confirmatory CPU09/10 authority, realdata/Holdout/GPU/cloud/install.

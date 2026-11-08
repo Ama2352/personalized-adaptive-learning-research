@@ -1,0 +1,5 @@
+# RQ1 closed-loop — current-source reconstruction, không exact historical source
+
+Giữ timeout120.029706s và fastPASS revision183.8694935s/overall304.0824027s. 17original/10fast/12descriptive/5posthoc tests là4nhóm khác nhau, không broad model efficacy suite. Hai passes exact3240legacy+27outcome mỗi pass;27state/9uniform pairs;newN0/0optimizer. Descriptive all27trajectories/all18comparisons; ranking là explicitPOSTHOC source-local CID explanation đã parentreview, không qid/difficulty, causal mediation, edge-only hoặc learning benefit. Served-itemP tínhsau select; Bscore đã log đủlocalranking nhưng calibratedmastery/S04/fullSglobal còn mở. Originala585MISSING. Partial gzip failure giữ nguyên, không repair. Source/code/CSV là simulator inputs; không realdata/Holdout, checkpoint/Parquet/privateRPC/base64 hoặc notebookexecution. Archive chỉ copy/hash, không model/tests/analysis.
+
+Report snapshot liên kết original local paths; copy_inventory.json map exact originalpaths→flat aliases trong bundle này. Candidate JSON pendinglabel giữ generated-state lịch sử; actual parent-ranking-review và closure_review ghi review đến sau.
