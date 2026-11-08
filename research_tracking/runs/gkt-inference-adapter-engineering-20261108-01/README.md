@@ -1,0 +1,3 @@
+# GKT frozen engineering inference adapter — 08/11/2026
+
+32 portable mock unit cases giữ unverified_fixture, tách một actual stored GKT04 checkpoint load. Integration6targets=2scored+4unsupported/0research_fitted,0optimizer; conservative51,662743/60giây. Giữ40source before/after snapshots và exact input lineage; model binary chỉ SHA reference tại artifact gốc. Mapping caller-declared NOT train-attested, full-prefix/cold/OOVunsupported_history explicit, không fitted OnlineSession hoặc final baseline/S04S05 promotion. Parent actual review; không fabricated independent-agent PASS. Pack chỉ copy/hash, không rerun model/tests. Không sửa sau closure.

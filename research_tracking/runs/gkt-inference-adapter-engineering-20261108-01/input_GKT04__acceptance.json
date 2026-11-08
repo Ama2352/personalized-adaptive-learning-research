@@ -1,0 +1,101 @@
+{
+  "status": "FROZEN_TARGETED_PASS40_REVIEW_PENDING_NO_ARCHIVE",
+  "trials": [
+    {
+      "label": "01",
+      "counts": {
+        "tests": 40,
+        "failures": 0,
+        "errors": 39,
+        "skipped": 0
+      },
+      "controller_seconds": 14.230892899999162,
+      "exit_code": 1,
+      "cumulative_updates": 1,
+      "run_sha256": "264268fdd864e2ae65629f04b9d134cc58ff87a9c565535021ee2d111bc3cf4b",
+      "junit_sha256": "62904bcc08342d19a2ad99132dac21877a943111083767a00af29b7e4b74e777",
+      "stdout_sha256": "5cf8ba8bbd57aa73e6b64dbbcb0f16d6bb075af303125d87eef3414852befff0"
+    },
+    {
+      "label": "02",
+      "counts": {
+        "tests": 40,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "controller_seconds": 7.3789651000115555,
+      "exit_code": 0,
+      "cumulative_updates": 2,
+      "run_sha256": "3d5f5dfc45a544072a0e85e52545dcf343865b0835974dd2f6f393a38d128d13",
+      "junit_sha256": "113d2c60bacde4e0c719e28f558d6a25c07651e1b2b7ac919479c384d3369060",
+      "stdout_sha256": "a24f6dc65365669399dfecefff64412adde4b15fcd93a7cfb1a8a4495d16221c"
+    }
+  ],
+  "cumulative_controller_seconds": 21.609858000010718,
+  "reserved_static_and_link_control_seconds": 3,
+  "cumulative_conservative_seconds": 24.609858000010718,
+  "cap_seconds": 60,
+  "actual_updates": 2,
+  "max_actual_updates": 4,
+  "source_sha256": {
+    "src/knowledge_tracing/gkt/training_checkpoint.py": "5ddfea74c17cddf8f3ba72e60dcde1f2d36c6950ad2b22f7d2d55361ed2a89d8",
+    "tests/gkt/test_training_checkpoint.py": "494ea9e719898a5d4c5deda50bc280fa0f2ff8d569b6934b34145281fc0d692e"
+  },
+  "global_update_ledger_sha256": "ba967646d6e16e42a2b10c871b6d3bfdf447d9ede779089e1ea61ead5b9649e0",
+  "trial01_preserved": "39fixture errors, hard-link denied; no COMPLETE and no source correction",
+  "permission_controls": [
+    {
+      "stage": "01",
+      "source_sha256": "251f19ccc8a4e4761070804c1f31ae52482d6d35f09331271841df2ab172b2c9",
+      "model_optimizer_calls": 0,
+      "scope": "same directory owned hard-link permission control",
+      "status": "HARDLINK_FAILED",
+      "error_type": "PermissionError",
+      "error": "[WinError 5] Access is denied: 'D:\\\\Dev\\\\KLTN\\\\artifacts\\\\akt\\\\local-tests\\\\gkt04-checkpoint-preparation-20261108-01\\\\link-control-01\\\\source.bin' -> 'D:\\\\Dev\\\\KLTN\\\\artifacts\\\\akt\\\\local-tests\\\\gkt04-checkpoint-preparation-20261108-01\\\\link-control-01\\\\target.bin'",
+      "winerror": 5,
+      "elapsed_seconds": 0.012065599992638454
+    },
+    {
+      "stage": "02",
+      "source_sha256": "251f19ccc8a4e4761070804c1f31ae52482d6d35f09331271841df2ab172b2c9",
+      "model_optimizer_calls": 0,
+      "scope": "same directory owned hard-link permission control",
+      "status": "HARDLINK_CREATED_EXACT",
+      "link_count": 2,
+      "elapsed_seconds": 0.0016516000032424927
+    }
+  ],
+  "selected_metadata": [
+    {
+      "path": "artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-02/tmp/weights0/completed/COMPLETE.json",
+      "bytes": 286,
+      "sha256": "6aaf8cac5c084c82669c463a93f9ae8fa0992ef26ee184ba4b8902f53334c890"
+    },
+    {
+      "path": "artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-02/tmp/weights0/completed/COMPLETE.json.pending",
+      "bytes": 286,
+      "sha256": "6aaf8cac5c084c82669c463a93f9ae8fa0992ef26ee184ba4b8902f53334c890"
+    },
+    {
+      "path": "artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-02/tmp/weights0/completed/metadata.json",
+      "bytes": 3123,
+      "sha256": "01912938f358d667d42972faa0adbe56f8f287166c32284a3bfad5977c62e466"
+    }
+  ],
+  "selected_binary_inventory_no_copy": [
+    {
+      "path": "artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-01/tmp/weights0/completed/weights.pt.pending",
+      "bytes": 9746,
+      "sha256": "346807fdb44f9e9a37861073d593d523d9006f788f753c98016820179dfb909c"
+    },
+    {
+      "path": "artifacts/akt/local-tests/parallel-gkt-checkpoint-20261108-02/tmp/weights0/completed/weights.pt",
+      "bytes": 9746,
+      "sha256": "346807fdb44f9e9a37861073d593d523d9006f788f753c98016820179dfb909c"
+    }
+  ],
+  "source_all_versions_same": true,
+  "other_source_edits": false,
+  "checkpoint_role": "weights-only engineering, optimizer/RNG/hidden_state_saved false; no resume/fitted research"
+}
