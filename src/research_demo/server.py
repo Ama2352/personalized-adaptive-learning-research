@@ -10,6 +10,7 @@ from .evidence import EvidenceError, EvidenceStore
 
 STATIC = Path(__file__).with_name("static")
 ROUTES = {"/": ("index.html", "text/html"), "/assets/demo.css": ("demo.css", "text/css"), "/assets/demo.js": ("demo.js", "text/javascript")}
+DOCUMENT_ROUTES = {"/evidence/closed-loop/report":"report", "/evidence/closed-loop/sources":"sources"}
 
 
 def make_server(port=8765, *, store=None, host="127.0.0.1"):
@@ -26,6 +27,8 @@ def make_server(port=8765, *, store=None, host="127.0.0.1"):
         if len(data) > 256 * 1024:
             raise EvidenceError("UI asset vượt giới hạn")
         assets[route] = (data, mime)
+    for route, name in DOCUMENT_ROUTES.items():
+        assets[route] = evidence.documents[name]
 
     class Handler(BaseHTTPRequestHandler):
         server_version = "ResearchReplay/1"
@@ -70,7 +73,7 @@ def make_server(port=8765, *, store=None, host="127.0.0.1"):
                 return self.respond(200, data, mime)
             if url.path == "/api/catalog" and not url.query:
                 return self.respond(200, evidence.catalog())
-            if url.path == "/api/replay":
+            if url.path in {"/api/replay", "/api/closed-loop"}:
                 try:
                     q = parse_qs(url.query, keep_blank_values=True, strict_parsing=True, max_num_fields=4)
                     if set(q) != {"profile", "seed", "variant", "step"} or any(len(v) != 1 for v in q.values()):
@@ -80,7 +83,8 @@ def make_server(port=8765, *, store=None, host="127.0.0.1"):
                     seed, step = int(q["seed"][0]), int(q["step"][0])
                     if str(seed) != q["seed"][0] or str(step) != q["step"][0]:
                         raise ValueError("canonical integer")
-                    return self.respond(200, evidence.snapshot(q["profile"][0], seed, q["variant"][0], step))
+                    project = evidence.snapshot if url.path == "/api/replay" else evidence.closed_loop_snapshot
+                    return self.respond(200, project(q["profile"][0], seed, q["variant"][0], step))
                 except (ValueError, KeyError):
                     return self.respond(400, {"error": "Profile/seed/variant/step phải thuộc allowlist"})
             self.respond(404, {"error": "Không có route này"})

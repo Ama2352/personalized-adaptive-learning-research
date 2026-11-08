@@ -1,5 +1,8 @@
 """Synthetic stored-artifact viewer: integrity, semantic parity and real HTTP."""
 import gzip
+import csv
+import copy
+import io
 import hashlib
 import http.client
 import json
@@ -184,3 +187,147 @@ def test_ui_safe_dom_and_explicit_preview_boundary():
     assert "không phải P(đã biết)" in html
     assert "confidence giả" in html
     assert "http://" not in html and "https://" not in html
+
+
+@pytest.fixture(scope="module")
+def closed_raw():
+    folder=evidence.ROOT/"research_tracking/runs"/evidence.CLOSED_RUN
+    with gzip.open(folder/evidence.CLOSED_PINS[0][0],"rt",encoding="utf-8") as stream:
+        return [json.loads(line) for line in stream]
+
+
+def test_closed_pins_complete_projection_and_no_raw_or_oracle_fields(store,closed_raw):
+    assert len(store.closed_rows)==3240 and len(store.closed_prefix)==2160 and len(store.closed_rankings)==18
+    folder=evidence.ROOT/"research_tracking/runs"/evidence.CLOSED_RUN
+    assert hashlib.sha256((folder/"manifest.json").read_bytes()).hexdigest()==evidence.CLOSED_MANIFEST_SHA
+    for name,digest,_ in evidence.CLOSED_PINS:
+        assert hashlib.sha256((folder/name).read_bytes()).hexdigest()==digest
+    for raw in closed_raw:
+        s=store.closed_loop_snapshot(raw["profile"],raw["seed"],raw["variant"],raw["step"])
+        assert s["mastered_bool"]==raw["mastered_decisions"]
+        assert s["ready"]==raw["ready_set"] and s["candidates"]==raw["eligible_candidates"]
+        assert s["balanced"]==raw["balanced_candidates"] and s["served_item"]==raw["served_tuple"]
+        assert s["timestamp"]==raw["query"]["timestamp_iso"] and s["p_correct_served_item"]==raw["prediction"]
+        assert s["native_B_scores"]==raw["mastery_score_calls"]
+        assert s["route_served"][-1]==raw["served_tuple"]["concept"] and len(s["route_served"])==raw["step"]+1
+        assert s["posthoc"] is True and s["new_independent_N"]==0
+        assert not {"correct","y","p_true","theta_before","theta_after","outcome_sha256","mastery_calls",
+                    "state_before_selection_sha256","p_correct_logged_query","reference"}&s.keys()
+        assert not {"prior_visits","chapter_tie"}&s["native_B_scores"][0].keys()
+
+
+def test_all_prefix_flags_and_archived_first_break_keys_exact_projection(store):
+    folder=evidence.ROOT/"research_tracking/runs"/evidence.CLOSED_RUN
+    with (folder/evidence.CLOSED_PINS[1][0]).open(encoding="utf-8",newline="") as stream:
+        flags=list(csv.DictReader(stream))
+    for raw in flags:
+        c=store.closed_loop_snapshot(raw["profile"],int(raw["seed"]),raw["candidate"],int(raw["step"]))["comparison"]
+        for field in ("common_before","common_after","current_same_served_tuple","current_same_timestamp","current_same_label"):
+            assert c[field]==(raw[field]=="1")
+        assert (c["explanation"] is not None)==(int(raw["step"])==c["first_break_step"])
+    rank=json.loads((folder/evidence.CLOSED_PINS[2][0]).read_text(encoding="utf-8"))
+    negatives=0
+    for raw in rank["comparisons"]:
+        first=raw["first_prefix_break"]
+        if first is None:
+            negatives+=1
+            for step in range(120):
+                c=store.closed_loop_snapshot(raw["profile"],raw["seed"],raw["candidate"],step)["comparison"]
+                assert c["negative_case"] and c["common_before"] and c["first_break_step"] is None and c["explanation"] is None
+            continue
+        s=store.closed_loop_snapshot(raw["profile"],raw["seed"],raw["candidate"],first["step"])
+        proof=s["comparison"]["explanation"]
+        assert proof["classification"]==first["classification"]
+        for variant,field in [("graph_free","left_native_replay"),(raw["candidate"],"right_native_replay")]:
+            expected=[];native=first[field]
+            for cid in native["B"]:
+                key=native["native_keys"][cid]
+                expected.append({"concept":cid,"score":key["score"],"chapter_tie":key["chapter_tie"],
+                                 "prior_visits":key["prior_visits"],"selected":cid==native["chosen_concept"]})
+            assert proof["ranking_keys"][variant]==expected
+    assert negatives==7
+    assert store.closed_loop_snapshot("PG",20000,"graph_free",0)["comparison"] is None
+
+
+@pytest.mark.parametrize("name",["manifest.json"]+[p[0] for p in evidence.CLOSED_PINS])
+def test_closed_startup_tamper_before_socket(tmp_path_factory,monkeypatch,name):
+    # Short workspace fixture roots avoid legacy Windows MAX_PATH without OS changes.
+    scratch=tmp_path_factory.mktemp("c")
+    for run,_,filename,_ in evidence.PINS:
+        dst=scratch/"research_tracking/runs"/run;dst.mkdir(parents=True)
+        for selected in ("manifest.json",filename):
+            shutil.copyfile(evidence.ROOT/"research_tracking/runs"/run/selected,dst/selected)
+    folder=scratch/"research_tracking/runs"/evidence.CLOSED_RUN;folder.mkdir(parents=True)
+    for selected in ["manifest.json"]+[p[0] for p in evidence.CLOSED_PINS]:
+        shutil.copyfile(evidence.ROOT/"research_tracking/runs"/evidence.CLOSED_RUN/selected,folder/selected)
+    changed=folder/name;changed.write_bytes(changed.read_bytes()+b" ")
+    monkeypatch.setattr(evidence,"ROOT",scratch)
+    with pytest.raises(EvidenceError,match="SHA"):
+        make_server(0)
+
+
+@pytest.mark.parametrize("kind",["duplicate","query","phase","M","score","selected","step"])
+def test_closed_schema_and_phase_fail_closed(closed_raw,kind):
+    rows=list(closed_raw);row=copy.deepcopy(rows[0]);rows[0]=row
+    if kind=="duplicate":rows[0]=rows[1]
+    elif kind=="query":row["query"]["question"]="not-selected"
+    elif kind=="phase":row["phases"].reverse()
+    elif kind=="M":row["mastered_decisions"][next(iter(row["mastered_decisions"]))]=1
+    elif kind=="score":row["mastery_score_calls"]=["wrong"]
+    elif kind=="selected":row["balanced_candidates"]=["outside-domain"]
+    else:row["step"]=True
+    with pytest.raises(EvidenceError):EvidenceStore._index_closed(rows)
+
+
+def test_closed_expansion_bound_and_prefix_sticky_guard():
+    with pytest.raises(EvidenceError,match="giải nén"):
+        evidence.decode_closed_trace(gzip.compress(b" "*(32*1024*1024+1)))
+    folder=evidence.ROOT/"research_tracking/runs"/evidence.CLOSED_RUN
+    data=(folder/evidence.CLOSED_PINS[1][0]).read_text(encoding="utf-8")
+    reader=csv.DictReader(io.StringIO(data));rows=list(reader);fields=reader.fieldnames
+    target=next(v for v in rows if v["common_before"]=="0");target["common_before"]="1"
+    stream=io.StringIO();writer=csv.DictWriter(stream,fieldnames=fields);writer.writeheader();writer.writerows(rows)
+    with pytest.raises(EvidenceError):EvidenceStore._index_prefix(stream.getvalue().encode())
+
+
+@pytest.mark.parametrize("route,mime",[("/api/closed-loop?profile=PG&seed=20000&variant=graph_package&step=61","application/json"),
+    ("/evidence/closed-loop/report","text/plain"),("/evidence/closed-loop/sources","application/json")])
+def test_closed_http_fixed_routes_and_review_semantics(serving,route,mime):
+    status,headers,body=request(serving,route)
+    assert status==200 and headers["Content-Type"].startswith(mime)
+    assert headers["Cache-Control"]=="no-store" and headers["X-Content-Type-Options"]=="nosniff"
+    if route.startswith("/api/"):
+        result=json.loads(body)
+        assert result["comparison"]["first_break_step"]==61 and result["comparison"]["common_before"]
+        assert result["comparison"]["explanation"] and result["posthoc"]
+        assert not {"correct","p_true","reference","p_correct_logged_query"}&result.keys()
+    elif route.endswith("/report"):
+        assert hashlib.sha256(body).hexdigest()==evidence.CLOSED_PINS[5][1]
+    else:
+        result=json.loads(body)
+        assert result["new_independent_N"]==0 and result["review"]=="PASS_PARENT_INDEPENDENT_RAW_RANKING_AND_DESCRIPTIVE_REVIEW"
+        assert len(result["sources"])==6 and "CURRENT_SOURCE" not in result.keys()
+
+
+@pytest.mark.parametrize("query",["profile=PG&seed=20000&variant=graph_package&step=00",
+    "profile=PG&seed=20000&variant=graph_package&step=120","profile=PG&seed=20000&variant=other&step=1",
+    "profile=PG&seed=20000&variant=graph_free&step=1&file=private","profile=PG&seed=20000&variant=graph_free&step=1&step=2"])
+def test_closed_query_allowlist(serving,query):
+    assert request(serving,"/api/closed-loop?"+query)[0]==400
+
+
+@pytest.mark.parametrize("path",["/evidence/closed-loop/report?file=dataset","/evidence/closed-loop/private",
+    "/evidence/closed-loop/../../dataset","/evidence?path=secret"])
+def test_closed_no_arbitrary_document_or_private_file_routes(serving,path):
+    assert request(serving,path)[0]==404
+
+
+def test_closed_ui_context_and_cached_document_contract(store):
+    from src.research_demo.server import STATIC
+    js=(STATIC/"demo.js").read_text(encoding="utf-8");html=(STATIC/"index.html").read_text(encoding="utf-8")
+    assert 'id="mode"' in html and 'id="jump-break"' in html and 'id="ranking"' in html
+    assert "/api/closed-loop?" in js and "currentRequest" in js
+    assert "không điền visits/chapter giả" in js and "không paired" in store.closed_loop_snapshot("PG",20000,"graph_package",61)["semantics"]
+    assert "Post-hoc" in html and "new independent N = 0" in html and "B-score không là calibrated" in html
+    assert "innerHTML" not in js and "eval(" not in js
+    assert set(store.documents)=={"report","sources"}
