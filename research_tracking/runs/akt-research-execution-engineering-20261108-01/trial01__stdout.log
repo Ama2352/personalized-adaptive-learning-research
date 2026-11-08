@@ -1,0 +1,18 @@
+...........................................F.................            [100%]
+================================== FAILURES ===================================
+___________________ test_foreign_source_inventory_rejected ____________________
+
+files = namespace(root=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/akt-research-execution-20261108-01/trial01/tmp/test_..._available_ram_bytes=1073741824, max_checkpoint_bytes=8388608, max_prediction_bytes=1048576, max_input_bytes=4194304)))
+
+    def test_foreign_source_inventory_rejected(files):
+        files.corpus['source_inventory']['src/private.json']='a'*64;refresh(files)
+>       with pytest.raises(ValueError,match='source-bound Gate'):guard.prepare_research_identity(files.spec,files.evidence)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'source-bound Gate'
+E         Actual message: 'cross-role graph/recipe/source/clock/learners/provenance mismatch'
+
+tests\akt\test_research_execution.py:238: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_research_execution.py::test_foreign_source_inventory_rejected
+1 failed, 60 passed in 6.42s

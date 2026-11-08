@@ -1,0 +1,371 @@
+"""Pure metadata mocks only: no runtime/Gate/model/data execution certificate."""
+from dataclasses import asdict, replace
+import ast
+import builtins
+import hashlib
+import json
+from pathlib import Path
+from types import SimpleNamespace
+import os
+import subprocess
+import sys
+
+import pytest
+
+from knowledge_tracing.akt import config as cfg
+from knowledge_tracing.akt import research_execution as guard
+from knowledge_tracing.simulator_bridge import identity_hash
+from knowledge_tracing.simulator_research_data import ResearchSplitPlan, ResearchProvenance
+
+REAL_ROOT=Path(__file__).resolve().parents[2]
+
+
+def write_json(path,value):
+    path.parent.mkdir(parents=True,exist_ok=True)
+    path.write_text(json.dumps(value,sort_keys=True,indent=2)+'\n',encoding='utf-8')
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+@pytest.fixture(autouse=True)
+def no_neural_process_or_legacy_data(monkeypatch):
+    original=builtins.__import__
+    def checked(name,*args,**kwargs):
+        if name=='torch' or name.startswith('torch.') or name in ('knowledge_tracing.akt.model','knowledge_tracing.akt.training'):
+            raise AssertionError('no model/Torch import permitted')
+        return original(name,*args,**kwargs)
+    monkeypatch.setattr(builtins,'__import__',checked)
+    monkeypatch.setattr(subprocess,'Popen',lambda *a,**k:pytest.fail('no real subprocess/Git permitted'))
+    for name in ('identity','authorization_identity','require_authorization'):
+        monkeypatch.setattr(guard.native_auth,name,lambda *a,**k:pytest.fail('legacy BKT/default authorization path used'))
+    for name in tuple(os.environ):
+        if name.startswith(('GIT_','GH_')):monkeypatch.delenv(name,raising=False)
+    monkeypatch.setenv('CUDA_VISIBLE_DEVICES','');monkeypatch.setenv('NVIDIA_VISIBLE_DEVICES','')
+    assert 'torch' not in sys.modules
+    yield
+    assert 'torch' not in sys.modules
+
+
+@pytest.fixture
+def files(tmp_path,monkeypatch):
+    root=tmp_path/'fixture-project';root.mkdir()
+    monkeypatch.setattr(cfg,'PROJECT_ROOT',root);monkeypatch.setattr(guard,'PROJECT_ROOT',root)
+    # An empty directory is a filesystem fixture, not a newly created interpreter/venv.
+    (root/'.venv').mkdir()
+    protocol=root/guard.PROTOCOL_PATH;protocol.parent.mkdir(parents=True)
+    protocol.write_bytes((REAL_ROOT/guard.PROTOCOL_PATH).read_bytes())
+    protocol_sha=hashlib.sha256(protocol.read_bytes()).hexdigest()
+    b=guard.ResearchResourceBudget(8,1,1,24,3,3,3,16,1000,10.,20.,2*1024**3,1024**3,8*1024**2,1024**2,4*1024**2)
+    c=cfg.AKTConfig(project_root=root,output_dir=root/'experiments/akt/results/unit-a0',run_id='unit-a0',
+        phase='simulator-research',execution_enabled=True,source_root=root/'artifacts/akt/dependencies/upstream',
+        max_train_users=9,max_val_users=1,max_targets_per_side=27,max_total_targets=30,max_steps=16,
+        max_seconds=10.,max_wall_seconds=20.,max_rss_bytes=2*1024**3,min_available_ram_bytes=1024**3)
+    preflight=root/'artifacts/akt/preflight';preflight.mkdir(parents=True)
+    report=dict(runtime_schema_version=2,device='cpu',cuda_available=False)
+    runtime_sha=write_json(preflight/'runtime-unit.json',report)
+    lock=root/'artifacts/akt/dependencies/linux/candidate.lock.txt';lock.parent.mkdir(parents=True)
+    lock.write_bytes(b'unit metadata lock, no install\n');lock_sha=hashlib.sha256(lock.read_bytes()).hexdigest()
+    pointer_sha=write_json(preflight/'gate2-current-unit.json',{'unit_fixture_only':True})
+    evidence=guard.ResearchRuntimeEvidence('artifacts/akt/preflight/runtime-unit.json',runtime_sha,
+        'artifacts/akt/dependencies/linux/candidate.lock.txt',lock_sha,
+        'artifacts/akt/preflight/gate2-current-unit.json',pointer_sha,'d'*64,'e'*64)
+    source_name='src/knowledge_tracing/simulator_research_collection.py'
+    source=root/source_name;source.parent.mkdir(parents=True);source.write_bytes(b'not executed fixture source\n')
+    build={source_name:hashlib.sha256(source.read_bytes()).hexdigest()}
+    native=dict(status='ready',phase=c.phase,source={'commit':c.source_commit},lock_sha256=lock_sha,
+        runtime_report_sha256=runtime_sha,runtime=report)
+    gate=dict(status='PASS',pointer_sha256=pointer_sha,report_sha256='d'*64,test_log_sha256='e'*64)
+    def fake_preflight(config,**kwargs):
+        assert kwargs==dict(project_root=root,runtime_report_path=preflight/'runtime-unit.json',lock_file=lock)
+        return native
+    def fake_gate(config,**kwargs):
+        assert kwargs==dict(project_root=root,gate2_report=preflight/'gate2-current-unit.json',lock_file=lock)
+        return gate
+    monkeypatch.setattr(guard.native_auth,'preflight',fake_preflight)
+    monkeypatch.setattr(guard.native_auth,'require_gate2_evidence',fake_gate)
+    monkeypatch.setattr(guard.native_auth,'gate2_build_hashes',lambda project_root:dict(build))
+    base=root/'artifacts/simulator/corpora/unit-observables';base.mkdir(parents=True)
+    bank=dict(schema_version=1,environment_id='metadata-unit-not-generated-corpus',items=[
+        dict(item_id=f'i{cid}-{d}',concept_id=f'c{cid}',difficulty=float(d)) for cid in range(28) for d in (1050,1200,1350)])
+    bank_sha=write_json(base/'bank.json',bank);domain_sha=guard._bank(bank)
+    plan=ResearchSplitPlan('metadata-unit',42,10,1,protocol_sha)
+    plan_recipe={k:getattr(plan,k) for k in ('namespace','root_seed','development_learners','final_learners','protocol_sha256')}
+    plan_sha=write_json(base/'plan.json',dict(schema_version=1,recipe=plan_recipe,manifest=plan.manifest()))
+    recipe=dict(collector_version='unit-fixture',policy='explicit-observed',events_per_learner=3,
+        start_unix_seconds=100,gap_seconds=1,timestamp_unit='unix_seconds_utc',timezone='UTC')
+    corpus=dict(schema_version=1,domain='simulator',no_junyi_fold=True,protocol_id=guard.PROTOCOL_ID,
+        protocol_sha256=protocol_sha,bank_sha256=bank_sha,domain_sha256=domain_sha,plan_sha256=plan_sha,
+        research_plan_sha256=plan.identity,environment_graph_sha256='f'*64,normalized_recipe=recipe,
+        normalized_recipe_sha256=identity_hash(recipe),source_inventory=dict(build),roles={})
+    for role,profile in zip(guard.ROLES,('a'*64,'b'*64,'c'*64)):
+        learner_ids=sorted(a.learner_id for a in plan.split_plan.assignments(role))
+        # This deliberately is NOT a valid ObservableTrajectory; guard only hashes.
+        # BATCH3's mandatory observable audit must reject it before model allocation.
+        (base/(role+'.jsonl')).write_bytes(b'UNIT_ONLY_BYTES_NO_LABELS_PARSED\n')
+        observable_sha=hashlib.sha256((base/(role+'.jsonl')).read_bytes()).hexdigest()
+        targets=len(learner_ids)*3
+        manifest=dict(schema_version=1,role=role,research_plan_sha256=plan.identity,domain_sha256=domain_sha,
+            environment_graph_sha256='f'*64,normalized_recipe_sha256=identity_hash(recipe),source_inventory_sha256=identity_hash(build),
+            profile_sha256=profile,learner_ids=learner_ids,targets=targets,observable_sha256=observable_sha,
+            timestamp_unit='unix_seconds_utc',timezone='UTC',logging_policy_oracle_access=False)
+        raw={k:recipe[k] for k in ('policy','events_per_learner','start_unix_seconds','gap_seconds')}
+        raw_id=identity_hash({'collector':recipe['collector_version'],'clock':'unix_seconds_utc',**raw})
+        composite=identity_hash({'recipe':raw,'recipe_sha256':raw_id,'profile_metadata_sha256':profile})
+        provenance=ResearchProvenance(role,plan.identity,plan.split_plan.identity,domain_sha,'f'*64,
+            (('collector',build[source_name]),('environment','e'*64),('source_inventory',identity_hash(build))),
+            composite,recipe['collector_version']+':'+recipe['policy'],'unix_seconds_utc','UTC',False)
+        manifest['provenance']=asdict(provenance);manifest['provenance_sha256']=provenance.identity
+        manifest_sha=write_json(base/(role+'.manifest.json'),manifest)
+        corpus['roles'][role]=dict(observable_file=role+'.jsonl',observable_sha256=observable_sha,
+            manifest_file=role+'.manifest.json',manifest_sha256=manifest_sha,learners=len(learner_ids),targets=targets,profile_sha256=profile)
+    f=SimpleNamespace(root=root,base=base,corpus=corpus,config=c,budget=b,evidence=evidence,protocol_sha=protocol_sha,
+        native=native,gate=gate,build=build)
+    refresh(f)
+    return f
+
+
+def refresh(f):
+    f.corpus['bank_sha256']=hashlib.sha256((f.base/'bank.json').read_bytes()).hexdigest()
+    f.corpus['plan_sha256']=hashlib.sha256((f.base/'plan.json').read_bytes()).hexdigest()
+    for role in guard.ROLES:
+        f.corpus['roles'][role]['manifest_sha256']=hashlib.sha256((f.base/(role+'.manifest.json')).read_bytes()).hexdigest()
+    digest=write_json(f.base/'corpus.json',f.corpus)
+    files={name:hashlib.sha256((f.base/name).read_bytes()).hexdigest() for name in
+        ('corpus.json','bank.json','plan.json','train.jsonl','train.manifest.json','selection.jsonl','selection.manifest.json','calibration.jsonl','calibration.manifest.json')}
+    write_json(f.base/'DONE.json',dict(schema_version=1,status='COMPLETE_SIMULATOR_CORPUS',corpus_sha256=digest,files_sha256=files))
+    f.spec=guard.SimulatorResearchSpec(f.config,'unit-observables',digest,f.protocol_sha,f.budget)
+
+
+def authorize(f,mutate=None):
+    identity=guard.prepare_research_identity(f.spec,f.evidence)
+    value=dict(schema_version=1,decision='AUTHORIZE_BOUNDED_SIMULATOR_RESEARCH',scope=guard.SCOPE,
+        run_id=f.config.run_id,config_sha256=guard.native_auth.config_hash(f.config),spec_sha256=f.spec.identity,
+        identity=identity,caps=asdict(f.budget),requested_phases=list(guard.PHASES),approval_reference='unit_mock_not_actual_authority')
+    if mutate:mutate(value)
+    path='experiments/akt/authorizations/unit-a0.json'
+    digest=write_json(f.root/path,value)
+    return guard.require_research_authorization(f.spec,f.evidence,authorization_file=path,expected_authorization_sha256=digest)
+
+
+def test_complete_metadata_identity_and_authorization_no_output_creation(files):
+    identity=guard.prepare_research_identity(files.spec,files.evidence)
+    assert identity['input_domain']=='simulator' and identity['junyi_fold_used'] is False
+    assert identity['run_purpose']=='a0_single_candidate_lifecycle_pilot' and identity['candidate_allocation']==['A0']
+    assert identity['system_selector'].startswith('NOT_RUN_MAIN_MATRIX')
+    assert identity['corpus']['observable_labels_parsed'] is False
+    assert identity['corpus']['actual_observable_schema_reaudit_required_before_model'] is True
+    assert len(identity['corpus']['files_sha256'])==9 and len(identity['corpus']['done_sha256'])==64
+    token=authorize(files);assert token.revalidate()==identity
+    assert not files.config.output_dir.exists()
+
+
+def test_oracle_and_final_event_paths_never_opened(files,monkeypatch):
+    original=Path.open
+    def checked(path,*args,**kwargs):
+        assert 'oracle' not in path.parts and path.name!='final.jsonl'
+        return original(path,*args,**kwargs)
+    monkeypatch.setattr(Path,'open',checked)
+    guard.prepare_research_identity(files.spec,files.evidence)
+
+
+@pytest.mark.parametrize('field,value', [('max_optimizer_steps',None),('max_optimizer_steps',True),
+    ('max_rss_bytes',0),('max_training_seconds',float('nan')),('max_wall_seconds',float('inf')),
+    ('max_wall_seconds',False),('min_available_ram_bytes',1024),('selection_learners',2)])
+def test_explicit_budget_rejects_missing_invalid_or_wrong_allocation(files,field,value):
+    with pytest.raises(ValueError):replace(files.budget,**{field:value})
+
+
+@pytest.mark.parametrize('field,value',[('d_model',32),('dropout',0.),('device','cuda'),('seed',43),('batch_size',1),
+    ('max_epochs',1),('patience',2),('min_delta',0.),('lr',.01),('outer_fold',1),('max_steps',None),
+    ('max_wall_seconds',None),('max_train_users',True),('execution_enabled',1)])
+def test_newphase_frozen_policy_and_all_caps(files,field,value):
+    with pytest.raises(ValueError):cfg.validate_config(replace(files.config,**{field:value}))
+
+
+def test_legacy_dataclass_ast_and_phase_defaults_unchanged(files):
+    before=(REAL_ROOT/'artifacts/akt/local-tests/akt-research-execution-20261108-01/config.py.before').read_text(encoding='utf-8')
+    current=(REAL_ROOT/'src/knowledge_tracing/akt/config.py').read_text(encoding='utf-8')
+    cls=lambda text:next(n for n in ast.parse(text).body if isinstance(n,ast.ClassDef) and n.name=='AKTConfig')
+    assert ast.dump(cls(before))==ast.dump(cls(current))
+    cfg.validate_config(cfg.AKTConfig(project_root=files.root,output_dir=files.root/'artifacts/akt/unit-preflight'))
+    with pytest.raises(ValueError,match='invalid phase'):cfg.validate_config(replace(files.config,phase='unapproved-research'))
+    # Legacy smoke still needs d32 and its exact bounded workload.
+    with pytest.raises(ValueError,match='smoke cap'):cfg.validate_config(replace(files.config,phase='smoke'))
+
+
+def test_native_cap_projection_cannot_drift(files):
+    with pytest.raises(ValueError,match='caps must exactly'):
+        replace(files.spec,native_config=replace(files.config,max_steps=17))
+
+
+def test_disabled_proposal_not_execution_authority(files):
+    files.config=replace(files.config,execution_enabled=False);refresh(files)
+    assert guard.prepare_research_identity(files.spec,files.evidence)['status']=='PREPARED_IDENTITY_NOT_EXECUTION_AUTHORITY'
+    with pytest.raises(ValueError,match='enabled config'):authorize(files)
+
+
+@pytest.mark.parametrize('kind',['missing_done','failure','done_extra','done_bool','done_wrong_map'])
+def test_partial_or_uncommitted_publication_rejects(files,kind):
+    path=files.base/'DONE.json'
+    if kind=='missing_done':path.unlink()
+    elif kind=='failure':write_json(files.base/'failure.json',{'failed':True})
+    else:
+        done=json.loads(path.read_bytes())
+        if kind=='done_extra':done['oracle_sha256']='a'*64
+        elif kind=='done_bool':done['schema_version']=True
+        else:done['files_sha256']['train.jsonl']='b'*64
+        write_json(path,done)
+    with pytest.raises(ValueError):guard.prepare_research_identity(files.spec,files.evidence)
+
+
+@pytest.mark.parametrize('field,value',[('environment_graph_sha256','a'*64),('normalized_recipe_sha256','b'*64),
+    ('source_inventory_sha256','c'*64),('logging_policy_oracle_access',True),('logging_policy_oracle_access',0),
+    ('timezone','Asia/Saigon'),('learner_ids',[]),('targets',True)])
+def test_crossrole_manifest_semantics_exact(files,field,value):
+    path=files.base/'selection.manifest.json';row=json.loads(path.read_bytes());row[field]=value;write_json(path,row);refresh(files)
+    with pytest.raises(ValueError,match='cross-role'):guard.prepare_research_identity(files.spec,files.evidence)
+
+
+def test_profile_hash_may_differ_perrole(files):
+    identity=guard.prepare_research_identity(files.spec,files.evidence)
+    assert len({r['profile_sha256'] for r in files.corpus['roles'].values()})==3
+    assert identity['corpus']['normalized_recipe_sha256']==files.corpus['normalized_recipe_sha256']
+
+
+def test_protocol_real_bytes_required_not_fixture_sha(files):
+    changed=replace(files.spec,expected_protocol_sha256='a'*64)
+    with pytest.raises(ValueError,match='protocol21 bytes'):guard.prepare_research_identity(changed,files.evidence)
+
+
+def test_actual_observable_bytes_and_source_inventory_bound(files):
+    (files.base/'train.jsonl').write_bytes(b'changed')
+    with pytest.raises(ValueError,match='observable bytes'):guard.prepare_research_identity(files.spec,files.evidence)
+
+
+def test_foreign_source_inventory_rejected(files):
+    files.corpus['source_inventory']['src/private.json']='a'*64;refresh(files)
+    with pytest.raises(ValueError,match='source-bound Gate'):guard.prepare_research_identity(files.spec,files.evidence)
+
+
+@pytest.mark.parametrize('kind',['family','rolecount','finalread'])
+def test_plan_disjointness_counts_and_final_metadata(files,kind):
+    path=files.base/'plan.json';value=json.loads(path.read_bytes());plan=value['manifest']
+    if kind=='family':
+        a=next(x for x in plan['assignments'] if x['role']=='train');b=next(x for x in plan['assignments'] if x['role']=='calibration');b['seed_family']=a['seed_family']
+    elif kind=='rolecount':plan['role_counts']['selection']=2
+    else:plan['final_events_read']=True
+    write_json(path,value);refresh(files)
+    with pytest.raises(ValueError):guard.prepare_research_identity(files.spec,files.evidence)
+
+
+@pytest.mark.parametrize('name',['GIT_DIR','GIT_CONFIG_COUNT','GH_TOKEN'])
+def test_inherited_git_or_credential_overrides_rejected(files,monkeypatch,name):
+    monkeypatch.setenv(name,'unitvalue')
+    with pytest.raises(ValueError,match='Git/credential'):guard.prepare_research_identity(files.spec,files.evidence)
+
+
+def test_runtime_gate_and_cpu_device_bindings(files,monkeypatch):
+    files.native['runtime']['cuda_available']=True
+    with pytest.raises(ValueError,match='schema2 CPU'):guard.prepare_research_identity(files.spec,files.evidence)
+    files.native['runtime']['cuda_available']=False;files.gate['report_sha256']='b'*64
+    with pytest.raises(ValueError,match='Gate receipt'):guard.prepare_research_identity(files.spec,files.evidence)
+
+
+def test_output_collision_and_symlink_canary(files,monkeypatch):
+    files.config.output_dir.mkdir(parents=True)
+    with pytest.raises(ValueError,match='output already exists'):authorize(files)
+    original=Path.is_symlink;venv=files.root/'.venv'
+    monkeypatch.setattr(Path,'is_symlink',lambda p: p==venv or original(p))
+    with pytest.raises(ValueError,match='physical same-root'):guard.prepare_research_identity(files.spec,files.evidence)
+
+
+@pytest.mark.parametrize('kind',['boolean_only','extra_gatepass','scope','caps_type','identity','phases'])
+def test_authority_not_boolean_or_gatepass_and_all_fields_exact(files,kind):
+    def change(value):
+        if kind=='boolean_only':value.clear();value['approved']=True
+        elif kind=='extra_gatepass':value['gate_pass']=True
+        elif kind=='scope':value['scope']='development-inner-only'
+        elif kind=='caps_type':value['caps']['train_learners']=8.0
+        elif kind=='identity':value['identity']['junyi_fold_used']=True
+        else:value['requested_phases']=['refit90']
+    with pytest.raises(ValueError):authorize(files,change)
+
+
+def test_token_revalidation_catches_mutable_authorization(files):
+    token=authorize(files)
+    (files.root/token.authorization_file).write_bytes(b'changed')
+    with pytest.raises(ValueError,match='authorization changed'):token.revalidate()
+
+
+def test_strict_metadata_json_rejects_duplicates_and_nonfinite(files):
+    path=files.base/'invalid.json'
+    for raw in (b'{"a":1,"a":2}',b'{"a":NaN}',b'{"a":Infinity}'):
+        path.write_bytes(raw)
+        with pytest.raises(ValueError):guard._read_json(path,1024)
+
+
+def test_post_metadata_wall_elapsed_guard(files,monkeypatch):
+    monkeypatch.setattr(guard.time,'monotonic',lambda:0.)
+    clocks=iter((0.,21.))
+    monkeypatch.setattr(guard.time,'time',lambda:next(clocks))
+    with pytest.raises(ValueError,match='wall budget'):guard.prepare_research_identity(files.spec,files.evidence)
+
+
+def test_restart_plan_and_provenance_only_from_public_inputs(files,monkeypatch):
+    original=Path.open
+    def checked(path,*a,**kw):
+        assert 'oracle' not in path.parts
+        return original(path,*a,**kw)
+    monkeypatch.setattr(Path,'open',checked)
+    stored=json.loads((files.base/'plan.json').read_bytes())
+    recovered=ResearchSplitPlan(**stored['recipe'])
+    assert json.loads(json.dumps(recovered.manifest()))==stored['manifest']
+    provenance_hashes=[]
+    for role in guard.ROLES:
+        record=json.loads((files.base/(role+'.manifest.json')).read_bytes())
+        fields=dict(record['provenance']);fields['source_bindings']=tuple(tuple(x) for x in fields['source_bindings'])
+        provenance=ResearchProvenance(**fields)
+        assert provenance.identity==record['provenance_sha256']
+        assert provenance.research_plan_sha256==recovered.identity
+        assert provenance.split_plan_sha256==recovered.split_plan.identity
+        provenance_hashes.append(provenance.collection_recipe_sha256)
+    assert len(set(provenance_hashes))==3  # Profiles differ, composite receipt hashes must differ.
+    assert guard.prepare_research_identity(files.spec,files.evidence)['corpus']['environment_semantics_sha256']=='e'*64
+
+
+@pytest.mark.parametrize('field,value',[('namespace','other'),('root_seed',43),('development_learners',20),
+    ('final_learners',2),('protocol_sha256','b'*64)])
+def test_plan_constructor_recipe_must_match_declared_manifest(files,field,value):
+    path=files.base/'plan.json';record=json.loads(path.read_bytes());record['recipe'][field]=value
+    write_json(path,record);refresh(files)
+    with pytest.raises(ValueError,match='recipe/declared manifest'):guard.prepare_research_identity(files.spec,files.evidence)
+
+
+@pytest.mark.parametrize('field,value',[('role','calibration'),('research_plan_sha256','b'*64),
+    ('split_plan_sha256','c'*64),('bank_sha256','d'*64),('environment_graph_sha256','a'*64),
+    ('collection_recipe_sha256','b'*64),('collection_policy_id','other:policy'),('timezone','other')])
+def test_role_provenance_tamper_rejected(files,field,value):
+    path=files.base/'selection.manifest.json';record=json.loads(path.read_bytes());record['provenance'][field]=value
+    # Re-sign the metadata identity to prove semantic checks, not merely stalehash rejection.
+    fields=dict(record['provenance']);fields['source_bindings']=tuple(tuple(x) for x in fields['source_bindings'])
+    if field=='timezone':
+        record['provenance_sha256']='b'*64  # Typed constructor must reject unsupported clock.
+    else:record['provenance_sha256']=ResearchProvenance(**fields).identity
+    write_json(path,record);refresh(files)
+    with pytest.raises(ValueError):guard.prepare_research_identity(files.spec,files.evidence)
+
+
+@pytest.mark.parametrize('kind',['missing_recipe','missing_provenance','identity','collector','source_inventory','environment'])
+def test_restart_missing_or_source_binding_drift_rejected(files,kind):
+    if kind=='missing_recipe':
+        path=files.base/'plan.json';record=json.loads(path.read_bytes());record.pop('recipe')
+    else:
+        path=files.base/'selection.manifest.json';record=json.loads(path.read_bytes())
+        if kind=='missing_provenance':record.pop('provenance')
+        elif kind=='identity':record['provenance_sha256']='a'*64
+        else:
+            bindings=dict(record['provenance']['source_bindings']);bindings[kind]='b'*64
+            record['provenance']['source_bindings']=sorted([list(x) for x in bindings.items()])
+            fields=dict(record['provenance']);fields['source_bindings']=tuple(tuple(x) for x in fields['source_bindings'])
+            record['provenance_sha256']=ResearchProvenance(**fields).identity
+    write_json(path,record);refresh(files)
+    with pytest.raises(ValueError):guard.prepare_research_identity(files.spec,files.evidence)

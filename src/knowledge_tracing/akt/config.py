@@ -85,7 +85,7 @@ def validate_config(config: AKTConfig) -> None:
         validate_options(config)
     if config.project_root.resolve() != PROJECT_ROOT.resolve():
         raise ValueError('project root must be the trusted repository root')
-    if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold'}:
+    if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold', 'simulator-research'}:
         raise ValueError('invalid phase')
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,79}', config.run_id):
         raise ValueError('invalid run_id')
@@ -157,6 +157,29 @@ def validate_config(config: AKTConfig) -> None:
                 or config.max_rss_bytes is None or config.max_rss_bytes > 2 * 1024**3
                 or config.min_available_ram_bytes is None or config.min_available_ram_bytes < 1024**3):
             raise ValueError('pilot cap or architecture exceeded')
+    if config.phase == 'simulator-research':
+        # New scope only; no dataclass/default/hash change for historical phases.
+        frozen = {'device': 'cpu', 'seed': 42, 'context': 100, 'target_block': 100, 'max_length': 200,
+                  'd_model': 256, 'heads': 8, 'blocks': 1, 'd_ff': 1024, 'final_fc': 512,
+                  'dropout': 0.05, 'kq_same': 1, 'separate_qa': False, 'n_pid': 0, 'graph': False,
+                  'batch_size': 4, 'lr': 1e-4, 'betas': (0.9, 0.999), 'eps': 1e-8,
+                  'weight_decay': 0.0, 'max_grad_norm': 1.0, 'max_epochs': 20,
+                  'patience': 3, 'min_delta': 0.0001, 'outer_fold': 0}
+        if (any(type(getattr(config, name)) is not type(value) or getattr(config, name) != value
+                for name, value in frozen.items()) or config.recovery is not None
+                or type(config.execution_enabled) is not bool):
+            raise ValueError('simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold')
+        for name in ('max_train_users', 'max_val_users', 'max_targets_per_side', 'max_total_targets',
+                     'max_steps', 'max_rss_bytes', 'min_available_ram_bytes'):
+            if type(getattr(config, name)) is not int or getattr(config, name) <= 0:
+                raise ValueError('simulator research requires every integer cap explicitly')
+        for name in ('max_seconds', 'max_wall_seconds'):
+            value = getattr(config, name)
+            if type(value) not in (int, float) or not math.isfinite(value) or value <= 0:
+                raise ValueError('simulator research requires finite explicit time caps')
+        if (config.max_seconds > config.max_wall_seconds or output.name != config.run_id
+                or output.parent != (root / 'experiments/akt/results').resolve()):
+            raise ValueError('simulator research requires bounded time and exclusive named results path')
     manifest = output / 'manifest.json'
     if manifest.is_file() and json.loads(manifest.read_text(encoding='utf-8')).get('status') == 'completed':
         raise ValueError('completed run cannot be overwritten')

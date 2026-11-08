@@ -1,0 +1,80 @@
+{
+  "contract": "simulator-research-corpus-v1",
+  "status": "EXACT_GUARD_PUBLISHER_CONTRACT_FOR_PARENT_REVIEW_NOT_GENERATED_CORPUS",
+  "root": "artifacts/simulator/corpora/<corpus_id>/",
+  "known_input_files": ["corpus.json", "bank.json", "plan.json", "train.jsonl", "train.manifest.json", "selection.jsonl", "selection.manifest.json", "calibration.jsonl", "calibration.manifest.json"],
+  "oracle_policy": "oracle/ never listed/opened/hashed by execution guard; publisher stores separately; no final event file input",
+  "corpus_json_exact_keys": {
+    "schema_version": "integer exactly1, not bool",
+    "domain": "simulator",
+    "no_junyi_fold": "boolean true",
+    "protocol_id": "S04A-S05B-GROUP-V1-20261108",
+    "protocol_sha256": "actual docs21 raw-byte SHA256 lowercase64hex",
+    "bank_sha256": "raw bank.json SHA256",
+    "domain_sha256": "identity_hash(SimulatorBank.identity), normalized float difficulties and sorted item IDs",
+    "plan_sha256": "raw plan.json SHA256",
+    "research_plan_sha256": "ResearchSplitPlan.identity, same as plan.manifest.research_plan_sha256",
+    "environment_graph_sha256": "same declared actual G_env SHA across all3roles",
+    "normalized_recipe": "object with exact normalized_recipe_exact_keys below",
+    "normalized_recipe_sha256": "identity_hash(normalized_recipe), excludes role profile metadata",
+    "source_inventory": "nonempty map project-relative POSIX path -> lowercase64hex raw file SHA; values must match current source-bound Gate build hashes or exact protocol_path SHA",
+    "roles": "object exact keys train,selection,calibration; each role_entry_exact_keys below"
+  },
+  "normalized_recipe_exact_keys": {
+    "collector_version": "nonempty current collector version string",
+    "policy": "nonempty explicit shared logging policy",
+    "events_per_learner": "positive integer",
+    "start_unix_seconds": "nonnegative integer",
+    "gap_seconds": "positive integer",
+    "timestamp_unit": "unix_seconds_utc",
+    "timezone": "UTC"
+  },
+  "role_entry_exact_keys": {
+    "observable_file": "<role>.jsonl exact relative filename",
+    "observable_sha256": "raw JSONL SHA256",
+    "manifest_file": "<role>.manifest.json exact relative filename",
+    "manifest_sha256": "raw role manifest SHA256",
+    "learners": "positive integer equals budget + plan role count",
+    "targets": "positive integer equals budget; learners * normalized_recipe.events_per_learner",
+    "profile_sha256": "identity_hash(role profile metadata), may differ across roles"
+  },
+  "bank_json_exact_keys": {
+    "schema_version": "integer1",
+    "environment_id": "nonempty simulator domain identifier",
+    "items": "list84 records; exact item_id/concept_id/difficulty fields; unique items;28concepts each exactly1050/1200/1350; numeric float normalization for SimulatorBank.identity"
+  },
+  "plan_json_exact_keys": {
+    "schema_version": "integer1",
+    "manifest": "exact ResearchSplitPlan.manifest() object with plan_manifest_exact_keys below; no final event file references"
+  },
+  "plan_manifest_exact_keys": ["protocol_id", "research_plan_sha256", "split_plan_sha256", "protocol_sha256", "role_counts", "assignments", "refit_roles", "calibration_in_refit", "final_events_read", "scope"],
+  "plan_manifest_rules": {
+    "role_counts": "exact train,selection,calibration,final positive integers; development80/10/10; final metadata count only",
+    "assignments": "complete list matching counts; exact learner_id/role/seed_family/stream_seeds fields; unique learner IDs; family never crosses roles; stream_seeds exactly latent/response/behavior list pairs with unique uint64 integers",
+    "refit_roles": ["train", "selection"],
+    "calibration_in_refit": false,
+    "final_events_read": false,
+    "scope": "existing ResearchSplitPlan.manifest scope text; metadata declaration, not empirical independence"
+  },
+  "role_manifest_exact_keys": {
+    "schema_version": "integer1",
+    "role": "train|selection|calibration matching filename",
+    "research_plan_sha256": "same corpus research plan identity",
+    "domain_sha256": "same corpus bank semantic domain SHA",
+    "environment_graph_sha256": "same corpus G_env SHA",
+    "normalized_recipe_sha256": "same shared normalized recipe SHA, NOT raw composite collector recipe SHA",
+    "source_inventory_sha256": "identity_hash(corpus.source_inventory)",
+    "profile_sha256": "same roles[role].profile_sha256, allowed role-dependent",
+    "learner_ids": "sorted complete learner IDs for this role from plan assignments",
+    "targets": "same roles[role].targets integer",
+    "observable_sha256": "same raw JSONL SHA",
+    "timestamp_unit": "unix_seconds_utc",
+    "timezone": "UTC",
+    "logging_policy_oracle_access": "boolean false, not integer0"
+  },
+  "observable_jsonl_line": "one exact ObservableTrajectory.payload()/from_payload schema per learner, no oracle fields; guard stream-hashes bytes but BATCH3 must parse/re-audit observations before model allocation",
+  "json_hashing": "raw file hashes bind bytes; identity_hash uses sort_keys=True,separators comma/colon,allow_nan=False; shared identity objects use existing simulator_bridge.identity_hash",
+  "publication": "write corpus.json LAST as publication descriptor after all8 role/bank/plan files; no self hash inside corpus.json; guard requires external expected_corpus_sha256. No DONE marker required by current guard. Publisher should never publish corpus.json on partial failure and use fresh exclusive directory; failure receipt remains outside successful descriptor inputs.",
+  "actual_run_allocation": "not defaults: root plans60development=48/6/6 and210events each separately; no actual corpus allocated or execution authorized by this schema",
+  "raw_manifest_preservation": "original ResearchCollectionResult.manifest/provenance composite recipe SHA includes role profile metadata. Preserve original receipts separately; normalize disk descriptor without rewriting historical collector results. Oracle/raw receipts not in guard input list."
+}
