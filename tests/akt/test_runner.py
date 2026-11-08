@@ -440,6 +440,7 @@ def test_gate2_evidence_rejects_code_drift_and_missing_log(tmp_path, monkeypatch
     config = AKTConfig()
     payload = {'schema_version': 1, 'status': 'PASS', 'source_commit': config.source_commit,
                'suite': 'tests/akt tests/shared_kt',
+               'elapsed_seconds': 1.0, 'timeout_seconds': 30,
                'test_result': {'passed': 1, 'failed': 0, 'errors': 0, 'skipped': 0},
                'lock_sha256': runner.sha256_file(runner.LOCK_FILE),
                'build_hashes': runner._gate2_build_hashes(),

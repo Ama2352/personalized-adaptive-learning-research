@@ -113,6 +113,16 @@ def gate2_build_hashes(project_root: Path = PROJECT_ROOT) -> dict:
             for path in sorted(set(paths))}
 
 
+def validate_gate2_elapsed_budget(elapsed_seconds, timeout_seconds) -> None:
+    """Cap của software Gate; không thay ngân sách/hyperparameter của model."""
+    if type(timeout_seconds) is not int or not 1 <= timeout_seconds <= 600:
+        raise ValueError('Gate 2 timeout must be an integer from 1 to 600 seconds')
+    if (type(elapsed_seconds) not in (int, float)
+            or not 0 <= elapsed_seconds <= timeout_seconds
+            or not math.isfinite(elapsed_seconds)):
+        raise ValueError('Gate 2 elapsed seconds must be finite and within the declared timeout')
+
+
 def require_gate2_evidence(config: AKTConfig, *, project_root: Path = PROJECT_ROOT,
                            gate2_report: Path = GATE2_CURRENT,
                            lock_file: Path = LOCK_FILE,
@@ -138,6 +148,9 @@ def require_gate2_evidence(config: AKTConfig, *, project_root: Path = PROJECT_RO
                 or pointer.get('test_log_sha256') != log_sha256):
             raise ValueError('Gate 2 evidence pointer digest mismatch')
         evidence = json.loads(evidence_path.read_text(encoding='utf-8'))
+        if not isinstance(evidence, dict):
+            raise ValueError('Gate 2 evidence must be an object')
+        validate_gate2_elapsed_budget(evidence.get('elapsed_seconds'), evidence.get('timeout_seconds'))
         test_result = evidence.get('test_result')
         test_counts_valid = (
             isinstance(test_result, dict)

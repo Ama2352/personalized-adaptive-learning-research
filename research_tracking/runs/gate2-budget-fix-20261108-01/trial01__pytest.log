@@ -1,0 +1,498 @@
+............F.FFFFFFFFFFFFFFFFFFFFFFFF......                             [100%]
+================================== FAILURES ===================================
+_____ test_gate2_exit_zero_clock_overrun_rejected_without_pointer_change ______
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_exit_zero_clock_ove0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000286FED39220>
+
+    def test_gate2_exit_zero_clock_overrun_rejected_without_pointer_change(tmp_path, monkeypatch):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1084.0)
+        original = pointer.read_bytes()
+>       with pytest.raises(TimeoutError, match='elapsed'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE TimeoutError
+
+tests\akt\test_gate2_refresh.py:81: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource0] ____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso0')
+resource = {}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource1] ____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso1')
+resource = {'elapsed_seconds': 1.0}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource2] ____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso2')
+resource = {'timeout_seconds': 30}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource3] ____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso3')
+resource = {'elapsed_seconds': 31.0, 'timeout_seconds': 30}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource4] ____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso4')
+resource = {'elapsed_seconds': True, 'timeout_seconds': 30}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource5] ____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso5')
+resource = {'elapsed_seconds': False, 'timeout_seconds': 30}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource6] ____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso6')
+resource = {'elapsed_seconds': None, 'timeout_seconds': 30}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource7] ____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso7')
+resource = {'elapsed_seconds': '1.0', 'timeout_seconds': 30}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource8] ____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso8')
+resource = {'elapsed_seconds': [], 'timeout_seconds': 30}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource9] ____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso9')
+resource = {'elapsed_seconds': {}, 'timeout_seconds': 30}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource10] ___
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso10')
+resource = {'elapsed_seconds': -1.0, 'timeout_seconds': 30}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource11] ___
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso11')
+resource = {'elapsed_seconds': nan, 'timeout_seconds': 30}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource12] ___
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso12')
+resource = {'elapsed_seconds': inf, 'timeout_seconds': 30}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource13] ___
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso13')
+resource = {'elapsed_seconds': -inf, 'timeout_seconds': 30}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource14] ___
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso14')
+resource = {'elapsed_seconds': 100000000000000000...0000000000000000000, 'timeout_seconds': 30}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource15] ___
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso15')
+resource = {'elapsed_seconds': 1.0, 'timeout_seconds': True}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource16] ___
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso16')
+resource = {'elapsed_seconds': 1.0, 'timeout_seconds': False}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource17] ___
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso17')
+resource = {'elapsed_seconds': 1.0, 'timeout_seconds': None}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource18] ___
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso18')
+resource = {'elapsed_seconds': 1.0, 'timeout_seconds': '30'}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource19] ___
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso19')
+resource = {'elapsed_seconds': 1.0, 'timeout_seconds': 30.0}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource20] ___
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso20')
+resource = {'elapsed_seconds': 1.0, 'timeout_seconds': 0}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource21] ___
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso21')
+resource = {'elapsed_seconds': 1.0, 'timeout_seconds': 601}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource22] ___
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso22')
+resource = {'elapsed_seconds': 1.0, 'timeout_seconds': nan}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+___ test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource23] ___
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-budget-fix-trial-20261108-01/t/test_gate2_reader_rejects_reso23')
+resource = {'elapsed_seconds': 1.0, 'timeout_seconds': inf}
+
+    @pytest.mark.parametrize('resource', [
+        {}, {'elapsed_seconds': 1.0}, {'timeout_seconds': 30},
+        {'elapsed_seconds': 31.0, 'timeout_seconds': 30},
+        *({'elapsed_seconds': value, 'timeout_seconds': 30}
+          for value in (True, False, None, '1.0', [], {}, -1.0, float('nan'), float('inf'), -float('inf'), 10**400)),
+        *({'elapsed_seconds': 1.0, 'timeout_seconds': value}
+          for value in (True, False, None, '30', 30.0, 0, 601, float('nan'), float('inf'))),
+    ])
+    def test_gate2_reader_rejects_resource_bypass_even_after_rehash(tmp_path, resource):
+>       with pytest.raises(ValueError, match='elapsed|timeout|resource'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_gate2_refresh.py:148: Failed
+=========================== short test summary info ===========================
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_exit_zero_clock_overrun_rejected_without_pointer_change
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource0]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource1]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource2]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource3]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource4]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource5]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource6]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource7]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource8]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource9]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource10]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource11]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource12]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource13]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource14]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource15]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource16]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource17]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource18]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource19]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource20]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource21]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource22]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_reader_rejects_resource_bypass_even_after_rehash[resource23]
+25 failed, 19 passed in 9.07s

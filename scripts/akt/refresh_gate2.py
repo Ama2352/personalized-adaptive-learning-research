@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -14,7 +15,9 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'src'))
 
-from knowledge_tracing.akt.authorization import gate2_build_hashes, require_gate2_evidence
+from knowledge_tracing.akt.authorization import (
+    gate2_build_hashes, require_gate2_evidence, validate_gate2_elapsed_budget,
+)
 from knowledge_tracing.akt.config import AKTConfig, SOURCE_COMMIT
 from knowledge_tracing.akt.provenance import sha256_file, verify_upstream
 
@@ -57,7 +60,8 @@ def refresh(run_id, *, publish_current=False, timeout_seconds=300):
     before = gate2_build_hashes()
     lock_before = sha256_file(ROOT / 'requirements-akt.lock.txt')
     env = {**os.environ, 'PYTHONPATH': str(ROOT / 'src') + os.pathsep + str(ROOT / 'third_party'),
-           'CUDA_VISIBLE_DEVICES': '', 'PYTHONDONTWRITEBYTECODE': '1'}
+           'CUDA_VISIBLE_DEVICES': '', 'PYTHONDONTWRITEBYTECODE': '1',
+           'OMP_NUM_THREADS': '2', 'MKL_NUM_THREADS': '2', 'OPENBLAS_NUM_THREADS': '2'}
     temporary = ROOT / 'artifacts/akt/local-tests' / f'gate2-{run_id}-{uuid.uuid4().hex}'
     temporary.parent.mkdir(parents=True, exist_ok=True)
     command = [sys.executable, '-B', '-m', 'pytest', 'tests/akt', 'tests/shared_kt', '-q',
@@ -73,15 +77,31 @@ def refresh(run_id, *, publish_current=False, timeout_seconds=300):
         raise ValueError('source or lock changed during Gate2 execution')
     if source != verify_upstream(ROOT / 'artifacts/akt/dependencies/upstream', SOURCE_COMMIT):
         raise ValueError('upstream source changed during Gate2 execution')
+    elapsed = time.perf_counter() - started
     payload = {'schema_version': 1, 'status': 'PASS', 'source_commit': SOURCE_COMMIT,
                'source': source, 'suite': 'tests/akt tests/shared_kt', 'test_result': counts,
                'lock_sha256': lock_before, 'build_hashes': before,
                'test_log_sha256': sha256_file(log), 'junit_sha256': sha256_file(junit),
                'command': command, 'python': sys.executable,
-               'elapsed_seconds': time.perf_counter() - started, 'timeout_seconds': timeout_seconds,
+               'elapsed_seconds': elapsed, 'timeout_seconds': timeout_seconds,
                'scope': 'CPU synthetic/software gate only, no CUDA or full-training acceptance'}
+    try:
+        validate_gate2_elapsed_budget(elapsed, timeout_seconds)
+    except ValueError as exc:
+        # Exit 0/JUnit PASS không đủ: Windows wait và monotonic elapsed có thể
+        # tính thời gian suspend khác nhau. Giữ rejection độc quyền trước pointer.
+        payload.update(status='REJECTED_RESOURCE_BOUND', resource_error=str(exc),
+                       observed_elapsed_seconds=repr(elapsed), allowed_seconds=timeout_seconds)
+        if type(elapsed) not in (int, float) or (type(elapsed) is float and not math.isfinite(elapsed)):
+            # Chuỗi repr giữ NaN/Infinity mà không tạo JSON numeric phi chuẩn.
+            payload['elapsed_seconds'] = repr(elapsed)
+        payload['observed_elapsed_seconds'] = payload['elapsed_seconds']
+        with report.open('x', encoding='utf-8', newline='\n') as stream:
+            json.dump(payload, stream, ensure_ascii=False, indent=2, allow_nan=False)
+            stream.write('\n')
+        raise TimeoutError(f'Gate2 elapsed resource bound rejected; inspect {report}') from exc
     with report.open('x', encoding='utf-8', newline='\n') as stream:
-        json.dump(payload, stream, ensure_ascii=False, indent=2)
+        json.dump(payload, stream, ensure_ascii=False, indent=2, allow_nan=False)
         stream.write('\n')
     pointer_payload = {'schema_version': 1, 'evidence_file': report.name,
                        'evidence_sha256': sha256_file(report), 'test_log_file': log.name,

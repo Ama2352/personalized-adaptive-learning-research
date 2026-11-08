@@ -1,0 +1,271 @@
+{
+  "file": "C:\\Users\\AmaDev\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\subprocess.py",
+  "sha256": "970207fdd712c92f7dc14d1623d2574f7e0910ceb0b5c37652a7a0850f35a396",
+  "python_version": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+  "ranges": [
+    {
+      "start": 1596,
+      "end": 1613,
+      "lines": [
+        {
+          "line": 1596,
+          "text": "        def _wait(self, timeout):"
+        },
+        {
+          "line": 1597,
+          "text": "            \"\"\"Internal implementation of wait() on Windows.\"\"\""
+        },
+        {
+          "line": 1598,
+          "text": "            if timeout is None:"
+        },
+        {
+          "line": 1599,
+          "text": "                timeout_millis = _winapi.INFINITE"
+        },
+        {
+          "line": 1600,
+          "text": "            elif timeout <= 0:"
+        },
+        {
+          "line": 1601,
+          "text": "                timeout_millis = 0"
+        },
+        {
+          "line": 1602,
+          "text": "            else:"
+        },
+        {
+          "line": 1603,
+          "text": "                timeout_millis = int(timeout * 1000)"
+        },
+        {
+          "line": 1604,
+          "text": "            if self.returncode is None:"
+        },
+        {
+          "line": 1605,
+          "text": "                # API note: Returns immediately if timeout_millis == 0."
+        },
+        {
+          "line": 1606,
+          "text": "                result = _winapi.WaitForSingleObject(self._handle,"
+        },
+        {
+          "line": 1607,
+          "text": "                                                     timeout_millis)"
+        },
+        {
+          "line": 1608,
+          "text": "                if result == _winapi.WAIT_TIMEOUT:"
+        },
+        {
+          "line": 1609,
+          "text": "                    raise TimeoutExpired(self.args, timeout)"
+        },
+        {
+          "line": 1610,
+          "text": "                self.returncode = _winapi.GetExitCodeProcess(self._handle)"
+        },
+        {
+          "line": 1611,
+          "text": "            return self.returncode"
+        },
+        {
+          "line": 1612,
+          "text": ""
+        },
+        {
+          "line": 1613,
+          "text": ""
+        }
+      ]
+    },
+    {
+      "start": 1619,
+      "end": 1663,
+      "lines": [
+        {
+          "line": 1619,
+          "text": "        def _communicate(self, input, endtime, orig_timeout):"
+        },
+        {
+          "line": 1620,
+          "text": "            # Start reader threads feeding into a list hanging off of this"
+        },
+        {
+          "line": 1621,
+          "text": "            # object, unless they've already been started."
+        },
+        {
+          "line": 1622,
+          "text": "            if self.stdout and not hasattr(self, \"_stdout_buff\"):"
+        },
+        {
+          "line": 1623,
+          "text": "                self._stdout_buff = []"
+        },
+        {
+          "line": 1624,
+          "text": "                self.stdout_thread = \\"
+        },
+        {
+          "line": 1625,
+          "text": "                        threading.Thread(target=self._readerthread,"
+        },
+        {
+          "line": 1626,
+          "text": "                                         args=(self.stdout, self._stdout_buff))"
+        },
+        {
+          "line": 1627,
+          "text": "                self.stdout_thread.daemon = True"
+        },
+        {
+          "line": 1628,
+          "text": "                self.stdout_thread.start()"
+        },
+        {
+          "line": 1629,
+          "text": "            if self.stderr and not hasattr(self, \"_stderr_buff\"):"
+        },
+        {
+          "line": 1630,
+          "text": "                self._stderr_buff = []"
+        },
+        {
+          "line": 1631,
+          "text": "                self.stderr_thread = \\"
+        },
+        {
+          "line": 1632,
+          "text": "                        threading.Thread(target=self._readerthread,"
+        },
+        {
+          "line": 1633,
+          "text": "                                         args=(self.stderr, self._stderr_buff))"
+        },
+        {
+          "line": 1634,
+          "text": "                self.stderr_thread.daemon = True"
+        },
+        {
+          "line": 1635,
+          "text": "                self.stderr_thread.start()"
+        },
+        {
+          "line": 1636,
+          "text": ""
+        },
+        {
+          "line": 1637,
+          "text": "            if self.stdin:"
+        },
+        {
+          "line": 1638,
+          "text": "                self._stdin_write(input)"
+        },
+        {
+          "line": 1639,
+          "text": ""
+        },
+        {
+          "line": 1640,
+          "text": "            # Wait for the reader threads, or time out.  If we time out, the"
+        },
+        {
+          "line": 1641,
+          "text": "            # threads remain reading and the fds left open in case the user"
+        },
+        {
+          "line": 1642,
+          "text": "            # calls communicate again."
+        },
+        {
+          "line": 1643,
+          "text": "            if self.stdout is not None:"
+        },
+        {
+          "line": 1644,
+          "text": "                self.stdout_thread.join(self._remaining_time(endtime))"
+        },
+        {
+          "line": 1645,
+          "text": "                if self.stdout_thread.is_alive():"
+        },
+        {
+          "line": 1646,
+          "text": "                    raise TimeoutExpired(self.args, orig_timeout)"
+        },
+        {
+          "line": 1647,
+          "text": "            if self.stderr is not None:"
+        },
+        {
+          "line": 1648,
+          "text": "                self.stderr_thread.join(self._remaining_time(endtime))"
+        },
+        {
+          "line": 1649,
+          "text": "                if self.stderr_thread.is_alive():"
+        },
+        {
+          "line": 1650,
+          "text": "                    raise TimeoutExpired(self.args, orig_timeout)"
+        },
+        {
+          "line": 1651,
+          "text": ""
+        },
+        {
+          "line": 1652,
+          "text": "            # Collect the output from and close both pipes, now that we know"
+        },
+        {
+          "line": 1653,
+          "text": "            # both have been read successfully."
+        },
+        {
+          "line": 1654,
+          "text": "            stdout = None"
+        },
+        {
+          "line": 1655,
+          "text": "            stderr = None"
+        },
+        {
+          "line": 1656,
+          "text": "            if self.stdout:"
+        },
+        {
+          "line": 1657,
+          "text": "                stdout = self._stdout_buff"
+        },
+        {
+          "line": 1658,
+          "text": "                self.stdout.close()"
+        },
+        {
+          "line": 1659,
+          "text": "            if self.stderr:"
+        },
+        {
+          "line": 1660,
+          "text": "                stderr = self._stderr_buff"
+        },
+        {
+          "line": 1661,
+          "text": "                self.stderr.close()"
+        },
+        {
+          "line": 1662,
+          "text": ""
+        },
+        {
+          "line": 1663,
+          "text": "            # All data exchanged.  Translate lists into strings."
+        }
+      ]
+    }
+  ]
+}

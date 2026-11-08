@@ -1,0 +1,38 @@
+{
+  "role": "primary docs read in diagnosis, paraphrase only; not host-suspend proof",
+  "sources": [
+    {
+      "title": "Microsoft WaitForSingleObject",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobject",
+      "claim_vi": "Windows8+ không tính thời gian low-power vào countdown của dwMilliseconds."
+    },
+    {
+      "title": "Microsoft QPC",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/sysinfo/acquiring-high-resolution-time-stamps",
+      "claim_vi": "QueryPerformanceCounter tính cả thời gian standby/hibernate/connected-standby."
+    },
+    {
+      "title": "CPython3.13 time",
+      "url": "https://docs.python.org/3.13/library/time.html#time.perf_counter",
+      "claim_vi": "perf_counter dùng cùng monotonic clock; Windows monotonic dùng QPC."
+    },
+    {
+      "title": "CPython3.13 subprocess",
+      "url": "https://docs.python.org/3.13/library/subprocess.html",
+      "claim_vi": "timeout truyền vào communicate; thời gian tạo process có thể không ngắt được."
+    },
+    {
+      "title": "CPythonv3.13.5 source",
+      "url": "https://github.com/python/cpython/blob/v3.13.5/Lib/subprocess.py#L1596-L1613",
+      "claim_vi": "Windows _wait gọi WaitForSingleObject, như bản stdlib local đã đọc."
+    }
+  ],
+  "host_suspend_status": "UNKNOWN",
+  "event_query": {
+    "command_scope": "System Microsoft-Windows-Kernel-Power IDs42/107 max10 timestamps only",
+    "status": "unavailable",
+    "exception_type": "System.UnauthorizedAccessException",
+    "message": "Attempted to perform an unauthorized operation.",
+    "escalation": false
+  }
+}
