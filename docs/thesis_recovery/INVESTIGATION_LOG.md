@@ -746,3 +746,9 @@ G10closed48/test5bd/reportc017 commit5e1eb40,51rawGitblobsverified; outputinvent
 - RQDIAG13 đã ghép đủ1080cặp của hai bundle đóng, kiểm concept/M-set/CID và8fixtures. Trong22rawcriterion-differences và22CID-differences chỉ2cặp trùng nhau;5Query-M differences không trùngCID. Query-M chỉ mộtconcept, không toànM-set28.
 - Đây là post-hoc descriptive cross-tab:0modelcalls,0newindependentN, không calibration truth/causal mediation/learning benefit. Cả16nhóm/8zero cells giữ trong bundle24; crosscheck độc lập pooled khớp8ô.
 - Checkpoint35metadata và online35NumPy fixtures cũng accepted nhưng chưa đồng nghĩa checkpoint native/fullGRAPH16 hoặc fitted research. Các gói tương ứng được review/đóng riêng.
+
+### 09/11 — GRAPH16 past-only query evidence
+
+- Dựng dữ liệu query động theo Grade10 namespace, giữ geometry/OOV và binding lịch sử/item/domain/encoding. Offline indexguard không đổi.
+- Actual35NumPy cases đạt, không Torch/model/backend/corpus; ownedJob0 và source/runtime pre/post khớp. Bundle25 đã đóng; current record tách thời gian prewrite, printed và terminal.
+- GRAPH16 vẫn PARTIAL: chưa dynamic graph-model parity; GRAPH17 fitted loader/calibration/controller chưa được suy ra từ test data helper.
