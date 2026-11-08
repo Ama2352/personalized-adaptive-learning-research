@@ -692,3 +692,8 @@ Root bounded90s actual terminal26.7052626s, return1, cleanupaccepted/Job0/Popenc
 ### 09/11 — operational benchmark02 đã được nhận
 
 Trước retry, Rootchạy2stdlibAST actualevent regressions, PASS0.0937658s. New02same144ABBA/fullTRAIN80 accepted, terminalcharged78.6461785s bao gồm5sregreserved; worker72.9724705s, không lấychargedtime thànhpurewall. Old26.7053 vẫngiữ, protectivesum105.3514785≤206.7053, khôngdoublecharge5. Hai fullpasses36groups mỗi lượt20.1733682/20.4438635s; hai fastpasses1.0972125/1.2281469s. Chỉ for_windowsAPIcost cùngindex/data/allcalloutputs, khôngcollate/epoch/GPUthroughput. All144calls complete/equal; source/input/prepost stable; Job0/cleanupaccepted. PeakRSS131141632B/minfree4620050432B. Build23.0528367s/seal1.4398383s táchriêng; noTorch/model/teacher/oracle/Holdout. Raw01failure+02success đangđược gói, chưa sửa closed41. Browser vẫnđóng, khôngpreviewserver/Modal.
+
+
+### 09/11 — cache cost đã commit; bàn giao actualAdam
+
+Operationalbundle45 manifestd8976cfa...eda883 đã đóng vàcommitc77e88a;45outputs+manifest+canonicalreport+plan27=48rawGitblobsverified. Outputinventory4334→4379, khôngresearchN. PublicreportHTMLkhông thêm sốđo kỹthuật này; browser/previewđãđóng. GRAPH10newtest5bdc3e53...42f4afc+plan1ed42255...661ca76 đượcRootreviewsource, chưaexecute; tácgiảđangchuẩn bịownedworker90s/1GiB/free2GiB cho1A3/1Adam/3fwd/back/clip/steps/18targets. Configmax_steps3chỉresourcecap, hypersunchanged. Metadataactualfalseavailabilityupstream1, cho phép≤16realfalsequeries chỉwithin countedAdamctor/stepphases nếuDynamolazyimport; vẫndenyCUDAinit/alloc. NewtestWIP chưacommit, khôngsourcePASS/fittedclaim; main4sources đãcommitf8b90fb giữnguyên. No nativejobs/Modal/Holdout/fullCV.
