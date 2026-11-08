@@ -1,0 +1,77 @@
+"""Đóng bằng chứng nhỏ calibration, kiểm byte trước/sau; không chạy tests/model."""
+from pathlib import Path
+import hashlib
+import json
+import sys
+import xml.etree.ElementTree as ET
+
+ROOT = Path(__file__).resolve().parents[4]
+PREP = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT / 'src'))
+from knowledge_tracing.evidence import record_evidence_run, verify_evidence_bundle
+
+sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+RUN = 'response-calibration-engineering-20261108-01'
+
+
+def main():
+    sources = {
+        'source__response_calibration.py': ROOT / 'src/knowledge_tracing/response_calibration.py',
+        'tests__test_response_calibration.py': ROOT / 'tests/shared_kt/test_response_calibration.py',
+        'source__simulator_bridge.py': ROOT / 'src/knowledge_tracing/simulator_bridge.py',
+        # Exact dependency version executed by trial02, not mutable parent WIP.
+        'source__reference_controller.py': PREP / 'trial02/3-reference_controller.py.before',
+        'protocol__21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md': ROOT / 'docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md',
+        'report__response_calibration_readiness_20261108.md': ROOT / 'research_tracking/reports/response_calibration_readiness_20261108.md',
+        'source__evidence.py': ROOT / 'src/knowledge_tracing/evidence.py',
+        'pack_evidence.py': Path(__file__).resolve(),
+        'run_targeted.py': PREP / 'run_targeted.py', 'run_targeted02.py': PREP / 'run_targeted02.py',
+        'controller02-preparation-failure-summary.log': PREP / 'controller02-preparation-failure.log',
+        'trial01__readiness.md': PREP / 'RESPONSE_CALIBRATION_V1_READINESS.md',
+        'pack-preflight-stop.md': PREP / 'pack-preflight-stop.md',
+        'pack_preflight01.py.before': PREP / 'pack_preflight01.py.before',
+    }
+    for trial in ('trial01', 'trial02'):
+        for p in sorted((PREP / trial).iterdir()):
+            if p.is_file(): sources[trial + '__' + p.name] = p
+    expected = {'source__response_calibration.py': '134277e291a768913576c83c593d40419597134fc6f7dd443ee5dd77b414e0aa',
+                'tests__test_response_calibration.py': '235c5381458521f27e5e406a11a52a282ebd27e5e78d22a9bb185590652af1aa',
+                'source__reference_controller.py': '8f4795e3e236c08a33f12bfd9c5047264fef82e7113493ade5c9e37cb35a6cfc'}
+    for alias, value in expected.items(): assert sha(sources[alias]) == value
+    for trial, count in [('trial01', 38), ('trial02', 39)]:
+        xml = ET.parse(PREP / trial / 'junit.xml').getroot().find('testsuite')
+        assert int(xml.attrib['tests']) == count and all(int(xml.attrib[k]) == 0 for k in ('errors', 'failures', 'skipped'))
+        receipt = json.loads((PREP / trial / 'receipt.json').read_bytes())
+        assert receipt['status'] == 'PASS' and receipt['inputs_before'] == receipt['inputs_after']
+        assert receipt['neural_optimizer_updates'] == 0 and receipt['cumulative_seconds'] <= 30
+    before = {alias: dict(path=p.relative_to(ROOT).as_posix(), sha256=sha(p), bytes=p.stat().st_size) for alias, p in sources.items()}
+    note = '# Response calibration/reference V1 — kiểm kỹ thuật\n\n38PASS01 và39PASS02, không cộng thành77independenttests; scalarfit tổng hợp,0neuralupdates.\nKhông fittedresearchcalibrator/RQ/GPU/Gateclaim. Giữ summary0testsharnessquotingfailure, nguồn trước/sau và parentcontroller exact8f479.\nKhông sửa sauclosure. manifest chỉ kiểm integrity; provenance/corpus/fittedclaims cần actualrun riêng.\n'
+    with record_evidence_run(ROOT, RUN, metadata={'kind': 'research-mode-api-synthetic-software-validation',
+            'recipe': 'response-temperature-reference-v1', 'trial_counts': [38, 39],
+            'cumulative_controller_seconds_conservative': 2.1001911895202636,
+            'neural_optimizer_updates': 0, 'fitted_research_calibrator': False,
+            'parent_authorization': 'root-calibration39-integration-small-bundle-20261108'},
+            sources=list(sources.values()), note=note) as directory:
+        for alias, p in sources.items():
+            assert sha(p) == before[alias]['sha256']
+            (directory / alias).write_bytes(p.read_bytes())
+            assert sha(directory / alias) == before[alias]['sha256']
+        after = {alias: dict(path=p.relative_to(ROOT).as_posix(), sha256=sha(p), bytes=p.stat().st_size) for alias, p in sources.items()}
+        assert before == after
+        (directory / 'copy_inventory.json').write_text(json.dumps({'inputs_before': before, 'inputs_after': after}, indent=2)+'\n')
+    verification = verify_evidence_bundle(directory)
+    manifest = json.loads((directory / 'manifest.json').read_bytes())
+    actual = {p.name for p in directory.iterdir()}
+    assert actual == set(manifest['outputs_sha256']) | {'manifest.json'}
+    report = (ROOT / 'research_tracking/reports/response_calibration_readiness_20261108.md').read_text(encoding='utf-8')
+    for alias in ('trial01__receipt.json', 'trial02__receipt.json', 'trial02__junit.xml', 'trial01__readiness.md'):
+        assert alias in report and (directory / alias).is_file()
+    result = dict(verification=verification, bundle=str(directory), manifest_sha256=sha(directory / 'manifest.json'),
+                  report_sha256=sha(sources['report__response_calibration_readiness_20261108.md']),
+                  outputs=len(manifest['outputs_sha256']), files=len(actual), copy_inputs=len(sources))
+    (PREP / 'closure-verification.json').open('x', encoding='utf-8').write(json.dumps(result, indent=2)+'\n')
+    (PREP / 'force_add_paths.txt').open('x', encoding='utf-8').write('\n'.join(p.relative_to(ROOT).as_posix() for p in sorted(directory.iterdir()))+'\n')
+    print(json.dumps(result))
+
+
+if __name__ == '__main__': main()
