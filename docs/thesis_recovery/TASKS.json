@@ -4208,7 +4208,8 @@
       "owner": "Codex",
       "execution_owner": "Codex",
       "dependencies": [
-        "GRAPH10"
+        "GRAPH10",
+        "GRAPH19"
       ],
       "required_inputs": "Plan27 và adoptedProtocol21/Recipe26; source/input/allocation pins được review cho từng gói.",
       "files_components": "src/knowledge_tracing/akt/research_graph_model.py; checkpoint.py; new researchgraph checkpoint scope/tests",
@@ -4240,7 +4241,8 @@
       "owner": "Codex",
       "execution_owner": "Codex",
       "dependencies": [
-        "GRAPH07"
+        "GRAPH07",
+        "GRAPH20"
       ],
       "required_inputs": "Plan27 và adoptedProtocol21/Recipe26; source/input/allocation pins được review cho từng gói.",
       "files_components": "src/knowledge_tracing/akt/research_execution.py; research_lifecycle.py; research_runner.py; existing canonical reader/phase views; main-stage source/tests",
@@ -4435,6 +4437,91 @@
       "status": "COMPLETED_CACHED_DESCRIPTIVE_NOT_RQ_COMPLETE",
       "blockers": [],
       "evidence_bundle": "research_tracking/runs/rq1-query-decision-overlap-20261109-01"
+    },
+    {
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P1",
+      "estimated_effort": "Gói hữu hạn; nghiệm thu từng artifact, không suy effort từ testcount",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Local engineering theo user; Root review exact source/commands/caps trước thực thi. Actual corpus/fullCV/Holdout/cloud spending cần authorization riêng.",
+      "blockers": [],
+      "id": "GRAPH18",
+      "research_objective": "Hợp đồng phase main selected-only, reuse typed claims",
+      "dependencies": [
+        "GRAPH07"
+      ],
+      "required_inputs": "Adopted21/22/23/26, admissioncore8 đã kiểm trong GRAPH12; mapping9candidate IDs",
+      "files_components": [
+        "src/knowledge_tracing/akt/research_main_stage.py",
+        "tests/akt/test_research_main_stage.py"
+      ],
+      "implementation_objective": "Fit80 có raw-selection validation mỗi epoch, finalrawbestexport riêng; không dùng metadata cấp quyền chạy/refit/calibration",
+      "acceptance_criteria": "14purecases/0FES; đủ9mapping/two-env metadata, phaseorder/claims/source tamper và fakefreeze reject; khôngactualfit từ tests",
+      "verification_steps": "Root actual30s capped owned worker; raw14result/coldclass/source/runtime/Job0 đã kiểm",
+      "required_artifacts": "Bundle24 và báo cáo phạm vi NO_EXECUTION_AUTHORITY",
+      "status": "COMPLETED_METADATA_CONTRACT_NOT_ACTUAL_PRODUCER",
+      "evidence_bundle": "research_tracking/runs/cgakt-main-stage-contract-engineering-20261109-01"
+    },
+    {
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P1",
+      "estimated_effort": "Gói hữu hạn; nghiệm thu từng artifact, không suy effort từ testcount",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Local engineering theo user; Root review exact source/commands/caps trước thực thi. Actual corpus/fullCV/Holdout/cloud spending cần authorization riêng.",
+      "blockers": [],
+      "id": "GRAPH19",
+      "parent_task": "GRAPH11",
+      "research_objective": "Khôi phục training-state qua hai OS processes thật",
+      "dependencies": [
+        "GRAPH10"
+      ],
+      "required_inputs": "GRAPH11 same-process native16 accepted CPf40/test332 và fixture5793; original fresh-process acceptance còn mở",
+      "files_components": "P/check_graph_checkpoint_fresh_process01.py + supervised two-worker harness/packet; existing CP source unchanged",
+      "implementation_objective": "Producer1model fullE1/save/controlpartialE2; distinctPID consumer reconstruct/strictrestore/partialE2. Externalparent verifies producer stopped and handoff digests before consumerGO",
+      "acceptance_criteria": "2actualPID+creationtokens; model/Adam/3RNG/modes/readout parity; total2ctors6FWD4updates96targetexposures1save1load; no completeE2/lifecycle/actualcorpus/fit claim",
+      "verification_steps": "Root review finitepacket150s whole, two owned jobs≤60s inclcleanup, native45s/worker53s, explicit inner/outer1GiB/free2GiB then actual artifact checks",
+      "required_artifacts": "Two actual owned receipts/results/counters, verified externalhandoff/checkpoint references, parity/schema/resources/cleanup and VNnote",
+      "status": "SOURCE_ONLY_PREPARATION_NOT_EXECUTED"
+    },
+    {
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P1",
+      "estimated_effort": "Gói hữu hạn; nghiệm thu từng artifact, không suy effort từ testcount",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Local engineering theo user; Root review exact source/commands/caps trước thực thi. Actual corpus/fullCV/Holdout/cloud spending cần authorization riêng.",
+      "blockers": [],
+      "id": "GRAPH20",
+      "research_objective": "Actual guarded main selected-only producer A0–A3, không auto-refit",
+      "dependencies": [
+        "GRAPH07",
+        "GRAPH11",
+        "GRAPH18"
+      ],
+      "required_inputs": "Adoptedspec/actual Gate/runtime/data/graph authorization; MainStage77b7, checkpointf40; patchplan998a",
+      "files_components": [
+        "src/knowledge_tracing/akt/research_main_execution.py",
+        "src/knowledge_tracing/akt/research_selected_runner.py"
+      ],
+      "implementation_objective": "Concrete on-disk revalidated executionguard; actual train_epoch/graphcollate, per-epochselection, trainindex-beforeCPsave, freshbestreload/rawexport/closedterminal; originalpilot untouched",
+      "acceptance_criteria": "Missing/wrong/stale authority/source/runtime/data reject before model; boundedactualproducer generates rawbest80 completecoverage+lineage counters/artifacts. SAKT/GKT/Junyi integration remains explicit required pending, not omission",
+      "verification_steps": "Source/pure orchestration first; actualfinite fixture after exactRootallocation; corpusfit/paid jobs separately approved",
+      "required_artifacts": "Source/tests/guard schema/actual runmanifest+terminal+rawexports/CPrefs or honest failure",
+      "status": "SOURCE_ONLY_IMPLEMENTATION_IN_PROGRESS"
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

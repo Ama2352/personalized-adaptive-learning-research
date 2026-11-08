@@ -1,0 +1,222 @@
+"""GRAPH18: main selected-only state contract; NO_EXECUTION_AUTHORITY.
+
+Pure metadata: không đọc file/data, tạo model, chọn winner hoặc cấp quyền chạy.
+SelectedCandidateClaim được reuse và revalidate, KHÔNG được nâng thành verified
+file receipt. Refit hiện luôn unavailable vì chưa có external-freeze file verifier.
+Không thay API hoặc ordering của A0 single-candidate lifecycle pilot.
+"""
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass, field
+import hashlib
+import json
+
+from .. import research_admission as admission
+
+PROTOCOL22 = '96858efc6d99915390d841f45144d2e2be29e244e825b58cee993a148f05f3d1'
+ACCOUNTING23 = '6f9e5adc2f075cb9c0c43ebbf1852e2365dd1baf5ff7c59dd8630561b3d72567'
+STATUS = 'NO_EXECUTION_AUTHORITY'
+REFIT_UNAVAILABLE = 'EXTERNAL_FREEZE_FILE_VERIFIER_UNAVAILABLE'
+CANDIDATE_BINDINGS = (
+    ('A0', 'A0', 'disabled'), ('A1_EXPERT', 'A1', 'expert'), ('A1_LEARNED', 'A1', 'learned'),
+    ('A2_EXPERT', 'A2', 'expert'), ('A2_LEARNED', 'A2', 'learned'),
+    ('A3_EXPERT', 'A3', 'expert'), ('A3_LEARNED', 'A3', 'learned'),
+    ('SAKT', 'SAKT', 'disabled'), ('GKT', 'GKT', 'expert'),
+)
+
+
+def _need(ok, message):
+    if not ok: raise ValueError(message)
+
+
+def _sha(value):
+    _need(type(value) is str and len(value) == 64 and all(c in '0123456789abcdef' for c in value),
+          'lowercase SHA256 metadata required')
+
+
+def _identity(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'),
+        ensure_ascii=False, allow_nan=False).encode('utf-8')).hexdigest()
+
+
+@dataclass(frozen=True)
+class MainSelectedStageSpec:
+    """Candidate/phase binding, không runtime/source/artifact attestation.
+
+21/26/allocation lấy từ MainSelectionContext hiện có.22/23 constants chỉ chốt
+identity phương pháp: actual file driver sau này vẫn phải hash bytes từ disk.
+"""
+    candidate_id: str
+    context: admission.MainSelectionContext
+    protocol22_sha256: str
+    accounting23_sha256: str
+    config_sha256: str
+    sources_sha256: str
+    runtime_sha256: str
+    graph_condition_sha256: str | None
+    graph_train_role_sha256: str | None
+
+    def validate(self):
+        _need(tuple(row[0] for row in CANDIDATE_BINDINGS) == admission.REQUIRED_CANDIDATE_IDS,
+              'exact adopted nine-candidate population required')
+        _need(type(self.candidate_id) is str and self.candidate_id in admission.REQUIRED_CANDIDATE_IDS
+              and type(self.context) is admission.MainSelectionContext, 'typed main candidate/context required')
+        self.context.validate()
+        _need(self.protocol22_sha256 == PROTOCOL22 and self.accounting23_sha256 == ACCOUNTING23,
+              'adopted lifecycle22/accounting23 metadata IDs required')
+        for name in ('config_sha256', 'sources_sha256', 'runtime_sha256'):
+            _sha(getattr(self, name))
+        if self.candidate_id in ('A0', 'SAKT'):
+            _need(self.graph_condition_sha256 is None and self.graph_train_role_sha256 is None,
+                  'independent graph-disabled candidate required')
+        else:
+            _sha(self.graph_condition_sha256)
+            _need(self.graph_train_role_sha256 == self.context.train_role_sha256,
+                  'graph/confidence must remain TRAIN80 bound through later neural refit')
+
+    def __post_init__(self):
+        self.validate()
+
+    @property
+    def candidate_variant(self):
+        self.validate()
+        return next(variant for name, variant, _ in CANDIDATE_BINDINGS if name == self.candidate_id)
+
+    @property
+    def estimator_graph(self):
+        self.validate()
+        return next(graph for name, _, graph in CANDIDATE_BINDINGS if name == self.candidate_id)
+
+    @property
+    def identity(self):
+        self.validate()
+        return _identity(asdict(self))
+
+
+class ExternalFreezeVerifierUnavailable(ValueError):
+    """Refit không được mở bằng claim/SHA/bool hoặc selection statistics."""
+
+
+def _match_terminal(spec, claim):
+    _need(type(claim) is admission.SelectedCandidateClaim, 'existing typed selected-only claim required')
+    claim.validate()
+    _need(claim.candidate_id == spec.candidate_id and claim.context == spec.context
+          and claim.config_sha256 == spec.config_sha256 and claim.sources_sha256 == spec.sources_sha256
+          and claim.runtime_sha256 == spec.runtime_sha256
+          and claim.graph_condition_sha256 == spec.graph_condition_sha256
+          and claim.graph_train_role_sha256 == spec.graph_train_role_sha256
+          and claim.estimator_graph == spec.estimator_graph, 'selected terminal/spec binding mismatch')
+
+
+@dataclass(frozen=True, init=False)
+class MainSelectedStage:
+    """Immutable cooperative journal head; caller phải giữ đúng latest head.
+
+Không chống caller fork/reset state hoặc giả inert metadata; không actual epoch,
+prediction/export receipt, budget/optimizer accounting, file admission hay grant.
+"""
+    spec: MainSelectedStageSpec
+    phase: str
+    terminal_claim: admission.SelectedCandidateClaim | None
+    content_sha256: str = field(repr=False)
+
+    def __init__(self, *args, **kwargs):
+        raise TypeError('use prepare_main_selected_stage')
+
+    def _payload(self):
+        return dict(spec=asdict(self.spec), phase=self.phase,
+                    terminal_claim=None if self.terminal_claim is None else asdict(self.terminal_claim))
+
+    def assert_integrity(self):
+        _need(type(self.spec) is MainSelectedStageSpec, 'typed stage spec required')
+        self.spec.validate()
+        _need(self.phase in ('READY', 'selected_fit80', 'raw_best_selection10', 'SELECTED_ONLY_COMPLETE'),
+              'selected-only stage required; no refit/calibration/pilot promotion')
+        if self.phase == 'SELECTED_ONLY_COMPLETE':
+            _match_terminal(self.spec, self.terminal_claim)
+        else:
+            _need(self.terminal_claim is None, 'terminal claim before raw best-selection completion')
+        _need(self.content_sha256 == _identity(self._payload()), 'main stage payload drift')
+
+    @property
+    def identity(self):
+        self.assert_integrity()
+        return self.content_sha256
+
+    @property
+    def status(self):
+        return STATUS
+
+    @property
+    def artifact_bytes_verified(self):
+        return False
+
+    @property
+    def external_freeze_authority(self):
+        return False
+
+    def phase_inputs(self):
+        """Fit80: optimization refs; raw-best: final export refs, không full corpus.
+
+        Epoch validation không phải final best export: dùng API riêng bên dưới
+        trong fit80 để EarlyStopping không phải chờ train hết mọi epoch.
+        """
+        self.assert_integrity()
+        if self.phase == 'selected_fit80':
+            return 'select_train80', (('train', self.spec.context.train_role_sha256),)
+        if self.phase == 'raw_best_selection10':
+            return 'raw_selection10', (('selection', self.spec.context.selection_role_sha256),)
+        raise ValueError('no phase inputs in ready or selected-only terminal state')
+
+    def epoch_validation_inputs(self):
+        """Raw selection10 read-only mỗi epoch; không optimization entitlement.
+
+        Không calibration/temperature, không thêm labels vào train inputs. Actual
+        runner vẫn phải kiểm readonly model/evaluation, actual epoch và coverage;
+        refs ở đây chỉ là phase-consistency metadata, không grant hoặc proof.
+        """
+        self.assert_integrity()
+        _need(self.phase == 'selected_fit80', 'per-epoch raw validation only during selected fit80')
+        return 'raw_selection10', (('selection', self.spec.context.selection_role_sha256),)
+
+    def begin_selected_fit(self):
+        self.assert_integrity()
+        _need(self.phase == 'READY', 'fit80 only from fresh selected-only state')
+        return _new(self.spec, 'selected_fit80', None)
+
+    def begin_raw_best_selection(self):
+        self.assert_integrity()
+        _need(self.phase == 'selected_fit80', 'raw best selection only after declared fit80 stage')
+        return _new(self.spec, 'raw_best_selection10', None)
+
+    def finish_selected(self, claim):
+        self.assert_integrity()
+        _need(self.phase == 'raw_best_selection10', 'selected-only terminal requires raw best selection stage')
+        _match_terminal(self.spec, claim)
+        return _new(self.spec, 'SELECTED_ONLY_COMPLETE', claim)
+
+    def request_refit_after_external_freeze(self, external_freeze_result):
+        self.assert_integrity()
+        # Deliberately do not invoke/traverse an arbitrary verifier/caller object.
+        # No actual file verifier exists; accepting a typed-looking wrapper here
+        # would turn a declared SHA or boolean into false external authority.
+        raise ExternalFreezeVerifierUnavailable(REFIT_UNAVAILABLE)
+
+    def request_calibration(self):
+        self.assert_integrity()
+        raise ValueError('selected-only excludes calibration; verified external freeze/refit path unavailable')
+
+
+def _new(spec, phase, claim):
+    result = object.__new__(MainSelectedStage)
+    for name, value in (('spec', spec), ('phase', phase), ('terminal_claim', claim)):
+        object.__setattr__(result, name, value)
+    object.__setattr__(result, 'content_sha256', _identity(result._payload()))
+    result.assert_integrity()
+    return result
+
+
+def prepare_main_selected_stage(spec):
+    _need(type(spec) is MainSelectedStageSpec, 'typed main selected-only spec required')
+    spec.validate()
+    return _new(spec, 'READY', None)

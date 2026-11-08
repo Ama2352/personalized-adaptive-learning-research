@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**Main selected-only — thứ tự phase:** [contract14](cgakt_main_stage_contract_20261109.md), [bundle24](../runs/cgakt-main-stage-contract-engineering-20261109-01/README.md). Có raw-selection validation mỗi epoch, final best export riêng; refit/calibration không được mở bằng metadata. Chưa actual producer hoặc execution authority.
+
 **CG-AKT checkpoint CPU:** [lưu/restore epoch](cgakt_research_checkpoint_readiness_20261109.md), [bundle119](../runs/cgakt-research-checkpoint-engineering-20261109-01/README.md). Native16 đạt, model/Adam/RNG/modes và một bước tiếp diễn khớp trong cùng process. Giữ cả hai failure trước; chưa fresh-process/lifecycle resume, fitted research hoặc GPU readiness.
 
 **Main selection — kiểm tính nhất quán:** [admission core8](research_admission_core_readiness_20261109.md), [bundle27](../runs/research-admission-core-engineering-20261109-01/README.md). Đủ chín claims trước phép join, kiểm toàn bộ targets/nhãn và tập chung năm mô hình; typed fixtures chưa xác nhận chín file kết quả thật hoặc cho phép refit.

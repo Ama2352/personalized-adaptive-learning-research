@@ -1,5 +1,7 @@
 # Chỉ mục bằng chứng
 
+**Main phase contract:** [báo cáo](reports/cgakt_main_stage_contract_20261109.md) / [bundle24](runs/cgakt-main-stage-contract-engineering-20261109-01/README.md),14pure cases. Giữ validation mỗi epoch trong fit80 và final raw-best export tách riêng; tất cả trạng thái NO_EXECUTION_AUTHORITY, chưa file admission/actual producer.
+
 **CG-AKT complete-epoch persistence:** [báo cáo](reports/cgakt_research_checkpoint_readiness_20261109.md) / [bundle119](runs/cgakt-research-checkpoint-engineering-20261109-01/README.md). Native03:16PASS, fullE1=8windows/48targets/2steps và controlled continuation parity; named Adam participation, RNG/modes và malformed payloads. Hai failures giữ nguyên; không fresh-OS-process/lifecycle/fit/CUDA claim. Binaries giữ nguyên trong experiments, bundle chỉ SHA/size references.
 
 **Main9 consistency:** [báo cáo](reports/research_admission_core_readiness_20261109.md) / [bundle27](runs/research-admission-core-engineering-20261109-01/README.md), 8 manufactured cases/0 model calls. Core giữ đủ chín mô hình, coverage và common-U statistics; actual selected-only producer, kiểm file thật và external freeze vẫn chưa hoàn tất.

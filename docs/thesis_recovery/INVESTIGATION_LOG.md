@@ -765,3 +765,10 @@ G10closed48/test5bd/reportc017 commit5e1eb40,51rawGitblobsverified; outputinvent
 - Giữ Native01monitor-race3updates vàNative02inner-RAM3updates; accepted03 có4updates, tổng10actual bodies. Pure35 vàcanary5 được kiểm lại trên source/pins mới, không cộng thành70/10unique logic.
 - Đã đóng119outputs nhỏ, binaries47refs chỉhash/size, không copy454MB vàoGit. Dry inventory giữ thêm trong docs/evidence vì bundle dùng closure-review SHA. CPf40 không đổi qua các retries; chỉfixtureRAM/monitor/harness được sửa.
 - GRAPH11 chưa complete vì acceptance ban đầu yêu cầu freshOSprocess. GRAPH19 sẽ kiểm hai owned workers riêng; không đổi mục tiêu thànhsame-process. Mainproducer/GPU/lifecycle vẫn thiếu.
+
+### 09/11 — main phase contract14 và phân rã critical path
+
+- GRAPH18 đạt14purecases, có selection validation mỗi epoch trong fit80; final best-export riêng. Đã sửa API ở static review trước execution, không gán thành failedtest. Bundle24 không cấp execution/refit authority.
+- Giữ nguyên yêu cầu fresh-process của GRAPH11 bằng subtaskGRAPH19: parent11 phụ thuộc19, task19 chỉ cần actualsame-process evidence đã có vàGRAPH10, không tạo dependencycycle.
+- GRAPH20 là actual concreteguard/selected-only producer; parentGRAPH12 cần20, không dùng typedstage thay fileauthority. Đủ9models vàhai môi trường vẫn bắt buộc, producerA*Grade10 đầu tiên không làm mất SAKT/GKT/Junyi requirements.
+- Đã kiểm toàn bộ141task IDs/dependencies bằng DFS, không cycle; nguồn/phương pháp21/22/23/26 không đổi.
