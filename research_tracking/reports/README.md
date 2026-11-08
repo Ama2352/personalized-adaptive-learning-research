@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**Đo cost context09/11:** [API for_windows](cgakt_context_api_cost_20261109.md), completeTRAIN8010080targets/144windows/144ABBAcalls. Fullpasses20,17/20,44s, fast1,10/1,23s; chỉ lookupAPI, không epoch/NN/GPUthroughput. Giữ failure01, regression2 và accepted02 trong45outputs.
+
 **CG-AKT hotpath09/11:** [135pure và25native cases](cgakt_hotpath_integrity_20261109.md), bundle41outputs;0full-cache serializer ở batch hotregions, vẫn explicitfullboundary. Không actualAdam/checkpoint/corpusfit/CUDA/throughput.
 
 **RQ1 — kết quả trực tiếp bên trong mastery:** [trạng thái và hai điều kiện](rq1_native_mastery_reference_diagnostic_20261109.md), [bundle92](../runs/rq1-prediction-mastery-trace-20261109-01/README.md). Đủ2.160 snapshots khớp nguồn; trên30.240cặp khái niệm–thời điểm,3.428bất đồng điều kiện bất định bị điểm kiến thức thấp giữ lại,90bất đồng phân loại do điều kiện kiến thức. Không90temporal transitions, accuracy/calibration hoặc learning benefit.

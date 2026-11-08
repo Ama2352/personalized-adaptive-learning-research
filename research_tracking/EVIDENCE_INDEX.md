@@ -1,5 +1,7 @@
 # Chỉ mục bằng chứng
 
+**Context API cost:** [báo cáo](reports/cgakt_context_api_cost_20261109.md) / [bundle45](runs/cgakt-context-api-cost-benchmark-20261109-01/README.md), completeTRAIN80/144ABBA/equaloutputs, không NN hoặc modelselection; old01loggingfailure giữ nguyên. Không đổi rawdata/recipe hoặc lấy API timings dự báo GPUtraining.
+
 **CG-AKT context hotpath:** [báo cáo](reports/cgakt_hotpath_integrity_20261109.md) / [bundle41](runs/cgakt-context-model-hotpath-engineering-20261109-01/README.md),135pure+25native scopes riêng;8Architectureforward/5logicalbackward/0Adam,0fullserializer ở hotregions vàfullwholeinferenceboundary. Chưa costbenchmark/maintraining; old52/74 giữ nguyên.
 
 **RQ1 native state:** [báo cáo cơ chế](reports/rq1_native_mastery_reference_diagnostic_20261109.md) / [bundle92](runs/rq1-prediction-mastery-trace-20261109-01/README.md),18closed traces/all2160parity;3428uncertainty-condition differences masked bybothknowledge-below,90knowledge-condition/mastery differences. Đơn vị concept–time, không temporaltransitions. **Core CG-AKT:** [18CPUcases](reports/cgakt_research_core_20261109.md) / [bundle74](runs/cgakt-research-core-engineering-20261109-01/README.md);8forward/5backward/0optimizer, chưa model fitted.

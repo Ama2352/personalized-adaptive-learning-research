@@ -682,3 +682,13 @@ Báo cáo hai file09/11 đã nối chặng5 và bảng mastery; giữ nguyên10S
 ROOT đã nghiệm thu135pure(66condition/69context) và25native, terminal12.7690966s/90 và14.5938191s/90. Native1backbone+1wrapper+1gate,8Architectureforward/5logicalbackward/0Adam;61fullpayload outsidehotregions,0inside;wholeinference before/afterfullaudit1each. Không đo speedup từ sốtest/time. Closed41outputs manifest38ce2196...dfd6ef, commitf8b90fb;47rawGitblobs verified trước futureedits. Outputinventory4293→4334 không researchN. Publicreaderbenchmark còn sourcepreparation, actualAdam/checkpoint chưa thựcchạy.
 
 Main-stage staticreview21sourcepins được kiểm vàpublishplan27 d7460468...9c0d04; sửa diễn đạtconfig.graph đểkhônggán graphprerequisite choAKTupstream. RunnerA0pilot auto-refit khôngmainmatrix; graph epoch cầncollate_trainingticket, externalfreeze authority vàpublicscopedreader; GPUport riêng. Backlog thêmGRAPH09–15,135tasks; GPUport chuẩn bị song song refitwiring saucheckpoint/stagecontracts, không ép tuần tựsau toànmainpipeline. Readerupdate6fa9d58 raw3verified; đã đóngbrowser trongfinally, khôngpreviewserver/Modal/Holdout/fullCV.
+
+
+### 09/11 — operational benchmark01 không được nghiệm thu
+
+Root bounded90s actual terminal26.7052626s, return1, cleanupaccepted/Job0/Popenclosed. Canonicalreader auditsall3Developmentroles rồi chỉTRAIN80 build10080targets/144windows; noTorch/teacher/oracle/model/metrics. Firstfullbodyreturned1 nhưng event journal gọi seconds trùng namedfield nênTypeError; bench_calls=[] và không timing nào được nhận. Raw01 giữnguyên. Root giao02chỉsửalog +stdlibactualevent regression trướcdispatch, cùng144ABBA; newprotective180cap khôngxóa26.7053oldspent, không dựbáoruntime/biệnminhspeedup. Build22.1200s/seal1.4112s làstageops córeceipt, khôngtrainingthroughput.
+
+
+### 09/11 — operational benchmark02 đã được nhận
+
+Trước retry, Rootchạy2stdlibAST actualevent regressions, PASS0.0937658s. New02same144ABBA/fullTRAIN80 accepted, terminalcharged78.6461785s bao gồm5sregreserved; worker72.9724705s, không lấychargedtime thànhpurewall. Old26.7053 vẫngiữ, protectivesum105.3514785≤206.7053, khôngdoublecharge5. Hai fullpasses36groups mỗi lượt20.1733682/20.4438635s; hai fastpasses1.0972125/1.2281469s. Chỉ for_windowsAPIcost cùngindex/data/allcalloutputs, khôngcollate/epoch/GPUthroughput. All144calls complete/equal; source/input/prepost stable; Job0/cleanupaccepted. PeakRSS131141632B/minfree4620050432B. Build23.0528367s/seal1.4398383s táchriêng; noTorch/model/teacher/oracle/Holdout. Raw01failure+02success đangđược gói, chưa sửa closed41. Browser vẫnđóng, khôngpreviewserver/Modal.

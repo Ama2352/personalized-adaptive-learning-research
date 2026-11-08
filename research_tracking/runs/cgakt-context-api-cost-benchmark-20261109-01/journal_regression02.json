@@ -1,0 +1,54 @@
+{
+  "cap_seconds": 5,
+  "config_sha256": "c5cc433a4368e9e13fea354b608172bdfc06684be7de8bb4f59f3d35d8265ba3",
+  "conservative_charge_within_new180_seconds": 5,
+  "errors": [],
+  "no_corpus_or_model_imports": true,
+  "observations": [
+    {
+      "accepted": true,
+      "actual_callsite_keywords": [
+        "group_number",
+        "mode",
+        "pass_number",
+        "seconds"
+      ],
+      "journal_bytes": 0,
+      "label": "old01",
+      "original_exception": {
+        "message": "dict() got multiple values for keyword argument 'seconds'",
+        "type": "TypeError"
+      },
+      "parsed_row": null,
+      "source": "artifacts/akt/local-tests/akt-research-runner-20261108-01/check_graph_context_hash_benchmark01.py",
+      "source_sha256": "c76adc0bd36a7a64fc584d1c2160da8abb8c33fc431e9e456a2ad22cea586bda"
+    },
+    {
+      "accepted": true,
+      "actual_callsite_keywords": [
+        "call_seconds",
+        "group_number",
+        "mode",
+        "pass_number"
+      ],
+      "journal_bytes": 123,
+      "label": "new02",
+      "original_exception": null,
+      "parsed_row": {
+        "call_seconds": 0.1,
+        "group_number": 0,
+        "mode": "full",
+        "pass_number": 0,
+        "phase": "call_body_returned",
+        "seconds": 0.25
+      },
+      "source": "artifacts/akt/local-tests/akt-research-runner-20261108-01/check_graph_context_hash_benchmark02.py",
+      "source_sha256": "f4347134cf3acdb9f34250e7cb06217b3730f344a33ea218fdeee1ba3c7324af"
+    }
+  ],
+  "passed": 2,
+  "seconds": 0.08252120018005371,
+  "status": "ACCEPTED_2_STDLIB_AST_JOURNAL_REGRESSIONS_NOT_BENCHMARK",
+  "synthetic_memory_only_fsync": true,
+  "tests": 2
+}
