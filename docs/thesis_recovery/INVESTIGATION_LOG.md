@@ -472,3 +472,8 @@ Availabilityattempt01 fail PID trước imports/native0. ONE metadata probe xác
 ### 08/11 — Freeze profile corpus đầu tiên, chưa dispatch
 
 Metadata-only actual ResearchSplitPlan kiểm role48/6/6 và modulo profile16/2/2,12600events dự kiến; config8e780048/plan7222b7c.150finalIDs chỉmetadata,0finalevents; no collector/model.120s toàn operation gồmpublication≤30, không150s; no seedsearch/auto retry. Dependencies ownedJob/publicreader/driverinventory ghi riêng, không blocked user decision. A0lifecycle BATCH3B mới thiết kế, không fitted model.
+
+
+### 08/11 — Báo cáo GVHD revision4 đã kiểm và commit
+
+Same reportMD/JSON tại research_tracking/reports/BAO_CAO_TIEN_DO_GVHD_20261108, commit e502848, SHA7a727d9b. Root xác nhận32source bytes/358bundleoutputs/25links và exactrev3Git,0Holdout/training. Nêu negativePG/full–empty963khác oldfull–GF964, history/timeconfounds, không RQcomplete; report chưa gửi ngoài. Contract22 là design, không trainer/fitted artifact.
