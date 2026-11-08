@@ -383,3 +383,15 @@ Parent đang triển khai A2/A3 engineering-only nên current-source Gate24 stal
 `4a256a4`:43targetedCPUtestsPASS/0optimizer,3rawattempts giữ nguyên,39.650895≤120s;37outputs rawGitverified. Không thay upstream/native geometry; explicitconfidence/gate recipe/zero-mass nativebypass. CurrentfullGateSTALE sau sourcechange; không relabel actualLinuxGate24 cũ. `4edf1f8`:14claims/104pointers/28inputs/24links; parent kiểm originalC01–13/input21/first9arithmetic và MarkdownngoàiC14 byte-identical. Parent initialassertion đã nhầm wholearithmeticlist phảiunchanged trong khiC14 thêm2rows; correction kiểmfirst9và2rowsmới,không sửa kết quả nguồn.
 
 TổngrawGitoutputs1761 chỉ là auditcount,khôngcompletion%/N. Graph03 vàRQDIAG05đãindex;nextgraphlifecycle contract ởprep, coldinstaller mớiplan11inputs/44wheelconstraints, tấtcả chưaactualGPU/install. Modalaccesshistorical/user30freecredits; chưa đoCUDAthroughput/currentmainrecovery/Volume hoặc authorizationpaid.
+
+
+### 08/11 — GRAPH04 actual và demo: checkpoint phục hồi trước archive
+
+Callback8purePASS (17.699122/30), adapter34purePASS (18.382563/30) giữ harnessSyntaxError và15fixture source-row failures. Actual01RAMfloor:32PASS3FAIL11ERROR,0optimizer/0rundirs,19.2115564s. User giải phóng RAM, actual02:45PASS1FAIL,4genuine optimizer bodyreturns/4reservations,18.2473471s; graphhappy1+partial1, basehappy1+partial1. Nativegraph cập nhật backbone/message/readout/gate,8train/4selection=3known1OOV, fullcheckpoint/reload0/export+truthCSV,partialkhôngCOMPLETE. Failureduynhất oldtest inventoryexpectedthiếu2graphhelpers, fixture-onlycorrected+stored-artifact directtestPASS9.2299786s/0fit. Tổng46.6888821≤60, không relabel45PASS1FAIL thành46PASS. Parentrawreviewđãlưu;4stepcapEXHAUSTED, khôngrerunđểarchive.
+
+Demo83PASS sau boundedlocalhostpermission retry, browserQA giữ actualdimensions/negativecases và đóngownedtab/server. GPUhostprep99uniqueinputs/143occurrences đãparentreview vàauthorizeONEclosure; tấtcảmocks/metadata, khôngactualGPU/install. Colabcontroller30957đãterminalexit0, khôngcònlivehandle; remote runtime khôngbịdelete nhưng trạngtháichưađọc lại. NoModalspending. Cácbatcharchive/commitđangchờpins, chưagoalcomplete/fullGate/currentCUDAready.
+
+
+### 08/11 — GPU-host prep đã commit c1d93ec
+
+102outputs rawGitverified,manifest3ed52942…acc305. Bốn scopes riêng warm20/generic9/cold24/packet41 là mocks; storedCPUstartupfacts không freshGPU proof. NoGPU/install/cloudspend. GRAPH04+demo source vẫn chưacommit vì chờ canonicalreport/dryarchive vàrootreview cuối; không gọi workingtreeclean hoặc fullresearchready.
