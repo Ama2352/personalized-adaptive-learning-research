@@ -415,3 +415,10 @@ Bundleb9eaaab:66outputs rawGitverified; source/report22b3522:83testsPASS vàbrow
 ### 08/11 — Ưu tiên scientific gap thay vì thêm framework
 
 FreshRAM snapshot3.546GB<4GiBGatefloor,khônglaunchGate. 06architectuređãđốichiếuA0–A3/lifecycleactual vớiS04/S05cònmở. Sourceauditdiagnostics xácnhậnchỉ2fixed-stream/reconciliationcallers,closedloopkhônggọi;khôngevidence đểsửaoldpairedmetrics/claimcalibrationmisuse. 04diagnosticplanbổsungfuturetarget/history/timing/readysemantics vàgiữallhistoricalresults. No sourcecode/model/tests/data/cloudchange. AgentđangsoạnS04/S05explicitchoices đểchuyểntừtoyengineeringsangresearchprotocolđượcduyệt.
+
+
+### 08/11 — Kết nối lại Colab CPU và reference semantics
+
+UserxácnhậnMCPgiữCPU;newbridge17125/session4a53…actualconnectedtrue+websocketlive. Mộtcellstdlibreadonlythật xácnhậnROOT/targetpythoncòntồntại,Python3.13.18/cfg0b853774…033366,/dev/nvidia0absent,newgraphsourceabsent. Khôngtargetinterpreter/Torch/pip/install/train/deviceAPI. Khôngsuy44packages/source165freshchỉtừcfg;nextwarmmetadataauditđượcgiaoagentchuẩnbịlocal.
+
+Metadataquestion_bank84/28x3difficultiesconfirmed vàmanualresponsecurvemeanθ1250=0.5637150147511514;τ0.5choequal3refs tươngứngθ1200. 18interfaceđãlưuđểS04review,khôngapplycontroller/thresh/calibration. GlobalGoalactive; noModal/fullCV/Holdout.
