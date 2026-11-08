@@ -1,0 +1,74 @@
+{
+  "status": "PASS_SCOPED_PREEXEC_LOADER04_PIN_REMEDIATION",
+  "source": "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/materialize_upstream_loader04.py",
+  "source_sha256": "6aff88a7abc9620d6372ee934391d2079bccd253330e7a1e4f0ddcaa436b41b2",
+  "request_sha256": "3b2cbdefe9892f802c950e135bc12e3b12a6819e90f33a6d585d26baf27eab60",
+  "source03_sha256_unchanged": "9489a25d14aab2f5ecd9173b128378db358c11950daa5aefcfd8615d2aabbda1",
+  "blocking_findings": [],
+  "sha256_digest_shape_checks": {
+    "PINS": 11,
+    "LF_files": 3,
+    "payload_and_profile": 2,
+    "all_lowercase_exact64": true
+  },
+  "Git_ID_shape_checks": {
+    "PIN": 40,
+    "tree": 40,
+    "loader_blob": 40
+  },
+  "actual_structured_RPC_summary_sources": {
+    "cache01": {
+      "path": "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/loader-cache01-rpc-summary.json",
+      "sha256": "78bfaa16328d9b8894ea2e196fc05073413c20ebef09da06ced1e65bcb4c73eb",
+      "bound_fields": [
+        "summary.result_sha256",
+        "summary.output_manifest_sha256"
+      ],
+      "status": "CACHE_MISS_NO_MUTATION_NOT_REMEDIATED"
+    },
+    "failed03": {
+      "path": "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/loader-transfer03-failed-rpc-summary.json",
+      "sha256": "d6f18037d127ebe5cc903af8a4d37d49c75a19d514d52572fee1c981a19e5d99",
+      "bound_fields": [
+        "summary.result_sha256",
+        "summary.output_manifest_sha256"
+      ],
+      "status": "FAILED_TRANSFERRED_LOADER_RETAIN_PARTIAL"
+    }
+  },
+  "payload_checks": {
+    "bytes": 6428,
+    "sha256": "27550ccd07c1131971c4381f024c0f3795dba3d32b7f9fb4eea4ababd8bfe9e8",
+    "Git_blob_ID": "9fafe965e0b442242125250f37dc8c3f8a145edf",
+    "profile_bytes": 381,
+    "profile_sha256": "fe92be5208b9b2b1ba041945c7a5c190c0eef13a34679203c5f76acc93a8088e",
+    "embedded_bytes_equal_local_primary_files": true,
+    "controller_and_child_AST_parse": true
+  },
+  "coordination": {
+    "source_filename": "materialize_upstream_loader04.py",
+    "controller_and_child_stage": "upstream-loader-transfer03",
+    "preserved_failed03_stage": "upstream-loader-transfer02",
+    "request_payload_byte_exact_to_reviewed_source": true,
+    "upstream_destination_unchanged": true
+  },
+  "guard_checks_vi": [
+    "validate_pin_inventory(PINS) module-level purecheck beforemutation, CLI expectedsourceSHA validatedbeforestage creation.",
+    "Child logic byte-identical03 exceptstagepath; exacttreeOID/payloadbefore realGit hash-object -w stdin; source/clean3LF/kit161/PINSpostchecks unchanged.",
+    "Git transport/config/credentials/fsmonitor isolated;30s/25workbudget+oncecleanup beforeparse preserved; no source/controller/model/remoteexecution by reviewer."
+  ],
+  "reported_local_tests": {
+    "receipt": "artifacts/akt/local-tests/upstream-loader-transfer04-offline-20261108-01/run.json",
+    "receipt_sha256": "d11a702655de68215e12f93a03b81d1b06cfd528cc1496ea935e91a3ce44bfe5",
+    "status": "PASS_3_GUARD_CASES_INCLUDING_65HEX_NEGATIVE",
+    "cases": 3,
+    "controller_seconds": 0.21703440000419505,
+    "negative65_and_bool": true
+  },
+  "review03_correction_vi": "Review03 missed malformed65hex copied pin; accepted pinformatfinding,03source/failure/oldreview left intact.04reads exact actualstructured summary JSON values, not wrapped preview text.",
+  "limits_vi": [
+    "Raw privateRPC receipt bytes were not independently fetched by this reviewer; reviewed exact structured-summary JSON source files and matchingSHA fields. No new artifact/remote acceptance inferred.",
+    "Cooperative path/storage/hash consistency; not hostile-race/hostnetwork attestation.",
+    "Successfulloader source materialization would not be Gate/mainworker/GPU acceptance."
+  ]
+}

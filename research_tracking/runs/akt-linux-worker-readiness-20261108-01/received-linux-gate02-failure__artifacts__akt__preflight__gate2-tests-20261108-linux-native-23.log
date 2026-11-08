@@ -1,0 +1,159 @@
+........................................................................ [  9%]
+........................................................................ [ 18%]
+..F..................................................................... [ 28%]
+........................................................................ [ 37%]
+........................................................................ [ 46%]
+........................................................................ [ 56%]
+........................................................................ [ 65%]
+.............FFFF....................................................... [ 75%]
+........................................................................ [ 84%]
+........................................................................ [ 93%]
+................................................                         [100%]
+=================================== FAILURES ===================================
+_ test_whole_batch_native_bypass_for_each_supported_fallback[no_parent_support] _
+
+bundle = (AKTConfig(project_root=PosixPath('/content/KLTN_GPU08_20261108_01'), output_dir=PosixPath('/content/KLTN_GPU08_202611...: ReLU()
+    (5): Dropout(p=0.0, inplace=False)
+    (6): Linear(in_features=256, out_features=1, bias=True)
+  )
+), ...)
+mode = 'no_parent_support'
+
+    @pytest.mark.parametrize("mode",["A0","empty","no_parent_support"])
+    def test_whole_batch_native_bypass_for_each_supported_fallback(bundle,mode):
+        cfg,train,selection,encoding,graph,baseline,proto,_=bundle
+        if mode=="A0":
+            model=build(cfg,train,encoding,graph,"A0")
+            shard=train
+        elif mode=="empty":
+            graph=PrerequisiteGraph.from_edges(graph.nodes,[])
+            model=build(cfg,train,encoding,graph)
+            shard=train
+        else:
+            trajectory=selection.trajectories[0]
+            shard=replace(selection,trajectories=(replace(trajectory,observations=tuple(
+                replace(o,query=replace(o.query,item_id="c")) for o in trajectory.observations)),))
+            model=proto
+        batch=graph_proto.prepare_graph_batch(shard,encoding,config=cfg,graph=graph)
+        before=model.message_module.calls if model.message_module is not None else 0
+        target=labels(batch,shard)
+        actual=model.forward_details(batch,target)
+        expected=baseline(batch.base.q_data,batch.base.qa_data,target)
+>       assert all(torch.equal(a,b) for a,b in zip(actual.native_result,expected,strict=True))
+E       assert False
+E        +  where False = all(<generator object test_whole_batch_native_bypass_for_each_supported_fallback.<locals>.<genexpr> at 0x78544099d620>)
+
+tests/akt/test_graph_prototype.py:159: AssertionError
+_________ test_three_line_loader_encoding_padding_and_student_indices __________
+
+tmp_path = PosixPath('/content/KLTN_GPU08_20261108_01/artifacts/akt/local-tests/gate2-20261108-linux-native-23-d6d73ede4a3d479dabe5812de6b8e913/test_three_line_loader_encodin0')
+
+    def test_three_line_loader_encoding_padding_and_student_indices(tmp_path):
+        fixture = tmp_path / 'synthetic.csv'
+        fixture.write_text('891,78276\n1,2,1,3,2\n1,0,1,0,1\n', encoding='utf-8')
+>       q, qa, student_indices = upstream_loader().DATA(3, 8, ',').load_data(fixture)
+                                 ^^^^^^^^^^^^^^^^^
+
+tests/akt/test_upstream_data_contract.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/akt/test_upstream_data_contract.py:18: in upstream_loader
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:1023: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:1160: in get_code
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_frozen_importlib_external.SourceFileLoader object at 0x78543e541490>
+path = '/content/KLTN_GPU08_20261108_01/artifacts/akt/dependencies/upstream/load_data.py'
+
+>   ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/content/KLTN_GPU08_20261108_01/artifacts/akt/dependencies/upstream/load_data.py'
+
+<frozen importlib._bootstrap_external>:1218: FileNotFoundError
+____________ test_four_line_loader_separates_skill_and_problem_ids _____________
+
+tmp_path = PosixPath('/content/KLTN_GPU08_20261108_01/artifacts/akt/local-tests/gate2-20261108-linux-native-23-d6d73ede4a3d479dabe5812de6b8e913/test_four_line_loader_separate0')
+
+    def test_four_line_loader_separates_skill_and_problem_ids(tmp_path):
+        fixture = tmp_path / 'synthetic_pid.csv'
+        fixture.write_text('891,78276\n11,12,11\n1,2,1\n1,0,1\n', encoding='utf-8')
+>       q, qa, pid = upstream_loader().PID_DATA(3, 4, ',').load_data(fixture)
+                     ^^^^^^^^^^^^^^^^^
+
+tests/akt/test_upstream_data_contract.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/akt/test_upstream_data_contract.py:18: in upstream_loader
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:1023: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:1160: in get_code
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_frozen_importlib_external.SourceFileLoader object at 0x78543e5416d0>
+path = '/content/KLTN_GPU08_20261108_01/artifacts/akt/dependencies/upstream/load_data.py'
+
+>   ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/content/KLTN_GPU08_20261108_01/artifacts/akt/dependencies/upstream/load_data.py'
+
+<frozen importlib._bootstrap_external>:1218: FileNotFoundError
+_______________ test_header_values_do_not_control_loader_output ________________
+
+tmp_path = PosixPath('/content/KLTN_GPU08_20261108_01/artifacts/akt/local-tests/gate2-20261108-linux-native-23-d6d73ede4a3d479dabe5812de6b8e913/test_header_values_do_not_cont0')
+
+    def test_header_values_do_not_control_loader_output(tmp_path):
+>       loader = upstream_loader().DATA(3, 4, ',')
+                 ^^^^^^^^^^^^^^^^^
+
+tests/akt/test_upstream_data_contract.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/akt/test_upstream_data_contract.py:18: in upstream_loader
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:1023: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:1160: in get_code
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_frozen_importlib_external.SourceFileLoader object at 0x78543e540710>
+path = '/content/KLTN_GPU08_20261108_01/artifacts/akt/dependencies/upstream/load_data.py'
+
+>   ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/content/KLTN_GPU08_20261108_01/artifacts/akt/dependencies/upstream/load_data.py'
+
+<frozen importlib._bootstrap_external>:1218: FileNotFoundError
+_________ test_kltn_reconstructs_native_alignment_without_double_shift _________
+
+tmp_path = PosixPath('/content/KLTN_GPU08_20261108_01/artifacts/akt/local-tests/gate2-20261108-linux-native-23-d6d73ede4a3d479dabe5812de6b8e913/test_kltn_reconstructs_native_0')
+
+    def test_kltn_reconstructs_native_alignment_without_double_shift(tmp_path):
+        fixture = tmp_path / 'synthetic.csv'
+        fixture.write_text('unused\n1,2,3\n1,0,1\n', encoding='utf-8')
+>       q, qa, _ = upstream_loader().DATA(3, 3, ',').load_data(fixture)
+                   ^^^^^^^^^^^^^^^^^
+
+tests/akt/test_upstream_data_contract.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/akt/test_upstream_data_contract.py:18: in upstream_loader
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:1023: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:1160: in get_code
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_frozen_importlib_external.SourceFileLoader object at 0x78543e541310>
+path = '/content/KLTN_GPU08_20261108_01/artifacts/akt/dependencies/upstream/load_data.py'
+
+>   ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/content/KLTN_GPU08_20261108_01/artifacts/akt/dependencies/upstream/load_data.py'
+
+<frozen importlib._bootstrap_external>:1218: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/akt/test_graph_prototype.py::test_whole_batch_native_bypass_for_each_supported_fallback[no_parent_support]
+FAILED tests/akt/test_upstream_data_contract.py::test_three_line_loader_encoding_padding_and_student_indices
+FAILED tests/akt/test_upstream_data_contract.py::test_four_line_loader_separates_skill_and_problem_ids
+FAILED tests/akt/test_upstream_data_contract.py::test_header_values_do_not_control_loader_output
+FAILED tests/akt/test_upstream_data_contract.py::test_kltn_reconstructs_native_alignment_without_double_shift
+5 failed, 763 passed in 256.80s (0:04:16)

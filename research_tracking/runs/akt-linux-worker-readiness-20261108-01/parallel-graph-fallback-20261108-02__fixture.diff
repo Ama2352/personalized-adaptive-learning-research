@@ -1,0 +1,75 @@
+--- historical5e2a/test_graph_prototype.py
++++ corrected/test_graph_prototype.py
+@@ -137,28 +137,51 @@
+ 
+ 
+ @pytest.mark.parametrize("mode",["A0","empty","no_parent_support"])
+-def test_whole_batch_native_bypass_for_each_supported_fallback(bundle,mode):
++@pytest.mark.parametrize("ambient_threads",[1,2])
++def test_whole_batch_native_bypass_for_each_supported_fallback(bundle,mode,ambient_threads):
+     cfg,train,selection,encoding,graph,baseline,proto,_=bundle
+-    if mode=="A0":
+-        model=build(cfg,train,encoding,graph,"A0")
+-        shard=train
+-    elif mode=="empty":
+-        graph=PrerequisiteGraph.from_edges(graph.nodes,[])
+-        model=build(cfg,train,encoding,graph)
+-        shard=train
+-    else:
+-        trajectory=selection.trajectories[0]
+-        shard=replace(selection,trajectories=(replace(trajectory,observations=tuple(
+-            replace(o,query=replace(o.query,item_id="c")) for o in trajectory.observations)),))
+-        model=proto
+-    batch=graph_proto.prepare_graph_batch(shard,encoding,config=cfg,graph=graph)
+-    before=model.message_module.calls if model.message_module is not None else 0
+-    target=labels(batch,shard)
+-    actual=model.forward_details(batch,target)
+-    expected=baseline(batch.base.q_data,batch.base.qa_data,target)
+-    assert all(torch.equal(a,b) for a,b in zip(actual.native_result,expected,strict=True))
+-    assert actual.hidden is None and not actual.applied_mask.any()
+-    if model.message_module is not None:assert model.message_module.calls==before
++    previous_threads=torch.get_num_threads()
++    hooks=[]
++    try:
++        torch.set_num_threads(ambient_threads)
++        if mode=="A0":
++            model=build(cfg,train,encoding,graph,"A0")
++            shard=train
++        elif mode=="empty":
++            graph=PrerequisiteGraph.from_edges(graph.nodes,[])
++            model=build(cfg,train,encoding,graph)
++            shard=train
++        else:
++            trajectory=selection.trajectories[0]
++            shard=replace(selection,trajectories=(replace(trajectory,observations=tuple(
++                replace(o,query=replace(o.query,item_id="c")) for o in trajectory.observations)),))
++            model=proto
++        batch=graph_proto.prepare_graph_batch(shard,encoding,config=cfg,graph=graph)
++        before=model.message_module.calls if model.message_module is not None else 0
++        target=labels(batch,shard)
++        native_threads=[]
++        control_threads=[]
++        hooks.append(model.native.register_forward_pre_hook(
++            lambda module,args:native_threads.append(torch.get_num_threads())))
++        hooks.append(baseline.register_forward_pre_hook(
++            lambda module,args:control_threads.append(torch.get_num_threads())))
++        actual=model.forward_details(batch,target)
++        assert torch.get_num_threads()==ambient_threads
++        # The wrapper scopes CPU threads; exact control uses the same thread contract.
++        try:
++            torch.set_num_threads(cfg.threads)
++            with torch.device("cpu"):
++                expected=baseline(batch.base.q_data,batch.base.qa_data,target)
++        finally:
++            torch.set_num_threads(ambient_threads)
++        assert torch.get_num_threads()==ambient_threads
++        assert native_threads==control_threads==[cfg.threads]
++        assert all(torch.equal(a,b) for a,b in zip(actual.native_result,expected,strict=True))
++        assert actual.hidden is None and not actual.applied_mask.any()
++        if model.message_module is not None:assert model.message_module.calls==before
++    finally:
++        for hook in hooks:hook.remove()
++        torch.set_num_threads(previous_threads)
+ 
+ 
+ def test_current_future_label_perturbations_no_current_probability_leak_and_past_positive_control(bundle):

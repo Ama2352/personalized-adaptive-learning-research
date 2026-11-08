@@ -1,0 +1,133 @@
+{
+  "status": "CACHE_MISS_NO_MUTATION_NOT_REMEDIATED",
+  "children": 1,
+  "git_transport_allowed": false,
+  "optimizer_steps": 0,
+  "model_steps": 0,
+  "gate_reruns": 0,
+  "approval_reference": "USER_FREE_CPU_ENGINEERING_PARENT_REVIEW_CACHE_ONLY_SOURCE_LOADER_30S",
+  "audit": {
+    "status": "CACHE_MISS_NO_MUTATION_NOT_REMEDIATED",
+    "mutation_attempted": false,
+    "commands": [
+      {
+        "command": [
+          "/usr/bin/git",
+          "-C",
+          "/content/KLTN_GPU08_20261108_01/artifacts/akt/dependencies/upstream",
+          "config",
+          "--local",
+          "--no-includes",
+          "--name-only",
+          "--list"
+        ],
+        "returncode": 0,
+        "stdout_sha256": "50afc3547d70635ec3e88c4a8540b428578d45f42a86a7314a171b97f70afd2f",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 257,
+        "stderr_bytes": 0
+      },
+      {
+        "command": [
+          "/usr/bin/git",
+          "-C",
+          "/content/KLTN_GPU08_20261108_01/artifacts/akt/dependencies/upstream",
+          "config",
+          "--worktree",
+          "--no-includes",
+          "--name-only",
+          "--list"
+        ],
+        "returncode": 0,
+        "stdout_sha256": "ec659d00531e7e44ecb64ed0c4b2939c0f9e31e835595f0e0d80c2fb3fb77a95",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 44,
+        "stderr_bytes": 0
+      },
+      {
+        "command": [
+          "/usr/bin/git",
+          "-C",
+          "/content/KLTN_GPU08_20261108_01/artifacts/akt/dependencies/upstream",
+          "status",
+          "--porcelain",
+          "--untracked-files=all"
+        ],
+        "returncode": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "command": [
+          "/usr/bin/git",
+          "-C",
+          "/content/KLTN_GPU08_20261108_01/artifacts/akt/dependencies/upstream",
+          "sparse-checkout",
+          "list"
+        ],
+        "returncode": 0,
+        "stdout_sha256": "8f8b6d9609d008c35d17693f85ebafe381702e2adfbfb26866afae1f27e4fd09",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_bytes": 28,
+        "stderr_bytes": 0
+      },
+      {
+        "command": [
+          "/usr/bin/git",
+          "-C",
+          "/content/KLTN_GPU08_20261108_01/artifacts/akt/dependencies/upstream",
+          "cat-file",
+          "blob",
+          "01b7e8d7d7c862cabc9467108e3e7f2555653a88:load_data.py"
+        ],
+        "returncode": 128,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "5023c684d94b5a1172494e2682790270d5cc9f6d43772625903469d160356638",
+        "stdout_bytes": 0,
+        "stderr_bytes": 152
+      }
+    ],
+    "source_before_after": {
+      "commit": "01b7e8d7d7c862cabc9467108e3e7f2555653a88",
+      "tree": "904863502337ef2eefd1769d14836b62e3c3804a",
+      "remote": "https://github.com/arghosh/AKT.git",
+      "files": {
+        "akt.py": "ace9e4486ea6d8f8c52310a8ddf27212022136eda719c12d8204fab1bfcfdc67",
+        "README.md": "bec19014f10f469002e46f53175a1599b1be9b2d3fc9fe184129e6da1efd442b",
+        "LICENSE": "50a2c2d2521182935c537a56220083c7a4194abdfbd459b6c682fae32cceb4cf"
+      }
+    },
+    "kit_receipt_sha256": "debb7590e8fd1247bcbdf7a479c2ea204b7d8625414c989b0a4bab5c1e831c3b",
+    "git_transport_allowed": false
+  },
+  "source_sha256": "43526ab61ea51576b73a29126775a154533bedbdc830170990e03136916b596c",
+  "preserved_input_sha256": {
+    "upstream_checkout01.py": "f33c9d50dbde6a354c03c0f9d702f239a70a9d298f3ee0214718d0daadd9db90",
+    "upstream-checkout01/result.json": "b82828207f763f53ca76d52827bbf1315a4cda7e403e8d1848b8cf9723732ca1",
+    "post-checkout-audit01/result.json": "1f116d3db2c88d2815bee73cb4471e56f6f442b744c4cd29cede7ce2a43cf952",
+    "linux-cpu-validation-gate-20261108-02/result.json": "c7cf0a96ca75c32728fcb7d566d0f1fcac22b95ae940d6e37e916645081c6583",
+    "linux-cpu-validation-gate-20261108-02/output-manifest.json": "4edfac1ec01d910d92862c527d215400211d0e4f0729cb35904148514afe1224"
+  },
+  "cleanup": {
+    "attempted": true,
+    "accepted": true,
+    "events": [
+      {
+        "signal": "SIGTERM",
+        "already_absent": true
+      },
+      {
+        "signal": "SIGKILL",
+        "already_absent": true
+      }
+    ],
+    "returncode": 0
+  },
+  "elapsed_seconds": 0.20494881400009035,
+  "elapsed_wall_seconds": 0.20494937896728516,
+  "timeout_seconds": 30,
+  "peak_observed_source_bytes": 73785,
+  "storage_monitor_cooperative": true
+}

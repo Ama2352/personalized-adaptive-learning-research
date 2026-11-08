@@ -1,0 +1,111 @@
+test_absent_group_accepted (__main__.CleanupTests.test_absent_group_accepted) ... ERROR
+test_controller_group_refused (__main__.CleanupTests.test_controller_group_refused) ... ok
+test_global_group_refused (__main__.CleanupTests.test_global_group_refused) ... ok
+test_permission_signal_error_rejects (__main__.CleanupTests.test_permission_signal_error_rejects) ... ERROR
+test_reap_oserror_rejects (__main__.CleanupTests.test_reap_oserror_rejects) ... ERROR
+test_reap_timeout_rejects (__main__.CleanupTests.test_reap_timeout_rejects) ... ERROR
+test_success_once_no_historical_resignal (__main__.CleanupTests.test_success_once_no_historical_resignal) ... ERROR
+test_unreaped_leader_rejects (__main__.CleanupTests.test_unreaped_leader_rejects) ... ERROR
+test_nonzero_preserved_and_rejected (__main__.CommandTests.test_nonzero_preserved_and_rejected) ... ok
+test_real_command_shape_is_fixed_and_group_inherited (__main__.CommandTests.test_real_command_shape_is_fixed_and_group_inherited) ... ok
+test_timeout_preserved_and_rejected (__main__.CommandTests.test_timeout_preserved_and_rejected) ... ok
+test_caps_and_exclusive_outputs (__main__.StaticContracts.test_caps_and_exclusive_outputs) ... ok
+test_exact_clone_fetch_sparse_command_contract (__main__.StaticContracts.test_exact_clone_fetch_sparse_command_contract) ... ok
+test_exact_kit_manifest_canonical_hash (__main__.StaticContracts.test_exact_kit_manifest_canonical_hash) ... ok
+test_exact_pin_and_three_file_hashes_from_gate22 (__main__.StaticContracts.test_exact_pin_and_three_file_hashes_from_gate22) ... ok
+test_kit_verified_before_project_import (__main__.StaticContracts.test_kit_verified_before_project_import) ... ok
+
+======================================================================
+ERROR: test_absent_group_accepted (__main__.CleanupTests.test_absent_group_accepted)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\test_upstream_checkout01_static.py", line 41, in test_absent_group_accepted
+    _,_,s,c=self.run_case(signal_error=ProcessLookupError);self.assertTrue(s['accepted']);self.assertEqual(len(c),2)
+            ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\test_upstream_checkout01_static.py", line 35, in run_case
+    fn(p,state)
+    ~~^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\upstream_checkout01.py", line 73, in cleanup_once
+    for sig in (signal.SIGTERM,signal.SIGKILL):
+                               ^^^^^^^^^^^^^^
+AttributeError: module 'signal' has no attribute 'SIGKILL'. Did you mean: 'SIGILL'?
+
+======================================================================
+ERROR: test_permission_signal_error_rejects (__main__.CleanupTests.test_permission_signal_error_rejects)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\test_upstream_checkout01_static.py", line 43, in test_permission_signal_error_rejects
+    fn,p,s,c=self.run_case(signal_error=PermissionError);self.assertFalse(s['accepted']);fn(p,s);self.assertEqual(len(c),2)
+             ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\test_upstream_checkout01_static.py", line 35, in run_case
+    fn(p,state)
+    ~~^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\upstream_checkout01.py", line 73, in cleanup_once
+    for sig in (signal.SIGTERM,signal.SIGKILL):
+                               ^^^^^^^^^^^^^^
+AttributeError: module 'signal' has no attribute 'SIGKILL'. Did you mean: 'SIGILL'?
+
+======================================================================
+ERROR: test_reap_oserror_rejects (__main__.CleanupTests.test_reap_oserror_rejects)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\test_upstream_checkout01_static.py", line 47, in test_reap_oserror_rejects
+    _,_,s,_=self.run_case(reap_error=OSError('fake'));self.assertFalse(s['accepted'])
+            ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\test_upstream_checkout01_static.py", line 35, in run_case
+    fn(p,state)
+    ~~^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\upstream_checkout01.py", line 73, in cleanup_once
+    for sig in (signal.SIGTERM,signal.SIGKILL):
+                               ^^^^^^^^^^^^^^
+AttributeError: module 'signal' has no attribute 'SIGKILL'. Did you mean: 'SIGILL'?
+
+======================================================================
+ERROR: test_reap_timeout_rejects (__main__.CleanupTests.test_reap_timeout_rejects)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\test_upstream_checkout01_static.py", line 45, in test_reap_timeout_rejects
+    _,_,s,_=self.run_case(reap_error=subprocess.TimeoutExpired('fake',5));self.assertFalse(s['accepted'])
+            ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\test_upstream_checkout01_static.py", line 35, in run_case
+    fn(p,state)
+    ~~^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\upstream_checkout01.py", line 73, in cleanup_once
+    for sig in (signal.SIGTERM,signal.SIGKILL):
+                               ^^^^^^^^^^^^^^
+AttributeError: module 'signal' has no attribute 'SIGKILL'. Did you mean: 'SIGILL'?
+
+======================================================================
+ERROR: test_success_once_no_historical_resignal (__main__.CleanupTests.test_success_once_no_historical_resignal)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\test_upstream_checkout01_static.py", line 38, in test_success_once_no_historical_resignal
+    fn,p,s,c=self.run_case();self.assertTrue(s['accepted']);self.assertEqual(len(c),2)
+             ~~~~~~~~~~~~~^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\test_upstream_checkout01_static.py", line 35, in run_case
+    fn(p,state)
+    ~~^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\upstream_checkout01.py", line 73, in cleanup_once
+    for sig in (signal.SIGTERM,signal.SIGKILL):
+                               ^^^^^^^^^^^^^^
+AttributeError: module 'signal' has no attribute 'SIGKILL'. Did you mean: 'SIGILL'?
+
+======================================================================
+ERROR: test_unreaped_leader_rejects (__main__.CleanupTests.test_unreaped_leader_rejects)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\test_upstream_checkout01_static.py", line 53, in test_unreaped_leader_rejects
+    _,_,s,_=self.run_case(rc=None);self.assertFalse(s['accepted'])
+            ~~~~~~~~~~~~~^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\test_upstream_checkout01_static.py", line 35, in run_case
+    fn(p,state)
+    ~~^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\upstream_checkout01.py", line 73, in cleanup_once
+    for sig in (signal.SIGTERM,signal.SIGKILL):
+                               ^^^^^^^^^^^^^^
+AttributeError: module 'signal' has no attribute 'SIGKILL'. Did you mean: 'SIGILL'?
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.011s
+
+FAILED (errors=6)

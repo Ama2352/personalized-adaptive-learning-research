@@ -1,0 +1,28 @@
+{
+  "status": "HOLD_TWO_P2_ACCEPTANCE_OR_EARLY_FAILURE_CONTRACTS",
+  "reviewed_source": "linux_cpu_dummy_worker_driver02.py",
+  "reviewed_source_sha256": "9e1531d27b039c081a45d999bf6041351b55fbd58e406f0407f9fe621b3398ba",
+  "findings": [
+    {
+      "priority": "P2",
+      "location": "validate_completion identity comparison",
+      "finding_vi": "Binding identity chứa authorization-only build/Gate hashes. Normal non-recovery native runner identity không giữ các fields đó; Gate hashes nằm gate_records.gate2. Guard hiện tại sẽ false-reject completedrun.",
+      "native_anchors": [
+        "runner.py:154-160",
+        "runner.py:385-397",
+        "runner.py:336-352"
+      ],
+      "requested_vi": "Compare all native data/context/config/source identity keys; compare Gate hashes separately to native gate_records.gate2, keep native Gate/build-source validation. Actual-shape fixture regression."
+    },
+    {
+      "priority": "P2",
+      "location": "BIND_CHILD replace ordering",
+      "finding_vi": "Inject EXECUTION_REFERENCE trước replace MODE sẽ thay substring MODE trong valid approvalreference cóMODEL, gây malformed childPython.",
+      "requested_vi": "Inject reference last after placeholder replacement; generated AST regression with MODE/MODEL reference."
+    }
+  ],
+  "other_scoped_static_findings_vi": "Explicit context flags/identity, newTrue config+proposedFalseauth, separateexecuteapproval, exactcaps/48train8val, runtimebytealias/Gate24reader/source pins/freshtmp/PublicCLI flow appear scoped; no native/production change requested.",
+  "reviewer_native_model_tests_Git_remote_calls": 0,
+  "source_edits_by_reviewer": false,
+  "review_scope_vi": "Static source-contract review only; agent preparing narrow fixes; no PASS/execution until newsourcefreeze and rereview."
+}

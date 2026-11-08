@@ -1,0 +1,38 @@
+--- prepare_linux_cpu_validation_request01.py
++++ prepare_linux_cpu_validation_request02.py
+@@ -21,7 +21,7 @@
+     p.add_argument('--approval-reference',required=True)
+     args=p.parse_args()
+     work=Path(__file__).resolve().parent
+-    source=work/'linux_cpu_validation_driver01.py';raw=source.read_bytes()
++    source=work/'linux_cpu_validation_driver02.py';raw=source.read_bytes()
+     if sha(raw)!=args.expected_driver_sha256:raise ValueError('reviewed driver SHA mismatch')
+     ast.parse(raw)  # Syntax only; never import/execute operation source.
+     audit_raw=args.upstream_audit_receipt.read_bytes()
+@@ -50,7 +50,7 @@
+     code=("import base64,hashlib\nfrom pathlib import Path\n"
+           f"payload=base64.b64decode({encoded!r})\nexpected={args.expected_driver_sha256!r}\n"
+           "assert hashlib.sha256(payload).hexdigest()==expected\n"
+-          "path=Path('/content/KLTN_GPU08_20261108_01/linux_cpu_validation_driver01.py')\n"
++          "path=Path('/content/KLTN_GPU08_20261108_01/linux_cpu_validation_driver02.py')\n"
+           "assert not path.is_symlink()\n"
+           "if path.exists():\n assert path.is_file() and path.read_bytes()==payload\n"
+           "else:\n with path.open('xb') as stream:stream.write(payload)\n"
+@@ -58,7 +58,7 @@
+           "exec(compile(payload,str(path),'exec'),namespace)\n"
+           f"returncode=namespace['main']({argv!r})\n")
+     requests=work.parent/'requests'
+-    output=requests/f'gpu09-add-linux-cpu-{args.phase}-validation-01.json'
++    output=requests/f'gpu09-add-linux-cpu-{args.phase}-validation-02.json'
+     with output.open('x',encoding='utf-8') as stream:
+         json.dump({'cellIndex':0,'language':'python','code':code},stream)
+     contract={'status':'REQUEST_PREPARED_OFFLINE_NOT_DISPATCHED','phase':args.phase,
+@@ -69,7 +69,7 @@
+               'must_not_dispatch_if_bridge_remaining_seconds_below':660,
+               'approval_reference':args.approval_reference,'executed':False,
+               'no_install_gpu_realdata_fullCV_modal_phase':True}
+-    with (work/f'linux-cpu-{args.phase}-request01-contract.json').open('x',encoding='utf-8') as stream:
++    with (work/f'linux-cpu-{args.phase}-request02-contract.json').open('x',encoding='utf-8') as stream:
+         json.dump(contract,stream,indent=2);stream.write('\n')
+     print(json.dumps({'prepared':str(output),'phase':args.phase,'executed':False,'driver_sha256':args.expected_driver_sha256}))
+ 

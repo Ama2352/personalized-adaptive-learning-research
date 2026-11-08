@@ -1,0 +1,31 @@
+test_actual_prior_runtime02_reused_as105a_not_new_driver (__main__.MetadataTests.test_actual_prior_runtime02_reused_as105a_not_new_driver) ... ok
+test_all_static_SHA_pins64_and_real_reviewed_sources_match (__main__.MetadataTests.test_all_static_SHA_pins64_and_real_reviewed_sources_match) ... ERROR
+test_delta_elapsed_bool_or_partial_never_accepted (__main__.MetadataTests.test_delta_elapsed_bool_or_partial_never_accepted) ... ok
+test_delta_manifest_exactly_one_test_without_mutating_base (__main__.MetadataTests.test_delta_manifest_exactly_one_test_without_mutating_base) ... ok
+test_gate_native_scope_cleanup_and_git_environment_unchanged (__main__.MetadataTests.test_gate_native_scope_cleanup_and_git_environment_unchanged) ... ok
+test_lineage_rejects_phantom_zip_extra_change_wrong_loader (__main__.MetadataTests.test_lineage_rejects_phantom_zip_extra_change_wrong_loader) ... ERROR
+test_loader_acceptance_required_and_failed_old_source_rejects (__main__.MetadataTests.test_loader_acceptance_required_and_failed_old_source_rejects) ... ok
+test_loader_path_is_explicit_POSIX_not_hardcoded_stage02 (__main__.MetadataTests.test_loader_path_is_explicit_POSIX_not_hardcoded_stage02) ... ok
+
+======================================================================
+ERROR: test_all_static_SHA_pins64_and_real_reviewed_sources_match (__main__.MetadataTests.test_all_static_SHA_pins64_and_real_reviewed_sources_match)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\test_source_delta_gate24.py", line 57, in test_all_static_SHA_pins64_and_real_reviewed_sources_match
+    for value in G['PRESERVED'].values():self.assertRegex(value,r'^[a-f0-9]{64}$')
+                 ~^^^^^^^^^^^^^
+KeyError: 'PRESERVED'
+
+======================================================================
+ERROR: test_lineage_rejects_phantom_zip_extra_change_wrong_loader (__main__.MetadataTests.test_lineage_rejects_phantom_zip_extra_change_wrong_loader)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\test_source_delta_gate24.py", line 71, in test_lineage_rejects_phantom_zip_extra_change_wrong_loader
+    elif case=='source':m['manifest']['files']['src/knowledge_tracing/akt/graph.py']['sha256']='c'*64
+                        ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'src/knowledge_tracing/akt/graph.py'
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.014s
+
+FAILED (errors=2)

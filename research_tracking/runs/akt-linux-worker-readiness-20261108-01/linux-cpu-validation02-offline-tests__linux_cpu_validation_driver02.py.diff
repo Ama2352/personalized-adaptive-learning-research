@@ -1,0 +1,72 @@
+--- linux_cpu_validation_driver01.py
++++ linux_cpu_validation_driver02.py
+@@ -34,7 +34,7 @@
+     'README.md':'bec19014f10f469002e46f53175a1599b1be9b2d3fc9fe184129e6da1efd442b',
+     'LICENSE':'50a2c2d2521182935c537a56220083c7a4194abdfbd459b6c682fae32cceb4cf',
+ }
+-RUNTIME=ROOT/'artifacts/akt/runtime/linux-cpu-20261108-01.json'
++RUNTIME=ROOT/'artifacts/akt/runtime/linux-cpu-20261108-02.json'
+ RUN_ID='20261108-linux-native-23'
+ PREFLIGHT=ROOT/'artifacts/akt/preflight'
+ REPORT=PREFLIGHT/f'gate2-evidence-{RUN_ID}.json'
+@@ -65,6 +65,22 @@
+ def write(path,value):
+     with path.open('x',encoding='utf-8') as stream:
+         json.dump(value,stream,indent=2,allow_nan=False);stream.write('\n')
++
++def isolated_git_environment(environment):
++    # Reject inherited Git routing/config/auth state; all Git transports disabled.
++    cleaned={k:v for k,v in environment.items()
++             if not k.upper().startswith(('GIT_','GH_','GITHUB_','SSH_'))
++             and not any(word in k.upper() for word in ('TOKEN','SECRET','PASSWORD','CREDENTIAL','COOKIE','AUTH','API_KEY','PROXY'))
++             and k not in {'LD_PRELOAD','LD_LIBRARY_PATH','CURL_HOME','NETRC','XDG_CONFIG_HOME'}}
++    cleaned.update(GIT_CONFIG_NOSYSTEM='1',GIT_CONFIG_GLOBAL=os.devnull,GIT_TERMINAL_PROMPT='0',
++                   GIT_ALLOW_PROTOCOL='__NO_TRANSPORT__',GIT_OPTIONAL_LOCKS='0',GIT_NO_LAZY_FETCH='1',
++                   GIT_CONFIG_COUNT='5',GIT_CONFIG_KEY_0='safe.directory',GIT_CONFIG_VALUE_0=UPSTREAM.as_posix(),
++                   GIT_CONFIG_KEY_1='core.hooksPath',GIT_CONFIG_VALUE_1=os.devnull,
++                   GIT_CONFIG_KEY_2='core.autocrlf',GIT_CONFIG_VALUE_2='false',
++                   GIT_CONFIG_KEY_3='credential.helper',GIT_CONFIG_VALUE_3='',
++                   GIT_CONFIG_KEY_4='credential.interactive',GIT_CONFIG_VALUE_4='false',PATH='/usr/bin:/bin')
++    return cleaned
++
+ 
+ def main(argv=None):
+     parser=argparse.ArgumentParser(description=__doc__)
+@@ -77,7 +93,7 @@
+     parser.add_argument('--approval-reference',required=True)
+     args=parser.parse_args(argv)
+     start=time.monotonic();wall=time.time();cap=60 if args.phase=='runtime' else 630
+-    directory=ROOT/f'linux-cpu-validation-{args.phase}-20261108-01'
++    directory=ROOT/f'linux-cpu-validation-{args.phase}-20261108-02'
+     result={'status':'FAILED','phase':args.phase,'timeout_seconds':cap,'native_gate_timeout_seconds':600,
+             'no_fullCV_or_realdata':True,'no_gpu_model_phase':True,'no_installs_or_network_phase':True,
+             'scope':'native runtime CLI or full CPU software suite; not efficacy/CUDA/worker training acceptance'}
+@@ -119,7 +135,7 @@
+     directory.mkdir(exist_ok=False)
+     try:
+         source=Path(__file__).absolute()
+-        if source!=ROOT/'linux_cpu_validation_driver01.py' or sha(read(source))!=args.expected_source_sha256:
++        if source!=ROOT/'linux_cpu_validation_driver02.py' or sha(read(source))!=args.expected_source_sha256:
+             raise ValueError('reviewed driver source SHA/path required')
+         if not args.approval_reference.strip():raise ValueError('dispatch approval reference required')
+         if os.environ.get('COLAB_GPU') not in (None,'','0') or os.environ.get('COLAB_TPU_ADDR') or list(Path('/dev').glob('nvidia[0-9]*')):
+@@ -155,7 +171,7 @@
+             command=[str(TARGET),'-B','scripts/akt/check_runtime.py','--upstream',str(UPSTREAM),'--device','cpu',
+                      '--lock-file',str(LOCK),'--output',str(RUNTIME)]
+         else:
+-            prior=ROOT/'linux-cpu-validation-runtime-20261108-01/result.json'
++            prior=ROOT/'linux-cpu-validation-runtime-20261108-02/result.json'
+             runtime_accept=pinned(prior,args.runtime_result_sha256)
+             if (runtime_accept.get('status')!='ACCEPTED_NATIVE_RUNTIME_CPU' or runtime_accept.get('runtime_sha256')!=sha(read(RUNTIME))
+                     or runtime_accept.get('upstream_audit_sha256')!=args.upstream_audit_sha256
+@@ -173,7 +189,9 @@
+                    TORCH_HOME=str(directory/'cache'),TRITON_CACHE_DIR=str(directory/'cache'),CUDA_CACHE_PATH=str(directory/'cache'),
+                    CUDA_VISIBLE_DEVICES='',NVIDIA_VISIBLE_DEVICES='',PYTHONDONTWRITEBYTECODE='1',PYTHONNOUSERSITE='1',
+                    OMP_NUM_THREADS='2',MKL_NUM_THREADS='2',OPENBLAS_NUM_THREADS='2',PIP_CONFIG_FILE=os.devnull,
+-                   GIT_CONFIG_COUNT='1',GIT_CONFIG_KEY_0='safe.directory',GIT_CONFIG_VALUE_0=UPSTREAM.as_posix())
++                   XDG_CONFIG_HOME=str(directory/'home'))
++        env=isolated_git_environment(env)
++        env['XDG_CONFIG_HOME']=str(directory/'home')
+         result['command']=command
+         if POINTER.exists():
+             data=read(POINTER);result['pointer_before_sha256']=sha(data)
