@@ -2386,6 +2386,232 @@
         "31 publisher tests với handmade temporary corpus; chưa actual research corpus; DONE-last không OS crash transaction.",
         "Không RQ complete, không model efficacy/paid GPU/Holdout mới."
       ]
+    },
+    {
+      "id": "EXP-RQDIAG09-20261108",
+      "model": "Paper2 Graph-GAM native policy",
+      "variant": "Controlled available-history replay và cached analysis",
+      "objective": "Đo phản ứng của toàn policy với last10/last50/full trên cùng cached target; kiểm full-prefix trước truncated interpretation",
+      "research_questions": [
+        "RQ1",
+        "RQ2"
+      ],
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED",
+      "evidence_class": "FINITE_ALGORITHMIC_INTERVENTION_NOT_LEARNING_EFFICACY",
+      "completion_commit": "8f95fd6",
+      "output_count": 45,
+      "manifest_sha256": "3fab490cc520aa5207f7483b3b33a8b031da15d2fa0c10c6da3c62252e59c5ca",
+      "evidence_refs": [
+        "research_tracking/reports/rq1_history_availability_replay_20261108.md",
+        "research_tracking/runs/rq1-history-availability-20261108-02/README.md",
+        "research_tracking/runs/rq1-history-availability-20261108-02/manifest.json"
+      ],
+      "results": {
+        "cached_targets": 27,
+        "native_arms": 108,
+        "full_prefix_endpoint_controls_exact": 54,
+        "unique_target_window_pairs": 54,
+        "nominal_pairs_with_aliases": 81,
+        "summary_rows": 144,
+        "native_state_updates": 4140,
+        "native_cumulative_seconds": 6.097641301761936,
+        "native_cap_seconds": 60,
+        "teacher_world_rng_draw_nn_optimizer_calls": 0,
+        "new_independent_N": 0
+      },
+      "limitations": [
+        "Toàn policy gồm controller bookkeeping, không KT-only hoặc can thiệp practice/learning.",
+        "So sánh cùng query/y/time chỉ trong targetH; không so H khác target như causal history-length effect.",
+        "Preview chưa served action; aliases không repeated independent observations; đủ mọi profile/negative, không CI/p-value."
+      ],
+      "verification_note_vi": "Đối chiếu filesystem outputs SHA trong lượt chỉ mục; raw Git verification tại commit do ROOT đã cung cấp, không chạy lại Git/tests/native."
+    },
+    {
+      "id": "EXP-DEVWORKER01-20261108",
+      "model": "Development corpus worker",
+      "variant": "Pure orchestration stubs, không actual corpus generation",
+      "objective": "Kiểm source/owner/input/resource/publication-readback orchestration trước native collection",
+      "research_questions": [
+        "RQ3"
+      ],
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED",
+      "evidence_class": "SOFTWARE_ORCHESTRATION_ONLY",
+      "completion_commit": "509c955",
+      "output_count": 27,
+      "manifest_sha256": "08dbc4fbbdf6eb6cfe293a01619fd20728a0977b3f2b6f63668b2ab846283591",
+      "evidence_refs": [
+        "research_tracking/reports/development_corpus_worker_readiness_20261108.md",
+        "research_tracking/runs/development-corpus-worker-engineering-20261108-01/README.md",
+        "research_tracking/runs/development-corpus-worker-engineering-20261108-01/manifest.json"
+      ],
+      "results": {
+        "trial01_setup_errors": 19,
+        "trial01_test_bodies": 0,
+        "trial02_passed": 19,
+        "cumulative_seconds": 3.808174300007522,
+        "cap_seconds": 20,
+        "actual_native_collector_model_calls": 0,
+        "manufactured_12600_not_actual": true
+      },
+      "limitations": [
+        "19setupERROR lượt01 giữ nguyên; lượt02 fixture path ngắn, không driver bugfix hoặc relabel failure.",
+        "Manufactured12600 là stub counts; actual corpus chỉ ở EXP-RESCORPUS01, không tests=research sample."
+      ],
+      "verification_note_vi": "Đối chiếu filesystem outputs SHA trong lượt chỉ mục; raw Git verification tại commit do ROOT đã cung cấp, không chạy lại Git/tests/native."
+    },
+    {
+      "id": "EXP-RESCORPUS01-20261108",
+      "model": "Paper2 native environment + role-aware collector",
+      "variant": "Actual first Development corpus/publication/typed public reader",
+      "objective": "Sinh và kiểm corpus observable train/selection/calibration có source/role/coverage/restart lineage",
+      "research_questions": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED",
+      "evidence_class": "ACTUAL_SYNTHETIC_DEVELOPMENT_DATA_NOT_MODEL_EFFICACY",
+      "completion_commit": "1990d4c",
+      "output_count": 48,
+      "manifest_sha256": "cbd81b65363b2d50c62fb1d145793375cb44e523410d2aea2a062ba974624c9c",
+      "evidence_refs": [
+        "research_tracking/reports/simulator_development_corpus_20261108.md",
+        "research_tracking/runs/development-corpus-native-20261108-01/README.md",
+        "research_tracking/runs/development-corpus-native-20261108-01/manifest.json",
+        "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/corpus.json"
+      ],
+      "results": {
+        "train_learners": 48,
+        "selection_learners": 6,
+        "calibration_learners": 6,
+        "events_per_learner": 210,
+        "teacher_attempts": 12600,
+        "teacher_returns": 12600,
+        "canonical_files": 17,
+        "canonical_bytes": 6985213,
+        "items_per_role": 84,
+        "outer_receipt_seconds": 8.765300299972296,
+        "outer_terminal_seconds": 8.767507299955469,
+        "cap_seconds": 120,
+        "final_events": 0,
+        "model_calls": 0,
+        "modal_spend_usd": 0,
+        "support_coverage_only": {
+          "min_train_unique_learners_per_item": 38,
+          "min_train_unique_learners_per_concept": 47,
+          "ordered_distinct_concept_pairs": 756,
+          "min_train_learners_with_parent_strictly_before_child": 45,
+          "pairs_supported_by_at_least20learners": 756
+        }
+      },
+      "limitations": [
+        "150final learners là metadata, không final events/evaluation; corpus chưa fitted/calibrated research model.",
+        "Coverage không OOF confidence/learned graph hoặc causal prerequisite truth; một source world/namespace không independent experimentalN mới.",
+        "QA đã hash7oracle files như bytes opaque; không parse/features. Original oracle_opened=false flag có erratum, không đổi bytes/counts.",
+        "Report snapshot còn preclosure wording; manifest completed hiện xác nhận bundle đã đóng."
+      ],
+      "verification_note_vi": "Đối chiếu filesystem outputs SHA trong lượt chỉ mục; raw Git verification tại commit do ROOT đã cung cấp, không chạy lại Git/tests/native."
+    },
+    {
+      "id": "EXP-RQ2-CONTROLLED-ABILITY-20261108",
+      "model": "Paper2 controlled world + matched Graph-GAM policy",
+      "variant": "Shared residual/U; ability1000/1150/1300 × estimator full/empty × lambda0/.55; S1P1L0",
+      "objective": "Tách scalar ability khỏi residual/profile và đo conditional graph-by-world-mechanism interaction",
+      "research_questions": [
+        "RQ2"
+      ],
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED",
+      "evidence_class": "FINITE_SIMULATOR_FACTORIAL_NOT_POPULATION_ABILITY_INFERENCE",
+      "completion_commit": "8b6487c",
+      "output_count": 70,
+      "manifest_sha256": "a910612fdb0b3c728a715a3f5250eb9736016fdd9e691bc8fd29cdc89a146f57",
+      "evidence_refs": [
+        "research_tracking/reports/rq2_controlled_ability_prerequisite_results_20261108.md",
+        "research_tracking/runs/rq2-controlled-ability-prerequisite-20261108-01/README.md",
+        "research_tracking/runs/rq2-controlled-ability-prerequisite-20261108-01/manifest.json"
+      ],
+      "results": {
+        "blocks": [
+          21000,
+          21001,
+          21002
+        ],
+        "worlds": 36,
+        "interact_attempts": 4320,
+        "interact_returns": 4320,
+        "high_exact_semantic_event_pairs": 720,
+        "high_exact_final_pairs": 6,
+        "Y_count": 36,
+        "delta_count": 18,
+        "psi_count": 9,
+        "omega_count": 6,
+        "mean_psi": {
+          "1000": -0.0076313665263766,
+          "1150": -0.03586679193687381,
+          "1300": 0.0
+        },
+        "units": "mean net latent theta/Elo points across28concepts at fixedT41days",
+        "outer_seconds": 12.361254453659058,
+        "cap_seconds": 60,
+        "nn_optimizer_calls": 0,
+        "new_independent_N": 0
+      },
+      "limitations": [
+        "Finite versioned-simulator potential-outcome contrasts, không external causal ability/general learning benefit hoặc RQcompletion.",
+        "MeanPsi nhỏ; a1000 signs+/−/+,a1150−/−/−; không practical-significance/p-value/CI claim.",
+        "HighPsi0 design-knownD0; high graphDelta tại lambda0 vẫn dương cả3blocks, không quy mọi graph advantage cho prerequisite mechanism.",
+        "Native GAM updates4320 là actual state/model calls; 0NNoptimizer không có nghĩa0modelcalls; stepU coupling không giữ cùng exposure/labels."
+      ],
+      "verification_note_vi": "Đối chiếu filesystem outputs SHA trong lượt chỉ mục; raw Git verification tại commit do ROOT đã cung cấp, không chạy lại Git/tests/native."
+    },
+    {
+      "id": "EXP-GVHD-SNAPSHOT01-20261108",
+      "model": "Research evidence presentation",
+      "variant": "Dated Vietnamese packet + self-contained CPU stdlib notebook",
+      "objective": "Trình bày thành quả, files, resolved/unresolved và kết quả so sánh RQ từ frozen evidence",
+      "research_questions": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "execution_status": "COMPLETED",
+      "verification_status": "VERIFIED",
+      "evidence_class": "SYNTHESIS_AND_NOTEBOOK_PRESENTATION_NOT_NEW_EXPERIMENT",
+      "completion_commit": "2e63cd9",
+      "artifact_count": 26,
+      "artifact_count_scope": "25files trong01_tien_do + supervisor_reports/README.md; không26nativeexperimentoutputs",
+      "provenance_sha256": "8d24da6fab72ca9cb2ff21100362b75d667fda7d1ab95843196f68b26f9804cf",
+      "notebook_sha256": "0f2130aba7b04a187b31ac9c0fd9d4b81df290ced470e5aa04bbf92625267620",
+      "evidence_refs": [
+        "research_tracking/supervisor_reports/README.md",
+        "research_tracking/supervisor_reports/2026-11-08/01_tien_do/README.md",
+        "research_tracking/supervisor_reports/2026-11-08/01_tien_do/BAO_CAO.md",
+        "research_tracking/supervisor_reports/2026-11-08/01_tien_do/BANG_CHUNG.md",
+        "research_tracking/supervisor_reports/2026-11-08/01_tien_do/KET_QUA_NGHIEN_CUU.ipynb",
+        "research_tracking/supervisor_reports/2026-11-08/01_tien_do/NGUON.json",
+        "research_tracking/supervisor_reports/2026-11-08/01_tien_do/KIEM_TRA_NOTEBOOK.json"
+      ],
+      "results": {
+        "cells": 16,
+        "executable_cells": 8,
+        "svg_figures": 4,
+        "embedded_source_files": 22,
+        "verified_json_pointer_slices": 40,
+        "cached_outputs_exact": true,
+        "new_research_observations": 0,
+        "current_root_notebook_changed": false,
+        "actual_Colab_Jupyter_visual_QA": false
+      },
+      "limitations": [
+        "Notebook chỉ render frozen slices; embeddedSHA kiểm nội bộ, nguồn ngoài đã kiểm lúc dựng, không fetch từ Colab.",
+        "17bản đọc/receipts giữ map nguồn; Markdown bản đọc đổi relative links, không gọi mọi file là byte-exact.",
+        "Ẩn code dài và dời labelsD14 chỉ presentation; không số liệu/scientific effect mới/RQcomplete.",
+        "Không cài thư viện/network/training/GPU; actual Colab/kernel/visualQA chưa chạy."
+      ]
     }
   ]
 }

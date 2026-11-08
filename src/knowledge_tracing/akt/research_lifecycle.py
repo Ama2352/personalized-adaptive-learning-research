@@ -90,7 +90,8 @@ class StepTicket:
 @dataclass(frozen=True)
 class EpochRecord:
     epoch: int
-    checkpoint_sha256: str
+    # None: epoch này không được persist, không ghép bytes của prior best.
+    checkpoint_sha256: str | None
     predictions_sha256: str
     population_sha256: str
     full_targets: int
@@ -224,7 +225,9 @@ class LifecycleLedger:
                and type(record.supported_targets) is int and 0 < record.supported_targets <= record.full_targets
                and record.population_sha256 == self.invocation.selection_population_sha256,
                'raw selection full population/epoch mismatch')
-        for value in (record.checkpoint_sha256, record.predictions_sha256, record.population_sha256):
+        if record.checkpoint_sha256 is not None:
+            _sha(record.checkpoint_sha256)
+        for value in (record.predictions_sha256, record.population_sha256):
             _sha(value)
         _check(type(record.raw_selection_loss) in (int, float) and math.isfinite(record.raw_selection_loss)
                and record.raw_selection_loss >= 0, 'finite raw response loss required')
@@ -239,6 +242,8 @@ class LifecycleLedger:
                and freeze.research_plan_sha256 == inv.research_plan_sha256 and freeze.bank_sha256 == inv.bank_sha256
                and freeze.train_shard_sha256 == dict(inv.role_shard_sha256)['train']
                and freeze.selection_shard_sha256 == dict(inv.role_shard_sha256)['selection'], 'foreign selection freeze')
+        _check(self.fit_epochs[freeze.selected_epoch-1].checkpoint_sha256 is not None,
+               'selected epoch requires its own persisted checkpoint')
         # Epoch choice is owned by existing EarlyStopping, NOT recomputed here.
         return self._next('raw_selection_frozen', wall_seconds=wall_seconds, training_seconds=training_seconds,
                           phase='selection_frozen', selection_freeze=freeze)

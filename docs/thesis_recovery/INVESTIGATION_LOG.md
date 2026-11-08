@@ -500,3 +500,8 @@ History8f95fd6:45outputs; worker509c955:27outputs; corpus1990d4c:48outputs và17
 User yêu cầu báo cáo dễ đọc, riêng theo ngày, rõ đã/chưa xử lý và ít nhất1Colab notebook số liệu/biểu đồ. Tạo research_tracking/supervisor_reports/2026-11-08/01_tien_do, bản đọc đã rebase links ghi rõ transformation/hash; không di chuyển hay sửa source/history. Notebook đang chuẩn bị bởi agent, chờ root QA. A0 runner fixes+confidence source ready chưa executed/accepted; không Colab/Modal/Holdout/fullCV.
 
 Gói GVHD mới:17cặp nguồn/bản sao SHA kiểm,158links kiểm trước bổ sung2link biên bản; notebook16cells/8executable/4SVG/22inputs/40pointers. Agent chạy stdlib2passes cachedexact, root chạy độc lập1pass+source/pointer/XMLSVG checks; không actualColab/Jupyter/visualQA hoặc modelrun. Root sửa3ý theo peerreview: không causal-funnel, điều kiện retention đầy đủ, runtime chưa đo chỉscope fullresearchworkload. Root notebook cũ nguyênSHA.
+
+
+### 08/11 — A0 runner/Method24 pure verification
+
+Root ONE actualpytest dispatch accepted101PASS after2controller failures beforepytest (platformAPI missing, -S hidvenvsitepackages); sourcebefore/after6pins unchanged. Native/solver/model0, noheavyimports/actualPopenattempt. 3.6554365controllercum/30, conservativetoolbound4.2683491/30; explicitnarrowWinAPItestfixture, cooperativeTimer nothardquota. NewNaN/Infunsupported serializationfix covered, selectedepoch owncheckpoint/nullnonbest andphaseprivacy fixed. Bundle44outputs closed. Canonicalpostcalibration reportingmetrics stillmissing, noactualfit/actualconfidences/noRQcompletion. DatedGVHDsnapshot2e63cd9 unchanged; tracking4indexes refreshed separately.

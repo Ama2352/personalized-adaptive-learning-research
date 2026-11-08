@@ -1,0 +1,382 @@
+"""Pure Method24 engineering: manufactured observables/OOF, NO solver fit.
+
+No corpus I/O/collection/native/NumPy/sklearn/Torch. Fit orchestration tests replace
+the private public-sklearn boundary with a deterministic nonlearning stub; bootstrap
+tests use explicit manufactured index draws, not a custom production resampler.
+These fixtures cannot certify actual48learner estimates or runtime throughput.
+"""
+import builtins
+from collections import Counter
+from dataclasses import asdict, replace
+import hashlib
+import json
+import math
+import sys
+
+import pytest
+
+from knowledge_tracing import edge_confidence as ec
+from knowledge_tracing.simulator_bridge import SimulatorBank, SimulatorItem, ItemQuery, Observation, identity_hash
+from knowledge_tracing.simulator_corpus_reader import PublicRoleData
+from knowledge_tracing.simulator_data import ObservableTrajectory
+from knowledge_tracing.simulator_research_data import ResearchProvenance, ResearchSplitPlan, ShardLimits, audit_research_shard
+
+H = 'a' * 64
+
+
+def recipe():
+    return ec.EdgeConfidenceRecipe(ec.METHOD_ID, 42, 3, 1., 5., 1., 1e-6, 200, 1e-6, 200, 20)
+
+
+def runtime():
+    return ec.EdgeRuntimeBinding('DECLARED_ENGINEERING_NOT_IMPORTED', 'DECLARED_ENGINEERING_NOT_IMPORTED', H, H)
+
+
+def seal(value):
+    return replace(value, content_sha256=identity_hash(value._payload()))
+
+
+@pytest.fixture(autouse=True)
+def deny_real_estimators_and_native(monkeypatch):
+    original = builtins.__import__
+    attempted = []
+    def guarded(name, *args, **kwargs):
+        if name.split('.')[0] in ('numpy', 'pandas', 'torch', 'sklearn') or name in (
+            'knowledge_tracing.paper2_reference', 'knowledge_tracing.simulator_research_collection',
+            'knowledge_tracing.simulator_corpus_publisher'):
+            attempted.append(name)
+            raise AssertionError('pure tests must not import real solver/native: ' + name)
+        return original(name, *args, **kwargs)
+    monkeypatch.setattr(builtins, '__import__', guarded)
+    yield
+    assert attempted == []
+
+
+@pytest.fixture
+def observed():
+    """Hand-built84item×8learner observations, no generator/publication."""
+    bank = SimulatorBank('explicit-engineering-bank', tuple(SimulatorItem(f'C{c:02d}:{d}', f'C{c:02d}', difficulty)
+        for c in range(28) for d, difficulty in enumerate((1050., 1200., 1350.))))
+    plan = ResearchSplitPlan('edge-confidence-pure-engineering', 42, 10, 1, H)
+    provenance = ResearchProvenance('train', plan.identity, plan.split_plan.identity, identity_hash(bank.identity), H,
+        (('collector', H), ('environment', H)), H, 'handwritten-observable-engineering-only', 'unix_seconds_utc', 'UTC', False)
+    trajectories = tuple(ObservableTrajectory(a.learner_id, plan.split_plan.identity, identity_hash(bank.identity),
+        provenance.collection_policy_id, tuple(Observation(ItemQuery(item.item_id, 1000+rank, i*1000+rank+1), (i+rank) % 2)
+        for rank, item in enumerate(bank.items))) for i, a in enumerate(plan.split_plan.assignments('train')))
+    return bank, plan, provenance, trajectories
+
+
+def role_from(observed, trajectories=None):
+    bank, plan, provenance, original = observed
+    trajectories = tuple(sorted(original if trajectories is None else trajectories, key=lambda t: t.learner_id))
+    audit = audit_research_shard(trajectories, plan=plan, bank=bank, role='train', provenance=provenance,
+        expected_provenance_sha256=provenance.identity, limits=ShardLimits(8, 84, 672), reference_items=bank.item_ids)
+    raw = b''.join((ec._json(t.payload())+'\n').encode() for t in trajectories)
+    observable_sha = hashlib.sha256(raw).hexdigest()
+    manifest = dict(observable_sha256=observable_sha, provenance_sha256=provenance.identity)
+    labels = Counter(o.correct for t in trajectories for o in t.observations)
+    role = PublicRoleData('train', provenance, trajectories, json.dumps(manifest), json.dumps(audit), (labels[0], labels[1]))
+    return role, observable_sha
+
+
+def prepare(observed, trajectories=None, **changes):
+    bank, plan, provenance, _ = observed
+    role, observable_sha = role_from(observed, trajectories)
+    args = dict(expected_train_provenance_sha256=provenance.identity, expected_train_observable_sha256=observable_sha,
+                recipe=recipe(), limits=ec.EdgePreparationLimits(8, 84, 672, 10.))
+    args.update(changes)
+    return ec.prepare_train_lagged_rows(role, bank, plan, **args)
+
+
+def tiny_prepared():
+    """Explicit sealed orchestration fixture; NOT an actual corpus-reader output."""
+    ids, concepts = tuple(f'L{i}' for i in range(6)), ('A', 'B', 'C')
+    rows = []
+    for i, learner in enumerate(ids):
+        successes, counts = [0]*3, [0]*3
+        for rank, (child, y) in enumerate(zip(('A', 'B', 'C', 'B'), (i % 2, 1-i % 2, i % 2, 1-i % 2))):
+            c = concepts.index(child)
+            rows.append(ec.LaggedRow(learner, child, i*10+rank+1, 1000+rank, rank, y,
+                (ec._mean(successes[c], counts[c]), ec._support(counts[c]), ec._mean(sum(successes), rank), ec._support(rank)),
+                tuple(successes), tuple(counts)))
+            successes[c] += y
+            counts[c] += 1
+    r = recipe()
+    return seal(ec.PreparedEdgeConfidence(r, H, H, H, H, H, (('engineering', H),), concepts, ids,
+        ec.label_free_fold_assignments(r, H, ids), tuple(rows), ''))
+
+
+class NonlearningProbabilityStub:
+    def predict_proba(self, rows):
+        return [[1-(.45 if len(row) == 4 else .55), .45 if len(row) == 4 else .55] for row in rows]
+
+
+def stub_fitter(calls):
+    def fake(x, y, r, binding):
+        calls.append((x, y))
+        return ec._FitOutcome(NonlearningProbabilityStub(), None, False, (0.,)*len(x[0]), 0., 1)
+    return fake
+
+
+def fit_stubbed(monkeypatch, prepared=None):
+    value = tiny_prepared() if prepared is None else prepared
+    calls = []
+    monkeypatch.setattr(ec, '_fit_logistic', stub_fitter(calls))
+    result = ec.fit_crossfit_edge_confidence(value, expected_prepared_sha256=value.identity,
+        runtime=runtime(), limits=ec.EdgeFitLimits(27, 48, 10.))
+    return result, calls
+
+
+def test_hand_calculated_features_and_full_target_preservation(observed):
+    value = prepare(observed)
+    value.assert_integrity()
+    assert len(value.rows) == 672 and len(value.concepts) == 28 and len(value.learner_ids) == 8
+    trajectory = sorted(observed[3], key=lambda t: t.learner_id)[0]
+    first = tuple(r for r in value.rows if r.learner_id == trajectory.learner_id)
+    y = trajectory.observations[0].correct
+    assert first[0].base == (.5, 0., .5, 0.)
+    assert first[0].concept_counts == (0,)*28
+    assert first[1].base == ((y+1)/3, 1/6, (y+1)/3, 1/6)
+    assert first[2].base == (.5, 2/7, .5, 2/7)
+    assert first[3].base[:2] == (.5, 0.)  # first event of next child
+    assert [r.source_row for r in first] == [o.query.source_row for o in trajectory.observations]
+
+
+def test_current_and_future_y_invariance_and_label_free_pairing(observed):
+    original = prepare(observed)
+    trajectories = list(observed[3])
+    target = min(trajectories, key=lambda t: t.learner_id)
+    index = trajectories.index(target)
+    observations = list(target.observations)
+    for rank in (10, 20):
+        observations[rank] = replace(observations[rank], correct=1-observations[rank].correct)
+    trajectories[index] = replace(target, observations=tuple(observations))
+    changed = prepare(observed, tuple(trajectories))
+    before = [r for r in original.rows if r.learner_id == target.learner_id]
+    after = [r for r in changed.rows if r.learner_id == target.learner_id]
+    assert [r.base for r in before[:11]] == [r.base for r in after[:11]]
+    assert [r.concept_counts for r in before] == [r.concept_counts for r in after]
+    assert [r.concept_successes for r in before[:11]] == [r.concept_successes for r in after[:11]]
+    assert before[11].base != after[11].base
+    assert original.train_observable_sha256 != changed.train_observable_sha256
+    assert original.folds == changed.folds
+    seed = lambda p: ec.label_free_bootstrap_seed(p.recipe, p.plan_sha256, p.learner_ids, 'C00', 'C01')
+    assert seed(original) == seed(changed)  # full-label SHA never seeds resamples
+
+
+def test_hash_fold_balance_whole_learner_membership_and_direction():
+    ids = tuple(f'L{i:02d}' for i in range(48))
+    assigned = ec.label_free_fold_assignments(recipe(), H, ids)
+    assert Counter(f for _, f in assigned) == {0:16, 1:16, 2:16}
+    assert assigned == ec.label_free_fold_assignments(recipe(), H, ids)
+    for fold in range(3):
+        assert len({learner for learner, f in assigned if f != fold}) == 32
+    a = ec.label_free_bootstrap_seed(recipe(), H, ids, 'A', 'B')
+    b = ec.label_free_bootstrap_seed(recipe(), H, ids, 'B', 'A')
+    assert a != b and 0 <= a < 2**64
+
+
+@pytest.mark.parametrize('kind', ['role', 'provenance', 'observable', 'class_counts', 'event_cap', 'metadata'])
+def test_role_source_and_population_fail_closed_before_fit(observed, kind):
+    bank, plan, provenance, _ = observed
+    role, digest = role_from(observed)
+    args = dict(expected_train_provenance_sha256=provenance.identity, expected_train_observable_sha256=digest,
+                recipe=recipe(), limits=ec.EdgePreparationLimits(8, 84, 672, 10.))
+    if kind == 'role': role = replace(role, role='selection')
+    elif kind == 'provenance': args['expected_train_provenance_sha256'] = 'b'*64
+    elif kind == 'observable': args['expected_train_observable_sha256'] = 'b'*64
+    elif kind == 'class_counts': role = replace(role, class_counts=(0, 672))
+    elif kind == 'event_cap': args['limits'] = ec.EdgePreparationLimits(8, 84, 671, 10.)
+    else: role = replace(role, manifest_json=json.dumps({'observable_sha256': digest, 'provenance_sha256':'b'*64}))
+    with pytest.raises(ValueError):
+        ec.prepare_train_lagged_rows(role, bank, plan, **args)
+
+
+@pytest.mark.parametrize('field,value', [('seed', True), ('C', 2.), ('folds', 2), ('max_iter', 201), ('clip', float('nan'))])
+def test_no_silent_recipe_tuning(field, value):
+    with pytest.raises(ValueError): replace(recipe(), **{field:value})
+
+
+def test_fit_uses_identical_training_rows_and_all_oof_populations(monkeypatch):
+    prepared = tiny_prepared()
+    result, calls = fit_stubbed(monkeypatch, prepared)
+    assert len(calls) == len(result.fit_records) == 27
+    assert sum(r.solver_called for r in result.fit_records) == 0  # actual fake boundary, not27real fits
+    assert len(result.oof_rows) == 48 and len(result.edges) == 6
+    assert sum(r.kind == 'baseline' for r in result.fit_records) == 9
+    folds = dict(prepared.folds)
+    for record in result.fit_records:
+        assert all(folds[learner] != record.heldout_fold for learner in record.training_learners)
+        baseline = next(r for r in result.fit_records if r.kind == 'baseline' and
+                        (r.child_id, r.heldout_fold) == (record.child_id, record.heldout_fold))
+        assert record.training_row_ids_sha256 == baseline.training_row_ids_sha256
+        assert record.class_counts == baseline.class_counts
+    assert all(not row.eligible for row in result.oof_rows if row.child_id == 'A')
+    assert all(row.eligible for row in result.oof_rows if row.child_id == 'C')
+    for edge in result.edges:
+        assert edge.full_child_targets == sum(r.child_id == edge.child_id for r in prepared.rows)
+        assert edge.eligible_targets + edge.excluded_targets == edge.full_child_targets
+        assert not edge.supported and edge.confidence is None
+    result.assert_integrity()
+
+
+def explicit_oof(deltas, counts=None, *, y=1):
+    counts = [1]*len(deltas) if counts is None else counts
+    return tuple(ec.OOFRow('A', 'B', f'L{i:02d}', i*1000+k+1, i % 3, y, True, .5, .6, delta, None)
+        for i, (delta, n) in enumerate(zip(deltas, counts)) for k in range(n))
+
+
+def fixed_bootstrap(seed, population, replicates):
+    return (tuple(range(population)),)*replicates
+
+
+def test_equal_learner_estimand_differs_from_pooled_and_keeps_unary_oof(monkeypatch):
+    monkeypatch.setattr(ec, '_resample_indices', fixed_bootstrap)
+    rows = explicit_oof([1.] + [-.1]*19, [100] + [1]*19)
+    result = ec._summarize_edge(rows, recipe(), 123, True)
+    assert math.fsum(r.paired_delta for r in rows)/len(rows) > 0
+    assert result.point_delta == pytest.approx(-.045)
+    assert result.supported and result.unary_evaluation_labels and result.eligible_class_counts == (0,119)
+    assert result.confidence == 0 and result.bootstrap_positive == 0
+    assert len(result.learner_deltas) == 20  # unary OOF is valid; two classes only required at FIT
+
+
+def test_unary_fit_stops_without_real_solver_but_unary_oof_remains_valid(monkeypatch):
+    def forbidden(*args): raise AssertionError('one-class must stop before solver')
+    monkeypatch.setattr(ec, '_fit_logistic', forbidden)
+    out = ec._fit_one(((.5,)*4,)*2, (1,1), recipe(), runtime())
+    assert out.reason == 'FIT_REQUIRES_TWO_CLASSES' and not out.solver_called
+    monkeypatch.setattr(ec, '_resample_indices', fixed_bootstrap)
+    summary = ec._summarize_edge(explicit_oof([.1]*20), recipe(), 123, True)
+    assert summary.supported and summary.unary_evaluation_labels and summary.confidence == 1.
+
+
+def test_bootstrap_exact200_ties_zero_and_no_label_seed(monkeypatch):
+    calls = []
+    def draws(seed, n, k):
+        calls.append((seed,n,k))
+        return fixed_bootstrap(seed,n,k)
+    monkeypatch.setattr(ec, '_resample_indices', draws)
+    rows = explicit_oof([0.]*20)
+    summary = ec._summarize_edge(rows, recipe(), 555, True)
+    assert calls == [(555,20,200)] and summary.bootstrap_positive == 0 and summary.confidence == 0.
+    assert summary.point_delta == 0
+
+
+@pytest.mark.parametrize('problem', ['min_learners', 'fold_fit'])
+def test_unsupported_is_null_without_forced_bootstrap(monkeypatch, problem):
+    monkeypatch.setattr(ec, '_resample_indices', lambda *args: pytest.fail('unsupported must not bootstrap'))
+    result = ec._summarize_edge(explicit_oof([.1]*(19 if problem == 'min_learners' else 20)), recipe(), 2, problem != 'fold_fit')
+    assert not result.supported and result.point_delta is result.confidence is result.bootstrap_positive is None
+
+
+def test_loss_clipping_same_binary_population():
+    assert ec._loss(1, 0., 1e-6) == pytest.approx(-math.log(1e-6))
+    assert ec._loss(0, 1., 1e-6) == pytest.approx(-math.log1p(-(1-1e-6)))
+    assert ec._loss(1, .8, 1e-6) < ec._loss(1, .4, 1e-6)
+
+
+@pytest.mark.parametrize('kind', ['truncate', 'nonfinite'])
+def test_prediction_population_or_nonfinite_cannot_produce_score(kind):
+    class Invalid:
+        def predict_proba(self, x): return [] if kind == 'truncate' else [[.5,float('nan')]]
+    fit = ec._FitOutcome(Invalid(), None, False)
+    assert ec._probabilities(fit, ((.5,)*4,)) is None
+
+
+def test_declared_convergence_failure_retains_population_without_scores(monkeypatch):
+    # A manufactured boundary result, not an executed or observed solver failure.
+    value = tiny_prepared()
+    monkeypatch.setattr(ec, '_fit_logistic', lambda *args: ec._FitOutcome(
+        None, 'ENGINEERING_CONVERGENCE_CONTROL', False, (), None, 200, ('ConvergenceWarning',)))
+    result = ec.fit_crossfit_edge_confidence(value, expected_prepared_sha256=value.identity,
+        runtime=runtime(), limits=ec.EdgeFitLimits(27,48,10.))
+    assert len(result.fit_records) == 27 and len(result.oof_rows) == 48
+    assert all(not r.supported and not r.solver_called for r in result.fit_records)
+    assert all(not e.supported and e.confidence is None and e.point_delta is None for e in result.edges)
+    assert all(row.base_probability is row.augmented_probability is row.paired_delta is None for row in result.oof_rows)
+
+
+def test_budget_stops_before_any_fit_and_partial_deadline_retained(monkeypatch):
+    value = tiny_prepared()
+    calls = []
+    monkeypatch.setattr(ec, '_fit_logistic', stub_fitter(calls))
+    with pytest.raises(ValueError, match='whole workload'):
+        ec.fit_crossfit_edge_confidence(value, expected_prepared_sha256=value.identity,
+            runtime=runtime(), limits=ec.EdgeFitLimits(26,48,10.))
+    assert calls == []
+    clock = [0.]
+    monkeypatch.setattr(ec.time, 'monotonic', lambda: clock[0])
+    stub = stub_fitter(calls)
+    def delayed(*args):
+        outcome = stub(*args)
+        clock[0] = 2.
+        return outcome
+    monkeypatch.setattr(ec, '_fit_logistic', delayed)
+    with pytest.raises(ec.EdgeFitInterrupted) as caught:
+        ec.fit_crossfit_edge_confidence(value, expected_prepared_sha256=value.identity,
+            runtime=runtime(), limits=ec.EdgeFitLimits(27,48,1.))
+    assert len(caught.value.fit_records) == 1 and caught.value.oof_rows == ()
+
+
+def test_final_hash_time_inside_active_cap(monkeypatch):
+    value = tiny_prepared()
+    clock = [0.]
+    monkeypatch.setattr(ec.time, 'monotonic', lambda: clock[0])
+    monkeypatch.setattr(ec, '_fit_logistic', stub_fitter([]))
+    original = ec.EdgeConfidenceResult._payload
+    def costly_hash(result):
+        clock[0] = 2.
+        return original(result)
+    monkeypatch.setattr(ec.EdgeConfidenceResult, '_payload', costly_hash)
+    with pytest.raises(ec.EdgeFitInterrupted) as caught:
+        ec.fit_crossfit_edge_confidence(value, expected_prepared_sha256=value.identity,
+            runtime=runtime(), limits=ec.EdgeFitLimits(27,48,1.))
+    assert len(caught.value.fit_records) == 27 and len(caught.value.oof_rows) == 48
+
+
+def test_checksum_mutation_and_wrong_external_prepared_pin(monkeypatch):
+    value = tiny_prepared()
+    with pytest.raises(ValueError, match='external identity'):
+        ec.fit_crossfit_edge_confidence(value, expected_prepared_sha256='b'*64,
+            runtime=runtime(), limits=ec.EdgeFitLimits(27,48,10.))
+    object.__setattr__(value, 'train_observable_sha256', 'b'*64)
+    with pytest.raises(ValueError, match='prepared observables changed'): value.assert_integrity()
+
+
+def graph_fixture(points):
+    # Manufactured summaries for graph-algorithm proof only, never fitted evidence.
+    edges = []
+    for p in ('A','B','C'):
+        for c in ('A','B','C'):
+            if p == c: continue
+            delta = points.get((p,c), -1.)
+            edges.append(ec.EdgeSummary(p,c,20,20,0,20,(10,10),False,((0,8,8,8),(1,6,6,6),(2,6,6,6)),
+                True,None,(),delta,1,200 if delta > 0 else 0,200,1. if delta > 0 else 0.))
+    return seal(ec.EdgeConfidenceResult('COMPLETE_CONDITIONAL_SURROGATE_NOT_EDGE_TRUTH',H,recipe(),runtime(),(),(),tuple(edges),0.,''))
+
+
+def test_dag_direction_lexicographic_tie_and_cycle_rejection_no_filler():
+    result = graph_fixture({('A','B'):1., ('B','C'):1., ('C','A'):1.})
+    graph = ec.select_positive_dag(result, edge_budget=3)
+    assert graph.status == 'UNSUPPORTED_EDGE_BUDGET'
+    assert graph.edges == (('A','B'), ('B','C')) and graph.rejected_cycles == (('C','A'),)
+    assert graph.requested_edges == 3 and len(graph.edges) == 2
+    accepted = ec.select_positive_dag(result, edge_budget=2)
+    assert accepted.status == 'SUPPORTED_DAG' and accepted.edges == (('A','B'), ('B','C'))
+
+
+def test_zero_or_unsupported_edges_never_fill_dag():
+    result = graph_fixture({('A','B'):0.})
+    assert ec.select_positive_dag(result, edge_budget=1).edges == ()
+    changed = replace(result.edges[0], supported=False, reason='ENGINEERING_UNSUPPORTED', point_delta=None, confidence=None)
+    result = seal(replace(result, edges=(changed,)+result.edges[1:]))
+    assert ec.select_positive_dag(result, edge_budget=1).status == 'UNSUPPORTED_EDGE_BUDGET'
+
+
+def test_dag_rejects_incomplete_candidate_population_and_result_drift():
+    result = graph_fixture({('A','B'):1.})
+    partial = seal(replace(result, edges=result.edges[:-1]))
+    with pytest.raises(ValueError, match='complete nonself'): ec.select_positive_dag(partial, edge_budget=1)
+    object.__setattr__(result, 'status', 'OTHER')
+    with pytest.raises(ValueError): result.assert_integrity()

@@ -233,6 +233,27 @@ def test_foreign_or_uncompleted_freeze_rejected(invocation, changes):
         ledger.freeze_selection(replace(freeze(invocation), **changes), **CLOCK)
 
 
+def test_unsaved_nonbest_epoch_keeps_its_predictions_without_prior_checkpoint(invocation):
+    ledger=fit_complete(invocation)
+    ledger=step(ledger.start_epoch(**CLOCK),8)
+    record=replace(epoch_record(invocation,2),checkpoint_sha256=None,predictions_sha256='3'*64,
+                   raw_selection_loss=.8)
+    ledger=ledger.complete_fit_epoch(record,**CLOCK)
+    assert ledger.fit_epochs[0].checkpoint_sha256=='1'*64
+    assert ledger.fit_epochs[1].checkpoint_sha256 is None
+    assert ledger.fit_epochs[1].predictions_sha256=='3'*64
+    chosen=ledger.freeze_selection(freeze(invocation,epoch=1),**CLOCK)
+    assert chosen.selection_freeze.selected_epoch==1
+
+
+def test_selection_freeze_rejects_epoch_without_its_own_persisted_checkpoint(invocation):
+    ledger=step(life.LifecycleLedger.begin(invocation).start_epoch(**CLOCK),8)
+    ledger=ledger.complete_fit_epoch(replace(epoch_record(invocation,1),checkpoint_sha256=None),**CLOCK)
+    with pytest.raises(ValueError,match='own persisted checkpoint'):
+        ledger.freeze_selection(freeze(invocation),**CLOCK)
+    assert ledger.phase=='fit80' and ledger.selection_freeze is None
+
+
 def test_refit_exact_selected_epochs_and_calibration_cannot_optimize(invocation):
     ledger = fit_complete(invocation).freeze_selection(freeze(invocation), **CLOCK)
     ledger = step(ledger.start_epoch(**CLOCK), 9).complete_refit_epoch(**CLOCK)
