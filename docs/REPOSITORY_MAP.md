@@ -34,7 +34,7 @@ Các báo cáo có ngày cũ là snapshot lịch sử. Ví dụ bản benchmark3
 | `_context/` | Mục tiêu, quyết định và evaluation protocol của **baseline BKT ban đầu** | **Còn giá trị tham chiếu/ràng buộc BKT**; không là dashboard hoặc protocol chung mới cho RQ1–RQ3 |
 | `artifacts/` | Dữ liệu phái sinh/splits, sidecar, source phụ thuộc, runtime/gate evidence, kit Colab, cùng cache/temp | **Đang được code sử dụng**; không thể coi toàn bộ là cache để xóa |
 | `experiments/` | Config/authorization và kết quả đầy đủ theo model/run: metrics, models, checkpoints, predictions, logs | **Đang dùng**; nhiều kết quả gốc nằm ở đây, phần lớn giữ local |
-| `notebooks/` | Hiện có notebook kiểm synthetic CPU/CUDA trên Colab | **Đang dùng cho kiểm runtime**, không phải bằng chứng đã train GPU hoặc notebook tổng hợp cả luận văn |
+| `notebooks/` | Notebook kiểm synthetic CPU/CUDA và [notebook báo cáo bằng chứng](../notebooks/thesis_evidence_report.ipynb) | **Đang dùng cho runtime và trình bày kết quả đã lưu**; notebook báo cáo là chẩn đoán/pilot RQ1–RQ2, chưa kết quả cuối của cả luận văn |
 | `scripts/` | Entry points chạy/audit/build/verify; xem nhóm bên dưới | **Đang dùng**; script không tự là kết quả đã chạy |
 | `src/` và `tests/` | Implementation và kiểm thử tương ứng | **Đang dùng**; kết quả test cần log/manifest đi kèm |
 | `paper1/`, `paper2/` | Source/artifacts/PDF từ nghiên cứu trước; một số notebook và simulator inputs vẫn là dependency của adapter/audit | **Đang được tái sử dụng**; không chuyển cả hai sang archive hoặc chỉnh source lịch sử |
@@ -64,6 +64,8 @@ Một số kết quả BKT đã được relocation sang `experiments/bkt_baseli
 - [scripts/wsl2](../scripts/wsl2/): runner/reproduction của BKT C++ trên WSL. Có script đánh giá Test lịch sử; không chạy lại chỉ để xem báo cáo.
 - [scripts/bootstrap_bkt_gam_cv.py](../scripts/bootstrap_bkt_gam_cv.py): thống kê paired learner bootstrap trên predictions Development đã lưu; JSON bootstrap đã lưu tại research_tracking/reports. Script nhận `--output`; lần tái lập mới cần output riêng, không ghi đè JSON lịch sử hoặc tạo lại root reports.
 - [notebooks/akt_colab_synthetic.ipynb](../notebooks/akt_colab_synthetic.ipynb): giao diện chạy kiểm trên Colab; log/outputs sau execution mới là bằng chứng. Notebook nguồn Paper1/2 nằm trong hai thư mục paper riêng, không phải root `notebooks/`.
+- [notebooks/thesis_evidence_report.ipynb](../notebooks/thesis_evidence_report.ipynb): bảng/sơ đồ cơ chế và nguồn C01–C14 từ artifact đã đóng, có outputs và kiểm28inputs/104pointers. Builder stdlib chỉ đọc bằng chứng; không rerun research. Chưa Jupyter-kernel/visual QA; xem [nghiệm thu](../research_tracking/reports/thesis_evidence_notebook_20261108.md).
+  Bản working đã có [bổ sung single-payload integrity](../research_tracking/reports/thesis_evidence_notebook_integrity_20261108.md); snapshot v1 và v2 giữ riêng trong bundles, số liệu không đổi.
 
 Một số script nằm bên trong run archives là bản lịch sử, có thể chứa đường dẫn cũ. Ưu tiên entrypoints tại `scripts/` và runbook hiện hành, không tự chạy script bất kỳ trong folder kết quả.
 
