@@ -1,0 +1,18 @@
+...............F.........                                                [100%]
+================================== FAILURES ===================================
+_ test_prefix_chain_cross_encoding_same_observed_past_and_distinct_session_scheme _
+
+    def test_prefix_chain_cross_encoding_same_observed_past_and_distinct_session_scheme():
+        _, train, selection, refit, _ = phases()
+        e80,e90=data.fit_research_encoding(train),data.fit_research_encoding(refit)
+        left=data.research_scoring_targets(selection,e80)
+        right=[t for t in data.research_scoring_targets(refit,e90) if t.origin_role=='selection']
+        assert [t.history_sha256 for t in left] == [t.history_sha256 for t in right]
+>       assert all(t.history_hash_scheme == 'observable-prefix-chain-v1' for t in left+right)
+                                                                                  ^^^^^^^^^^
+E       TypeError: can only concatenate tuple (not "list") to tuple
+
+tests\akt\test_research_simulator_data.py:190: TypeError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_research_simulator_data.py::test_prefix_chain_cross_encoding_same_observed_past_and_distinct_session_scheme
+1 failed, 24 passed in 1.36s
