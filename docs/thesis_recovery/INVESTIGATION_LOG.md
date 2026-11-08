@@ -395,3 +395,8 @@ Demo83PASS sau boundedlocalhostpermission retry, browserQA giữ actualdimension
 ### 08/11 — GPU-host prep đã commit c1d93ec
 
 102outputs rawGitverified,manifest3ed52942…acc305. Bốn scopes riêng warm20/generic9/cold24/packet41 là mocks; storedCPUstartupfacts không freshGPU proof. NoGPU/install/cloudspend. GRAPH04+demo source vẫn chưacommit vì chờ canonicalreport/dryarchive vàrootreview cuối; không gọi workingtreeclean hoặc fullresearchready.
+
+
+### 08/11 — Demo closed-loop đã commit
+
+Bundleb9eaaab:66outputs rawGitverified; source/report22b3522:83testsPASS vàbrowserQA. Stage list trongbundle chỉ chứabundle, nênroot commit source5files+report riêngngaysau; không gọi bundlecommit làsourcecommit. Khôngmodel/researchreplay/GPU. GRAPH04source vẫn pendingcanonical/dryarchive finalpins, actual4stepbudgetđãhết; statehướngdẫnkhôngrerun.
