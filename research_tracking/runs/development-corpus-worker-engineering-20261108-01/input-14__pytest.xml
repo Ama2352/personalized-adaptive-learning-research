@@ -1,0 +1,742 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="19" failures="0" skipped="0" tests="19" time="0.667" timestamp="2026-11-08T18:59:53.099998+07:00" hostname="Ama"><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_protected_source_rejected_before_any_protected_open[collection_sources]" time="0.007"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_protected_source_rejected0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_protected_source_rejected0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4FA24C2B0&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_protected_source_rejected0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_protected_source_rejected_before_any_protected_open[extra_sources]" time="0.006"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_protected_source_rejected1\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_protected_source_rejected1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4F98F3230&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_protected_source_rejected1\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_frozen_config_profile_sha_cannot_be_changed" time="0.005"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_frozen_config_profile_sha0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_frozen_config_profile_sha0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4FA20CDD0&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_frozen_config_profile_sha0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_allowlisted_source_byte_drift_rejected_before_generation" time="0.007"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_allowlisted_source_byte_d0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_allowlisted_source_byte_d0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4FA522140&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_allowlisted_source_byte_d0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_existing_corpus_rejected_before_generation_or_worker_writes" time="0.006"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_existing_corpus_rejected_0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_existing_corpus_rejected_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4FA521D00&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_existing_corpus_rejected_0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_alias_rejected_before_generation[output]" time="0.006"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_alias_rejected_before_gen0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_alias_rejected_before_gen0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4FA1D2350&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_alias_rejected_before_gen0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_alias_rejected_before_generation[corpus]" time="0.006"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_alias_rejected_before_gen1\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_alias_rejected_before_gen1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4FA1D1750&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_alias_rejected_before_gen1\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_alias_rejected_before_generation[source]" time="0.006"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_alias_rejected_before_gen2\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_alias_rejected_before_gen2')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4FA2A06E0&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_alias_rejected_before_gen2\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_wrong_owner_stops_before_validation_or_writes[status]" time="0.005"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_wrong_owner_stops_before_0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_wrong_owner_stops_before_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4FA528C80&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_wrong_owner_stops_before_0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_wrong_owner_stops_before_validation_or_writes[pid]" time="0.006"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_wrong_owner_stops_before_1\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_wrong_owner_stops_before_1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4FA212CF0&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_wrong_owner_stops_before_1\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_wrong_owner_stops_before_validation_or_writes[missing]" time="0.008"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_wrong_owner_stops_before_2\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_wrong_owner_stops_before_2')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4FA211390&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_wrong_owner_stops_before_2\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_ram_guards_leave_no_success_receipt[before_heavy]" time="0.006"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_ram_guards_leave_no_succe0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_ram_guards_leave_no_succe0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4F996F6C0&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_ram_guards_leave_no_succe0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_ram_guards_leave_no_success_receipt[after_heavy]" time="0.006"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_ram_guards_leave_no_succe1\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_ram_guards_leave_no_succe1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4FA1C22D0&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_ram_guards_leave_no_succe1\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_ram_guards_leave_no_success_receipt[after_reader]" time="0.006"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_ram_guards_leave_no_succe2\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_ram_guards_leave_no_succe2')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4FA1C2C90&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_ram_guards_leave_no_succe2\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_positive_mock_flow_is_pending_outer_not_actual_corpus_acceptance" time="0.007"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_positive_mock_flow_is_pen0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_positive_mock_flow_is_pen0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4FA256360&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_positive_mock_flow_is_pen0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_missing_role_support_stops_before_publish_reader" time="0.006"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_missing_role_support_stop0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_missing_role_support_stop0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4FA255DE0&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_missing_role_support_stop0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_reader_content_mismatch_is_failure_not_pending_success" time="0.006"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_reader_content_mismatch_i0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_reader_content_mismatch_i0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4FA247ED0&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_reader_content_mismatch_i0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_extra_source_drift_after_reader_prevents_success" time="0.005"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_extra_source_drift_after_0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_extra_source_drift_after_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4FA2465D0&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_extra_source_drift_after_0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase><testcase classname="tests.shared_kt.test_development_corpus_worker" name="test_post_result_ram_failure_retains_failure_override_not_final_acceptance" time="0.006"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_post_result_ram_failure_r0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'&quot;">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_post_result_ram_failure_r0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002B4FA516570&gt;
+
+    @pytest.fixture
+    def case(tmp_path,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        root=tmp_path/'workspace';root.mkdir()
+        config_bytes=CONFIG.read_bytes()
+        assert hashlib.sha256(config_bytes).hexdigest()==driver.CONFIG_SHA
+        config_path=root/driver.CONFIG;config_path.parent.mkdir(parents=True);config_path.write_bytes(config_bytes)
+        config=json.loads(config_bytes)
+        sources={}
+        for name in (*driver.COLLECTION_SOURCES,*driver.EXTRA_SOURCES):
+            path=root/name;path.parent.mkdir(parents=True,exist_ok=True)
+&gt;           path.write_bytes(('SYNTHETIC_SOURCE_BINDING_NOT_NATIVE '+name).encode())
+
+tests\shared_kt\test_development_corpus_worker.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/development-corpus-worker-engineering-20261108-01/trial01/tmp/test_...6_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\development-corpus-worker-engineering-20261108-01\\trial01\\tmp\\test_post_result_ram_failure_r0\\workspace\\paper2\\rivf2026_gam_kt_artifact_v20\\rivf2026_gam_kt_artifact_v20\\source\\adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</error></testcase></testsuite></testsuites>
