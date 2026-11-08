@@ -1,0 +1,323 @@
+"""Discovery stdlib chỉ đọc: không cài đặt, import Torch hoặc truy vấn GPU."""
+from __future__ import annotations
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path, PurePosixPath
+import platform
+import re
+import signal
+import subprocess
+import sys
+import sysconfig
+import time
+
+PROJECT = Path('/content/KLTN_GPU08_20261108_01')
+STAGING = Path('/content/KLTN_GPU10_DISCOVERY_20261108_01')
+LOCK_SHA = '60dad3de310562db4f775d1977e2097a6d1c8f57a22bfa4f7afc3ceab35cc45a'
+MODULES = ('torch', 'numpy', 'duckdb', 'pandas', 'sklearn', 'scipy', 'psutil', 'packaging', 'pip')
+HEX = re.compile('[a-f0-9]{64}')
+MAX_BYTES = 64 * 1024**2
+
+PROBE = r'''import email.parser,hashlib,importlib.machinery,itertools,json,os,platform,sys,sysconfig
+from pathlib import Path
+v=Path(sys.argv[1]);pure=Path(sysconfig.get_path('purelib',vars={'base':str(v),'platbase':str(v)}))
+if not sys.flags.no_site or not sys.flags.isolated:raise ValueError('no-site isolated startup required')
+def bounded(p,cap):
+    with p.open('rb') as f:b=f.read(cap+1)
+    if len(b)>cap:raise ValueError('metadata/origin file cap exceeded')
+    return b
+rows=[];entries=list(itertools.islice(pure.iterdir(),4097))
+if len(entries)>4096:raise ValueError('purelib entry count cap exceeded')
+for p in sorted(entries):
+    if p.name.endswith('.egg-info'):raise ValueError('unexpected egg-info')
+    if not p.name.endswith('.dist-info'):continue
+    if len(rows)>=128:raise ValueError('distribution count cap exceeded')
+    if p.is_symlink() or not p.resolve().is_relative_to(v.resolve()):raise ValueError('external metadata origin')
+    m=bounded(p/'METADATA',1024**2);r=bounded(p/'RECORD',8*1024**2)
+    headers=email.parser.BytesParser().parsebytes(m,headersonly=True)
+    if len(headers.get_all('Name',[]))!=1 or len(headers.get_all('Version',[]))!=1:raise ValueError('metadata fields')
+    name,version=headers['Name'],headers['Version']
+    if len(name)>128 or len(version)>128:raise ValueError('metadata text cap')
+    rows.append({'name':name,'version':version,'root':str(pure),'metadata_sha256':hashlib.sha256(m).hexdigest(),'record_sha256':hashlib.sha256(r).hexdigest()})
+origins={}
+for name in ('torch','numpy','duckdb','pandas','sklearn','scipy','psutil','packaging','pip'):
+    s=importlib.machinery.PathFinder.find_spec(name,[str(pure)])
+    if s is None:origins[name]=None;continue
+    p=Path(s.origin or '')
+    if not p.is_file():raise ValueError('non-file module origin')
+    if not p.resolve().is_relative_to(v.resolve()):raise ValueError('external module origin')
+    b=bounded(p,1024**2)
+    origins[name]={'path':str(p),'sha256':hashlib.sha256(b).hexdigest(),'bytes':len(b)}
+gil=sysconfig.get_config_var('Py_GIL_DISABLED')
+abi={'platform_id':sys.platform,'implementation':sys.implementation.name,'python_version':platform.python_version(),'machine':platform.machine(),'libc':list(platform.libc_ver()),'cache_tag':sys.implementation.cache_tag,'soabi':sysconfig.get_config_var('SOABI'),'extension_suffix':sysconfig.get_config_var('EXT_SUFFIX'),'gil_disabled':0 if gil is None else gil}
+print(json.dumps({'abi':abi,'executable':sys.executable,'prefix':sys.prefix,'base_prefix':sys.base_prefix,'purelib':str(pure),'no_site':sys.flags.no_site,'isolated':sys.flags.isolated,'sys_path':sys.path,'distributions':rows,'origins':origins,'cuda_visible_devices':os.environ.get('CUDA_VISIBLE_DEVICES'),'nvidia_visible_devices':os.environ.get('NVIDIA_VISIBLE_DEVICES'),'heavy_modules_imported':[n for n in ('torch','numpy','duckdb','pandas','sklearn','scipy') if n in sys.modules],'prefix_scope':'actual no-site prefix; normal startup prefix/site-hook audit deferred'}))
+'''
+
+
+def sha(payload):
+    return hashlib.sha256(payload).hexdigest()
+
+
+def read(path, cap):
+    with path.open('rb') as f:
+        b = f.read(cap + 1)
+    if len(b) > cap:
+        raise ValueError('input byte cap exceeded')
+    return b
+
+
+def host_abi():
+    gil = sysconfig.get_config_var('Py_GIL_DISABLED')
+    return dict(platform_id=sys.platform, implementation=sys.implementation.name,
+                python_version=platform.python_version(), machine=platform.machine(),
+                libc=list(platform.libc_ver()), cache_tag=sys.implementation.cache_tag,
+                soabi=sysconfig.get_config_var('SOABI'), extension_suffix=sysconfig.get_config_var('EXT_SUFFIX'),
+                gil_disabled=0 if gil is None else gil)
+
+
+def relative_path(root, text):
+    if (not isinstance(text, str) or not text or '\\' in text or ':' in text
+            or any(x in text for x in '*?[]')):
+        raise ValueError('unsafe profile relative path')
+    rel = PurePosixPath(text)
+    if rel.is_absolute() or '..' in rel.parts or rel.parts[0] in {'dataset', 'venv', '.wsl', '.venv'}:
+        raise ValueError('protected/escaping profile path')
+    if rel.parts[:2] == ('artifacts', 'bkt_baseline'):
+        raise ValueError('protected BKT path')
+    p = root.joinpath(*rel.parts)
+    if not p.resolve().is_relative_to(root.resolve()) or p.is_symlink():
+        raise ValueError('source path escapes project')
+    return p
+
+
+def validate_profile(p):
+    keys = {'schema_version', 'role', 'expected_host', 'source_files', 'upstream_files',
+            'package_versions', 'lock_relative', 'lock_sha256', 'provenance'}
+    if not isinstance(p, dict) or set(p) != keys or type(p['schema_version']) is not int or p['schema_version'] != 1:
+        raise ValueError('profile schema')
+    if p['role'] != 'discovery_only_not_authorization' or p['lock_sha256'] != LOCK_SHA:
+        raise ValueError('profile role/lock')
+    if not isinstance(p['expected_host'], dict) or set(p['expected_host']) != set(host_abi()):
+        raise ValueError('expected ABI fields')
+    if type(p['expected_host']['gil_disabled']) is not int or p['expected_host']['gil_disabled'] != 0:
+        raise ValueError('free-threaded ABI unsupported')
+    abi=p['expected_host']
+    if (any(not isinstance(abi[k],str) or not abi[k] for k in abi if k not in {'gil_disabled','libc'})
+            or abi['platform_id']!='linux' or abi['implementation']!='cpython'
+            or abi['python_version']!='3.13.18' or abi['machine']!='x86_64'
+            or abi['libc']!=['glibc','2.39'] or abi['cache_tag']!='cpython-313'
+            or abi['soabi']!='cpython-313-x86_64-linux-gnu'
+            or abi['extension_suffix']!='.cpython-313-x86_64-linux-gnu.so'):
+        raise ValueError('unreviewed candidate host profile')
+    provenance=p['provenance']
+    if (not isinstance(provenance,dict) or set(provenance)!={'source_materialization_sha256','wheel_resolution_report_sha256','actual_abi_probe_sha256'}
+            or any(not isinstance(v,str) or HEX.fullmatch(v) is None for v in provenance.values())):
+        raise ValueError('profile provenance SHA')
+    if (not isinstance(p['source_files'], dict) or len(p['source_files']) != 161
+            or not isinstance(p['upstream_files'], dict) or set(p['upstream_files']) != {'akt.py','README.md','LICENSE','load_data.py'}):
+        raise ValueError('source inventory cardinality')
+    for mapping in (p['source_files'], p['upstream_files']):
+        if any(not isinstance(k, str) or not isinstance(v, str) or HEX.fullmatch(v) is None for k, v in mapping.items()):
+            raise ValueError('invalid source SHA')
+    packages = p['package_versions']
+    if (not isinstance(packages, dict) or len(packages) != 44
+            or sum(n.startswith('nvidia-') for n in packages) != 14
+            or packages.get('torch') != '2.7.1+cu126' or packages.get('triton') != '3.3.1'
+            or any(not isinstance(n,str) or not re.fullmatch('[a-z0-9-]+',n)
+                   or not isinstance(v,str) or not v or len(v)>128 for n,v in packages.items())):
+        raise ValueError('44-package profile')
+
+
+def inspect_snapshot(root, profile, probe, abi, *, clock=time.monotonic, deadline=None):
+    """Pure filesystem/snapshot classifier; project_root parameter supports synthetic tests."""
+    validate_profile(profile)
+    root = Path(root)
+    if not root.is_absolute():
+        raise ValueError('absolute project root required')
+    deadline = clock() + 30 if deadline is None else deadline
+    def check():
+        if clock() > deadline:
+            raise TimeoutError('discovery deadline')
+    check()
+    result = {'role':'DISCOVERY_ONLY_NOT_GPU_READY_OR_AUTHORIZATION','host_abi':abi,
+              'profile_sha256_semantic':sha(json.dumps(profile,sort_keys=True).encode()),
+              'source_sha256':{},'target_probe':probe,'gpu_queries':0,'model_imports':0,'installs':0}
+    def stop(reason):
+        return dict(result,status='STOP_PARTIAL_OR_IDENTITY_MISMATCH',reason=reason)
+    if abi != profile['expected_host'] or type(abi.get('gil_disabled')) is not int:
+        return stop('host ABI differs from explicitly pinned candidate profile')
+    if root.is_symlink():
+        return stop('symlink project root')
+    if not root.exists():
+        return dict(result,status='COLD_ROOT_ABSENT')
+    if not root.is_dir():
+        return stop('project root is not a directory')
+    total = 0
+    paths = {**profile['source_files'], **{
+        'artifacts/akt/dependencies/upstream/'+n:h for n,h in profile['upstream_files'].items()},
+        profile['lock_relative']:profile['lock_sha256']}
+    try:
+        for name, expected in paths.items():
+            check()
+            path = relative_path(root,name)
+            b = read(path,MAX_BYTES-total)
+            total += len(b)
+            actual = sha(b)
+            check()
+            if actual != expected:
+                return stop('source/lock SHA mismatch: '+name)
+            result['source_sha256'][name]=actual
+        result['hashed_source_bytes']=total
+        v = root/'.venv'
+        if v.is_symlink():
+            return stop('symlink venv root')
+        if not v.exists():
+            return dict(result,status='COLD_VENV_ABSENT')
+        if not v.is_dir():
+            return stop('venv is not a directory')
+        cfg = read(v/'pyvenv.cfg',4096)
+        result['pyvenv_cfg_sha256']=sha(cfg)
+        lines = [x.strip().lower() for x in cfg.decode().splitlines()]
+        if lines.count('include-system-site-packages = false') != 1 or any(
+                x.startswith('include-system-site-packages') and x != 'include-system-site-packages = false' for x in lines):
+            return stop('venv must exclude system site packages')
+        if probe is None:
+            return stop('existing venv lacks fresh target probe')
+        if (probe['abi'] != abi or type(probe['abi'].get('gil_disabled')) is not int
+                or probe['executable'] != str(v/'bin/python')
+                or probe['prefix']!='/usr' or probe['base_prefix']!='/usr'
+                or type(probe['no_site']) is not int or probe['no_site']!=1
+                or type(probe['isolated']) is not int or probe['isolated']!=1
+                or probe['heavy_modules_imported'] != []
+                or probe['cuda_visible_devices'] != '' or probe['nvidia_visible_devices'] != ''):
+            return stop('target ABI/interpreter/isolation/probe mismatch')
+        for text in [probe['purelib'], *[x for x in probe['sys_path'] if 'site-packages' in x or 'dist-packages' in x]]:
+            if not Path(text).is_absolute() or not Path(text).resolve().is_relative_to(v.resolve()):
+                return stop('external site origin')
+        selected={}
+        for row in probe['distributions']:
+            name=re.sub('[-_.]+','-',row['name']).lower()
+            if name in selected or not Path(row['root']).resolve().is_relative_to(v.resolve()):
+                return stop('duplicate/external distribution')
+            if any(not isinstance(row.get(k),str) or not HEX.fullmatch(row[k]) for k in ('metadata_sha256','record_sha256')):
+                return stop('distribution metadata fingerprint missing')
+            selected[name]=row['version']
+        origins = probe['origins']
+        if set(origins) != set(MODULES) or origins['pip'] is not None:
+            return stop('unexpected target pip/origin keys')
+        if not selected:
+            if any(value is not None for value in origins.values()) or any(Path(probe['purelib']).iterdir()):
+                return stop('partial empty venv has package residue')
+            return dict(result,status='COLD_VENV_EMPTY_REQUIRES_INSTALL_APPROVAL')
+        if selected != profile['package_versions']:
+            return stop('installed distribution names/versions differ from selected44')
+        for name in MODULES[:-1]:
+            origin=origins[name]
+            if (not isinstance(origin,dict) or not isinstance(origin.get('path'),str)
+                    or not Path(origin['path']).is_absolute()
+                    or not Path(origin['path']).resolve().is_relative_to(v.resolve())
+                    or not isinstance(origin.get('sha256'),str) or not HEX.fullmatch(origin['sha256'])
+                    or type(origin.get('bytes')) is not int or origin['bytes']<0):
+                return stop('missing/external origin: '+name)
+        check()
+        return dict(result,status='WARM_CANDIDATE_REQUIRES_AUDIT',
+                    remaining=['normal-startup prefix/site-hook audit','actual target wheel tags','full RECORD origin audit','fresh hidden CPU import audit',
+                               'fresh visible CUDA runtime/hardware probe','separate user-authorized CUDA worker'],
+                    limits='No full installed-site-byte attestation, GPU identity or persistence parity inferred.')
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        return stop(type(error).__name__+': '+str(error))
+
+
+def run_probe(target, directory, *, deadline, clock=time.monotonic):
+    """One stdlib-only target child; cleanup exactly once before reading outputs."""
+    if os.name != 'posix':
+        raise ValueError('production target probe requires POSIX')
+    env={'PATH':'/usr/bin:/bin','LANG':'C.UTF-8','LC_ALL':'C.UTF-8','HOME':str(directory),
+         'CUDA_VISIBLE_DEVICES':'','NVIDIA_VISIBLE_DEVICES':'','PYTHONNOUSERSITE':'1',
+         'PYTHONDONTWRITEBYTECODE':'1','PIP_CONFIG_FILE':os.devnull}
+    output=directory/'target.stdout'
+    errors=directory/'target.stderr'
+    remaining=deadline-clock()
+    if remaining<=0:
+        raise TimeoutError('discovery deadline before child')
+    cleanup=[]
+    with output.open('xb') as out, errors.open('xb') as err:
+        child=subprocess.Popen([str(target),'-I','-S','-B','-c',PROBE,str(target.parent.parent)],stdin=subprocess.DEVNULL,
+                               stdout=out,stderr=err,env=env,start_new_session=True)
+        try:
+            child.wait(timeout=remaining)
+        finally:
+            try:
+                os.killpg(child.pid,signal.SIGKILL)
+                cleanup.append('owned process group signalled once')
+            except ProcessLookupError:
+                cleanup.append('owned process group already absent')
+            child.wait(timeout=2)
+    if child.returncode != 0 or clock()>deadline:
+        raise RuntimeError('target probe failed/deadline; retain logs')
+    value=json.loads(read(output,512*1024))
+    return value,{'returncode':child.returncode,'cleanup':cleanup,'cleanup_accepted':True,
+                  'stdout_sha256':sha(read(output,512*1024)),'stderr_sha256':sha(read(errors,512*1024))}
+
+
+def _parser():
+    p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--profile',type=Path,required=True)
+    p.add_argument('--profile-sha256',required=True)
+    p.add_argument('--expected-source-sha256',required=True)
+    p.add_argument('--attempt-id',required=True)
+    p.add_argument('--approval-reference',required=True)
+    return p
+
+
+def main(argv=None):
+    a=_parser().parse_args(argv)
+    if (os.name!='posix' or not re.fullmatch('[A-Za-z0-9][A-Za-z0-9_-]{0,47}',a.attempt_id)
+            or not a.approval_reference.strip() or not HEX.fullmatch(a.profile_sha256)
+            or not HEX.fullmatch(a.expected_source_sha256)):
+        raise ValueError('explicit Linux/source/profile/attempt/approval required')
+    started=time.monotonic();deadline=started+28  # Reserve up to2s for owned child reap/final receipt.
+    source=read(Path(__file__),128*1024);raw=read(a.profile,1024**2)
+    if sha(source)!=a.expected_source_sha256 or sha(raw)!=a.profile_sha256:
+        raise ValueError('source/profile SHA mismatch before staging')
+    profile=json.loads(raw);validate_profile(profile)
+    if STAGING.is_symlink():raise ValueError('symlink staging root')
+    STAGING.mkdir(exist_ok=True)
+    if STAGING.stat().st_uid!=os.getuid():raise ValueError('staging root owner mismatch')
+    directory=STAGING/a.attempt_id;directory.mkdir(exist_ok=False)
+    result={'status':'STOP_PARTIAL_OR_IDENTITY_MISMATCH','role':'DISCOVERY_ONLY_NOT_GPU_READY_OR_AUTHORIZATION'}
+    try:
+        probe=None;child=None
+        target=PROJECT/'.venv/bin/python'
+        abi=host_abi()
+        result=inspect_snapshot(PROJECT,profile,None,abi,deadline=deadline)
+        if result.get('reason')=='existing venv lacks fresh target probe':
+            if not target.is_file() or target.resolve()!=Path(sys.executable).resolve():
+                raise ValueError('target entry must resolve to current verified base interpreter')
+            probe,child=run_probe(target,directory,deadline=deadline)
+            result=inspect_snapshot(PROJECT,profile,probe,abi,deadline=deadline)
+        result['child']=child
+    except Exception as error:
+        result.update(reason=type(error).__name__+': '+str(error))
+    source_after=sha(read(Path(__file__),128*1024));profile_after=sha(read(a.profile,1024**2))
+    if source_after!=sha(source) or profile_after!=sha(raw):
+        result.update(status='STOP_PARTIAL_OR_IDENTITY_MISMATCH',reason='source/profile changed during discovery')
+    result.update(controller_source_sha256_before=sha(source),controller_source_sha256_after=source_after,
+                  profile_file_sha256_before=sha(raw),profile_file_sha256_after=profile_after,
+                  approval_reference=a.approval_reference,elapsed_seconds=time.monotonic()-started,
+                  host_signals={'COLAB_GPU':os.environ.get('COLAB_GPU'),'TPU_present':bool(os.environ.get('COLAB_TPU_ADDR')),
+                                'nvidia_device_entry_names':sorted(x.name for x in Path('/dev').glob('nvidia[0-9]*'))},
+                  output_scope='Exclusive metadata/log staging only; project/venv/source unchanged. No GPU query/install/model/auto-next-phase.')
+    if result['host_signals']['TPU_present']:
+        result.update(status='STOP_PARTIAL_OR_IDENTITY_MISMATCH',reason='TPU host outside profile')
+    if result['elapsed_seconds']>30:
+        result.update(status='STOP_PARTIAL_OR_IDENTITY_MISMATCH',reason='post-exit overall deadline exceeded')
+    (directory/'result.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    print(json.dumps({'status':result['status'],'result':str(directory/'result.json'),'sha256':sha(read(directory/'result.json',1024**2))}))
+    return 1 if result['status'].startswith('STOP') else 0
+
+
+if __name__=='__main__':
+    raise SystemExit(main())

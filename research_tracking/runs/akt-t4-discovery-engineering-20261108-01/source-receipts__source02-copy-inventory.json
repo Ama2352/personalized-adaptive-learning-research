@@ -1,0 +1,12 @@
+{
+  "status": "EXCLUSIVE_SOURCE02_NARROW_DERIVED_COPY_NO_EXECUTION",
+  "source01_sha256_before": "c176c85ad5e93c6daf229f9f7f884b277aa11c1ae99a259389059292784d0b75",
+  "source01_sha256_after": "c176c85ad5e93c6daf229f9f7f884b277aa11c1ae99a259389059292784d0b75",
+  "source02_sha256_before_write": "51c4b98053ba4eaac42b8c8be51ac29645c0b5fdcdf243b19d07c760a8a9db5f",
+  "source02_sha256_after_write": "51c4b98053ba4eaac42b8c8be51ac29645c0b5fdcdf243b19d07c760a8a9db5f",
+  "source01_bytes": 19125,
+  "source02_bytes": 19238,
+  "profile_unchanged_sha256": "0944dc50b1840c35d6085e5faa888b3d3370849e59077ea68e9a2397009b8228",
+  "diff": "--- discovery.py\n+++ discovery02.py\n@@ -22,7 +22,9 @@\n \n PROBE = r'''import email.parser,hashlib,importlib.machinery,itertools,json,os,platform,sys,sysconfig\n from pathlib import Path\n-v=Path(sys.argv[1]);pure=Path(sysconfig.get_path('purelib',vars={'base':str(v),'platbase':str(v)}))\n+v=Path(sys.argv[1])\n+if 'venv' not in sysconfig.get_scheme_names():raise ValueError('explicit venv scheme unavailable')\n+pure=Path(sysconfig.get_path('purelib',scheme='venv',vars={'base':str(v),'platbase':str(v)}))\n if not sys.flags.no_site or not sys.flags.isolated:raise ValueError('no-site isolated startup required')\n def bounded(p,cap):\n     with p.open('rb') as f:b=f.read(cap+1)\n",
+  "reason": "Actual Debian defaultscheme posix_local pointed at nonexistent .venv/local/lib/python3.13/dist-packages. No package/venv repair or install."
+}

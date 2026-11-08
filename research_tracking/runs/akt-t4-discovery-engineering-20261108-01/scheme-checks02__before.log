@@ -1,0 +1,25 @@
+test_debian_default_does_not_override_explicit_venv (__main__.SchemeTests.test_debian_default_does_not_override_explicit_venv) ... FAIL
+test_missing_venv_scheme_stops_without_fallback (__main__.SchemeTests.test_missing_venv_scheme_stops_without_fallback) ... FAIL
+
+======================================================================
+FAIL: test_debian_default_does_not_override_explicit_venv (__main__.SchemeTests.test_debian_default_does_not_override_explicit_venv)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\t4-discovery01\test_scheme02.py", line 24, in test_debian_default_does_not_override_explicit_venv
+    self.assertEqual(self.evaluate(),Path('/synthetic/project/.venv/lib/python3.13/site-packages'))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: WindowsPath('/synthetic/project/.venv/local/lib/python3.13/dist-packages') != WindowsPath('/synthetic/project/.venv/lib/python3.13/site-packages')
+
+======================================================================
+FAIL: test_missing_venv_scheme_stops_without_fallback (__main__.SchemeTests.test_missing_venv_scheme_stops_without_fallback)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\t4-discovery01\test_scheme02.py", line 26, in test_missing_venv_scheme_stops_without_fallback
+    with self.assertRaisesRegex(ValueError,'explicit venv scheme unavailable'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.019s
+
+FAILED (failures=2)
