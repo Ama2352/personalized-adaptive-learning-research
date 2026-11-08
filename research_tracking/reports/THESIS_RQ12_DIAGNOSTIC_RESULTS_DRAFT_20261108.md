@@ -38,6 +38,22 @@ Hai trường hợp giúp diễn giải bảng. Ở `20000-PG/event0`, P thay t�
 
 Empty-graph package là negative control quan trọng: vẫn có 37 P changes và 267 S changes nhưng không có M/R/A changes. Package còn pathway cục bộ ngay khi không có cạnh; empty-graph package vì thế không tương đương graph-free. Full-package contrast chưa cô lập đóng góp của prerequisite edges, và zero action change của control không chứng minh equivalence của graph ngoài pilot này. [C02].
 
+## Bổ sung C13: query và full preview được quan sát trong reproduction mới
+
+Bằng chứng mới bổ sung một giới hạn quan sát của C01–C04, trong khi các phát biểu về trace lịch sử ở trên vẫn giữ nguyên. Cùng pilot ba seed families 20000–20002 và các profile PG/PY/PYH đã được tái lập với observer. Control và observed mỗi pass giữ exact 3.240 legacy rows và 18 comparisons so với historical values. Trong pass observed, query arguments được ghi trước native `predict`, còn full preview là chính tuple **(concept, question, difficulty)** do native `select` trả trên policy copy. Tại **1.080 logical keys**, cả ba variants có cùng actual query tuple và label. [C13: reproduction đã đóng](../runs/rq1-query-observability-reproduction-20261108-01/parity.json), [báo cáo nguồn](rq1_query_observability_reproduction_20261108.md).
+
+| So với graph-free, reproduction mới | Full graph package | Empty-graph package |
+|---|---:|---:|
+| Full preview tuple đổi / event pairs | 22/1.080 | 0/1.080 |
+| P đổi nhưng toàn preview tuple giữ / P đổi | 944/964 | 37/37 |
+| P giữ nhưng full preview tuple đổi / P giữ | 2/116 | 0/1.043 |
+| Concept giữ nhưng full tuple đổi | 0/1.080 | 0/1.080 |
+| Difficulty đổi | 0/1.080 | 0/1.080 |
+
+Trong reproduction này, 22 full-tuple changes cũng là 22 concept/question changes; không phát hiện thêm item differences khi concept giữ. Vì vậy có thể nâng phát biểu “P đổi nhưng concept preview giữ” thành **“944/964 P changes vẫn giữ toàn bộ returned preview tuple” cho reproduction này**. Hai P-same/full-preview-changed rows vẫn tồn tại. P là một scalar của current query, không toàn bộ state/ranking mà selector sử dụng; chúng không tự chứng minh lỗi, causal mediation hoặc learning benefit. Empty package còn local pathway, nên 37 P changes/0 full-preview changes không phải isolated edge effect hay equivalence proof. [C13: counts trực tiếp](../runs/rq1-query-observability-reproduction-20261108-01/attempt01__sidecar_analysis.json).
+
+Cross-profile query tuples cũng trùng **360/360** trong từng cặp PG–PY, PG–PYH và PY–PYH. Labels/histories và initialization vẫn có thể khác. Đây là ba seed families đã dùng, **new independent N = 0**, không phải chín independent replicates hoặc causal ability intervention. New metadata chỉ thuộc reproduction; không backfill các trường chưa log trong historical trace. `preview_is_served=false`; selector không nhận timestamp nên không gán query time thành preview time. Kết quả này khép phần diagnostic về **actual shared query và returned full preview** của cùng fixed-stream pilot, còn closed-loop mastered/ready/served-item chain, reference calibration/mastery và interventions cô lập pathway vẫn chưa được xác minh đầy đủ. [C13: phạm vi và acceptance](../runs/rq1-query-observability-reproduction-20261108-01/frozen_acceptance.json).
+
 ## Predictive loss, profile và ranh giới của closed loop
 
 Số lần dự báo thay đổi không cho biết dự báo tốt hơn. Reanalysis đã tính Log Loss/Brier trên cùng paired labels và đối chiếu với aggregates cũ. Full package có pooled ΔLog Loss −0,000694 và ΔBrier −0,000365 so với graph-free, nhưng kết quả theo profile khác nhau. Bảng dùng trung bình ba seed cùng kích thước; mỗi profile có 360 event pairs. [C05: các seed–profile rows và phép trung bình được khai báo trong hồ sơ nguồn](../runs/rq1-score-vector-20261108-01/analysis.json).

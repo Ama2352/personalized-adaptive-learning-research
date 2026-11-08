@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "document": "research_tracking/reports/THESIS_RQ12_DIAGNOSTIC_RESULTS_DRAFT_20261108.md",
-  "document_sha256": "da64fbae222b9d116ebdc41933f02912ed04385eac43491d3a438b4f649caa8e",
+  "document_sha256": "7a3a4fe388d6cb2b8a454059e08ca978a27469d7012cd9ce324db6a3c20a536c",
   "evidence_class": "THESIS_SUBSECTION_DRAFT_STORED_PILOT_DIAGNOSTICS_NOT_FINAL_RQ12",
   "json_pointer_convention": "RFC6901; empty pointer=complete JSON; array indices zero-based",
   "input_inventory": [
@@ -114,6 +114,44 @@
       "manifest_path": "research_tracking/runs/cpu-rq12-20261107-03/manifest.json",
       "manifest_sha256": "6592a80768e6608355cde1fd545ee90f6ca4ec937b2284a1e3eb42fae4f766f0",
       "manifest_pointer": "/outputs_sha256/README.md"
+    },
+    {
+      "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/attempt01__sidecar_analysis.json",
+      "sha256": "b41d3b12d1e00b25c8e150960dea5651167822115c79ff0da3e9580dd0285684",
+      "bytes": 15842,
+      "manifest_path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/manifest.json",
+      "manifest_sha256": "112cd15f69b63fec730a4b4a67acf98650986adc58138f68ef4a5105adbf81d7",
+      "manifest_pointer": "/outputs_sha256/attempt01__sidecar_analysis.json"
+    },
+    {
+      "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/parity.json",
+      "sha256": "4636f1caef8d121b919922928b1f785e81d62eb4be2f378424b34424fd5e980f",
+      "bytes": 322183,
+      "manifest_path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/manifest.json",
+      "manifest_sha256": "112cd15f69b63fec730a4b4a67acf98650986adc58138f68ef4a5105adbf81d7",
+      "manifest_pointer": "/outputs_sha256/parity.json"
+    },
+    {
+      "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/frozen_acceptance.json",
+      "sha256": "29714a56e87478e30278f0386ed066fc3db50776c58c4fda8d34583ee236a007",
+      "bytes": 4864,
+      "manifest_path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/manifest.json",
+      "manifest_sha256": "112cd15f69b63fec730a4b4a67acf98650986adc58138f68ef4a5105adbf81d7",
+      "manifest_pointer": "/outputs_sha256/frozen_acceptance.json"
+    },
+    {
+      "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/rq1_query_observability_reproduction.md",
+      "sha256": "d0b8eeee20723ad31b03415f816c707a71cd234cf69a0c281fade10dac36c28f",
+      "bytes": 9439,
+      "manifest_path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/manifest.json",
+      "manifest_sha256": "112cd15f69b63fec730a4b4a67acf98650986adc58138f68ef4a5105adbf81d7",
+      "manifest_pointer": "/outputs_sha256/rq1_query_observability_reproduction.md"
+    },
+    {
+      "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/manifest.json",
+      "sha256": "112cd15f69b63fec730a4b4a67acf98650986adc58138f68ef4a5105adbf81d7",
+      "bytes": 16989,
+      "role_vi": "Closure mới của cùng-pilot observability reproduction; không thay input lịch sử C01–C12."
     }
   ],
   "claims": [
@@ -2796,6 +2834,236 @@
           "value": "Equal learner weight, child mean trong learner; timestamp ties riêng, incoming edges denominator."
         }
       ]
+    },
+    {
+      "id": "C13",
+      "claim_vi": "Reproduction mới của cùng fixed-stream pilot xác minh actual query parity và prediction→full-preview mismatch; không backfill historical trace, không thêm independent N hoặc causal/served-action evidence.",
+      "evidence": [
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/attempt01__sidecar_analysis.json",
+          "sha256": "b41d3b12d1e00b25c8e150960dea5651167822115c79ff0da3e9580dd0285684",
+          "json_pointer": "/status",
+          "value": "PASS_STORED_OBSERVABILITY_ANALYSIS_NO_MODEL_RERUN"
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/attempt01__sidecar_analysis.json",
+          "sha256": "b41d3b12d1e00b25c8e150960dea5651167822115c79ff0da3e9580dd0285684",
+          "json_pointer": "/logical_event_pairs_per_comparison",
+          "value": 1080
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/attempt01__sidecar_analysis.json",
+          "sha256": "b41d3b12d1e00b25c8e150960dea5651167822115c79ff0da3e9580dd0285684",
+          "json_pointer": "/shared_query_label_checks",
+          "value": 1080
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/attempt01__sidecar_analysis.json",
+          "sha256": "b41d3b12d1e00b25c8e150960dea5651167822115c79ff0da3e9580dd0285684",
+          "json_pointer": "/current_query_tuple_identical_all_three_variants",
+          "value": true
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/attempt01__sidecar_analysis.json",
+          "sha256": "b41d3b12d1e00b25c8e150960dea5651167822115c79ff0da3e9580dd0285684",
+          "json_pointer": "/counts/25",
+          "value": {
+            "candidate": "graph_package",
+            "group": "pooled",
+            "pairs": 1080,
+            "P_same": 116,
+            "P_changed": 964,
+            "concept_changed": 22,
+            "question_changed": 22,
+            "difficulty_changed": 0,
+            "full_tuple_changed": 22,
+            "same_concept_full_tuple_changed": 0,
+            "same_P_full_tuple_changed": 2,
+            "same_P_concept_changed": 2,
+            "same_P_question_changed": 2,
+            "same_P_difficulty_changed": 0,
+            "changed_P_full_tuple_unchanged": 944
+          }
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/attempt01__sidecar_analysis.json",
+          "sha256": "b41d3b12d1e00b25c8e150960dea5651167822115c79ff0da3e9580dd0285684",
+          "json_pointer": "/counts/12",
+          "value": {
+            "candidate": "empty_graph_package",
+            "group": "pooled",
+            "pairs": 1080,
+            "P_same": 1043,
+            "P_changed": 37,
+            "concept_changed": 0,
+            "question_changed": 0,
+            "difficulty_changed": 0,
+            "full_tuple_changed": 0,
+            "same_concept_full_tuple_changed": 0,
+            "same_P_full_tuple_changed": 0,
+            "same_P_concept_changed": 0,
+            "same_P_question_changed": 0,
+            "same_P_difficulty_changed": 0,
+            "changed_P_full_tuple_unchanged": 37
+          }
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/attempt01__sidecar_analysis.json",
+          "sha256": "b41d3b12d1e00b25c8e150960dea5651167822115c79ff0da3e9580dd0285684",
+          "json_pointer": "/cross_profile_query_identity",
+          "value": {
+            "PG__PY": {
+              "query_pairs": 360,
+              "exact_same_query_tuples": 360
+            },
+            "PG__PYH": {
+              "query_pairs": 360,
+              "exact_same_query_tuples": 360
+            },
+            "PY__PYH": {
+              "query_pairs": 360,
+              "exact_same_query_tuples": 360
+            }
+          }
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/attempt01__sidecar_analysis.json",
+          "sha256": "b41d3b12d1e00b25c8e150960dea5651167822115c79ff0da3e9580dd0285684",
+          "json_pointer": "/new_independent_N",
+          "value": 0
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/attempt01__sidecar_analysis.json",
+          "sha256": "b41d3b12d1e00b25c8e150960dea5651167822115c79ff0da3e9580dd0285684",
+          "json_pointer": "/float_comparison",
+          "value": "exact binary64 parsed values; no tolerance"
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/attempt01__sidecar_analysis.json",
+          "sha256": "b41d3b12d1e00b25c8e150960dea5651167822115c79ff0da3e9580dd0285684",
+          "json_pointer": "/scope",
+          "value": "same3seed families/same3profiles reproduction metadata only; preview not served; no causal/calibration/CI or historical backfill"
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/parity.json",
+          "sha256": "4636f1caef8d121b919922928b1f785e81d62eb4be2f378424b34424fd5e980f",
+          "json_pointer": "/status",
+          "value": "PASS_EXACT_LEGACY_PARITY_NEW_OBSERVATIONS_ONLY"
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/parity.json",
+          "sha256": "4636f1caef8d121b919922928b1f785e81d62eb4be2f378424b34424fd5e980f",
+          "json_pointer": "/control/legacy_rows",
+          "value": 3240
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/parity.json",
+          "sha256": "4636f1caef8d121b919922928b1f785e81d62eb4be2f378424b34424fd5e980f",
+          "json_pointer": "/control/comparisons",
+          "value": 18
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/parity.json",
+          "sha256": "4636f1caef8d121b919922928b1f785e81d62eb4be2f378424b34424fd5e980f",
+          "json_pointer": "/observed/legacy_rows",
+          "value": 3240
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/parity.json",
+          "sha256": "4636f1caef8d121b919922928b1f785e81d62eb4be2f378424b34424fd5e980f",
+          "json_pointer": "/observed/comparisons",
+          "value": 18
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/parity.json",
+          "sha256": "4636f1caef8d121b919922928b1f785e81d62eb4be2f378424b34424fd5e980f",
+          "json_pointer": "/observed/query_captures",
+          "value": 3240
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/parity.json",
+          "sha256": "4636f1caef8d121b919922928b1f785e81d62eb4be2f378424b34424fd5e980f",
+          "json_pointer": "/logical_event_keys",
+          "value": 1080
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/parity.json",
+          "sha256": "4636f1caef8d121b919922928b1f785e81d62eb4be2f378424b34424fd5e980f",
+          "json_pointer": "/actual_query_and_preview_tuples",
+          "value": 3240
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/parity.json",
+          "sha256": "4636f1caef8d121b919922928b1f785e81d62eb4be2f378424b34424fd5e980f",
+          "json_pointer": "/preview_is_served",
+          "value": false
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/parity.json",
+          "sha256": "4636f1caef8d121b919922928b1f785e81d62eb4be2f378424b34424fd5e980f",
+          "json_pointer": "/historical_metadata_backfilled",
+          "value": false
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/parity.json",
+          "sha256": "4636f1caef8d121b919922928b1f785e81d62eb4be2f378424b34424fd5e980f",
+          "json_pointer": "/new_independent_N",
+          "value": 0
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/frozen_acceptance.json",
+          "sha256": "29714a56e87478e30278f0386ed066fc3db50776c58c4fda8d34583ee236a007",
+          "json_pointer": "/kind",
+          "value": "SAME_PILOT_REPRODUCTION_OBSERVABILITY_NOT_NEW_INDEPENDENT_SAMPLE"
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/frozen_acceptance.json",
+          "sha256": "29714a56e87478e30278f0386ed066fc3db50776c58c4fda8d34583ee236a007",
+          "json_pointer": "/logical_events",
+          "value": 1080
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/frozen_acceptance.json",
+          "sha256": "29714a56e87478e30278f0386ed066fc3db50776c58c4fda8d34583ee236a007",
+          "json_pointer": "/query_preview_tuples",
+          "value": 3240
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/frozen_acceptance.json",
+          "sha256": "29714a56e87478e30278f0386ed066fc3db50776c58c4fda8d34583ee236a007",
+          "json_pointer": "/new_independent_N",
+          "value": 0
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/frozen_acceptance.json",
+          "sha256": "29714a56e87478e30278f0386ed066fc3db50776c58c4fda8d34583ee236a007",
+          "json_pointer": "/historical_metadata_backfilled",
+          "value": false
+        },
+        {
+          "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/frozen_acceptance.json",
+          "sha256": "29714a56e87478e30278f0386ed066fc3db50776c58c4fda8d34583ee236a007",
+          "json_pointer": "/preview_is_served",
+          "value": false
+        }
+      ],
+      "narrative_source": {
+        "path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/rq1_query_observability_reproduction.md",
+        "sha256": "d0b8eeee20723ad31b03415f816c707a71cd234cf69a0c281fade10dac36c28f",
+        "sections": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ]
+      },
+      "limits_vi": [
+        "P chỉ scalar current query; full preview là (concept,question,difficulty) do native select trả, không served action.",
+        "Cùng3seed families/PG,PY,PYH; cross-profile queries trùng không biến profiles thành independent samples hoặc ability intervention.",
+        "Full package còn local adaptation; empty package không phải graph-free hoặc edge-only intervention.",
+        "Chỉ tích hợp aggregate đã lưu; không rerun model/RNG/data hoặc tạo CI/causal inference mới."
+      ]
     }
   ],
   "derived_arithmetic": [
@@ -2974,5 +3242,21 @@
     "historical_manifest_sha256": "8e101c8a17e025a0b3b8ae66acba661804fe783a24305c231c15fc9d555c957b",
     "historical_manifest_source_key": "src/knowledge_tracing/gam_kt/practice_order.py",
     "meaning_vi": "Ít nhất một parent observed ở mỗi incoming parent set; hai witness parents không nhất thiết là cùng parent."
+  },
+  "observability_c13_revision": {
+    "prior_document_sha256": "da64fbae222b9d116ebdc41933f02912ed04385eac43491d3a438b4f649caa8e",
+    "prior_sources_sha256": "04e879674243dbdcbc8ba69423819662509bf8bdd7039b42d0fac92a69b50fbf",
+    "reason_vi": "Bổ sung C13 từ closed observability reproduction40: actual query/full preview đã được đo ở reproduction mới, không sửa historical C01–C12 hoặc backfill metadata.",
+    "changes_vi": [
+      "Chèn một subsection C13 trước predictive loss; giữ nguyên toàn bộ nội dung cũ, bảng số và C01–C12.",
+      "Append5 source inputs và27 JSON pointers thuộc C13; mọi số lấy trực tiếp aggregate immutable."
+    ],
+    "bundle_manifest_path": "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/manifest.json",
+    "bundle_manifest_sha256": "112cd15f69b63fec730a4b4a67acf98650986adc58138f68ef4a5105adbf81d7",
+    "bundle_outputs_reverified": 40,
+    "new_model_data_rng_calls": 0,
+    "new_independent_N": 0,
+    "pre_edit_copy_inventory": "artifacts/akt/local-tests/thesis-rq12-draft-20261108-01/before-observability-c13/copy_inventory.json",
+    "pre_edit_copy_inventory_sha256": "12f765342ec49f11b2edf7255e3c0e81e895a22be53f5b57b67ced4fffd361af"
   }
 }
