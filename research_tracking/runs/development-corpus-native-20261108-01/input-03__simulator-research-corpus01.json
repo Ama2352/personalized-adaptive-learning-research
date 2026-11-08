@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "status": "PROFILE_FROZEN_DISPATCH_PENDING_READER_AND_OWNED_LAUNCH",
+  "corpus_id": "grade10-development-lifecycle01-20261108",
+  "research_scope": "First single-candidate lifecycle pilot; not final research matrix or final evaluation",
+  "plan_recipe": {
+    "namespace": "grade10-development-lifecycle01-20261108",
+    "root_seed": 42,
+    "development_learners": 60,
+    "final_learners": 150,
+    "protocol_sha256": "c0d6e8a698d7d5083986e9848898a643390fc5e76100fc0b8c6286c306e6bea6"
+  },
+  "generated_roles": ["train", "selection", "calibration"],
+  "role_counts": {"train": 48, "selection": 6, "calibration": 6},
+  "profile_rule": "role-local assignment ordinal modulo 3: PG, PY, PYH",
+  "collection_recipe": {
+    "policy": "uniform_items",
+    "events_per_learner": 210,
+    "start_unix_seconds": 1767225600,
+    "gap_seconds": 21600
+  },
+  "expected_events": {"train": 10080, "selection": 1260, "calibration": 1260, "total": 12600, "final": 0},
+  "global_limits": {
+    "max_wall_seconds": 120,
+    "max_rss_bytes": 536870912,
+    "min_available_ram_bytes": 1073741824,
+    "max_teacher_attempts": 12600,
+    "max_concurrent_workers": 1,
+    "automatic_retries": 0
+  },
+  "publication_limits": {
+    "max_wall_seconds": 30,
+    "max_file_bytes": 33554432,
+    "max_total_bytes": 67108864,
+    "max_oracle_bytes": 50331648
+  },
+  "acceptance": {
+    "all_84_items_in_each_role": true,
+    "exact_counts_and_chronology": true,
+    "oracle_features_forbidden": true,
+    "public_reader_roundtrip_required": true,
+    "source_before_after_hash_equality_required": true,
+    "accepted_outer_cleanup_receipt_required": true,
+    "done_marker_alone_is_acceptance": false,
+    "profile_or_seed_search_on_failure": false,
+    "favorable_model_metrics_required": false
+  },
+  "authorization": {
+    "basis": "User sustained local engineering and safe economical Development choices",
+    "native_dispatch_ready": false,
+    "training_included": false,
+    "holdout_access_included": false,
+    "cloud_export_included": false,
+    "modal_spending_usd": 0
+  }
+}

@@ -1,0 +1,4718 @@
+{
+  "status": "PASS_PUBLIC_POPULATION_AND_STRUCTURAL_SUPPORT_NOT_MODEL_FIT",
+  "roles": {
+    "train": {
+      "learners": 48,
+      "events": 10080,
+      "covered_items": 84,
+      "class_counts": {
+        "0": 5041,
+        "1": 5039
+      },
+      "two_classes": true
+    },
+    "selection": {
+      "learners": 6,
+      "events": 1260,
+      "covered_items": 84,
+      "class_counts": {
+        "0": 665,
+        "1": 595
+      },
+      "two_classes": true
+    },
+    "calibration": {
+      "learners": 6,
+      "events": 1260,
+      "covered_items": 84,
+      "class_counts": {
+        "0": 626,
+        "1": 634
+      },
+      "two_classes": true
+    }
+  },
+  "total_distinct_source_rows": 12600,
+  "files_before_after_unchanged": true,
+  "files_sha256": {
+    "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/DONE.json": "66232663868baafd2f012b4d79afad373e2fd5e831d30622153163b94e1b733f",
+    "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/bank.json": "4ef02907ee9071ba2ed6b4bba4d4dab728d390e9bbff8218a4e39bbb32f48034",
+    "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/calibration.jsonl": "df784684c3928c20a526396b8cec34ffa97bd4cda379141c176e1315f1a89a6f",
+    "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/calibration.manifest.json": "c68dc065c5a326cae14c62d673b0feaab48998fea0b216b6f1458c87c2479328",
+    "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/corpus.json": "555ed695c7c7121af474edb542fa3eef664b340162ced46cdfc001a5d7a4ad72",
+    "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/oracle/calibration.collection.json": "2052fec298a76aa315970074031728cb5f59544a9d669828ca04107c274f979d",
+    "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/oracle/calibration.json": "662f2d2e509b1e1ca53400219272f713e294ee83cdcee8f054aa4ac5ac30889e",
+    "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/oracle/publication-inventory.json": "07b940ac449d3b1d5dd6aaf8401246d23bf45513ef55c14585da82af86172605",
+    "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/oracle/selection.collection.json": "3a978a63c466069e3907ecafa43c7772bfdc7d3b4b69c82898723a39f3e2dc9a",
+    "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/oracle/selection.json": "387dff00a5a59b5ce231ec38e48908236a07579959e3b6d4c4c773974c2df7d7",
+    "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/oracle/train.collection.json": "0c38af37fc124f636d5ccfde14bcf38cfb8e76b019659417bc3ab6949f29ad23",
+    "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/oracle/train.json": "56cb95987d8745f6d4082a11398d7e53f10e7c16d98d798b0b87445cd8d69255",
+    "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/plan.json": "b48c3657eac3c04cbad5e3b7864021e5860eef8ef01ba8808cc9161deaa8b2f6",
+    "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/selection.jsonl": "33d7ec7e419334117ba0b2a50c18ba4297254544488428af86fea609dc7a0e4d",
+    "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/selection.manifest.json": "444bf3d2edd74073a8605bd4458b0d60edcbbf159bdb7ab3660dc71d4e08e0fa",
+    "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/train.jsonl": "e2f3d7c0e1cf1fefa8b3c952d21a0531436f86259d6a7c8a07699cc0435fc07b",
+    "artifacts/simulator/corpora/grade10-development-lifecycle01-20261108/train.manifest.json": "37101c7d6d1d1a74310c58179455cd844c47d5d4cba9d4878ac6316127bf6f49"
+  },
+  "train_item_learner_support": {
+    "BatPhuongTrinhBacHaiMotAn_NB_01": 46,
+    "BatPhuongTrinhBacHaiMotAn_TH_01": 43,
+    "BatPhuongTrinhBacHaiMotAn_VD_01": 45,
+    "CacPhepToanTrenTapHop_NB_01": 45,
+    "CacPhepToanTrenTapHop_TH_01": 46,
+    "CacPhepToanTrenTapHop_VD_01": 47,
+    "DauCuaTamThucBacHai_NB_01": 45,
+    "DauCuaTamThucBacHai_TH_01": 44,
+    "DauCuaTamThucBacHai_VD_01": 42,
+    "GiaiBatPhuongTrinhBacHaiMotAn_NB_01": 47,
+    "GiaiBatPhuongTrinhBacHaiMotAn_TH_01": 42,
+    "GiaiBatPhuongTrinhBacHaiMotAn_VD_01": 46,
+    "GiaiDuocBatPhuongTrinhBacHai_NB_01": 48,
+    "GiaiDuocBatPhuongTrinhBacHai_TH_01": 40,
+    "GiaiDuocBatPhuongTrinhBacHai_VD_01": 47,
+    "GiaiPhuongTrinhChuaCanThuc_NB_01": 46,
+    "GiaiPhuongTrinhChuaCanThuc_TH_01": 44,
+    "GiaiPhuongTrinhChuaCanThuc_VD_01": 43,
+    "GiaiThichDinhLyVeDau_NB_01": 38,
+    "GiaiThichDinhLyVeDau_TH_01": 42,
+    "GiaiThichDinhLyVeDau_VD_01": 47,
+    "HamSoBacHaiVaDoThi_NB_01": 44,
+    "HamSoBacHaiVaDoThi_TH_01": 44,
+    "HamSoBacHaiVaDoThi_VD_01": 42,
+    "HamSoBacHai_NB_01": 45,
+    "HamSoBacHai_TH_01": 44,
+    "HamSoBacHai_VD_01": 44,
+    "HamSoVaDoThi_NB_01": 45,
+    "HamSoVaDoThi_TH_01": 43,
+    "HamSoVaDoThi_VD_01": 46,
+    "HieuKhaiNiemCoBanVeHamSo_NB_01": 43,
+    "HieuKhaiNiemCoBanVeHamSo_TH_01": 44,
+    "HieuKhaiNiemCoBanVeHamSo_VD_01": 45,
+    "HieuMenhDeVaDieuKienLogic_NB_01": 43,
+    "HieuMenhDeVaDieuKienLogic_TH_01": 44,
+    "HieuMenhDeVaDieuKienLogic_VD_01": 44,
+    "MenhDeVaTapHop_NB_01": 46,
+    "MenhDeVaTapHop_TH_01": 43,
+    "MenhDeVaTapHop_VD_01": 40,
+    "MenhDe_NB_01": 43,
+    "MenhDe_TH_01": 42,
+    "MenhDe_VD_01": 42,
+    "NhanBietCacTrungBinhHoc_NB_01": 43,
+    "NhanBietCacTrungBinhHoc_TH_01": 44,
+    "NhanBietCacTrungBinhHoc_VD_01": 43,
+    "NhanBietDinhNghiaDuocHamSo_NB_01": 47,
+    "NhanBietDinhNghiaDuocHamSo_TH_01": 46,
+    "NhanBietDinhNghiaDuocHamSo_VD_01": 42,
+    "NhanBietHinhDangCuaDoThiParabol_NB_01": 41,
+    "NhanBietHinhDangCuaDoThiParabol_TH_01": 42,
+    "NhanBietHinhDangCuaDoThiParabol_VD_01": 46,
+    "NhanBietKhaiNiemCoBanVeTapHop_NB_01": 45,
+    "NhanBietKhaiNiemCoBanVeTapHop_TH_01": 43,
+    "NhanBietKhaiNiemCoBanVeTapHop_VD_01": 44,
+    "PhuongTrinhQuyVePhuongTrinhBacHai_NB_01": 41,
+    "PhuongTrinhQuyVePhuongTrinhBacHai_TH_01": 47,
+    "PhuongTrinhQuyVePhuongTrinhBacHai_VD_01": 44,
+    "TapHop_NB_01": 46,
+    "TapHop_TH_01": 47,
+    "TapHop_VD_01": 45,
+    "ThucHienPhepToanTrenTapHop_NB_01": 42,
+    "ThucHienPhepToanTrenTapHop_TH_01": 44,
+    "ThucHienPhepToanTrenTapHop_VD_01": 48,
+    "TimTapGiaTriCuaHamSoBacHai_NB_01": 45,
+    "TimTapGiaTriCuaHamSoBacHai_TH_01": 43,
+    "TimTapGiaTriCuaHamSoBacHai_VD_01": 43,
+    "VanDungDuocBatPhuongTrinhBacHai_NB_01": 46,
+    "VanDungDuocBatPhuongTrinhBacHai_TH_01": 46,
+    "VanDungDuocBatPhuongTrinhBacHai_VD_01": 45,
+    "VanDungHamSoBacHaiDeGiaiBaiToanThucTien_NB_01": 42,
+    "VanDungHamSoBacHaiDeGiaiBaiToanThucTien_TH_01": 45,
+    "VanDungHamSoBacHaiDeGiaiBaiToanThucTien_VD_01": 47,
+    "VanDungHamSoDeGiaiQuyetVaiBaiToan_NB_01": 48,
+    "VanDungHamSoDeGiaiQuyetVaiBaiToan_TH_01": 43,
+    "VanDungHamSoDeGiaiQuyetVaiBaiToan_VD_01": 46,
+    "VanDungPhepToanTapHop_NB_01": 45,
+    "VanDungPhepToanTapHop_TH_01": 44,
+    "VanDungPhepToanTapHop_VD_01": 44,
+    "VeDoThiParabolCuaHamSoBacHai_NB_01": 44,
+    "VeDoThiParabolCuaHamSoBacHai_TH_01": 44,
+    "VeDoThiParabolCuaHamSoBacHai_VD_01": 45,
+    "XacDinhTinhDungSaiCuaMenhDe_NB_01": 44,
+    "XacDinhTinhDungSaiCuaMenhDe_TH_01": 43,
+    "XacDinhTinhDungSaiCuaMenhDe_VD_01": 43
+  },
+  "train_concept_learner_support": {
+    "BatPhuongTrinhBacHaiMotAn": 48,
+    "CacPhepToanTrenTapHop": 48,
+    "DauCuaTamThucBacHai": 48,
+    "GiaiBatPhuongTrinhBacHaiMotAn": 48,
+    "GiaiDuocBatPhuongTrinhBacHai": 48,
+    "GiaiPhuongTrinhChuaCanThuc": 48,
+    "GiaiThichDinhLyVeDau": 48,
+    "HamSoBacHai": 48,
+    "HamSoBacHaiVaDoThi": 48,
+    "HamSoVaDoThi": 48,
+    "HieuKhaiNiemCoBanVeHamSo": 48,
+    "HieuMenhDeVaDieuKienLogic": 48,
+    "MenhDe": 47,
+    "MenhDeVaTapHop": 48,
+    "NhanBietCacTrungBinhHoc": 48,
+    "NhanBietDinhNghiaDuocHamSo": 48,
+    "NhanBietHinhDangCuaDoThiParabol": 48,
+    "NhanBietKhaiNiemCoBanVeTapHop": 48,
+    "PhuongTrinhQuyVePhuongTrinhBacHai": 48,
+    "TapHop": 48,
+    "ThucHienPhepToanTrenTapHop": 48,
+    "TimTapGiaTriCuaHamSoBacHai": 48,
+    "VanDungDuocBatPhuongTrinhBacHai": 48,
+    "VanDungHamSoBacHaiDeGiaiBaiToanThucTien": 48,
+    "VanDungHamSoDeGiaiQuyetVaiBaiToan": 48,
+    "VanDungPhepToanTapHop": 48,
+    "VeDoThiParabolCuaHamSoBacHai": 48,
+    "XacDinhTinhDungSaiCuaMenhDe": 48
+  },
+  "ordered_pair_support": [
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "BatPhuongTrinhBacHaiMotAn",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "CacPhepToanTrenTapHop",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "DauCuaTamThucBacHai",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiDuocBatPhuongTrinhBacHai",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiPhuongTrinhChuaCanThuc",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "GiaiThichDinhLyVeDau",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHai",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoBacHaiVaDoThi",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HamSoVaDoThi",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 46
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuKhaiNiemCoBanVeHamSo",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "HieuMenhDeVaDieuKienLogic",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDe",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 46
+    },
+    {
+      "parent": "MenhDe",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 46
+    },
+    {
+      "parent": "MenhDe",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 45
+    },
+    {
+      "parent": "MenhDe",
+      "child": "TapHop",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 46
+    },
+    {
+      "parent": "MenhDe",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 46
+    },
+    {
+      "parent": "MenhDe",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDe",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "MenhDeVaTapHop",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietCacTrungBinhHoc",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "NhanBietDinhNghiaDuocHamSo",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietHinhDangCuaDoThiParabol",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "NhanBietKhaiNiemCoBanVeTapHop",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 46
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "TapHop",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TapHop",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "ThucHienPhepToanTrenTapHop",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "TimTapGiaTriCuaHamSoBacHai",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungDuocBatPhuongTrinhBacHai",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VanDungPhepToanTapHop",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "VeDoThiParabolCuaHamSoBacHai",
+      "child": "XacDinhTinhDungSaiCuaMenhDe",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "BatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "CacPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "DauCuaTamThucBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "GiaiBatPhuongTrinhBacHaiMotAn",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "GiaiDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "GiaiPhuongTrinhChuaCanThuc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "GiaiThichDinhLyVeDau",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "HamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "HamSoBacHaiVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "HamSoVaDoThi",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "HieuKhaiNiemCoBanVeHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "HieuMenhDeVaDieuKienLogic",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "MenhDe",
+      "coobserved_learners": 47,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "MenhDeVaTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "NhanBietCacTrungBinhHoc",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "NhanBietDinhNghiaDuocHamSo",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "NhanBietHinhDangCuaDoThiParabol",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "NhanBietKhaiNiemCoBanVeTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "PhuongTrinhQuyVePhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "TapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "ThucHienPhepToanTrenTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "TimTapGiaTriCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "VanDungDuocBatPhuongTrinhBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "VanDungHamSoBacHaiDeGiaiBaiToanThucTien",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "VanDungHamSoDeGiaiQuyetVaiBaiToan",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "VanDungPhepToanTapHop",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 47
+    },
+    {
+      "parent": "XacDinhTinhDungSaiCuaMenhDe",
+      "child": "VeDoThiParabolCuaHamSoBacHai",
+      "coobserved_learners": 48,
+      "prior_parent_before_child_learners": 48
+    }
+  ],
+  "minimum_item_learner_support": 38,
+  "minimum_concept_learner_support": 47,
+  "minimum_lagged_pair_learner_support": 45,
+  "pairs_with_lagged_support_at_least20": 756,
+  "scope_vi": "Chỉ structural opportunity trên train; nhãn được parse và audit binary/class counts, không dùng chọn seed/cấu hình/edge. Không confidence estimate, OOF eligibility hoặc causal benefit.",
+  "oracle_opened": false,
+  "final_events": 0,
+  "model_or_teacher_calls": 0
+}
