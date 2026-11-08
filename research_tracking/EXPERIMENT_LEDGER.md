@@ -167,3 +167,5 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 
 
 - **Confidence worker engineering,08/11:**21purePASS/37,2609s/150; source5+env+ownedcleanup verified. Lượt trước45s không cóJUnit, giữ rejected. [Bundle](runs/edge-confidence-worker-engineering-20261108-01/README.md); chưa actualsolverfit/OOF graph/RQ3 result.
+
+- **AKT/reference binding engineering,08/11:**36pure cases ở2source revisions, mỗi lượt cap45,0NN/corpus reads. [Bundle](runs/akt-reference-binding-engineering-20261108-01/README.md). Giữ source snapshots trước/sau; không72unique hoặc RQcompletion.

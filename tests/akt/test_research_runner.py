@@ -8,6 +8,7 @@ import math
 from pathlib import Path
 import struct
 import sys
+import weakref
 from types import SimpleNamespace as NS
 
 import pytest
@@ -439,10 +440,17 @@ def test_orchestration_stubs_freeze_before_fresh_refit_and_calibration_never_sel
         calls.append(('phase',scope));return phase(scope)
     monkeypatch.setattr(runner,'_phase',make_phase)
     data=NS(fit_research_encoding=lambda p:StubEncoding(p.scope,SHA))
-    models=[]
+    # Chỉ giữ weakrefs: fixture không được tự giữ model/optimizer rồi che mất
+    # vòng đời thực của orchestration. Đây là object-liveness, không RSS test.
+    models=[];optimizers=[];payload_refs=[]
+    class TrackedAdapter:
+        def __init__(self,parameter):self.native=NS(parameters=lambda:iter([parameter]))
+    class OwnedPayload:
+        pass
     def new_model(run,tools,enc):
-        parameter=object();model=NS(native=NS(parameters=lambda:iter([parameter])))
-        models.append(model);calls.append(('new_model',enc.scope));return model,FakeAdam([parameter])
+        parameter=object();model=TrackedAdapter(parameter);optimizer=FakeAdam([parameter])
+        models.append(weakref.ref(model));optimizers.append(weakref.ref(optimizer))
+        calls.append(('new_model',enc.scope));return model,optimizer
     monkeypatch.setattr(runner,'_new_model',new_model)
     monkeypatch.setattr(runner,'_checkpoint_identity',lambda run,tools,model,enc,role:
         dict(weight_role=role,vocabulary_sha256=SHA))
@@ -469,6 +477,9 @@ def test_orchestration_stubs_freeze_before_fresh_refit_and_calibration_never_sel
         assert p.scope in ('raw_selection10','calibration_predict')
         calls.append(('predict',p.scope))
         role='selection' if p.scope=='raw_selection10' else 'calibration'
+        if role=='calibration':
+            assert models[1]() is None and optimizers[1]() is None
+            assert models[2]() is model and optimizers[2]() is None and payload_refs[0]() is None
         learner=plan.split_plan.assignments(role)[0].learner_id
         keys=[dict(learner_id=learner,source_row=i+1,item_id=bank.item_ids[0],timestamp=i+1,global_rank=i,
             history_sha256=SHA,history_hash_scheme='observable-prefix-chain-v1',origin_role=role,
@@ -484,23 +495,39 @@ def test_orchestration_stubs_freeze_before_fresh_refit_and_calibration_never_sel
             checkpoint_sha256=('1' if path.parent.name=='fit80' else '4')*64,epoch=epoch,identity=identity)
     monkeypatch.setattr(runner,'_save',save)
     monkeypatch.setattr(runner,'_restore_owned',lambda *a:calls.append(('restore',)))
-    monkeypatch.setattr(runner,'_read_owned',lambda *a:calls.append(('read_payload_before_constructor',)) or {})
-    monkeypatch.setattr(runner,'_restore_loaded',lambda *a:calls.append(('restore_loaded',)))
+    def read_owned(*args):
+        assert models[1]() is None and optimizers[1]() is None
+        payload=OwnedPayload();payload_refs.append(weakref.ref(payload))
+        calls.append(('read_payload_before_constructor',));return payload
+    monkeypatch.setattr(runner,'_read_owned',read_owned)
+    def restore_loaded(run,tools,payload,model,opt):
+        assert payload_refs[0]() is payload and models[2]() is model and optimizers[2]() is opt
+        calls.append(('restore_loaded',))
+    monkeypatch.setattr(runner,'_restore_loaded',restore_loaded)
     def probe(run,tools,data,model,p,enc):
         assert p.scope=='refit_union90';calls.append(('probe',p.scope))
+        if len(models)==3:
+            assert models[2]() is model and optimizers[2]() is None and payload_refs[0]() is None
         return dict(scope='BOUNDED_FIRST_NATIVE_WINDOWS_NOT_FULL_REFIT',windows=1,targets=2,population_sha256=SHA)
     monkeypatch.setattr(runner,'_reload_probe',probe)
     canonical_calls=[]
     def canonical_metrics(frame):
         canonical_calls.append(frame);return {'canonical_calibrated_sentinel':True}
     tools=NS(EarlyStopping=Stopper,pd=NS(DataFrame=lambda frame:frame),_metrics=canonical_metrics)
+    from knowledge_tracing import response_calibration as response
+    actual_temperature_fit=response.fit_temperature
+    def fit_after_release(*args,**kwargs):
+        assert all(ref() is None for ref in models+optimizers+payload_refs)
+        return actual_temperature_fit(*args,**kwargs)
+    monkeypatch.setattr(response,'fit_temperature',fit_after_release)
     result=runner._execute_cpu(runtime,tools,data,train,selection,encoding,corpus)
     assert result['selected_epoch']==1 and observed==[(1,.6)]
     assert [call for call in calls if call[0]=='stub_train']==[
         ('stub_train','select_train80',('train',)),('stub_train','refit_union90',('train','selection'))]
     assert [call for call in calls if call[0]=='new_model']==[
         ('new_model','select_train80'),('new_model','refit_union90'),('new_model','refit_union90')]
-    assert models[0] is not models[1] and models[1] is not models[2]
+    assert len(models)==len(optimizers)==3 and len(payload_refs)==1
+    assert all(ref() is None for ref in models+optimizers+payload_refs)
     assert calls.index(('read_payload_before_constructor',)) < max(i for i,c in enumerate(calls) if c[0]=='new_model')
     assert calls.index(('phase','refit_union90')) < calls.index(('phase','calibration_predict'))
     assert len([c for c in calls if c[0]=='probe'])==2
@@ -515,4 +542,39 @@ def test_orchestration_stubs_freeze_before_fresh_refit_and_calibration_never_sel
     assert exported['temperature_fit_objective']['logit_clip']==1e-6
     assert exported['temperature_fit_objective']['scope']=='Tfit optimization objective; not canonical reportingLL'
     assert len(canonical_calls)==1 and canonical_calls[0]['correct']==list(calibration_labels)
+    # JSON thực của runner phải reload được bằng public schema rồi qua đúng
+    # reference-bank validator. Backend scalar dưới đây là synthetic/unfitted;
+    # không khởi tạo AKT, không chứng nhận research weights hoặc inference quality.
+    from knowledge_tracing.response_calibration import (PredictionBinding,TemperatureCalibration,
+        score_reference_bank)
+    from knowledge_tracing.simulator_bridge import OnlineSession,OnlineScore
+    binding=PredictionBinding(**exported['binding'])
+    assert binding.bank_sha256==bank.identity['item_bank_sha256']
+    assert binding.domain_sha256==identity_hash(bank.identity)
+    assert binding.bank_sha256!=binding.domain_sha256
+    assert binding.model_id==binding.checkpoint_sha256==result['refit_checkpoint']['checkpoint_sha256']
+    payload=json.loads((runtime.output/'calibration/calibrator.json').read_text())
+    calibration=TemperatureCalibration.from_payload(payload,binding=binding)
+    class SyntheticScalarBackend:
+        model_id=binding.model_id
+        domain=bank.identity
+        calls=0
+        def predict_next(self,history,query,*,learner_id):
+            assert history==() and query.item_id in bank.item_ids
+            self.calls+=1
+            return OnlineScore(.5,'fitted',0,0,False,0)
+    backend=SyntheticScalarBackend()
+    session=OnlineSession(backend,bank,learner_id='synthetic-reference-probe',max_events=2)
+    reference=score_reference_bank(session,calibration=calibration,binding=binding,timestamp=1,source_row=1)
+    assert reference['supported_concepts']==reference['total_concepts']==28
+    assert backend.calls==84 and session.history==()
+    # Legacy domain hash ở trường bank không được lọt qua nhờ self-consistent
+    # calibrator metadata; phải bị từ chối TRƯỚC bất kỳ reference prediction.
+    wrong_bank=replace(binding,bank_sha256=binding.domain_sha256)
+    with pytest.raises(ValueError,match='reference model/bank/domain binding mismatch'):
+        score_reference_bank(session,calibration=replace(calibration,binding=wrong_bank),
+            binding=wrong_bank,timestamp=1,source_row=1)
+    assert backend.calls==84 and session.history==()
+    with pytest.raises(ValueError,match='calibrator payload schema'):
+        TemperatureCalibration.from_payload({k:v for k,v in payload.items() if k!='recipe'},binding=binding)
     assert not (runtime.output/'COMPLETE.json').exists()  # Actual outer acceptance/publication not stubbed as success.

@@ -550,10 +550,11 @@ def _execute_cpu(run, tools, data, train, selection, encoding80, corpus):
     final = _save(run,tools,run.output/'refit90/checkpoint.pt',refit_adapter,opt90,identity90,freeze.selected_epoch)
     # Bounded deterministic probe, không2full-refit passes hoặc calibration labels.
     baseline = _reload_probe(run,tools,data,refit_adapter,refit,encoding90)
+    del refit_adapter,opt90  # Chỉ còn metadata của baseline; không cần giữ model/Adam cũ khi reload.
     payload = _read_owned(run,tools,final,identity90)
     reloaded,reload_opt = _new_model(run,tools,encoding90)
     _restore_loaded(run,tools,payload,reloaded,reload_opt)
-    del payload
+    del payload,reload_opt  # Restore/RNG đã hoàn tất; prediction không dùng optimizer.
     parity = _reload_probe(run,tools,data,reloaded,refit,encoding90)
     _require(parity == baseline, 'refit reload exact prediction/loss/count parity')
     reload_sha = run.json('refit90/reload.json',dict(checkpoint_sha256=final['checkpoint_sha256'],
@@ -563,6 +564,7 @@ def _execute_cpu(run, tools, data, train, selection, encoding80, corpus):
     run.head.inputs('calibration_predict')
     calibration = _phase(data,corpus,'calibration_predict',freeze)
     summary,rows,truth = _predict(run,tools,data,reloaded,calibration,encoding90)
+    del reloaded  # Tfit/export chỉ dùng scalar predictions; không bảo đảm RSS trả về OS ngay.
     psha,tsha = _exports(run,'calibration',summary,rows,truth)
     run.transition('predictions_complete',checkpoint_sha256=final['checkpoint_sha256'],predictions_sha256=psha,
         population_sha256=summary['population_sha256'],full_targets=summary['full_targets'],supported_targets=summary['supported_targets'])
@@ -574,14 +576,14 @@ def _execute_cpu(run, tools, data, train, selection, encoding80, corpus):
     families = tuple((a.learner_id,a.seed_family) for a in assignments if a.role != 'final')
     partition = CalibrationPartition(run.plan.identity,learners,excluded,families)
     binding = PredictionBinding(final['checkpoint_sha256'],final['checkpoint_sha256'],
-        identity90['vocabulary_sha256'],run.plan.identity,identity_hash(run.bank.identity),
+        identity90['vocabulary_sha256'],run.plan.identity,run.bank.identity['item_bank_sha256'],
         reference_identity(reference_bank_v1(run.bank)),identity_hash(run.identity['native_evidence']['build_hashes']),
         identity_hash(run.bank.identity))
     targets = tuple(CalibrationTarget(p['learner_id'],str(p['source_row']),p['item_id'],p['history_sha256'],
         t['correct'],p['probability'],p['support_reason']) for p,t in zip(rows,truth))
     expected = tuple((t.learner_id,t.event_id,t.item_id,t.history_sha256) for t in targets)
     calibrator = fit_temperature(targets,binding=binding,partition=partition,expected_target_keys=expected,max_evaluations=200)
-    csha = run.json('calibration/calibrator.json',asdict(calibrator))
+    csha = run.json('calibration/calibrator.json',calibrator.to_payload())
     _require(calibrator.status == 'fitted_response_temperature', 'unsupported temperature; calibrated lifecycle cannot complete')
     calibrated = [dict(p,calibrated_probability=None if p['probability'] is None else
         calibrate_probability(p['probability'],calibration=calibrator,binding=binding)) for p in rows]

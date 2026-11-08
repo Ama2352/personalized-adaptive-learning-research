@@ -539,3 +539,8 @@ BackendsourceMethod24 absoluteownedbridge+initializer11fixed, pure01cap45rejecte
 ### 08/11 — Nghiệm thu kiểm worker confidence, chưa fit
 
 Lượt trước là tiến triển: đã đối chiếu đúng3PDF và chốt báo cáo theo bối cảnh. Lượt này kiểm trực tiếp terminal Method24pure02:21PASS/0fail/error/skip,37.260902643s/150; source5 trước=sau, không heavy imports/Popen từtest, env restored, owned cleanup/job0/handleclosed. Giữ pure01rejected37.502s/45 và7casejournal, không biến thànhPASS. Hai source fixes absolute-ownedlaunch/initializer11 được lưu trong bundle51outputs, hashcopytrước=sau. Actualsolver/NN/corpus0. Stagefitactive110/outer120 không đổi; runtime/ABI/request/realfit vẫn chưa nghiệm thu.
+
+
+### 08/11 — AKT/reference binding và object lifetime
+
+Sửa bankSHA đúng item_bank, calibrator.to_payload đúng strictloader. Kiểm36pure trước release2,804354100s/45, sau3del release36pure2,822563171s/45; không72unique. Schema JSON roundtrip→reference scorer thật84items/28concepts với synthetic backend, wrongbank/missingrecipe rejected. Weakrefs assert refit gone trước load, reloadpayload/optimizer gone trước predict và allmodels gone trướcTfit. KhôngTorch/NumPy/pandas/sklearn/SciPy/subprocess từtest; nguồn/env/ownedJob0 verified. Bundle42outputs; source19627a/tests3d19d8. Đây không actual NN/corpusfit/calibration research/RSSguarantee. Method24archive4fece2c51outputs+manifest rawGit verified.
