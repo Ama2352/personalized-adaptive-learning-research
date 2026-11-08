@@ -1,0 +1,313 @@
+{
+  "status": "DRAFT_FOR_PARENT_REVIEW_NOT_IMMUTABLE_BUNDLE",
+  "created_local_date": "2026-11-08",
+  "report": "research_tracking/reports/gkt_recurrence_specification_20261108.md",
+  "report_sha256": "cef8fcbb1c1b99c850a0069b42ff26a2dbce86449437a99fe2493abc6d00a3f1",
+  "source_policy": "Primary authors/publishers/arXiv and official library docs only; no unofficialGKT code used",
+  "sources": [
+    {
+      "id": "W19",
+      "role": "primary_GKT_workshop_manuscript",
+      "url": "https://rlgm.github.io/papers/70.pdf",
+      "anchors": [
+        "PDF pp2-3 §2.1-2.2 Eq1-2",
+        "PDF p7 AppendixB"
+      ],
+      "external_bytes_sha256": null,
+      "read_mode": "web_extracted_pdf_text",
+      "supports": [
+        "aggregate/message/EA/GRU macro pipeline",
+        "directed incoming/outgoing weighting",
+        "shared readout and node bias",
+        "unaryEA underspecification"
+      ],
+      "does_not_support": [
+        "unique unaryEA implementation",
+        "h0 choice",
+        "author checkpoint parity"
+      ]
+    },
+    {
+      "id": "ACCEPT",
+      "role": "primary_workshop_program",
+      "url": "https://rlgm.github.io/papers/",
+      "anchors": [
+        "ICLR2019 Workshop header",
+        "GKT poster listing"
+      ],
+      "external_bytes_sha256": null,
+      "supports": [
+        "workshop status, not maintrack claim"
+      ]
+    },
+    {
+      "id": "J21",
+      "role": "primary_GKT_journal_authors",
+      "url": "https://journals.sagepub.com/doi/pdf/10.3233/WEB-210458",
+      "html_url": "https://journals.sagepub.com/doi/10.3233/WEB-210458",
+      "anchors": [
+        "printed pp91-92 §3.1-3.3",
+        "printed pp95-96 §4.2.2 and4.3"
+      ],
+      "external_bytes_sha256": null,
+      "read_mode": "web_extracted_PDF16pages_and_HTML",
+      "supports": [
+        "answered/related nodes updated",
+        "target-only state readout",
+        "simultaneous-answer grouping",
+        "two-layer ELU/dropout/BN recipe description"
+      ],
+      "unresolved": [
+        "h0",
+        "exact unaryEA",
+        "BN axes/placement",
+        "GRU bias/reset details"
+      ]
+    },
+    {
+      "id": "JSAI19",
+      "role": "primary_same_GKT_authors_separate_revision",
+      "url": "https://www.jstage.jst.go.jp/article/pjsai/JSAI2019/0/JSAI2019_1Q3J203/_pdf/-char/en",
+      "anchors": [
+        "PDF p2 §3.1 Eq1 and following paragraph"
+      ],
+      "external_bytes_sha256": null,
+      "read_mode": "web_extracted_PDF4pages",
+      "supports": [
+        "revision-specific multianswer average+tanh",
+        "revision-specific bias omission in EA/GRU"
+      ],
+      "does_not_support": [
+        "importing its formula into2021 silently"
+      ]
+    },
+    {
+      "id": "DKVMN",
+      "role": "primary_referenced_erase_add_paper",
+      "url": "https://arxiv.org/html/1611.08108",
+      "version_url": "https://arxiv.org/abs/1611.08108",
+      "version": "v2 2017-02-17",
+      "anchors": [
+        "§3.2.3 Eq6-9"
+      ],
+      "external_bytes_sha256": null,
+      "supports": [
+        "memory/writeinput/writeweight erase-add algebra"
+      ],
+      "does_not_support": [
+        "GKT assignment M=v=m,w=1"
+      ]
+    },
+    {
+      "id": "CHO",
+      "role": "primary_referenced_GRU_paper",
+      "url": "https://arxiv.org/html/1406.1078v3",
+      "version": "v3 2014-09-03",
+      "anchors": [
+        "§2.3 Eq5-8"
+      ],
+      "external_bytes_sha256": null,
+      "supports": [
+        "literal reset-before equation",
+        "literal equations without biases"
+      ],
+      "does_not_support": [
+        "journalGKT author implementation uses this exact realization"
+      ]
+    },
+    {
+      "id": "TORCH27",
+      "role": "primary_library_documentation_not_GKT_authorcode",
+      "url": "https://docs.pytorch.org/docs/2.7/generated/torch.nn.GRUCell.html",
+      "anchors": [
+        "GRUCell equations and bias parameter"
+      ],
+      "external_bytes_sha256": null,
+      "supports": [
+        "PyTorch2.7 reset-after-hidden-affine formula differs from literalCho"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "C01",
+      "status": "source_supported",
+      "sources": [
+        "W19",
+        "J21"
+      ],
+      "claim_vi": "Macro pipeline và prediction/update indexing có đủ căn cứ để compose recurrent core."
+    },
+    {
+      "id": "C02",
+      "status": "not_identified_from_primary_sources",
+      "sources": [
+        "W19",
+        "J21",
+        "DKVMN"
+      ],
+      "claim_vi": "UnaryG_ea chưa định duy nhất cách gán memory/writeinput/writeweight."
+    },
+    {
+      "id": "C03",
+      "status": "source_supported_revision_boundary",
+      "sources": [
+        "JSAI19",
+        "J21"
+      ],
+      "claim_vi": "JSAI có multianswer/bias details khác; không trộn revisions."
+    },
+    {
+      "id": "C04",
+      "status": "repo_proposed_convention_NOT_author_fact",
+      "sources": [
+        "DKVMN",
+        "W19"
+      ],
+      "claim_vi": "EA unit-write specialization M_old=v=m,w=1 cần reviewer phê duyệt."
+    },
+    {
+      "id": "C05",
+      "status": "repo_proposed_source_literal_recipe_NOT_parity",
+      "sources": [
+        "CHO",
+        "TORCH27"
+      ],
+      "claim_vi": "Fixture chọn Cho reset-before bias-free; không coi GRUCellreset-after tương đương."
+    },
+    {
+      "id": "C06",
+      "status": "repo_operationalization",
+      "sources": [
+        "J21",
+        "W19"
+      ],
+      "claim_vi": "Mask answered hoặc incoming/outgoing nonzero áp sauGRU để cô lập state không support."
+    },
+    {
+      "id": "C07",
+      "status": "repo_proposed_fixture_deviation_NOT_journal_training_reproduction",
+      "sources": [
+        "J21"
+      ],
+      "claim_vi": "Zero h0, explicitMLPgeometry, normnone/dropout0; omitBN được khai báo và chưa áp benchmark."
+    },
+    {
+      "id": "C08",
+      "status": "engineering_plan_NOT_executed",
+      "sources": [
+        "W19",
+        "CHO",
+        "DKVMN"
+      ],
+      "claim_vi": "APIpredict/observe/sequence và known-answer numerical acceptance là đề nghị, chưa code/test trong researchtask."
+    },
+    {
+      "id": "C09",
+      "status": "scope_pending_S04_S05",
+      "local_sources": [
+        "docs/thesis_recovery/evidence/proposal.txt",
+        "docs/thesis_recovery/05_EXPERIMENT_MATRIX.md",
+        "docs/thesis_recovery/06_AKT_CGAKT_ARCHITECTURE_PLAN.md"
+      ],
+      "claim_vi": "Graph/node representation/capacity/history/training/allocation/calibration chưa adoption."
+    }
+  ],
+  "local_inputs": [
+    {
+      "path": "research_tracking/reports/gkt_source_and_core_plan_20261108.md",
+      "sha256": "3dcdd00714b1e310a27de5461ae9f6ae1237ecbbde685faf5aabf344119ab299",
+      "bytes": 14345
+    },
+    {
+      "path": "research_tracking/reports/gkt_source_and_core_plan_20261108.json",
+      "sha256": "bfbbcfb25b65fc150869028a4b077511c3aefa67bd8fec3ea2174a3e9a324169",
+      "bytes": 7835
+    },
+    {
+      "path": "research_tracking/reports/gkt_core_readiness_20261108.md",
+      "sha256": "4ee7d0251a3edc09e8fc57fa9fd227f9e6a6ee6aa8a07861993c72064f388802",
+      "bytes": 9248
+    },
+    {
+      "path": "src/knowledge_tracing/gkt/config.py",
+      "sha256": "8785a608e017ed4f6f77f8bd027ed3b3ee8a57d6e5b34bbb6d787acd9952c5d2",
+      "bytes": 2225
+    },
+    {
+      "path": "src/knowledge_tracing/gkt/core.py",
+      "sha256": "4663e25d158a08d344d2f5f85735d8db927f96e14199b5d16f40b8e32701b3e1",
+      "bytes": 8147
+    },
+    {
+      "path": "tests/gkt/test_core.py",
+      "sha256": "3897ff7b82d04a316b201894623b6c3b1f73f626ab280c6a178a354b6c958ab6",
+      "bytes": 11445
+    },
+    {
+      "path": "docs/thesis_recovery/evidence/proposal.txt",
+      "sha256": "a22de46c58b1b4e8dbcb7dd0b7140086f605c2dc3e07c7d9cc3c2638370710e0",
+      "bytes": 19087
+    },
+    {
+      "path": "docs/thesis_recovery/02_RESEARCH_TRACEABILITY.md",
+      "sha256": "a31a395f8dc549cdcc8543303bc361e2cfbb8566eb77b21de52889ffc8868db9",
+      "bytes": 5511
+    },
+    {
+      "path": "docs/thesis_recovery/05_EXPERIMENT_MATRIX.md",
+      "sha256": "635f5ea0ea8e069bdd3f9c2fa51763587c594d54ff4ae344612a595b1059dd0d",
+      "bytes": 11532
+    },
+    {
+      "path": "docs/thesis_recovery/06_AKT_CGAKT_ARCHITECTURE_PLAN.md",
+      "sha256": "5567e851211741ff5085260e92dfef0c6fd733f123683a4baafa723ed62e7d2c",
+      "bytes": 7569
+    }
+  ],
+  "search_calls": 3,
+  "queries_per_search_call": 4,
+  "queries": [
+    [
+      "\"Hiromi Nakagawa\" \"Graph-based Knowledge Tracing\" code erase add",
+      "\"WEB-210458\" erase add batch normalization",
+      "site:rlgm.github.io/papers/70.pdf G_ea",
+      "\"Graph-based Knowledge Tracing\" \"github\" \"Nakagawa\" official"
+    ],
+    [
+      "\"Nakagawa\" \"GKT\" \"github.com\" \"iwasawa\"",
+      "\"Graph-based knowledge tracing\" \"erase\" \"initial\"",
+      "\"WEB-210458\" \"supplement\" code",
+      "\"Hiromi Nakagawa\" knowledge tracing source code"
+    ],
+    [
+      "\"Graph-based Knowledge Tracing\" \"G_ea\" erase initialization",
+      "\"Hiromi Nakagawa\" github GKT code \"erase\"",
+      "\"Graph-based knowledge tracing\" \"supplementary\" \"2021\"",
+      "site:weblab.t.u-tokyo.ac.jp Nakagawa graph knowledge tracing github"
+    ]
+  ],
+  "limitations": {
+    "author_official_GKT_code_verified": false,
+    "external_raw_bytes_downloaded_or_hashed": false,
+    "visual_PDF_verification": false,
+    "search_exhaustive": false,
+    "supplement_endpoint": "https://journals.sagepub.com/doi/suppl/10.3233/WEB-210458",
+    "supplement_open_result": "not accessible viawebtool; not evidence absence",
+    "lab_url": "https://weblab.t.u-tokyo.ac.jp/en/news/2021-10-29/",
+    "lab_direct_open_result": "UnexpectedStatusCode; search result only, not gate evidence",
+    "third_party_jhljx_code_used": false
+  },
+  "proposal": {
+    "recipe_id": "gkt_static_recurrent_convention_v1",
+    "ea": "M_old=m,v=m,w=1; m*(1-sigmoid(W_em+b_e))+tanh(W_am+b_a)",
+    "gru": "literalCho2014 reset-before,bias-free",
+    "h0": "zeros or callercontinuationstate",
+    "MLP": "twoLinear+ELUeach,explicitwidth,biasTrue",
+    "normalization": "none; declared omissionofjournalBN",
+    "dropout_fixture": 0,
+    "scientific_adoption": false,
+    "requires_parent_recipe_review_before_code": true
+  },
+  "model_test_data_GPU_install_Git_write_calls": 0
+}

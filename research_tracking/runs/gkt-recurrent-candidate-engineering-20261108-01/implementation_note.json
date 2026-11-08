@@ -1,0 +1,23 @@
+{
+  "status": "APPROVED_ENGINEERING_CANDIDATE_INTERFACE_BEFORE_CODE",
+  "recipe_id": "gkt_static_recurrent_convention_v1",
+  "scientific_adoption": false,
+  "author_parity": false,
+  "ownership": ["src/knowledge_tracing/gkt/recurrent.py", "tests/gkt/test_recurrent.py"],
+  "class": "GKTStaticRecurrentCandidate(torch.nn.Module)",
+  "constructor": "(config:GKTKernelConfig, binding:GKTBinding, adjacency:Tensor, *, recipe_id, mlp_hidden_dim, normalization, dropout, initial_state_policy, gru_variant)",
+  "required_recipe_values": {"normalization": "none", "dropout": 0, "initial_state_policy": "zeros", "gru_variant": "cho2014_reset_before_bias_free", "message_dim": "equal state_dim"},
+  "network": "Registered concept/interaction Embeddings; three independent Linear-ELU-Linear-ELU MLPs with explicit width and biases; EA two affine gates; six bias-free ChoGRU affines; shared readout weight/per-node bias; fixed adjacency buffer plus existing StaticGKTKernel.",
+  "erase_add": "m*(1-sigmoid(W_e*m+b_e))+tanh(W_a*m+b_a); declared DKVMN specialization M_old=v=m,w=1, NOT author fact",
+  "GRU": "r=sigmoid(W_r*u+U_r*h); z=sigmoid(W_z*u+U_z*h); n=tanh(W_n*u+U_n*(r*h)); g=z*h+(1-z)*n",
+  "sparse_update": "where(event_valid AND (answered OR incoming/outgoing nonzero support),g,old_h), AFTER GRU",
+  "state": "GKTRecurrentState(values[B,N,H],history_counts[B],binding,graph_sha256,recipe_sha256); caller tensors never mutated, no implicit learner cache",
+  "API": ["initial_state(batch_size,*,binding,graph_sha256)", "predict(state,query_ids,*,binding,graph_sha256)", "observe(state,answered_ids,responses,event_valid_mask,*,binding,graph_sha256)", "sequence(query_ids[B,T],responses[B,T],valid_mask[B,T],*,initial_state,binding,graph_sha256)", "forward delegates sequence"],
+  "causality": "sequence predicts query_t from H_t before observe(i_t,r_t); output masks padded scores to finite0 and preserves state; unknown active IDs/multiconcept reject; no OOV or calibration adoption",
+  "evidence_role": "gkt_recurrent_engineering_convention_unfitted",
+  "tests": "Hand-calculated EA and non-diagonal-reset GRU; asymmetric directions; sparse mask positivecontrol; sequence==step/prefix/current-future answer invariance; two-learner isolation/permutation; padding/empty sequence; immutable inputs; binding/domain/node/graph mismatches; every registered parameter path finite nonzero gradients; 0 optimizer.",
+  "test_fixture_bounds": {"max_learners": 2, "max_steps": 12, "max_nodes": 4, "CPU_only": true, "optimizer_steps": 0, "cumulative_suite_timeout_seconds": 120, "OMP_MKL_OPENBLAS_threads": 2},
+  "no_existing_source_edits": true,
+  "no_trainer_fitted_adapter_graph_fit_dataset_IO": true,
+  "archive_only_after_independent_review": true
+}

@@ -1,0 +1,26 @@
+{
+  "status": "PASS_SCOPED_ENGINEERING_CANDIDATE_ONLY",
+  "reviewer": "/root/rq12_evidence_synthesis",
+  "review_mode": "Read-only source and actual receipts; reviewer did not execute tests or edit files.",
+  "source_sha256": {
+    "src/knowledge_tracing/gkt/recurrent.py": "510195d71c1ddb743f747e78d7d874c04bb809931c5ec24ae6fe907fe53ec072",
+    "tests/gkt/test_recurrent.py": "bb173f7dd9b7b8cf14dbe00dd5fc75097dc87c9f5a794d90e29fd670d26afdce"
+  },
+  "actual_final_receipt": {
+    "run_json": "artifacts/akt/local-tests/parallel-gkt-recurrent-20261108-03/run.json",
+    "run_json_sha256": "6aff6000c47d450f486c657555cd109af3ea5e3b18c6276fa6f669e9acebe2c1",
+    "tests": 88,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "junit_seconds": 5.177,
+    "controller_seconds": 6.553360799996881,
+    "cumulative_controller_seconds": 21.444324800017057,
+    "optimizer_steps": 0,
+    "current_before_after_source_hashes_verified": 8
+  },
+  "finding_vi": "P2 static: Dense validation trong frozen kernel dùng ambient device; candidate kernel constructor ngoài CPU context, regression02 chỉ Static. Không có actual fail-before invocation.",
+  "resolution_vi": "Candidate-only constructor được bọc torch.device(cpu); regression parametrized Static/Dense với ambient meta. Frozen core/config không sửa. Independent final source/receipt review PASS.",
+  "remaining_blockers_in_reviewed_engineering_scope": [],
+  "limits_vi": "Không exact-author parity, trainer/selected-fit/learned graph/fitted adapter/final baseline/S05 approval. Giữ86/87/88actualPASS histories và staticfinding, không fabricateRED."
+}
