@@ -3482,10 +3482,11 @@
       "estimated_effort": "Finite next engineering/diagnostic batch; thời gian chưa đo không là forecast",
       "compute_cost_category": "local CPU",
       "authorization_requirements": "Safe engineering/read-only; corpus/fit dispatch phải freeze exact counts/caps trước chạy; no paid/fullCV/Holdout",
-      "status": "PROFILE_FROZEN_DRIVER_VERIFICATION_PENDING",
-      "blockers": [
-        "Driver mock tests not accepted: trial01 MAX_PATH setup errors; source/driver/request freeze before native"
-      ]
+      "status": "COMPLETED_FIRST_PILOT_CORPUS_NOT_MODEL_FIT",
+      "blockers": [],
+      "completion_commit": "1990d4c",
+      "actual_teacher_calls": 12600,
+      "canonical_files": 17
     },
     {
       "id": "RQDIAG07",
@@ -3650,13 +3651,15 @@
       "estimated_effort": "Finite next engineering/diagnostic batch; thời gian chưa đo không là forecast",
       "compute_cost_category": "local CPU",
       "authorization_requirements": "Local engineering theo user; exact source/workload/resource dispatch review trước native/neural execution, no Modal/fullCV/Holdout.",
-      "status": "NATIVE_REPLAY_ACCEPTED_ANALYSIS_PENDING",
+      "status": "COMPLETED_NATIVE_AND_CACHED_ANALYSIS",
       "blockers": [],
       "completed_cases": 108,
       "exact_controls": 54,
       "cumulative_seconds": 6.097641301761936,
       "teacher_calls": 0,
-      "new_independent_N": 0
+      "new_independent_N": 0,
+      "completion_commit": "8f95fd6",
+      "bundle_outputs": 45
     },
     {
       "id": "A0LIFE01",
@@ -3678,8 +3681,10 @@
       ],
       "required_inputs": "Source/recipe/protocol/budget pins; không Holdout hoặc historical artifact mutation",
       "files_components": [
-        "docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md",
-        "src/knowledge_tracing/akt/training.py"
+        "src/knowledge_tracing/akt/research_runner.py",
+        "src/knowledge_tracing/akt/research_lifecycle.py",
+        "tests/akt/test_research_runner.py",
+        "tests/akt/test_research_lifecycle.py"
       ],
       "implementation_objective": "BATCH3B consume accepted guard/publiccorpus trước lazyTorch; reuse native train_epoch/EarlyStopping/checkpoint; selected80→rawselection→freeze→freshrefit90→calibration10 exports.",
       "acceptance_criteria": "Phase-limited inputs không calibration optimizer/epochselection, global cumulative budget/no reset, fresh refit optimizer, complete fulltarget/null/provenance/checkpoint/calibrator contracts. Pure verification trước actual neural cap/Gate/runtime authorization riêng. Không mainwinner claim.",
@@ -3691,7 +3696,7 @@
       "estimated_effort": "Finite next engineering/diagnostic batch; thời gian chưa đo không là forecast",
       "compute_cost_category": "local CPU",
       "authorization_requirements": "Local engineering theo user; exact source/workload/resource dispatch review trước native/neural execution, no Modal/fullCV/Holdout.",
-      "status": "PARTIAL_LEDGER_VERIFIED_RUNNER_NOT_IMPLEMENTED",
+      "status": "RUNNER_SOURCE_READY_REVIEW_TEST_PENDING",
       "blockers": [],
       "ledger_commit": "9964dbb",
       "ledger_tests": 45

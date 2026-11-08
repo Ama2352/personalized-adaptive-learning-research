@@ -491,3 +491,12 @@ Ledger9964dbb45purePASS/26outputs; ownedJob02e0b786tests/31outputs; reader420ce3
 History02 root source-reviewed/pinned nativeONE:108policies/4140priorpredict+update/108targetpredict+preview,54fullcontrols exact beforetruncatedphase. Outer2.5932703018s+prior3.504371=6.0976413018/60;actualJob0/handlesclosed;0teacher/NN/optimizer/newN. Analysispending; không causal learning benefit. Root raw verifier checked108ids,54controls,11outputSHA andsampledRSS124633088B. Oldfailurebundle unchanged.
 
 Costerratumc0a0db8:9conditions×2optimizationphases×2env=36nominal, no measuredruntime/cost. RQ2abilitydrafta554662 independentresidual×ability control, noexecution. Driver09c909 sourcepeerreviewPASS aftermemory+staticallowlist+freshdestination fixes; agent prematurelyranpuretrial01 beforeparentreview:19setupMAX_PATHerrors/0bodies/1.2762709s, notproductionbug. Preservetrial01; root-only executions reaffirmed; shortfixturepaths/correct finally andprocessaudit before next reviewedattempt.0actualcorpus/Modal/Holdout/export.
+
+
+### 08/11 — Corpus và hai chẩn đoán đã đóng; tổ chức lại báo cáo theo yêu cầu user
+
+History8f95fd6:45outputs; worker509c955:27outputs; corpus1990d4c:48outputs và17canonicalfiles; ability8b6487c:70outputs. Raw Git integrity đã kiểm; counter2551→2741chỉ kiểm bytes, không N hay completion%. Corpus60learners/12600events không NNfit. Ability36worlds/4320events/3reusedblocks, mean interaction low−0.007631/mid−0.035867/high0; highzero design-known, không graphbenefit theorem. Báo cáo nền revision6 đã có52inputs/521outputs/30links.
+
+User yêu cầu báo cáo dễ đọc, riêng theo ngày, rõ đã/chưa xử lý và ít nhất1Colab notebook số liệu/biểu đồ. Tạo research_tracking/supervisor_reports/2026-11-08/01_tien_do, bản đọc đã rebase links ghi rõ transformation/hash; không di chuyển hay sửa source/history. Notebook đang chuẩn bị bởi agent, chờ root QA. A0 runner fixes+confidence source ready chưa executed/accepted; không Colab/Modal/Holdout/fullCV.
+
+Gói GVHD mới:17cặp nguồn/bản sao SHA kiểm,158links kiểm trước bổ sung2link biên bản; notebook16cells/8executable/4SVG/22inputs/40pointers. Agent chạy stdlib2passes cachedexact, root chạy độc lập1pass+source/pointer/XMLSVG checks; không actualColab/Jupyter/visualQA hoặc modelrun. Root sửa3ý theo peerreview: không causal-funnel, điều kiện retention đầy đủ, runtime chưa đo chỉscope fullresearchworkload. Root notebook cũ nguyênSHA.
