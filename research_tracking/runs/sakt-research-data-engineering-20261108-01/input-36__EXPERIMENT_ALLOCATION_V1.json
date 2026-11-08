@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "kind": "PLANNED_NEURAL_ALLOCATION_NOT_RUN_AUTHORIZATION",
+  "protocol_sha256": "c0d6e8a698d7d5083986e9848898a643390fc5e76100fc0b8c6286c306e6bea6",
+  "environments": ["grade10_simulator", "junyi_development_outer_fold4"],
+  "conditions_per_environment": [
+    {"id": "A0", "model": "AKT_NonRasch", "estimator_graph": "disabled"},
+    {"id": "A1_EXPERT", "model": "fixed_graph_AKT", "estimator_graph": "expert"},
+    {"id": "A1_LEARNED", "model": "fixed_graph_AKT", "estimator_graph": "learned"},
+    {"id": "A2_EXPERT", "model": "confidence_AKT", "estimator_graph": "expert"},
+    {"id": "A2_LEARNED", "model": "confidence_AKT", "estimator_graph": "learned"},
+    {"id": "A3_EXPERT", "model": "gated_confidence_AKT", "estimator_graph": "expert"},
+    {"id": "A3_LEARNED", "model": "gated_confidence_AKT", "estimator_graph": "learned"},
+    {"id": "SAKT", "model": "SAKT", "estimator_graph": "disabled"},
+    {"id": "GKT", "model": "static_recurrent_GKT_candidate_v1", "estimator_graph": "expert"}
+  ],
+  "neural_optimization_stages_per_condition": ["selected_fit80", "fresh_refit90"],
+  "post_refit_stages_not_neural_optimization": ["calibration_prediction10", "temperature_fit", "evaluation_export"],
+  "nominal_complete_matrix": {
+    "conditions_per_environment": 9,
+    "optimization_stages_per_environment": 18,
+    "optimization_stages_both_environments": 36,
+    "training_seeds": [42],
+    "accepted_actual_phases_from_this_file": 0
+  },
+  "main_selection_order": "raw-selection for all frozen candidates -> freeze system selector -> any main refit/calibration",
+  "a0_pilot_is_main_system_winner": false,
+  "cross_environment_checkpoint_reuse": false,
+  "a3_disabled_equals_independently_trained_a0": false,
+  "excluded_from_nominal_neural_count": ["BKT", "GAM", "Graph-GAM", "graph/confidence surrogate", "bootstrap", "noise inference", "closed-loop/reference inference", "smoke/pilot/recovery/failures"],
+  "runtime_seconds": null,
+  "cost_usd": null,
+  "paid_execution_authorized": false,
+  "full_cv_authorized": false,
+  "holdout_access_authorized": false,
+  "scope_vi": "Đủ required models theo allocation21; đây là phép đếm dự toán, không nghiệm thu hoặc giảm phạm vi. Chi phí chưa đo không được coi0."
+}

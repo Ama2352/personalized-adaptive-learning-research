@@ -564,3 +564,8 @@ Theo yêu cầu người đọc, đổi notebook→HTML tĩnh50.207B,8fig/5table
 ### 08/11 — Chốt canonical Log Loss và publicsolver ABI
 
 Lượt goaltrước tiến triển: đã xuấtHTML31ce8ff vàsửaalltextcollisions;8publicationrawGitfilesverified. Metricfix numpyfloat64epsilon13actualDuckDB/sklearnfixturePASS7.78717s/45, observedpeak196890624B/freeRAMend1644703744B/job0; bundle42outputs giữfirstcollectioncontrollerfailure (gethostname quá rộng) vàpartialXML. Không rerun bảng lịch sử. BướcABIpublicsolver: smoke01rejected1.4078s/0fits vì NumPyWindowsplatform.machine gọi cmdver bịdeny. Newreviewedallocation30s actualWindowsmetadata (khôngfake) trongownedJob rồifitdeny:2fits/16hàngtựdựng accepted4.4777349s; khớporigin/profile/threads1. Cầnfix metadata bootstrap ởproductionMethod24 trước nativecorpusfit, không gọiABItoy nhưactual2352fit. RAM2.84879GB<existing4GiBfullGatefloor, asyncuserresourcequestionpending; tiếp tụcSAKTdata/graphdraftđộc lập. RootreviewSAKTretainsfullcorpus trongtrainview, giaofixInitVar trướctests.0Modal/NNresearch/Holdout/fullCV.
+
+
+## 08/11 — cầu nối SAKT và kiểm bootstrap Windows
+
+SAKT data20PASS/3,282903s trong60s; native public exports3PASS/6,049573s trong30s, actual2constructors/8forwards,0optimizer/corpus. View dùng InitVar để không giữ corpus đầy đủ. Đóng bundle52outputs với raw receipts và erratum, chưa fitted SAKT/RQ completion. Metric commit8cc0cc1 đã đối chiếu42rawGitoutputs+2sourcefiles. Method24 bootstrap43purePASS/83,446560s trong150s,0fit; review độc lập phát hiện latecounter cần kiểm lại sau runtime snapshot nên chưa native dispatch. User sẽ giải phóng RAM; fullGate vẫn giữ4GiB floor, chưa chi Modal.

@@ -1,0 +1,31 @@
+{
+  "status": "FROZEN_PHASE_ISOLATION_FIX_PENDING_ROOT_TEST",
+  "files": [
+    {
+      "path": "src/knowledge_tracing/sakt/__init__.py",
+      "sha256": "6b17674fb5d383be2823cfce897e447a523114d4c45a87d0c10291af7278ef0e",
+      "snapshot": "sakt_init.phase-isolated.py",
+      "sha256_after_copy": "6b17674fb5d383be2823cfce897e447a523114d4c45a87d0c10291af7278ef0e",
+      "bytes": 681
+    },
+    {
+      "path": "src/knowledge_tracing/sakt/research_data.py",
+      "sha256": "da64bc5bc4abb380c8d57fff4632afff0e88820c5533beeb2799089538b8c574",
+      "snapshot": "research_data.phase-isolated.py",
+      "sha256_after_copy": "da64bc5bc4abb380c8d57fff4632afff0e88820c5533beeb2799089538b8c574",
+      "bytes": 10877
+    },
+    {
+      "path": "tests/sakt/test_research_data.py",
+      "sha256": "005b531d7bc163329e4c8939bd787b046146a48691e9d0dbee58b0ee4933ccc7",
+      "snapshot": "test_research_data.phase-isolated.py",
+      "sha256_after_copy": "005b531d7bc163329e4c8939bd787b046146a48691e9d0dbee58b0ee4933ccc7",
+      "bytes": 17538
+    }
+  ],
+  "prechange_inventory": "pre-phase-isolation-fix01/inventory.json",
+  "prechange_inventory_sha256": "4ffb15ad514e1c77baddb8b26d70a8cbbda8ae69c5b889e89f7d7581e14a084c",
+  "expected_cases_by_static_enumeration": 20,
+  "actual_executions": 0,
+  "scope_vi": "Corpus chỉ InitVar; view giữ hash metadata+read limits và shards đúng phase, không giữ labels roles khác. OOV available theo nominal pre-barrier equation target_block1; source seal là consistency, không attestation bytes trên disk hay fitted readiness."
+}
