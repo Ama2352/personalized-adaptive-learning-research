@@ -1,5 +1,7 @@
 # Tiến độ nghiên cứu
 
+**Consumer confidence09/11:** [66purePASS và actual31typed scores](reports/edge_confidence_artifact_readiness_20261109.md) đã nghiệm thu; giữ nguyên hai lượt đọc thất bại, không sửa producer/artifact/recipe. Chưa Graph-AKT/CG-AKT fitted; fullGate current-source còn chờ collection và execution riêng.
+
 **Bổ sung09/11:** [SAKT epoch/prediction bridge](reports/sakt_research_epoch_readiness_20261109.md) đã22PASS trên fixtures; chưa full corpus/profile/checkpoint nghiên cứu. [Cached RQ1cross-ready](reports/rq1_cross_ready_membership_20261109.md) đã đóng bundle32outputs/1.080cặp:55Rđổi-previewgiữ,17previewđổi-M/Rgiữ,5jointchanges. Bản GVHD08/11 vẫn là snapshottrước bổ sung này; bản09/11 đang chuẩn bị. Đây không tăng independentN hoặc hoàn tất RQ.
 
 **Cập nhật hiện hành08/11:** [Báo cáo GVHD theo diễn tiến nghiên cứu](supervisor_reports/2026-11-08/01_tien_do/BAO_CAO.md) và [HTML độc lập](supervisor_reports/2026-11-08/01_tien_do/BAO_CAO_NGHIEN_CUU.html), commit `8fcbc77`. Ngữ cảnh hai paper → bảng đã làm/chưa chứng minh → bốn chặng điều tra → phần còn thiếu. Đã kiểm desktop/mobile, không còn chồng nhãn; browser preview đã đóng.

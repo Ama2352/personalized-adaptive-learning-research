@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**Consumer confidence09/11:** [đã đọc artifact thực](edge_confidence_artifact_readiness_20261109.md),66purePASS và31typed scores read-only; không fit lại hoặc hiệu quả CG-AKT.
+
 **RQ1 bổ sung09/11:** [đề xuất có nằm trong tập sẵn sàng của cấu hình kia không?](rq1_cross_ready_membership_20261109.md), phân tích đủ1.080cặp đã lưu:55ready-change/preview-giữ,17preview-change/M–R-giữ,5jointchanges. RecordedR không capturedC/B; chưa causal hoặc score-only.
 
 **SAKT09/11:** [epoch/prediction bridge đã kiểm](sakt_research_epoch_readiness_20261109.md),22PASS trên dữ liệu tự dựng; chưa baseline fitted, checkpoint/recovery hoặc profile nghiên cứu.
