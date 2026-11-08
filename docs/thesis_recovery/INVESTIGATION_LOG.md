@@ -574,3 +574,8 @@ SAKT data20PASS/3,282903s trong60s; native public exports3PASS/6,049573s trong30
 ## 08/11 — Method24 actualTRAIN đã hoàn tất, chưa neuralCG-AKT
 
 Sau45purePASS/87,961597s và exactrequestreview, ROOT chạy một operationCPU110active/120outer trênTRAIN48×210. TerminalRC0/45,1694439s; actual2352solverfits,272160OOFrows,756supported summaries và31edgeDAG. Peak263442432B/minfree1599983616B, ownedcleanupaccepted,0NN/Modal. Bundle113outputs nhỏ giữ failure/revisions và14nativeSHA/sizepointers;5exports lớn69MBtổngnative giữ nguyên. Confidence không P(edge true), chưaoraclevalidation/RQ3benefit. SAKT8082e04 rawGit52outputs+manifest+3sources verified. HTML viết lại theo diễn tiến vàprogressupfront; browserpreviewđóng sauQA, không đểtabtreo.
+
+
+## 08/11 — báo cáo theo diễn tiến nghiên cứu
+
+Xuất bản lại đúng2files: ngữ cảnhPaper1/2→bảngđãlàm/chưachứngminh→4chặng kiểmgiảđịnh/táchtácđộng/điềukiện/chuẩnbịgiảipháp→phầncònthiếu. Giữ byteexact8SVG đã sửa overlap và5bảngsốliệu cũ; thêm bảngtiếnđộ, đưa chi tiếtbaseline vào disclosure. Bổ sung actualMethod24 cùnggiớihạn confidencekhôngP(edgetrue). Independentreview sửa diễn giải GA−B1 vànguồnfootprinttáidựng. BrowserQA1365/390:0collisions/overflow,anchorsvalid,0externalassets/hash; đóngbrowserxong. Không trainingnew đểviếtbáocáo. Method24bbd7708 rawGit113outputs+manifestverified.
