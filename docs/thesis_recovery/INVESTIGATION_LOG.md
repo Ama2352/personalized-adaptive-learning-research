@@ -446,3 +446,10 @@ RESDATA01 76PASS(afeaa72), CALIB01 39PASS(b4cd8d0), CTRL01 36PASS(3548f6d); rawG
 User yêu cầu tiếp tục RQ và duy trì report để trao đổi GVHD. Đã cập nhật cùng BAO_CAO_TIEN_DO_GVHD_20261108.md/.json revision2; trước sửa xác nhận exact Git e4a44e9 cho cả hai bytes, giữ local backups. Report kiểm16inputs/18links/203bundleoutputs, không gửi ra ngoài. Notebook commit99e2c24 có outputs7cells/14claims/104pointers; integrity3RED→12GREEN và regenerated cùng7outputs, không kernel/visualQA hoặc plotpublication. Hai bundle35outputs rawGitverified.
 
 Reference boundaryfa05b6f67PASS/4RED giữ nguyên; AKT-data149279125PASS/0Torch; collector5caffbd45mockPASS và actualnative12attempts/returns/1,3233694s≤30 (roles8/2/2, missing76/82/82items), chưa researchcorpusready. Thêm112rawGitoutputs của3batch và35notebookoutputs, tổngcounter2265bao gồm91batchtrước; counterchỉintegrity, khôngN/tiếnđộRQ. Next codeguardresearch/firstcorpusfreeze và RQ2source-formulareadoutcounterexample. Colabexportvẫnchờpermissioncụthể;0Modal/fullCV/Holdout.
+
+
+### 08/11 — RQ2 metric-specific retention counterexample và báo cáo revision3
+
+Một fixed28-statepair theo công thức Paper2 cho softgainB>A tạiT nhưngA>B sau14ngày; netthetagain giữB>A/commonfactor, hardtie→A>Bkhôngstrictreversal. Khôngtrajectory/teacher/model/RNG/search/graphbenefit hoặc reachablepolicyclaim. C08/bảnthảoC01–C14 giữ nguyên. Agentonecalculation0,1298041s≤10; parentmathrecheck+18rawGitoutputs746c374verified. Báo cáoGVHDcùngfile cậpnhậtrevision3/19sources/19links/221bundleoutputs; giữ exact6909770revision2 trongGit vàbackup. NotebookvẫnC01–C14snapshot, kếtquảmới ởsupplementreport.
+
+Clarify firstA0lifecycle làsingle-candidatepilot; mainmatrix cầnallrawselectioncandidates→systemselectorfreeze→anyrefit/calibration. Không lấy A0pilotwinner làmfinalsystemselection. Corpusguard/schema cònđangcode, no fullfit/GPU/Modal/Holdout.

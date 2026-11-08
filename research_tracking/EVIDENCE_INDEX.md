@@ -1,5 +1,7 @@
 # Chỉ mục bằng chứng
 
+**RQ2 source-formula diagnostic:** [retention readouts](reports/rq2_retention_metric_separation_20261108.md) / [bundle18outputs](runs/rq2-retention-readout-separation-20261108-01/README.md), rawGit746c374 đã kiểm. Một constructed pair,0teacher/model/trajectory, không independent learner N.
+
 **Mốc hiện hành:** [báo cáo GVHD](reports/BAO_CAO_TIEN_DO_GVHD_20261108.md) và [notebook cached evidence](../notebooks/thesis_evidence_report.ipynb). Collector45mock+12native smoke (chưa corpus-ready), AKT research-data25pure và reference guard67targeted có bundle/source riêng; không thay các snapshot lịch sử hoặc báo RQ hoàn tất.
 
 

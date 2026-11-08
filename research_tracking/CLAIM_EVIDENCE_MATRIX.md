@@ -1,5 +1,7 @@
 # Ma trận claim–evidence
 
+**RQ2/trap retention mới:** [readout separation](reports/rq2_retention_metric_separation_20261108.md), commit746c374, chứng minh khả năng soft-ranking reversal ở fixed constructed states; C08 net-theta identity giữ nguyên. Không reachablepolicy/graphbenefit/RQcomplete.
+
 | Claim | Claim/RQ | Experiment | Evidence | Scope/verification | Diễn giải được phép | Không được kết luận |
 |---|---|---|---|---|---|---|
 | CLM-001 | BKT predictive baseline trên Junyi Dev | EXP-BKT-CV-20261015 | E-002, E-003, E-006 | 5-fold Development; VERIFIED | Mean-of-fold AUC .7834134107927653, LL .3756074974398662, Brier .11510534239887318, ECE .0022408926425045916, Acc .8474159098322505. | Không suy ra mastery/policy effect hoặc ngoài protocol. |

@@ -3345,6 +3345,168 @@
       "manifest_sha256": "bb53649474ad5ec3b2d782535a49bff92fc9a8a7417f4678bcf6c4f18d4eb9c5",
       "optimizer_steps": 0,
       "new_research_effect_estimates": 0
+    },
+    {
+      "id": "RQDIAG06",
+      "research_objective": "Phân biệt redundancy của net-theta retention và nonlinear soft/hard mastery bằng fixed counterexample",
+      "rq": [
+        "RQ2"
+      ],
+      "workstream": "research",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RQDIAG05"
+      ],
+      "required_inputs": "Source/recipe/protocol/budget pins; không Holdout hoặc historical artifact mutation",
+      "files_components": [
+        "research_tracking/reports/rq2_retention_metric_separation_20261108.md",
+        "research_tracking/runs/rq2-retention-readout-separation-20261108-01/manifest.json"
+      ],
+      "implementation_objective": "Phân biệt redundancy của net-theta retention và nonlinear soft/hard mastery bằng fixed counterexample",
+      "acceptance_criteria": "Source-formula pins, fixed vectors/raw readouts/controls,18outputs SHA và scope không reachablepolicy/causalbenefit",
+      "verification_steps": "Source-level review và bounded local checks đúng scope; no paid launch",
+      "required_artifacts": [
+        "research_tracking/reports/rq2_retention_metric_separation_20261108.md",
+        "research_tracking/runs/rq2-retention-readout-separation-20261108-01/manifest.json"
+      ],
+      "estimated_effort": "Finite next engineering/diagnostic batch; thời gian chưa đo không là forecast",
+      "compute_cost_category": "local CPU",
+      "authorization_requirements": "Safe engineering/read-only; corpus/fit dispatch phải freeze exact counts/caps trước chạy; no paid/fullCV/Holdout",
+      "status": "COMPLETED_DIAGNOSTIC_NOT_RQ_COMPLETE",
+      "blockers": [],
+      "completion_commit": "746c374",
+      "verified_bundle_outputs": 18,
+      "constructed_state_pairs": 1,
+      "teacher_model_trajectory_calls": 0,
+      "source_formula_counterexample": true,
+      "not_RQ_complete": true
+    },
+    {
+      "id": "RESAUTH01",
+      "research_objective": "Explicit A0 simulator-research phase và input/runtime/resource authorization trước model allocation",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "research",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "AKTDATA01",
+        "RESCOL01"
+      ],
+      "required_inputs": "Source/recipe/protocol/budget pins; không Holdout hoặc historical artifact mutation",
+      "files_components": [
+        "src/knowledge_tracing/akt/config.py",
+        "src/knowledge_tracing/akt/research_execution.py"
+      ],
+      "implementation_objective": "Explicit A0 simulator-research phase và input/runtime/resource authorization trước model allocation",
+      "acceptance_criteria": "Parent-reviewed source/contract, meaningful bounded verification, durable receipts; không fake research-ready/GPU/approval",
+      "verification_steps": "Source-level review và bounded local checks đúng scope; no paid launch",
+      "required_artifacts": [
+        "src/knowledge_tracing/akt/config.py",
+        "src/knowledge_tracing/akt/research_execution.py"
+      ],
+      "estimated_effort": "Finite next engineering/diagnostic batch; thời gian chưa đo không là forecast",
+      "compute_cost_category": "local CPU",
+      "authorization_requirements": "Safe engineering/read-only; corpus/fit dispatch phải freeze exact counts/caps trước chạy; no paid/fullCV/Holdout",
+      "status": "IN_PROGRESS",
+      "blockers": []
+    },
+    {
+      "id": "CORPUSIO01",
+      "research_objective": "Publisher reusable corpus đúng schema guard, exclusive output và DONE-last; oracle tách model inputs",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "research",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RESCOL01"
+      ],
+      "required_inputs": "Source/recipe/protocol/budget pins; không Holdout hoặc historical artifact mutation",
+      "files_components": [
+        "artifacts/simulator/corpora/",
+        "src/knowledge_tracing/simulator_research_collection.py"
+      ],
+      "implementation_objective": "Publisher reusable corpus đúng schema guard, exclusive output và DONE-last; oracle tách model inputs",
+      "acceptance_criteria": "Parent-reviewed source/contract, meaningful bounded verification, durable receipts; không fake research-ready/GPU/approval",
+      "verification_steps": "Source-level review và bounded local checks đúng scope; no paid launch",
+      "required_artifacts": [
+        "artifacts/simulator/corpora/",
+        "src/knowledge_tracing/simulator_research_collection.py"
+      ],
+      "estimated_effort": "Finite next engineering/diagnostic batch; thời gian chưa đo không là forecast",
+      "compute_cost_category": "local CPU",
+      "authorization_requirements": "Safe engineering/read-only; corpus/fit dispatch phải freeze exact counts/caps trước chạy; no paid/fullCV/Holdout",
+      "status": "IN_PROGRESS",
+      "blockers": []
+    },
+    {
+      "id": "RESCORPUS01",
+      "research_objective": "Freeze first development corpus60learners48/6/6,210events/learner và exact resource/input/output contract trước dispatch",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "research",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "CORPUSIO01"
+      ],
+      "required_inputs": "Source/recipe/protocol/budget pins; không Holdout hoặc historical artifact mutation",
+      "files_components": [
+        "artifacts/simulator/corpora/",
+        "experiments/akt/configs/"
+      ],
+      "implementation_objective": "Freeze first development corpus60learners48/6/6,210events/learner và exact resource/input/output contract trước dispatch",
+      "acceptance_criteria": "Parent-reviewed source/contract, meaningful bounded verification, durable receipts; không fake research-ready/GPU/approval",
+      "verification_steps": "Source-level review và bounded local checks đúng scope; no paid launch",
+      "required_artifacts": [
+        "artifacts/simulator/corpora/",
+        "experiments/akt/configs/"
+      ],
+      "estimated_effort": "Finite next engineering/diagnostic batch; thời gian chưa đo không là forecast",
+      "compute_cost_category": "local CPU",
+      "authorization_requirements": "Safe engineering/read-only; corpus/fit dispatch phải freeze exact counts/caps trước chạy; no paid/fullCV/Holdout",
+      "status": "PLANNED",
+      "blockers": []
+    },
+    {
+      "id": "RQDIAG07",
+      "research_objective": "Kiểm khả năng conditional full-vs-empty graph-package contrast từ cached shared-stream artifacts; chưa chạy phân tích mới",
+      "rq": [
+        "RQ1"
+      ],
+      "workstream": "research",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RQDIAG04",
+        "RQDIAG05"
+      ],
+      "required_inputs": "Source/recipe/protocol/budget pins; không Holdout hoặc historical artifact mutation",
+      "files_components": [
+        "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/",
+        "src/knowledge_tracing/paper2_reference.py"
+      ],
+      "implementation_objective": "Kiểm khả năng conditional full-vs-empty graph-package contrast từ cached shared-stream artifacts; chưa chạy phân tích mới",
+      "acceptance_criteria": "Parent-reviewed source/contract, meaningful bounded verification, durable receipts; không fake research-ready/GPU/approval",
+      "verification_steps": "Source-level review và bounded local checks đúng scope; no paid launch",
+      "required_artifacts": [
+        "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/",
+        "src/knowledge_tracing/paper2_reference.py"
+      ],
+      "estimated_effort": "Finite next engineering/diagnostic batch; thời gian chưa đo không là forecast",
+      "compute_cost_category": "local CPU",
+      "authorization_requirements": "Safe engineering/read-only; corpus/fit dispatch phải freeze exact counts/caps trước chạy; no paid/fullCV/Holdout",
+      "status": "IN_PROGRESS",
+      "blockers": []
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

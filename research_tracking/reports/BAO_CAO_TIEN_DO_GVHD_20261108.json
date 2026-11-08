@@ -1,15 +1,15 @@
 {
   "kind": "maintained_supervisor_progress_report_not_final_thesis",
-  "revision": 2,
+  "revision": 3,
   "as_of_local": "2026-11-08",
   "report": "research_tracking/reports/BAO_CAO_TIEN_DO_GVHD_20261108.md",
-  "report_sha256": "832fcb5483505a9ab2b2eb3420627ca70d06a939808adc7f5139f4fe47c123aa",
+  "report_sha256": "038a6316ca2941a6d4de06b39ae2ce13625420cfad21e76abd7ad8f73fdaddd1",
   "previous_revision": {
-    "git_commit": "e4a44e9",
-    "report_sha256": "16bab005cb0af960a81d2b8dd4ee291e9bffee17ce6081952e810376c5e55728",
-    "companion_sha256": "9e4785e8e6ed13150ac586f9bbf0bbb2fed777fd13490e33175e29060f08ee00",
-    "exact_git_blobs_verified": true,
-    "local_backups_verified": true
+    "revision": 2,
+    "git_commit": "6909770",
+    "report_sha256": "832fcb5483505a9ab2b2eb3420627ca70d06a939808adc7f5139f4fe47c123aa",
+    "companion_sha256": "c750bb04fc92d9d29187b72b89fb5de2311533080276b4e4588d3dd49157d76f",
+    "exact_git_blobs_verified": true
   },
   "scope_vi": "Tổng hợp bằng chứng đã có; không train/rerun simulator/raw learner/Holdout/cloud trong lượt cập nhật báo cáo.",
   "historical_baseline_reference": {
@@ -102,6 +102,18 @@
     "experiments/gam_kt/results/wsl_cpp/cv/cv.json": {
       "sha256": "ba143ca185288e4f1c32682dc9d84e08c762fb2ce023c4ad3ca111d63485c52c",
       "bytes": 97400
+    },
+    "research_tracking/reports/rq2_retention_metric_separation_20261108.md": {
+      "sha256": "cab14c81e95379105c9db3b072c3960ca597bd3b01eebe91b97e383909148e27",
+      "bytes": 7070
+    },
+    "research_tracking/runs/rq2-retention-readout-separation-20261108-01/readouts.json": {
+      "sha256": "ec7334b91ef578702020fe51eea63c5d21524a4bae8262ce455245eecb6ded63",
+      "bytes": 9266
+    },
+    "research_tracking/runs/rq2-retention-readout-separation-20261108-01/manifest.json": {
+      "sha256": "e048a7dc87510c7fe1e5b243b4b38e4f436f01e745e61c9ce6970d5387666b01",
+      "bytes": 4879
     }
   },
   "verified_bundles": {
@@ -132,6 +144,10 @@
     "simulator-research-collection-engineering-20261108-01": {
       "manifest_sha256": "2a893d00706b6ea6d39d37fdfc3e67b238f8b09bd57c4377df2415943e7c3d91",
       "outputs_verified": 55
+    },
+    "rq2-retention-readout-separation-20261108-01": {
+      "manifest_sha256": "e048a7dc87510c7fe1e5b243b4b38e4f436f01e745e61c9ce6970d5387666b01",
+      "outputs_verified": 18
     }
   },
   "rq_status": {
@@ -146,11 +162,53 @@
     "research_ready": false
   },
   "modal_spend_this_batch_usd": 0,
-  "local_links_verified": 18,
+  "local_links_verified": 19,
   "limitations": [
     "PASS counts overlap and differ by source version; not scientific sample sizes",
     "Notebook outputs generated locally; no Jupyter-kernel/visual QA",
     "Full model comparisons, statistical evaluation and complete RQ evidence still missing"
   ],
-  "delivery": "Saved in repository only; not sent to advisor or any external recipient"
+  "delivery": "Saved in repository only; not sent to advisor or any external recipient",
+  "revision_history": [
+    {
+      "git_commit": "e4a44e9",
+      "report_sha256": "16bab005cb0af960a81d2b8dd4ee291e9bffee17ce6081952e810376c5e55728",
+      "companion_sha256": "9e4785e8e6ed13150ac586f9bbf0bbb2fed777fd13490e33175e29060f08ee00",
+      "exact_git_blobs_verified": true,
+      "local_backups_verified": true
+    },
+    {
+      "revision": 2,
+      "git_commit": "6909770",
+      "report_sha256": "832fcb5483505a9ab2b2eb3420627ca70d06a939808adc7f5139f4fe47c123aa",
+      "companion_sha256": "c750bb04fc92d9d29187b72b89fb5de2311533080276b4e4588d3dd49157d76f",
+      "exact_git_blobs_verified": true
+    }
+  ],
+  "supplementary_readout_counterexample": {
+    "source": "research_tracking/runs/rq2-retention-readout-separation-20261108-01/readouts.json",
+    "commit": "746c374",
+    "constructed_state_pairs": 1,
+    "times": [
+      "T",
+      "D14"
+    ],
+    "teacher_model_trajectory_calls": 0,
+    "net_theta_order": "B>A at both times",
+    "soft_order": "B>A -> A>B",
+    "hard_order": "tie -> A>B, not strict reversal",
+    "reachable_policy_state_demonstrated": false,
+    "graph_benefit_claimed": false,
+    "notebook_C01_C14_snapshot_unchanged": true,
+    "values": {
+      "A": {
+        "T": 0.011828930144869259,
+        "D14": 0.005502275022401526
+      },
+      "B": {
+        "T": 0.01716264380354609,
+        "D14": 0.005120524067104538
+      }
+    }
+  }
 }
