@@ -1,5 +1,13 @@
 # Chẩn đoán hai công trình
 
+## Đối chiếu comparator08/11 — không quy lỗi phương pháp khi chưa có bằng chứng
+
+`compare_decision_traces` hiện được gọi trong fixed-stream ở `scripts/research/run_cpu_diagnostics.py:138` và legacy reconciliation ở `scripts/research/analyze_rq1_transitions.py:191`; closed-loop pilot không gọi comparator này. Fixed-stream chọn cùng query/label/time theo loop; observability reconstruction sau đó đối chiếu actual shared queries. Không có evidence hiện tại rằng published paired metrics đã ghép khác target, hoặc output `threshold_local_calibration` đã được dùng làm mastery calibration. Không rerun hay sửa historical metrics chỉ vì dataclass không tự chứng thực mọi điều kiện của caller.
+
+Giới hạn thực phải giữ khi mở rộng: event/learner/label match chưa tự chứng minh query và toàn past stream giống nhau; correctness calibration trên P của served item không phải calibration concept mastery/reference. Validator `action in ready` của comparator cũng không thể đại diện mọi action của native selector có anti-drill escape ngoài raw R. Comparator cũ chỉ giữ scope fixed-stream đã kiểm; không dùng nó trực tiếp cho closed-loop trajectory đã diverge hoặc đổi ý nghĩa ready/candidate để ép dữ liệu qua validator.
+
+C14 và [closed-loop report](../../research_tracking/reports/rq1_closed_loop_reconstruction_20261108.md) đã tách common-before prefix, native B-score ranking và thứ tự select→served-P→interact→update. Kết luận source-local chỉ giải thích CID, không causal mediation hoặc learning benefit. Hành động hiện tại là giữ các số và source lịch sử, không thêm framework hay sửa comparator chưa có caller hợp lệ. Khi S04/S05 chốt protocol mới, phải khai báo actual target/history identity, timing, raw-ready/candidate semantics và calibration reference trước khi dùng comparator mới; không tự chọn threshold hoặc coi served-P là upstream same-step action.
+
 ## Pass 1 — tái dựng và competing hypotheses
 
 Giả thuyết H1 tracking thiếu nguồn, H2 simulator chưa tồn tại. Source inspection xác nhận H1 cho Paper2. Paper1 có notebook nhưng thiếu hành vi theo PDF, vì vậy status reproduction unresolved. P2 inputs đã kiểm đếm 28 nodes, 31 advanced edges, 25 baseline edges, 84 items, map 36 rows. Map dư 8 dòng phải kiểm uniqueness/coverage với nodes trước reuse. Kiểm kê trong evidence/audit_checks.json.
