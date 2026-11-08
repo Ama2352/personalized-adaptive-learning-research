@@ -2,7 +2,7 @@
 
 ## Mốc đã nghiệm thu08/11 — history, ability, corpus và gói GVHD theo ngày
 
-**Điểm đọc hiện hành theo yêu cầu người dùng:** chỉ [BAO_CAO.md](supervisor_reports/2026-11-08/01_tien_do/BAO_CAO.md) và [KET_QUA_NGHIEN_CUU.ipynb](supervisor_reports/2026-11-08/01_tien_do/KET_QUA_NGHIEN_CUU.ipynb), cùng thư mục08/11/đợt01. Báo cáo tóm tắt thành quả/phần còn thiếu; notebook trình bày thiết kế, đối chứng, quá trình kiểm chứng và kết quả chẩn đoán đã có. Bản hiện hành đã kiểm local:27cells/16code cells/6SVG/64sources/58pointers; SHA `1fa77f7c55fd3fa2b81f300a1b107b5f0886f0b10f13177558b0125cee9fc71d`. Không phát sinh thí nghiệm/mẫu mới.
+**Điểm đọc hiện hành theo yêu cầu người dùng:** chỉ [BAO_CAO.md](supervisor_reports/2026-11-08/01_tien_do/BAO_CAO.md) và [KET_QUA_NGHIEN_CUU.ipynb](supervisor_reports/2026-11-08/01_tien_do/KET_QUA_NGHIEN_CUU.ipynb), cùng thư mục08/11/đợt01. Báo cáo tóm tắt thành quả/phần còn thiếu; notebook trình bày thiết kế, đối chứng, quá trình kiểm chứng và kết quả chẩn đoán đã có. Bản hiện hành đã kiểm local:27cells/16code cells/6SVG/73sources/58pointers; SHA `d7a7cbd61b242bf1434a19fbb0e24b28ec466bd317c41f90a31204bef53ae506`. Không phát sinh thí nghiệm/mẫu mới.
 
 **LỊCH SỬ — commit `2e63cd9`:** gói25snapshotfiles +1chỉ mục =26artifacts và notebook8code cells/4SVG/22nguồn/40JSONPointers/cached-output exact đã nghiệm thu ở snapshot cũ. SHA `0f2130aba7b04a187b31ac9c0fd9d4b81df290ced470e5aa04bbf92625267620` và các receipts/README/BANG_CHUNG/NGUON đã bỏ khỏi layout hiện hành vẫn được bảo toàn trong Git tại commit này; không dùng các số hoặc SHA đó chứng nhận notebook đang được chỉnh. Hai-file format không tạo thí nghiệm/RQcompletion mới. Chưa actual Colab/Jupyter-kernel/visual QA.
 

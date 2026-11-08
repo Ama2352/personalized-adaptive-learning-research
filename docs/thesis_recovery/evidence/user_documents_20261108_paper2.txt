@@ -1,0 +1,711 @@
+--- Trang 1 ---
+Auditing Prerequisite Context in Online Knowledge
+Tracing: Shared-Stream Prediction, Development
+Gating, and Closed-Loop Simulation
+Phạm Triều Dương, Hồ Nguyễn Minh Sang, and Lê Văn Tuấn
+Faculty of Software Engineering
+University of Information Technology, VNU-HCM
+Ho Chi Minh City, Vietnam
+{23520355,23521338}@student.uit.edu.vn, tuanlv@uit.edu.vn
+Abstract—Graph-aware, uncertainty-aware knowledge tracing
+and the distinction between predictive and instructional eval-
+uation are established research directions. We conduct a nar-
+rower audit of a frozen prerequisite-context/adaptation package
+in Gain-Adaptive Memory Knowledge Tracing (GAM-KT), a
+compact online learner-state estimator: does the package im-
+prove predictions on a shared stream, which configuration is
+selected by a development-only gate that includes an effective all-
+pathways-off candidate, and does estimator replacement produce
+a detectable difference in simulated outcomes under one frozen
+selector? In a matched-structure simulator with three mastery
+regimes and 50 untouched seeds, package-on Graph-GAM-KT
+yields small Log-Loss gains over otherwise identical package-
+off GAM-KT in the Low and Function-weak regimes (0.00319
+and0.00169), with both remaining statistically detectable after
+Holm correction. No Holm-corrected AUC difference is detected
+in any regime, and no corrected direct difference is detected
+in either primary closed-loop outcome: 14-day retained mean-
+ability gain or mean learning gain. On disjoint-user Junyi
+Academy logs, outcome-blind cycle removal is followed by a
+300-user development gate that selects the predeclared effective
+all-pathways-off null, represented by(s, α, w g) = (1,0,0)and
+algebraically identical to package-off GAM-KT. The subsequent
+1,000-user test run is therefore an implementation-identity check
+rather than an estimate of a nonzero graph effect. The evidence
+supports development gates that can disable every tested context
+pathway and separate shared-stream estimator evaluation from
+selector-dependent outcomes.
+Index Terms—adaptive learning, knowledge tracing, online
+evaluation, prerequisite graphs, student modeling
+I. INTRODUCTION
+Adaptive learning combines a learner-state estimator with
+an instructional policy. Given historyH t−1 and itemq t, the
+estimator predictsˆp t =P(y t = 1|H t−1, qt); a selector
+then uses estimated state to choose a later activity. Prior
+work has already shown that next-response accuracy alone
+can be insufficient for evaluating an adaptive tutor [1], [2]. A
+model may improve a proper scoring rule yet cross readiness
+thresholds differently, alter the future item distribution, or fail
+to improve a learning outcome.
+Knowledge tracing (KT) ranges from interpretable BKT [3],
+factor models [4], and educational Elo [5] to recurrent [6]
+and graph-aware methods [7], [8]. Uncertainty-aware and
+prerequisite-informed KT are also established [9]–[11]. We
+therefore claim neither the first graph-aware or uncertainty-
+aware estimator nor the first prediction–policy comparison.
+Benchmarking work further shows that preprocessing and
+target leakage can change KT rankings [12]. This motivates
+strict predict-before-update ordering, but we treat it as an
+information boundary rather than an algorithmic novelty.
+Instead, we audit a frozen prerequisite-context/adaptation
+package under three information boundaries.RQ1: in the
+matched-structure simulator, on matched chronological event
+streams, what incremental predictive value does the com-
+plete package provide over otherwise identical package-off
+GAM-KT?RQ2: on disjoint Junyi development users [13],
+which prespecified graph configuration, if any, is selected
+by mean sequential development Log Loss when the grid
+includes an all-pathways-off candidate?RQ3: under one frozen
+prerequisite-aware selector, does package-on Graph-GAM-KT
+versus package-off GAM-KT produce a detectable difference
+in simulated mean learning gain or 14-day retained mean-
+ability gain?
+Prior work already includes graph-aware, prerequisite-
+aware, uncertainty-aware, and policy-aware learner models.
+Our contribution is not a new general graph-KT paradigm;
+it is an evaluation design combining (i) an all-pathways-
+off development gate, (ii) a direct otherwise-identical shared-
+stream estimator ablation, and (iii) selector-dependent closed-
+loop contrasts under frozen information boundaries. This de-
+sign yields conditional synthetic evidence of small package
+increments without corrected primary-outcome differences and
+a real-log gate that advances only the null.
+II. RELATEDWORK
+A. Online state and uncertainty
+BKT tracks binary mastery with initial, transition, guess,
+and slip probabilities [3]; PFA models prior successes and
+failures [4]; Elo provides inexpensive online learner–item
+updates [5]; and LKT organizes recency, practice, learner,
+and item features in an interpretable logistic framework [14].
+SPARFA-Trace used approximate Kalman filtering for time-
+varying concept knowledge well before this work [15]. UKT
+
+--- Trang 2 ---
+more recently models predictive uncertainty explicitly [9].
+Accordingly, GAM-KT’sπ c is only an internal, variance-like
+update scale, not a calibrated posterior uncertainty.
+GAM-RAG introduces an uncertainty-aware, Kalman-
+inspired gain for evolving retrieval memory [16]. We cite it
+only as the design origin of gain-adaptive memory, not as a KT
+baseline, empirical evidence for education, or a priority claim
+for Kalman learner models. Its relation-free retrieval index,
+LLM feedback, and retrieval traces are absent here.
+B. Structure and instructional policy
+PDKT injects prerequisites into deep KT [7]; GIKT propa-
+gates question–skill interactions [8]; and PSI-KT jointly mod-
+els temporal knowledge and prerequisite structure [10]. KT-
+DUSL studies uncertainty-aware domain-structure propagation
+under high uncertainty or limited evidence [11]. Our narrower
+distinction is procedural: outcome-blind cycle removal, an
+explicit candidate with both graph signal and graph-dependent
+adaptation disabled, a direct otherwise-identical shared-stream
+ablation, and a selector-dependent closed-loop contrast.
+Predictive models and instructional policies have long been
+recognized as separate evaluation targets [1], [2]; robust offline
+policy evaluation and decision-theoretic tutoring make the
+decision layer explicit [17], [18]. We instantiate this distinction
+for a development-gated prerequisite-context package rather
+than present it as a new general gap.
+III. METHOD
+A. Online ordering and baselines
+Each prediction uses onlyH t−1 and the current item;y t is
+observed only afterˆpt is emitted. AdaptiveLMS maintains an
+Elo-like stateθ c,t:
+ˆpt =
+
+1 + 10(dqt −θc,t)/400
+−1
+, θ c,t+1 =θ c,t +K t(yt −ˆpt),
+(1)
+wheren c,t is the prior concept-level attempt count andK t =
+40forn c,t <5,24for5≤n c,t ≤15, and16thereafter;
+AdaptiveLMS initializes everyθ c at 1200. BKT uses a separate
+mastery probability per node and no forgetting. Simulator
+BKT uses(P(L 0), P(T), P(G), P(S)) = (.35, .05, .30, .20),
+selected on development seeds 2000–2019 and frozen before
+test seeds. Junyi BKT instead uses(.50, .10, .25, .10), selected
+on a 300-user subset of the original Junyi development split
+and frozen before the disjoint confirmation pool was evaluated.
+B. Gain-adaptive memory KT
+Gain-Adaptive Memory Knowledge Tracing maintains per-
+concept estimated abilityθ c, structured learner–concept mem-
+orym c, internal task and elapsed-time scalesπ task
+c , πtime
+c ,
+recent outcomes, and a forgotten-transition countF c. The
+two scales are variance-like update quantities, not calibrated
+posterior uncertainty. Before prediction,eπ k
+c,t = clip[0,1](πk
+c +
+λc∆t)fork∈ {task,time}. The logit and confidence-shrunk
+probability are
+zt = ln 10
+400 (θc −d qt) +w xm⊤
+c xqt +s w ggc,(2)
+κt = clip[.1,1](1−.45eπtask
+c,t −.35eπtime
+c,t ),
+ˆpt = 0.5 +κ t[σ(zt)−0.5],(3)
+wheres∈ {0,1}controls the parent-state signal. After
+observingy t, residual gainG t =eπtask
+c,t /(eπtask
+c,t +r t)scales
+et =y t −ˆpt:
+θc,t+1 =θ c,t +η θGtet,(4)
+mc,t+1 = clip(mc,t +η mGtetxqt),(5)
+πtask
+c,t+1 = clip[.01,1]((1−G t)eπtask
+c,t +q proc
+c,t ).(6)
+Both instantiations start atθ= 1200,m=0,(π task, πtime) =
+(1, .05)and usew x =.80,(η θ, ηm) = (80,1),r + =.60,
+baser − = 1, baseq proc =.04, memory-norm bound 3, and
+resetπ time to.04after update. Simulator features have 38
+normalized metadata dimensions; Junyi uses 64 normalized
+stable-hashed exercise, template, topic, and area features. Junyi
+difficulty uses only original training users.
+C. Prerequisite context and explicit gate
+For nonrootc, define parent summaries
+gc = clip[−1.5,1.5]
+
+meanj∈pa(c)
+θj −τ g
+400
+
+,
+uc = meanj∈pa(c) πtask
+j ,
+dc = meanj∈pa(c)
+ τg −θ j
+400
+
++
+,(7)
+and set all three to zero at roots. We denote the historical
+adaptation flag byα∈ {0,1}to distinguish it from residual
+gainG t.
+The simulator usesτ g = 1250. Whenα= 1, its frozen
+package sets
+qproc
+c = clip[.01,.18](.04 +.025u c +.020d c),
+r−,c = clip[.5,2](.9Ic),
+λc = clip[.01,.1](.02 +.004F c +.004d c),
+(8)
+HereI c = 1if conceptchas at least five observations and
+the mean of its most recent, at most eight, responses is below
+.4; otherwiseI c = 0. In the simulator,F c counts losses of the
+estimator mastery conditionθ c ≥1250, π task
+c ≤.55. Withα=
+0, plain GAM-KT instead keeps(q proc, r−, λ) = (.04,1, .02).
+Importantly,g c =u c =d c = 0at roots, yetI c andF c can still
+changer − andλ c whenα= 1. Thus the simulator condition
+is not a pure parent-edge ablation.
+Junyi retains the prediction and residual-gain update above,
+but usesτ g = 1300, development-selected base decay0, and
+elapsed days capped at 365. Whenα= 1, it uses the same
+qproc
+c andr −,c formulas above with Junyi’su c, dc, Ic, while
+λc = clip[0,.1](.004Fc +.004d c);F c counts downward cross-
+ings ofθ c = 1300. Whenα= 0,(q proc, r−, λ) = (.04,1,0).
+
+--- Trang 3 ---
+Signal and adaptation flags are separable. The gate tests signal-
+only(1,0, w g), adaptation-only(0,1,0), and full(1,1, w g)
+candidates forw g ∈ {0, .025, .05, .10, .15, .35}. The eligible
+(1,0,0)candidate is an all-pathways-off null becausesw g = 0
+andα= 0; it is algebraically identical to the package-off
+(graph-free) condition(0,0,0).
+In the simulator, one switch yields package-on Graph-
+GAM-KT(s, α, w g) = (1,1, .35)versus package-off GAM-
+KT(0,0,0). RQ1 and RQ3 therefore estimate the incre-
+ment of this complete frozen package—parent signal, parent-
+conditioned scale/decay, and gated local-history modifiers—
+not the isolated effect of prerequisite edges orw g.
+D. Selector interpretation
+Fixed replay evaluates all estimators on the same events.
+Closed-loop conditions instead share the deterministic selector
+below. Model-specific mastery isθ c ≥1250for AdaptiveLMS,
+P(K c)≥.95for BKT, andθ c ≥1250together with
+storedπ task
+c ≤.55for both GAM variants. Letv c andv q
+denote prior selection counts of conceptcand itemq, respec-
+tively, and letUbe the unmastered concepts. AdaptiveLMS
+usesscore(c) = (1 + 10 (1250−θc)/400)−1 andability(c) =
+θc. BKT usesscore(c) =P(K c)andability(c) =
+clip[850,1600](1250 + 400 log 10(pc/(1−p c))), wherep c =
+clip[10−4,1−10−4](P(K c)(1−P(S)) + (1−P(K c))P(G)).
+Both GAM variants useability(c) =θ c andscore(c) =
+.5 +κ c[σ(z ⋆
+c )−.5], wherez ⋆
+c = ln(10)(θ c −1250)/400 +
+.8m⊤
+c xc +sw ggc andκ c uses the stored, not elapsed-time-
+grown, scales. Herex c is theℓ 2-normalized 38-component
+structured feature vector returned byitem_feature(c,
+None, 1250): it contains the concept indicator (weight 1),
+chapter indicator (.65),UNKitem-level indicator (.85), and
+1250-Elo difficulty-bucket indicator (.55); it is not a learned
+embedding. Step 5 minimizes these within-model scores, so
+lower estimated mastery is selected first.
+Algorithm 1: Frozen prerequisite-aware selector
+1) FormR={c∈U:∀p∈pa(c), pis mastered or
+vp ≥6}.
+2) IfR̸=∅, setC=R. Else, ifU=∅, setCto all
+concepts. Otherwise, setCto the concepts inUhaving
+the fewest nonmastered parents.
+3) If the last three selections equalc ℓ, removec ℓ when
+possible. If this emptiesC, search all other concepts
+whose parents are mastered or have six selections; if
+none exists, retain the originalC.
+4) Withm= min c∈C vc, retainC b ={c∈C:v c ≤
+m+ 1}.
+5) Select the minimum tuple(score(c),1[chapter(c)̸=
+current], vc, c)overC b.
+6) For that concept, minimize|d q −ability(c)|; within10 −9
+ties, choose the least-seen item and then lexical question
+ID.
+7) Incrementv c andv q, append the concept to the length-
+three history, update the current chapter, and return the
+item.
+The fallback in step 2 counts nonmastered parents, not
+readiness deficits after the six-exposure exception. Step 3 is
+a preference, not a hard cap: a fourth consecutive selection
+remains possible when no alternative exists, and its escape
+search may revisit a mastered concept. The value 1150 appears
+only in the latent environment’s learning deficit in Sec. IV-
+A; it is not a selector threshold. “Package-off” denotes the
+graph-freeestimator, not a graph-free selector. All four con-
+ditions retain this same selector code, while estimator-specific
+mastery, score, and ability can induce different routes. RQ3
+tests estimator replacement under this inherited selector, not
+an optimized policy for each estimator. Figure 1 separates the
+shared predict-before-update step from the three RQ-specific
+evidence paths. In particular, the Junyi gate in RQ2 does not
+choose either simulator estimator used in RQ1 or RQ3.
+IV. EXPERIMENTALDESIGN
+A. Matched-structure simulation
+The mathematics simulator contains 28 concept nodes,
+31 prerequisite edges, and 84 items at difficulties
+{1050,1200,1350}. Base ability is generated topologically.
+For regime meanµ∈ {1400,1050,1175}(High, Low,
+Function-weak), a node starts fromµ+ϵ g +ϵ chapter +δ c +ϵ c,
+whereϵ g ∼ N(0,30 2),ϵ chapter ∼ N(0,35 2), and
+ϵc ∼ N(0,28 2). Hereδ c =−150only for function-
+chapter concepts in Function-weak. A nonroot then mixes.72
+of this draw with.28of its parents’ mean ability; all values
+are clipped to[850,1500]. These are stress-test structures, not
+demographics or Junyi groups.
+Letb c be this initial true ability, ¯θc the stored post-update
+state, andτ c(t)elapsed days since conceptcwas last practiced.
+Before an interaction, learned gain decays towardb c:
+θ−
+c,t =b c + [¯θc −b c]+e−.06τc(t),
+ptrue
+t =
+
+1 + 10(dq−θ−
+c,t)/400
+−1
+,
+yt ∼Bernoulli(p true
+t ).
+(9)
+For parents evaluated at the same time, letD c,t =
+|pa(c)|−1P
+j∈pa(c) clip[0,1]((1150−θ true
+j,t )/300), withD c,t =
+0at roots. Letf t = 1.15fory t = 0and.85fory t = 1, and
+st = 1 +.20 min(δ gap
+c (t),7)/7. Importantly,D c,t does not
+enter the response law. It affects only the immediate learning
+gain:
+∆θt = 12e− 1
+2 ((ptrue
+t −.65)/.22)2
+ft
+×s t(1−.55D c,t)(.85 +.30U t),
+¯θc ←min{1600, θ −
+c,t + ∆θt}.
+(10)
+whereU t ∼Uniform(0,1), andδ gap
+c (t) = 0on the first
+practice of conceptc, and otherwise denotes the elapsed days
+since its previous practice. Learning remains nonnegative,
+while later reads apply forgetting.
+For each regime and seed, one 300-event stream cycles
+concepts in supplied topological order and chooses, within
+each concept, the item nearest the current latent true ability
+before sampling a response. The clock advances six hours
+
+--- Trang 4 ---
+per event, except for a 72-hour gap before each new 28-
+concept cycle. This is an oracle-generated controlled stream,
+not logged behavior; all four estimators replay the same
+45,000 events, totaling 180,000 predictions. Separate 500-
+step closed-loop runs start from paired latent states and reuse
+arrays of outcome and learning uniforms across estimators,
+totaling 300,000 events across 600 regime–seed–estimator
+runs. Different selected routes can nevertheless map those
+common random numbers to different concepts and items.
+IfTis the final interaction time, the retained state applies
+the same decay atT+ 14days and the Table IV outcome is
+Gret = 28−1P
+c θtrue
+c (T+ 14d)−28 −1P
+c bc; a concept last
+practiced beforeTtherefore decays for its earlier gap plus
+14 days. The second Table IV outcome is mean true learning
+gain,G learn = 500 −1P500
+t=1 ∆θt, the mean gross immediate
+latent increment before later forgetting. Final evaluation uses
+50 untouched seeds (1000–1049). A separate 20-seed develop-
+ment run selected the frozen simulator BKT parameters stated
+in Sec. III-A.
+The shared-stream fixed-replay family contains five metrics
+(AUC, Log Loss, Brier score, ten-bin ECE, and absolute error
+against simulator probability), hence3regimes×3contrasts
+×5metrics= 45hypotheses. The closed-loop family contains
+eight metrics, hence3×3×8 = 72hypotheses. Its two primary
+outcomes are 14-day retained mean-ability gain from the initial
+state and mean true learning gain; retained soft-mastery gain,
+concept coverage, route entropy, mean prerequisite deficit,
+Log Loss, and Brier score are secondary. In both families
+the primary contrast is package-on Graph-GAM-KT minus
+package-off GAM-KT; Graph-GAM-KT minus AdaptiveLMS
+or BKT is secondary.
+The simulator inferential unit is the paired seed (n= 50per
+regime). Each hypothesis uses a two-sided paired Wilcoxon
+signed-rank test. Reported 95% intervals use 3,000 paired
+seed-level bootstrap draws and estimate the mean raw paired
+delta, not a median difference. Holm correction is applied once
+across each complete 45- or 72-hypothesis family. Raw delta
+is Graph-GAM-KT minus comparator: negative favors Graph-
+GAM-KT for losses, errors, and prerequisite deficit, whereas
+positive favors it for AUC, gains, soft mastery, coverage, and
+route entropy.
+B. Held-out Junyi logs
+We use the Junyi Academy Math Practicing Log through
+January 2015 [13]. Nodes are exercises, not expert-validated
+knowledge components; the pipeline treats each as a single-KC
+exercise proxy. The supplied exercise-prerequisite graph has
+835 nodes and 979 edges. Without responses, we remove all
+three edges internal to its only nontrivial strongly connected
+component, yielding a 976-edge DAG. This is conservative
+cycle removal, not a claim of semantic correction.
+An earlier Junyi test split was opened before cycle removal
+and is treated only as exploratory. The one-shot confirmation
+run draws 2,000 users with zero overlap with every user in
+that earlier train/development/test split: 1,000 for development
+and 1,000 for test. Original training users alone estimate
+Table I
+INFORMATION BOUNDARIES BEFORE CONFIRMATION-TEST ACCESS.
+Decision Permitted information Held out
+Event predictionH t−1, current item Current responsey t
+BKT parameters Simulator dev seeds;
+original Junyi
+development users
+Simulator test seeds;
+disjoint confirmation pool
+Item difficulty Original Junyi train users Confirmation users
+Cycle removal Supplied graph topology All responses
+Graph gate 300 confirmation-dev
+users
+1,000 test users
+Table II
+FIXED-REPLAY PACKAGE-ONGRAPH-GAM-KTMINUS PACKAGE-OFF
+GAM-KT. LOWER IS BETTER.†: HOLM-CORRECTEDp < .05.
+Regime∆LL∆Brier∆ECE∆MAE
+High−.00026−.00013−.00001−.00056 †
+Low−.00319 † −.00145† −.00569† −.00511†
+Function-weak−.00169 † −.00078† −.00539† −.00292†
+difficulty. The graph gate uses a prespecified 300-user subset
+of confirmation development. Per user, the first five chrono-
+logical events update state but are not scored. The 1,000 test
+users contribute 127,923 events and 122,923 scored events per
+model; equal-user macro means are reported. AUC is defined
+for the 968 users containing both classes. ECE uses five
+equal-width bins per user before macro averaging. Separately
+from the simulator families, paired user-level inference uses
+2,000 bootstrap draws and Holm correction over AUC, Log
+Loss, Brier score, and ECE; the null selected on development
+makes the graph-versus-GAM test predictions identical by
+construction.
+C. Artifact and claim boundaries
+The controlled domain, prerequisite map, and Adap-
+tiveLMS/Elo baseline originated in an earlier unsubmitted
+adaptive-sequencing project. GAM-KT, its gated graph ex-
+tension, the BKT comparison, fixed-versus-closed-loop audit,
+statistical analyses, and held-out Junyi confirmation are eval-
+uated here. The versioned artifact contains executable note-
+books, hash-matched simulator inputs, frozen per-seed/per-
+user records and configurations, evidence certificates, a claim
+map, and a standard-library verifier runnable aspython
+verify_claims.py. All numerical claims in this version
+were checked against these files. No simulator test seed or
+user in the independent confirmation pool was reused for re-
+design; the earlier opened Junyi run remains exploratory. Junyi
+supports next-response claims only, not causal learning or
+policy effects. No new human-subject data were collected. The
+designated review-artifact location is https://drive.google.com/
+drive/folders/1dneT0XGaUpfnSKo1BIYOGi9mGBJcd4E5.
+
+--- Trang 5 ---
+(A) Online estimator
+and gated package
+prior stateHt−1
+current itemqt
+emitˆpt beforeyt
+package signal:swggc
+observeyt
+residualet =y t −ˆpt
+gain-scaled update
+package adaptationα new stateHt
+parent summaries
+gc, uc, dc
+local history
+Ic, Fc
+signal
+adaptation
+α= 1
+RQ1: shared-
+stream prediction
+matched stream
+same events per seed
+otherwise-identical estimators
+package off versus on
+paired predictive deltas
+Log Loss, Brier, ECE, AUC, MAE
+RQ2: Junyi
+development gate
+supplied topology
+outcome-blind cycle removal
+300 disjoint
+development users
+prespecified grid
+includes all-pathways-off null
+minimize dev Log Loss
+freeze before test
+active package
+effect test
+all pathways off
+identity check (selected)
+active
+off
+RQ3: closed-loop simulation matched starts
+common random schedules
+same frozen prerequisite-aware
+selector logic
+otherwise-identical estimators
+package off versus on
+estimated states may
+induce different routes
+paired learning and
+14-day retention deltas
+Figure 1. Protocol and branch logic. Dashed inputs form the simulator context/adaptation package; package-off GAM-KT disables them. RQ1 fixes events.
+In RQ2, the frozen development choice determines whether one test run can estimate an active-package contrast or only verify identity; the observed branch
+is the all-pathways-off null. RQ3 fixes selector logic while estimator-induced routes may differ. RQ2 does not feed either simulator comparison.
+V. RESULTS
+A. RQ1: direct context-package increment
+Table II isolates the frozen package-on minus package-off
+estimator contrast, not a parent-only effect. All four probability
+metrics improve in Low and Function-weak; only latent-
+probability MAE survives correction in High. No regime
+has a corrected AUC difference. The Log-Loss and Brier
+increments are statistically detectable but small. Descriptively,
+Graph-GAM-KT lowers Log Loss on 30/50 High, 50/50 Low,
+and 49/50 Function-weak seeds. Against AdaptiveLMS on
+the same fixed stream, Graph-GAM-KT lowers Log Loss
+by.07478,.02870, and.01079, respectively; these larger
+differences concern the full estimator, not the direct package
+ablation.
+As a simulator diagnostic, ranking the stochastic responses
+by their generating probabilities yields mean AUCs of.5583,
+.5555, and.5650. This is an oracle reference, not a strict finite-
+sample ceiling, and helps explain why AUC is weak here.
+B. RQ2: the Junyi gate selects the null
+For signal-only development candidates, Log Loss is
+.386009atw g = 0and increases to.386072,.386136,
+.386268,.386403, and.386987as weight grows. Adaptation-
+only is also worse (.386697). The best full candidate is
+likewise.386697atw g = 0, and every positive-weight full
+candidate is worse. The gate therefore selects(s, α, w g) =
+(1,0,0), which is identical to the all-pathways-off null. No
+positive graph configuration advances to confirmatory testing.
+Because development selected the all-pathways-off null, the
+test run is an implementation-identity check; an all-zero paired
+contrast is not evidence estimating a nonzero graph effect.
+Table III is descriptive rather than a modern-KT leaderboard.
+Moreover, interaction-weighted Log Loss reverses the small
+macro ordering:.38290for AdaptiveLMS versus.38312for
+GAM-KT. The real-log evidence therefore does not yield an
+aggregation-robust Log-Loss ordering between AdaptiveLMS
+and GAM-KT.
+Table III
+EQUAL-USER MACRO RESULTS AFTER FIVE WARM-UP EVENTS ON1,000
+JUNYI TEST USERS(122,923SCORED EVENTS; AUC: 968USERS). THE
+GATE-SELECTED EFFECTIVE NULL(1,0,0)IS SHOWN SEPARATELY ONLY
+TO VERIFY IMPLEMENTATION IDENTITY WITHGAM-KT.
+Model LL↓Brier↓ECE↓AUC↑Acc.↑
+AdaptiveLMS .39437 .12147.08928.68099 .83678
+BKT .40867 .12612 .10165 .66874 .83535
+GAM-KT.39359 .11953.10244.71814 .84117
+Gate-selected null(1,0,0).39359 .11953 .10244 .71814 .84117
+Table IV
+DIRECT CLOSED-LOOP PACKAGE-ONGRAPH-GAM-KTMINUS
+PACKAGE-OFFGAM-KTCONTRASTS. PARENTHESES GIVE
+PAIRED-BOOTSTRAP95% CIS;NONE ISHOLM-SIGNIFICANT.
+Regime
+∆retained mean-
+ability gain∆mean learning gain
+High−.0066(−.0764, .0658).0075(−.0282, .0426)
+Low.0378(−.0505, .1211).0268(−.0091, .0628)
+Function-weak−.0091(−.1360, .1071)−.0159(−.0949, .0670)
+C. RQ3: estimator replacement in closed loop
+Despite the corrected fixed-replay package increments in
+Low and Function-weak, package-on Graph-GAM-KT versus
+package-off GAM-KT has no Holm-corrected difference in
+either primary outcome—14-day retained mean-ability gain
+or mean learning gain—in any regime. This direct package
+contrast is the primary RQ3 result. Comparisons with BKT
+can differ because both the estimator family and induced route
+change; their Elo-scale retained mean-ability-gain differences
+are only.35–1.11and do not establish educational importance.
+Table IV also shows that the uncertainty is large relative to
+these direct outcome deltas. The experiment therefore fails to
+detect a difference after correction under this selector; it does
+not establish equivalence between the two systems.
+VI. DISCUSSION
+The simulator shows small shared-stream predictive incre-
+ments from the matched context/adaptation package in Low
+
+--- Trang 6 ---
+and Function-weak, with no Holm-corrected AUC difference
+in any regime. The direct package contrast also yields no
+corrected detectable difference in either primary closed-loop
+outcome—14-day retained mean-ability gain or mean learning
+gain—under this frozen selector. Because the package bundles
+parent summaries with local-history modifiers, these data do
+not attribute the increment to prerequisite edges alone. Junyi
+gives a different but compatible result: development selects
+the all-pathways-off null, so the test run is an implementation-
+identity check only rather than another opportunity to tune on
+test data.
+The prediction–policy mismatch is neither new nor para-
+doxical [1], [2]. Proper scores assess response distributions on
+a shared stream; the fixed selector uses readiness, challenge,
+coverage, and prerequisite constraints. Our evidence adds a
+scoped case study: a context package should be evaluated
+against the same estimator with every tested pathway disabled,
+and any closed-loop statement must name both the package
+and selector being held fixed.
+VII. LIMITATIONS
+Closed-loop evidence comes from one simulator, graph,
+and inherited selector, not a classroom trial or a general
+causal claim. The simulator contrast bundles parent summaries
+with gated self-history modifiers, so it is not a pure parent-
+edge ablation. The shared replay stream is oracle-generated
+from latent ability rather than logged behavior. Exact reruns
+depend on the released simulator code, inputs, and seeds;
+the quick smoke test validates wiring but not the 50-seed
+estimates. Junyi nodes are exercise proxies, and the supplied
+relations need not be expert-valid prerequisites. Outcome-blind
+removal of every edge inside a cyclic component can discard
+valid directions. The 300-user point gate lacks a stability
+analysis; its small differences do not prove positive weights
+harmful. Macro and interaction-weighted Junyi Log Loss order
+AdaptiveLMS and GAM-KT differently. The internal scales
+πc are not calibrated posterior uncertainty. Complete coverage
+rules out total concept omission, not all route collapse. The
+descriptive baselines do not establish competitiveness with
+standardized modern KT models; such comparisons and a pure
+graph ablation require fresh held-out evidence.
+VIII. CONCLUSION
+This audit finds small shared-stream predictive incre-
+ments from a frozen context/adaptation package in Low and
+Function-weak, but no Holm-corrected AUC difference in any
+regime and no corrected direct difference in either primary
+closed-loop outcome—14-day retained mean-ability gain or
+mean learning gain—under one frozen selector. The Junyi de-
+velopment gate selects the predeclared effective all-pathways-
+off null; consequently, the test run is an implementation-
+identity check only, not a graph-effect test. The simulator
+contrast does not isolate prerequisite edges. The defensible
+contribution is therefore an evaluation pattern, not priority
+over graph-aware, uncertainty-aware, or policy-aware KT: pro-
+cess topology without outcomes, include an all-pathways-off
+candidate, compare otherwise identical estimators on shared
+streams, and evaluate selector-dependent outcomes separately.
+REFERENCES
+[1] J. P. González-Brenes and Y . Huang, “Your model is predictive—but is
+it useful? Theoretical and empirical considerations of a new paradigm
+for adaptive tutoring evaluation,” inProc. 8th Int. Conf. Educational
+Data Mining, 2015, pp. 187–194.
+[2] J. Rollinson and E. Brunskill, “From predictive models to instructional
+policies,” inProc. 8th Int. Conf. Educational Data Mining, 2015, pp.
+179–186.
+[3] A. T. Corbett and J. R. Anderson, “Knowledge tracing: Modeling the
+acquisition of procedural knowledge,”User Modeling and User-Adapted
+Interaction, vol. 4, pp. 253–278, 1994, doi: 10.1007/BF01099821.
+[4] P. I. Pavlik, Jr., H. Cen, and K. R. Koedinger, “Performance Factors
+Analysis—A new alternative to knowledge tracing,” inProc. 14th Int.
+Conf. Artificial Intelligence in Education, 2009, pp. 531–538, doi:
+10.3233/978-1-60750-028-5-531.
+[5] R. Pelánek, “Applications of the Elo rating system in adaptive educa-
+tional systems,”Computers & Education, vol. 98, pp. 169–179, 2016,
+doi: 10.1016/j.compedu.2016.03.017.
+[6] C. Piech, J. Spencer, J. Huang, S. Ganguli, M. Sahami, L. Guibas, and
+J. Sohl-Dickstein, “Deep knowledge tracing,” inAdvances in Neural
+Information Processing Systems 28, 2015.
+[7] P. Chen, Y . Lu, V . W. Zheng, and Y . Pian, “Prerequisite-driven deep
+knowledge tracing,” inProc. IEEE Int. Conf. Data Mining, 2018, pp.
+39–48, doi: 10.1109/ICDM.2018.00019.
+[8] Y . Yang, J. Shen, Y . Qu, Y . Liu, K. Wang, Y . Zhu, W. Zhang, and Y .
+Yu, “GIKT: A graph-based interaction model for knowledge tracing,” in
+Machine Learning and Knowledge Discovery in Databases, 2020, doi:
+10.1007/978-3-030-67658-2_18.
+[9] W. Cheng, H. Du, C. Li, E. Ni, L. Tan, T. Xu, and Y . Ni, “Uncertainty-
+aware knowledge tracing,” inProc. AAAI Conf. Artificial Intelligence,
+vol. 39, no. 27, 2025, pp. 27905–27913, doi: 10.1609/aaai.v39i27.35007.
+[10] H. Zhou, R. Bamler, C. M. Wu, and A. Tejero-Cantero, “Predictive,
+scalable and interpretable knowledge tracing on structured domains,” in
+Proc. Int. Conf. Learning Representations, 2024.
+[11] R. Ait Chabane, A. Brun, and A. Roussanaly, “A new domain-informed
+learner model with uncertainty-aware knowledge mastery propaga-
+tion,” inProc. 19th Int. Conf. Educational Data Mining, 2026, doi:
+10.5281/zenodo.21040060.
+[12] Z. Liu, Q. Liu, J. Chen, S. Huang, J. Tang, and W. Luo, “pyKT: A Python
+library to benchmark deep learning based knowledge tracing models,”
+inAdvances in Neural Information Processing Systems 35, Datasets and
+Benchmarks Track, 2022.
+[13] H.-S. Chang, H.-J. Hsu, and K.-T. Chen, “Modeling exercise rela-
+tionships in e-learning: A unified approach,” inProc. 8th Int. Conf.
+Educational Data Mining, 2015, pp. 532–535.
+[14] P. I. Pavlik, Jr., L. G. Eglington, and L. M. Harrell-Williams, “Logistic
+knowledge tracing: A constrained framework for learner modeling,”
+IEEE Trans. Learning Technologies, vol. 14, no. 5, pp. 624–639, 2021,
+doi: 10.1109/TLT.2021.3128569.
+[15] A. S. Lan, C. Studer, and R. G. Baraniuk, “Time-varying learning and
+content analytics via sparse factor analysis,” inProc. 20th ACM SIGKDD
+Int. Conf. Knowledge Discovery and Data Mining, 2014, pp. 452–461,
+doi: 10.1145/2623330.2623631.
+[16] Y . Wang, M. Jiang, Z. Sun, Y . Cao, Y . Liu, K. Chen, G. Ye, and H. Chai,
+“GAM-RAG: Gain-adaptive memory for evolving retrieval in retrieval-
+augmented generation,”arXiv preprint arXiv:2603.01783, Mar. 2026,
+doi: 10.48550/arXiv.2603.01783.
+[17] S. Doroudi, V . Aleven, and E. Brunskill, “Robust evaluation matrix:
+Towards a more principled offline exploration of instructional policies,”
+inProc. 4th ACM Conf. Learning at Scale, 2017, pp. 3–12, doi:
+10.1145/3051457.3051463.
+[18] A. N. Rafferty, E. Brunskill, T. L. Griffiths, and P. Shafto, “Faster
+teaching via POMDP planning,”Cognitive Science, vol. 40, no. 6, pp.
+1290–1332, 2016, doi: 10.1111/cogs.12290.

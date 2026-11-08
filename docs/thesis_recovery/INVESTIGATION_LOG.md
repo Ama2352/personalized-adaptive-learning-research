@@ -527,3 +527,10 @@ User explicit muốn hiện hành đúng1summary+1Colab detailedprocess. Invento
 GateUNKNOWN/rejected2attempts đãđóng archive27outputs, kindrejected_or_unknown, gate_execution_acceptedfalse; completedchỉarchiveintegrity. Các script/test chính chưacommit implementationpassed vì chưa cóJUnit accepted. Userreportnotebook đangenrich, folder chỉ2file.
 
 Report2file nghiệm thu local: summaryd9549b3b…10541, notebook1fa77f7c…fc71d/825293B.27cells/16code/6SVG,64sourceSHA/58pointers;40numericrecords cũ giữexact. Mỗi K1–K6 có câu hỏi/control/fixedchanged/bước/validity/nativecode+receipt/claimlimits, thêmchaptercounterexample available-revision. Agent2stdlibpasses+ROOTindependentreplaycachedexact,43notebooklinks+9summarylinks.0researchrerun/NN/GPU/network; chưaactualColab/kernel/visualQA. QA/inventory ngoài2-filefolder. FailedGatearchiveeb5d60a27rawGitverified, counter2813→2840 chỉintegrity.
+
+
+### 08/11 — Đọc đúng3PDF user và viết lại theo bối cảnh nghiên cứu
+
+Desktopproposal941e.../Paper1984e.../Paper25a661... byteidentical3repo namedPDFs; tríchdirectpypdfbundled bằng.venv,0install. Oldmapv21 giữlịchsử, không relabelnhưUserPDF. New3extracts+inventory copySHA before=after, xem renderproposaltr3/P1tr4/P2tr4. Reportmạch3components→2paper→3RQ→whymeasure→results→limits, KcardsfoldedNotebook. Giữexact58records/16code/6SVG, nguồn73gồmprimary3PDF. Rootcachedreplay/source/pointer/linkQA PASS, hai read-onlyreviews; userfolderđúng2file. Khôngđổi approvedRQ/scope; primaryPaper2grossgain khácnetfinalgain; đúngIV-A tr4, PDFP1đãkhớp còncoderevisionchưakhớp.
+
+BackendsourceMethod24 absoluteownedbridge+initializer11fixed, pure01cap45rejected37.502s noJUnit; journal7completecases≠21PASS/actualfit0. FS8synthetic.115s khôngchứngminhnguyênnhân timeout. Gate2node diagnostic accepted2PASS/8.26158helper/20, khôngfull76Gate; prior54.055chargegiữ. ChưaactualNativefit/GPU/Modal/Holdout/fullCV.
