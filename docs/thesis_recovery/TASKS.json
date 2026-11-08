@@ -2675,6 +2675,78 @@
         "fitted_research_model": false,
         "completion_unit": "train_step"
       }
+    },
+    {
+      "id": "GKT05",
+      "research_objective": "Frozen GKT inference và accounting toàn target",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "model_core_readiness",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GKT04"
+      ],
+      "required_inputs": "GKT04 immutable checkpoint/explicit bank, vocabulary, item→node mapping và inference spec",
+      "files_components": "src/knowledge_tracing/gkt/adapter.py;tests/gkt/test_adapter.py",
+      "implementation_objective": "Giữ đúng predict-before-update/learner isolation/unsupported rows; strict trained-engineering loader không promote fitted",
+      "acceptance_criteria": "32portable unit tests và1actual stored checkpoint load;6targets=2scored+4unsupported,0research_fitted;0optimizer,51.662743s≤60. Mapping caller-declared NOT train-attested, full-prefix/OOV policy engineering, không fitted OnlineSession/epoch/corpus/selectedfit/resume.",
+      "verification_steps": "Đọc raw receipts/XML/manifest/copy inventory và raw Git SHA; không rerun job hoàn tất",
+      "required_artifacts": [
+        "research_tracking/reports/gkt_adapter_readiness_20261108.md",
+        "research_tracking/runs/gkt-inference-adapter-engineering-20261108-01/manifest.json"
+      ],
+      "estimated_effort": "Deliverable đã kiểm08/11; xem raw receipts, không ngoại suy research runtime",
+      "compute_cost_category": "CPU local/synthetic engineering",
+      "authorization_requirements": "User autonomous safe engineering; không final methodology/model selection/realdata/fullCV/Holdout/Modal allocation",
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": [],
+      "evidence_refs": [
+        "research_tracking/reports/gkt_adapter_readiness_20261108.md",
+        "research_tracking/runs/gkt-inference-adapter-engineering-20261108-01/README.md"
+      ],
+      "verified_bundle_outputs": 69,
+      "completion_commit": "4a64525",
+      "manifest_sha256": "9ab55f777d2c2ffd7ae122a383680467138204a2a34f7e6063e594a97c2e2e01",
+      "completion_scope": "32portable unit tests và1actual stored checkpoint load;6targets=2scored+4unsupported,0research_fitted;0optimizer,51.662743s≤60. Mapping caller-declared NOT train-attested, full-prefix/OOV policy engineering, không fitted OnlineSession/epoch/corpus/selectedfit/resume.",
+      "scientific_adoption_pending": "S04/S05 và final comparator fit/corpus/recipe/mapping"
+    },
+    {
+      "id": "GPU09DISC",
+      "research_objective": "Xác minh fresh CPU environment baseline trước T4",
+      "rq": [],
+      "workstream": "gpu_readiness",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GPU09CPU"
+      ],
+      "required_inputs": "Materialization02/44selected versions/actual ABI02/source01→02 correction, profile0944",
+      "files_components": "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/t4-discovery01/",
+      "implementation_objective": "No-site stdlib discovery, không import Torch/install/device query; exact source/profile bindings và failclosed cold/partial/warm states",
+      "acceptance_criteria": "Actual read-only CPU warm discovery,165source/lock hashes và44versions/14NVIDIA khớp;source0.195042314s/launcher0.269272948s, cả hai cleanup accepted.40syntheticPASS/117.7979959s≤120; separate2RED→2GREEN correction0.6605037s≤10. Không normal-site import/full RECORD audit/CUDA/model/install/authorization.",
+      "verification_steps": "Đọc raw receipts/XML/manifest/copy inventory và raw Git SHA; không rerun job hoàn tất",
+      "required_artifacts": [
+        "research_tracking/reports/akt_t4_discovery_readiness_20261108.md",
+        "research_tracking/runs/akt-t4-discovery-engineering-20261108-01/manifest.json"
+      ],
+      "estimated_effort": "Deliverable đã kiểm08/11; xem raw receipts, không ngoại suy research runtime",
+      "compute_cost_category": "Free Colab CPU/read-only metadata",
+      "authorization_requirements": "User autonomous safe engineering; không final methodology/model selection/realdata/fullCV/Holdout/Modal allocation",
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": [],
+      "evidence_refs": [
+        "research_tracking/reports/akt_t4_discovery_readiness_20261108.md",
+        "research_tracking/runs/akt-t4-discovery-engineering-20261108-01/README.md"
+      ],
+      "verified_bundle_outputs": 53,
+      "completion_commit": "04b8ac1",
+      "manifest_sha256": "4927423cb8937973f67d8a217bcf591560fb07a93b7ecc372ce39cb2f0fb1983",
+      "completion_scope": "Actual read-only CPU warm discovery,165source/lock hashes và44versions/14NVIDIA khớp;source0.195042314s/launcher0.269272948s, cả hai cleanup accepted.40syntheticPASS/117.7979959s≤120; separate2RED→2GREEN correction0.6605037s≤10. Không normal-site import/full RECORD audit/CUDA/model/install/authorization.",
+      "scientific_adoption_pending": "Fresh GPU-host discovery/hidden audit +CUDA runtime/public worker; human chooses free T4 later"
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

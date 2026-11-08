@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## Bổ sung08/11 — GKT05 và discovery CPU đã nghiệm thu
+
+- [GKT05 adapter](gkt_adapter_readiness_20261108.md), commit `4a64525`:32portable tests và1actual stored checkpoint load;6targets=2scored+4unsupported,0research_fitted/optimizer.69outputs đã kiểm raw Git; chưa epoch/corpus/fitted OnlineSession hoặc training-attested item mapping.
+- [Discovery CPU trước T4](akt_t4_discovery_readiness_20261108.md), commit `04b8ac1`:165source/lock hashes,44versions, cả hai cleanup accepted; **warm candidate, chưa CUDA/GPU ready**.53outputs raw Git verified; giữ timeout, failed discovery01 và scheme correction. Không cài lại venv/đổi hardware/Modal.
+
 ## Hiện hành08/11 — Linux CPU worker đã đóng (`1c52043`)
 
 - [Linux worker readiness](akt_linux_worker_readiness_20261108.md) — [bundle 194 output](../runs/akt-linux-worker-readiness-20261108-01/README.md), [manifest](../runs/akt-linux-worker-readiness-20261108-01/manifest.json): actual Linux Gate24 **771 PASS/0 fail/error/skip**, native elapsed **268.092342194s ≤ 600s**; native CPU dummy **48 train targets/8 validation predictions/2 genuine optimizer updates**, reload exact. Đây là engineering synthetic CPU, không kết quả efficacy hoặc hoàn tất RQ.
