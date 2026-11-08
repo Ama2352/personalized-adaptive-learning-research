@@ -1,5 +1,13 @@
 # Hợp đồng nối KT với simulator — engineering CPU
 
+## Bổ sung08/11 — reference threshold cần S04 duyệt, chưa áp dụng
+
+Đã kiểm metadata gốc Paper2 `data/simulator_inputs/question_bank.csv`:84items/28concepts, mỗi concept đúng ba difficulties1050/1200/1350; file SHA256 `fb5924ac0d19049ef1a5be23352592e30dfa3a4bde3e3fa07f10979fe0887e4d`. Đây là kiểm metadata, không generate learner hoặc đọc Junyi/Holdout. `ReferenceSet`/`probe_references` hiện nhận weights khai báo, trả uncalibrated reference correctness; không tự tạo mastery decision.
+
+Nếu S04 chọn **equal weights trên ba item có sẵn** và neo tiêu chí response vào θ1250, công thức nguồn Paper2 cell9 `elo_probability(θ,d)=1/(1+10**((d-θ)/400))` cho ba xác suất `0.7597469266479578`, `0.5714631174083814`, `0.35993500019711494`; mean là **0.5637150147511514**. Đây là phép tính theo công thức environment, không native model prediction hoặc calibration fit. Với cùng bộ tham chiếu đối xứng quanh1200, mean0,5 tương ứng θ1200; vì vậy gán τ0,5 trong adapter mới sẽ không giữ tiêu chí θ1250.
+
+Các số trên **không phải ngưỡng được phê duyệt**, không BKT P(K), không proof estimator calibrated, và không áp dụng ngược vào historical native selector. Cần S04 chốt reference weights, ý nghĩa latent target, response calibration partition và criterion chung; learner/item support thiếu phải báo unsupported thay vì đổi mẫu số. `PREREQUISITE_READY_ELO=1150` của environment learning-deficit cũng không thay được native controller rule `is_mastered(parent) or selection_count≥6`. Ràng buộc readiness, mastery và learning mechanism phải được ghi riêng, giữ reproduction nguyên trạng.
+
 Ngày07/11/2026. Tiếp REC01–REC06; giữ source/results Paper1/2, không train Junyi/GPU/Holdout. Đây là interface prototype cho thiết kế06, chưa thay controller hay chốt scientific protocol S04/S05.
 
 ## Các quyết định đủ bằng chứng để cài đặt
