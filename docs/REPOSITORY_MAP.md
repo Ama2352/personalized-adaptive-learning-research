@@ -116,9 +116,9 @@ Các mục count/inventory phía trên là snapshots có ngày, không tự cậ
 
 [Hợp đồng20](thesis_recovery/20_LINUX_CUDA_WORKER_CONTRACT.md), [runtime report](../research_tracking/reports/akt_linux_runtime_contract_20261107.md), [worker report](../research_tracking/reports/akt_main_worker_lifecycle_20261107.md) và [SAKT inference report](../research_tracking/reports/sakt_adapter_readiness_20261107.md) là các điểm vào mới. Logs/failures/source snapshots nằm trong ba run có tên theo mục đích ở EVIDENCE_INDEX; không tạo thêm root reports hoặc chuyển historical artifacts. Gate17 nativeCPU513cases và SAKT89cases là suites riêng; Linux/CUDA main-worker execution chưa được xác nhận.
 
-## Báo cáo GVHD08/11
+## Báo cáo GVHD hiện hành09/11
 
-Mở [báo cáo GVHD](../research_tracking/reports/BAO_CAO_TIEN_DO_GVHD_20261108.md) để xem các claim đã có bằng chứng và agenda phương pháp. [RQ1 transitions](../research_tracking/reports/rq1_transition_evidence_20261108.md) và [RQ2 conditions](../research_tracking/reports/rq2_conditions_evidence_20261108.md) có scripts tái tính ở scripts/research và bundles theo run trong research_tracking/runs; reuse dữ liệu đã lưu, không rerun tất cả paper hoặc dùng software pass làm efficacy.
+Mở [tóm tắt GVHD](../research_tracking/supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md) và [báo cáo minh họa](../research_tracking/supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html): ngữ cảnh hai paper → tiến độ hiện tại → bốn chặng nghiên cứu → phần còn phải chứng minh. Mỗi ngày giữ đúng hai file đọc; log và hồ sơ kiểm chứng không đưa vào gói GVHD. [RQ1 transitions](../research_tracking/reports/rq1_transition_evidence_20261108.md), [RQ1 cross-ready](../research_tracking/reports/rq1_cross_ready_membership_20261109.md) và [RQ2 conditions](../research_tracking/reports/rq2_conditions_evidence_20261108.md) có scripts tái tính ở scripts/research và bundles theo run trong research_tracking/runs; reuse dữ liệu đã lưu, không rerun tất cả paper hoặc dùng software pass làm efficacy.
 
 ## Điểm vào engineering08/11
 

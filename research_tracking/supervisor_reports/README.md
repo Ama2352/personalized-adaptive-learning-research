@@ -1,6 +1,8 @@
 # Báo cáo tiến độ theo ngày
 
-**Bản hiện hành:** [Tóm tắt ngày 08/11](2026-11-08/01_tien_do/BAO_CAO.md) và [báo cáo nghiên cứu HTML](2026-11-08/01_tien_do/BAO_CAO_NGHIEN_CUU.html).
+**Bản hiện hành:** [Tóm tắt ngày 09/11](2026-11-09/01_tien_do/BAO_CAO.md) và [báo cáo nghiên cứu HTML](2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html).
+
+[Bản ngày 08/11](2026-11-08/01_tien_do/BAO_CAO.md) được giữ để đối chiếu diễn tiến. Bản 09/11 bổ sung phân tích đồng xuất hiện giữa thay đổi tập cho phép và đề xuất thử trên cùng 1.080 tình huống; không tạo thêm mẫu độc lập.
 
 Mỗi đợt giữ hai file: bản tóm tắt và báo cáo minh họa chi tiết. HTML tự chứa nội dung, bảng và hình; người đọc không cần repository, notebook hoặc thư viện để xem. Nguồn nền được ghi bằng tên tài liệu và trang, không dẫn đường dẫn nội bộ.
 

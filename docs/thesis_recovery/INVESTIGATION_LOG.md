@@ -594,3 +594,9 @@ RQ1cached32outputsđãđóng, giữ8jointcells/16membershipcells/tấtcả16grou
 ## 09/11 — consumer confidence current-source đã đóng
 
 SourceECC313/testF02:66purePASS27,060020s, actualreadonly03 accepted31scores/1,380055s,0newfits/model/oracle. Các failure01resource-equality và02signedseed được giữ, thêmpositive/negativeguards đúngproducer; không sửa dữ liệu. Bundle106outputsmanifestf19c2243... đã đóng, historical60/47/producer113 chỉthamchiếu. No independentgreedyproof hoặcCGAKTbenefit. Collectionprep đã xác nhậnđúngphạmvi localROOTauthorization, template/worker/outer chờpacket/sourcefreeze, không cóauto-reviewdeniallocal. Daily09candidate mới9SVG, rootQA/publishpending.
+
+## 09/11 — xuất bản báo cáo và đóng phiên web sau kiểm giao diện
+
+Đã xuất bản gói ngày09/11 đúng hai file, giữ nguyên bản08/11. Nội dung nối ngữ cảnh → tiến độ → lịch sử bốn chặng; thêm bảng2×2 trên1.080 tình huống cũ, không nâng kiểm phần mềm thành kết quả mô hình. Reviewer độc lập đối chiếu55/17/5, provenance fixed-stream và giới hạn SAKT/31điểm cạnh. Kiểm giao diện1365/390:9SVG,0chồng chữ,0vượt khung,0tài nguyên ngoài,liên kết nội bộ hợp lệ; đã xem ảnh hình mới. Đóng browser trong finally và tool xác nhận không còn tab. Không mở máy chủ preview. User yêu cầu duy trì việc tắt trang kiểm thử sau mỗi lượt; áp dụng cho các lượt sau.
+
+Kiểm raw Git bb4b23e/2c337d4:185output+3manifest+4source đều khớpSHA (192blobs); đây là kiểm toàn vẹn, không tăng mẫu nghiên cứu. Collection01 bị từ chối1,848673s trước pytest; trial02 giữ nguyên guard, bổ sung quan sát và bị từ chối1,658785s. Quan sát02 chứng minh parent/time đúng, nhưng psutil trả đường dẫn shim thiếu ký tự ổ đĩa; không phải lỗi huấn luyện hoặc thiếu quyền import. Hai trial giữ nguyên, cleanupJob0; chuẩn bị kiểm identity native-handle ở đường dẫn mới, chưa có current fullGatePASS.
