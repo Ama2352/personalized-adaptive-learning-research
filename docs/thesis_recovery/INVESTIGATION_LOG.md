@@ -477,3 +477,8 @@ Metadata-only actual ResearchSplitPlan kiểm role48/6/6 và modulo profile16/2/
 ### 08/11 — Báo cáo GVHD revision4 đã kiểm và commit
 
 Same reportMD/JSON tại research_tracking/reports/BAO_CAO_TIEN_DO_GVHD_20261108, commit e502848, SHA7a727d9b. Root xác nhận32source bytes/358bundleoutputs/25links và exactrev3Git,0Holdout/training. Nêu negativePG/full–empty963khác oldfull–GF964, history/timeconfounds, không RQcomplete; report chưa gửi ngoài. Contract22 là design, không trainer/fitted artifact.
+
+
+### 08/11 — Archive failure vận hành đã commit
+
+Commit d7d7ec8 giữ28outputs+manifest lỗiavailabilityattempt01/pureprobe; rawGit28/28verified, counter2448chỉintegrity. VerdictFAILED_PRE_NATIVE_AND_METADATA_PROBE_UNKNOWN,0native,spent0.845393699943088/60. Không relabel archivercompleted thành experimentPASS. Mục lục reports cập nhậtrevision4/cachednotebookC01–C14 scope.

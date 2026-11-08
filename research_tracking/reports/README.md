@@ -1,6 +1,12 @@
 # Mục lục báo cáo và phân tích KLTN
 
-**RQ2 bổ sung:** [metric-specific retention counterexample](rq2_retention_metric_separation_20261108.md): soft gain có thể đảo ranking trên trạng thái dựng sẵn dù net-theta retention giữ common factor. Không policy/trajectory effect; [báo cáo GVHD](BAO_CAO_TIEN_DO_GVHD_20261108.md) đã cập nhật revision3.
+**Báo cáo hiện hành revision4 (`e502848`):** [GVHD](BAO_CAO_TIEN_DO_GVHD_20261108.md),32source inputs/25links đã kiểm. Bổ sung [full–empty edge contrast](rq1_fixed_edge_set_contrast_20261108.md) và [history bins](rq1_history_stratified_edge_contrast_20261108.md): kết quả gộp cải thiện nhỏ nhưng PG bất lợi; history/time còn confounding, không causal learning benefit hoặc RQ completion. Notebook bên dưới vẫn snapshot C01–C14, chưa chứa hai phân tích mới.
+
+**RQ2 bổ sung:** [metric-specific retention counterexample](rq2_retention_metric_separation_20261108.md): soft gain có thể đảo ranking trên trạng thái dựng sẵn dù net-theta retention giữ common factor. Không policy/trajectory effect.
+
+**Đường triển khai tiếp:** [first Development corpus profile](first_development_corpus_plan_20261108.md) đã chốt48/6/6×210 nhưng chưa sinh, [A0 lifecycle contract](../../docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md) chưa là trainer. [Archive lỗi native replay trước imports](../runs/rq1-history-availability-20261108-01/README.md) giữ verdict thất bại/UNKNOWN và0native calls, không scientific result; đang sửa owned Windows launch trước retry. Không Modal spending.
+
+**Đính chính dự toán:** [hạch toán23](../../docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md) phân biệt9neural conditions với18selected/refit phases mỗi môi trường, tổng36phases cho allocation đầy đủ hai môi trường; chưa tính inference/GAM/surrogate. Không27lượt, không runtime/cost đã đo hoặc quyền chạy.
 
 **Báo cáo GVHD hiện hành:** [tiến độ08/11](BAO_CAO_TIEN_DO_GVHD_20261108.md) / [source/revision](BAO_CAO_TIEN_DO_GVHD_20261108.json). [Notebook báo cáo](../../notebooks/thesis_evidence_report.ipynb) đã có outputs cached; [integrity bổ sung](thesis_evidence_notebook_integrity_20261108.md), chưa Jupyter-kernel/visual QA.
 
