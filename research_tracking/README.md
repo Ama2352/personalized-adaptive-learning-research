@@ -1,6 +1,6 @@
 # Theo dõi bằng chứng nghiên cứu KLTN
 
-**Báo cáo tiến độ để trao đổi GVHD:** mở [thư mục báo cáo theo ngày](supervisor_reports/README.md), bắt đầu từ [gói08/11 — đợt01](supervisor_reports/2026-11-08/01_tien_do/README.md). Gói có báo cáo dễ đọc, bảng truy nguồn, notebook kết quả và tài liệu liên quan. [Bản kỹ thuật revision6](reports/BAO_CAO_TIEN_DO_GVHD_20261108.md) giữ làm nguồn nền, không là trang bắt đầu mới. Không tự gửi ra ngoài.
+**Báo cáo tiến độ để trao đổi GVHD:** mở [bản tóm tắt08/11 — đợt01](supervisor_reports/2026-11-08/01_tien_do/BAO_CAO.md) và [notebook đầy đủ kết quả nghiên cứu](supervisor_reports/2026-11-08/01_tien_do/KET_QUA_NGHIEN_CUU.ipynb). Theo yêu cầu người dùng, thư mục hiện hành chỉ giữ đúng2file này. Gói26artifacts cũ và các bản đọc/receipts đã loại khỏi layout vẫn bảo toàn ở Git commit `2e63cd9`; không dùng hash/cellcount cũ chứng nhận bản notebook đang chỉnh. [Bản kỹ thuật revision6](reports/BAO_CAO_TIEN_DO_GVHD_20261108.md) giữ làm nguồn nền. ROOT chốt currentpins sau kiểm; không tự gửi ra ngoài.
 
 **Protocol Development hiện hành:** [S04-A/S05-B V1](../docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md) đã được nhóm chọn theo quyền user giao ngày08/11. Các snapshot chờ S04/S05 cũ được giữ làm lịch sử; việc chọn phương pháp không cấp quyền chi Modal, fullCV hoặc Holdout.
 

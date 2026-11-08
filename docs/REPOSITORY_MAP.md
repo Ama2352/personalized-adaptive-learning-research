@@ -4,7 +4,7 @@
 
 ## Khi viết báo cáo, mở gì trước?
 
-**Để xem tiến độ với GVHD:** mở [báo cáo theo ngày](../research_tracking/supervisor_reports/README.md). Mỗi đợt có bản trình bày dễ đọc, notebook số liệu/biểu đồ, bảng truy nguồn và tài liệu kèm. `research_tracking/reports/` tiếp tục giữ phân tích chuyên sâu; `runs/` giữ bằng chứng gốc.
+**Để xem tiến độ với GVHD:** mở [báo cáo theo ngày](../research_tracking/supervisor_reports/README.md). Mỗi đợt chỉ có một summary và một notebook trình bày quá trình thí nghiệm, bảng/biểu đồ cùng nguồn kiểm chứng; không chép thêm tài liệu kèm. `research_tracking/reports/` tiếp tục giữ phân tích chuyên sâu; `runs/` giữ bằng chứng gốc.
 
 | Cần viết/kiểm tra | Đọc bản diễn giải | Đối chiếu bằng chứng gốc |
 |---|---|---|

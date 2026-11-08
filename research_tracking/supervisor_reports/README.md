@@ -1,26 +1,12 @@
-# Báo cáo tiến độ gửi GVHD
+# Báo cáo tiến độ theo ngày
 
-**Bản mới nhất:** [08/11/2026 — đợt01](2026-11-08/01_tien_do/README.md).
+**Bản hiện hành:** [Summary ngày08/11](2026-11-08/01_tien_do/BAO_CAO.md) · [Notebook Colab](2026-11-08/01_tien_do/KET_QUA_NGHIEN_CUU.ipynb).
 
-Đây là điểm bắt đầu cho người xem tiến độ. Các phân tích chuyên sâu vẫn ở `research_tracking/reports/`, bằng chứng gốc ở `research_tracking/runs/`; không di chuyển hoặc thay thế chúng.
+Mỗi đợt báo cáo chỉ giữ **hai file** trong thư mục ngày/đợt:
 
-## Cách lưu từ nay về sau
+- `BAO_CAO.md`: claim đã đạt, phạm vi bằng chứng, phần chưa đạt và bước tiếp theo.
+- `KET_QUA_NGHIEN_CUU.ipynb`: quá trình nghiên cứu, thiết kế/đối chứng, kiểm chứng, số liệu, biểu đồ, nguồn và giới hạn. Tự chứa kết quả tổng hợp để chạy Colab CPU; không tự training.
 
-Mỗi ngày có một thư mục `YYYY-MM-DD/`. Nếu cùng ngày có nhiều mốc đã nghiệm thu, tạo `01_tien_do/`, `02_.../` theo thứ tự; không dùng thời gian tạo file để suy ra thời gian chạy thí nghiệm.
+Không chép tài liệu/manifest/log vào gói đọc. Notebook dẫn đến nguồn gốc tại `research_tracking/reports/` và `research_tracking/runs/`. Không di chuyển hoặc chỉnh sửa các nguồn đó để làm đẹp báo cáo. Giữ lịch sử các lần cập nhật trong Git; khi có mốc mới khác ngày, tạo một cặp file tương tự theo ngày. Không tự gửi báo cáo ra ngoài.
 
-Mỗi gói gồm:
-
-- `README.md`: đọc gì trước, phạm vi thời gian và cách mở notebook.
-- `BAO_CAO.md`: thành quả, ý nghĩa theo RQ, phần đã/chưa xử lý và mốc tiếp theo.
-- `BANG_CHUNG.md`: thành quả → file số liệu → mã/plan/log/manifest → giới hạn.
-- `KET_QUA_NGHIEN_CUU.ipynb`: bảng, biểu đồ và nhận định có nguồn; chạy Colab CPU từ kết quả đã lưu, không tự training hoặc tải dữ liệu nhạy cảm.
-- `tai_lieu/`: tài liệu đọc kèm và JSON cần thiết. Chỉ sao chép có mục đích; không nhân bản dataset/checkpoint/log lớn.
-- `NGUON.json`: ghi nguồn, SHA trước/sau sao chép, bản sao byte-exact hay bản đọc đã chỉnh đường dẫn. Notebook ghi nguồn số liệu bên trong.
-
-Sau khi kiểm và commit, giữ snapshot. Đợt sau chỉ bổ sung phần mới và giải thích thay đổi so với đợt trước; cập nhật link “bản mới nhất” tại đây. Không sửa kết quả lịch sử để đồng bộ cách diễn giải mới. Không tự gửi gói ra ngoài.
-
-## Lịch sử các gói
-
-| Ngày | Đợt | Nội dung | Loại bằng chứng |
-|---|---|---|---|
-|08/11/2026|[01 — Tiến độ hiện tại](2026-11-08/01_tien_do/README.md)|Chẩn đoán RQ1/RQ2, đối chứng lịch sử/năng lực, corpus đã sinh và phần RQ3 còn thiếu|Tổng hợp lịch sử và pilot có kiểm soát; chưa hoàn tất RQ|
+Gói nhiều file cũ ngày08/11 được bảo toàn tại commit `2e63cd9`. Phiên bản hiện hành đã tinh gọn theo yêu cầu người dùng; số file cũ không mô tả cấu trúc hiện tại.
