@@ -1,0 +1,165 @@
+"""Stdlib-only mocked contracts; never call main/Popen/normal startup/Torch."""
+import argparse,ast,copy,hashlib,importlib.util,io,json,contextlib,tempfile,unittest
+from pathlib import Path
+from unittest.mock import patch
+W=Path(__file__).resolve().parent
+spec=importlib.util.spec_from_file_location('hidden_audit_definition_only',W/'hidden_audit01.py')
+d=importlib.util.module_from_spec(spec);spec.loader.exec_module(d)
+BASE=W.parent/'t4-discovery01'
+load=lambda p:json.loads(p.read_text())
+BASE_RAW=(BASE/'actual-cpu-discovery02-result.json').read_bytes()
+PROFILE_RAW=(BASE/'discovery_profile01.json').read_bytes()
+MANIFEST=load(W/'reviewed_startup_manifest01.json')
+
+class HiddenAuditTests(unittest.TestCase):
+    def setUp(self):
+        baseline=json.loads(BASE_RAW);fresh=copy.deepcopy(baseline)
+        fresh['host_signals']={'COLAB_GPU':'1','TPU_present':False,'nvidia_device_entry_names':['nvidia0']}
+        fresh['approval_reference']='SYNTHETIC_NEW_GPU_HOST_DISCOVERY_NOT_ACTUAL'
+        launcher=load(BASE/'actual-cpu-discovery02-launcher.json')
+        launcher.pop('inline_result_text',None);launcher['status']='COMPLETED_GPU_HOST_READONLY_DISCOVERY_NOT_GPU_READY'
+        launcher['phase']='GPU_HOST_READONLY_DISCOVERY';launcher['result_path']='/content/KLTN_GPU10_DISCOVERY_20261108_01/gpu-host-mock01/result.json'
+        launcher['command']=['/usr/bin/python3','-I','-S','-B','/content/KLTN_GPU10_DISCOVERY_20261108_01/gpu-host-mock01-inputs/discovery02.py',
+                            '--attempt-id','gpu-host-mock01','--approval-reference',fresh['approval_reference'],
+                            '--profile','/content/KLTN_GPU10_DISCOVERY_20261108_01/gpu-host-mock01-inputs/profile.json',
+                            '--expected-source-sha256',d.DISCOVERY_SOURCE_SHA,'--profile-sha256',d.PROFILE_SHA]
+        self.v={'baseline':baseline,'fresh':fresh,'launcher':launcher,'profile':json.loads(PROFILE_RAW),
+                'acceptance':{'phase':'GPU_HOST_READONLY_DISCOVERY','status':'VERIFIED_ACTUAL_WARM_GPU_HOST_DISCOVERY_NOT_GPU_READY',
+                 'raw_rpc_sha256':'e'*64,'parent_review_reference':'SYNTHETIC_UNIT_FIXTURE_ONLY','launcher_cleanup':True,
+                 'native_target_cleanup':True,'source_files':165}}
+        self.h={};self.refresh()
+        self.fact={'path':d.VENV_TEXT+'/lib/python3.13/site-packages/distutils-precedence.pth',
+                   'root_relative':'.venv/lib/python3.13/site-packages/distutils-precedence.pth',
+                   'is_symlink':False,'sha256':next(iter(MANIFEST['files'].values()))['sha256'],'bytes':151,'text':'actualbytes hash bound'}
+        self.link={'path':'/usr/lib/python3.13/sitecustomize.py','root_relative':None,'is_symlink':True,
+                   'resolved_path':'/etc/python3.13/sitecustomize.py','target_is_symlink':False,'bytes':0,
+                   'sha256':d.digest(b''),'text':''}
+        self.declared={self.fact['root_relative']:self.fact['sha256']}
+    def refresh(self):
+        self.h['baseline']=d.digest(BASE_RAW);self.h['profile']=d.digest(PROFILE_RAW)
+        self.h['fresh']=d.digest(json.dumps(self.v['fresh']).encode())
+        self.v['launcher']['result_sha256']=self.h['fresh']
+        self.h['launcher']=d.digest(json.dumps(self.v['launcher']).encode())
+        self.v['acceptance'].update(result_sha256=self.h['fresh'],launcher_sha256=self.h['launcher'])
+    def reject(self):
+        self.refresh()
+        with self.assertRaises((ValueError,KeyError,TypeError)):d.validate_bindings(self.v,self.h)
+    def test_positive_bindings_are_synthetic_not_GPU_execution(self):
+        expected,versions=d.validate_bindings(self.v,self.h)
+        self.assertEqual(len(expected),165);self.assertEqual(len(versions),44)
+    def test_cpu_baseline_and_CPU_labels_cannot_be_fresh(self):
+        for edit in ('baseline','cpu-label','cpu-host','cold','TPU'):
+            with self.subTest(edit=edit):
+                prior=copy.deepcopy(self.v)
+                if edit=='baseline':self.v['fresh']=copy.deepcopy(self.v['baseline'])
+                if edit=='cpu-label':self.v['acceptance']['phase']='CPU_DISCOVERY'
+                if edit=='cpu-host':self.v['fresh']['host_signals']={'COLAB_GPU':None,'TPU_present':False,'nvidia_device_entry_names':[]}
+                if edit=='cold':self.v['fresh']['status']='COLD_VENV_ABSENT'
+                if edit=='TPU':self.v['fresh']['host_signals']['TPU_present']=True
+                self.reject();self.v=prior
+    def test_source_ABI_profile_fingerprint_changes_reject(self):
+        paths=[('source_sha256','tests/akt/test_runtime.py'),('host_abi','soabi'),
+               ('target_probe','abi','gil_disabled'),('target_probe','origins','torch','sha256')]
+        for path in paths:
+            with self.subTest(path=path):
+                old=copy.deepcopy(self.v);target=self.v['fresh']
+                for key in path[:-1]:target=target[key]
+                target[path[-1]]=False if path[-1]=='gil_disabled' else 'changed'
+                self.reject();self.v=old
+        self.h['profile']='f'*64
+        with self.assertRaises(ValueError):d.validate_bindings(self.v,self.h)
+    def test_changed_metadata_or_version_reject(self):
+        for key in ('version','metadata_sha256','record_sha256'):
+            with self.subTest(key=key):
+                old=copy.deepcopy(self.v);self.v['fresh']['target_probe']['distributions'][0][key]='a'*64
+                self.reject();self.v=old
+    def test_cleanup_RC_and_postexit_budget_reject(self):
+        changes=[('child','cleanup_accepted',False),('child','returncode',1),('child','returncode',False)]
+        for first,key,value in changes:
+            with self.subTest(key=key,value=value):
+                old=copy.deepcopy(self.v);self.v['fresh'][first][key]=value;self.reject();self.v=old
+        self.v['launcher']['launcher_seconds']=30.01;self.reject()
+    def test_unknown_or_modified_startup_has_no_permission(self):
+        self.assertFalse(d.startup_decision([self.fact,self.link],None,self.declared)['accepted'])
+        facts=copy.deepcopy([self.fact,self.link]);facts[0]['sha256']='f'*64
+        self.assertFalse(d.startup_decision(facts,MANIFEST,self.declared)['accepted'])
+        facts=copy.deepcopy([self.fact,self.link]);facts.append({**self.fact,'root_relative':'.venv/extra.pth'})
+        self.assertFalse(d.startup_decision(facts,MANIFEST,self.declared)['accepted'])
+    def test_only_exact_reviewed_empty_system_symlink_exception(self):
+        self.assertTrue(d.startup_decision([self.fact,self.link],MANIFEST,self.declared)['accepted'])
+        for key,value in [('bytes',1),('sha256','a'*64),('resolved_path','/etc/elsewhere'),('is_symlink',False)]:
+            with self.subTest(key=key):
+                link={**self.link,key:value}
+                self.assertFalse(d.startup_decision([self.fact,link],MANIFEST,self.declared)['accepted'])
+    def test_record_binding_and_exact_manifest_SHA_required(self):
+        self.assertFalse(d.startup_decision([self.fact,self.link],MANIFEST,{})['accepted'])
+        self.v['startup_manifest']=MANIFEST;self.h['startup_manifest']='f'*64
+        with self.assertRaises(ValueError):d.validate_bindings(self.v,self.h)
+    def test_env_is_hidden_allowlisted_no_inheritedPIP(self):
+        with patch.dict('os.environ',{'PIP_INDEX_URL':'private','PYTHONPATH':'outside','CUDA_VISIBLE_DEVICES':'0'}):
+            env=d.child_environment(Path('/owned/new'),{'SETUPTOOLS_USE_DISTUTILS':'stdlib'})
+        self.assertEqual(env['CUDA_VISIBLE_DEVICES'],'');self.assertEqual(env['NVIDIA_VISIBLE_DEVICES'],'')
+        self.assertNotIn('PIP_INDEX_URL',env);self.assertNotIn('PYTHONPATH',env)
+        with self.assertRaises(ValueError):d.child_environment(Path('/owned/new'),{'SETUPTOOLS_USE_DISTUTILS':'local'})
+    def test_original_CHILD_exact_and_no_explicit_device_queries(self):
+        self.assertEqual(d.digest(d.CHILD.encode()),d.CHILD_SHA)
+        code=d.child_code(self.v['profile']['package_versions']);ast.parse(code)
+        for text in ('is_available(', 'device_count(', 'get_device_name(', 'nvidia-smi'):
+            self.assertNotIn(text,code)
+        self.assertEqual(d.OLD_IMPORTS,{'torch','numpy','pandas','duckdb','sklearn','scipy','psutil','pytest'})
+        tree=ast.parse((W/'hidden_audit01.py').read_bytes())
+        cleanup=next(n for n in ast.walk(tree) if isinstance(n,ast.FunctionDef) and n.name=='cleanup_once')
+        handled=min(n.lineno for n in ast.walk(cleanup) if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='handled' for t in n.targets))
+        signal=min(n.lineno for n in ast.walk(cleanup) if isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and n.func.attr=='killpg')
+        self.assertLess(handled,signal)  # Static ownership ordering; not actual signal/cleanup behavior proof.
+    def payload(self):
+        versions=self.v['profile']['package_versions'];metadata=d.distribution_map(self.v['fresh']['target_probe'])
+        p={'prefix':d.VENV_TEXT,'executable':d.TARGET_TEXT,'python':'3.13.18','package_count':44,
+           'distributions':{n:{'version':v,'metadata_sha256':metadata[n]['metadata_sha256']} for n,v in versions.items()},
+           'origins':{n:{'file':d.VENV_TEXT+'/lib/python3.13/site-packages/'+n+'/__init__.py'} for n in d.OLD_IMPORTS},
+           'cuda_initialized':False,'cpu_scalar_check':True,'torch_build':'2.7.1+cu126','cuda_build_metadata':'12.6',
+           'external_distribution_origins':0,'gpu_device_queries':0,'gpu_model_steps':0,'optimizer_steps':0}
+        return p,metadata
+    def test_payload_CPU_normalprefix_cleanup_and_budget(self):
+        p,metadata=self.payload();versions=self.v['profile']['package_versions']
+        self.assertTrue(d.accept_payload(p,versions,returncode=0,cleanup=True,elapsed=1,metadata_fingerprints=metadata))
+        for key,value in [('prefix','/usr'),('cuda_initialized',True),('optimizer_steps',1),('cpu_scalar_check',False)]:
+            with self.subTest(key=key),self.assertRaises(ValueError):d.accept_payload({**p,key:value},versions,returncode=0,cleanup=True,elapsed=1,metadata_fingerprints=metadata)
+        for rc,cleanup,elapsed in [(0,False,1),(1,True,1),(0,True,90.001),(False,True,1)]:
+            with self.subTest(rc=rc,cleanup=cleanup,elapsed=elapsed),self.assertRaises(ValueError):d.accept_payload(p,versions,returncode=rc,cleanup=cleanup,elapsed=elapsed,metadata_fingerprints=metadata)
+    def test_relocation_copy_origins_and_symlink_guards(self):
+        with tempfile.TemporaryDirectory(dir=W/'trial01') as td:
+            root=Path(td);self.assertTrue(root.resolve().is_relative_to(W.resolve()))
+            directory='artifacts/akt/gpu10-hidden-inputs/mock';base=root/directory;base.mkdir(parents=True)
+            rows=[]
+            for label in ('baseline','fresh','launcher','acceptance','profile'):
+                payload=json.dumps(self.v[label]).encode();(base/(label+'.json')).write_bytes(payload)
+                rows.append({'label':label,'original_locator':'outsideROOT/'+label,'origin_kind':'LOCAL_DERIVED_RECEIPT_FROM_VERIFIED_RPC' if label=='acceptance' else 'REMOTE_DISCOVERY_ARTIFACT','destination':directory+'/'+label+'.json','bytes':len(payload),'sha256_before_copy':d.digest(payload),'sha256_after_copy':d.digest(payload)})
+            inv={'schema_version':1,'role':'EXACT_BYTE_DISCOVERY_RELOCATION_NOT_EXECUTION','copy_root':directory,'phase_auto_execution':False,'copies':rows}
+            def write():
+                raw=json.dumps(inv).encode();(base/'copy-inventory.json').write_bytes(raw);return d.digest(raw)
+            with patch.object(d,'ROOT',root):
+                values,_,origins,_=d.read_inputs(directory,write());self.assertEqual(set(values),set(self.v));self.assertIn('outsideROOT',origins['fresh']['original_locator'])
+                inv['schema_version']=True
+                with self.assertRaises(ValueError):d.read_inputs(directory,write())
+                inv['schema_version']=1;inv['copies'][3]['origin_kind']='REMOTE_ORIGINAL_RECEIPT'
+                with self.assertRaises(ValueError):d.read_inputs(directory,write())
+                inv['copies'][3]['origin_kind']='LOCAL_DERIVED_RECEIPT_FROM_VERIFIED_RPC'
+                original=Path.is_symlink;victim=base/'profile.json'
+                with patch.object(Path,'is_symlink',lambda p:p==victim or original(p)):
+                    with self.assertRaises(ValueError):d.read_inputs(directory,write())
+                with self.assertRaises(ValueError):d.read_inputs('../escape','a'*64)
+    def test_exact_required_mode_CLI(self):
+        flags={'--mode':d.MODE,'--expected-source-sha256':'a'*64,'--attempt-id':'warm01',
+               '--approval-reference':'MOCK_ONLY','--input-directory':'artifacts/akt/gpu10-hidden-inputs/warm01',
+               '--input-inventory-sha256':'b'*64}
+        self.assertEqual(d.parser().parse_args([x for pair in flags.items() for x in pair]).mode,d.MODE)
+        for missing in flags:
+            argv=[x for k,v in flags.items() if k!=missing for x in (k,v)]
+            with self.subTest(missing=missing),contextlib.redirect_stderr(io.StringIO()),self.assertRaises(SystemExit):d.parser().parse_args(argv)
+
+if __name__=='__main__':
+    result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(HiddenAuditTests))
+    print(json.dumps({'unit_methods':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),
+                      'actual_target_model_gpu_install_network_calls':0,'scope':'Synthetic metadata/AST/CLI/filesystem-copy mocks only; no main/Popen/normal startup.'}))
+    raise SystemExit(0 if result.wasSuccessful() else 1)

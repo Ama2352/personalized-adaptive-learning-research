@@ -1,0 +1,217 @@
+test_active_extras_not_silently_resolved (test_packet_validator01.CompatibilityTests.test_active_extras_not_silently_resolved) ... FAIL
+test_active_missing_provider_rejected (test_packet_validator01.CompatibilityTests.test_active_missing_provider_rejected) ... FAIL
+test_active_url_not_silently_resolved (test_packet_validator01.CompatibilityTests.test_active_url_not_silently_resolved) ... ok
+test_active_version_conflict_rejected (test_packet_validator01.CompatibilityTests.test_active_version_conflict_rejected) ... FAIL
+test_all11_marker_fields_mandatory (test_packet_validator01.CompatibilityTests.test_all11_marker_fields_mandatory) ... ok
+test_compat_bindings_rejected (test_packet_validator01.CompatibilityTests.test_compat_bindings_rejected) ... ok
+test_duplicate_lock_row_rejected (test_packet_validator01.CompatibilityTests.test_duplicate_lock_row_rejected) ... FAIL
+test_explicit_linux_marker_ignores_windows_host (test_packet_validator01.CompatibilityTests.test_explicit_linux_marker_ignores_windows_host) ... ERROR
+test_inactive_extra_recorded_without_dependency (test_packet_validator01.CompatibilityTests.test_inactive_extra_recorded_without_dependency) ... ERROR
+test_incompatible_wheel_tag_rejected (test_packet_validator01.CompatibilityTests.test_incompatible_wheel_tag_rejected) ... ok
+test_marker_abi_mismatch_rejected (test_packet_validator01.CompatibilityTests.test_marker_abi_mismatch_rejected) ... ok
+test_nonbool_root_flag_rejected (test_packet_validator01.CompatibilityTests.test_nonbool_root_flag_rejected) ... FAIL
+test_report_hash_not_just_name_version (test_packet_validator01.CompatibilityTests.test_report_hash_not_just_name_version) ... FAIL
+test_requires_python_rejected (test_packet_validator01.CompatibilityTests.test_requires_python_rejected) ... FAIL
+test_unknown_marker_variable_rejected (test_packet_validator01.CompatibilityTests.test_unknown_marker_variable_rejected) ... ok
+test_unofficial_lock_url_rejected (test_packet_validator01.CompatibilityTests.test_unofficial_lock_url_rejected) ... ok
+test_abi_bool_pointer_rejected (test_packet_validator01.PacketTests.test_abi_bool_pointer_rejected) ... ok
+test_bool_policy_rejected (test_packet_validator01.PacketTests.test_bool_policy_rejected) ... ok
+test_bool_schema_rejected (test_packet_validator01.PacketTests.test_bool_schema_rejected) ... ok
+test_complete_engineering_chain_and_stored44_478_rows (test_packet_validator01.PacketTests.test_complete_engineering_chain_and_stored44_478_rows) ... ERROR
+test_copied_path_traversal_rejected (test_packet_validator01.PacketTests.test_copied_path_traversal_rejected) ... ok
+test_cross_attempt_rejected (test_packet_validator01.PacketTests.test_cross_attempt_rejected) ... ok
+test_current_cfg_binding_rejected (test_packet_validator01.PacketTests.test_current_cfg_binding_rejected) ... ok
+test_duplicate_json_key_rejected (test_packet_validator01.PacketTests.test_duplicate_json_key_rejected) ... ok
+test_failed_bootstrap_cleanup_rejected (test_packet_validator01.PacketTests.test_failed_bootstrap_cleanup_rejected) ... ok
+test_false_base_startup_rejected (test_packet_validator01.PacketTests.test_false_base_startup_rejected) ... ok
+test_forged_fresh_source_rejected (test_packet_validator01.PacketTests.test_forged_fresh_source_rejected) ... ok
+test_late_zero_rc_bootstrap_rejected (test_packet_validator01.PacketTests.test_late_zero_rc_bootstrap_rejected) ... ok
+test_nonempty_normal_target_rejected (test_packet_validator01.PacketTests.test_nonempty_normal_target_rejected) ... ok
+test_normal_prefix_must_be_venv (test_packet_validator01.PacketTests.test_normal_prefix_must_be_venv) ... ok
+test_old_cpu_bootstrap_rejected_before_downstream (test_packet_validator01.PacketTests.test_old_cpu_bootstrap_rejected_before_downstream) ... ok
+test_old_cpu_receipt_role_rejected (test_packet_validator01.PacketTests.test_old_cpu_receipt_role_rejected) ... ok
+test_packet_cannot_repin_bytes_without_external_review (test_packet_validator01.PacketTests.test_packet_cannot_repin_bytes_without_external_review) ... ok
+test_pending_startup_rejected (test_packet_validator01.PacketTests.test_pending_startup_rejected) ... ok
+test_reject_missing_each_artifact (test_packet_validator01.PacketTests.test_reject_missing_each_artifact) ... ok
+test_source_and_input_objects_unchanged (test_packet_validator01.PacketTests.test_source_and_input_objects_unchanged) ... ERROR
+test_unknown_target_hook_rejected (test_packet_validator01.PacketTests.test_unknown_target_hook_rejected) ... ok
+test_unsafe_effective_pip_rejected (test_packet_validator01.PacketTests.test_unsafe_effective_pip_rejected) ... ok
+test_wrong_cold_source_rejected (test_packet_validator01.PacketTests.test_wrong_cold_source_rejected) ... ok
+
+======================================================================
+ERROR: test_explicit_linux_marker_ignores_windows_host (test_packet_validator01.CompatibilityTests.test_explicit_linux_marker_ignores_windows_host)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\test_packet_validator01.py", line 201, in test_explicit_linux_marker_ignores_windows_host
+    result = self.evaluate(); rows = [x for x in result['dependency_rows'] if x['owner'] == 'cloudpickle']
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\test_packet_validator01.py", line 196, in evaluate
+    return v.evaluate_compatibility(self.report, self.lock if lock is None else lock,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.target, expected_bindings=self.base_target['bindings'])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\packet_validator01.py", line 242, in evaluate_compatibility
+    require(parts.hostname in ('files.pythonhosted.org', 'download.pytorch.org') and
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            parts.netloc == parts.hostname and not parts.query and not parts.fragment, 'official exact wheel URL')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\packet_validator01.py", line 45, in require
+    raise ValueError(reason)
+ValueError: official exact wheel URL
+
+======================================================================
+ERROR: test_inactive_extra_recorded_without_dependency (test_packet_validator01.CompatibilityTests.test_inactive_extra_recorded_without_dependency)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\test_packet_validator01.py", line 223, in test_inactive_extra_recorded_without_dependency
+    rows = [x for x in self.evaluate()['dependency_rows'] if x['owner'] == 'cloudpickle']
+                       ~~~~~~~~~~~~~^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\test_packet_validator01.py", line 196, in evaluate
+    return v.evaluate_compatibility(self.report, self.lock if lock is None else lock,
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.target, expected_bindings=self.base_target['bindings'])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\packet_validator01.py", line 242, in evaluate_compatibility
+    require(parts.hostname in ('files.pythonhosted.org', 'download.pytorch.org') and
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            parts.netloc == parts.hostname and not parts.query and not parts.fragment, 'official exact wheel URL')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\packet_validator01.py", line 45, in require
+    raise ValueError(reason)
+ValueError: official exact wheel URL
+
+======================================================================
+ERROR: test_complete_engineering_chain_and_stored44_478_rows (test_packet_validator01.PacketTests.test_complete_engineering_chain_and_stored44_478_rows)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\test_packet_validator01.py", line 115, in test_complete_engineering_chain_and_stored44_478_rows
+    result = self.validate(); self.assertFalse(result['execution_authorized'])
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\test_packet_validator01.py", line 107, in validate
+    def validate(self): return v.validate_packet(self.packet, self.blobs, trusted_review=self.review)
+                               ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\packet_validator01.py", line 371, in validate_packet
+    evaluation = evaluate_compatibility(data['selected_report'], artifact_bytes['linux_lock'], compat, expected_bindings=bindings)
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\packet_validator01.py", line 242, in evaluate_compatibility
+    require(parts.hostname in ('files.pythonhosted.org', 'download.pytorch.org') and
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            parts.netloc == parts.hostname and not parts.query and not parts.fragment, 'official exact wheel URL')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\packet_validator01.py", line 45, in require
+    raise ValueError(reason)
+ValueError: official exact wheel URL
+
+======================================================================
+ERROR: test_source_and_input_objects_unchanged (test_packet_validator01.PacketTests.test_source_and_input_objects_unchanged)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\test_packet_validator01.py", line 185, in test_source_and_input_objects_unchanged
+    before = copy.deepcopy((self.packet, self.blobs, self.review)); self.validate()
+                                                                    ~~~~~~~~~~~~~^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\test_packet_validator01.py", line 107, in validate
+    def validate(self): return v.validate_packet(self.packet, self.blobs, trusted_review=self.review)
+                               ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\packet_validator01.py", line 371, in validate_packet
+    evaluation = evaluate_compatibility(data['selected_report'], artifact_bytes['linux_lock'], compat, expected_bindings=bindings)
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\packet_validator01.py", line 242, in evaluate_compatibility
+    require(parts.hostname in ('files.pythonhosted.org', 'download.pytorch.org') and
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            parts.netloc == parts.hostname and not parts.query and not parts.fragment, 'official exact wheel URL')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\packet_validator01.py", line 45, in require
+    raise ValueError(reason)
+ValueError: official exact wheel URL
+
+======================================================================
+FAIL: test_active_extras_not_silently_resolved (test_packet_validator01.CompatibilityTests.test_active_extras_not_silently_resolved)
+----------------------------------------------------------------------
+ValueError: official exact wheel URL
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\test_packet_validator01.py", line 227, in test_active_extras_not_silently_resolved
+    with self.assertRaisesRegex(ValueError, 'extras'): self.evaluate()
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "extras" does not match "official exact wheel URL"
+
+======================================================================
+FAIL: test_active_missing_provider_rejected (test_packet_validator01.CompatibilityTests.test_active_missing_provider_rejected)
+----------------------------------------------------------------------
+ValueError: official exact wheel URL
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\test_packet_validator01.py", line 217, in test_active_missing_provider_rejected
+    with self.assertRaisesRegex(ValueError, 'missing'): self.evaluate()
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "missing" does not match "official exact wheel URL"
+
+======================================================================
+FAIL: test_active_version_conflict_rejected (test_packet_validator01.CompatibilityTests.test_active_version_conflict_rejected)
+----------------------------------------------------------------------
+ValueError: official exact wheel URL
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\test_packet_validator01.py", line 220, in test_active_version_conflict_rejected
+    with self.assertRaisesRegex(ValueError, 'conflict'): self.evaluate()
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "conflict" does not match "official exact wheel URL"
+
+======================================================================
+FAIL: test_duplicate_lock_row_rejected (test_packet_validator01.CompatibilityTests.test_duplicate_lock_row_rejected)
+----------------------------------------------------------------------
+ValueError: official exact wheel URL
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\test_packet_validator01.py", line 241, in test_duplicate_lock_row_rejected
+    with self.assertRaisesRegex(ValueError, 'duplicate'): self.evaluate(self.lock + self.lock.splitlines()[0] + b'\n')
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "duplicate" does not match "official exact wheel URL"
+
+======================================================================
+FAIL: test_nonbool_root_flag_rejected (test_packet_validator01.CompatibilityTests.test_nonbool_root_flag_rejected)
+----------------------------------------------------------------------
+ValueError: official exact wheel URL
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\test_packet_validator01.py", line 247, in test_nonbool_root_flag_rejected
+    with self.assertRaisesRegex(ValueError, 'flag'): self.evaluate()
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: "flag" does not match "official exact wheel URL"
+
+======================================================================
+FAIL: test_report_hash_not_just_name_version (test_packet_validator01.CompatibilityTests.test_report_hash_not_just_name_version)
+----------------------------------------------------------------------
+ValueError: official exact wheel URL
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\test_packet_validator01.py", line 236, in test_report_hash_not_just_name_version
+    with self.assertRaisesRegex(ValueError, 'hash'): self.evaluate()
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: "hash" does not match "official exact wheel URL"
+
+======================================================================
+FAIL: test_requires_python_rejected (test_packet_validator01.CompatibilityTests.test_requires_python_rejected)
+----------------------------------------------------------------------
+ValueError: official exact wheel URL
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\colab\gpu09-cpu-worker-kit-20261108-01\gpu10-cold-installer01\test_packet_validator01.py", line 214, in test_requires_python_rejected
+    with self.assertRaisesRegex(ValueError, 'Requires-Python'): self.evaluate()
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "Requires-Python" does not match "official exact wheel URL"
+
+----------------------------------------------------------------------
+Ran 39 tests in 0.217s
+
+FAILED (failures=7, errors=4)

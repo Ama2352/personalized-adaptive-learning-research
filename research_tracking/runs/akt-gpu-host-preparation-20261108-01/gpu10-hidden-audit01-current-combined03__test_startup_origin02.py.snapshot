@@ -1,0 +1,27 @@
+"""Focused PathFinder metadata only; not normal startup or target execution."""
+import importlib.util,json,tempfile,types,unittest
+from pathlib import Path
+from unittest.mock import patch
+W=Path(__file__).resolve().parent
+s=importlib.util.spec_from_file_location('hidden_audit_origin_focused',W/'hidden_audit01.py');d=importlib.util.module_from_spec(s);s.loader.exec_module(d)
+
+class OriginTests(unittest.TestCase):
+    def test_binary_bytecode_and_virtual_origins_fail_closed(self):
+        for origin in [str((W/'hook.so').resolve()),str((W/'hook.pyc').resolve()),None,'frozen','relative.py']:
+            with self.subTest(origin=origin),patch.object(d.PathFinder,'find_spec',return_value=types.SimpleNamespace(origin=origin)),self.assertRaises(ValueError):
+                d.customize_origins(['explicit-only'])
+    def test_real_source_origin_is_found_without_execution(self):
+        with tempfile.TemporaryDirectory(dir=W/'trial02') as td:
+            p=Path(td)/'sitecustomize.py';self.assertTrue(p.resolve().is_relative_to(W.resolve()))
+            p.write_text("raise AssertionError('metadata lookup must not execute this file')\n")
+            self.assertEqual(d.customize_origins([td]),[p])
+    def test_exact_search_paths_and_absent_customizers(self):
+        search=['/no-site/stdlib','/explicit/venv/purelib']
+        with patch.object(d.PathFinder,'find_spec',return_value=None) as finder:
+            self.assertEqual(d.customize_origins(search),[])
+        self.assertEqual([c.args for c in finder.call_args_list],[('sitecustomize',search),('usercustomize',search)])
+
+if __name__=='__main__':
+    r=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(OriginTests))
+    print(json.dumps({'focused_methods':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'target_normalstartup_model_GPU_install_calls':0}))
+    raise SystemExit(0 if r.wasSuccessful() else 1)

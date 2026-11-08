@@ -1,0 +1,51 @@
+{
+  "status": "FROZEN_SOURCE_AND_LOCAL_MOCKS_ONLY_NOT_DISPATCHED",
+  "source_sha256": "cca21b585840cab0af7f3bcfbccf9022ca74120a0b7ec2c84974a1eff568ef77",
+  "test_sha256": "4af8af5089cb15a6ff5ad6ca4215c95c729a176324b623adb8841117e32bc3eb",
+  "policy_packet_sha256": "5a0845d46156c06a8d284350e1b63b93af1649badddc8dae787e74e584002898",
+  "mock_receipt_sha256": "f07a364c85fdf9ebd9cfa1d310e93a32cf6556ae265ef49112257e4b7469c9db",
+  "contract_sha256": "f93e43c4235f2ab806d83923b95ccbcef556d0383637a010ac1b2576b750bef7",
+  "source_before_after_match": true,
+  "mock_counts": {
+    "trial01_pass": 16,
+    "trial01_fail": 1,
+    "trial02_pass": 17,
+    "trial02_fail": 0
+  },
+  "cumulative_mock_controller_seconds": 0.42756870001903735,
+  "actual_stage_processes": 0,
+  "actual_venvs_created": 0,
+  "actual_pip_or_network_or_device_calls": 0,
+  "proposed_environment": {
+    "CUDA_VISIBLE_DEVICES": "",
+    "NVIDIA_VISIBLE_DEVICES": ""
+  },
+  "proposed_argv": [
+    "/usr/bin/python3",
+    "-I",
+    "-S",
+    "-B",
+    "/content/KLTN_GPU10_COLD_BOOTSTRAP_20261108_01/gpu10_cold_bootstrap01.py",
+    "--mode",
+    "GPU_HOST_CUDA_HIDDEN_BOOTSTRAP_EMPTY",
+    "--expected-source-sha256",
+    "cca21b585840cab0af7f3bcfbccf9022ca74120a0b7ec2c84974a1eff568ef77",
+    "--profile-packet-sha256",
+    "5a0845d46156c06a8d284350e1b63b93af1649badddc8dae787e74e584002898",
+    "--approval-reference",
+    "<EXPLICIT_PARENT_FRESH_GPU_HOST_APPROVAL_REFERENCE>"
+  ],
+  "dispatch_blockers": [
+    "Nguoi dung van tren CPU; chua co actual fresh GPU-host absence receipt/approval.",
+    "Stage source+policy byte-exact ngoai ROOT, STAGING physical/current-owned; ROOT phai absent.",
+    "Thay approval placeholder bang reference that sau parent review; khong tu dispatch."
+  ],
+  "limits": [
+    "Chi tao venv --without-pip va no-site discovery; pending BOTH base+target startup review va pip/tag review.",
+    "Khong device API/T4 proof/GPU-ready/install authority/target-tags/full Linux Gate.",
+    "Cac bound RAM/disk/log la cooperative monitor; khong claim kernel quota hay host-wide network attestation.",
+    "Old cfg SHA co the trung hop le; bang chung fresh la absence-before-creation, khong hash inequality.",
+    "Python -S prefix duoc ghi actual, khong ep thanh venv."
+  ],
+  "failure01_note": "Chi sai ky vong duong dan Windows trong test; sua PurePosixPath, production source khong doi; giu ca hai trial."
+}

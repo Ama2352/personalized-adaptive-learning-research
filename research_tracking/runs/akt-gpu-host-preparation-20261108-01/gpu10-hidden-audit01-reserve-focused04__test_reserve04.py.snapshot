@@ -1,0 +1,34 @@
+"""Focused deadline80/overall90 boundary checks, no sleep/child/model."""
+import ast,importlib.util,json,unittest
+from pathlib import Path
+W=Path(__file__).resolve().parent
+s=importlib.util.spec_from_file_location('hidden_reserve_focused',W/'hidden_audit01.py');d=importlib.util.module_from_spec(s);s.loader.exec_module(d)
+class ReserveTests(unittest.TestCase):
+    def test_child_boundary_reserves_ten_seconds(self):
+        self.assertEqual(d.child_time_remaining(100,100),80)
+        self.assertGreater(d.child_time_remaining(100,179.999),0)
+        for now in (180,180.001,190):
+            with self.subTest(now=now),self.assertRaises(TimeoutError):d.child_time_remaining(100,now)
+        self.assertEqual(d.OVERALL_SECONDS-d.CHILD_DEADLINE_SECONDS,10)
+    def test_nonfinite_negative_and_bool_clock_failclosed(self):
+        for start,now in [(1,0),(0,float('nan')),(0,float('inf')),(False,1),(0,True)]:
+            with self.subTest(start=start,now=now),self.assertRaises(ValueError):d.child_time_remaining(start,now)
+    def test_prechild_and_whilechild_calls_are_present_before_wait(self):
+        tree=ast.parse((W/'hidden_audit01.py').read_bytes())
+        main=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='main')
+        spawn=next(n for n in ast.walk(main) if isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and n.func.attr=='Popen')
+        checks=[n for n in ast.walk(main) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='child_time_remaining']
+        self.assertTrue(any(n.lineno<spawn.lineno for n in checks))
+        loop=next(n for n in ast.walk(main) if isinstance(n,ast.While))
+        self.assertEqual(sum(loop.lineno<=n.lineno<=loop.end_lineno for n in checks),2)
+        waits=[n for n in ast.walk(loop) if isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and n.func.attr=='wait']
+        self.assertTrue(any(isinstance(k.value,ast.Call) and isinstance(k.value.func,ast.Name) and k.value.func.id=='min' for n in waits for k in n.keywords if k.arg=='timeout'))
+    def test_overall_late_and_cleanupfail_reject_even_zero_childRC(self):
+        for elapsed,cleanup in [(90.0001,True),(89,False)]:
+            with self.subTest(elapsed=elapsed,cleanup=cleanup),self.assertRaises(ValueError):
+                d.accept_payload({}, {},returncode=0,cleanup=cleanup,elapsed=elapsed,metadata_fingerprints={})
+        self.assertEqual(d.digest(d.CHILD.encode()),d.CHILD_SHA)
+if __name__=='__main__':
+    r=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(ReserveTests))
+    print(json.dumps({'focused_methods':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'actual_child_sleep_model_GPU_calls':0}))
+    raise SystemExit(0 if r.wasSuccessful() else 1)

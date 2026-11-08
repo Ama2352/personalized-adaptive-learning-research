@@ -1,0 +1,60 @@
+{
+  "status": "REVISION02_FROZEN_MOCK_ONLY_NOT_DISPATCHED",
+  "source_sha256": "037d5aafc1490afb0ae36c0abb216552625a52993f2dfffee1aa4d6d1a5c5883",
+  "test_sha256": "9619505cc7c20fc5e897049ffc5c8e4b89f61c9f5e27ae5b1eb38137a8ef438a",
+  "mock_receipt_sha256": "a594a5aba7206bbe9cd652f9c80ca1c5bd03bf21af091fd44baaf5fa190ab2f9",
+  "controller_sha256": "70a007c4ac3a62ca8a9f15e97b3c94a9271bdab8a4504517b519e8a20b6e4b79",
+  "policy_packet_sha256": "5a0845d46156c06a8d284350e1b63b93af1649badddc8dae787e74e584002898",
+  "diff_sha256": "5973ecf666bf2fde9e56f6ba4b0ba5d689cc2c7b1b8d3b57fd34a8aa22af3afe",
+  "supersedes_source_for_future_dispatch": "cca21b585840cab0af7f3bcfbccf9022ca74120a0b7ec2c84974a1eff568ef77",
+  "preserved_frozen01_inputs": {
+    "gpu10_cold_bootstrap01.py": "cca21b585840cab0af7f3bcfbccf9022ca74120a0b7ec2c84974a1eff568ef77",
+    "test_bootstrap01.py": "4af8af5089cb15a6ff5ad6ca4215c95c729a176324b623adb8841117e32bc3eb",
+    "profile-packet.json": "5a0845d46156c06a8d284350e1b63b93af1649badddc8dae787e74e584002898",
+    "frozen-handoff.json": "69c40a33a0ea8166635593bde907a7003d661278ce1029d11f100a4c6404506c",
+    "mock-trial01/receipt.json": "f6907dc19ab09b39609c313a86b9b4de3072d4f6900fa79dcc96d2a4e7855a44",
+    "mock-trial02/receipt.json": "f07a364c85fdf9ebd9cfa1d310e93a32cf6556ae265ef49112257e4b7469c9db"
+  },
+  "prior_trials_preserved": true,
+  "actual_mock_tests": 24,
+  "actual_mock_failures": 0,
+  "cumulative_mock_controller_seconds": 0.6092078000074252,
+  "cumulative_cap_seconds": 15,
+  "actual_bootstrap_processes": 0,
+  "actual_venvs_created": 0,
+  "actual_pip_device_network_calls": 0,
+  "proposed_environment": {
+    "CUDA_VISIBLE_DEVICES": "",
+    "NVIDIA_VISIBLE_DEVICES": ""
+  },
+  "proposed_argv": [
+    "/usr/bin/python3",
+    "-I",
+    "-S",
+    "-B",
+    "/content/KLTN_GPU10_COLD_BOOTSTRAP_20261108_01/gpu10_cold_bootstrap02.py",
+    "--mode",
+    "GPU_HOST_CUDA_HIDDEN_BOOTSTRAP_EMPTY",
+    "--expected-source-sha256",
+    "037d5aafc1490afb0ae36c0abb216552625a52993f2dfffee1aa4d6d1a5c5883",
+    "--profile-packet-sha256",
+    "5a0845d46156c06a8d284350e1b63b93af1649badddc8dae787e74e584002898",
+    "--approval-reference",
+    "<EXPLICIT_PARENT_FRESH_GPU_HOST_APPROVAL_REFERENCE>"
+  ],
+  "attempt_path": "/content/KLTN_GPU10_COLD_BOOTSTRAP_20261108_01/bootstrap-attempt02",
+  "rationale": [
+    "24s pre-Popen guard: preflight khong duoc an vao6s cleanup/posthash reserve.",
+    "Guard truoc/sau cooperative resource scan va khi observed exit; zero RC sau24s van reject.",
+    "Wait min(0.2, remaining), khong wait vuot remaining deadline.",
+    "Bounded topfile output hashing va resource scan truoc operative30s verdict; sau do small result/hash/manifest publication theo warm-reviewed pattern.",
+    "Customize spec ton tai nhung origin None/built-in/frozen duoc ghi UNKNOWN/not-approved, khong gia emptyhook.",
+    "Source filename/attempt02 rieng, khong sua01 hay sua historical PASS."
+  ],
+  "limits": [
+    "Day la local mock/AST proof, khong actual fresh ABI/venv/GPU fact.",
+    "30s/disk/log monitor cooperative; final small receipt publication follows verdict; future outer controller phai verify total actual postelapsed<=30.",
+    "--owned-child la internal orchestration/cooperative PPID+PG check, khong la independent authorization boundary; chi public proposed argv co outer host-indication guard.",
+    "Khong normalstartup/pip/runtime tags/install readiness; user vanCPU, parent+peerreview truoc remote."
+  ]
+}

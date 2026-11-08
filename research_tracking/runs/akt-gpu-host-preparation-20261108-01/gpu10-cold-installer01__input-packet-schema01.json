@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Proposed cold hidden-install prerequisite packet; not actual evidence or execution authority",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "role", "mode", "run_id", "target_root", "parent_review_reference", "artifacts", "policy"],
+  "properties": {
+    "schema_version": {"const": 1, "type": "integer"},
+    "role": {"const": "COLD_INSTALL_PREREQUISITES_NOT_EXECUTION_AUTHORITY"},
+    "mode": {"const": "GPU_HOST_CUDA_HIDDEN_INSTALL_EMPTY"},
+    "run_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,47}$"},
+    "target_root": {"const": "/content/KLTN_GPU08_20261108_01"},
+    "parent_review_reference": {"type": "string", "minLength": 1},
+    "artifacts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["fresh_bootstrap_descriptor", "bootstrap_result", "bootstrap_policy", "actual_cfg", "fresh_empty_probe", "startup_review", "base_pip_review", "linux_lock", "selected_report", "resolution_provenance", "target_compatibility"],
+      "properties": {
+        "fresh_bootstrap_descriptor": {"$ref": "#/$defs/artifact"},
+        "bootstrap_result": {"$ref": "#/$defs/artifact"},
+        "bootstrap_policy": {"$ref": "#/$defs/artifact"},
+        "actual_cfg": {"$ref": "#/$defs/artifact"},
+        "fresh_empty_probe": {"$ref": "#/$defs/artifact"},
+        "startup_review": {"$ref": "#/$defs/artifact"},
+        "base_pip_review": {"$ref": "#/$defs/artifact"},
+        "linux_lock": {"allOf": [{"$ref": "#/$defs/artifact"}, {"properties": {"sha256_after_copy": {"const": "60dad3de310562db4f775d1977e2097a6d1c8f57a22bfa4f7afc3ceab35cc45a"}}}]},
+        "selected_report": {"$ref": "#/$defs/artifact"},
+        "resolution_provenance": {"$ref": "#/$defs/artifact"},
+        "target_compatibility": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["packages", "nvidia_packages", "overall_seconds", "install_deadline_seconds", "workspace_bytes", "minimum_free_bytes", "visible_devices_during_install", "attempts", "requested_root_extras"],
+      "properties": {
+        "packages": {"const": 44, "type": "integer"},
+        "nvidia_packages": {"const": 14, "type": "integer"},
+        "overall_seconds": {"const": 600, "type": "integer"},
+        "install_deadline_seconds": {"const": 480, "type": "integer"},
+        "workspace_bytes": {"const": 21474836480, "type": "integer"},
+        "minimum_free_bytes": {"const": 32212254720, "type": "integer"},
+        "visible_devices_during_install": {"const": "CUDA_AND_NVIDIA_HIDDEN"},
+        "attempts": {"const": 1, "type": "integer"},
+        "requested_root_extras": {"type": "array", "maxItems": 0}
+      }
+    }
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["root_relative_copy", "original_locator", "origin_kind", "bytes", "sha256_before_copy", "sha256_after_copy"],
+      "properties": {
+        "root_relative_copy": {"type": "string", "pattern": "^artifacts/akt/gpu10-cold-install-inputs/[A-Za-z0-9_-]+/[A-Za-z0-9_.-]+$"},
+        "original_locator": {"type": "string", "minLength": 1},
+        "origin_kind": {"enum": ["REMOTE_ACTUAL_STAGE_ARTIFACT", "LOCAL_DERIVED_RECEIPT_FROM_VERIFIED_RPC", "HISTORICAL_LINUX_RESOLVER_METADATA", "REVIEWED_POLICY_INPUT"]},
+        "bytes": {"type": "integer", "minimum": 0, "maximum": 8388608},
+        "sha256_before_copy": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "sha256_after_copy": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    }
+  }
+}

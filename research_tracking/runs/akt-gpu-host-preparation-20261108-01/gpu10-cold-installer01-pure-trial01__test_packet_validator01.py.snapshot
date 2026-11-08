@@ -1,0 +1,253 @@
+"""In-memory engineering receipts only; never actual GPU-host acceptance."""
+import copy
+import hashlib
+import importlib.util
+import json
+from pathlib import Path
+import unittest
+from urllib.parse import unquote, urlsplit
+
+HERE = Path(__file__).resolve().parent
+SPEC = importlib.util.spec_from_file_location('cold_packet_validator', HERE / 'packet_validator01.py')
+v = importlib.util.module_from_spec(SPEC); SPEC.loader.exec_module(v)
+HIST = HERE.parents[1] / 'gpu08-linux-20261108-01' / 'received' / 'resolution-attempt01'
+POLICY_PATH = HERE.parent / 'gpu10-cold-bootstrap01' / 'profile-packet.json'
+
+
+def raw(value): return json.dumps(value, sort_keys=True, allow_nan=False).encode()
+def digest(value): return hashlib.sha256(value).hexdigest()
+
+
+def fixture():
+    """Synthetic facts clearly scoped by external ENGINEERING_FIXTURE role."""
+    report_raw = (HIST / 'pip-report.json').read_bytes()
+    lock = (HIST / 'candidate-linux-cuda.lock.txt').read_bytes()
+    report = json.loads(report_raw)
+    # Union is an ENGINEERING tag fixture, not measured compatible tags of any host.
+    tags = set()
+    for item in report['install']:
+        filename = unquote(urlsplit(item['download_info']['url']).path.rsplit('/', 1)[-1])
+        tags.update(map(str, v.parse_wheel_filename(filename)[3]))
+    abi = dict(implementation='cpython', python_version='3.13.18', python_full='ENGINEERING_FIXTURE_CPYTHON',
+        cache_tag='cpython-313', system='Linux', machine='x86_64', pointer_bits=64,
+        soabi='cpython-313-x86_64-linux-gnu', extension_suffix='.cpython-313-x86_64-linux-gnu.so',
+        gil_disabled=False, libc=['glibc', '2.39'], executable='/usr/bin/python3',
+        prefix='/usr', base_prefix='/usr', isolated=1, no_site=1, bytecode_disabled=True)
+    exe = dict(resolved='/usr/bin/python3.13', is_symlink=True, device=1, inode=123, bytes=987, sha256='e' * 64)
+    cfg = b'home = /usr/bin\ninclude-system-site-packages = false\nversion = 3.13.18\n'
+    facts = {key: abi[key] for key in ('python_version', 'cache_tag', 'soabi', 'extension_suffix',
+                                     'gil_disabled', 'pointer_bits', 'machine', 'libc')}
+    facts.update(status='EMPTY_VENV_NO_SITE_FACTS_ONLY', executable=v.VENV + '/bin/python',
+        purelib_empty=True, distributions=[], target_package_specs=dict(pip=None, numpy=None, torch=None),
+        normal_startup_executed=False, normal_prefix_proven=False, packages_installed=0, gpu_device_queries=0,
+        pip_runtime_version=None, effective_pip_config=None, target_tags=None, scheme='venv')
+    desc = dict(schema_version=1, mode='GPU_HOST_CUDA_HIDDEN_BOOTSTRAP_EMPTY', status=v.PENDING,
+        source_sha256=v.BOOT_SOURCE, packet_sha256=v.BOOT_POLICY,
+        creation=dict(root_absent_before=True, root_created=True, venv_created_without_pip=True),
+        actual_base_abi_before_creation=abi, base_executable=dict(exe, lexical='/usr/bin/python3'),
+        target_executable=dict(exe, lexical=v.VENV + '/bin/python'), pyvenv_cfg_sha256=digest(cfg),
+        actual_target_facts=facts, packages_installed=0, gpu_device_queries=0, normal_startup_executed=False)
+    blobs = dict(fresh_bootstrap_descriptor=raw(desc), actual_cfg=cfg, linux_lock=lock,
+        selected_report=report_raw, bootstrap_policy=POLICY_PATH.read_bytes(),
+        resolution_provenance=(HIST / 'resolution.json').read_bytes())
+    result = dict(status=v.PENDING, mode='GPU_HOST_CUDA_HIDDEN_BOOTSTRAP_EMPTY',
+        descriptor_sha256=digest(blobs['fresh_bootstrap_descriptor']), cleanup_accepted=True,
+        resource_time_accepted=True, source_packet_prepost_equal=True,
+        cleanup=dict(cleanup_accepted=True, returncode=0), elapsed_seconds=0.5, elapsed_wall_seconds=0.5,
+        gpu_host_indication=dict(colab_gpu_marked=True, nvidia_node_indication=False), installer_authorized=False,
+        pip_executed=False, normal_startup_executed=False, packages_installed=0, gpu_device_queries=0,
+        model_optimizer_steps=0, retry_count=0)
+    blobs['bootstrap_result'] = raw(result)
+    review = dict(role='ENGINEERING_FIXTURE', parent_review_reference='ENGINEERING_FIXTURE_ONLY_NOT_ACTUAL_GPU_HOST',
+        run_id='engineering-fixture', artifact_sha256={},
+        producer_sha256={label: digest(('ENGINEERING_SOURCE_' + label).encode()) for label in v.FRESH_LABELS},
+        evaluator_packaging_version=v.packaging.__version__)
+    bindings = dict(descriptor_sha256=digest(blobs['fresh_bootstrap_descriptor']),
+        bootstrap_result_sha256=digest(blobs['bootstrap_result']), cfg_sha256=digest(cfg), abi_sha256=digest(v.canonical(abi)))
+    def receipt(label, facts):
+        return raw(dict(schema_version=1, role='FRESH_GPU_HOST_' + label.upper(), status='REVIEWED_PASS',
+            run_id=review['run_id'], approval_reference=review['parent_review_reference'],
+            source_sha256=review['producer_sha256'][label], bindings=bindings, facts=facts))
+    blobs['fresh_empty_probe'] = receipt('fresh_empty_probe', dict(prefix=v.VENV, executable=v.VENV + '/bin/python',
+        base_prefix='/usr', distributions=[], package_specs=dict(pip=None, numpy=None, torch=None),
+        user_site_enabled=False, normal_startup=True, purelib_empty=True,
+        cfg_sha256=digest(cfg), abi_sha256=bindings['abi_sha256']))
+    blobs['startup_review'] = receipt('startup_review', dict(base_approved=True, target_approved=True,
+        unknown_hooks_absent=True, cuda_hidden=True, record_bindings_accepted=True,
+        base_facts_sha256='a' * 64, target_facts_sha256='b' * 64, review_manifest_sha256='c' * 64))
+    blobs['base_pip_review'] = receipt('base_pip_review', dict(version='26.2.2', python_isolated=True,
+        config_file='/dev/null', file_effective_entries=[], pip_env_names=['PIP_CONFIG_FILE'],
+        origin='/usr/local/lib/python3.13/dist-packages/pip/__init__.py', origin_sha256='d' * 64,
+        effective_config={':env:': {':env:.config-file': '/dev/null'}}))
+    compat_bindings = dict(descriptor_sha256=bindings['descriptor_sha256'], cfg_sha256=digest(cfg),
+        startup_review_sha256=digest(blobs['startup_review']), base_pip_review_sha256=digest(blobs['base_pip_review']),
+        empty_probe_sha256=digest(blobs['fresh_empty_probe']), lock_sha256=v.LOCK_SHA,
+        selected_report_sha256=v.REPORT_SHA, abi_sha256=bindings['abi_sha256'])
+    blobs['target_compatibility'] = receipt('target_compatibility', dict(marker_environment=report['environment'],
+        tags=sorted(tags), requested_root_extras=[], bindings=compat_bindings))
+    packet = dict(schema_version=1, role='COLD_INSTALL_PREREQUISITES_NOT_EXECUTION_AUTHORITY', mode=v.MODE,
+        run_id=review['run_id'], target_root=v.ROOT, parent_review_reference=review['parent_review_reference'],
+        artifacts={}, policy=copy.deepcopy(v.POLICY))
+    for label in v.LABELS:
+        origin = ('HISTORICAL_LINUX_RESOLVER_METADATA' if label in ('linux_lock', 'selected_report', 'resolution_provenance')
+                  else 'REVIEWED_POLICY_INPUT' if label == 'bootstrap_policy'
+                  else 'LOCAL_DERIVED_RECEIPT_FROM_VERIFIED_RPC' if label in ('startup_review', 'base_pip_review', 'target_compatibility')
+                  else 'REMOTE_ACTUAL_STAGE_ARTIFACT')
+        packet['artifacts'][label] = dict(root_relative_copy='artifacts/akt/gpu10-cold-install-inputs/engineering-fixture/' + label,
+            original_locator='ENGINEERING_IN_MEMORY_FIXTURE_NOT_ACTUAL:' + label, origin_kind=origin,
+            bytes=len(blobs[label]), sha256_before_copy=digest(blobs[label]), sha256_after_copy=digest(blobs[label]))
+        review['artifact_sha256'][label] = digest(blobs[label])
+    return packet, blobs, review
+
+
+class PacketTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls): cls.base = fixture()
+    def setUp(self): self.packet, self.blobs, self.review = copy.deepcopy(self.base)
+    def validate(self): return v.validate_packet(self.packet, self.blobs, trusted_review=self.review)
+    def mutate(self, label, change):
+        value = json.loads(self.blobs[label]); change(value); self.blobs[label] = raw(value)
+        # A changed received payload can be reviewed/re-pinned; semantic guards still must reject.
+        row = self.packet['artifacts'][label]; row.update(bytes=len(self.blobs[label]),
+            sha256_before_copy=digest(self.blobs[label]), sha256_after_copy=digest(self.blobs[label]))
+        self.review['artifact_sha256'][label] = digest(self.blobs[label])
+    def test_complete_engineering_chain_and_stored44_478_rows(self):
+        result = self.validate(); self.assertFalse(result['execution_authorized'])
+        self.assertEqual(result['status'], 'ENGINEERING_PACKET_CONSISTENT_NOT_RUNTIME_FACTS')
+        c = result['compatibility']; self.assertEqual((c['packages'], c['nvidia_packages'], c['requested_roots']), (44, 14, 29))
+        self.assertEqual((c['requires_python_declared'], c['requires_python_unspecified'], c['requires_dist_rows']), (41, 3, 478))
+        self.assertEqual(c['active_requires_dist'] + c['inactive_requires_dist'], 478)
+    def test_packet_cannot_repin_bytes_without_external_review(self):
+        self.blobs['actual_cfg'] += b'#x\n'
+        with self.assertRaisesRegex(ValueError, 'size|pin'): self.validate()
+    def test_reject_missing_each_artifact(self):
+        for label in v.LABELS:
+            with self.subTest(label=label):
+                blobs = dict(self.blobs); del blobs[label]
+                with self.assertRaises(ValueError): v.validate_packet(self.packet, blobs, trusted_review=self.review)
+    def test_bool_schema_rejected(self):
+        self.packet['schema_version'] = True
+        with self.assertRaises(ValueError): self.validate()
+    def test_bool_policy_rejected(self):
+        self.packet['policy']['attempts'] = True
+        with self.assertRaises(ValueError): self.validate()
+    def test_pending_startup_rejected(self):
+        self.mutate('startup_review', lambda x: x.update(status='PENDING'))
+        with self.assertRaisesRegex(ValueError, 'reviewed'): self.validate()
+    def test_old_cpu_receipt_role_rejected(self):
+        self.mutate('fresh_empty_probe', lambda x: x.update(role='VERIFIED_ACTUAL_WARM_CPU_DISCOVERY_NOT_GPU_READY'))
+        with self.assertRaisesRegex(ValueError, 'GPU-host'): self.validate()
+    def test_forged_fresh_source_rejected(self):
+        self.mutate('fresh_empty_probe', lambda x: x.update(source_sha256='0' * 64))
+        with self.assertRaisesRegex(ValueError, 'source identity'): self.validate()
+    def test_cross_attempt_rejected(self):
+        self.mutate('fresh_empty_probe', lambda x: x.update(run_id='old-cpu-run'))
+        with self.assertRaisesRegex(ValueError, 'attempt'): self.validate()
+    def test_current_cfg_binding_rejected(self):
+        self.mutate('fresh_empty_probe', lambda x: x['bindings'].update(cfg_sha256='0' * 64))
+        with self.assertRaisesRegex(ValueError, 'bindings'): self.validate()
+    def test_false_base_startup_rejected(self):
+        self.mutate('startup_review', lambda x: x['facts'].update(base_approved=False))
+        with self.assertRaisesRegex(ValueError, 'startup'): self.validate()
+    def test_unknown_target_hook_rejected(self):
+        self.mutate('startup_review', lambda x: x['facts'].update(unknown_hooks_absent=False))
+        with self.assertRaisesRegex(ValueError, 'startup'): self.validate()
+    def test_nonempty_normal_target_rejected(self):
+        self.mutate('fresh_empty_probe', lambda x: x['facts'].update(distributions=['torch']))
+        with self.assertRaisesRegex(ValueError, 'empty-target'): self.validate()
+    def test_normal_prefix_must_be_venv(self):
+        self.mutate('fresh_empty_probe', lambda x: x['facts'].update(prefix='/usr'))
+        with self.assertRaisesRegex(ValueError, 'empty-target'): self.validate()
+    def test_unsafe_effective_pip_rejected(self):
+        self.mutate('base_pip_review', lambda x: x['facts'].update(effective_config={':env:': {':env:.target': '/tmp/x'}}))
+        with self.assertRaisesRegex(ValueError, 'devnull'): self.validate()
+    def test_copied_path_traversal_rejected(self):
+        self.packet['artifacts']['actual_cfg']['root_relative_copy'] = 'artifacts/akt/gpu10-cold-install-inputs/x/..'
+        with self.assertRaisesRegex(ValueError, 'path'): self.validate()
+    def test_old_cpu_bootstrap_rejected_before_downstream(self):
+        self.mutate('fresh_bootstrap_descriptor', lambda x: x.update(mode='CPU'))
+        with self.assertRaisesRegex(ValueError, 'CPU'): self.validate()
+    def test_wrong_cold_source_rejected(self):
+        self.mutate('fresh_bootstrap_descriptor', lambda x: x.update(source_sha256='f' * 64))
+        with self.assertRaisesRegex(ValueError, 'cold02'): self.validate()
+    def test_abi_bool_pointer_rejected(self):
+        self.mutate('fresh_bootstrap_descriptor', lambda x: x['actual_base_abi_before_creation'].update(pointer_bits=True))
+        with self.assertRaisesRegex(ValueError, 'ABI'): self.validate()
+    def test_failed_bootstrap_cleanup_rejected(self):
+        self.mutate('bootstrap_result', lambda x: x.update(cleanup_accepted=False))
+        with self.assertRaisesRegex(ValueError, 'cleanup'): self.validate()
+    def test_late_zero_rc_bootstrap_rejected(self):
+        self.mutate('bootstrap_result', lambda x: x.update(elapsed_seconds=30.0001))
+        with self.assertRaisesRegex(ValueError, 'bounded'): self.validate()
+    def test_duplicate_json_key_rejected(self):
+        with self.assertRaisesRegex(ValueError, 'duplicate'): v.decode(b'{"a":1,"a":2}')
+    def test_source_and_input_objects_unchanged(self):
+        before = copy.deepcopy((self.packet, self.blobs, self.review)); self.validate()
+        self.assertEqual(before, (self.packet, self.blobs, self.review))
+
+
+class CompatibilityTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        _, blobs, _ = fixture(); cls.base_report = json.loads(blobs['selected_report']); cls.lock = blobs['linux_lock']
+        cls.base_target = json.loads(blobs['target_compatibility'])['facts']
+    def setUp(self): self.report = copy.deepcopy(self.base_report); self.target = copy.deepcopy(self.base_target)
+    def evaluate(self, lock=None):
+        return v.evaluate_compatibility(self.report, self.lock if lock is None else lock,
+            self.target, expected_bindings=self.base_target['bindings'])
+    def md(self, name): return next(x['metadata'] for x in self.report['install'] if x['metadata']['name'].lower() == name)
+    def test_explicit_linux_marker_ignores_windows_host(self):
+        self.md('cloudpickle')['requires_dist'] = ['numpy>=2; sys_platform == "linux"', 'missing-provider; sys_platform == "win32"']
+        result = self.evaluate(); rows = [x for x in result['dependency_rows'] if x['owner'] == 'cloudpickle']
+        self.assertEqual([x['active'] for x in rows], [True, False]); self.assertEqual(rows[0]['provider'], 'numpy')
+    def test_all11_marker_fields_mandatory(self):
+        for key in v.MARKER_FIELDS:
+            with self.subTest(key=key):
+                old = self.target['marker_environment'].pop(key)
+                with self.assertRaisesRegex(ValueError, '11'): self.evaluate()
+                self.target['marker_environment'][key] = old
+    def test_incompatible_wheel_tag_rejected(self):
+        self.target['tags'] = ['cp39-cp39-win_amd64']
+        with self.assertRaisesRegex(ValueError, 'unsupported'): self.evaluate()
+    def test_requires_python_rejected(self):
+        self.md('numpy')['requires_python'] = '<3.13'
+        with self.assertRaisesRegex(ValueError, 'Requires-Python'): self.evaluate()
+    def test_active_missing_provider_rejected(self):
+        self.md('cloudpickle')['requires_dist'] = ['never-installed>=1; sys_platform == "linux"']
+        with self.assertRaisesRegex(ValueError, 'missing'): self.evaluate()
+    def test_active_version_conflict_rejected(self):
+        self.md('cloudpickle')['requires_dist'] = ['numpy<1']
+        with self.assertRaisesRegex(ValueError, 'conflict'): self.evaluate()
+    def test_inactive_extra_recorded_without_dependency(self):
+        self.md('cloudpickle')['requires_dist'] = ['not-installed; extra == "dev"']
+        rows = [x for x in self.evaluate()['dependency_rows'] if x['owner'] == 'cloudpickle']
+        self.assertFalse(rows[0]['active']); self.assertIn('inactive', rows[0]['status'])
+    def test_active_extras_not_silently_resolved(self):
+        self.md('cloudpickle')['requires_dist'] = ['numpy[unknownextra]>=2']
+        with self.assertRaisesRegex(ValueError, 'extras'): self.evaluate()
+    def test_active_url_not_silently_resolved(self):
+        self.md('cloudpickle')['requires_dist'] = ['numpy @ https://example.invalid/numpy.whl']
+        with self.assertRaisesRegex(ValueError, 'URL'): self.evaluate()
+    def test_unknown_marker_variable_rejected(self):
+        self.md('cloudpickle')['requires_dist'] = ['numpy; unknown_target_field == "a"']
+        with self.assertRaises(ValueError): self.evaluate()
+    def test_report_hash_not_just_name_version(self):
+        self.report['install'][0]['download_info']['archive_info']['hashes']['sha256'] = '0' * 64
+        with self.assertRaisesRegex(ValueError, 'hash'): self.evaluate()
+    def test_unofficial_lock_url_rejected(self):
+        lock = self.lock.replace(b'https://files.pythonhosted.org/', b'https://untrusted.invalid/', 1)
+        with self.assertRaisesRegex(ValueError, 'official'): self.evaluate(lock)
+    def test_duplicate_lock_row_rejected(self):
+        with self.assertRaisesRegex(ValueError, 'duplicate'): self.evaluate(self.lock + self.lock.splitlines()[0] + b'\n')
+    def test_marker_abi_mismatch_rejected(self):
+        self.target['marker_environment']['python_version'] = '3.12'
+        with self.assertRaisesRegex(ValueError, 'minor'): self.evaluate()
+    def test_nonbool_root_flag_rejected(self):
+        self.report['install'][0]['requested'] = 1
+        with self.assertRaisesRegex(ValueError, 'flag'): self.evaluate()
+    def test_compat_bindings_rejected(self):
+        self.target['bindings']['cfg_sha256'] = '0' * 64
+        with self.assertRaisesRegex(ValueError, 'bindings'): self.evaluate()
+
+
+if __name__ == '__main__': unittest.main()

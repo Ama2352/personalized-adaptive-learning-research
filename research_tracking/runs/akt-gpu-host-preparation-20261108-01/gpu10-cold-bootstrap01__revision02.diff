@@ -1,0 +1,102 @@
+--- frozen01/cca21/source
++++ revision02/037d/source
+@@ -25,7 +25,7 @@
+ ROOT_TEXT = '/content/KLTN_GPU08_20261108_01'
+ STAGING_TEXT = '/content/KLTN_GPU10_COLD_BOOTSTRAP_20261108_01'
+ ROOT = Path(ROOT_TEXT); VENV = ROOT / '.venv'; BASE = Path('/usr/bin/python3')
+-STAGING = Path(STAGING_TEXT); ATTEMPT = STAGING / 'bootstrap-attempt01'
++STAGING = Path(STAGING_TEXT); ATTEMPT = STAGING / 'bootstrap-attempt02'
+ MODE = 'GPU_HOST_CUDA_HIDDEN_BOOTSTRAP_EMPTY'
+ PENDING = 'FRESH_EMPTY_VENV_DISCOVERY_PENDING_STARTUP_AND_PIP_REVIEW'
+ CAP_SECONDS = 30; CHILD_SECONDS = 24; CAP_BYTES = 128 * 1024**2
+@@ -37,6 +37,14 @@
+ 
+ def is_sha(value):
+     return type(value) is str and len(value) == 64 and all(c in '0123456789abcdef' for c in value)
++
++
++def child_time_remaining(started, now):
++    if not all(type(x) in (int, float) and math.isfinite(x) for x in (started, now)) or now < started:
++        raise ValueError('invalid child deadline clock')
++    remaining = CHILD_SECONDS - (now - started)
++    if remaining <= 0: raise TimeoutError('24s child deadline; reserve6s cleanup/posthash')
++    return remaining
+ 
+ 
+ def read_regular(path, limit):
+@@ -156,11 +164,14 @@
+ for role,search in [('base',stdlib+base_dirs),('target',stdlib+list(paths.values()))]:
+  pth=sorted({p for directory in search if directory.is_dir() for p in directory.glob('*.pth')})
+  assert len(pth)<=64
+- hooks=[]
++ hooks=[];unknown=[]
+  for name in ('sitecustomize','usercustomize'):
+   spec=PathFinder.find_spec(name,[str(p) for p in search])
+-  if spec is not None and spec.origin not in (None,'built-in','frozen'):hooks.append(Path(spec.origin))
+- facts[role]={'pth':[fact(p) for p in pth],'customize':[fact(p) for p in sorted(set(hooks))]}
++  if spec is not None:
++   if spec.origin in (None,'built-in','frozen'):
++    unknown.append({'module':name,'origin':spec.origin,'status':'UNKNOWN_CUSTOMIZE_ORIGIN_NOT_APPROVED','approved_for_execution':False})
++   else:hooks.append(Path(spec.origin))
++ facts[role]={'pth':[fact(p) for p in pth],'customize':[fact(p) for p in sorted(set(hooks))],'unknown_customize':unknown}
+ pip_spec=PathFinder.find_spec('pip',[str(p) for p in base_dirs])
+ pip_static=None
+ if pip_spec is not None and pip_spec.origin:
+@@ -285,7 +296,7 @@
+     if Path(sys.executable) != BASE or STAGING.resolve() != STAGING or STAGING.is_symlink() or STAGING.stat().st_uid != os.getuid():
+         raise ValueError('fixed owned staging/current lexical base required')
+     source_path = Path(__file__).absolute()
+-    if source_path != STAGING / 'gpu10_cold_bootstrap01.py': raise ValueError('source must be staged outside ROOT')
++    if source_path != STAGING / 'gpu10_cold_bootstrap02.py': raise ValueError('source must be staged outside ROOT')
+     source = read_regular(source_path, 128 * 1024); packet_raw = read_regular(STAGING / 'profile-packet.json', 16384)
+     if digest(source) != args.expected_source_sha256 or digest(packet_raw) != args.profile_packet_sha256:
+         raise ValueError('source/packet SHA mismatch before mutation')
+@@ -307,14 +318,17 @@
+             '--expected-source-sha256', args.expected_source_sha256, '--profile-packet-sha256', args.profile_packet_sha256,
+             '--approval-reference', args.approval_reference, '--owned-child', '--controller-pid', str(os.getpid())]
+         with (ATTEMPT / 'child.stdout').open('xb') as out, (ATTEMPT / 'child.stderr').open('xb') as err:
++            child_time_remaining(start, time.monotonic())
+             process = subprocess.Popen(command, cwd=STAGING, env=child_environment(ATTEMPT), stdout=out, stderr=err, start_new_session=True)
+             entry = dict(pid=process.pid, pgid=process.pid, command=command)
+             try:
+                 while process.poll() is None:
++                    child_time_remaining(start, time.monotonic())
+                     resource_check(start, wall)
+-                    if time.monotonic() - start >= CHILD_SECONDS: raise TimeoutError('child limit reserves cleanup within30s')
+-                    try: process.wait(timeout=.2)
++                    remaining = child_time_remaining(start, time.monotonic())
++                    try: process.wait(timeout=min(.2, remaining))
+                     except subprocess.TimeoutExpired: pass
++                child_time_remaining(start, time.monotonic())  # Late RC0 cannot consume the cleanup reserve.
+             finally:
+                 cleanup_once(process, entry)  # Immediate before child JSON parsing; never historical re-signal.
+         if not entry.get('cleanup_accepted') or entry['returncode'] != 0: raise RuntimeError('child/cleanup failed')
+@@ -333,6 +347,17 @@
+         with (ATTEMPT / 'failure.log').open('x', encoding='utf-8') as stream: stream.write(traceback.format_exc())
+     finally:
+         if process is not None and not entry.get('cleanup_attempted'): cleanup_once(process, entry)
++        # Hash all bounded outputs before the operative elapsed verdict, including failures.
++        outputs = {}
++        try:
++            for p in ATTEMPT.iterdir():
++                if p.is_file() and p.name not in {'result.json', 'output-manifest.json'}:
++                    raw = read_regular(p, CAP_LOGS)
++                    outputs[p.name] = dict(bytes=len(raw), sha256=digest(raw))
++            resource_check(start, wall)
++        except Exception as error:
++            result.update(status='REJECTED_RESOURCE_BOUND_RETAIN_PARTIAL',
++                          output_hash_or_resource_error_type=type(error).__name__, output_hash_or_resource_error=str(error))
+         elapsed = time.monotonic() - start; wall_elapsed = time.time() - wall
+         cleanup_ok = process is None or entry.get('cleanup_accepted') is True
+         time_ok = all(math.isfinite(x) and 0 <= x <= CAP_SECONDS for x in (elapsed, wall_elapsed))
+@@ -343,8 +368,8 @@
+             approval_reference=args.approval_reference, packages_installed=0, pip_executed=False, normal_startup_executed=False,
+             gpu_device_queries=0, model_optimizer_steps=0, retry_count=0, installer_authorized=False)
+         write_json(ATTEMPT / 'result.json', result)
+-        outputs = {p.name: dict(bytes=p.stat().st_size, sha256=digest(read_regular(p, CAP_LOGS)))
+-                   for p in ATTEMPT.iterdir() if p.is_file()}
++        final_raw = read_regular(ATTEMPT / 'result.json', 128 * 1024)
++        outputs['result.json'] = dict(bytes=len(final_raw), sha256=digest(final_raw))
+         write_json(ATTEMPT / 'output-manifest.json', dict(status=result['status'], outputs=outputs,
+             excludes='Created .venv and owned home/tmp/cache/config directories; no binary/credential export'))
+         print(json.dumps(dict(status=result['status'], result_sha256=digest(read_regular(ATTEMPT / 'result.json', 128 * 1024)),

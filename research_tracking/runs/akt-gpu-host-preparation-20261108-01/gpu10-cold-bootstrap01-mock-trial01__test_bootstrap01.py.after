@@ -1,0 +1,165 @@
+"""Kiểm tra stdlib giả lập; không tạo venv, process, pip, mạng hay device API."""
+import ast
+import importlib.util
+import json
+from pathlib import Path
+import subprocess
+import sys
+import unittest
+from unittest.mock import MagicMock, patch
+
+HERE = Path(__file__).resolve().parent
+SOURCE = HERE / 'gpu10_cold_bootstrap01.py'
+spec = importlib.util.spec_from_file_location('cold_bootstrap_review', SOURCE)
+m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+TREE = ast.parse(SOURCE.read_text(encoding='utf-8'))
+
+
+def packet():
+    return dict(schema_version=1, role='COLD_BOOTSTRAP_POLICY_NOT_HOST_FACTS',
+        mode='GPU_HOST_CUDA_HIDDEN_BOOTSTRAP_EMPTY', target_root='/content/KLTN_GPU08_20261108_01',
+        base_python='/usr/bin/python3', required_implementation='cpython', required_machine='x86_64',
+        pointer_bits=64, gil_disabled=False, overall_seconds=30, child_seconds=24,
+        workspace_bytes=134217728, log_bytes=4194304, minimum_free_bytes=32212254720)
+
+
+class Contract(unittest.TestCase):
+    def setUp(self):
+        # Any accidental actual process launch is a test failure, including mocked main paths.
+        self.popen = self.enterContext(patch.object(m.subprocess, 'Popen', side_effect=AssertionError('REAL POPEN FORBIDDEN')))
+        self.run = self.enterContext(patch.object(m.subprocess, 'run', side_effect=AssertionError('REAL SUBPROCESS FORBIDDEN')))
+
+    def tearDown(self):
+        self.popen.assert_not_called()
+        # The nested-run timeout test replaces this mock explicitly; all other calls forbidden.
+        self.run.assert_not_called()
+
+    def test_sha_shape(self):
+        self.assertTrue(m.is_sha('a' * 64))
+        for value in ['a' * 65, 'A' * 64, 'g' * 64, True, None]:
+            with self.subTest(value=str(value)): self.assertFalse(m.is_sha(value))
+
+    def test_packet_exact_and_no_boolean_integer_coercion(self):
+        self.assertEqual(m.validate_packet(packet()), packet())
+        for key, value in [('schema_version', True), ('overall_seconds', 31), ('target_root', '/tmp/other'),
+                           ('mode', 'CPU'), ('pointer_bits', 32), ('extra', 'unknown')]:
+            changed = packet(); changed[key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError): m.validate_packet(changed)
+
+    def test_existing_or_dangling_root_refused(self):
+        for exists, symlink in [(True, False), (True, True), (False, True)]:
+            root = MagicMock(); root.exists.return_value = exists; root.is_symlink.return_value = symlink
+            with self.subTest(exists=exists, symlink=symlink), self.assertRaises(FileExistsError): m.absent_root(root)
+            root.mkdir.assert_not_called()
+
+    def test_absent_root_indirect_symlink_refused(self):
+        root = MagicMock(); root.exists.return_value = False; root.is_symlink.return_value = False
+        root.resolve.return_value = Path('/elsewhere')
+        with self.assertRaises(ValueError): m.absent_root(root)
+
+    def test_cfg_freshness_does_not_require_hash_inequality(self):
+        raw = b'home = /usr/bin\ninclude-system-site-packages = false\nversion = 3.13.18\n'
+        self.assertIsNone(m.validate_cfg(raw)); self.assertIsNone(m.validate_cfg(raw))
+        for bad in [b'', b'include-system-site-packages = true', raw + b'include-system-site-packages = false\n']:
+            with self.subTest(raw=bad), self.assertRaises(ValueError): m.validate_cfg(bad)
+
+    def test_abi_is_actual_not_historical_minor_pin(self):
+        facts = dict(system='Linux', implementation='cpython', machine='x86_64', pointer_bits=64,
+                     gil_disabled=False, isolated=1, no_site=1, bytecode_disabled=True, python_version='3.14.1')
+        with patch.object(m.sysconfig, 'get_scheme_names', return_value=('venv',)):
+            self.assertIsNone(m.validate_abi(facts, packet()))
+            for key, value in [('gil_disabled', True), ('machine', 'aarch64'), ('pointer_bits', True), ('no_site', 0)]:
+                with self.subTest(key=key), self.assertRaises(ValueError): m.validate_abi({**facts, key:value}, packet())
+
+    def test_host_indication_is_not_model_verification(self):
+        value = m.host_indication({'COLAB_GPU':'1'}, ())
+        self.assertFalse(value['hardware_model_verified']); self.assertEqual(value['device_api_queries'], 0)
+        self.assertTrue(m.host_indication({}, ('nvidia0',))['nvidia_node_indication'])
+        for env in [{}, {'COLAB_GPU':'0'}, {'COLAB_GPU':'1', 'COLAB_TPU_ADDR':'x'}]:
+            with self.subTest(env=env), self.assertRaises(ValueError): m.host_indication(env, ())
+
+    def test_environment_is_allowlist_and_hidden(self):
+        with patch.dict(m.os.environ, {'GITHUB_TOKEN':'secret','PIP_INDEX_URL':'secret','PYTHONPATH':'evil','LD_PRELOAD':'evil'}):
+            env = m.child_environment(Path('/owned'))
+        self.assertEqual(env['HOME'], '/owned/home'); self.assertEqual(env['CUDA_VISIBLE_DEVICES'], '')
+        self.assertEqual(env['NVIDIA_VISIBLE_DEVICES'], '')
+        self.assertFalse(any(k.startswith(('PIP_', 'UV_', 'GIT_', 'GH_', 'LD_')) for k in env))
+        self.assertNotIn('PYTHONPATH', env)
+
+    def test_exactly_one_owned_session_and_inherited_descendants(self):
+        calls = [n for n in ast.walk(TREE) if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)]
+        popens = [n for n in calls if isinstance(n.func.value, ast.Name) and n.func.value.id=='subprocess' and n.func.attr=='Popen']
+        runs = [n for n in calls if isinstance(n.func.value, ast.Name) and n.func.value.id=='subprocess' and n.func.attr=='run']
+        self.assertEqual(len(popens), 1); self.assertEqual(len(runs), 1)
+        self.assertIs(next(k.value.value for k in popens[0].keywords if k.arg=='start_new_session'), True)
+        self.assertFalse(any(k.arg in ('start_new_session','process_group','preexec_fn') for k in runs[0].keywords))
+        self.assertIn("'-m', 'venv', '--without-pip'", SOURCE.read_text())
+        self.assertNotIn('--system-site-packages', SOURCE.read_text())
+
+    def test_collector_no_site_truthful_prefix_and_no_device_import(self):
+        tree = ast.parse(m.COLLECTOR)
+        imports = {a.name.split('.')[0] for n in ast.walk(tree) if isinstance(n, (ast.Import, ast.ImportFrom)) for a in n.names}
+        self.assertFalse(imports & {'torch','numpy','pip','site','sitecustomize','usercustomize'})
+        self.assertIn("scheme='venv'", m.COLLECTOR)
+        self.assertIn("'prefix_observed_no_site':sys.prefix", m.COLLECTOR)
+        self.assertIn("'target_tags':None", m.COLLECTOR)
+        self.assertIn("'runtime_probed':False", m.COLLECTOR)
+        self.assertNotIn('subprocess', m.COLLECTOR)
+
+    def cleanup(self, *, errors=None, returncode=0, wait_error=None):
+        process = MagicMock(); process.poll.return_value = returncode
+        if wait_error: process.wait.side_effect = wait_error
+        entry = dict(pgid=43210)
+        with patch.object(m.os, 'getpgrp', return_value=123, create=True), \
+             patch.object(m.os, 'killpg', side_effect=errors, create=True) as kill, \
+             patch.object(m.signal, 'SIGKILL', 9, create=True):
+            accepted = m.cleanup_once(process, entry)
+            again = m.cleanup_once(process, entry)
+            self.assertEqual(kill.call_count, 2)
+            self.assertEqual(again, accepted)
+        return accepted, entry
+
+    def test_cleanup_success_once(self):
+        accepted, entry = self.cleanup(); self.assertTrue(accepted); self.assertEqual(entry['returncode'], 0)
+
+    def test_cleanup_absent_group_success(self):
+        accepted, entry = self.cleanup(errors=ProcessLookupError()); self.assertTrue(accepted)
+        self.assertTrue(all(row.get('absent') for row in entry['signals']))
+
+    def test_cleanup_signal_error_cannot_accept(self):
+        accepted, entry = self.cleanup(errors=PermissionError('denied')); self.assertFalse(accepted)
+
+    def test_cleanup_reap_failed_cannot_accept(self):
+        for error in [subprocess.TimeoutExpired('fake', 5), OSError('reap refused')]:
+            with self.subTest(error=type(error).__name__):
+                accepted, entry = self.cleanup(wait_error=error); self.assertFalse(accepted); self.assertTrue(entry['reap_failed'])
+
+    def test_cleanup_refuses_controller_group(self):
+        with patch.object(m.os, 'getpgrp', return_value=123, create=True), patch.object(m.os, 'killpg', create=True) as kill:
+            self.assertFalse(m.cleanup_once(MagicMock(), dict(pgid=123))); kill.assert_not_called()
+
+    def test_postelapsed_is_independent_of_process_exit(self):
+        for monotonic, wall in [(31,1), (1,31), (float('nan'),1), (-1,1)]:
+            with self.subTest(monotonic=monotonic, wall=wall), \
+                 patch.object(m.time, 'monotonic', return_value=monotonic), patch.object(m.time, 'time', return_value=wall), \
+                 self.assertRaises(TimeoutError): m.resource_check(0,0)
+
+    def test_nested_timeout_retains_attempt_receipt_without_process(self):
+        owned = next(n for n in TREE.body if isinstance(n, ast.FunctionDef) and n.name=='_owned_child')
+        nested = next(n for n in owned.body if isinstance(n, ast.FunctionDef) and n.name=='run')
+        captured = []; fake_run = MagicMock(side_effect=subprocess.TimeoutExpired('fake', 15))
+        namespace = dict(time=m.time, ATTEMPT=MagicMock(), subprocess=MagicMock(run=fake_run),
+                         child_environment=lambda _: {}, os=MagicMock(getpgrp=lambda:43210), commands=[],
+                         write_json=lambda p, row: captured.append(dict(row)))
+        exec(compile(ast.Module(body=[nested], type_ignores=[]), '<actual nested run>', 'exec'), namespace)
+        with self.assertRaises(subprocess.TimeoutExpired): namespace['run']('venv-create', ['fake'], 15)
+        self.assertEqual(len(captured), 1); self.assertIsNone(captured[0]['returncode'])
+        self.assertEqual(captured[0]['error_type'], 'TimeoutExpired')
+        self.assertFalse(captured[0]['independent_session_created'])
+
+
+if __name__ == '__main__':
+    result = unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(Contract))
+    print(json.dumps(dict(tests_run=result.testsRun, failures=len(result.failures), errors=len(result.errors),
+                         actual_subprocesses=0, actual_venvs=0, actual_pip=0, device_api_calls=0, network_calls=0)))
+    raise SystemExit(0 if result.wasSuccessful() else 1)
