@@ -1,5 +1,20 @@
 # Phản biện kế hoạch và điều chỉnh
 
+## Bổ sung09/11 — state RQ1 và core CG-AKT
+
+Đã có peer review nội bộ qua agent độc lập và một phép đối chiếu raw do ROOT viết riêng. [Bằng chứng RQ1](../../research_tracking/reports/rq1_native_mastery_reference_diagnostic_20261109.md) đã đóng92outputs; [core CG-AKT](../../research_tracking/reports/cgakt_research_core_20261109.md) đã đóng74outputs. Các ghi chú self-review ban đầu bên dưới giữ vai trò lịch sử, không phủ nhận vòng review mới này.
+
+| Phản biện | Điều chỉnh được áp dụng |
+|---|---|
+|90 “crossings” có thể bị hiểu thành90 lần học vượt ngưỡng hoặc90mẫu độc lập |Dùng “bất đồng phân loại khái niệm–thời điểm giữa hai cấu hình”; trạng thái cùng concept có thể lặp qua nhiều thời điểm. Giữ tên field cũ chỉ để đối chiếu.|
+|Cửa ngưỡng giống nhau bị suy thành state giống nhau; hai marginal20319 bị suy thành cùng records |000 chỉ đồng nhất hai predicate. Báo riêng từng marginal, không khẳng định giao nếu chưa join; theta là ước lượng model, không truth/learning gain.|
+|253bất đồng raw-reference bị gọi thành lỗi calibration; hai số22 bị ghép sai |Không có nhãn truth cho bảng253;5query-M/22rawcriterion là biến khác90M-set và22preview cũ. Không dùng confusion-matrix/causal language.|
+|Pi lớn hơn bị coi là định lý của mọi history hoặc độ tự tin kém hơn |Nguồn có Q graph không âm và recurrence đơn điệu khi noise/time-decay cùng điều kiện. Feedback times_forgotten có thể phá ordering decay; chỉ khẳng định dấu đã quan sát, không định lý vô điều kiện hoặc calibration accuracy.|
+|18core tests bị nâng thành CG-AKT đã train |Chỉ A3/same-backbone-off,8forward/5backward,0optimizer; confidence trong fixture là metadata dựng sẵn, chưa A1/A2 native matrix hoặc independent fitted A0.|
+|GPU sẽ tốn tiền dù forward nhỏ đã đúng |Phát hiện7fullcontext JSON hashes mỗi trainbatch. Cần tối ưu có kiểm chứng và throughput benchmark đại diện trướcpaidtraining; O(W) lookup còn lại là risk cần đo, không tự thêm framework hoặc blocker theo suy đoán.|
+
+Root cũng giữ các failure thật: context01/02 là schema/fixture errors, model01/02 là bank84 và môi trường Git normalization. Sửa controller bằng process-scoped cấu hình đúng hệ thống, giữ nguyên original upstream verification và source; không sửa dữ liệu/validator hoặc bỏ kiểm nguồn. Chưa dùng Holdout/GPU/Modal trong vòng này; RQ1–RQ3 vẫn chưa hoàn tất.
+
 Đây là self-review độc lập về lập luận, không có subagent/reviewer bên ngoài. Có ba pass chính và pass4 kiểm tra runtime làm thay đổi readiness. Giới hạn source/proposal approval identity được công khai.
 
 | Objection | Kiểm tra | Correction hoặc lý do giữ |

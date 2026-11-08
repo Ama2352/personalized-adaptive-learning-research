@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**RQ1 — kết quả trực tiếp bên trong mastery:** [trạng thái và hai điều kiện](rq1_native_mastery_reference_diagnostic_20261109.md), [bundle92](../runs/rq1-prediction-mastery-trace-20261109-01/README.md). Đủ2.160 snapshots khớp nguồn; trên30.240cặp khái niệm–thời điểm,3.428bất đồng điều kiện bất định bị điểm kiến thức thấp giữ lại,90bất đồng phân loại do điều kiện kiến thức. Không90temporal transitions, accuracy/calibration hoặc learning benefit.
+
+**CG-AKT core:** [A3 forward/gradient thực trên CPU](cgakt_research_core_20261109.md), [bundle74](../runs/cgakt-research-core-engineering-20261109-01/README.md).18PASS với8forward/5backward/0optimizer; chưa fittedA0/A1/A2/CG-AKT hoặc main-training readiness.
+
 **Context CG-AKT:** [109ca chung](cgakt_research_context_readiness_20261109.md),66condition+43context; [bundle52](../runs/cgakt-research-context-engineering-20261109-01/README.md) giữ hai lỗi trước sửa, kiểm cửa sổ/OOV và cold imports. NumPy dữ liệu, chưa training.
 
 **Chi phí observer:** [microbenchmark](mastery_observer_cost_microbenchmark_20261109.md) / [bundle24](../runs/mastery-observer-cost-engineering-20261109-01/README.md). Chỉ fixture dựng sẵn; không dùng tỷ số này dự báo tốc độ GAM/GPU.
