@@ -171,3 +171,5 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 - **AKT/reference binding engineering,08/11:**36pure cases ở2source revisions, mỗi lượt cap45,0NN/corpus reads. [Bundle](runs/akt-reference-binding-engineering-20261108-01/README.md). Giữ source snapshots trước/sau; không72unique hoặc RQcompletion.
 
 - **Gate process isolation engineering,08/11:**76fixturePASS62,0455s/240, không native/model/Gatepublication. [Bundle](runs/akt-gate-process-isolation-engineering-20261108-01/README.md); nguồn/env/process cleanup verified; actual67moduleGate còn pending.
+
+- **RQ1 cached readiness exposure,08/11:** ROOT một lượt2,9229504s/10,3240R/orderexact,0model/simulator. [Bundle28outputs](runs/rq1-ready-set-exposure-20261108-01/README.md).500roots/699strict-nonroot/2041exposure; không3.240người học độc lập, không paired effect sau histories phânkỳ hoặc RQcompletion.

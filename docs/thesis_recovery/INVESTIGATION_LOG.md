@@ -549,3 +549,8 @@ Sửa bankSHA đúng item_bank, calibrator.to_payload đúng strictloader. Kiể
 ### 08/11 — Gate process isolation có kiểm76cases, chưa fullGate
 
 Một allocation phần mềm mới240s được ghim trước; nochildTimer, externalowned237/cleanup5, phasesdurable76unique/228reports. Actual76PASS62.045502901s/240, noFES/heavy/Popen/protectedopens;source8/env/job0/handlesclosed accepted. Source5b7/tests9a0 giữ nguyên so targeted trước; trước54.0555s thiếuJUnit vẫnrejected. Bundle51outputs kèm diagnostic2node vàFS8files, không khẳng định nguyênnhân timeout hoặc fullGate đãchạy. Bankbinding8dd3e7c42outputs+source2rawGit verified; tổngintegritycounter2933 khôngresearchprogress.
+
+
+### 08/11 — Định lượng M→readiness trong served traces
+
+Prospective post-hoc plan/source froze trướcROOTsource/AST/native ready_set review. Một cachedanalysis accepted2.9229504s/10, full3240R orderexact/27trajectories. Pooled500roots;2740nonroots=2041exposure+699strict,2245unmasteredparentopportunities đều visits≥6;actualfallback0/outsideR0, không nhầm anti-repeat filter. Current-source/reused3seedfamilies/newN0,0native/model/simulator. Bundle28outputs đãhashcopy20files vàverify125originaloutputs trước/sau, khôngcopygzip. Rootreview nguồn+output/contracts, chưa extra independentrawverifier. Usernay muốnHTML thay notebook choGVHD; graphagent chuẩn bịbuilder, oldnotebook+summary snapshotSHA/Gite759983 verified trướcconversion; chưaxóa. Gatefc571ee51outputs+source2rawGit verified, fullGateadmission4GiB chưađạt (observed2.368GB), khônghạfloor hoặcspend.

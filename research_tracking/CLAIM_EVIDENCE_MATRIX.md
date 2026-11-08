@@ -75,3 +75,8 @@ Native AKT online/offline/geometry/OOV và session isolation được kiểm b�
 - **CORPUSIO01**, commit `47323e9`, 30outputs đã kiểm raw Git: [simulator_corpus_publisher_readiness_20261108.md](reports/simulator_corpus_publisher_readiness_20261108.md), [manifest](runs/simulator-corpus-publisher-engineering-20261108-01/manifest.json). 31 publisher tests với handmade temporary corpus; chưa actual research corpus; DONE-last không OS crash transaction.
 
 Không cộng repeated targets/tests thành independent samples hoặc phần trăm hoàn tất. Reader timeout chưa JUnit và replay PID guard fail trước native được giữ riêng; không gắn PASS.
+
+
+### RQ1 — readiness không chỉ phụ thuộc boolean mastered
+
+[Phân tích exposure](reports/rq1_ready_set_exposure_results_20261108.md), [bundle](runs/rq1-ready-set-exposure-20261108-01/README.md): trên3240current-source served actions,500roots táchriêng;2740nonroots gồm2041cần ngoại lệ đã chọn≥6lần và699thỏa mastery của mọi parent. ExactreturnedR/order3240; không observedfallback/outsideR. Rule đã công bố Paper2; đóng góp là footprint từcache, không phát hiện rule mới, causal masking fraction, calibration sai, hypothetical strict-only action hoặc learning benefit.
