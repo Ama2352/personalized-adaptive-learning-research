@@ -14,6 +14,10 @@ Một hệ thống học tập thích ứng phải trả lời câu hỏi: **v�
 
 Khóa luận kế thừa những kết quả này, không coi chúng là phát hiện mới. Theo đề cương, phần nghiên cứu tiếp nối phải giải thích **vì sao đồ thị chưa giúp ổn định, trong điều kiện nào nó có thể giúp và liệu có thể sử dụng nó thận trọng hơn hay không**. Ba RQ bên dưới là câu hỏi của KLTN; cách đánh số RQ riêng trong mỗi paper không tương ứng trực tiếp với chúng.
 
+## Cách đọc các kết quả
+
+Đánh giá cần trả lời ba câu hỏi khác nhau. Trước hết, mô hình có dự báo đúng hơn từ bài làm trước đó không? Phần này giữ bộ thước đo như baseline BKT: AUC và Accuracy kiểm khả năng dự báo, Log Loss và Brier kiểm chất lượng xác suất, ECE kiểm sự phù hợp giữa mức tự tin và tần suất đúng. Sau đó mới hỏi thay đổi ước lượng có làm hệ thống quyết định hoặc chọn bài khác đi không. Cuối cùng, mô phỏng kiểm người học có tiến bộ và giữ lại kiến thức tốt hơn không. Các số đếm về quyết định bổ sung lời giải thích cho hai tầng sau; chúng không thay bảng so sánh chất lượng dự báo.
+
 ## RQ1 — Vì sao thông tin đồ thị chưa chuyển thành cải thiện học tập?
 
 Vấn đề còn mở sau hai paper là khoảng cách giữa “ước lượng tốt hơn” và “chọn bài tốt hơn”. Nếu việc thêm đồ thị làm thay đổi dự báo nhưng hệ thống vẫn nhận định người học đủ hoặc chưa đủ kiến thức như trước, các bài được phép học có thể không đổi. Ngay cả khi tập bài được phép thay đổi, quy tắc chọn bài vẫn có thể đưa ra cùng một đề xuất. Vì thế, khóa luận cần quan sát các tầng này riêng, thay vì chỉ so một điểm dự báo cuối cùng.
@@ -21,6 +25,8 @@ Vấn đề còn mở sau hai paper là khoảng cách giữa “ước lượng
 Nhóm đã bắt đầu bằng các phép so sánh giữ cùng câu hỏi và lịch sử người học, rồi xem việc thay tập quan hệ tiên quyết đưa vào mô hình có đi cùng thay đổi ở trạng thái ước lượng và đề xuất tiếp theo hay không. Việc so trên cùng đầu vào giúp hạn chế trường hợp hai mô hình trông khác nhau chỉ vì đã được hỏi các bài khác nhau. Nhóm cũng giữ các cơ chế ngoài cạnh giống nhau trong một phép so sánh riêng, nhằm tiến gần hơn tới phần tác động của đầu vào đồ thị mà Paper 2 chưa tách được.
 
 **Kết quả hiện có cho thấy thay đổi dự báo thường không đi cùng thay đổi đề xuất.** Trong 1.080 tình huống so sánh, có 963 tình huống thay đổi xác suất dự báo; 943 trong số đó vẫn giữ đề xuất khái niệm xem trước. Đồng thời, tác động lên chất lượng dự báo khác chiều giữa các hồ sơ người học mô phỏng. Để đánh giá chất lượng dự báo, nhóm kiểm tra xác suất có phù hợp với đáp án quan sát được hay không; các thước đo chi tiết trong notebook phục vụ câu hỏi đó, không đo trực tiếp việc người học đã học được thêm bao nhiêu.
+
+Một phép kiểm tiếp theo cho thấy **quyết định cho phép học tiếp không chỉ dựa vào thành thạo**. Paper 2 cho phép một kiến thức nền đáp ứng điều kiện nếu mô hình đánh dấu đã thành thạo, hoặc nếu nội dung đó đã được chọn ít nhất sáu lần. Trong 3.240 lượt chọn đã lưu, 500 lượt không có kiến thức tiên quyết. Trong 2.740 lượt còn lại, 699 lượt có mọi kiến thức nền được đánh dấu thành thạo; 2.041 lượt cần ngoại lệ đủ số lần luyện. Như vậy, ngoại lệ này thực sự được sử dụng trong các quỹ đạo đã xét. Chưa thể từ đó kết luận ngoại lệ gây lợi hay hại, hoặc xác định bao nhiêu thay đổi dự báo đã bị che khuất. Đây là phân tích lại các quỹ đạo có sẵn, không phải 3.240 người học độc lập.
 
 Phần bổ sung so với hai paper là các đối chiếu cụ thể giữa những đầu ra trung gian, không phải phát hiện lần đầu rằng dự báo và kết quả học tập có thể khác nhau. Hiện chưa xác định đầy đủ nguyên nhân nằm ở mức tự tin của dự báo, cách quyết định thành thạo hay quy tắc chọn bài. Các đề xuất trên mới được kiểm tra thử trên bản sao trạng thái, chưa phải bài đã giao cho người học và chưa chứng minh lợi ích học tập.
 
@@ -50,6 +56,6 @@ RQ1 và RQ2 dẫn tới một hướng giải quyết cần kiểm chứng: hệ
 
 Bước tiếp theo là hoàn tất quy trình chạy có thể kiểm chứng, thực hiện các đối chứng còn thiếu về mức tự tin và lựa chọn bài, rồi nối các mô hình bắt buộc vào phép so sánh chung. Việc viết kết quả và chuẩn bị demo tiếp tục dựa trên bằng chứng đã lưu, giữ cả kết quả bất lợi hoặc chưa kết luận được.
 
-[Notebook nghiên cứu](KET_QUA_NGHIEN_CUU.ipynb) đi theo cùng mạch giải thích, sau đó mới trình bày thiết kế, số liệu, biểu đồ và nguồn kiểm chứng. Run all trên Colab CPU chỉ dựng lại các bảng/biểu đồ từ kết quả đã lưu, không tự chạy lại simulator hoặc huấn luyện.
+[Báo cáo nghiên cứu có minh họa](BAO_CAO_NGHIEN_CUU.html) trình bày đầy đủ bối cảnh, thiết kế so sánh, bảng dự báo BKT/GAM-KT trên Junyi, các kết quả chẩn đoán cho từng RQ, biểu đồ và nguồn kiểm chứng.
 
-**Tài liệu đối chiếu:** [Đề cương đã duyệt, trang 1–4](../../../../paper2/DC%20KLTN0127%2023520355%2623521338_LeVanTuan.pdf), [Paper 1, trang 1 và 4–5](../../../../paper1/Paper1_RIVF_2026_Graph_vs_Policy_Adaptive_Sequencing.pdf), [Paper 2, trang 1 và 4–6](../../../../paper2/Paper2_RIVF_2026_Prerequisite_Aware_Knowledge_Tracing.pdf). Ba bản trong repository đã được kiểm là giống từng byte với ba PDF người dùng gửi lại. Thư mục báo cáo hiện hành giữ đúng summary này và một notebook; các log và dữ liệu gốc vẫn ở vị trí nghiên cứu ban đầu.
+**Tài liệu nền:** Đề cương KLTN đã duyệt (2026), tr. 1–4; Paper 1 về đồ thị và chính sách lựa chọn, tr. 1 và 4–5; Paper 2 về theo dõi tri thức có tiên quyết, tr. 1 và 3–6. Tên đầy đủ và phạm vi kế thừa được trình bày trong báo cáo HTML.

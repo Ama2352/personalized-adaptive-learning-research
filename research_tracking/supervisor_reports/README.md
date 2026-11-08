@@ -1,12 +1,7 @@
 # Báo cáo tiến độ theo ngày
 
-**Bản hiện hành:** [Summary ngày08/11](2026-11-08/01_tien_do/BAO_CAO.md) · [Notebook Colab](2026-11-08/01_tien_do/KET_QUA_NGHIEN_CUU.ipynb).
+**Bản hiện hành:** [Tóm tắt ngày 08/11](2026-11-08/01_tien_do/BAO_CAO.md) và [báo cáo nghiên cứu HTML](2026-11-08/01_tien_do/BAO_CAO_NGHIEN_CUU.html).
 
-Mỗi đợt báo cáo chỉ giữ **hai file** trong thư mục ngày/đợt:
+Mỗi đợt giữ hai file: bản tóm tắt và báo cáo minh họa chi tiết. HTML tự chứa nội dung, bảng và hình; người đọc không cần repository, notebook hoặc thư viện để xem. Nguồn nền được ghi bằng tên tài liệu và trang, không dẫn đường dẫn nội bộ.
 
-- `BAO_CAO.md`: claim đã đạt, phạm vi bằng chứng, phần chưa đạt và bước tiếp theo.
-- `KET_QUA_NGHIEN_CUU.ipynb`: quá trình nghiên cứu, thiết kế/đối chứng, kiểm chứng, số liệu, biểu đồ, nguồn và giới hạn. Tự chứa kết quả tổng hợp để chạy Colab CPU; không tự training.
-
-Không chép tài liệu/manifest/log vào gói đọc. Notebook dẫn đến nguồn gốc tại `research_tracking/reports/` và `research_tracking/runs/`. Không di chuyển hoặc chỉnh sửa các nguồn đó để làm đẹp báo cáo. Giữ lịch sử các lần cập nhật trong Git; khi có mốc mới khác ngày, tạo một cặp file tương tự theo ngày. Không tự gửi báo cáo ra ngoài.
-
-Gói nhiều file cũ ngày08/11 được bảo toàn tại commit `2e63cd9`. Phiên bản hiện hành đã tinh gọn theo yêu cầu người dùng; số file cũ không mô tả cấu trúc hiện tại.
+Nguồn, log và hồ sơ kiểm chứng vẫn ở research_tracking/reports/, research_tracking/runs/ và docs/thesis_recovery/evidence/. Hồ sơ kỹ thuật không ghép vào file đọc của GVHD. Notebook trước chuyển đổi được bảo toàn ở Git commit e759983; gói nhiều file cũ ở2e63cd9. Không sửa dữ liệu hoặc kết quả nghiên cứu khi đổi hình thức trình bày.
