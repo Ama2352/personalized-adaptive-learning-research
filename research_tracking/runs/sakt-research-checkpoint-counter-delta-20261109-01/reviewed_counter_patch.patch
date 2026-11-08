@@ -1,0 +1,55 @@
+*** Begin Patch
+*** Update File: src/knowledge_tracing/sakt/research_checkpoint.py
+@@
+-                  and 1 <= step.item() <= progress.optimizer_steps and float(step.item()).is_integer(), 'Adam step counter invalid')
++                  and step.item() == progress.optimizer_steps and float(step.item()).is_integer(), 'Adam step counter invalid')
+*** Update File: tests/sakt/test_research_checkpoint.py
+@@
+     finally:
+         f.optimizer.param_groups[0]['params'] = old
++
++
++def test_epoch2_roundtrip_then_stale_positive_adam_step_rejected(completed, tmp_path, monkeypatch):
++    f = completed
++    suffix = hashlib.sha256(tmp_path.name.encode()).hexdigest()[:8]
++    identity = cp.research_checkpoint_identity(f.native, f.view, f.spec2, f.optimizer, profile=f.profile)
++    reference = cp.save_research_training_state(f.owned/('epoch2-'+suffix), f.native, f.view, f.spec2, f.optimizer,
++        profile=f.profile, epoch_result=f.second, previous_progress=f.progress, expected_identity=identity, limits=f.limits)
++    progress = cp.restore_research_training_state(reference['directory'], f.loaded, f.view, f.spec2, f.loaded_optimizer,
++        profile=f.profile, expected_identity=identity, expected_complete_sha256=reference['complete_sha256'], limits=f.limits)
++    assert progress == cp.SAKTEpochProgress(2, 2, 64)
++    assert _equal(f.loaded.state_dict(), f.native.state_dict())
++    assert _equal(f.loaded_optimizer.state_dict(), f.optimizer.state_dict())
++    # Giữ epoch2 hợp lệ; chỉ mutate bản sao mới để thử authenticated stale state.
++    bad = f.owned/('stale2-'+suffix); bad.mkdir()
++    for path in reference['directory'].iterdir():
++        raw = path.read_bytes(); before = hashlib.sha256(raw).hexdigest()
++        (bad/path.name).write_bytes(raw)
++        assert hashlib.sha256(path.read_bytes()).hexdigest() == hashlib.sha256((bad/path.name).read_bytes()).hexdigest() == before
++    payload = torch.load(bad/'state.pt', map_location='cpu', weights_only=True)
++    states = list(payload['optimizer_state_dict']['state'].values())
++    assert all(state['step'].item() == 2 for state in states)
++    states[0]['step'].fill_(1)
++    buffer = io.BytesIO(); torch.save(payload, buffer); raw = buffer.getvalue(); (bad/'state.pt').write_bytes(raw)
++    metadata = json.loads((bad/'metadata.json').read_bytes())
++    metadata.update(checkpoint_sha256=hashlib.sha256(raw).hexdigest(), checkpoint_bytes=len(raw))
++    meta = json.dumps(metadata, sort_keys=True).encode(); (bad/'metadata.json').write_bytes(meta)
++    complete = json.loads((bad/'COMPLETE.json').read_bytes())
++    complete.update(metadata_sha256=hashlib.sha256(meta).hexdigest(), checkpoint_sha256=metadata['checkpoint_sha256'])
++    end = json.dumps(complete, sort_keys=True).encode(); (bad/'COMPLETE.json').write_bytes(end)
++    monkeypatch.setattr(f.loaded, 'load_state_dict', lambda *a, **k: pytest.fail('stale step reached model mutation'))
++    monkeypatch.setattr(f.loaded_optimizer, 'load_state_dict', lambda *a, **k: pytest.fail('stale step reached optimizer mutation'))
++    with pytest.raises(ValueError, match='Adam step counter invalid'):
++        cp.restore_research_training_state(bad, f.loaded, f.view, f.spec2, f.loaded_optimizer,
++            profile=f.profile, expected_identity=identity, expected_complete_sha256=hashlib.sha256(end).hexdigest(), limits=f.limits)
++
++
++def test_wrong_previous_cumulative_steps_rejected_before_save(completed, tmp_path):
++    f = completed
++    output = f.owned/('badprev-'+hashlib.sha256(tmp_path.name.encode()).hexdigest()[:8])
++    identity = cp.research_checkpoint_identity(f.native, f.view, f.spec2, f.optimizer, profile=f.profile)
++    with pytest.raises(ValueError, match='Adam step counter invalid'):
++        cp.save_research_training_state(output, f.native, f.view, f.spec2, f.optimizer, profile=f.profile,
++            epoch_result=f.second, previous_progress=cp.SAKTEpochProgress(1, 2, 32), expected_identity=identity, limits=f.limits)
++    assert not output.exists()
+*** End Patch

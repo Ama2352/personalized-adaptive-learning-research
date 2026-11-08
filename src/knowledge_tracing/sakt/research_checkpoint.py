@@ -239,7 +239,7 @@ def _validate_states(model, optimizer, state, optimizer_state, progress, limits)
             step = entry['step']
             _need(type(step) is torch.Tensor and step.device.type == 'cpu' and step.numel() == 1
                   and step.dtype in (torch.float32, torch.float64) and torch.isfinite(step).all()
-                  and 1 <= step.item() <= progress.optimizer_steps and float(step.item()).is_integer(), 'Adam step counter invalid')
+                  and step.item() == progress.optimizer_steps and float(step.item()).is_integer(), 'Adam step counter invalid')
             for name in names-{'step'}:
                 _tensor(entry[name], shape=parameter.shape)
             _need(bool((entry['exp_avg_sq'] >= 0).all()), 'negative Adam second moment')

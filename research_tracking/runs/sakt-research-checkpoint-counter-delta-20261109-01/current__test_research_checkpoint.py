@@ -1,0 +1,279 @@
+"""Đề xuất ROOT review trước chạy: handmade typed metadata, không real corpus.
+
+Một module fixture:2SAKT/2Adam constructors,3genuine epoch updates (prefix dùng
+chung rồi continuous vs restored suffix). Không mặc định đã được cấp phép chạy.
+Không tạo batch cursor hoặc promote selected-fit; negative cases không update.
+"""
+from copy import deepcopy
+from dataclasses import replace
+import hashlib
+import io
+import json
+import random
+from types import SimpleNamespace
+
+import numpy as np
+import pytest
+import torch
+
+from knowledge_tracing.sakt import SAKTConfig, SAKTCore
+from knowledge_tracing.sakt import research_checkpoint as cp
+from knowledge_tracing.sakt import research_data as data
+from knowledge_tracing.sakt import research_training as training
+from knowledge_tracing.sakt.training import state_digest
+from .test_research_data import corpus as handmade_corpus_fixture
+
+
+def _model(view, seed):
+    with torch.random.fork_rng(devices=[]), torch.device('cpu'):
+        torch.random.default_generator.manual_seed(seed)
+        return SAKTCore(SAKTConfig(len(view.vocabulary.values), 3, 4, 1, 4, .2, 1e-5)).to(dtype=torch.float32, device='cpu')
+
+
+def _adam(model):
+    return torch.optim.Adam(model.parameters(), lr=.01, betas=(.9, .999), eps=1e-8,
+                            weight_decay=0., amsgrad=False, foreach=False, capturable=False,
+                            differentiable=False, fused=False)
+
+
+def _equal(a, b):
+    if isinstance(a, torch.Tensor):
+        return isinstance(b, torch.Tensor) and a.dtype == b.dtype and torch.equal(a, b)
+    if isinstance(a, dict):
+        return isinstance(b, dict) and a.keys() == b.keys() and all(_equal(a[k], b[k]) for k in a)
+    if isinstance(a, (list, tuple)):
+        return type(a) is type(b) and len(a) == len(b) and all(_equal(x, y) for x, y in zip(a, b))
+    return a == b
+
+
+@pytest.fixture(scope='module')
+def completed(tmp_path_factory):
+    # Reuse đúng handmade public fixture factory; không reader/collector/auth bypass.
+    corpus = handmade_corpus_fixture.__wrapped__()
+    view = data.prepare_sakt_research_view(corpus, scope='select_train80',
+        recipe=data.SAKTDataRecipe(2, 'left', 'query_only', 'sliding_last_context', 'window_relative_interaction_rank'))
+    profile = cp.SAKTCheckpointProfile('a'*64, 'b'*64, 'c'*64, 'SYNTHETIC_METADATA_NOT_RUNTIME_AUTHORITY')
+    limits = cp.SAKTCheckpointLimits(2**20, 65536, 2**20)
+    spec1 = training.SAKTResearchSpec(32, 1., 42, 'seeded_permutation', 'cpu', 'float32', 'mean_bce_on_eligible_targets')
+    spec2 = replace(spec1, epoch_seed=43)
+    budget = training.SAKTResearchBudget(20., 32, 32, 1)
+    root = tmp_path_factory.mktemp('sr')
+    owned = root/'artifacts/akt/local-tests/run01'; owned.mkdir(parents=True)
+    patch = pytest.MonkeyPatch(); patch.setattr(cp, 'ROOT', root)
+    original_rng = cp._rng(); previous_threads = torch.get_num_threads()
+    try:
+        torch.set_num_threads(2)
+        native = _model(view, 13); optimizer = _adam(native)
+        native.eval(); native.dropout.train(True)  # Mixed caller modes must restore exactly.
+        first = training.train_research_epoch(native, view, optimizer=optimizer, spec=spec1, budget=budget)
+        assert first['ledger']['optimizer_steps_body_returned'] == 1
+        saved_rng = cp._rng()
+        identity = cp.research_checkpoint_identity(native, view, spec1, optimizer, profile=profile)
+        reference = cp.save_research_training_state(owned/'epoch1', native, view, spec1, optimizer,
+            profile=profile, epoch_result=first, previous_progress=cp.SAKTEpochProgress(0, 0, 0),
+            expected_identity=identity, limits=limits)
+        assert _equal(cp._rng(), saved_rng)
+        second = training.train_research_epoch(native, view, optimizer=optimizer, spec=spec2, budget=budget)
+        continuous_state = deepcopy(native.state_dict()); continuous_optimizer = deepcopy(optimizer.state_dict())
+        reloaded = _model(view, 777); reloaded_optimizer = _adam(reloaded)
+        assert state_digest(reloaded) != first['model_state_after']
+        assert not {id(p) for p in native.parameters()} & {id(p) for p in reloaded.parameters()}
+        progress = cp.restore_research_training_state(reference['directory'], reloaded, view, spec1, reloaded_optimizer,
+            profile=profile, expected_identity=identity, expected_complete_sha256=reference['complete_sha256'], limits=limits)
+        restored_rng = cp._rng(); assert _equal(restored_rng, saved_rng)
+        assert [(n, m.training) for n, m in reloaded.named_modules()] == [(n, m.training) for n, m in native.named_modules()]
+        suffix = training.train_research_epoch(reloaded, view, optimizer=reloaded_optimizer, spec=spec2, budget=budget)
+        assert second['ledger']['optimizer_steps_body_returned'] == suffix['ledger']['optimizer_steps_body_returned'] == 1
+        yield SimpleNamespace(root=root, owned=owned, corpus=corpus, view=view, native=native, optimizer=optimizer,
+            loaded=reloaded, loaded_optimizer=reloaded_optimizer, reference=reference, identity=identity,
+            profile=profile, limits=limits, spec1=spec1, spec2=spec2, budget=budget, progress=progress,
+            second=second, suffix=suffix, continuous_state=continuous_state, continuous_optimizer=continuous_optimizer)
+    finally:
+        random.setstate(original_rng['python'])
+        ns = original_rng['numpy']; np.random.set_state((ns[0], np.asarray(ns[1], dtype=np.uint32), *ns[2:]))
+        torch.set_rng_state(original_rng['torch']); torch.set_num_threads(previous_threads); patch.undo()
+
+
+def _restore(f, directory=None, **changes):
+    args = dict(profile=f.profile, expected_identity=f.identity,
+                expected_complete_sha256=f.reference['complete_sha256'], limits=f.limits)
+    args.update(changes)
+    return cp.restore_research_training_state(directory or f.reference['directory'], f.native,
+                                              f.view, f.spec1, f.optimizer, **args)
+
+
+def _copy(f, tmp_path):
+    directory = f.owned/('copy-'+hashlib.sha256(tmp_path.name.encode()).hexdigest()[:8])
+    directory.mkdir()
+    for path in f.reference['directory'].iterdir():
+        before = hashlib.sha256(path.read_bytes()).hexdigest()
+        raw = path.read_bytes(); (directory/path.name).write_bytes(raw)
+        assert hashlib.sha256((directory/path.name).read_bytes()).hexdigest() == before == hashlib.sha256(path.read_bytes()).hexdigest()
+    return directory
+
+
+def test_continuous_and_epoch_boundary_restored_suffix_are_exact(completed):
+    f = completed
+    assert _equal(f.loaded.state_dict(), f.continuous_state)
+    assert _equal(f.loaded_optimizer.state_dict(), f.continuous_optimizer)
+    assert f.second['loss_sum'] == f.suffix['loss_sum'] and f.second['ledger'] == f.suffix['ledger']
+    assert f.progress == cp.SAKTEpochProgress(1, 1, 32)
+    assert f.reference['iterator_resume_supported'] is False and f.reference['fitted_research_model'] is False
+    # Frozen prediction parity uses actual research input/target population, no optimizer.
+    left = training.predict_research_sakt(f.native, f.view, spec=f.spec2,
+        budget=training.SAKTResearchBudget(20., 32, 32, 0))
+    right = training.predict_research_sakt(f.loaded, f.view, spec=f.spec2,
+        budget=training.SAKTResearchBudget(20., 32, 32, 0))
+    assert left['predictions'] == right['predictions'] and left['ledger']['scored_targets'] == 32
+
+
+@pytest.mark.parametrize('change', ['runtime', 'profile', 'protocol', 'expected_role', 'encoding', 'config', 'spec', 'optimizer', 'source'])
+def test_identity_drift_rejected_before_deserialization(completed, monkeypatch, change):
+    f = completed; expected = deepcopy(f.identity); profile = f.profile
+    if change in ('runtime', 'profile', 'protocol'):
+        profile = replace(profile, **{change+'_sha256': 'd'*64})
+    elif change == 'expected_role': expected['role'] = 'selected_research_fitted'
+    elif change == 'encoding': expected['encoding_sha256'] = 'd'*64
+    elif change == 'config': expected['model_config']['dropout'] = 0.
+    elif change == 'spec': expected['spec']['epoch_seed'] += 1
+    elif change == 'optimizer': expected['optimizer']['groups'][0]['settings']['lr'] *= 2
+    else:
+        original = cp.source_identity(); monkeypatch.setattr(cp, 'source_identity', lambda: (*original, ('drift', 'd'*64)))
+    monkeypatch.setattr(cp.torch, 'load', lambda *a, **k: pytest.fail('identity drift reached deserialization'))
+    before = state_digest(f.native)
+    with pytest.raises(ValueError, match='identity drift|profile protocol'):
+        _restore(f, profile=profile, expected_identity=expected)
+    assert state_digest(f.native) == before
+
+
+@pytest.mark.parametrize('change', ['bounded', 'failed', 'incomplete', 'pending', 'started_only', 'partial_targets', 'model_receipt_drift'])
+def test_partial_or_ambiguous_epoch_cannot_be_published(completed, tmp_path, change):
+    f = completed; result = deepcopy(f.second)
+    if change in ('bounded', 'failed'): result['status'] = change
+    elif change == 'incomplete': result['ledger']['complete'] = False
+    elif change == 'pending': result['ledger']['possibly_updated_source_rows'] = [1]
+    elif change == 'started_only': result['ledger']['optimizer_steps_started'] += 1
+    elif change == 'partial_targets': result['ledger']['optimized_targets'] -= 1
+    else: result['model_state_after'] = 'd'*64
+    output = f.owned/('bad-'+hashlib.sha256(tmp_path.name.encode()).hexdigest()[:8])
+    identity = cp.research_checkpoint_identity(f.native, f.view, f.spec2, f.optimizer, profile=f.profile)
+    with pytest.raises(ValueError):
+        cp.save_research_training_state(output, f.native, f.view, f.spec2, f.optimizer, profile=f.profile,
+            epoch_result=result, previous_progress=f.progress, expected_identity=identity, limits=f.limits)
+    assert not output.exists()
+
+
+@pytest.mark.parametrize('bound', ['metadata', 'checkpoint', 'tensor'])
+def test_byte_limits_reject_without_model_mutation(completed, bound):
+    f = completed
+    limit = replace(f.limits, **{'max_'+bound+'_bytes': 1})
+    before = state_digest(f.native)
+    with pytest.raises(ValueError, match='cap'):
+        _restore(f, limits=limit)
+    assert state_digest(f.native) == before
+
+
+@pytest.mark.parametrize('change', ['nan', 'dtype', 'missing', 'foreign_optimizer', 'adam_step', 'rng',
+                                   'missing_all_optimizer_state', 'missing_one_optimizer_state', 'negative_second_moment'])
+def test_authenticated_but_malformed_payload_fails_before_mutation(completed, tmp_path, monkeypatch, change):
+    f = completed; directory = _copy(f, tmp_path)
+    payload = torch.load(directory/'state.pt', map_location='cpu', weights_only=True)
+    key = next(iter(payload['model_state_dict']))
+    if change == 'nan': payload['model_state_dict'][key].flatten()[0] = float('nan')
+    elif change == 'dtype': payload['model_state_dict'][key] = payload['model_state_dict'][key].double()
+    elif change == 'missing': payload['model_state_dict'].pop(key)
+    elif change == 'foreign_optimizer': payload['optimizer_state_dict']['state'][999999] = {}
+    elif change == 'adam_step': next(iter(payload['optimizer_state_dict']['state'].values()))['step'].fill_(999)
+    elif change == 'missing_all_optimizer_state': payload['optimizer_state_dict']['state'].clear()
+    elif change == 'missing_one_optimizer_state': payload['optimizer_state_dict']['state'].pop(next(iter(payload['optimizer_state_dict']['state'])))
+    elif change == 'negative_second_moment': next(iter(payload['optimizer_state_dict']['state'].values()))['exp_avg_sq'].flatten()[0] = -.1
+    else: payload['rng']['numpy'] = ('NOT_MT19937', [], 0, 0, 0.)
+    buffer = io.BytesIO(); torch.save(payload, buffer); raw = buffer.getvalue(); (directory/'state.pt').write_bytes(raw)
+    metadata = json.loads((directory/'metadata.json').read_bytes())
+    metadata.update(checkpoint_sha256=hashlib.sha256(raw).hexdigest(), checkpoint_bytes=len(raw))
+    meta = json.dumps(metadata, sort_keys=True).encode(); (directory/'metadata.json').write_bytes(meta)
+    complete = json.loads((directory/'COMPLETE.json').read_bytes())
+    complete.update(metadata_sha256=hashlib.sha256(meta).hexdigest(), checkpoint_sha256=metadata['checkpoint_sha256'])
+    end = json.dumps(complete, sort_keys=True).encode(); (directory/'COMPLETE.json').write_bytes(end)
+    monkeypatch.setattr(f.native, 'load_state_dict', lambda *a, **k: pytest.fail('invalid state reached mutation'))
+    with pytest.raises(ValueError):
+        _restore(f, directory, expected_complete_sha256=hashlib.sha256(end).hexdigest())
+
+
+def test_exclusive_publication_and_failed_complete_marker_preserve_history(completed, tmp_path, monkeypatch):
+    f = completed; before = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in f.reference['directory'].iterdir()}
+    identity = cp.research_checkpoint_identity(f.native, f.view, f.spec2, f.optimizer, profile=f.profile)
+    args = dict(profile=f.profile, epoch_result=f.second, previous_progress=f.progress, expected_identity=identity, limits=f.limits)
+    with pytest.raises(FileExistsError):
+        cp.save_research_training_state(f.reference['directory'], f.native, f.view, f.spec2, f.optimizer, **args)
+    assert before == {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in f.reference['directory'].iterdir()}
+    original = cp.publish_new_file
+    def fail_complete(source, destination):
+        if destination.name == 'COMPLETE.json': raise OSError('injected publication failure')
+        return original(source, destination)
+    monkeypatch.setattr(cp, 'publish_new_file', fail_complete)
+    output = f.owned/('partial-'+hashlib.sha256(tmp_path.name.encode()).hexdigest()[:8])
+    with pytest.raises(OSError, match='injected'):
+        cp.save_research_training_state(output, f.native, f.view, f.spec2, f.optimizer, **args)
+    assert (output/'failure.json').exists() and not (output/'COMPLETE.json').exists()
+    with pytest.raises(ValueError, match='partial/failed'):
+        _restore(f, output)
+
+
+def test_prediction_role_and_wrong_optimizer_ownership_rejected(completed):
+    f = completed
+    selection = data.prepare_sakt_research_view(f.corpus, scope='raw_selection10', recipe=f.view.recipe, encoding=f.view.encoding)
+    with pytest.raises(ValueError, match='optimization-phase'):
+        cp.research_checkpoint_identity(f.native, selection, f.spec1, f.optimizer, profile=f.profile)
+    old = f.optimizer.param_groups[0]['params']
+    f.optimizer.param_groups[0]['params'] = old[:-1]
+    try:
+        with pytest.raises(ValueError, match='every model parameter'):
+            cp.research_checkpoint_identity(f.native, f.view, f.spec1, f.optimizer, profile=f.profile)
+    finally:
+        f.optimizer.param_groups[0]['params'] = old
+
+
+def test_epoch2_roundtrip_then_stale_positive_adam_step_rejected(completed, tmp_path, monkeypatch):
+    f = completed
+    suffix = hashlib.sha256(tmp_path.name.encode()).hexdigest()[:8]
+    identity = cp.research_checkpoint_identity(f.native, f.view, f.spec2, f.optimizer, profile=f.profile)
+    reference = cp.save_research_training_state(f.owned/('epoch2-'+suffix), f.native, f.view, f.spec2, f.optimizer,
+        profile=f.profile, epoch_result=f.second, previous_progress=f.progress, expected_identity=identity, limits=f.limits)
+    progress = cp.restore_research_training_state(reference['directory'], f.loaded, f.view, f.spec2, f.loaded_optimizer,
+        profile=f.profile, expected_identity=identity, expected_complete_sha256=reference['complete_sha256'], limits=f.limits)
+    assert progress == cp.SAKTEpochProgress(2, 2, 64)
+    assert _equal(f.loaded.state_dict(), f.native.state_dict())
+    assert _equal(f.loaded_optimizer.state_dict(), f.optimizer.state_dict())
+    # Giữ epoch2 hợp lệ; chỉ mutate bản sao mới để thử authenticated stale state.
+    bad = f.owned/('stale2-'+suffix); bad.mkdir()
+    for path in reference['directory'].iterdir():
+        raw = path.read_bytes(); before = hashlib.sha256(raw).hexdigest()
+        (bad/path.name).write_bytes(raw)
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == hashlib.sha256((bad/path.name).read_bytes()).hexdigest() == before
+    payload = torch.load(bad/'state.pt', map_location='cpu', weights_only=True)
+    states = list(payload['optimizer_state_dict']['state'].values())
+    assert all(state['step'].item() == 2 for state in states)
+    states[0]['step'].fill_(1)
+    buffer = io.BytesIO(); torch.save(payload, buffer); raw = buffer.getvalue(); (bad/'state.pt').write_bytes(raw)
+    metadata = json.loads((bad/'metadata.json').read_bytes())
+    metadata.update(checkpoint_sha256=hashlib.sha256(raw).hexdigest(), checkpoint_bytes=len(raw))
+    meta = json.dumps(metadata, sort_keys=True).encode(); (bad/'metadata.json').write_bytes(meta)
+    complete = json.loads((bad/'COMPLETE.json').read_bytes())
+    complete.update(metadata_sha256=hashlib.sha256(meta).hexdigest(), checkpoint_sha256=metadata['checkpoint_sha256'])
+    end = json.dumps(complete, sort_keys=True).encode(); (bad/'COMPLETE.json').write_bytes(end)
+    monkeypatch.setattr(f.loaded, 'load_state_dict', lambda *a, **k: pytest.fail('stale step reached model mutation'))
+    monkeypatch.setattr(f.loaded_optimizer, 'load_state_dict', lambda *a, **k: pytest.fail('stale step reached optimizer mutation'))
+    with pytest.raises(ValueError, match='Adam step counter invalid'):
+        cp.restore_research_training_state(bad, f.loaded, f.view, f.spec2, f.loaded_optimizer,
+            profile=f.profile, expected_identity=identity, expected_complete_sha256=hashlib.sha256(end).hexdigest(), limits=f.limits)
+
+
+def test_wrong_previous_cumulative_steps_rejected_before_save(completed, tmp_path):
+    f = completed
+    output = f.owned/('badprev-'+hashlib.sha256(tmp_path.name.encode()).hexdigest()[:8])
+    identity = cp.research_checkpoint_identity(f.native, f.view, f.spec2, f.optimizer, profile=f.profile)
+    with pytest.raises(ValueError, match='Adam step counter invalid'):
+        cp.save_research_training_state(output, f.native, f.view, f.spec2, f.optimizer, profile=f.profile,
+            epoch_result=f.second, previous_progress=cp.SAKTEpochProgress(1, 2, 32), expected_identity=identity, limits=f.limits)
+    assert not output.exists()

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "status": "PREP_ONLY_NOT_APPLIED_NO_EXECUTION_WAIT_ROOT39909_RELEASE",
+  "root_live_session": 39909,
+  "closed70_reference": {
+    "sha256": "378046f4605a431d4a404975cb46201f8b982d059736d34d329bf26ceacb4611",
+    "output_count": 70,
+    "path": "research_tracking/runs/sakt-research-checkpoint-engineering-20261109-01/manifest.json"
+  },
+  "production_before": {
+    "test_path": "tests/sakt/test_research_checkpoint.py",
+    "test_sha256": "0d9c4942fb66671f37979fe355b3deacad4a3bff27df6e6884061b1bfef71466",
+    "module_sha256": "1b0745951636ff967df0aed2a519cef153fe4aaa2dd5c3d4f8ecee6baf8cc4d3",
+    "module_path": "src/knowledge_tracing/sakt/research_checkpoint.py"
+  },
+  "patch": {
+    "path": "artifacts/akt/local-tests/akt-research-runner-20261108-01/sakt_checkpoint_counter02.patch",
+    "sha256": "830aa3e469a21c9472edf77df68ea6f42a5a0abc01cc2e43f7be5a4a79a2b141"
+  },
+  "proposed": {
+    "test_path": "artifacts/akt/local-tests/akt-research-runner-20261108-01/test_research_checkpoint_counter02.py.proposed",
+    "test_sha256": "e7a144ac5fafff4d90c2f0ae5613fbbd261db76f43c906d9aa61fed207e4a2c0",
+    "module_sha256": "40fa69b861fb93d565fb2a37a0f126509c5239e681fdf3a3c5ae022f3b6cb3c7",
+    "module_path": "artifacts/akt/local-tests/akt-research-runner-20261108-01/research_checkpoint_counter02.py.proposed"
+  },
+  "expected_cases": 33,
+  "native_core_inventory_unchanged": {
+    "adam_steps": 3,
+    "constructors": 2,
+    "adam_constructors": 2,
+    "forwards": 5,
+    "logical_backwards": 3
+  },
+  "static_serialization_estimate_not_actual": {
+    "torch_load_calls": 23,
+    "model_state_restores": 2,
+    "torch_save_calls": 13,
+    "optimizer_state_restores": 2
+  },
+  "existing_serialization_caps_sufficient": {
+    "torch_load_calls": 24,
+    "model_state_restores": 4,
+    "torch_save_calls": 16,
+    "optimizer_state_restores": 4
+  },
+  "new_actual_executions": 0,
+  "scope_vi": "One equality hunk +2tests using existing completedsecond epoch; noextraNN/step in proposed33suite beyond existing3. Prior31alreadyused3 separately, notrewritten. ProductionunchangeduntilROOTreleases39909freeze."
+}

@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**SAKT — bổ sung counter:** [delta33fixtures](sakt_checkpoint_counter_delta_20261109.md), chấp nhận boundary epoch2 và từ chối Adam step cũ trước mutation. [Bundle43outputs](../runs/sakt-research-checkpoint-counter-delta-20261109-01/README.md) đã đóng, tham chiếu bundle70 cũ;3tiny Adamsteps trong lượt mới, chưa baseline fitted.
+
 **Kiểm phần mềm hiện hành09/11:** [AKT/shared KT trên Windows CPU](akt_windows_gate_readiness_20261109.md),1.418 PASS/0 failure/error/skip; [bundle đã đóng](../runs/akt-windows-gate-readiness-20261109-01/README.md) giữ cả lỗi trước sửa và log nghiệm thu. Đây chưa là CUDA hoặc kết quả mô hình nghiên cứu. Các dòng chưa full Gate bên dưới là mốc lịch sử trước lượt03.
 
 **RQ1 — giải thích bước chọn khái niệm:** [tái dựng bộ lọc ứng viên](rq1_fixed_controller_candidates_20261109.md), khớp đủ2.160ready memberships/CID trên1.080cặp cũ. Bốn khác biệt bị bước cân bằng loại;51tập cuối khác vẫn cùng lựa chọn;17tập cuối giữ nguyên nhưng lựa chọn đổi. Đây là giải thích theo source, không thêm mẫu hoặc bằng chứng lợi ích học tập.

@@ -1,5 +1,7 @@
 # Chỉ mục bằng chứng
 
+**SAKT counter delta09/11:** [33CPUfixtures](reports/sakt_checkpoint_counter_delta_20261109.md) / [bundle43outputs](runs/sakt-research-checkpoint-counter-delta-20261109-01/README.md). Counter phải khớp bước Adam tích lũy; giữ lịch sử31fixtures cũ. Chưa actual corpus fit hoặc full research orchestration.
+
 ## Kiểm phần mềm hiện hành09/11
 
 [AKT/shared KT Windows CPU](reports/akt_windows_gate_readiness_20261109.md) và [bundle nghiệm thu](runs/akt-windows-gate-readiness-20261109-01/README.md):1.418 PASS/0 failure/error/skip,154 source files/69 test modules. Giữ raw failure trước sửa; chưa CUDA hoặc quyền training. Các nhận định chưa full Gate trong các mốc bên dưới là lịch sử.
