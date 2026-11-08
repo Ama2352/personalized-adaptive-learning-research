@@ -81,7 +81,7 @@
     "mandatory baseline allocation pending",
     "Linux/Colab GPU publish/lifecycle chưa thực chạy, Windows local fix đã verified"
   ],
-  "next_recommended_investigation": "Nhận actual Gate23 verdict+raw artifacts, không exit0-only hoặc dùng Windows Gate thay.",
+  "next_recommended_investigation": "Bổ sung loader từ actual pinned Git blob, không mạng/metadata giả; giữ cachemiss/FAILED23.",
   "resume_instructions": "Đọc STATE, LOG,09 và03 trước. Không lặp PDF/source scans đã có nếu hashes không đổi. Đọc current test logs và staged status. Mọi sửa verdict append lý do vào LOG. Không launch training từ task existence.",
   "resolved_questions": {
     "Q09": "Map đủ28nodes,36unique IDs,8extra metadata IDs,0duplicates, planning_validation.json"
@@ -359,18 +359,11 @@
     "gpu_executed": false
   },
   "current_software_gate": {
-    "status": "PASS",
-    "passed": 768,
-    "failed": 0,
-    "errors": 0,
-    "skipped": 0,
-    "elapsed_seconds": 477.70916349999607,
-    "timeout_seconds": 540,
-    "report": "artifacts/akt/preflight/gate2-evidence-20261108-linux-tooling-22.json",
-    "sha256": "f2f702408adb2162b0102aaca80eac1b1acd59ebec56a2fb77d8b1a358b276cd",
-    "lock_sha256": "3e721fdb49543ad0888cf02a863826ebc6144c0d1dd670f2490ebcc0d69b8c0a",
-    "scope": "Windows CPU only; actual Linux full Gate/CUDA còn thiếu.",
-    "archived_report": "research_tracking/runs/akt-linux-isolated-install-20261108-01/windows_gate22_report.json"
+    "status": "STALE_SOURCE_CHANGE_AWAIT_LINUX_GATE24",
+    "reason": "Test fixture thread contract changed in dd80006; native model unchanged. Windows Gate22 remains historical; actualLinuxGate23 failed.",
+    "last_accepted_windows_gate": "software_gate_before_test_fixture_dd80006",
+    "expected_new_tests": 771,
+    "authorization_granted": false
   },
   "previous_software_gate": {
     "status": "REJECTED_RESOURCE_BOUND",
@@ -777,7 +770,7 @@
     "RQ2": "PARTIAL_CONTROLLED_PILOTS_AND_CONFOUNDING_AUDIT",
     "RQ3": "A0_A1_BACKBONE_PROTOTYPE_NOT_TRAINED_CGAKT",
     "AKT_CUDA": "HISTORICAL_KITV12_SYNTHETIC_ONLY_NEW_WORKER_NOT_VALIDATED",
-    "AKT_MAIN_LINUX_GPU_WORKER": "NATIVE_LINUX_CPU_RUNTIME_VERIFIED_GATE23_RUNNING_NO_CUDA_WORKER_ACCEPTANCE",
+    "AKT_MAIN_LINUX_GPU_WORKER": "NATIVE_CPU_RUNTIME_ACCEPTED_LINUX_GATE23_FAILED_NO_MAINWORKER_OR_CUDA_ACCEPTANCE",
     "SAKT": "TOY_CPU_TRAINER_AND_CHECKPOINT_VERIFIED_NOT_RESEARCH_FITTED",
     "GKT": "STATIC_RECURRENT_ENGINEERING_CANDIDATE_88PASS_NOT_FITTED_OR_ADOPTED",
     "Modal": "NO_COMPUTE_SPEND_NO_AUTOMATIC_ALLOCATION",
@@ -893,18 +886,17 @@
     "latest_verified_commit": "d30dafe",
     "commit_evidence": "artifacts/akt/local-tests/thesis-rq12-draft-20261108-01/git-validation06.json",
     "closed_science_outputs": 39,
-    "current_main": "Actual Linux native runtime02 accepted8,189s, raw5files đã nhận/verify. Gate23 full768 software cases đang chạy CPU; chưa verdict. Không GPU/Modal/realdata.",
+    "current_main": "Hai nguyên nhân Gate23 đã tách: loader upstream thiếu đang bổ sung provenance-checked; numerical mismatch là CPUthread contract, test-only fix26PASS đãcommitdd80006. Source delta/Gate24 chưa dispatch.",
     "parallel": {
       "graph_gate_prototype": "Cập nhật GKT02/WRITE02 tracking và registry, không Linux outcome speculation.",
       "rq12_evidence_synthesis": "Chuẩn bị bounded native CPU mainworker driver sau Gate; không execute remote.",
       "platform_fixture_compat": "RQ1 observer reproduction: exact historical projection parity, cumulative120s, không new independentN."
     },
     "next": [
-      "Nhận actual Gate23 verdict+raw artifacts, không exit0-only hoặc dùng Windows Gate thay.",
-      "Nếu Gate đạt, review bounded native CPU synthetic mainworker2updates; explicit context, no default/historical data.",
-      "Đóng một bundle Linux source/runtime/whole-software-Gate với failed/success history và SHA; commit verified.",
-      "RQ1 observer replay chỉ chấp nhận exact historical projection parity; không backfill trace cũ.",
-      "CUDA mainworker/recovery/throughput vẫn cần stage riêng; không tự dùng Modal/free credits."
+      "Bổ sung loader từ actual pinned Git blob, không mạng/metadata giả; giữ cachemiss/FAILED23.",
+      "Review materialization delta riêng cho test fixture, bản base161/ZIP/receipt cũ immutable.",
+      "Chạy fresh LinuxGate24 native771tests chỉ khi loader+delta prerequisites verified.",
+      "Sau acceptedGate mới review native CPUdummy mainworker; chưa GPU/Modal/realdata."
     ],
     "pending_external": [
       "S01 exactPaper1revision; S04 mastery/calibration/controller; S05 scientific allocation.",
@@ -934,9 +926,11 @@
       "linux_gate_tooling": "7b07d61",
       "linux_isolated_cpu_audit": "4f48749",
       "gkt_recurrent_candidate": "6035262",
-      "thesis_rq12_results_draft": "d30dafe"
+      "thesis_rq12_results_draft": "d30dafe",
+      "rq1_query_observability": "7dd8338",
+      "graph_fallback_test_contract": "dd80006"
     },
-    "verified_new_output_blobs": 940,
+    "verified_new_output_blobs": 980,
     "colab_connection": {
       "status": "CONNECTED_CPU_RUNTIME_RECONFIRMED",
       "last_controller_session": 55463,
@@ -1061,19 +1055,47 @@
         "gpu_ready": false
       },
       "linux_gate23": {
-        "status": "RUNNING_NOT_ACCEPTED_YET",
+        "status": "FAILED_RETAIN_PARTIAL_NO_RETRY",
         "native_timeout_seconds": 600,
         "outer_timeout_seconds": 630,
         "driver_sha256": "105a2388288fc608ac5b8c0b1eb48ee1e877d352ed352189e08fc4c4c86ebba1",
-        "resume_rule": "Không dispatch lại; đọc existing result/log/XML rồi verify trước acceptance."
+        "resume_rule": "Không dispatch lại; đọc existing result/log/XML rồi verify trước acceptance.",
+        "passed": 763,
+        "failed": 5,
+        "errors": 0,
+        "skipped": 0,
+        "elapsed_seconds": 261.71898930600037,
+        "result_sha256": "c7cf0a96ca75c32728fcb7d566d0f1fcac22b95ae940d6e37e916645081c6583",
+        "output_manifest_sha256": "4edfac1ec01d910d92862c527d215400211d0e4f0729cb35904148514afe1224",
+        "cleanup_accepted": true,
+        "raw_export_received": true,
+        "received": "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/received-linux-gate02-failure"
+      },
+      "graph_fallback_diagnostic01": {
+        "status": "ACTUAL_LINUX_THREAD_CONTRACT_DIFFERENCE",
+        "result_sha256": "1649db0c143e98c086e3ecbd1fef7f6610f6182e49bfe3c76db91f0ab3d5ab9a",
+        "elapsed_seconds": 5.024490350999258,
+        "max_probability_difference_mismatched_threads": 5.960464477539063e-08,
+        "matched_threads_bitwise_equal": true,
+        "model_source_unchanged": true,
+        "test_fix_commit": "dd80006",
+        "local_targeted_passed": 26,
+        "full_new_suite_expected": 771,
+        "new_full_gate_accepted": false
       }
     },
     "latest_rq1_evidence": {
-      "run_id": "rq1-score-vector-20261108-01",
-      "outputs": 7,
-      "new_samples": 0,
+      "run_id": "rq1-query-observability-reproduction-20261108-01",
+      "outputs": 40,
+      "new_independent_samples": 0,
+      "spy_tests": 12,
+      "shared_query_keys_verified": 1080,
+      "full_preview_changes": 22,
+      "same_concept_additional_item_changes": 0,
+      "same_P_full_preview_changes": "2/116",
       "rq_complete": false,
-      "profile_harm_preserved": true
+      "commit": "7dd8338",
+      "parent_review": "artifacts/akt/local-tests/rq1-observability-preparation-20261108-01/parent-review.json"
     },
     "new_blocker": "GPU08 isolated install/runtime/image và GPU09 actual worker CUDA còn thiếu; Gate20 rejection đã được thay bằng Gate21 hợp lệ, không sửa lịch sử.",
     "source_kit": {
@@ -1167,5 +1189,19 @@
     "GPU09: actual Linux/CUDA MAINworker synthetic Parquet lifecycle once phase/runtime prerequisites pass; previousv12 probes do not certify this new source.",
     "SAKT trainer/selected-fit/checkpoint provenance/OnlineSession bridge and S04/S05 protocols remain; random/unverified adapter scores cannot be benchmarked as fitted.",
     "GKT and proposal-required comparisons remain. No fullCV, Holdout or Modal allocation from engineering test PASS."
-  ]
+  ],
+  "software_gate_before_test_fixture_dd80006": {
+    "status": "PASS",
+    "passed": 768,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "elapsed_seconds": 477.70916349999607,
+    "timeout_seconds": 540,
+    "report": "artifacts/akt/preflight/gate2-evidence-20261108-linux-tooling-22.json",
+    "sha256": "f2f702408adb2162b0102aaca80eac1b1acd59ebec56a2fb77d8b1a358b276cd",
+    "lock_sha256": "3e721fdb49543ad0888cf02a863826ebc6144c0d1dd670f2490ebcc0d69b8c0a",
+    "scope": "Windows CPU only; actual Linux full Gate/CUDA còn thiếu.",
+    "archived_report": "research_tracking/runs/akt-linux-isolated-install-20261108-01/windows_gate22_report.json"
+  }
 }

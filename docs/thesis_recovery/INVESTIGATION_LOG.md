@@ -297,3 +297,15 @@ GKT recurrent engineeringcandidate được triểnkhai theo conventionnêurõ, 
 Audit riêng theo Git blob LF đạt0,284787s; raw result1f116d3d… và cả14text files FAILEDcheckout/acceptedLF đã export, mọi copySHA trước/sau khớp. FAILEDcheckout01 vẫn giữ nguyên. Native runtime02 chạy CPU đạt8,189495s; result874336b8… và manifest05630c55…, raw5files/24976bytes export verified. Driver02 bổ sung Git transport/config/credential isolation sau independentreviewP2;8mock-env checks PASS. Driver01/request01 chưa dispatch và giữ nguyên, không có failed runtime01 giả.
 
 Đã dispatch Linux Gate23 trên CPU: nguyên768 software tests, native600s/outer630s; đang chạy, chưa acceptance. Không realdata/Holdout/GPU/Modal. Bản thảo results RQ1/RQ2 đãcommitd30dafe:2rawGit files,16input hashes,53JSONpointers/14links PASS; không newmetrics. RQ1 observer reproduction được parent cho phép trong cumulative120s, exactlegacyparity hoặc STOP; thông tin query mới chỉ thuộc reproduction, không chép ngược lịch sử.
+
+### 08/11 — Gate23 thất bại có giới hạn, dừng trước main worker
+
+Actual Linux CPU suite:763PASS/5FAIL trong256,80s pytest; controller261,718989s<=630, cleanup accepted, childRC1. Resultc7cf0a96…/manifest4edfac1e…; không report/pointer PASS được tạo.4tests lỗi vì sparsecheckout chỉ3files thiếu upstream load_data.py; local pinnedGitblob loader6428bytes SHA27550ccd… đãderive, chưa materialize remote.1graph no_parent_support exactparityfail đang chẩn đoán CPUthread/kernel, chưa kết luận modelbug hoặc nới tolerance. Mainworker dừng và không lặp Gate vô điều kiện.
+
+Rawfailureexport đã thực hiện chỉ đọc; receiver Windows dùng str(Path('/content/...')) sai separator nên reject envelope trước ghi. Sửa riêng receiver, không sửa/re-export hoặc relabel remoteFAILED. RQ1 observer nhánh song song đã báo exactlegacyparity/control-observed, đang independently kiểm và đóng bundle; chưa nâng RQ1 hoàn tất.
+
+### 08/11 — Phân biệt lỗi fixture với model và thêm evidence RQ1
+
+RawGate23 nhận8files149283bytes, XML768tests/5fail/0error/skip và SHA khớp; failed giữ nguyên. Localreceiver02 sửa riêng POSIXstring comparison, originalhelper vàfailurelog còn nguyên, không remoteexport lại. Actual Linux graph diagnostic5,02449s/30s cho thấy baselineambient1 khác wrapped2 ở probability tối đa5,960464477539063e−08; matched2 bitwiseequal cảloss/p/count. Ba precedingtestsPASS, backbone states không đổi. Test-only correction giữtorch.equal, thêm6fallback configurations và restoration/hooks;26targetedPASS/13,171s/30, commitdd80006, nativegraphc7e9… unchanged. WindowsGate22 stale cho test source mới; không dùng nó để lách freshGate.
+
+RQ1 query-observability reproduction được parent kiểm độc lập40outputSHA/2160comparisonflags/1080actualsharedquerykeys, commit7dd8338/raw40Gitblobsverified. Fullpreview22/1080, additionalitemchanges khi conceptgiữ0; sameP/fullpreview2/116.3seedfamilies/crossprofiledependence/newindependentN0; không backfill oldmetadata/servedaction/causalclaim. Totals verifiednewoutputblobs980 không là số thí nghiệm khoa học. Loader cache-only actualmiss0,204949s không mutation; chuyển sang vận chuyển đúng Gitblobđãderive, không clone/fetch hoặc dựng Gitmetadata.

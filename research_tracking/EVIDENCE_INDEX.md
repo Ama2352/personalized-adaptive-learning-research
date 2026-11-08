@@ -1,13 +1,15 @@
 # Chỉ mục bằng chứng
 
-## Bổ sung08/11 — GKT02 engineering và WRITE02 draft
+## Bổ sung08/11 — GKT02/WRITE02/RQDIAG04
 
 | Mốc | Evidence đã đối chiếu | Source identity và giới hạn |
 |---|---|---|
 | GKT02, commit `6035262` | [Report](reports/gkt_recurrent_candidate_readiness_20261108.md), [bundle47outputs](runs/gkt-recurrent-candidate-engineering-20261108-01/README.md):88finalCPUtests,0optimizer; historical86/87 giữ riêng. Manifest `b00ca32d5c4385da9a84d3442b82638ec344a64cb191b91b1b02c5ab513d09ac`. | Recurrent SHA `510195d71c1ddb743f747e78d7d874c04bb809931c5ec24ae6fe907fe53ec072`; tests SHA `bb173f7dd9b7b8cf14dbe00dd5fc75097dc87c9f5a794d90e29fd670d26afdce`. Engineering recipe candidate, chưa full GKT/fitted comparator/S05. |
 | WRITE02, commit `d30dafe` | [Draft](reports/THESIS_RQ12_DIAGNOSTIC_RESULTS_DRAFT_20261108.md), [sources](reports/THESIS_RQ12_DIAGNOSTIC_RESULTS_DRAFT_20261108.sources.json), [validation05](../artifacts/akt/local-tests/thesis-rq12-draft-20261108-01/validation05.json):53JSONPointers/14links; giữ pre-P3 snapshots/review. | MD SHA `da64fbae222b9d116ebdc41933f02912ed04385eac43491d3a438b4f649caa8e`; sources SHA `04e879674243dbdcbc8ba69423819662509bf8bdd7039b42d0fac92a69b50fbf`. Kết quả kiểm toán/chẩn đoán pilot sẵn studentedit, không final RQ1/RQ2 hoặc new inference. |
 
-Hai mốc bổ sung GKT01/WRITE01, không thay verdict lịch sử hoặc nâng engineering thành research efficacy. Chỉ mục này không dự đoán runtime/Linux Gate outcome, không thêm cloud/realdata authorization.
+- **RQDIAG04 — `7dd8338`:** [observability reproduction](reports/rq1_query_observability_reproduction_20261108.md),40outputs/12spyPASS/71,9959014s≤120,new independentN=0; manifest `112cd15f69b63fec730a4b4a67acf98650986adc58138f68ef4a5105adbf81d7`. Parent review1080actualsharedquery keys; cùngpilot, không backfill/servedaction/causalRQcompletion.
+
+Các mốc bổ sung GKT01/WRITE01/RQDIAG03, không thay verdict lịch sử hoặc nâng engineering thành research efficacy. Chỉ mục này không dự đoán runtime/Linux Gate outcome, không thêm cloud/realdata authorization.
 
 ## Hiện hành08/11 — Linux CPU audit riêng và Windows Gate22
 

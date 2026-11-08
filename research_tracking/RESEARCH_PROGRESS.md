@@ -1,13 +1,17 @@
 # Tiến độ nghiên cứu
 
-## Bổ sung08/11 — hai deliverables đã hoàn tất theo phạm vi
+**Vận hành Linux CPU sau cập nhật nguồn:** Gate23 có 763 PASS/5 FAIL, chưa được chấp nhận. Bốn lỗi do checkout thiếu upstream loader; lỗi còn lại được tái hiện là khác CPU threads (matched threads cho kết quả bitwise bằng nhau). Test-only fix `dd80006` đạt 26 targeted tests; native model giữ nguyên. Gate22 Windows là bằng chứng lịch sử cho source trước sửa test, không chứng nhận source hiện tại. Xem [state phục hồi](../docs/thesis_recovery/INVESTIGATION_STATE.json) và [log](../docs/thesis_recovery/INVESTIGATION_LOG.md); chưa chạy main worker/CUDA/Modal.
+
+## Bổ sung08/11 — engineering, bản thảo và reproduction
 
 | Task/commit | Kết quả source-bound | Giới hạn còn giữ |
 |---|---|---|
 | GKT02 — `6035262` | [Recurrent candidate](reports/gkt_recurrent_candidate_readiness_20261108.md):88finalCPUtests/0optimizer, [47outputs](runs/gkt-recurrent-candidate-engineering-20261108-01/README.md); source recurrent SHA `510195d71c1ddb743f747e78d7d874c04bb809931c5ec24ae6fe907fe53ec072`, manifest `b00ca32d5c4385da9a84d3442b82638ec344a64cb191b91b1b02c5ab513d09ac`. | Hoàn tất engineering candidate sau GKT01; chưa trainer/fitted adapter/learned graph, author parity hoặc final S05/required baseline. |
 | WRITE02 — `d30dafe` | [Tiểu mục diagnostic results](reports/THESIS_RQ12_DIAGNOSTIC_RESULTS_DRAFT_20261108.md), [source map](reports/THESIS_RQ12_DIAGNOSTIC_RESULTS_DRAFT_20261108.sources.json):12claims/53JSONPointers/14links, reviewPASS+3P3clarifications. MD `da64fbae222b9d116ebdc41933f02912ed04385eac43491d3a438b4f649caa8e`; JSON `04e879674243dbdcbc8ba69423819662509bf8bdd7039b42d0fac92a69b50fbf`. | Hoàn tất bản thảo sau WRITE01; stored pilot/descriptive evidence, không final RQ1/RQ2 hoặc causal efficacy. |
 
-TASKS ghi GKT02 phụ thuộc GKT01; WRITE02 phụ thuộc WRITE01/RQDIAG03. Các snapshots cũ ghi GKT chỉ kernel vẫn là lịch sử trước candidate này. Không cập nhật verdict runtime/Linux Gate đang chạy từ hai deliverables trên; STATE/LOG và kết quả vận hành do parent đối chiếu riêng.
+- **RQDIAG04 — `7dd8338`:** [query/full-preview reproduction](reports/rq1_query_observability_reproduction_20261108.md),12spyPASS/40outputs,71,9959014s≤120/new independentN=0/0optimizer. Giữ exactlegacy và parent kiểm1080sharedqueries; observation mới thuộc reproduction, không backfill trace cũ, không servedaction/causal/finalRQ1.
+
+TASKS ghi GKT02 phụ thuộc GKT01; WRITE02 phụ thuộc WRITE01/RQDIAG03; RQDIAG04 phụ thuộc RQDIAG03. Các snapshots cũ ghi GKT chỉ kernel vẫn là lịch sử trước candidate này. Không cập nhật verdict runtime/Linux Gate đang chạy từ hai deliverables trên; STATE/LOG và kết quả vận hành do parent đối chiếu riêng.
 
 ## Mới nhất08/11 — Windows Gate22 và audit existing Linux CPU venv
 

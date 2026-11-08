@@ -1,11 +1,13 @@
 # Mục lục báo cáo và phân tích KLTN
 
-## Bổ sung08/11 — GKT02 và bản thảo kết quả WRITE02
+## Bổ sung08/11 — GKT02, WRITE02 và RQDIAG04
 
 - **GKT02, commit `6035262`:** [recurrent candidate readiness](gkt_recurrent_candidate_readiness_20261108.md), [đặc tả recipe](gkt_recurrence_specification_20261108.md), [bundle47outputs](../runs/gkt-recurrent-candidate-engineering-20261108-01/README.md). Final **88CPUtests**,0optimizer; manifest SHA `b00ca32d5c4385da9a84d3442b82638ec344a64cb191b91b1b02c5ab513d09ac`. Recurrent source SHA `510195d71c1ddb743f747e78d7d874c04bb809931c5ec24ae6fe907fe53ec072`; report SHA `17e2d57e139a96dbef7dce0e768b4969dd32fdff1980dcc9a84720c496236807`. Đây là engineering recipe candidate sau GKT01; chưa author parity/S05 adoption, trainer/fitted adapter/learned graph hoặc full comparator.
 - **WRITE02, commit `d30dafe`:** [tiểu mục kết quả kiểm toán/chẩn đoán pilot](THESIS_RQ12_DIAGNOSTIC_RESULTS_DRAFT_20261108.md), [claim-source JSON](THESIS_RQ12_DIAGNOSTIC_RESULTS_DRAFT_20261108.sources.json). MD SHA `da64fbae222b9d116ebdc41933f02912ed04385eac43491d3a438b4f649caa8e`; sources SHA `04e879674243dbdcbc8ba69423819662509bf8bdd7039b42d0fac92a69b50fbf`. Parent/independent review và [validation05](../../artifacts/akt/local-tests/thesis-rq12-draft-20261108-01/validation05.json) giữ53JSONPointers/14links;3P3wording đã bổ sung, các bảng số/claim values không đổi. Đây là bản thảo sau WRITE01, không final RQ1/RQ2 completion hoặc thí nghiệm mới.
 
-Các phần GKT kernel/methods draft phía dưới là các mốc trước, giữ nguyên vai trò lịch sử. Hai commit này không bổ sung actual Linux Gate/runtime outcome, GPU/Modal hoặc fitted research result.
+- **RQDIAG04, commit `7dd8338`:** [query/full-preview observability reproduction](rq1_query_observability_reproduction_20261108.md),40outputs/12spyPASS,71,9959014s≤120,0optimizer/new independentN=0. Nativecontrol/observer giữ exactlegacy của cùngpilot; parent kiểm1.080sharedqueries. Newsidecar không backfill metadata lịch sử; preview≠servedaction, không causal/finalRQ1.
+
+Các phần GKT kernel/methods draft phía dưới là các mốc trước, giữ nguyên vai trò lịch sử. Các cập nhật này không bổ sung actual Linux Gate/runtime outcome, GPU/Modal hoặc fitted research result.
 
 ## Hiện hành08/11 — Linux install/audit và Windows Gate22
 
