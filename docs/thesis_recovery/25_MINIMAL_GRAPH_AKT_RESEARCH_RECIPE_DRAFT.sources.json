@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "status": "DRAFT_SOURCE_REVIEW_NOT_ADOPTED_NO_EXECUTION",
+  "language": "vi",
+  "date": "2026-11-08",
+  "draft": {
+    "path": "docs/thesis_recovery/25_MINIMAL_GRAPH_AKT_RESEARCH_RECIPE_DRAFT.md",
+    "sha256": "7b478d584820351ac3ff118c8856b4afa935f4bf1a4137b6d82ef3037adea080"
+  },
+  "scope_vi": "Nguồn đọc để phản biện recipe đề xuất; không đọc data/oracle, không chạy test/model/optimizer, không sửa protocol/source/Git.",
+  "proposed_method_changes": [
+    "fixed centered parent mean D1 plus signed alpha initialized0",
+    "A3 sigmoid Linear4->1 weights/bias0",
+    "graph and confidence fitted on train80 frozen through neural refit90"
+  ],
+  "not_yet_adopted": [
+    "D1 graph model recipe",
+    "research promotion of engineering gate4 features",
+    "explicit train80 graph/confidence freeze through refit90"
+  ],
+  "known_limits": [
+    "Gate gradient0 at first step because alpha0; do not bypass alpha0",
+    "One scalar is capacity-limited and gate/alpha weakly identifiable",
+    "legacy estimated_probability enum means predictive stability here,not P(edge true)",
+    "same-backbone graph-off doesnot equal independent fitted A0"
+  ],
+  "inputs": [
+    {
+      "path": "docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md",
+      "sha256": "c0d6e8a698d7d5083986e9848898a643390fc5e76100fc0b8c6286c306e6bea6",
+      "bytes": 18993,
+      "anchors": [
+        "§2 lifecycle,controller,independent A0 fallback",
+        "§3 same initialization/effective history; A0–A3 matrix",
+        "§4 Method24 score semantics"
+      ]
+    },
+    {
+      "path": "docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md",
+      "sha256": "96858efc6d99915390d841f45144d2e2be29e244e825b58cee993a148f05f3d1",
+      "bytes": 14218,
+      "anchors": [
+        "§3 limited phase inputs and full target population",
+        "§4 selected/refit/calibration artifacts",
+        "§5 global budgets/native primitive"
+      ]
+    },
+    {
+      "path": "docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md",
+      "sha256": "6f9e5adc2f075cb9c0c43ebbf1852e2365dd1baf5ff7c59dd8630561b3d72567",
+      "bytes": 3968,
+      "anchors": [
+        "9conditions/environment,18optimization phases/environment;36total",
+        "same-backbone disable differs independent A0"
+      ]
+    },
+    {
+      "path": "docs/thesis_recovery/06_AKT_CGAKT_ARCHITECTURE_PLAN.md",
+      "sha256": "a7dca3925d46794aa5f367fbef5b0840befb734fa5dc6d277d1beeb8164d09f7",
+      "bytes": 10299,
+      "anchors": [
+        "engineering prototype recipe is not research adoption",
+        "residual normalization and two fallback meanings"
+      ]
+    },
+    {
+      "path": "src/knowledge_tracing/graph_augmentation.py",
+      "sha256": "105aa918f1dc5d8fcfae22c9d8e7d2e13c1832b71d8b6a7ce8deed67d443ff08",
+      "bytes": 6979,
+      "anchors": [
+        "apply_graph_residual: weighted observed sum/max(1,mass)",
+        "enabled/mass0/gate0 exact base-logit bypass"
+      ]
+    },
+    {
+      "path": "src/knowledge_tracing/graph_context.py",
+      "sha256": "3db94ec43271d336898f61f81f12aeb569c6de52219eeed535af709711c97264",
+      "bytes": 7367,
+      "anchors": [
+        "EdgeConfidence enum estimated_probability requires fitted_role=train",
+        "audit_graph_context: effective native window,oracle and OOV guards"
+      ]
+    },
+    {
+      "path": "src/knowledge_tracing/edge_confidence.py",
+      "sha256": "a91aec2558d1fa63c18212aadda265e2dd0e01f369756447022b21bacfc235e9",
+      "bytes": 28417,
+      "anchors": [
+        "EdgeSummary/_summarize_edge: learner means and200bootstrap positive fractions",
+        "prepare_train_lagged_rows: train role/provenance binding",
+        "EdgeConfidenceResult/select_positive_dag: complete supported graph requirements"
+      ]
+    },
+    {
+      "path": "src/knowledge_tracing/akt/graph_prototype.py",
+      "sha256": "9fc6b8271da503ce16d25147a320bf0ffb9312e5416abae40fbb034f26d3157a",
+      "bytes": 22906,
+      "anchors": [
+        "GraphPrototypeSpec/_scope: engineering d32/dropout0 guards",
+        "gate_features: support,all-parent confidence mean/variance,observed fraction",
+        "forward_details: native bypass/active BCEWithLogits graph path"
+      ]
+    },
+    {
+      "path": "src/knowledge_tracing/akt/research_runner.py",
+      "sha256": "19627a1aa1bbf76069f1a07e0b56a3b5c79a1651863a31c37ac1c08c6cf62092",
+      "bytes": 40570,
+      "anchors": [
+        "_new_model/_train_epoch: seed,Adam ownership/native training primitive",
+        "_execute_cpu: A0 raw selection/fresh refit/calibration stages",
+        "_native_bce: selection on exported float32 probabilities"
+      ]
+    },
+    {
+      "path": "src/knowledge_tracing/akt/model.py",
+      "sha256": "e40b068bc305d0157a03f4baea3cd8e06c5777611c492f02fb65f792760e9e9f",
+      "bytes": 9244,
+      "anchors": [
+        "AKTAdapter.step: native loss/countmean,backward,global clipping,Adam"
+      ]
+    },
+    {
+      "path": "src/knowledge_tracing/akt/config.py",
+      "sha256": "beb2f8830c9d411fa1c00f0acf81ffe0c5200d6c09045d949b9cebade30dc85f",
+      "bytes": 11099,
+      "anchors": [
+        "validate_config: frozen simulator-research CPU policy"
+      ]
+    },
+    {
+      "path": "artifacts/akt/dependencies/upstream/akt.py",
+      "sha256": "be2788c20cac602e86ef3a51e5294b37dd7b200f818be4e173dbd69069a3ec6d",
+      "bytes": 14756,
+      "anchors": [
+        "pinned commit01b7e8d7d7c862cabc9467108e3e7f2555653a88 physical working-tree bytes",
+        "forward lines103–110: BCEWithLogitsLoss and sigmoid predictions"
+      ]
+    }
+  ],
+  "validation": {
+    "source_inspection_only": true,
+    "actual_tests": 0,
+    "actual_optimizer_steps": 0,
+    "actual_model_calls": 0,
+    "git_mutations": 0,
+    "protocol_mutations": 0
+  }
+}
