@@ -1,0 +1,1102 @@
+EEEEEEEEEEEEEEEEEE                                                       [100%]
+=================================== ERRORS ====================================
+_ ERROR at setup of test_native_eight_forwards_five_logical_backwards_no_optimizer _
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+_ ERROR at setup of test_ticket_exact_batch_and_one_use_with_public_primitive _
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+_ ERROR at setup of test_ticket_and_owned_optimizer_reject_before_primitive[foreign_batch] _
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+_ ERROR at setup of test_ticket_and_owned_optimizer_reject_before_primitive[changed_targets] _
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+_ ERROR at setup of test_ticket_and_owned_optimizer_reject_before_primitive[changed_qa] _
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+_ ERROR at setup of test_ticket_and_owned_optimizer_reject_before_primitive[missing_parameter] _
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+_ ERROR at setup of test_ticket_and_owned_optimizer_reject_before_primitive[wrong_lr] _
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+__ ERROR at setup of test_pending_ticket_blocks_prediction_and_phase_switch ___
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+_______ ERROR at setup of test_prediction_phase_cannot_collate_training _______
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+__ ERROR at setup of test_changed_window_rejected_by_context_before_forward ___
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+_ ERROR at setup of test_native_ticket_rejects_tensor_replacement_and_is_consumed _
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+_________ ERROR at setup of test_source_drift_rejects_before_forward __________
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+________ ERROR at setup of test_duplicate_windows_reject_before_native ________
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+________ ERROR at setup of test_no_retained_phase_or_other_role_truth _________
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+_ ERROR at setup of test_public_native_recipe_rebinding_rejected_before_forward[variant-A0] _
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+_ ERROR at setup of test_public_native_recipe_rebinding_rejected_before_forward[condition_sha256-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb] _
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+_ ERROR at setup of test_native_enabled_is_exact_boolean_not_truthy_fallback __
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+_ ERROR at setup of test_inference_failure_restores_all_modes_and_clears_context _
+
+    @pytest.fixture(scope='module')
+    def case():
+>       fixture = handmade()
+                  ^^^^^^^^^^
+
+tests\akt\test_research_graph_model.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_research_graph_model.py:46: in handmade
+    shards[role] = data.ResearchAKTShard(plan, bank, role, tuple(trajectories), provenance,
+<string>:10: in __init__
+    ???
+src\knowledge_tracing\akt\research_simulator_data.py:52: in __post_init__
+    self.audit
+src\knowledge_tracing\akt\research_simulator_data.py:56: in audit
+    return audit_research_shard(self.trajectories, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-59c4d1c884672f0dae9810ad2c19724e7baf9af6496c314ea77c7f2e708736da', plan_sha256='...rce_row=505), correct=1), Observation(query=ItemQuery(item_id='i2', timestamp=1005, source_row=506), correct=0))), ...)
+plan = ResearchSplitPlan(namespace='HANDMADE_MODEL_NO_GENERATED_CORPUS', root_seed=42, development_learners=10, final_learners=1, protocol_sha256='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+bank = SimulatorBank(environment_id='HANDMADE_NO_FITTED_MODEL', items=(SimulatorItem(item_id='i0', concept_id='c00', difficul...(item_id='i8', concept_id='c08', difficulty=1200.0), SimulatorItem(item_id='i9', concept_id='c09', difficulty=1200.0)))
+role = 'train'
+provenance = ResearchProvenance(role='train', research_plan_sha256='127fe98e93119cecf1a079fff42b7a719d56a1ce0e04e692ce2ec08156f674d..._id='handmade_observables_only', timestamp_unit='unix_seconds_utc', timezone='UTC', logging_policy_oracle_access=False)
+expected_provenance_sha256 = '34d052bdcd69a04b06366be9ed0fe7d13d9be43e8ebef0fa2a0987ce1f1f5f53'
+limits = ShardLimits(max_learners=8, max_events_per_learner=6, max_total_events=48)
+reference_items = ('i0', 'i1', 'i10', 'i11', 'i12', 'i13', ...)
+
+    def audit_research_shard(trajectories, *, plan, bank, role, provenance,
+                             expected_provenance_sha256, limits, reference_items):
+        """Audit only requested development role; final data rejected before iteration.
+    
+    No source I/O, generator calls or oracle-sidecar fields are accepted. Source and
+    policy metadata are declarations bound to an externally pinned identity.
+    """
+        if role not in DEVELOPMENT_ROLES:
+            raise ValueError('final events are inaccessible to development audit')
+        if (type(plan) is not ResearchSplitPlan or type(bank) is not SimulatorBank
+                or type(provenance) is not ResearchProvenance or type(limits) is not ShardLimits):
+            raise ValueError('typed research plan/bank/provenance/limits required')
+        _sha(expected_provenance_sha256)
+        if (provenance.identity != expected_provenance_sha256 or provenance.role != role
+                or provenance.research_plan_sha256 != plan.identity
+                or provenance.split_plan_sha256 != plan.split_plan.identity
+                or provenance.bank_sha256 != identity_hash(bank.identity)):
+            raise ValueError('provenance/role/plan/domain binding mismatch')
+        if (type(reference_items) is not tuple or not reference_items
+                or any(type(i) is not str for i in reference_items)
+                or len(reference_items) != len(set(reference_items))
+                or set(reference_items) != set(bank.item_ids)):
+            raise ValueError('reference items must cover the complete bank; no subset renormalization')
+        concepts = {}
+        for item in bank.items:
+            concepts.setdefault(item.concept_id, []).append(item.difficulty)
+        if (len(bank.items) != 84 or len(concepts) != 28
+                or any(sorted(values) != [1050., 1200., 1350.] for values in concepts.values())):
+>           raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+E           ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+src\knowledge_tracing\simulator_research_data.py:154: ValueError
+=========================== short test summary info ===========================
+ERROR tests/akt/test_research_graph_model.py::test_native_eight_forwards_five_logical_backwards_no_optimizer
+ERROR tests/akt/test_research_graph_model.py::test_ticket_exact_batch_and_one_use_with_public_primitive
+ERROR tests/akt/test_research_graph_model.py::test_ticket_and_owned_optimizer_reject_before_primitive[foreign_batch]
+ERROR tests/akt/test_research_graph_model.py::test_ticket_and_owned_optimizer_reject_before_primitive[changed_targets]
+ERROR tests/akt/test_research_graph_model.py::test_ticket_and_owned_optimizer_reject_before_primitive[changed_qa]
+ERROR tests/akt/test_research_graph_model.py::test_ticket_and_owned_optimizer_reject_before_primitive[missing_parameter]
+ERROR tests/akt/test_research_graph_model.py::test_ticket_and_owned_optimizer_reject_before_primitive[wrong_lr]
+ERROR tests/akt/test_research_graph_model.py::test_pending_ticket_blocks_prediction_and_phase_switch
+ERROR tests/akt/test_research_graph_model.py::test_prediction_phase_cannot_collate_training
+ERROR tests/akt/test_research_graph_model.py::test_changed_window_rejected_by_context_before_forward
+ERROR tests/akt/test_research_graph_model.py::test_native_ticket_rejects_tensor_replacement_and_is_consumed
+ERROR tests/akt/test_research_graph_model.py::test_source_drift_rejects_before_forward
+ERROR tests/akt/test_research_graph_model.py::test_duplicate_windows_reject_before_native
+ERROR tests/akt/test_research_graph_model.py::test_no_retained_phase_or_other_role_truth
+ERROR tests/akt/test_research_graph_model.py::test_public_native_recipe_rebinding_rejected_before_forward[variant-A0]
+ERROR tests/akt/test_research_graph_model.py::test_public_native_recipe_rebinding_rejected_before_forward[condition_sha256-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb]
+ERROR tests/akt/test_research_graph_model.py::test_native_enabled_is_exact_boolean_not_truthy_fallback
+ERROR tests/akt/test_research_graph_model.py::test_inference_failure_restores_all_modes_and_clears_context
+18 errors in 0.72s

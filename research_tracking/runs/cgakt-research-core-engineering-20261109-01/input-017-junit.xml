@@ -1,0 +1,1171 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="18" failures="0" skipped="0" tests="18" time="1.802" timestamp="2026-11-09T03:45:27.262657+07:00" hostname="Ama"><testcase classname="tests.akt.test_research_graph_model" name="test_native_eight_forwards_five_logical_backwards_no_optimizer" time="0.524"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase><testcase classname="tests.akt.test_research_graph_model" name="test_ticket_exact_batch_and_one_use_with_public_primitive" time="0.001"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase><testcase classname="tests.akt.test_research_graph_model" name="test_ticket_and_owned_optimizer_reject_before_primitive[foreign_batch]" time="0.001"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase><testcase classname="tests.akt.test_research_graph_model" name="test_ticket_and_owned_optimizer_reject_before_primitive[changed_targets]" time="0.001"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase><testcase classname="tests.akt.test_research_graph_model" name="test_ticket_and_owned_optimizer_reject_before_primitive[changed_qa]" time="0.000"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase><testcase classname="tests.akt.test_research_graph_model" name="test_ticket_and_owned_optimizer_reject_before_primitive[missing_parameter]" time="0.001"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase><testcase classname="tests.akt.test_research_graph_model" name="test_ticket_and_owned_optimizer_reject_before_primitive[wrong_lr]" time="0.001"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase><testcase classname="tests.akt.test_research_graph_model" name="test_pending_ticket_blocks_prediction_and_phase_switch" time="0.001"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase><testcase classname="tests.akt.test_research_graph_model" name="test_prediction_phase_cannot_collate_training" time="0.001"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase><testcase classname="tests.akt.test_research_graph_model" name="test_changed_window_rejected_by_context_before_forward" time="0.001"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase><testcase classname="tests.akt.test_research_graph_model" name="test_native_ticket_rejects_tensor_replacement_and_is_consumed" time="0.001"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase><testcase classname="tests.akt.test_research_graph_model" name="test_source_drift_rejects_before_forward" time="0.001"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase><testcase classname="tests.akt.test_research_graph_model" name="test_duplicate_windows_reject_before_native" time="0.001"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase><testcase classname="tests.akt.test_research_graph_model" name="test_no_retained_phase_or_other_role_truth" time="0.001"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase><testcase classname="tests.akt.test_research_graph_model" name="test_public_native_recipe_rebinding_rejected_before_forward[variant-A0]" time="0.001"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase><testcase classname="tests.akt.test_research_graph_model" name="test_public_native_recipe_rebinding_rejected_before_forward[condition_sha256-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb]" time="0.001"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase><testcase classname="tests.akt.test_research_graph_model" name="test_native_enabled_is_exact_boolean_not_truthy_fallback" time="0.001"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase><testcase classname="tests.akt.test_research_graph_model" name="test_inference_failure_restores_all_modes_and_clears_context" time="0.001"><error message="failed on setup with &quot;ValueError: source content mismatch: akt.py&quot;">@pytest.fixture(scope='module')
+    def case():
+        fixture = handmade()
+        # Capture the RNG immediately after real backbone construction: the new
+        # alpha/gate branch must consume no additional native RNG draws.
+        original = model.build_native
+        observed = {}
+        def build(*args, **kwargs):
+            native = original(*args, **kwargs)
+            observed['after_backbone'] = torch.get_rng_state().clone()
+            return native
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+            model.build_native = build
+            try:
+&gt;               adapter = model.ResearchGraphAKTAdapter(config=fixture['config'], encoding=fixture['encoding'],
+                    index=fixture['index'], condition=fixture['condition'])
+
+tests\akt\test_research_graph_model.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_graph_model.py:238: in __init__
+    self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:178: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_graph_model.py:120: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_research_graph_model.py:98: in build
+    native = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:317: in backbone
+    native = original_build(config, n_items=n_items)  # REAL load_upstream + REAL verify_upstream.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_cgakt_research_model02.py:285: in observed_loader
+    loaded = original_loader(root, device=device)  # Always executes original; never returns a cache.
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('D:/Dev/KLTN/artifacts/akt/dependencies/upstream')
+expected_commit = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
+
+    def verify_upstream(root: Path, expected_commit: str) -&gt; dict:
+        root = root.resolve()
+        commit = _git(root, 'rev-parse', 'HEAD')
+        if commit != expected_commit:
+            raise ValueError('source commit mismatch')
+        if _git(root, 'status', '--porcelain', '--untracked-files=all'):
+            raise ValueError('dirty source checkout')
+        if _git(root, 'remote', 'get-url', 'origin') != SOURCE_URL:
+            raise ValueError('source remote mismatch')
+        paths = {name: root / name for name in ('akt.py', 'README.md', 'LICENSE')}
+        if not all(path.is_file() for path in paths.values()):
+            raise ValueError('source file missing')
+        for name in paths:
+            if _git(root, 'hash-object', name) != _git(root, 'rev-parse', f'HEAD:{name}'):
+&gt;               raise ValueError(f'source content mismatch: {name}')
+E               ValueError: source content mismatch: akt.py
+
+src\knowledge_tracing\akt\provenance.py:42: ValueError</error></testcase></testsuite></testsuites>
