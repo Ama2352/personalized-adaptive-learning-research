@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**SAKT09/11:** [epoch/prediction bridge đã kiểm](sakt_research_epoch_readiness_20261109.md),22PASS trên dữ liệu tự dựng; chưa baseline fitted, checkpoint/recovery hoặc profile nghiên cứu.
+
 **Ước lượng cạnh đã thực chạy:** [Method24 trên TRAIN mô phỏng](edge_confidence_native_results_20261108.md),2.352solverfits trong45,17giây CPU; chưa CG-AKT neural hoặc bằng chứng cạnh đúng.
 
 **SAKT — cầu nối dữ liệu:** [bản nghiệm thu kỹ thuật](sakt_research_data_readiness_20261108.md),20 data fixtures và3 native compatibility fixtures đã kiểm; chưa fitted model hoặc kết quả RQ.

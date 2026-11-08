@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "roadmap_version": "1.0",
-  "as_of": "2026-11-08",
+  "as_of": "2026-11-09",
   "execution_authorized": false,
   "approval_rule": "Không tự approve methodology, data execution, cloud spend, full CV, Holdout hoặc final selection",
   "tasks": [
@@ -3740,10 +3740,179 @@
       "authorization_requirements": "Local engineering theo user; exact source/workload/resource dispatch review trước native/neural execution, no Modal/fullCV/Holdout.",
       "status": "PURE_SOFTWARE_CHECKS_VERIFIED_ACTUAL_FULL_GATE_PENDING",
       "blockers": [
-        "Actual full Gate source/lock/RAM/ownedprocess acceptance not yet executed."
+        "RAM snapshot03 đã đủ4GiB floor nhưng cần đo lại trước dispatch.",
+        "Cần source/test mới freeze, collection/currentinventory; recipeGate25 cũ hardcode836cases/124sources không còn dùng nguyên bản."
       ],
       "verified_cases": 76,
       "evidence_bundle": "research_tracking/runs/akt-gate-process-isolation-engineering-20261108-01"
+    },
+    {
+      "id": "SAKT04",
+      "research_objective": "Nối corpus phân vai vào dữ liệu SAKT, không giữ nhãn ngoài phase",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "SAKT03",
+        "CORPUSREAD01"
+      ],
+      "required_inputs": "src/knowledge_tracing/sakt/research_data.py; tests/sakt/test_research_data.py",
+      "files_components": "src/knowledge_tracing/sakt/research_data.py; tests/sakt/test_research_data.py",
+      "implementation_objective": "Nối corpus phân vai vào dữ liệu SAKT, không giữ nhãn ngoài phase",
+      "acceptance_criteria": "20dataPASS+3nativeexportsPASS; exactsource/env/Job cleanup; TRAIN view không giữ corpus đầy đủ.",
+      "verification_steps": "ROOT đọc source/config; chạy bounded checks theo allocation riêng; kiểm artifacts/cleanup/SHA và raw Git trước đóng batch.",
+      "required_artifacts": "research_tracking/runs/sakt-research-data-engineering-20261108-01/",
+      "estimated_effort": "Ước lượng0,5–1ngày công; execution time xem receipt, không suy từ effort.",
+      "elapsed_duration": "Tùy review và tài nguyên; không mặc định training đã được cấp quyền.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Safe engineering theo user; actual data operation cần ROOT review input/config/resource riêng. Không Holdout/fullCV/Modal từ task status.",
+      "status": "COMPLETED_ENGINEERING_NOT_RESEARCH_FITTED",
+      "blockers": []
+    },
+    {
+      "id": "SAKT05",
+      "research_objective": "Một research epoch và dự đoán đủ quần thể SAKT, không tự cấp fitted role",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "SAKT04"
+      ],
+      "required_inputs": "src/knowledge_tracing/sakt/research_training.py; tests/sakt/test_research_training.py",
+      "files_components": "src/knowledge_tracing/sakt/research_training.py; tests/sakt/test_research_training.py",
+      "implementation_objective": "Một research epoch và dự đoán đủ quần thể SAKT, không tự cấp fitted role",
+      "acceptance_criteria": "Finite objective trước backward; exact population identities; causality/modeRNG/partial optimizer ledgers; bounded tiny native fixtures theo ROOTallocation.",
+      "verification_steps": "ROOT đọc source/config; chạy bounded checks theo allocation riêng; kiểm artifacts/cleanup/SHA và raw Git trước đóng batch.",
+      "required_artifacts": "Nguồn/tests và owned fixture logs/JSON/XML sau ROOT chạy.",
+      "estimated_effort": "Ước lượng0,5–1ngày công; execution time xem receipt, không suy từ effort.",
+      "elapsed_duration": "Tùy review và tài nguyên; không mặc định training đã được cấp quyền.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Safe engineering theo user; actual data operation cần ROOT review input/config/resource riêng. Không Holdout/fullCV/Modal từ task status.",
+      "status": "COMPLETED_COMPUTATIONAL_BRIDGE_NOT_RESEARCH_FITTED",
+      "blockers": [],
+      "evidence_bundle": "research_tracking/runs/sakt-research-epoch-engineering-20261109-01",
+      "verified_cases": 22
+    },
+    {
+      "id": "EDGEFIT01",
+      "research_objective": "Ước lượng predictive-stability cạnh trên TRAIN48×210 bằng Method24",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "RESCORPUS01",
+        "CORPUSREAD01"
+      ],
+      "required_inputs": "src/knowledge_tracing/edge_confidence.py; Method24 request/config/profile/worker",
+      "files_components": "src/knowledge_tracing/edge_confidence.py; Method24 request/config/profile/worker",
+      "implementation_objective": "Ước lượng predictive-stability cạnh trên TRAIN48×210 bằng Method24",
+      "acceptance_criteria": "45purePASS; actual2352fits/272160OOF/756summaries;14artifacts đúngSHA,outer120s/ownedcleanup; không oracle/NN.",
+      "verification_steps": "ROOT đọc source/config; chạy bounded checks theo allocation riêng; kiểm artifacts/cleanup/SHA và raw Git trước đóng batch.",
+      "required_artifacts": "research_tracking/runs/edge-confidence-windows-bootstrap-20261108-01/",
+      "estimated_effort": "Ước lượng0,5–1ngày công; execution time xem receipt, không suy từ effort.",
+      "elapsed_duration": "Tùy review và tài nguyên; không mặc định training đã được cấp quyền.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Safe engineering theo user; actual data operation cần ROOT review input/config/resource riêng. Không Holdout/fullCV/Modal từ task status.",
+      "status": "COMPLETED_BOUNDED_TRAIN_SURROGATE_NOT_EDGE_TRUTH",
+      "blockers": []
+    },
+    {
+      "id": "EDGELOAD01",
+      "research_objective": "Đọc artifact confidence đã accepted thành typed scores, giữ unsupported/null khác0",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "EDGEFIT01"
+      ],
+      "required_inputs": "src/knowledge_tracing/edge_confidence_artifact.py; tests/shared_kt/test_edge_confidence_artifact.py",
+      "files_components": "src/knowledge_tracing/edge_confidence_artifact.py; tests/shared_kt/test_edge_confidence_artifact.py",
+      "implementation_objective": "Đọc artifact confidence đã accepted thành typed scores, giữ unsupported/null khác0",
+      "acceptance_criteria": "Outer/terminal/owned/request/DONE14hash/source-runtime provenance; learnedDAG cần exactbudget/acyclic; declaredgraph khác learnedbinding; nooracle/autoNone→0.",
+      "verification_steps": "ROOT đọc source/config; chạy bounded checks theo allocation riêng; kiểm artifacts/cleanup/SHA và raw Git trước đóng batch.",
+      "required_artifacts": "Pure manufactured-envelope tests và actual readonly integration chỉ sau ROOTreview.",
+      "estimated_effort": "Ước lượng0,5–1ngày công; execution time xem receipt, không suy từ effort.",
+      "elapsed_duration": "Tùy review và tài nguyên; không mặc định training đã được cấp quyền.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Safe engineering theo user; actual data operation cần ROOT review input/config/resource riêng. Không Holdout/fullCV/Modal từ task status.",
+      "status": "51PURE_FIXTURES_VERIFIED_ACTUAL_READONLY_INTEGRATION_PENDING",
+      "blockers": [
+        "Chưa đọc actualartifact bằng loader; source/tests frozen sau fixtureclockfix."
+      ]
+    },
+    {
+      "id": "RQDIAG10",
+      "research_objective": "Đối chiếu preview của hai cấu hình có cùng nằm trong hai ready sets không",
+      "rq": [
+        "RQ1"
+      ],
+      "workstream": "research",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "RQDIAG07"
+      ],
+      "required_inputs": "scripts/research/analyze_rq1_cross_ready.py; cached fixed-edge-set contrast inputs",
+      "files_components": "scripts/research/analyze_rq1_cross_ready.py; cached fixed-edge-set contrast inputs",
+      "implementation_objective": "Đối chiếu preview của hai cấu hình có cùng nằm trong hai ready sets không",
+      "acceptance_criteria": "Exact1080query/y/keyjoin,reconcilemarginals,16groups/8MRAcells; giữown/outside/crossmembership vàtất cảrows; no causal/score-only/newN claim.",
+      "verification_steps": "ROOT đọc source/config; chạy bounded checks theo allocation riêng; kiểm artifacts/cleanup/SHA và raw Git trước đóng batch.",
+      "required_artifacts": "Plan/inputpins trước run; rows/summary/validation sau bounded cached analysis.",
+      "estimated_effort": "Ước lượng0,5–1ngày công; execution time xem receipt, không suy từ effort.",
+      "elapsed_duration": "Tùy review và tài nguyên; không mặc định training đã được cấp quyền.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Safe engineering theo user; actual data operation cần ROOT review input/config/resource riêng. Không Holdout/fullCV/Modal từ task status.",
+      "status": "CACHED_ANALYSIS_VERIFIED_ARCHIVE_PENDING",
+      "blockers": [
+        "Đóng bundle/diễn giải giới hạn recordedR trước claim báo cáo."
+      ]
+    },
+    {
+      "id": "WRITE04",
+      "research_objective": "Báo cáo tiến độ theo diễn tiến từ hai paper, nêu rõ đã làm và chưa chứng minh",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "research",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "RQDIAG07",
+        "RQDIAG09",
+        "EDGEFIT01"
+      ],
+      "required_inputs": "research_tracking/supervisor_reports/2026-11-08/01_tien_do/",
+      "files_components": "research_tracking/supervisor_reports/2026-11-08/01_tien_do/",
+      "implementation_objective": "Báo cáo tiến độ theo diễn tiến từ hai paper, nêu rõ đã làm và chưa chứng minh",
+      "acceptance_criteria": "Đúng2files; progressupfront+4chặng;8SVG/5oldtablesunchanged,6tablescurrent; desktop/mobile0overlap,0internalhash/assets; browserclosed.",
+      "verification_steps": "ROOT đọc source/config; chạy bounded checks theo allocation riêng; kiểm artifacts/cleanup/SHA và raw Git trước đóng batch.",
+      "required_artifacts": "Commit8fcbc77; docs/thesis_recovery/evidence/supervisor_narrative_20261108_publication.json",
+      "estimated_effort": "Ước lượng0,5–1ngày công; execution time xem receipt, không suy từ effort.",
+      "elapsed_duration": "Tùy review và tài nguyên; không mặc định training đã được cấp quyền.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Safe engineering theo user; actual data operation cần ROOT review input/config/resource riêng. Không Holdout/fullCV/Modal từ task status.",
+      "status": "COMPLETED_REPORT_SNAPSHOT_NOT_THESIS",
+      "blockers": []
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

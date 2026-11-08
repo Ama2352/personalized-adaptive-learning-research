@@ -579,3 +579,8 @@ Sau45purePASS/87,961597s và exactrequestreview, ROOT chạy một operationCPU1
 ## 08/11 — báo cáo theo diễn tiến nghiên cứu
 
 Xuất bản lại đúng2files: ngữ cảnhPaper1/2→bảngđãlàm/chưachứngminh→4chặng kiểmgiảđịnh/táchtácđộng/điềukiện/chuẩnbịgiảipháp→phầncònthiếu. Giữ byteexact8SVG đã sửa overlap và5bảngsốliệu cũ; thêm bảngtiếnđộ, đưa chi tiếtbaseline vào disclosure. Bổ sung actualMethod24 cùnggiớihạn confidencekhôngP(edgetrue). Independentreview sửa diễn giải GA−B1 vànguồnfootprinttáidựng. BrowserQA1365/390:0collisions/overflow,anchorsvalid,0externalassets/hash; đóngbrowserxong. Không trainingnew đểviếtbáocáo. Method24bbd7708 rawGit113outputs+manifestverified.
+
+
+## 09/11 — SAKT computational bridge và chẩn đoán RQ1 tiếp nối
+
+SAKT22cases:01rejected19PASS/3FAIL vì observerTorchDeviceMode đếm doubleTensor dispatch;02source/testsunchanged22PASS,5logicalbackwards/10rawentries/5SGDsteps. Bundle68outputs đã đóng, chưa researchfit/checkpoint/resume/OnlineSession. Bộ đọcconfidence51+crossready9 đạt60purePASS/15,597877s; giữ startupfailure0,596197s thiếusrcpath trướccollection. Actualcachedcrossready1.154977s≤10s,0model/newN:973000/17001/30100/55110/5111;5fullwinners ngoàiemptyrecordedR,1075bothcrossR. RkhôngcapturedC/B nên khôngscore-only/causalclaim. Actualloaderintegration/bundlepending, fullGatechờsource/currentcollection; không Modal.

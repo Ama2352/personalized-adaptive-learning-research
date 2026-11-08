@@ -1,8 +1,14 @@
 # Tiến độ nghiên cứu
 
-**Cập nhật mới nhất:** [báo cáo GVHD hiện hành](reports/BAO_CAO_TIEN_DO_GVHD_20261108.md) đã phản ánh collector/native12, AKT research-data và notebook có outputs. RQ1/RQ2 vẫn diagnostic/pilot, RQ3 chưa research-fitted comparison; không dùng testcounts làm phần trăm nghiên cứu.
+**Bổ sung09/11:** [SAKT epoch/prediction bridge](reports/sakt_research_epoch_readiness_20261109.md) đã22PASS trên fixtures; chưa full corpus/profile/checkpoint nghiên cứu. CachedRQ1cross-ready đã chạy1080cặp, còn đóng gói/diễn giải trước khi cập nhật báo cáo GVHD. Đây không tăng independentN hoặc hoàn tất RQ.
 
-**Mốc Development08/11 mới:** [Protocol21 đã adopt](../docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md); split/refit contract76PASS, calibration39PASS, controller36PASS và [lượt kiểm chung151PASS](runs/reference-pipeline-integration-20261108-01/README.md). Các con số có overlap, không cộng thành independent experiments. Chưa sinh research corpus/train neural models hoặc chứng minh graph tốt hơn; Modal0USD. Các chữ S04/S05 pending bên dưới là snapshot trước adoption.
+**Cập nhật hiện hành08/11:** [Báo cáo GVHD theo diễn tiến nghiên cứu](supervisor_reports/2026-11-08/01_tien_do/BAO_CAO.md) và [HTML độc lập](supervisor_reports/2026-11-08/01_tien_do/BAO_CAO_NGHIEN_CUU.html), commit `8fcbc77`. Ngữ cảnh hai paper → bảng đã làm/chưa chứng minh → bốn chặng điều tra → phần còn thiếu. Đã kiểm desktop/mobile, không còn chồng nhãn; browser preview đã đóng.
+
+**RQ1/RQ2:** đã có matched edge contrast, footprint controller, history/ability controls và audit retention/Junyi; vẫn là bằng chứng chẩn đoán hữu hạn, chưa hoàn tất RQ. **RQ3:** corpus60người học/12.600tương tác đã tạo tại `1990d4c`. [Method24](reports/edge_confidence_native_results_20261108.md) vừa actualfit2.352surrogates trên TRAIN, tạo candidateDAG31cạnh trong45,17giây CPU; bundle `bbd7708` đã đối chiếu113rawGitoutputs. Điểm cạnh là predictive stability, khôngP(edge true); chưa neuralCG-AKT hoặc learningbenefit.
+
+**Mô hình/phần mềm:** [SAKT research data](reports/sakt_research_data_readiness_20261108.md), commit `8082e04`, đã20dataPASS+3nativeexportsPASS, chưa researchfitted. Research epoch/prediction và strict confidence artifact reader đang triển khai, chưa dùng WIP để cấp quyền training. RAM snapshot03 hiện đủ4GiB admission nhưng fullGate chưa chạy: cần source/test mới freeze và actualcollection thay recipe counts cũ. GPU/CUDA current-source, fullCV, Holdout và Modal vẫn chưa được cấp quyền từ các kiểm CPU này.
+
+[Protocol21](../docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md) đã groupadopt S04-A/S05-B theo quyền user giao. Các đoạn “chưa sinh corpus”, “S04/S05 pending” và “hiện hành” bên dưới là snapshot lịch sử; dùng bản cập nhật này và INVESTIGATION_STATE cho trạng thái mới. Không dùng testcounts hoặc số task làm phần trăm hoàn thành nghiên cứu.
 
 
 ## Mốc mới08/11 — graph lifecycle, GPU-host preparation và demo closed-loop

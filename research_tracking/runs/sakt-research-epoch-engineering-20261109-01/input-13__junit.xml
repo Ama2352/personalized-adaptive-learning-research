@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="22" time="9.306" timestamp="2026-11-08T23:52:22.680593+07:00" hostname="Ama"><testcase classname="tests.sakt.test_research_training" name="test_specs_and_budgets_have_no_implicit_invalid_profile[change0]" time="0.002" /><testcase classname="tests.sakt.test_research_training" name="test_specs_and_budgets_have_no_implicit_invalid_profile[change1]" time="0.001" /><testcase classname="tests.sakt.test_research_training" name="test_specs_and_budgets_have_no_implicit_invalid_profile[change2]" time="0.001" /><testcase classname="tests.sakt.test_research_training" name="test_specs_and_budgets_have_no_implicit_invalid_profile[change3]" time="0.001" /><testcase classname="tests.sakt.test_research_training" name="test_specs_and_budgets_have_no_implicit_invalid_profile[change4]" time="0.001" /><testcase classname="tests.sakt.test_research_training" name="test_specs_and_budgets_have_no_implicit_invalid_profile[change5]" time="0.001" /><testcase classname="tests.sakt.test_research_training" name="test_optimizer_foreign_missing_duplicate_and_wrong_geometry_rejected_before_forward" time="3.324" /><testcase classname="tests.sakt.test_research_training" name="test_prediction_roles_cannot_optimize[raw_selection10]" time="0.202" /><testcase classname="tests.sakt.test_research_training" name="test_prediction_roles_cannot_optimize[calibration_predict]" time="0.334" /><testcase classname="tests.sakt.test_research_training" name="test_complete_epoch_matches_constant_logit_gradient_and_raw_prediction" time="0.522" /><testcase classname="tests.sakt.test_research_training" name="test_seen_budget_stops_before_any_forward_without_full_denominator_claim" time="0.484" /><testcase classname="tests.sakt.test_research_training" name="test_step_budget_keeps_real_partial_update_and_unique_processed_targets" time="0.175" /><testcase classname="tests.sakt.test_research_training" name="test_truncated_generator_is_failure_not_complete_or_favorable_subset" time="0.266" /><testcase classname="tests.sakt.test_research_training" name="test_predictions_are_causal_peer_independent_and_restore_mixed_modes" time="0.697" /><testcase classname="tests.sakt.test_research_training" name="test_partial_prediction_and_all_unsupported_population_keep_distinct_null_reasons" time="0.587" /><testcase classname="tests.sakt.test_research_training" name="test_late_optimizer_completion_cannot_be_accepted_by_resetting_time" time="0.314"><failure message="knowledge_tracing.sakt.research_training.SAKTResearchExecutionError: ValueError: native reservation exceeded: backwards">model = SAKTCore(
+  (exercise_embedding): Embedding(3, 4, padding_idx=0)
+  (interaction_embedding): Embedding(5, 4, padding_id...ine=True)
+  (dropout): Dropout(p=0.0, inplace=False)
+  (prediction): Linear(in_features=4, out_features=1, bias=True)
+)
+view = SAKTResearchView(phase=ResearchPhaseData(scope='select_train80', shards=(ResearchAKTShard(plan=ResearchSplitPlan(names...l_events=80, max_wall_seconds=10.0), content_sha256='48c4459122d6b5cd54e6ab7b768b871f1f8325c362701a6859633d0eb7643456')
+optimizer = SGD (
+Parameter Group 0
+    dampening: 0
+    differentiable: False
+    foreach: None
+    fused: None
+    lr: 0.2
+    maximize: False
+    momentum: 0
+    nesterov: False
+    weight_decay: 0
+)
+spec = SAKTResearchSpec(batch_size=32, max_grad_norm=10.0, epoch_seed=42, order='in_order', device='cpu', precision='float32', objective='mean_bce_on_eligible_targets')
+budget = SAKTResearchBudget(max_seconds=30.0, max_seen_targets=32, max_processed_targets=32, max_optimizer_steps=1)
+training = True
+
+    def _run(model, view, *, optimizer, spec, budget, training):
+        started = time.perf_counter()
+        if type(view) is not SAKTResearchView or type(spec) is not SAKTResearchSpec or type(budget) is not SAKTResearchBudget:
+            raise ValueError('typed research view/spec/budget required')
+        if training and view.phase.scope not in ('select_train80', 'refit_union90'):
+            raise ValueError('prediction-only selection/calibration phase cannot train')
+        if training and torch.is_inference_mode_enabled():
+            raise ValueError('training under caller inference_mode is unsupported')
+        if training and any(not p.requires_grad for p in model.parameters()):
+            raise ValueError('training optimizer must cover trainable model parameters')
+        if training:
+            _optimizer_identity(model, optimizer)
+        binding = _binding(model, view, spec, optimizer, budget)
+        before = state_digest(model)
+        modes = [(module, module.training) for module in model.modules()]
+        ledger = dict(expected_targets=sum(s.audit['audit']['targets'] for s in view.phase.shards),
+            seen_targets=0, eligible_targets_seen=0, unsupported_targets_seen=0, unsupported_reasons={},
+            input_population_complete=False, expected_eligible_targets=None, processed_targets=0,
+            optimized_targets=0, scored_targets=0, optimizer_steps_started=0, optimizer_steps_body_returned=0,
+            seen_source_rows=[], processing_order_source_rows=[], processed_source_rows=[],
+            possibly_updated_source_rows=[], rollback=False)
+        entries, outputs, truth = [], {}, ()
+        truth_validated = False
+        loss_sum = 0.
+        status, stop_reason, error = 'bounded', 'not_started', None
+        try:
+            expected_queries = _expected_queries(view)
+            if len(expected_queries) != ledger['expected_targets']:
+                raise ValueError('audited count and observable population differ')
+            entries, stop_reason = _collect(view, training, spec, budget, started, ledger, expected_queries)
+            if stop_reason is None:
+                active = [entry for entry in entries if _record(entry, training).eligible]
+                if not active and training:
+                    raise ValueError('no eligible target under explicit support/cold policy')
+                with torch.random.fork_rng(devices=[]), torch.device('cpu'), torch.set_grad_enabled(training):
+                    if training:
+                        torch.random.default_generator.manual_seed(spec.epoch_seed)
+                        if spec.order == 'seeded_permutation':
+                            generator = torch.Generator(device='cpu').manual_seed(spec.epoch_seed)
+                            active = [active[i] for i in torch.randperm(len(active), generator=generator, device='cpu').tolist()]
+                    ledger['processing_order_source_rows'] = [_record(entry, training).query.source_row for entry in active]
+                    model.train(training)
+                    for offset in range(0, len(active), spec.batch_size):
+                        block = active[offset:offset+spec.batch_size]
+                        if time.perf_counter()-started &gt;= budget.max_seconds:
+                            stop_reason = 'max_seconds_before_batch'; break
+                        if ledger['processed_targets']+len(block) &gt; budget.max_processed_targets:
+                            stop_reason = 'max_processed_targets'; break
+                        if training and ledger['optimizer_steps_started'] &gt;= budget.max_optimizer_steps:
+                            stop_reason = 'max_optimizer_steps'; break
+                        batch, labels, mask = _batch(block, view, model, training)
+                        if training:
+                            if _optimizer_identity(model, optimizer) != binding['optimizer']:
+                                raise ValueError('optimizer identity changed')
+                            optimizer.zero_grad(set_to_none=True)
+                            output = model(batch)
+                            total, count = masked_bce(output.logits, labels, mask)
+                            if count != len(block):
+                                raise ValueError('terminal loss mask denominator mismatch')
+                            batch_loss = float(total.detach())
+                            next_loss_sum = loss_sum+batch_loss
+                            objective = total/count
+                            if (not math.isfinite(batch_loss) or batch_loss &lt; 0
+                                    or not math.isfinite(next_loss_sum)
+                                    or not math.isfinite(next_loss_sum/(ledger['optimized_targets']+count))
+                                    or not torch.isfinite(objective.detach())):
+                                raise ValueError('nonfinite batch or aggregated objective before backward')
+&gt;                           objective.backward()
+
+src\knowledge_tracing\sakt\research_training.py:289: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_sakt_research_epoch01.py:142: in call
+    result = original(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\torch\_tensor.py:639: in backward
+    return handle_torch_function(
+.venv\Lib\site-packages\torch\overrides.py:1721: in handle_torch_function
+    result = mode.__torch_function__(public_api, types, args, kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\torch\utils\_device.py:104: in __torch_function__
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_sakt_research_epoch01.py:139: in call
+    need(started[key] &lt;= expected[key], 'native reservation exceeded: '+key)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+ok = False, message = 'native reservation exceeded: backwards'
+
+    def need(ok, message):
+        if not ok:
+&gt;           raise ValueError(message)
+E           ValueError: native reservation exceeded: backwards
+
+artifacts\akt\local-tests\akt-research-runner-20261108-01\check_sakt_research_epoch01.py:26: ValueError
+
+The above exception was the direct cause of the following exception:
+
+corpus = PublicResearchCorpus(corpus_id='handmade-not-published', plan=ResearchSplitPlan(namespace='sakt-handmade-not-collected...input_bytes=10, elapsed_seconds=0.0, content_sha256='9e10c23b445310087519d9fa42664013576c0143529a870967c5e864aa788c8b')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000020B6FFC8C30&gt;
+
+    def test_late_optimizer_completion_cannot_be_accepted_by_resetting_time(corpus, monkeypatch):
+        prepared = view(all_zero_labels(corpus))
+        native = model(prepared)
+        optimizer = torch.optim.SGD(native.parameters(), lr=.2)
+        clock = [0.]
+        # Patch only module binding, never global time/perf_counter used by pytest/outer.
+        monkeypatch.setattr(rt, 'time', SimpleNamespace(perf_counter=lambda: clock[0]))
+        step = optimizer.step
+    
+        def late():
+            result = step()
+            clock[0] = 31.
+            return result
+    
+        monkeypatch.setattr(optimizer, 'step', late)
+&gt;       result = rt.train_research_epoch(native, prepared, optimizer=optimizer, spec=spec(), budget=budget(steps=1))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\sakt\test_research_training.py:261: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\sakt\research_training.py:386: in train_research_epoch
+    return _run(model, view, optimizer=optimizer, spec=spec, budget=budget, training=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+model = SAKTCore(
+  (exercise_embedding): Embedding(3, 4, padding_idx=0)
+  (interaction_embedding): Embedding(5, 4, padding_id...ine=True)
+  (dropout): Dropout(p=0.0, inplace=False)
+  (prediction): Linear(in_features=4, out_features=1, bias=True)
+)
+view = SAKTResearchView(phase=ResearchPhaseData(scope='select_train80', shards=(ResearchAKTShard(plan=ResearchSplitPlan(names...l_events=80, max_wall_seconds=10.0), content_sha256='48c4459122d6b5cd54e6ab7b768b871f1f8325c362701a6859633d0eb7643456')
+optimizer = SGD (
+Parameter Group 0
+    dampening: 0
+    differentiable: False
+    foreach: None
+    fused: None
+    lr: 0.2
+    maximize: False
+    momentum: 0
+    nesterov: False
+    weight_decay: 0
+)
+spec = SAKTResearchSpec(batch_size=32, max_grad_norm=10.0, epoch_seed=42, order='in_order', device='cpu', precision='float32', objective='mean_bce_on_eligible_targets')
+budget = SAKTResearchBudget(max_seconds=30.0, max_seen_targets=32, max_processed_targets=32, max_optimizer_steps=1)
+training = True
+
+    def _run(model, view, *, optimizer, spec, budget, training):
+        started = time.perf_counter()
+        if type(view) is not SAKTResearchView or type(spec) is not SAKTResearchSpec or type(budget) is not SAKTResearchBudget:
+            raise ValueError('typed research view/spec/budget required')
+        if training and view.phase.scope not in ('select_train80', 'refit_union90'):
+            raise ValueError('prediction-only selection/calibration phase cannot train')
+        if training and torch.is_inference_mode_enabled():
+            raise ValueError('training under caller inference_mode is unsupported')
+        if training and any(not p.requires_grad for p in model.parameters()):
+            raise ValueError('training optimizer must cover trainable model parameters')
+        if training:
+            _optimizer_identity(model, optimizer)
+        binding = _binding(model, view, spec, optimizer, budget)
+        before = state_digest(model)
+        modes = [(module, module.training) for module in model.modules()]
+        ledger = dict(expected_targets=sum(s.audit['audit']['targets'] for s in view.phase.shards),
+            seen_targets=0, eligible_targets_seen=0, unsupported_targets_seen=0, unsupported_reasons={},
+            input_population_complete=False, expected_eligible_targets=None, processed_targets=0,
+            optimized_targets=0, scored_targets=0, optimizer_steps_started=0, optimizer_steps_body_returned=0,
+            seen_source_rows=[], processing_order_source_rows=[], processed_source_rows=[],
+            possibly_updated_source_rows=[], rollback=False)
+        entries, outputs, truth = [], {}, ()
+        truth_validated = False
+        loss_sum = 0.
+        status, stop_reason, error = 'bounded', 'not_started', None
+        try:
+            expected_queries = _expected_queries(view)
+            if len(expected_queries) != ledger['expected_targets']:
+                raise ValueError('audited count and observable population differ')
+            entries, stop_reason = _collect(view, training, spec, budget, started, ledger, expected_queries)
+            if stop_reason is None:
+                active = [entry for entry in entries if _record(entry, training).eligible]
+                if not active and training:
+                    raise ValueError('no eligible target under explicit support/cold policy')
+                with torch.random.fork_rng(devices=[]), torch.device('cpu'), torch.set_grad_enabled(training):
+                    if training:
+                        torch.random.default_generator.manual_seed(spec.epoch_seed)
+                        if spec.order == 'seeded_permutation':
+                            generator = torch.Generator(device='cpu').manual_seed(spec.epoch_seed)
+                            active = [active[i] for i in torch.randperm(len(active), generator=generator, device='cpu').tolist()]
+                    ledger['processing_order_source_rows'] = [_record(entry, training).query.source_row for entry in active]
+                    model.train(training)
+                    for offset in range(0, len(active), spec.batch_size):
+                        block = active[offset:offset+spec.batch_size]
+                        if time.perf_counter()-started &gt;= budget.max_seconds:
+                            stop_reason = 'max_seconds_before_batch'; break
+                        if ledger['processed_targets']+len(block) &gt; budget.max_processed_targets:
+                            stop_reason = 'max_processed_targets'; break
+                        if training and ledger['optimizer_steps_started'] &gt;= budget.max_optimizer_steps:
+                            stop_reason = 'max_optimizer_steps'; break
+                        batch, labels, mask = _batch(block, view, model, training)
+                        if training:
+                            if _optimizer_identity(model, optimizer) != binding['optimizer']:
+                                raise ValueError('optimizer identity changed')
+                            optimizer.zero_grad(set_to_none=True)
+                            output = model(batch)
+                            total, count = masked_bce(output.logits, labels, mask)
+                            if count != len(block):
+                                raise ValueError('terminal loss mask denominator mismatch')
+                            batch_loss = float(total.detach())
+                            next_loss_sum = loss_sum+batch_loss
+                            objective = total/count
+                            if (not math.isfinite(batch_loss) or batch_loss &lt; 0
+                                    or not math.isfinite(next_loss_sum)
+                                    or not math.isfinite(next_loss_sum/(ledger['optimized_targets']+count))
+                                    or not torch.isfinite(objective.detach())):
+                                raise ValueError('nonfinite batch or aggregated objective before backward')
+                            objective.backward()
+                            norm = torch.nn.utils.clip_grad_norm_(model.parameters(), spec.max_grad_norm, error_if_nonfinite=True)
+                            if not torch.isfinite(norm):
+                                raise ValueError('nonfinite gradient norm')
+                            if time.perf_counter()-started &gt;= budget.max_seconds:
+                                stop_reason = 'max_seconds_before_optimizer'; break
+                            ledger['possibly_updated_source_rows'] = [entry.inputs.query.source_row for entry in block]
+                            ledger['optimizer_steps_started'] += 1
+                            optimizer.step()
+                            ledger['optimizer_steps_body_returned'] += 1
+                            loss_sum = next_loss_sum
+                            ledger['optimized_targets'] += count
+                        else:
+                            with torch.inference_mode():
+                                output = model(batch)
+                                values = output.probabilities[mask].tolist()
+                            if len(values) != len(block) or any(not math.isfinite(p) or not 0 &lt;= p &lt;= 1 for p in values):
+                                raise ValueError('invalid full-population prediction')
+                            for record, probability in zip(block, values):
+                                outputs[_key(record)] = float(probability)
+                            ledger['scored_targets'] += len(block)
+                        ledger['processed_targets'] += len(block)
+                        ledger['processed_source_rows'].extend(_record(entry, training).query.source_row for entry in block)
+                        if training:
+                            ledger['possibly_updated_source_rows'] = []
+                        if training and _optimizer_identity(model, optimizer) != binding['optimizer']:
+                            raise ValueError('optimizer identity changed after step')
+                        if time.perf_counter()-started &gt;= budget.max_seconds:
+                            stop_reason = 'max_seconds_after_batch'; break
+                    else:
+                        status, stop_reason = 'complete', 'epoch_complete' if training else 'prediction_complete'
+            if (not training and ledger['input_population_complete']
+                    and time.perf_counter()-started &lt; budget.max_seconds):
+                # Only after all attempted forwards: separate full truth sidecar.
+                truth = sakt_research_scoring_targets(view)
+                _validate_truth(view, entries, truth, expected_queries)
+                truth_validated = True
+        except Exception as caught:
+            error = caught
+        finally:
+            for module, mode in modes:
+                module.training = mode
+        after = None
+        try:
+            after = state_digest(model)
+            if _binding(model, view, spec, optimizer, budget) != binding:
+                raise ValueError('research source/config/phase/vocabulary/optimizer binding changed')
+            if not training and after != before:
+                raise ValueError('prediction changed model weights')
+        except Exception as caught:
+            if error is None:
+                error = caught
+        if error is not None:
+            status, stop_reason = 'failed', type(error).__name__+': '+str(error)
+        elif training and (not math.isfinite(loss_sum)
+                or ledger['optimized_targets'] and not math.isfinite(loss_sum/ledger['optimized_targets'])):
+            error = ValueError('nonfinite aggregate loss/mean cannot complete')
+            status, stop_reason = 'failed', str(error)
+        elif time.perf_counter()-started &gt;= budget.max_seconds:
+            status, stop_reason = 'bounded', 'max_seconds_finalization'
+        complete = (status == 'complete' and ledger['input_population_complete']
+            and ledger['processed_targets'] == ledger['expected_eligible_targets']
+            and ledger['optimizer_steps_started'] == ledger['optimizer_steps_body_returned'])
+        if status == 'complete' and not complete:
+            error = ValueError('incomplete computation cannot be accepted as complete')
+            status, stop_reason = 'failed', str(error)
+        ledger.update(complete=complete, unseen_targets=ledger['expected_targets']-ledger['seen_targets'],
+            unprocessed_seen_eligible_targets=ledger['eligible_targets_seen']-ledger['processed_targets'])
+        rows = tuple(dict(learner_id=record.learner_id, item_id=record.query.item_id,
+            timestamp=record.query.timestamp, source_row=record.query.source_row, global_rank=record.global_rank,
+            history_sha256=record.history_sha256, history_hash_scheme=record.history_hash_scheme,
+            origin_role=record.origin_role, phase_sha256=record.phase_sha256, encoding_sha256=record.encoding_sha256,
+            history_available=record.history_available, history_used=record.history_used, context_reset=record.context_reset,
+            support_reason=record.support_reason, probability=outputs.get(_key(record)),
+            prediction_status='unsupported' if not record.eligible else 'scored' if _key(record) in outputs else 'unprocessed')
+            for record in entries) if not training else ()
+        result = dict(status=status, stop_reason=stop_reason, ledger=ledger, binding=binding, budget=asdict(budget),
+            model_state_before=before, model_state_after=after, weights_changed=before != after,
+            loss_sum=loss_sum if training and math.isfinite(loss_sum) else None,
+            mean_loss=loss_sum/ledger['optimized_targets'] if training and ledger['optimized_targets']
+                      and math.isfinite(loss_sum/ledger['optimized_targets']) else None,
+            predictions=rows, truth_sidecar=truth,
+            truth_sidecar_complete=truth_validated,
+            elapsed_seconds=time.perf_counter()-started,
+            role='research_computation_only_no_selected_fit_attestation', resume_supported=False, fitted_research_model=False)
+        # Late result materialization counts as work; no success after the deadline.
+        result['elapsed_seconds'] = time.perf_counter()-started
+        if error is None and result['elapsed_seconds'] &gt;= budget.max_seconds:
+            result.update(status='bounded', stop_reason='max_seconds_after_result')
+            ledger['complete'] = False
+        if error is not None:
+&gt;           raise SAKTResearchExecutionError(stop_reason, result) from error
+E           knowledge_tracing.sakt.research_training.SAKTResearchExecutionError: ValueError: native reservation exceeded: backwards
+
+src\knowledge_tracing\sakt\research_training.py:380: SAKTResearchExecutionError</failure></testcase><testcase classname="tests.sakt.test_research_training" name="test_optimizer_identity_drift_after_step_fails_with_actual_returned_work" time="0.299"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'identity changed'&#10;  Actual message: 'ValueError: native reservation exceeded: backwards'">corpus = PublicResearchCorpus(corpus_id='handmade-not-published', plan=ResearchSplitPlan(namespace='sakt-handmade-not-collected...input_bytes=10, elapsed_seconds=0.0, content_sha256='9e10c23b445310087519d9fa42664013576c0143529a870967c5e864aa788c8b')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000020B7500E570&gt;
+
+    def test_optimizer_identity_drift_after_step_fails_with_actual_returned_work(corpus, monkeypatch):
+        prepared = view(all_zero_labels(corpus))
+        native = model(prepared)
+        optimizer = torch.optim.SGD(native.parameters(), lr=.2)
+        step = optimizer.step
+    
+        def changed():
+            result = step()
+            optimizer.param_groups[0]['lr'] = .9
+            return result
+    
+        monkeypatch.setattr(optimizer, 'step', changed)
+&gt;       with pytest.raises(rt.SAKTResearchExecutionError, match='identity changed') as caught:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'identity changed'
+E         Actual message: 'ValueError: native reservation exceeded: backwards'
+
+tests\sakt\test_research_training.py:279: AssertionError</failure></testcase><testcase classname="tests.sakt.test_research_training" name="test_optimizer_exception_after_update_retains_uncertain_batch_not_fake_rollback" time="0.210"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'failed after mutation'&#10;  Actual message: 'ValueError: native reservation exceeded: backwards'">corpus = PublicResearchCorpus(corpus_id='handmade-not-published', plan=ResearchSplitPlan(namespace='sakt-handmade-not-collected...input_bytes=10, elapsed_seconds=0.0, content_sha256='9e10c23b445310087519d9fa42664013576c0143529a870967c5e864aa788c8b')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000020B74FAFCE0&gt;
+
+    def test_optimizer_exception_after_update_retains_uncertain_batch_not_fake_rollback(corpus, monkeypatch):
+        prepared = view(all_zero_labels(corpus))
+        native = model(prepared)
+        optimizer = torch.optim.SGD(native.parameters(), lr=.2)
+        step = optimizer.step
+    
+        def failed():
+            step()
+            raise RuntimeError('synthetic step wrapper failed after mutation')
+    
+        monkeypatch.setattr(optimizer, 'step', failed)
+&gt;       with pytest.raises(rt.SAKTResearchExecutionError, match='failed after mutation') as caught:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'failed after mutation'
+E         Actual message: 'ValueError: native reservation exceeded: backwards'
+
+tests\sakt\test_research_training.py:298: AssertionError</failure></testcase><testcase classname="tests.sakt.test_research_training" name="test_seeded_order_reproducible_without_update_and_without_changing_global_rng" time="0.322" /><testcase classname="tests.sakt.test_research_training" name="test_finite_extreme_logits_with_overflowing_sum_fail_before_backward_or_step" time="0.328" /><testcase classname="tests.sakt.test_research_training" name="test_same_count_foreign_iterator_key_fails_before_prediction" time="0.277" /><testcase classname="tests.sakt.test_research_training" name="test_same_count_wrong_truth_key_rejected_after_prediction_not_false_complete" time="0.250" /></testsuite></testsuites>

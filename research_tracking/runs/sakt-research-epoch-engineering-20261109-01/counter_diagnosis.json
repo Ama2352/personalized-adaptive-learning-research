@@ -1,0 +1,94 @@
+{
+  "status": "OBSERVER_CORRECTION_NOT_PRODUCTION_OR_TEST_CHANGE",
+  "failed01": {
+    "label": "sakt-research-epoch01",
+    "status": "REJECTED_SAKT_RESEARCH_EPOCH_CHECK",
+    "counts": {
+      "tests": 22,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0
+    },
+    "failed_cases": [
+      "test_late_optimizer_completion_cannot_be_accepted_by_resetting_time",
+      "test_optimizer_identity_drift_after_step_fails_with_actual_returned_work",
+      "test_optimizer_exception_after_update_retains_uncertain_batch_not_fake_rollback"
+    ],
+    "stored_outer_elapsed_seconds": 17.748528699972667,
+    "child_elapsed_seconds": 16.756601299974136,
+    "pytest_seconds": 9.306,
+    "cap_seconds": 80,
+    "native_started": {
+      "constructors": 16,
+      "forwards": 11,
+      "backwards": 8,
+      "sgd_steps": 2,
+      "sgd_constructors": 15
+    },
+    "native_body_returned": {
+      "constructors": 16,
+      "forwards": 11,
+      "backwards": 4,
+      "sgd_steps": 2,
+      "sgd_constructors": 15
+    },
+    "resources": {
+      "observed_peak_rss_bytes": 312983552,
+      "observed_minimum_available_ram_bytes": 6123180032,
+      "samples": 155,
+      "pre_torch_available_ram_bytes": 6406451200
+    },
+    "owned_cleanup_accepted": true,
+    "result_sha256": "6e2296a95353cdbf0c0b7146023b4fe43f17e98eb1523adafbf8a4db7adb70e9",
+    "junit_sha256": "d43dd248935c97e3585c2c3688f8182edff86088eed15305592b4cd1dd50864c"
+  },
+  "accepted02": {
+    "label": "sakt-research-epoch02",
+    "status": "ACCEPTED_SAKT_RESEARCH_EPOCH_ENGINEERING_ONLY",
+    "counts": {
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "failed_cases": [],
+    "stored_outer_elapsed_seconds": 13.753853300004266,
+    "child_elapsed_seconds": 12.725743899994995,
+    "pytest_seconds": 8.835,
+    "cap_seconds": 80,
+    "native_started": {
+      "constructors": 16,
+      "forwards": 11,
+      "sgd_steps": 5,
+      "sgd_constructors": 15,
+      "logical_backwards": 5,
+      "tensor_backward_dispatch_entries": 10
+    },
+    "native_body_returned": {
+      "constructors": 16,
+      "forwards": 11,
+      "sgd_steps": 5,
+      "sgd_constructors": 15,
+      "logical_backwards": 5,
+      "tensor_backward_dispatch_entries": 10
+    },
+    "resources": {
+      "observed_peak_rss_bytes": 295948288,
+      "observed_minimum_available_ram_bytes": 5260562432,
+      "samples": 114,
+      "pre_torch_available_ram_bytes": 5560868864
+    },
+    "owned_cleanup_accepted": true,
+    "result_sha256": "df00541f4de348fb6192e9637fd5a4b7900c2f30cc192b3bda721974cf923bd6",
+    "junit_sha256": "ce282f59bc9535e16992889b830b1b974746ef33bd17baf5060cb05b3abd6bce"
+  },
+  "raw01_backward_field_is_logical": false,
+  "logical_backward01_directly_measured": false,
+  "logical_api02": "torch.autograd.backward",
+  "raw_dispatch_api02": "torch.Tensor.backward",
+  "preserved_source_and_test_sha256": {
+    "src/knowledge_tracing/sakt/research_training.py": "3c9b785685fc17739d1ae4ddc98f52597a70e7c3f2ef1cfb4d06433153968af5",
+    "tests/sakt/test_research_training.py": "f6dc9264d397c2d39249aaa0a6a8207cb3d8d76a54edfdcac17189a27941584d"
+  },
+  "note_vi": "01raw Tensor observer cap5 là lỗi instrumentation. 02logical cap5 không tăng; raw10 tách đơn vị. Không sửa oldverdict/raw files."
+}
