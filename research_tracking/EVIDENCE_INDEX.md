@@ -1,5 +1,7 @@
 # Chỉ mục bằng chứng
 
+**Selection statisticsonly:** [báo cáo](reports/research_selection_kernel_readiness_20261109.md) / [bundle50](runs/research-selection-kernel-engineering-20261109-01/README.md),8purefixtures+6canonicalformulaParityfixtures scopekhác. Không realwinner/all9admission/refit authority; sourcekernel0e3 khôngđổi khi sửaquantiletest.
+
 **CG-AKT actualAdam:** [báo cáo](reports/cgakt_actual_adam_20261109.md) / [bundle48](runs/cgakt-actual-adam-engineering-20261109-01/README.md);02accepted1case/3updates/18targetvisits,30methodchecks;01rejected3updates giữnguyên, pure5scopekhác. Chưa actualresearchfit/fullEpoch/checkpoint.
 
 **Context API cost:** [báo cáo](reports/cgakt_context_api_cost_20261109.md) / [bundle45](runs/cgakt-context-api-cost-benchmark-20261109-01/README.md), completeTRAIN80/144ABBA/equaloutputs, không NN hoặc modelselection; old01loggingfailure giữ nguyên. Không đổi rawdata/recipe hoặc lấy API timings dự báo GPUtraining.

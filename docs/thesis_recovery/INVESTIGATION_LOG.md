@@ -729,3 +729,8 @@ Rootsourceinspect online.py111–126/155 vàgraphcontext227–239: existingA0onl
 ### 09/11 — khép48outputsAdam và nghiệmthu kernel8
 
 Graph10metadata dryRoot phát hiện archiver chưa chạy đòi ownedacceptedTrue cho cảfailed01. Giữhelpersourceed0f.before, sửa kiểmcleanup chung +01acceptedFalse/RC1 và02acceptedTrue/RC0 đúngraw. Dry85411e33...c0d5f rồiclosed48outputs manifest9e40daab...66396; khôngrerunmodel. Coretest5bdđược chuẩn bịcommit cùngrawproof. Kernel02same0e3source8casesaccepted.9419086s/30; actualrawexit=int0, normalizationbool chỉcompatkhôngphảicause01. Giữ7PASS1floatingknownanswerfailure01, sửatesttol1e-14khôngđổistricteligibility. Whole9terminals/externalfreeze chưaaccepted. Checkpointmodulea2f/test538sourcefrozen, pure32chưachạy.
+
+
+### 09/11 — commit Adam và đóng kernel statistical50
+
+G10closed48/test5bd/reportc017 commit5e1eb40,51rawGitblobsverified; outputinventory4379→4427 khôngresearchN. Kernel0e3/testc2b/report4919 closed50 manifestac942db6...00976, source/controller/log/6formula fixtures/01failure held; chưaexternalfreeze. Chuẩn bịcommitkernelđã8purePASS, khôngstageshaycheckpointWIP. Graphonlinegap đãtách16/17 đểkhôngnhầm offlinecachevớihistoryquerycontroller. Allcurrent RQs vẫnpartial; noModal/browser/fullCV/Holdout.

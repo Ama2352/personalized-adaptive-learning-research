@@ -1,0 +1,178 @@
+"""GRAPH13: manufactured common-U statistics only; no I/O/data/model authority.
+
+Known reporting-loss answers are frozen from reporting-loss-parity01.json SHA
+110d998297ac96e37e2c0bba03053085eee52ea3e5e6508b31d824f24d712e5f.
+No NumPy/sklearn import; absolute formula tolerance 1e-12, no eligibility epsilon.
+"""
+from dataclasses import replace
+import hashlib
+import json
+import math
+import random
+import unittest
+
+from knowledge_tracing import research_selection as s
+
+
+def limits(**changes):
+    base = s.SelectionKernelLimits(8,1000,1000,20000,200000,10.)
+    return replace(base,**changes)
+
+
+def learner(name,count,losses):
+    return s.LearnerCommonStatistics(name,count,tuple(
+        s.CandidateLossSum(candidate,count,float(losses.get(candidate,count)))
+        for candidate in s.COMMON_MODEL_IDS))
+
+
+def calculate(rows,zero=(),**changes):
+    full=sum(row.common_target_count for row in rows)+len(zero)
+    return s.select_from_common_statistics(tuple(rows),
+        coverage=s.CommonPopulationCoverage(full,tuple(zero)),limits=limits(**changes))
+
+
+def by_id(result):
+    return {row.candidate_id:row for row in result.candidate_statistics}
+
+
+class ResearchSelectionTests(unittest.TestCase):
+    def test_loss_formula_known_answers_and_type7(self):
+        fixtures=(
+            ((0,1,0,1),(0.,1.,0.,1.),2.2204460492503136e-16),
+            ((0,1,0,1),(1.,0.,1.,0.),36.04365338911715),
+            ((0,1,1,0,1,0),(.1,.7,.4,.8,.9,.3),.5749665939168954),
+            ((0,1,0,1,0,1),(1e-300,1e-300,.9999999999999999,.9999999999999999,
+                2.220446049250313e-16,.9999999999999998),12.014551129705717),
+            ((0,1,1,0,0,1),(9.999999974752427e-7,.9999989867210388,.3333333432674408,
+                .6666666865348816,0.,1.),.3662044367364195),
+            ((0,1)+(1,)*18,(.4,.6)+(.8,)*18,.2519117585593878),
+        )
+        for labels,probabilities,expected in fixtures:
+            actual=math.fsum(s.binary_row_log_loss(p,y) for p,y in zip(probabilities,labels))/len(labels)
+            self.assertLessEqual(abs(actual-expected),1e-12)
+        self.assertLessEqual(abs(s.linear_percentile([0.,10.,20.,30.],.975)-29.25),1e-14)
+        self.assertLessEqual(abs(s.linear_percentile([0.,10.,20.,30.],.025)-.75),1e-14)
+        self.assertEqual(s.linear_percentile([3.],.975),3.)
+        for p,y in ((True,1),(1,1),(.2,True),(float('nan'),0),(.2,2)):
+            with self.assertRaises(ValueError):s.binary_row_log_loss(p,y)
+
+    def test_response_weighting_and_shared_draw_known_intervals(self):
+        # Cluster-macro point would be -.35; response-pooled contrast is +.09.
+        rows=(learner('a',1,{'A1_EXPERT':.1}),learner('b',9,{'A1_EXPERT':10.8}))
+        class FixedDraws:
+            calls=0
+            def randrange(self,n):
+                assert n==2
+                value=(0,0,1,1,0,1,1,0)[self.calls%8];self.calls+=1
+                return value
+        draw=FixedDraws();old=s._make_rng
+        def factory(seed):
+            self.assertEqual(seed,42);return draw
+        s._make_rng=factory
+        try:result=calculate(rows)
+        finally:s._make_rng=old
+        candidate=by_id(result)['A1_EXPERT']
+        self.assertAlmostEqual(candidate.point_log_loss,1.09,places=12)
+        self.assertAlmostEqual(candidate.delta_log_loss_vs_A0,.09,places=12)
+        self.assertAlmostEqual(candidate.ci025,-.9,places=12)
+        self.assertAlmostEqual(candidate.ci975,.2,places=12)
+        self.assertEqual(result.proposed_winner_id,'A0')
+        self.assertEqual(draw.calls,4000)  # Shared once, not independently per model.
+        self.assertEqual(result.index_requests,4000)
+        self.assertEqual(result.work_units,36014)
+
+    def test_negative_stable_tie_single_cluster_and_zero_coverage(self):
+        result=calculate((learner('one',10,{'A1_EXPERT':5.,'A3_EXPERT':5.,
+            'A1_LEARNED':math.nextafter(10.,0.)}),),zero=('no-common-row',))
+        self.assertEqual(result.proposed_winner_id,'A1_EXPERT')
+        for name in ('A1_EXPERT','A3_EXPERT'):
+            row=by_id(result)[name]
+            self.assertEqual((row.delta_log_loss_vs_A0,row.ci025,row.ci975,row.eligible),(-.5,-.5,-.5,True))
+        tiny=by_id(result)['A1_LEARNED']
+        self.assertLess(tiny.ci975,0.)
+        self.assertTrue(tiny.eligible)  # No invented epsilon may erase strict negative evidence.
+        self.assertTrue(result.conditional_single_learner)
+        self.assertEqual(result.contributing_learner_ids,('one',))
+        self.assertEqual(result.zero_contribution_learner_ids,('no-common-row',))
+        self.assertEqual(result.caller_declared_full_target_count,11)
+        self.assertEqual(result.index_requests,2000)
+        header=dict(algorithm='cpython-random-MT19937-randrange-v1',seed=42,learners=['one'],R=2000)
+        payload=json.dumps(header,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode()+b'\n'
+        self.assertEqual(result.draws_sha256,hashlib.sha256(payload+b'[0]\n'*2000).hexdigest())
+
+    def test_equal_or_worse_fallback_is_not_authority(self):
+        result=calculate((learner('one',10,{'A1_EXPERT':20.}),))
+        self.assertEqual(result.proposed_winner_id,'A0')
+        self.assertFalse(any(row.eligible for row in result.candidate_statistics))
+        self.assertEqual(by_id(result)['A3_EXPERT'].ci975,0.)
+        self.assertEqual(by_id(result)['A1_EXPERT'].ci975,1.)
+        self.assertEqual(result.status,'STATISTICS_ONLY_NO_EXTERNAL_FREEZE')
+        self.assertFalse(result.nine_candidate_admission_performed)
+        self.assertFalse(result.external_freeze_authority)
+        self.assertEqual(len(result.required_candidate_ids),9)
+        self.assertIn('A2_LEARNED',result.required_candidate_ids)
+        self.assertIn('SAKT',result.required_candidate_ids)
+        self.assertIn('GKT',result.required_candidate_ids)
+
+    def test_private_rng_and_order_invariance(self):
+        rows=(learner('z',2,{'A1_EXPERT':1.,'A3_LEARNED':3.}),
+              learner('a',5,{'A1_EXPERT':4.,'A3_LEARNED':4.}))
+        before=random.getstate()
+        first=calculate(rows)
+        reordered=tuple(replace(row,candidates=tuple(reversed(row.candidates))) for row in reversed(rows))
+        second=calculate(reordered)
+        self.assertEqual(random.getstate(),before)
+        self.assertEqual(first.candidate_statistics,second.candidate_statistics)
+        self.assertEqual(first.draws_sha256,second.draws_sha256)
+        self.assertEqual(first.contributing_learner_ids,('a','z'))
+        self.assertEqual(first.replicates,2000)
+        self.assertEqual(first.seed,42)
+        self.assertEqual(first.aggregation_id,'binary64-learner-sums-fsum-response-pooled-v1')
+
+    def test_invalid_population_and_typed_stats_fail_closed(self):
+        row=learner('one',1,{})
+        with self.assertRaisesRegex(ValueError,'EMPTY_COMMON_POPULATION'):
+            s.select_from_common_statistics((),coverage=s.CommonPopulationCoverage(1,()),limits=limits())
+        with self.assertRaises(ValueError):calculate((row,row))
+        with self.assertRaises(ValueError):calculate((row,),zero=('one',))
+        with self.assertRaises(ValueError):replace(row,candidates=row.candidates[:-1])
+        with self.assertRaises(ValueError):replace(row,candidates=(row.candidates[0],)*5)
+        with self.assertRaises(ValueError):replace(row,candidates=(replace(row.candidates[0],target_count=2),)+row.candidates[1:])
+        for bad in (float('nan'),float('inf'),-.1,100.):
+            with self.assertRaises(ValueError):s.CandidateLossSum('A0',1,bad)
+        with self.assertRaises(ValueError):s.CandidateLossSum('A0',True,1.)
+        with self.assertRaises(ValueError):s.CommonPopulationCoverage(1,('x','x'))
+        with self.assertRaises(ValueError):limits(max_seconds=True)
+        with self.assertRaises(ValueError):
+            s.select_from_common_statistics((row,),coverage=s.CommonPopulationCoverage(1,('x',)),limits=limits())
+
+    def test_preflight_work_caps_before_rng_no_replicate_reduction(self):
+        old=s._make_rng
+        def forbidden(seed):raise AssertionError('RNG constructed before resource preflight')
+        s._make_rng=forbidden
+        try:
+            for change in ({'max_index_requests':1999},{'max_work_units':22008}):
+                with self.assertRaisesRegex(ValueError,'fixed2000'):
+                    calculate((learner('one',1,{}),),**change)
+        finally:s._make_rng=old
+
+    def test_final_deadline_includes_quantiles_no_false_complete(self):
+        old_clock,old_percentile=s._clock,s.linear_percentile
+        state={'late':False,'calls':0}
+        s._clock=lambda:2. if state['late'] else 0.
+        def delayed_quantile(values,q):
+            value=old_percentile(values,q);state['calls']+=1
+            if state['calls']==8:state['late']=True
+            return value
+        s.linear_percentile=delayed_quantile
+        try:
+            with self.assertRaises(s.SelectionLimitExceeded) as caught:
+                calculate((learner('one',1,{'A1_EXPERT':.5}),),max_seconds=1.)
+            self.assertEqual(caught.exception.index_requests,2000)
+            self.assertEqual(caught.exception.work_units,22009)
+            self.assertEqual(caught.exception.elapsed_seconds,2.)
+            self.assertEqual(state['calls'],8)
+        finally:s._clock,s.linear_percentile=old_clock,old_percentile
+
+
+if __name__=='__main__':unittest.main(verbosity=2)

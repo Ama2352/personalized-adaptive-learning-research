@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**Kernel selection09/11:** [8fixtures thống kê](research_selection_kernel_readiness_20261109.md) với6LLknownanswers đãđốichiếu evaluatorbaseline;50outputs giữ7PASS1FAIL01 và8PASS02. Chỉ response-pooled/sharedbootstrap/tie/fallback logic, chưa nine-terminaladmission hoặc externalfreeze.
+
 **CG-AKT Adam09/11:** [actual3updates](cgakt_actual_adam_20261109.md),1nativecase accepted02 +pure5;48outputs giữ01rejected dù3updates đã xảy ra. Tổng6updates acrossattempts, khôngresearchfit/epoch/checkpoint/CUDA.
 
 **Đo cost context09/11:** [API for_windows](cgakt_context_api_cost_20261109.md), completeTRAIN8010080targets/144windows/144ABBAcalls. Fullpasses20,17/20,44s, fast1,10/1,23s; chỉ lookupAPI, không epoch/NN/GPUthroughput. Giữ failure01, regression2 và accepted02 trong45outputs.
