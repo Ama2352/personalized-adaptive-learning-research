@@ -3913,6 +3913,72 @@
       "authorization_requirements": "Safe engineering theo user; actual data operation cần ROOT review input/config/resource riêng. Không Holdout/fullCV/Modal từ task status.",
       "status": "COMPLETED_REPORT_SNAPSHOT_NOT_THESIS",
       "blockers": []
+    },
+    {
+      "id": "SAKT06",
+      "research_objective": "Persistence cuối epoch SAKT với model/optimizer/RNG/counters nhất quán",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "SAKT05"
+      ],
+      "required_inputs": "SAKT05 typed view/spec/epoch ledger; caller optimizer/profile; external COMPLETE SHA và byte limits.",
+      "files_components": "src/knowledge_tracing/sakt/research_checkpoint.py; tests/sakt/test_research_checkpoint.py",
+      "implementation_objective": "CPU FP32 checkpoint cuối completed epoch; từ chối state thiếu hoặc drift trước mutation.",
+      "acceptance_criteria": "31nativefixtures/0FES;3Adamsteps; continuous/restored model+optimizer/prediction/RNG parity; role/source/partialepoch/coverage/moment/bytecap rejection; ownedcleanup và sourceSHA.",
+      "verification_steps": "ROOT đã chạy allocation b7dd... dưới90s và kiểm nguồn/log/XML/counters/Job0; chưa SGD numeric roundtrip.",
+      "required_artifacts": "Bundle70outputs, manifest378046f4...; source1b074/test0d9; binary references và raw owned receipts.",
+      "estimated_effort": "Ước lượng0,5–1ngày công; execution time xem receipt, không suy từ effort.",
+      "elapsed_duration": "Tùy review và tài nguyên; không mặc định training đã được cấp quyền.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Safe engineering theo user; actual data operation cần ROOT review input/config/resource riêng. Không Holdout/fullCV/Modal từ task status.",
+      "status": "COMPLETED_EPOCH_BOUNDARY_PERSISTENCE_NOT_RESEARCH_FITTED",
+      "blockers": [],
+      "evidence_bundle": "research_tracking/runs/sakt-research-checkpoint-engineering-20261109-01",
+      "verified_cases": 31,
+      "remaining_scope": [
+        "SGD numeric execution chưa kiểm",
+        "Mid-epoch cursor/fullresearchresume chưa triển khai",
+        "Selected-fit/refit/calibration orchestration và profile chưa nghiệm thu"
+      ]
+    },
+    {
+      "id": "RQDIAG11",
+      "research_objective": "Tái dựng C/B và khóa xếp hạng CID trên snapshot cũ để giải thích nơi khác biệt bị giữ lại",
+      "rq": [
+        "RQ1"
+      ],
+      "workstream": "research",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "RQDIAG10"
+      ],
+      "required_inputs": "15frozen source/cache references; controller source definitions; source-only helper và native chapter fullmap.",
+      "files_components": "research_tracking/runs/rq1-fixed-controller-candidates-20261109-01/; original execution layout artifacts/akt/local-tests/akt-research-runner-20261108-01/",
+      "implementation_objective": "Từ immutable fixed-stream history tái dựng controller đúng source, yêu cầu exact all2160 trước diễn giải.",
+      "acceptance_criteria": "18purefixtures;1080pairs/all2160R+CID exact;16groups/zero cells; nativechapter28required/36entries/8unused;4/51/17 distinctions; no newN/causalmediation/learningbenefit claim.",
+      "verification_steps": "ROOT actual cached02 2.3624581s/10 after source02 regression18; outputs/ownedcleanup/input prepostSHA đã kiểm.",
+      "required_artifacts": "Bundle67outputs manifestcf1861dd...; all1080eventflags/summary/validation/source/runs và failed01 preservation.",
+      "estimated_effort": "Ước lượng0,5–1ngày công; execution time xem receipt, không suy từ effort.",
+      "elapsed_duration": "Tùy review và tài nguyên; không mặc định training đã được cấp quyền.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Safe engineering theo user; actual data operation cần ROOT review input/config/resource riêng. Không Holdout/fullCV/Modal từ task status.",
+      "status": "COMPLETED_SOURCE_RECONSTRUCTED_CACHED_DIAGNOSTIC_NOT_RQ_COMPLETE",
+      "blockers": [],
+      "evidence_bundle": "research_tracking/runs/rq1-fixed-controller-candidates-20261109-01",
+      "verified_cases": 18,
+      "remaining_scope": [
+        "Không có direct C/B observer trace",
+        "Không reference-label calibration từ cache hiện tại",
+        "Không outcome/causal mediation hoặc independentN mới"
+      ]
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

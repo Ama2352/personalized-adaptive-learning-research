@@ -1,5 +1,10 @@
 # Chỉ mục bằng chứng
 
+## Bổ sung09/11 — cơ chế controller và persistence SAKT
+
+- [Source-controller RQ1](reports/rq1_fixed_controller_candidates_20261109.md) / [bundle67outputs](runs/rq1-fixed-controller-candidates-20261109-01/README.md): sourceR/CID khớp2160snapshots,18regressionfixtures;4balance-filtered/51common-winner/17same-B-changed-CID. Không C/B được ghi trực tiếp, không causal mediation hoặc independentN mới.
+- [Checkpoint SAKT](reports/sakt_research_checkpoint_readiness_20261109.md) / [bundle70outputs](runs/sakt-research-checkpoint-engineering-20261109-01/README.md):31CPUfixtures,3Adamsteps, lưu/reload model+Adam+RNG+counters cuối epoch. Chỉ thực chạy Adam; chưa baseline fitted hoặc orchestration đầy đủ.
+
 ## Mốc09/11 — báo cáo hiện hành và hồ sơ kiểm tra local
 
 **Điểm đọc hiện hành:** [tóm tắt09/11](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md) và [HTML minh họa](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html), commit `ab471ca`. Chín SVG và sáu bảng đã kiểm desktop/mobile; không chồng chữ hoặc tràn khung. Đã đóng browser ngay sau QA; không mở máy chủ preview.

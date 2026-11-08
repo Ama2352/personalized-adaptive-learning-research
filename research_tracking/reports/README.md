@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**RQ1 — giải thích bước chọn khái niệm:** [tái dựng bộ lọc ứng viên](rq1_fixed_controller_candidates_20261109.md), khớp đủ2.160ready memberships/CID trên1.080cặp cũ. Bốn khác biệt bị bước cân bằng loại;51tập cuối khác vẫn cùng lựa chọn;17tập cuối giữ nguyên nhưng lựa chọn đổi. Đây là giải thích theo source, không thêm mẫu hoặc bằng chứng lợi ích học tập.
+
+**SAKT — persistence cuối epoch:** [bản nghiệm thu31fixtures](sakt_research_checkpoint_readiness_20261109.md),3Adamupdates và continuous/restored parity; bundle70outputs đã đóng. Chưa mid-epoch/fullresearchresume hoặc baseline fitted; SGD format chưa thực chạy.
+
 **Kiểm vận hành09/11:** [hồ sơ collection01–05](gate_collection_trials_20261109.md) đã đóng bundle127outputs; giữ nguyên tất cả failure. Chưa collection toàn bộ hoặc full Gate PASS; đây không phải thí nghiệm trả lời RQ.
 
 **Consumer confidence09/11:** [đã đọc artifact thực](edge_confidence_artifact_readiness_20261109.md),66purePASS và31typed scores read-only; không fit lại hoặc hiệu quả CG-AKT.
