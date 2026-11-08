@@ -400,3 +400,8 @@ Demo83PASS sau boundedlocalhostpermission retry, browserQA giữ actualdimension
 ### 08/11 — Demo closed-loop đã commit
 
 Bundleb9eaaab:66outputs rawGitverified; source/report22b3522:83testsPASS vàbrowserQA. Stage list trongbundle chỉ chứabundle, nênroot commit source5files+report riêngngaysau; không gọi bundlecommit làsourcecommit. Khôngmodel/researchreplay/GPU. GRAPH04source vẫn pendingcanonical/dryarchive finalpins, actual4stepbudgetđãhết; statehướngdẫnkhôngrerun.
+
+
+### 08/11 — GRAPH04 hoàn tất commit f8e9ab0
+
+89outputs+manifest rawGitverified,manifestf8b66f4d…361e2d. Source/test/report cùngcommit,repo clean saucommit. Closure preflight đầuSTOP vì unrelatedfreshGateplan xuất hiện trongflatprep;root relocation duy nhấtplan vào gate-planning/ cóSHAinventory trước/sau,không sửa115frozeninputs/helper/report/dry. Retryclosure approved cùngpins thànhcông; giữ actual45PASS1FAIL/correction riêng,4updates đãdùng hết,46.688882≤60. Không model/test rerun đểarchive. Chờtrackingdry03 choGRAPH04/GPU09HOST/DEMO02; nextfreshGate làscope riêng, không giảGate24covercurrent source.
