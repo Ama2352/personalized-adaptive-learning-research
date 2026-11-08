@@ -1,0 +1,94 @@
+{
+  "kind": "WINDOWS_CURRENT_SOFTWARE_GATE_INVESTIGATION_EXISTING_RAW_ONLY",
+  "collections": [
+    {
+      "phase": "06",
+      "status": "REJECTED_COLLECTION",
+      "node_count": 0,
+      "stored_outer_seconds": 2.6393256000010297
+    },
+    {
+      "phase": "07",
+      "status": "ACCEPTED_COLLECTION_ONLY_NOT_GATE_PASS",
+      "node_count": 1417,
+      "stored_outer_seconds": 39.475047799991444
+    },
+    {
+      "phase": "08",
+      "status": "ACCEPTED_COLLECTION_ONLY_NOT_GATE_PASS",
+      "node_count": 1418,
+      "stored_outer_seconds": 38.71728419995634
+    },
+    {
+      "phase": "09",
+      "status": "ACCEPTED_COLLECTION_ONLY_NOT_GATE_PASS",
+      "node_count": 1418,
+      "stored_outer_seconds": 42.55355919996509
+    }
+  ],
+  "focused": [
+    {
+      "revision": "01",
+      "counts": {
+        "tests": 77,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "stored_outer_seconds": 8.231253200036008
+    },
+    {
+      "revision": "02",
+      "counts": {
+        "tests": 77,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "stored_outer_seconds": 6.461477399978321
+    }
+  ],
+  "native01": {
+    "status": "REJECTED_WINDOWS_CPU_GATE",
+    "stored_outer_seconds": 5.725125312805176,
+    "tests": 19,
+    "errors": 19
+  },
+  "native02": {
+    "status": "REJECTED_WINDOWS_CPU_GATE",
+    "stored_outer_seconds": 291.58200059999945,
+    "tests": 1418,
+    "passed": 1415,
+    "failures": 3
+  },
+  "native03": {
+    "status": "ACCEPTED_WINDOWS_CPU_SOFTWARE_GATE_ONLY",
+    "stored_outer_seconds": 358.7608751000371,
+    "native_seconds": 355.0576141999918,
+    "tests": 1418,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "peak_observed_bytes": 520663040,
+    "minimum_available_bytes": 4487327744,
+    "samples": 2522,
+    "source_files": 154,
+    "test_modules": 69,
+    "pointer_changed": false,
+    "published_current": false
+  },
+  "current_overlay": {
+    "scripts/akt/refresh_gate2.py": "9608ddfe1450b2d78699d5ec95d26b8cd65d4439fcc7bda209f698b2e4a7f9ef",
+    "tests/akt/test_gate2_refresh.py": "255c07a3a1af2d458c8586bd206a3151baadeae76d1fa0a2ce3362409da8d5df"
+  },
+  "base_git": "2c337d4",
+  "base_git_proof_does_not_certify_current_uncommitted_overlay": true,
+  "external_references": [
+    {
+      "path": "research_tracking/runs/gate-collection-engineering-20261109-01/manifest.json",
+      "sha256": "aa3d46e5bc6898480503c90cc07a7e027e7735d616284ddafd4c91111c901d7d",
+      "copy": false
+    }
+  ],
+  "scope_vi": "Không chạy lại tests/model hoặc promote pointer khi archive; Windows synthetic software, không Linux/CUDA/research proof."
+}

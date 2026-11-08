@@ -188,8 +188,16 @@ def refresh(run_id, *, publish_current=False, timeout_seconds=300, lock_file=Non
            'CUDA_VISIBLE_DEVICES': '', 'PYTHONDONTWRITEBYTECODE': '1',
            'OMP_NUM_THREADS': '2', 'MKL_NUM_THREADS': '2', 'OPENBLAS_NUM_THREADS': '2',
            'PYTEST_DISABLE_PLUGIN_AUTOLOAD': '1', 'PYTEST_ADDOPTS': '', 'PYTEST_PLUGINS': ''}
-    temporary = ROOT / 'artifacts/akt/local-tests' / f'gate2-{run_id}-{uuid.uuid4().hex}'
+    # Scratch identity needs only the UUID; run_id remains in durable artifacts.
+    # Keeping it out of this ancestor bounds nested Windows/native export paths.
+    temporary = ROOT / 'artifacts/akt/local-tests' / f'gate2-{uuid.uuid4().hex}'
+    for ancestor in (ROOT, ROOT / 'artifacts', ROOT / 'artifacts/akt', temporary.parent):
+        if ancestor.is_symlink() or ancestor.is_junction():
+            raise ValueError('Gate2 temporary root requires physical parent directories')
     temporary.parent.mkdir(parents=True, exist_ok=True)
+    # pytest creates each --basetemp leaf with parents=False. The unique run
+    # directory must already exist; never reuse/delete another attempt's root.
+    temporary.mkdir(exist_ok=False)
     commands, groups = [], []
     counts = {'passed': 0, 'failed': 0, 'errors': 0, 'skipped': 0}
     payload = {'schema_version': 1, 'status': 'PASS', 'source_commit': SOURCE_COMMIT,

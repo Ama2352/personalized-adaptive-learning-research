@@ -1,0 +1,248 @@
+{
+  "status": "REJECTED_WINDOWS_CPU_GATE",
+  "run_id": "win-current-gate-20261109-01",
+  "run_accepted": false,
+  "elapsed_seconds": 5.725125312805176,
+  "limits": {
+    "native": 580,
+    "owned_max": 600,
+    "owned_cleanup": 3,
+    "outer": 630,
+    "active_max": 615
+  },
+  "external_collection_packet_sha256": "ea3438f7c291cf6ded28c08dfa2e312112e01504b01c85f88d9ed7b20fe82f57",
+  "controller_source_pins": {
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/windows_current_gate_worker01.py": "8f6d0852060618e4208049d5f4af65dc7668ef8f904b5f6a97cab4e6ac516436",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/windows_current_gate_outer01.py": "16d54b06f96ea22e509f5a9c690f9a9c3f50f895c52c2411e9a5c6d1ac4828c7",
+    "scripts/research/windows_owned_worker.py": "0dc8723170467e9ae73c4e233a357b9d584c66a8c183c478bdcff358fb0a95a1",
+    ".venv/Lib/site-packages/_pytest/junitxml.py": "557b8978c66b8010fafc50ada4bf56333f9927f31b2b5909fe4c1a9df1a3c0f0"
+  },
+  "errors": [
+    {
+      "type": "ValueError",
+      "message": "owned worker/Job cleanup"
+    }
+  ],
+  "readiness": {
+    "status": "ready",
+    "phase": "preflight",
+    "source": {
+      "commit": "01b7e8d7d7c862cabc9467108e3e7f2555653a88",
+      "tree": "904863502337ef2eefd1769d14836b62e3c3804a",
+      "remote": "https://github.com/arghosh/AKT.git",
+      "files": {
+        "akt.py": "be2788c20cac602e86ef3a51e5294b37dd7b200f818be4e173dbd69069a3ec6d",
+        "README.md": "df8eea9919dcdb343f3a841540af18e2039b8b0c33af449ca9c752d11f56ee8b",
+        "LICENSE": "891133edce0d8693f5b916d4257ce70b71a02aa110cb02cc5d47326544ea4522"
+      }
+    },
+    "lock_sha256": "3e721fdb49543ad0888cf02a863826ebc6144c0d1dd670f2490ebcc0d69b8c0a",
+    "runtime_report_sha256": "259c171fe63e39a14d9bdf42793bd854a5be73ded19a7a800a2e8a982906f1b4",
+    "runtime": {
+      "python": "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+      "python_version": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "lock_sha256": "3e721fdb49543ad0888cf02a863826ebc6144c0d1dd670f2490ebcc0d69b8c0a",
+      "available_ram_bytes": 3367985152,
+      "disk_free_bytes": 92149989376,
+      "torch_version": "2.7.1+cpu",
+      "torch_origin": "D:\\Dev\\KLTN\\.venv\\Lib\\site-packages\\torch\\__init__.py",
+      "numpy_version": "2.5.4",
+      "numpy_origin": "D:\\Dev\\KLTN\\.venv\\Lib\\site-packages\\numpy\\__init__.py",
+      "device": "cpu",
+      "cuda_available": false,
+      "source": {
+        "commit": "01b7e8d7d7c862cabc9467108e3e7f2555653a88",
+        "tree": "904863502337ef2eefd1769d14836b62e3c3804a",
+        "remote": "https://github.com/arghosh/AKT.git",
+        "files": {
+          "akt.py": "be2788c20cac602e86ef3a51e5294b37dd7b200f818be4e173dbd69069a3ec6d",
+          "README.md": "df8eea9919dcdb343f3a841540af18e2039b8b0c33af449ca9c752d11f56ee8b",
+          "LICENSE": "891133edce0d8693f5b916d4257ce70b71a02aa110cb02cc5d47326544ea4522"
+        }
+      }
+    }
+  },
+  "worker_result": null,
+  "owned_receipt": {
+    "status": "REJECTED_OWNED_PROCESS_LAUNCH",
+    "GO_released": true,
+    "command": [
+      "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+      "-B",
+      "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\akt-research-runner-20261108-01\\windows_current_gate_worker01.py",
+      "--packet",
+      "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\akt-research-runner-20261108-01\\windows_current_gate_packet.ROOT.json",
+      "--packet-sha256",
+      "ea3438f7c291cf6ded28c08dfa2e312112e01504b01c85f88d9ed7b20fe82f57",
+      "--run-id",
+      "win-current-gate-20261109-01"
+    ],
+    "parent": {
+      "pid": 15916,
+      "created_filetime_100ns": "134386359717508916",
+      "create_time": 1794162371.7508917,
+      "image": "C:\\Users\\AmaDev\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+    },
+    "approval_reference": "ROOT_USER_LOCAL_ENGINEERING_CPU_GATE1417_FRESH3GROUPS_NATIVE580_OWNED600_OUTER630_NOPUBLISH_20261109",
+    "job_name": "KLTN_OWNED_f5e26be233c2cf627ea500a533fa18dc16323cb035953026822010d70f0d413c",
+    "helper_sha256": "0dc8723170467e9ae73c4e233a357b9d584c66a8c183c478bdcff358fb0a95a1",
+    "worker_sha256": "8f6d0852060618e4208049d5f4af65dc7668ef8f904b5f6a97cab4e6ac516436",
+    "actual_worker": {
+      "pid": 30972,
+      "created_filetime_100ns": "134386359729479334",
+      "create_time": 1794162372.9479334,
+      "image": "C:\\Users\\AmaDev\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+    },
+    "popen": {
+      "pid": 20228,
+      "created_filetime_100ns": "134386359729412640",
+      "create_time": 1794162372.941264,
+      "image": "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe"
+    },
+    "preGO_owned_tokens": [
+      {
+        "pid": 20228,
+        "created_filetime_100ns": "134386359729412640",
+        "create_time": 1794162372.941264,
+        "image": "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 30972,
+        "created_filetime_100ns": "134386359729479334",
+        "create_time": 1794162372.9479334,
+        "image": "C:\\Users\\AmaDev\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+      },
+      {
+        "pid": 9324,
+        "created_filetime_100ns": "134386359729621868",
+        "create_time": 1794162372.9621868,
+        "image": "C:\\Windows\\System32\\conhost.exe"
+      }
+    ],
+    "actual_worker_in_job_before_GO": true,
+    "worker_returncode_before_cleanup": 1,
+    "active_process_samples": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      6,
+      7,
+      7,
+      6,
+      7,
+      5,
+      5,
+      6,
+      5,
+      5,
+      5,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      5,
+      3
+    ],
+    "job_active_before_cleanup": 1,
+    "job_active_after_cleanup": 0,
+    "popen_handle_closed": true,
+    "cleanup_errors": [],
+    "cleanup_accepted": true,
+    "observed_owned_tokens": [
+      {
+        "pid": 20228,
+        "created_filetime_100ns": "134386359729412640",
+        "create_time": 1794162372.941264,
+        "image": "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 30972,
+        "created_filetime_100ns": "134386359729479334",
+        "create_time": 1794162372.9479334,
+        "image": "C:\\Users\\AmaDev\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+      },
+      {
+        "pid": 9324,
+        "created_filetime_100ns": "134386359729621868",
+        "create_time": 1794162372.9621868,
+        "image": "C:\\Windows\\System32\\conhost.exe"
+      }
+    ],
+    "output_sha256": {
+      "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "accepted": false,
+    "errors": [],
+    "elapsed_seconds": 4.038247346878052,
+    "max_seconds": 600.0,
+    "cleanup_reserve_seconds": 3,
+    "returncode": 1,
+    "automatic_retry": false,
+    "elapsed_scope": "call through cleanup/posthash; caller must check final total after persisting/reading its outputs"
+  },
+  "verified_JUnit": {},
+  "outputs": {
+    "artifacts/akt/preflight/gate2-tests-win-current-gate-20261109-01.log": {
+      "bytes": 45249,
+      "sha256": "d981e98a53a9d1f630f8f68419847ac54bbfd5aab3fdc27b0d1c27c41292b9dd"
+    },
+    "artifacts/akt/preflight/gate2-tests-win-current-gate-20261109-01-stdlib.log": {
+      "bytes": 45213,
+      "sha256": "7d8a8b038c5c9e6a99db506eadbe98c8108172a138f1ce6598d3159292709ef3"
+    },
+    "artifacts/akt/preflight/gate2-tests-win-current-gate-20261109-01-stdlib.xml": {
+      "bytes": 49426,
+      "sha256": "07399b0a2fcb822890d7cd2040072fa9a545e5b6d8a0f24af870a7356f2400e2"
+    }
+  },
+  "pointer_before_sha256": "7ecd8067fd3f30b658867fd5540ec331653ec4a8d6a5d1d3a0a68f932fa7690f",
+  "pointer_changed": false,
+  "publication_requested": false,
+  "pointer_manually_rewritten": false,
+  "automatic_retry": false,
+  "scope_vi": "Actual synthetic software suite only. NativePASS alone insufficient; require exact acceptedcollection/JUnit IDs, sources, runtime, resources, ownedJob0 and outertime. No research/GPU claim."
+}

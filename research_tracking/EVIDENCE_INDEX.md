@@ -1,5 +1,9 @@
 # Chỉ mục bằng chứng
 
+## Kiểm phần mềm hiện hành09/11
+
+[AKT/shared KT Windows CPU](reports/akt_windows_gate_readiness_20261109.md) và [bundle nghiệm thu](runs/akt-windows-gate-readiness-20261109-01/README.md):1.418 PASS/0 failure/error/skip,154 source files/69 test modules. Giữ raw failure trước sửa; chưa CUDA hoặc quyền training. Các nhận định chưa full Gate trong các mốc bên dưới là lịch sử.
+
 ## Bổ sung09/11 — cơ chế controller và persistence SAKT
 
 - [Source-controller RQ1](reports/rq1_fixed_controller_candidates_20261109.md) / [bundle67outputs](runs/rq1-fixed-controller-candidates-20261109-01/README.md): sourceR/CID khớp2160snapshots,18regressionfixtures;4balance-filtered/51common-winner/17same-B-changed-CID. Không C/B được ghi trực tiếp, không causal mediation hoặc independentN mới.
@@ -7,7 +11,7 @@
 
 ## Mốc09/11 — báo cáo hiện hành và hồ sơ kiểm tra local
 
-**Điểm đọc hiện hành:** [tóm tắt09/11](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md) và [HTML minh họa](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html), commit `ab471ca`. Chín SVG và sáu bảng đã kiểm desktop/mobile; không chồng chữ hoặc tràn khung. Đã đóng browser ngay sau QA; không mở máy chủ preview.
+**Điểm đọc hiện hành:** [tóm tắt09/11](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md) và [HTML minh họa](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html), bổ sung cơ chế controller sau bản nền `ab471ca`. Mười SVG và sáu bảng đã kiểm desktop/mobile; không chồng chữ hoặc tràn khung. Đã đóng browser ngay sau QA; không mở máy chủ preview.
 
 **Hồ sơ vận hành:** [collection01–05](reports/gate_collection_trials_20261109.md) và [bundle đã đóng](runs/gate-collection-engineering-20261109-01/README.md),127outputs có kiểm toàn vẹn. Năm lượt đều rejected, chưa collection toàn bộ hoặc full Gate PASS. Nguồn154files đối chiếu raw Git commit `2c337d4`, không nhân bản lại; giữ raw failures, namespace snapshots, guards và cleanup. Đây không phải kết quả mô hình hoặc bằng chứng RQ mới.
 

@@ -150,6 +150,52 @@ def test_gate2_inbudget_publisher_retains_counts_and_bounds_child_threads(tmp_pa
     assert time.perf_counter is real_counter  # Only the loaded script's clock was replaced.
 
 
+def test_gate2_unique_run_root_supports_real_nested_pytest_basetemps(tmp_path_factory, monkeypatch):
+    """Real pytest temp-path implementation/filesystem, fake test subprocess only."""
+    from _pytest.tmpdir import TempPathFactory
+    owned = tmp_path_factory.mktemp('g2')
+    refresh, directory, pointer, observed = _publisher(owned, monkeypatch, elapsed=1.)
+    namespace = refresh.__globals__
+    root = directory.parents[2]
+    fake_child = namespace['subprocess'].run
+    bases, markers = [], []
+
+    def child(command, **kwargs):
+        base = Path(command[command.index('--basetemp') + 1])
+        # getbasetemp recursively removes an existing given_basetemp: only
+        # permit a fresh, absent leaf inside this newly owned fake project.
+        assert base.is_absolute() and base.resolve().is_relative_to(root.resolve())
+        assert not base.exists() and not base.is_symlink() and not base.is_junction()
+        assert base.name in ('stdlib', 'no-torch', 'remaining')
+        factory = TempPathFactory(given_basetemp=base, retention_count=0,
+                                  retention_policy='all', trace=lambda *args: None,
+                                  _ispytest=True)
+        actual = factory.getbasetemp()  # Real mkdir(parents=False), failed before fix.
+        payload = factory.mktemp('payload', numbered=False) / 'probe.txt'
+        payload.write_text('real nested pytest temporary directory', encoding='utf-8')
+        assert payload.read_text(encoding='utf-8') == 'real nested pytest temporary directory'
+        bases.append(actual); markers.append(payload)
+        return fake_child(command, **kwargs)
+
+    monkeypatch.setitem(namespace, 'subprocess', SimpleNamespace(run=child, STDOUT=-2))
+    before = pointer.read_bytes()
+    long_run_id = 'g' * 80  # Longest valid public run ID must not inflate scratch paths.
+    result = refresh(long_run_id, publish_current=False, timeout_seconds=30)
+    assert result['published_current'] is False and pointer.read_bytes() == before
+    assert [p.name for p in bases] == ['stdlib', 'no-torch', 'remaining']
+    assert len({p.parent for p in bases}) == 1 and len(observed['children']) == 3
+    run_root = bases[0].parent
+    assert run_root.parent == root / 'artifacts/akt/local-tests'
+    assert run_root.name.startswith('gate2-') and len(run_root.name) == len('gate2-') + 32
+    assert all(character in '0123456789abcdef' for character in run_root.name[len('gate2-'):])
+    assert long_run_id not in run_root.name
+    assert result['report'].endswith(f'gate2-evidence-{long_run_id}.json')
+    assert (directory / f'gate2-tests-{long_run_id}.log').is_file()
+    assert (directory / f'gate2-tests-{long_run_id}.xml').is_file()
+    assert run_root.is_dir() and not run_root.is_symlink() and not run_root.is_junction()
+    assert all(path.is_file() for path in markers)  # Later groups did not delete prior evidence.
+
+
 @pytest.mark.parametrize('elapsed', [-1.0, float('nan'), float('inf')])
 def test_gate2_publisher_rejects_invalid_elapsed_and_preserves_strict_json(tmp_path, monkeypatch, elapsed):
     refresh, directory, pointer, _ = _publisher(tmp_path, monkeypatch, elapsed=elapsed)

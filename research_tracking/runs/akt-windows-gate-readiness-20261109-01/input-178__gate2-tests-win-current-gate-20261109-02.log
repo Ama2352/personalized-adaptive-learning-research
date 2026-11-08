@@ -1,0 +1,279 @@
+
+=== Gate2 process group stdlib ===
+...................                                                      [100%]
+19 passed in 5.17s
+
+=== Gate2 process group no-torch ===
+........................................................................ [ 26%]
+........................................................................ [ 53%]
+........................................................................ [ 79%]
+.......................................................                  [100%]
+271 passed in 55.55s
+
+=== Gate2 process group remaining ===
+......................FF................................................ [  6%]
+........................................................................ [ 12%]
+........................................................................ [ 19%]
+............................................................F........... [ 25%]
+........................................................................ [ 31%]
+........................................................................ [ 38%]
+........................................................................ [ 44%]
+........................................................................ [ 51%]
+........................................................................ [ 57%]
+........................................................................ [ 63%]
+........................................................................ [ 70%]
+........................................................................ [ 76%]
+........................................................................ [ 82%]
+........................................................................ [ 89%]
+........................................................................ [ 95%]
+................................................                         [100%]
+================================== FAILURES ===================================
+__ test_actual_cli_fresh_attempt_recovery_and_prediction_export[batch-exit] ___
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-02-9a6ae67d72c8498aa282f50eebc1f820/remaining/test_actual_cli_fresh_attempt_0')
+boundary = 'batch-exit'
+
+    @pytest.mark.parametrize('boundary', ['batch-exit', 'export'])
+    def test_actual_cli_fresh_attempt_recovery_and_prediction_export(tmp_path, boundary):
+        root = tmp_path / 'project'
+        root.mkdir()
+        template = load_config(PROJECT_ROOT / 'experiments/akt/configs/smoke.json')
+        config = replace(template, project_root=root, execution_enabled=True, run_id='continuous',
+            output_dir=root / 'experiments/akt/results/continuous', recovery=RecoveryOptions(),
+            dropout=.2, batch_size=2, max_steps=3, max_seconds=60, max_wall_seconds=180)
+        result = launch(config, tmp_path / 'continuous-cli')
+>       assert result.returncode == 0, result.stderr
+E       AssertionError: {"event": "watchdog-before-worker-spawn", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 3940, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "watchdog-after-worker-spawn", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 3940, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592, "worker_pid": 8964}
+E         {"elapsed_seconds": 12.519429999985732, "event": "watchdog-after-worker-exit", "phase": "smoke", "pid": 3940, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592, "worker_pid": 8964, "worker_returncode": 1}
+E         {"event": "worker-before-runtime-import", "phase": "smoke", "pid": 9212, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "worker-after-runtime-import", "phase": "smoke", "pid": 9212, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "worker-before-data-load", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 9212, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "worker-before-data-load", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 9212, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         Traceback (most recent call last):
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 80, in <module>
+E             raise SystemExit(main())
+E                              ~~~~^^
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 76, in main
+E             return watchdog.main(sys.argv[1:])
+E                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\watchdog.py", line 123, in main
+E             return _worker_main(argv[1:])
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\runner.py", line 812, in _worker_main
+E             result = dispatch[phase](config,authorization=authorization,_invocation=invocation,**extra)
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\runner.py", line 662, in run_smoke
+E             return _with_context(_run_phase,config,authorization,pilot=False,invocation=_invocation,context=context)
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\runner.py", line 61, in _with_context
+E             return function(*args, **kwargs)
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\runner.py", line 602, in _run_phase
+E             export = export_predictions(records, prediction_dir,
+E                                         expected_learners_factory=lambda: iter(val_data),
+E                                         identity={'run': config.run_id,
+E                                                   'checkpoint_sha256': sha256_file(selection.checkpoint)},
+E                                         shard_rows=50000)
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 66, in fail_export
+E             return export(*args, **kwargs)
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\prediction.py", line 278, in export_predictions
+E             finish_user()
+E             ~~~~~~~~~~~^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\prediction.py", line 251, in finish_user
+E             write_pending()
+E             ~~~~~~~~~~~~~^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\prediction.py", line 242, in write_pending
+E             _record_rows(temp, current_buffer)
+E             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\prediction.py", line 160, in _record_rows
+E             with duckdb.connect() as con:
+E                  ~~~~~~~~~~~~~~^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\prediction.py", line 162, in _record_rows
+E             con.execute(f'COPY prediction_batch TO {_sql_path(path)} (FORMAT PARQUET, COMPRESSION ZSTD)')
+E             ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         _duckdb.IOException: IO Error: Cannot open file "D:\Dev\KLTN\artifacts\akt\local-tests\gate2-win-current-gate-20261109-02-9a6ae67d72c8498aa282f50eebc1f820\remaining\test_actual_cli_fresh_attempt_0\project\experiments\akt\results\continuous\predictions\.pending\f05cfed810b24093ac9546e1a340a6dc-00000.parquet.tmp": The system cannot find the path specified.
+E         
+E         
+E         Traceback (most recent call last):
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 80, in <module>
+E             raise SystemExit(main())
+E                              ~~~~^^
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 76, in main
+E             return watchdog.main(sys.argv[1:])
+E                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\watchdog.py", line 229, in main
+E             raise RuntimeError(f'AKT child process failed with exit code {returncode}')
+E         RuntimeError: AKT child process failed with exit code 1
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe', 'D:\\Dev\\KLTN\\tests\\akt\\cli_recovery_fixture.p...f\'AKT child process failed with exit code {returncode}\')\nRuntimeError: AKT child process failed with exit code 1\n').returncode
+
+tests\akt\test_cli_recovery.py:58: AssertionError
+____ test_actual_cli_fresh_attempt_recovery_and_prediction_export[export] _____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-02-9a6ae67d72c8498aa282f50eebc1f820/remaining/test_actual_cli_fresh_attempt_1')
+boundary = 'export'
+
+    @pytest.mark.parametrize('boundary', ['batch-exit', 'export'])
+    def test_actual_cli_fresh_attempt_recovery_and_prediction_export(tmp_path, boundary):
+        root = tmp_path / 'project'
+        root.mkdir()
+        template = load_config(PROJECT_ROOT / 'experiments/akt/configs/smoke.json')
+        config = replace(template, project_root=root, execution_enabled=True, run_id='continuous',
+            output_dir=root / 'experiments/akt/results/continuous', recovery=RecoveryOptions(),
+            dropout=.2, batch_size=2, max_steps=3, max_seconds=60, max_wall_seconds=180)
+        result = launch(config, tmp_path / 'continuous-cli')
+>       assert result.returncode == 0, result.stderr
+E       AssertionError: {"event": "watchdog-before-worker-spawn", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 12652, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "watchdog-after-worker-spawn", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 12652, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592, "worker_pid": 21304}
+E         {"elapsed_seconds": 13.053197400004137, "event": "watchdog-after-worker-exit", "phase": "smoke", "pid": 12652, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592, "worker_pid": 21304, "worker_returncode": 1}
+E         {"event": "worker-before-runtime-import", "phase": "smoke", "pid": 19692, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "worker-after-runtime-import", "phase": "smoke", "pid": 19692, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "worker-before-data-load", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 19692, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         {"event": "worker-before-data-load", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "smoke", "pid": 19692, "process_peak_rss_bytes": 134217728, "process_rss_bytes": 134217728, "run_id": "continuous", "system_available_ram_bytes": 4294967296, "system_total_ram_bytes": 8589934592}
+E         Traceback (most recent call last):
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 80, in <module>
+E             raise SystemExit(main())
+E                              ~~~~^^
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 76, in main
+E             return watchdog.main(sys.argv[1:])
+E                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\watchdog.py", line 123, in main
+E             return _worker_main(argv[1:])
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\runner.py", line 812, in _worker_main
+E             result = dispatch[phase](config,authorization=authorization,_invocation=invocation,**extra)
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\runner.py", line 662, in run_smoke
+E             return _with_context(_run_phase,config,authorization,pilot=False,invocation=_invocation,context=context)
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\runner.py", line 61, in _with_context
+E             return function(*args, **kwargs)
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\runner.py", line 602, in _run_phase
+E             export = export_predictions(records, prediction_dir,
+E                                         expected_learners_factory=lambda: iter(val_data),
+E                                         identity={'run': config.run_id,
+E                                                   'checkpoint_sha256': sha256_file(selection.checkpoint)},
+E                                         shard_rows=50000)
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 66, in fail_export
+E             return export(*args, **kwargs)
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\prediction.py", line 278, in export_predictions
+E             finish_user()
+E             ~~~~~~~~~~~^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\prediction.py", line 251, in finish_user
+E             write_pending()
+E             ~~~~~~~~~~~~~^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\prediction.py", line 242, in write_pending
+E             _record_rows(temp, current_buffer)
+E             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\prediction.py", line 160, in _record_rows
+E             with duckdb.connect() as con:
+E                  ~~~~~~~~~~~~~~^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\prediction.py", line 162, in _record_rows
+E             con.execute(f'COPY prediction_batch TO {_sql_path(path)} (FORMAT PARQUET, COMPRESSION ZSTD)')
+E             ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         _duckdb.IOException: IO Error: Cannot open file "D:\Dev\KLTN\artifacts\akt\local-tests\gate2-win-current-gate-20261109-02-9a6ae67d72c8498aa282f50eebc1f820\remaining\test_actual_cli_fresh_attempt_1\project\experiments\akt\results\continuous\predictions\.pending\2349d88508314708aef12ccf89424d06-00000.parquet.tmp": The system cannot find the path specified.
+E         
+E         
+E         Traceback (most recent call last):
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 80, in <module>
+E             raise SystemExit(main())
+E                              ~~~~^^
+E           File "D:\Dev\KLTN\tests\akt\cli_recovery_fixture.py", line 76, in main
+E             return watchdog.main(sys.argv[1:])
+E                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+E           File "D:\Dev\KLTN\src\knowledge_tracing\akt\watchdog.py", line 229, in main
+E             raise RuntimeError(f'AKT child process failed with exit code {returncode}')
+E         RuntimeError: AKT child process failed with exit code 1
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe', 'D:\\Dev\\KLTN\\tests\\akt\\cli_recovery_fixture.p...f\'AKT child process failed with exit code {returncode}\')\nRuntimeError: AKT child process failed with exit code 1\n').returncode
+
+tests\akt\test_cli_recovery.py:58: AssertionError
+_ test_pilot_completed_cycle_reloads_checkpoint_and_exports_aligned_predictions _
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-02-9a6ae67d72c8498aa282f50eebc1f820/remaining/test_pilot_completed_cycle_rel0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024599931860>
+
+    def test_pilot_completed_cycle_reloads_checkpoint_and_exports_aligned_predictions(
+            tmp_path, monkeypatch):
+        base_config = load_config(PROJECT_ROOT / 'experiments/akt/configs/pilot.json')
+        monkeypatch.setattr(config_module, 'PROJECT_ROOT', tmp_path)
+        monkeypatch.setattr(runner, 'PROJECT_ROOT', tmp_path)
+        monkeypatch.setattr(prediction_module, 'PROJECT_ROOT', tmp_path)
+        config = replace(
+            base_config,
+            project_root=tmp_path,
+            source_root=PROJECT_ROOT / 'artifacts/akt/dependencies/upstream',
+            run_id='pilot-synthetic-full',
+            output_dir=tmp_path / 'experiments/akt/results/pilot-synthetic-full',
+            execution_enabled=True,
+            max_train_users=4,
+            max_val_users=2,
+            max_total_targets=20,
+        )
+        train = make_learner('train', 1, ['A', 'B', 'A', 'B'], row_start=1)
+        val = make_learner('val', 2, ['A', 'B', 'A', 'OOV'], row_start=20)
+        caps = {'max_train_users': 4, 'max_val_users': 2, 'max_total_targets': 20,
+                'max_seconds': 30, 'max_wall_seconds': 60,
+                'max_rss_bytes': 2 * 1024**3, 'min_available_ram_bytes': 1024**3}
+        approved = {'caps': caps, 'approval_reference': 'synthetic pilot authorization'}
+        monkeypatch.setattr(runner, '_require_authorization', lambda *args: approved)
+        monkeypatch.setattr(runner, '_require_gate2_evidence', lambda _: {'status': 'PASS'})
+        monkeypatch.setattr(runner, '_check_resource_budget', lambda budget: 1)
+        # Đây là lifecycle fixture. Resource thresholds được kiểm bằng snapshots
+        # xác định ở các tests riêng, không phụ thuộc RAM của ứng dụng khác trên máy.
+        monkeypatch.setattr(training_module, 'memory_snapshot', lambda: {
+            'pid': 123, 'process_rss_bytes': 512 * 1024**2,
+            'process_peak_rss_bytes': 512 * 1024**2,
+            'system_available_ram_bytes': 4 * 1024**3,
+            'system_total_ram_bytes': 8 * 1024**3})
+        monkeypatch.setattr(runner, '_load_phase_inputs', lambda _, **kwargs: (
+            {'runtime_report_sha256': 'runtime', 'source': {'commit': config.source_commit}},
+            InnerSplit(('train',), ('val',), 0, 'split'),
+            (train,), (val,),
+            {'selected_train_learners': 1, 'selected_validation_learners': 1,
+             'loaded_train_learners': 1, 'loaded_validation_learners': 1,
+             'selected_train_targets': 4, 'selected_validation_targets': 4,
+             'data_loading_seconds': 0.01,
+             'chronological_query_sort_and_materialize_seconds': 0.01},
+        ))
+    
+>       result = runner.run_pilot(config, authorization={'synthetic': True})
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_pilot.py:171: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\runner.py:667: in run_pilot
+    return _with_context(_run_phase,config,authorization,pilot=True,invocation=_invocation,context=context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\runner.py:61: in _with_context
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\runner.py:519: in _run_phase
+    export = export_predictions(
+src\knowledge_tracing\akt\prediction.py:278: in export_predictions
+    finish_user()
+src\knowledge_tracing\akt\prediction.py:251: in finish_user
+    write_pending()
+src\knowledge_tracing\akt\prediction.py:242: in write_pending
+    _record_rows(temp, current_buffer)
+src\knowledge_tracing\akt\prediction.py:160: in _record_rows
+    with duckdb.connect() as con:
+         ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-02-9a6ae67d72c8498aa282f50eebc1f820.../experiments/akt/results/pilot-synthetic-full/predictions/.pending/4f21246aa895401e95b8223f32f86058-00000.parquet.tmp')
+records = [PredictionRecord(source_row=20, user_id='val', exercise='A', time_done=1, correct=0, suggested=0, fold=2, prediction=...d9a63de125a5c36cfea903941702259d82', checkpoint_id='28d04d1e6f6207add85f1861a404c8510277de4cd41481acf056d2b9bcc5435b')]
+
+    def _record_rows(path: Path, records: list[PredictionRecord]) -> None:
+        frame = pd.DataFrame([asdict(record) for record in records], columns=_COLUMNS)
+        frame['prediction'] = pd.array(frame['prediction'], dtype='Float64')
+        with duckdb.connect() as con:
+            con.register('prediction_batch', frame)
+>           con.execute(f'COPY prediction_batch TO {_sql_path(path)} (FORMAT PARQUET, COMPRESSION ZSTD)')
+E           _duckdb.IOException: IO Error: Cannot open file "D:\Dev\KLTN\artifacts\akt\local-tests\gate2-win-current-gate-20261109-02-9a6ae67d72c8498aa282f50eebc1f820\remaining\test_pilot_completed_cycle_rel0\experiments\akt\results\pilot-synthetic-full\predictions\.pending\4f21246aa895401e95b8223f32f86058-00000.parquet.tmp": The system cannot find the path specified.
+
+src\knowledge_tracing\akt\prediction.py:162: IOException
+---------------------------- Captured stderr call -----------------------------
+{"event": "worker-before-data-load", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "pilot", "pid": 11328, "process_peak_rss_bytes": 454995968, "process_rss_bytes": 447819776, "run_id": "pilot-synthetic-full", "system_available_ram_bytes": 4932542464, "system_total_ram_bytes": 16794759168}
+{"event": "worker-before-data-load", "max_rss_bytes": 2147483648, "min_available_ram_bytes": 1073741824, "phase": "pilot", "pid": 11328, "process_peak_rss_bytes": 454995968, "process_rss_bytes": 447819776, "run_id": "pilot-synthetic-full", "system_available_ram_bytes": 4932546560, "system_total_ram_bytes": 16794759168}
+=========================== short test summary info ===========================
+FAILED tests/akt/test_cli_recovery.py::test_actual_cli_fresh_attempt_recovery_and_prediction_export[batch-exit]
+FAILED tests/akt/test_cli_recovery.py::test_actual_cli_fresh_attempt_recovery_and_prediction_export[export]
+FAILED tests/akt/test_pilot.py::test_pilot_completed_cycle_reloads_checkpoint_and_exports_aligned_predictions
+3 failed, 1125 passed in 220.99s (0:03:40)

@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**Kiểm phần mềm hiện hành09/11:** [AKT/shared KT trên Windows CPU](akt_windows_gate_readiness_20261109.md),1.418 PASS/0 failure/error/skip; [bundle đã đóng](../runs/akt-windows-gate-readiness-20261109-01/README.md) giữ cả lỗi trước sửa và log nghiệm thu. Đây chưa là CUDA hoặc kết quả mô hình nghiên cứu. Các dòng chưa full Gate bên dưới là mốc lịch sử trước lượt03.
+
 **RQ1 — giải thích bước chọn khái niệm:** [tái dựng bộ lọc ứng viên](rq1_fixed_controller_candidates_20261109.md), khớp đủ2.160ready memberships/CID trên1.080cặp cũ. Bốn khác biệt bị bước cân bằng loại;51tập cuối khác vẫn cùng lựa chọn;17tập cuối giữ nguyên nhưng lựa chọn đổi. Đây là giải thích theo source, không thêm mẫu hoặc bằng chứng lợi ích học tập.
 
 **SAKT — persistence cuối epoch:** [bản nghiệm thu31fixtures](sakt_research_checkpoint_readiness_20261109.md),3Adamupdates và continuous/restored parity; bundle70outputs đã đóng. Chưa mid-epoch/fullresearchresume hoặc baseline fitted; SGD format chưa thực chạy.
@@ -18,7 +20,7 @@
 
 **Bổ sung kỹ thuật sau gói GVHD08/11:** [metric sau calibration](akt_calibrated_reporting_readiness_20261108.md) có36purePASS và một lần kiểm evaluator pandas/sklearn thật trên5hàng tự dựng;0model/solver/realdata. Số AUC/Brier fixture không là kết quả RQ. Full Gate vẫn cần tách process trước khi chạy; không lấy batch này thay actual training/CUDA.
 
-**Đọc báo cáo tiến độ GVHD:** mở [gói ngày09/11 — đợt01](../supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md), chỉ gồm bản tóm tắt và [báo cáo HTML độc lập](../supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html) có diễn tiến nghiên cứu, số liệu và chín biểu đồ. Đã kiểm giao diện và đóng browser sau kiểm; bản08/11 giữ nguyên để đối chiếu. Notebook lịch sử đã được thay bằng HTML tại `31ce8ff`. Các đoạn revision4/chưa sinh corpus bên dưới là snapshot cũ, không mô tả trạng thái hiện tại. Corpus thực đã nghiệm thu tại `1990d4c`; controlled history tại `8f95fd6`, controlled ability tại `8b6487c`.
+**Đọc báo cáo tiến độ GVHD:** mở [gói ngày09/11 — đợt01](../supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md), chỉ gồm bản tóm tắt và [báo cáo HTML độc lập](../supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html) có diễn tiến nghiên cứu, số liệu và mười biểu đồ. Đã kiểm giao diện và đóng browser sau kiểm; bản08/11 giữ nguyên để đối chiếu. Notebook lịch sử đã được thay bằng HTML tại `31ce8ff`. Các đoạn revision4/chưa sinh corpus bên dưới là snapshot cũ, không mô tả trạng thái hiện tại. Corpus thực đã nghiệm thu tại `1990d4c`; controlled history tại `8f95fd6`, controlled ability tại `8b6487c`.
 
 **Báo cáo hiện hành revision4 (`e502848`):** [GVHD](BAO_CAO_TIEN_DO_GVHD_20261108.md),32source inputs/25links đã kiểm. Bổ sung [full–empty edge contrast](rq1_fixed_edge_set_contrast_20261108.md) và [history bins](rq1_history_stratified_edge_contrast_20261108.md): kết quả gộp cải thiện nhỏ nhưng PG bất lợi; history/time còn confounding, không causal learning benefit hoặc RQ completion. Notebook bên dưới vẫn snapshot C01–C14, chưa chứa hai phân tích mới.
 

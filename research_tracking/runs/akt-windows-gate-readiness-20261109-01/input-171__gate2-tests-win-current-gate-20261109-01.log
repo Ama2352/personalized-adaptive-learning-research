@@ -1,0 +1,728 @@
+
+=== Gate2 process group stdlib ===
+EEEEEEEEEEEEEEEEEEE                                                      [100%]
+=================================== ERRORS ====================================
+_ ERROR at setup of test_protected_source_rejected_before_any_protected_open[collection_sources] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB76B8180>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_ ERROR at setup of test_protected_source_rejected_before_any_protected_open[extra_sources] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB73935C0>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_____ ERROR at setup of test_frozen_config_profile_sha_cannot_be_changed ______
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB7679B50>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_ ERROR at setup of test_allowlisted_source_byte_drift_rejected_before_generation _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB9792140>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_ ERROR at setup of test_existing_corpus_rejected_before_generation_or_worker_writes _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB9790380>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_______ ERROR at setup of test_alias_rejected_before_generation[output] _______
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB7639E50>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_______ ERROR at setup of test_alias_rejected_before_generation[corpus] _______
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB763BC50>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_______ ERROR at setup of test_alias_rejected_before_generation[source] _______
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB770CD70>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_ ERROR at setup of test_wrong_owner_stops_before_validation_or_writes[status] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB97A0C80>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+__ ERROR at setup of test_wrong_owner_stops_before_validation_or_writes[pid] __
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB979BA10>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_ ERROR at setup of test_wrong_owner_stops_before_validation_or_writes[missing] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB76AD1D0>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+__ ERROR at setup of test_ram_guards_leave_no_success_receipt[before_heavy] ___
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB96731E0>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+___ ERROR at setup of test_ram_guards_leave_no_success_receipt[after_heavy] ___
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB7621B50>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+__ ERROR at setup of test_ram_guards_leave_no_success_receipt[after_reader] ___
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB7622390>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_ ERROR at setup of test_positive_mock_flow_is_pending_outer_not_actual_corpus_acceptance _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB76BEAF0>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+___ ERROR at setup of test_missing_role_support_stops_before_publish_reader ___
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB76BE8E0>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_ ERROR at setup of test_reader_content_mismatch_is_failure_not_pending_success _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB7716850>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+___ ERROR at setup of test_extra_source_drift_after_reader_prevents_success ___
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB77153B0>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_ ERROR at setup of test_post_result_ram_failure_retains_failure_override_not_final_acceptance _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-...luggy._tracing.TagTracerSub object at 0x000001FCB7392060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCB7685370>
+
+    @pytest.fixture
+    def case(tmp_path_factory,monkeypatch):
+        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.
+>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_development_corpus_worker.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:158: in getbasetemp
+    basetemp.mkdir(mode=0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532/stdlib')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\gate2-win-current-gate-20261109-01-9e0142adeae64e02abc8addc46b1b532\\stdlib'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_protected_source_rejected_before_any_protected_open[collection_sources]
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_protected_source_rejected_before_any_protected_open[extra_sources]
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_frozen_config_profile_sha_cannot_be_changed
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_allowlisted_source_byte_drift_rejected_before_generation
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_existing_corpus_rejected_before_generation_or_worker_writes
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_alias_rejected_before_generation[output]
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_alias_rejected_before_generation[corpus]
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_alias_rejected_before_generation[source]
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_wrong_owner_stops_before_validation_or_writes[status]
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_wrong_owner_stops_before_validation_or_writes[pid]
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_wrong_owner_stops_before_validation_or_writes[missing]
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_ram_guards_leave_no_success_receipt[before_heavy]
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_ram_guards_leave_no_success_receipt[after_heavy]
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_ram_guards_leave_no_success_receipt[after_reader]
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_positive_mock_flow_is_pending_outer_not_actual_corpus_acceptance
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_missing_role_support_stops_before_publish_reader
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_reader_content_mismatch_is_failure_not_pending_success
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_extra_source_drift_after_reader_prevents_success
+ERROR tests/shared_kt/test_development_corpus_worker.py::test_post_result_ram_failure_retains_failure_override_not_final_acceptance
+19 errors in 1.33s
