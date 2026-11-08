@@ -1,0 +1,120 @@
+......................................FF...                              [100%]
+================================== FAILURES ===================================
+_______ test_weighted_gated_causal_prefix_isolation_and_oov_barrier[A2] _______
+
+variant = 'A2'
+
+    @pytest.mark.parametrize("variant",["A2","A3"])
+    def test_weighted_gated_causal_prefix_isolation_and_oov_barrier(variant):
+        cfg,train,selection,encoding,graph,confidence,model,batch=weighted_bundle(variant)
+        recipe=graph_proto.GATE_RECIPE if variant=="A3" else None
+        def prepare(shard,**kwargs):
+            return graph_proto.prepare_graph_batch(shard,encoding,config=cfg,graph=graph,
+                confidence=confidence,gate_feature_recipe=recipe,**kwargs)
+        original=model(batch)[1].reshape(batch.base.q_data.shape)
+        # One learner's current/future answers cannot change its current prediction or peer rows.
+        t=train.trajectories[0]
+        changed=replace(train,trajectories=(replace(t,observations=tuple(replace(o,correct=1-o.correct) if i>=3 else o
+            for i,o in enumerate(t.observations))),train.trajectories[1]))
+>       altered=prepare(changed);p=model(altered)[1].reshape(altered.base.q_data.shape)
+                ^^^^^^^^^^^^^^^^
+
+tests\akt\test_graph_prototype.py:457: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_graph_prototype.py:450: in prepare
+    return graph_proto.prepare_graph_batch(shard,encoding,config=cfg,graph=graph,
+src\knowledge_tracing\akt\graph_prototype.py:42: in guarded
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\graph_prototype.py:193: in prepare_graph_batch
+    _scope(config, shard, encoding, graph)
+src\knowledge_tracing\akt\graph_prototype.py:122: in _scope
+    tuple(iter_simulator_windows(shard, encoding, context=config.context, target_block=config.target_block, training=False))
+src\knowledge_tracing\akt\simulator_data.py:123: in iter_simulator_windows
+    _check_scope(shard, encoding, training=training)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+shard = SimulatorShard(plan=SimulatorSplitPlan(namespace='graph-prototype-handmade-only', root_seed=42, role_counts=(('train',...p=3, source_row=202), correct=1), Observation(query=ItemQuery(item_id='c', timestamp=4, source_row=203), correct=0)))))
+encoding = SimulatorEncoding(plan_sha256='869f8ab1aa409f587cd7f5a81ffcb75859f241c97dcd40a65ed4d3fdb853ee19', domain_sha256='15bb1...7ea260ec608f6836cc2a53f8f57ff966746d8b38b614c63325743e91737', train_learners=2, support=(('a', 2), ('b', 2), ('c', 2)))
+training = False
+
+    def _check_scope(shard, encoding, *, training):
+        if type(shard) is not SimulatorShard or type(encoding) is not SimulatorEncoding or type(training) is not bool:
+            raise ValueError('invalid simulator window scope')
+        if shard.role not in {'train', 'selection'} or (training and shard.role != 'train'):
+            raise ValueError('only train optimization and train/selection prediction are supported; no calibration/refit/final')
+        if encoding.plan_sha256 != shard.plan.identity or encoding.domain_sha256 != identity_hash(shard.bank.identity):
+            raise ValueError('simulator encoding plan/domain mismatch')
+        if not {item for item, _ in encoding.support}.issubset(shard.bank.item_ids):
+            raise ValueError('simulator encoding vocabulary outside bank')
+        if shard.role == 'train' and encoding.train_shard_sha256 != shard.identity:
+>           raise ValueError('train data changed after vocabulary fit')
+E           ValueError: train data changed after vocabulary fit
+
+src\knowledge_tracing\akt\simulator_data.py:113: ValueError
+_______ test_weighted_gated_causal_prefix_isolation_and_oov_barrier[A3] _______
+
+variant = 'A3'
+
+    @pytest.mark.parametrize("variant",["A2","A3"])
+    def test_weighted_gated_causal_prefix_isolation_and_oov_barrier(variant):
+        cfg,train,selection,encoding,graph,confidence,model,batch=weighted_bundle(variant)
+        recipe=graph_proto.GATE_RECIPE if variant=="A3" else None
+        def prepare(shard,**kwargs):
+            return graph_proto.prepare_graph_batch(shard,encoding,config=cfg,graph=graph,
+                confidence=confidence,gate_feature_recipe=recipe,**kwargs)
+        original=model(batch)[1].reshape(batch.base.q_data.shape)
+        # One learner's current/future answers cannot change its current prediction or peer rows.
+        t=train.trajectories[0]
+        changed=replace(train,trajectories=(replace(t,observations=tuple(replace(o,correct=1-o.correct) if i>=3 else o
+            for i,o in enumerate(t.observations))),train.trajectories[1]))
+>       altered=prepare(changed);p=model(altered)[1].reshape(altered.base.q_data.shape)
+                ^^^^^^^^^^^^^^^^
+
+tests\akt\test_graph_prototype.py:457: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_graph_prototype.py:450: in prepare
+    return graph_proto.prepare_graph_batch(shard,encoding,config=cfg,graph=graph,
+src\knowledge_tracing\akt\graph_prototype.py:42: in guarded
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\graph_prototype.py:193: in prepare_graph_batch
+    _scope(config, shard, encoding, graph)
+src\knowledge_tracing\akt\graph_prototype.py:122: in _scope
+    tuple(iter_simulator_windows(shard, encoding, context=config.context, target_block=config.target_block, training=False))
+src\knowledge_tracing\akt\simulator_data.py:123: in iter_simulator_windows
+    _check_scope(shard, encoding, training=training)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+shard = SimulatorShard(plan=SimulatorSplitPlan(namespace='graph-prototype-handmade-only', root_seed=42, role_counts=(('train',...p=3, source_row=202), correct=1), Observation(query=ItemQuery(item_id='c', timestamp=4, source_row=203), correct=0)))))
+encoding = SimulatorEncoding(plan_sha256='869f8ab1aa409f587cd7f5a81ffcb75859f241c97dcd40a65ed4d3fdb853ee19', domain_sha256='15bb1...7ea260ec608f6836cc2a53f8f57ff966746d8b38b614c63325743e91737', train_learners=2, support=(('a', 2), ('b', 2), ('c', 2)))
+training = False
+
+    def _check_scope(shard, encoding, *, training):
+        if type(shard) is not SimulatorShard or type(encoding) is not SimulatorEncoding or type(training) is not bool:
+            raise ValueError('invalid simulator window scope')
+        if shard.role not in {'train', 'selection'} or (training and shard.role != 'train'):
+            raise ValueError('only train optimization and train/selection prediction are supported; no calibration/refit/final')
+        if encoding.plan_sha256 != shard.plan.identity or encoding.domain_sha256 != identity_hash(shard.bank.identity):
+            raise ValueError('simulator encoding plan/domain mismatch')
+        if not {item for item, _ in encoding.support}.issubset(shard.bank.item_ids):
+            raise ValueError('simulator encoding vocabulary outside bank')
+        if shard.role == 'train' and encoding.train_shard_sha256 != shard.identity:
+>           raise ValueError('train data changed after vocabulary fit')
+E           ValueError: train data changed after vocabulary fit
+
+src\knowledge_tracing\akt\simulator_data.py:113: ValueError
+============================== warnings summary ===============================
+.venv\Lib\site-packages\_pytest\cacheprovider.py:469
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:469: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\nodeids: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+.venv\Lib\site-packages\_pytest\cacheprovider.py:423
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:423: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\lastfailed: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/lastfailed", self.lastfailed)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/akt/test_graph_prototype.py::test_weighted_gated_causal_prefix_isolation_and_oov_barrier[A2]
+FAILED tests/akt/test_graph_prototype.py::test_weighted_gated_causal_prefix_isolation_and_oov_barrier[A3]
+2 failed, 41 passed, 2 warnings in 12.51s

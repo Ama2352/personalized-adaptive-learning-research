@@ -1,4 +1,4 @@
-"""Pinned native A0/A1 toy forward/backward; zero optimizer steps or model fit."""
+"""Pinned native A0–A3 toy forward/backward; zero optimizer steps or model fit."""
 from dataclasses import replace
 import hashlib
 
@@ -10,6 +10,7 @@ from torch import nn
 from knowledge_tracing.akt.config import PROJECT_ROOT, load_config
 from knowledge_tracing.akt.model import AKTAdapter
 from knowledge_tracing.akt import graph_prototype as graph_proto
+from knowledge_tracing.graph_context import EdgeConfidence
 from knowledge_tracing.akt.simulator_data import SimulatorShard,fit_simulator_encoding
 from knowledge_tracing.shared_kt import PrerequisiteGraph
 from knowledge_tracing.simulator_bridge import SimulatorBank,SimulatorItem,ItemQuery,Observation,identity_hash
@@ -266,10 +267,11 @@ def test_batch_identity_drift_and_cross_domain_confidence_guards(bundle,case):
     with pytest.raises(ValueError):proto(changed)
 
 
-@pytest.mark.parametrize("variant",["A2","A3","unknown"])
-def test_unimplemented_variants_are_rejected(variant):
-    with pytest.raises(ValueError,match="not implemented"):
-        graph_proto.GraphPrototypeSpec(variant,graph_proto.RECIPE,"engineering","effective_window")
+def test_unknown_variant_and_implicit_gate_recipe_are_rejected():
+    with pytest.raises(ValueError,match="unknown variant"):
+        graph_proto.GraphPrototypeSpec("unknown",graph_proto.RECIPE,"engineering","effective_window")
+    with pytest.raises(ValueError,match="explicit engineering gate"):
+        graph_proto.GraphPrototypeSpec("A3",graph_proto.RECIPE,"engineering","effective_window")
 
 
 def test_scope_limits_and_no_full_history_or_junyi_domain(bundle):
@@ -321,3 +323,164 @@ def test_a0_cannot_register_unvalidated_branch_parameters(bundle):
     with pytest.raises(ValueError,match="A0 requires no"):
         graph_proto.GraphAKTPrototype(config=cfg,train=train,encoding=encoding,graph=graph,spec=spec,
                                       message_module=CountingLinear(),readout=nn.Parameter(torch.ones(2)))
+
+
+def weighted_bundle(variant="A2", values=(.25,.75), kind="structural_score"):
+    cfg,train,selection,encoding,graph=toy()
+    confidence=EdgeConfidence(kind,tuple((p,c,v) for (p,c),v in zip(graph.edges,values,strict=True)),
+        identity_hash({"role":"handmade-engineering-not-fitted-not-calibrated","values":values}),
+        "train" if kind=="estimated_probability" else None)
+    recipe=graph_proto.GATE_RECIPE if variant=="A3" else None
+    with torch.random.fork_rng(devices=[]),torch.device("cpu"):
+        message=CountingLinear();readout=nn.Parameter(torch.tensor([.7,-.4]))
+        gate=nn.Linear(4,1) if variant=="A3" else None
+        if gate is not None:
+            with torch.no_grad():gate.weight.fill_(.2);gate.bias.fill_(-.1)
+        torch.manual_seed(42)
+        model=graph_proto.GraphAKTPrototype(config=cfg,train=train,encoding=encoding,graph=graph,
+            spec=graph_proto.GraphPrototypeSpec(variant,graph_proto.RECIPE,"user sustained engineering; toy only",
+                "effective_window",gate_feature_recipe=recipe),message_module=message,readout=readout,
+            confidence=confidence,gate_module=gate)
+    batch=graph_proto.prepare_graph_batch(train,encoding,config=cfg,graph=graph,confidence=confidence,
+                                         gate_feature_recipe=recipe)
+    return cfg,train,selection,encoding,graph,confidence,model,batch
+
+
+@pytest.mark.parametrize("variant",["A2","A3"])
+def test_weighted_and_gated_gradients_with_independent_signed_residual_formula(variant):
+    _,train,_,_,_,_,model,batch=weighted_bundle(variant)
+    before=native_hash(model.native)
+    detail=model.forward_details(batch,labels(batch,train))
+    assert detail.applied_mask.any() and (~detail.applied_mask).any()
+    flat=[q for row in batch.contexts for q in row]
+    for i,query in enumerate(flat):
+        if not detail.applied_mask[i]:
+            assert torch.equal(detail.native_result[1][i],detail.base_probabilities[i])
+            continue
+        parents=query.evidence.parents
+        # Explicit arithmetic, independent of apply_graph_residual/feature helper.
+        residual=0.
+        for p in parents:
+            if p.support:
+                x=p.mean_observed_correctness
+                residual+=p.confidence*(.7*(.25*x+.1)-.4*(-.125*x-.1))
+        mass=sum(p.confidence for p in parents if p.support)
+        residual=residual/max(1.,mass)*float(detail.gate_values[i])
+        assert float(detail.augmented_logits[i]-detail.base_logits[i])==pytest.approx(residual,abs=1e-7)
+        assert detail.confidence_mass[i]==mass
+    detail.native_result[0].backward()
+    for module in (model.native,model.message_module,model.gate_module):
+        if module is not None:
+            assert any(p.grad is not None and torch.any(p.grad!=0) for p in module.parameters())
+            assert all(p.grad is None or torch.isfinite(p.grad).all() for p in module.parameters())
+    assert model.readout.grad is not None and torch.any(model.readout.grad!=0)
+    assert native_hash(model.native)==before  # No optimizer or fitting.
+
+
+def test_uniform_a2_matches_a1_without_changing_backbone_or_branch_weights(bundle):
+    _,train,_,_,_,_,fixed,fixed_batch=bundle
+    _,_,_,_,_,_,weighted,weighted_batch=weighted_bundle("A2",(1.,1.),"fixed_uniform")
+    assert native_hash(fixed.native)==native_hash(weighted.native)
+    assert all(torch.equal(a,b) for a,b in zip(fixed(fixed_batch,labels(fixed_batch,train)),
+                                              weighted(weighted_batch,labels(weighted_batch,train)),strict=True))
+
+
+@pytest.mark.parametrize("variant",["A2","A3"])
+@pytest.mark.parametrize("disable",[True,False])
+@pytest.mark.parametrize("ambient_threads",[1,2])
+def test_weighted_disable_or_all_zero_confidence_exact_native_tuple_and_gradients(variant,disable,ambient_threads):
+    cfg,train,_,_,_,_,model,batch=weighted_bundle(variant,(.25,.75) if disable else (0.,0.))
+    previous=torch.get_num_threads()
+    try:
+        target=labels(batch,train)
+        torch.set_num_threads(cfg.threads)
+        expected=model.native(batch.base.q_data,batch.base.qa_data,target)
+        expected[0].backward()
+        gradients={k:None if p.grad is None else p.grad.clone() for k,p in model.native.named_parameters()}
+        model.zero_grad(set_to_none=True)
+        calls=model.message_module.calls
+        torch.set_num_threads(ambient_threads)
+        actual=model.forward_details(batch,target,enabled=not disable)
+        assert torch.get_num_threads()==ambient_threads
+        assert all(torch.equal(a,b) for a,b in zip(actual.native_result,expected,strict=True))
+        assert actual.hidden is None and actual.gate_values is None and not actual.applied_mask.any()
+        torch.set_num_threads(cfg.threads)
+        actual.native_result[0].backward()
+        for k,p in model.native.named_parameters():
+            assert (p.grad is None)==(gradients[k] is None)
+            if p.grad is not None:assert torch.equal(p.grad,gradients[k])
+        assert model.message_module.calls==calls and model.readout.grad is None
+        assert all(p.grad is None for module in (model.message_module,model.gate_module) if module is not None
+                   for p in module.parameters())
+    finally:
+        torch.set_num_threads(previous)
+
+
+def test_engineering_gate_feature_population_and_normalization_are_explicit():
+    _,_,_,_,_,_,model,batch=weighted_bundle("A3")
+    query=next(q for row in batch.contexts for q in row if q is not None and any(p.support for p in q.evidence.parents))
+    parents=query.evidence.parents;support=sum(p.support for p in parents)
+    expected=(support/(1+support),.5,.0625,sum(p.support>0 for p in parents)/2)
+    assert graph_proto.gate_features(query.evidence)==expected
+    detail=model.forward_details(batch)
+    for i,q in enumerate(q for row in batch.contexts for q in row):
+        if detail.applied_mask[i]:
+            x=graph_proto.gate_features(q.evidence)
+            expected_gate=1/(1+np.exp(-(.2*sum(x)-.1)))
+            assert float(detail.gate_values[i])==pytest.approx(expected_gate,abs=1e-7)
+
+
+@pytest.mark.parametrize("variant",["A2","A3"])
+def test_confidence_and_gate_identity_drift_fail_closed_even_when_disabled(variant):
+    cfg,train,_,encoding,graph,confidence,model,_=weighted_bundle(variant)
+    changed=replace(confidence,provenance_sha256="a"*64)
+    batch=graph_proto.prepare_graph_batch(train,encoding,config=cfg,graph=graph,confidence=changed,
+        gate_feature_recipe=graph_proto.GATE_RECIPE if variant=="A3" else None)
+    with pytest.raises(ValueError,match="binding"):model(batch,enabled=False)
+    oracle=EdgeConfidence("oracle_label",tuple((p,c,1.) for p,c in graph.edges),"b"*64)
+    with pytest.raises(ValueError,match="nonoracle"):
+        graph_proto.prepare_graph_batch(train,encoding,config=cfg,graph=graph,confidence=oracle)
+
+
+@pytest.mark.parametrize("variant",["A2","A3"])
+def test_weighted_gated_causal_prefix_isolation_and_oov_barrier(variant):
+    cfg,train,selection,encoding,graph,confidence,model,batch=weighted_bundle(variant)
+    recipe=graph_proto.GATE_RECIPE if variant=="A3" else None
+    def prepare(shard,**kwargs):
+        return graph_proto.prepare_graph_batch(shard,encoding,config=cfg,graph=graph,
+            confidence=confidence,gate_feature_recipe=recipe,**kwargs)
+    original=model(batch)[1].reshape(batch.base.q_data.shape)
+    # Perturb disjoint selection histories; never rewrite the train shard bound to encoding.
+    t=selection.trajectories[0]
+    t=replace(t,observations=tuple(replace(o,query=replace(o.query,item_id=i))
+        for o,i in zip(t.observations,"abacbc",strict=True)))
+    reference=replace(selection,trajectories=(t,))
+    changed=replace(reference,trajectories=(replace(t,observations=tuple(
+        replace(o,correct=1-o.correct) if i>=3 else o for i,o in enumerate(t.observations))),))
+    first=prepare(reference);second=prepare(changed)
+    assert torch.equal(model(first)[1][:4],model(second)[1][:4])
+    # Learner isolation/padding: peer in the full train batch cannot affect this window.
+    single=prepare(train,window_ids=(batch.window_ids[0],));n=int(single.base.valid_mask.sum())
+    assert torch.allclose(model(single)[1][:n],original[0,:n],atol=1e-7,rtol=0)
+    barrier=prepare(selection)
+    assert [u[2] for u in barrier.unseen_targets]==[3]
+    later=[q for row in barrier.contexts for q in row if q and q.global_rank>=4]
+    assert [q.global_rank for q in later]==[4,5] and all(q.evidence.effective_start==4 for q in later)
+    assert torch.isfinite(model(barrier)[1]).all()
+
+
+def test_a3_rejects_wrong_gate_output_geometry():
+    _,_,_,_,_,_,model,batch=weighted_bundle("A3")
+    model.gate_module=nn.Linear(4,2)
+    with pytest.raises(ValueError,match="logits"):model(batch)
+
+
+@pytest.mark.parametrize("variant",["A2","A3"])
+def test_new_variants_do_not_silently_choose_uniform_confidence(variant):
+    cfg,train,_,encoding,graph=toy()
+    spec=graph_proto.GraphPrototypeSpec(variant,graph_proto.RECIPE,"engineering","effective_window",
+        gate_feature_recipe=graph_proto.GATE_RECIPE if variant=="A3" else None)
+    with pytest.raises(ValueError,match="caller-explicit"):
+        graph_proto.GraphAKTPrototype(config=cfg,train=train,encoding=encoding,graph=graph,spec=spec,
+            message_module=CountingLinear(),readout=nn.Parameter(torch.ones(2)),
+            gate_module=nn.Linear(4,1) if variant=="A3" else None)

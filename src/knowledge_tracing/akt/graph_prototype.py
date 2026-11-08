@@ -1,4 +1,4 @@
-"""A0/A1 toy forward/backward, không adoption CG-AKT hoặc fitted trainer.
+"""A0–A3 toy forward/backward, không adoption CG-AKT hoặc fitted trainer.
 
 Pinned NonRasch submodule bridge, không hook/patch/inverse-sigmoid/detach loss.
 Dataclass/SHA binding là consistency in-process, không cryptographic attestation.
@@ -25,6 +25,7 @@ from .simulator_data import SimulatorEncoding, SimulatorShard, SimulatorUnseenQu
 from .tensors import AKTBatch, collate_windows
 
 RECIPE = "engineering-observed-parent-mean-v1"
+GATE_RECIPE = "engineering-parent-support-confidence-v1"
 
 
 def _cpu(function):
@@ -51,10 +52,13 @@ class GraphPrototypeSpec:
     approval_reference: str
     history_scope: str
     weight_role: str = "engineering_only"
+    gate_feature_recipe: str | None = None
 
     def __post_init__(self):
-        if self.variant not in {"A0", "A1"} or self.feature_recipe != RECIPE:
-            raise ValueError("only explicit A0/A1 parent-mean engineering recipe; A2/A3 not implemented")
+        if self.variant not in {"A0", "A1", "A2", "A3"} or self.feature_recipe != RECIPE:
+            raise ValueError("unknown variant or parent-mean engineering recipe")
+        if self.gate_feature_recipe != (GATE_RECIPE if self.variant == "A3" else None):
+            raise ValueError("A3 requires explicit engineering gate feature recipe; other variants have no gate")
         if self.history_scope != "effective_window" or self.weight_role != "engineering_only":
             raise ValueError("matched-window engineering scope only")
         if not isinstance(self.approval_reference, str) or not self.approval_reference.strip():
@@ -89,6 +93,8 @@ class GraphForwardDetails:
     hidden: torch.Tensor | None
     base_logits: torch.Tensor | None
     augmented_logits: torch.Tensor | None
+    gate_values: torch.Tensor | None = None
+    confidence_mass: tuple[float, ...] = ()
 
 
 def _scope(config, shard, encoding, graph):
@@ -124,15 +130,41 @@ def _source_inventory(config):
     return {p.relative_to(PROJECT_ROOT).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
 
 
-def _binding(config, bank, encoding, graph, sources):
+def _binding(config, bank, encoding, graph, sources, confidence, gate_feature_recipe):
     return identity_hash({"engineering_bank": bank.identity, "encoding": encoding.identity,
                           "graph": asdict(graph), "inference_recipe": inference_recipe(config),
-                          "feature_recipe": RECIPE,"source_identity":identity_hash(sources)})
+                          "feature_recipe": RECIPE, "confidence": confidence.identity,
+                          "gate_feature_recipe": gate_feature_recipe,"source_identity":identity_hash(sources)})
 
 
 def _confidence(graph):
     return EdgeConfidence("fixed_uniform",tuple((p,c,1.) for p,c in graph.edges),
                           identity_hash({"kind":"declared_fixed_graph","graph":asdict(graph),"recipe":RECIPE}))
+
+
+def _checked_confidence(graph, confidence):
+    confidence = _confidence(graph) if confidence is None else confidence
+    if (type(confidence) is not EdgeConfidence or confidence.kind == "oracle_label"
+            or {(p,c) for p,c,_ in confidence.values} != set(graph.edges)):
+        raise ValueError("explicit nonoracle confidence must cover exactly the graph edges")
+    return confidence
+
+
+def gate_features(evidence: PreparedGraphContext) -> tuple[float, float, float, float]:
+    """Engineering recipe, chưa được chọn làm phương pháp nghiên cứu.
+
+S/(1+S), mean(c), population variance(c), observed-parent fraction. S là tổng
+support trong effective prefix; các thống kê confidence dùng ALL declared
+parents của query, kể cả chưa quan sát. Không label hiện tại/latent/oracle.
+"""
+    parents = evidence.parents
+    if not parents:
+        return (0., 0., 0., 0.)
+    support = sum(p.support for p in parents)
+    mean = sum(p.confidence for p in parents) / len(parents)
+    variance = sum((p.confidence - mean)**2 for p in parents) / len(parents)
+    return (support / (1 + support), mean, variance,
+            sum(p.support > 0 for p in parents) / len(parents))
 
 
 def _payload(base, contexts, windows, binding, unseen):
@@ -150,13 +182,18 @@ def _payload(base, contexts, windows, binding, unseen):
 
 @_cpu
 def prepare_graph_batch(shard: SimulatorShard, encoding: SimulatorEncoding, *, config: AKTConfig,
-                        graph: PrerequisiteGraph, window_ids: tuple[str, ...] | None = None) -> GraphAKTBatch:
+                        graph: PrerequisiteGraph, window_ids: tuple[str, ...] | None = None,
+                        confidence: EdgeConfidence | None = None,
+                        gate_feature_recipe: str | None = None) -> GraphAKTBatch:
     """Build only from role-bound full observable prefixes, never re-anchor slices.
 
 Current/future outcomes may exist in a source trajectory; they are never passed
 to the message module. Native qa uses existing causal collator/masking unchanged.
 """
     _scope(config, shard, encoding, graph)
+    if gate_feature_recipe not in (None, GATE_RECIPE):
+        raise ValueError("unknown gate feature recipe")
+    confidence = _checked_confidence(graph, confidence)
     sources = _source_inventory(config)
     entries = tuple(iter_simulator_windows(shard, encoding, context=config.context, target_block=config.target_block, training=False))
     unseen = tuple((e.learner_id, e.query.source_row, e.global_rank) for e in entries if isinstance(e, SimulatorUnseenQuery))
@@ -169,7 +206,6 @@ to the message module. Native qa uses existing causal collator/masking unchanged
     if not 1 <= len(known) <= min(4, config.batch_size):
         raise ValueError("select 1..batch_size known windows; OOV never rescued by graph")
     base = collate_windows(known, n_items=len(encoding.support), device="cpu")
-    confidence = _confidence(graph)
     trajectories = {t.learner_id:t for t in shard.trajectories}
     contexts = []
     width = base.q_data.shape[1]
@@ -190,14 +226,14 @@ to the message module. Native qa uses existing causal collator/masking unchanged
         contexts.append(tuple(row))
     contexts = tuple(contexts)
     windows = tuple(w.window_id for w in known)
-    binding = _binding(config,shard.bank,encoding,graph,sources)
+    binding = _binding(config,shard.bank,encoding,graph,sources,confidence,gate_feature_recipe)
     if _source_inventory(config)!=sources:
         raise ValueError("source drift during graph batch preparation")
     return GraphAKTBatch(base,contexts,binding,windows,_payload(base,contexts,windows,binding,unseen),unseen,identity_hash(sources))
 
 
 class GraphAKTPrototype(nn.Module):
-    """Fresh native backbone + caller trainable one-feature A1 branch.
+    """Fresh native backbone + caller trainable observed-parent branch.
 
 No checkpoint import, fit/step/train_epoch integration or selected-model certificate.
 Source/metadata binding detects accidental drift, not a hostile in-process caller.
@@ -205,25 +241,37 @@ Source/metadata binding detects accidental drift, not a hostile in-process calle
     @_cpu
     def __init__(self, *, config: AKTConfig, train: SimulatorShard, encoding: SimulatorEncoding,
                  graph: PrerequisiteGraph, spec: GraphPrototypeSpec,
-                 message_module: nn.Module | None, readout: nn.Parameter | None):
+                 message_module: nn.Module | None, readout: nn.Parameter | None,
+                 confidence: EdgeConfidence | None = None, gate_module: nn.Module | None = None):
         super().__init__()
         _scope(config,train,encoding,graph)
         if train.role != "train" or type(spec) is not GraphPrototypeSpec:
             raise ValueError("fresh train-bound engineering prototype required")
+        if spec.variant in {"A2", "A3"} and confidence is None:
+            raise ValueError("A2/A3 require caller-explicit confidence and provenance")
+        confidence = _checked_confidence(graph, confidence)
+        if spec.variant in {"A0", "A1"} and confidence.kind != "fixed_uniform":
+            raise ValueError("A0/A1 require fixed-uniform confidence")
+        if (spec.variant == "A3") != isinstance(gate_module, nn.Module):
+            raise ValueError("only A3 requires a caller-owned trainable gate module")
+        if spec.variant != "A3" and gate_module is not None:
+            raise ValueError("only A3 may register a gate")
         self.config,self.spec = config,spec
         self.sources = _source_inventory(config)
         self.source_identity_sha256 = identity_hash(self.sources)
-        self.binding = _binding(config,train.bank,encoding,graph,self.sources)
+        self.binding = _binding(config,train.bank,encoding,graph,self.sources,confidence,spec.gate_feature_recipe)
         self.domain = identity_hash(train.bank.identity)
         self.vocabulary = identity_hash(sorted(item for item,_ in encoding.support))
         self.graph_sha256 = identity_hash(asdict(graph))
-        self.confidence_sha256 = _confidence(graph).identity
+        self.confidence_sha256 = confidence.identity
+        self.confidence_kind = confidence.kind
+        self.confidence = confidence
         self.items = tuple(item for item,_ in encoding.support)
         self.recipe = inference_recipe(config)
         if spec.variant=="A0" and (message_module is not None or readout is not None):
             raise ValueError("A0 requires no message module/readout")
-        self.message_module,self.readout = message_module,readout
-        if spec.variant == "A1":
+        self.message_module,self.readout,self.gate_module = message_module,readout,gate_module
+        if spec.variant != "A0":
             if not isinstance(message_module,nn.Module) or not isinstance(readout,nn.Parameter) or readout.ndim != 1 or not 1 <= readout.numel() <= 32:
                 raise ValueError("explicit trainable module + 1D readout width1..32 required")
             params = tuple(message_module.parameters())+(readout,)
@@ -235,6 +283,14 @@ Source/metadata binding detects accidental drift, not a hostile in-process calle
                 raise ValueError("stateless message module required; no running buffers")
             if any(p.device.type != "cpu" or p.dtype != torch.float32 or not p.requires_grad or not torch.isfinite(p).all() for p in params):
                 raise ValueError("CPU FP32 finite trainable branch parameters required")
+            if gate_module is not None:
+                gate_params = tuple(gate_module.parameters())
+                if (not gate_params or sum(p.numel() for p in (*params,*gate_params)) > 4096
+                        or tuple(gate_module.buffers())
+                        or any(isinstance(m,nn.Dropout) and m.p != 0 for m in gate_module.modules())
+                        or any(p.device.type != "cpu" or p.dtype != torch.float32 or not p.requires_grad
+                               or not torch.isfinite(p).all() for p in gate_params)):
+                    raise ValueError("tiny stateless dropout0 CPU FP32 finite trainable gate required")
         self.native = AKTAdapter(config,encoding.exercise_encoding()).native
         if _source_inventory(config)!=self.sources:
             raise ValueError("source drift during graph prototype construction")
@@ -272,9 +328,8 @@ Source/metadata binding detects accidental drift, not a hostile in-process calle
                         or e.query.source_row!=query.source_row or query.source_row!=int(batch.base.source_rows[b,local])
                         or e.query.item_id!=self.items[int(q[b,local])-1] or query.window_id!=batch.window_ids[b]
                         or not 0<=query.global_rank<12
-                        or e.confidence_kind!="fixed_uniform" or not e.target_fitted
-                        or any(p.confidence!=1 for p in e.parents)):
-                    raise ValueError("A1 nonoracle fixed confidence/vocabulary scope mismatch")
+                        or e.confidence_kind!=self.confidence_kind or not e.target_fitted):
+                    raise ValueError("nonoracle confidence/vocabulary scope mismatch")
 
     def _checked_result(self,result):
         if _source_inventory(self.config)!=self.sources:
@@ -304,29 +359,39 @@ Source/metadata binding detects accidental drift, not a hostile in-process calle
                 or not torch.isin(targets,torch.tensor([-1.,0.,1.])).all()
                 or torch.any((targets>=0)&~mask)):
             raise ValueError("loss labels/mask invalid; labels are not message features")
-        active=[bool(query is not None and any(p.support>0 for p in query.evidence.parents))
-                for row in batch.contexts for query in row]
+        mass=tuple(sum(p.confidence for p in query.evidence.parents if p.support>0) if query is not None else 0.
+                   for row in batch.contexts for query in row)
+        active=[m>0 for m in mass]
         if self.spec.variant=="A0" or not enabled or not any(active):
             native_result=self.native(q,qa,targets)
-            return self._checked_result(GraphForwardDetails(native_result,native_result[1],torch.zeros(q.numel(),dtype=torch.bool),None,None,None))
+            return self._checked_result(GraphForwardDetails(native_result,native_result[1],torch.zeros(q.numel(),dtype=torch.bool),None,None,None,None,mass))
         hidden,z=self._features(q,qa)
         base_p=torch.sigmoid(z)
-        augmented=[]
+        augmented=[]; gates=[]; applied_flags=[]
         for index,query in enumerate(query for row in batch.contexts for query in row):
             if not active[index]:
-                augmented.append(z[index]);continue
+                augmented.append(z[index]);gates.append(z.new_zeros(()));applied_flags.append(False);continue
             evidence=query.evidence
             features=z.new_tensor([[p.mean_observed_correctness if p.support else 0.] for p in evidence.parents])
             messages=self.message_module(features)
+            gate=z.new_tensor(1.)
+            if self.spec.variant == "A3":
+                gate_logit=self.gate_module(z.new_tensor([gate_features(evidence)]))
+                if (not isinstance(gate_logit,torch.Tensor) or gate_logit.shape!=(1,1)
+                        or gate_logit.device!=z.device or gate_logit.dtype!=z.dtype
+                        or not torch.isfinite(gate_logit).all()):
+                    raise ValueError("gate must return finite FP32 CPU logits[1,1]")
+                gate=torch.sigmoid(gate_logit.reshape(()))
             result=apply_graph_residual(z[index],evidence=evidence,binding=evidence.binding,
-                edge_messages=messages,readout=self.readout,gate=z.new_tensor(1.))
+                edge_messages=messages,readout=self.readout,gate=gate)
             augmented.append(result.logit)
+            gates.append(gate);applied_flags.append(result.applied)
         augmented=torch.stack(augmented)
-        applied=torch.tensor(active,dtype=torch.bool,device="cpu")
+        applied=torch.tensor(applied_flags,dtype=torch.bool,device="cpu")
         probabilities=torch.where(applied,torch.sigmoid(augmented),base_p)
         labels=targets.reshape(-1);loss_mask=labels>-.9
         loss=nn.BCEWithLogitsLoss(reduction="none")(augmented[loss_mask],labels[loss_mask].float()).sum()+0.
-        return self._checked_result(GraphForwardDetails((loss,probabilities,loss_mask.sum()),base_p,applied,hidden,z,augmented))
+        return self._checked_result(GraphForwardDetails((loss,probabilities,loss_mask.sum()),base_p,applied,hidden,z,augmented,torch.stack(gates),mass))
 
     def forward(self,batch,targets=None,*,enabled=True):
         return self.forward_details(batch,targets,enabled=enabled).native_result
