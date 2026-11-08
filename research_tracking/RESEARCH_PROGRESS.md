@@ -1,5 +1,14 @@
 # Tiến độ nghiên cứu
 
+## Bổ sung08/11 — hai deliverables đã hoàn tất theo phạm vi
+
+| Task/commit | Kết quả source-bound | Giới hạn còn giữ |
+|---|---|---|
+| GKT02 — `6035262` | [Recurrent candidate](reports/gkt_recurrent_candidate_readiness_20261108.md):88finalCPUtests/0optimizer, [47outputs](runs/gkt-recurrent-candidate-engineering-20261108-01/README.md); source recurrent SHA `510195d71c1ddb743f747e78d7d874c04bb809931c5ec24ae6fe907fe53ec072`, manifest `b00ca32d5c4385da9a84d3442b82638ec344a64cb191b91b1b02c5ab513d09ac`. | Hoàn tất engineering candidate sau GKT01; chưa trainer/fitted adapter/learned graph, author parity hoặc final S05/required baseline. |
+| WRITE02 — `d30dafe` | [Tiểu mục diagnostic results](reports/THESIS_RQ12_DIAGNOSTIC_RESULTS_DRAFT_20261108.md), [source map](reports/THESIS_RQ12_DIAGNOSTIC_RESULTS_DRAFT_20261108.sources.json):12claims/53JSONPointers/14links, reviewPASS+3P3clarifications. MD `da64fbae222b9d116ebdc41933f02912ed04385eac43491d3a438b4f649caa8e`; JSON `04e879674243dbdcbc8ba69423819662509bf8bdd7039b42d0fac92a69b50fbf`. | Hoàn tất bản thảo sau WRITE01; stored pilot/descriptive evidence, không final RQ1/RQ2 hoặc causal efficacy. |
+
+TASKS ghi GKT02 phụ thuộc GKT01; WRITE02 phụ thuộc WRITE01/RQDIAG03. Các snapshots cũ ghi GKT chỉ kernel vẫn là lịch sử trước candidate này. Không cập nhật verdict runtime/Linux Gate đang chạy từ hai deliverables trên; STATE/LOG và kết quả vận hành do parent đối chiếu riêng.
+
 ## Mới nhất08/11 — Windows Gate22 và audit existing Linux CPU venv
 
 **Windows Gate22 hiện hành768PASS/0fail/error/skip,477.7091635s≤540s**; [report](../artifacts/akt/preflight/gate2-evidence-20261108-linux-tooling-22.json) SHA`f2f702408adb2162b0102aaca80eac1b1acd59ebec56a2fb77d8b1a358b276cd`. Run-id `linux-tooling` chỉ mục đích sửa tooling, không phải actual Linux fullGate. Các heading “mới nhất/current” Gate21 hoặc pending archive phía dưới là snapshots trước cập nhật này; giữ nguyên lịch sử.

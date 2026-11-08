@@ -2339,6 +2339,83 @@
       "authorization_requirements": "Safe engineering đã được user cho phép; không cấp scientific/cloud allocation.",
       "status": "COMPLETED_ENGINEERING_ONLY",
       "blockers": []
+    },
+    {
+      "id": "GKT02",
+      "research_objective": "Recurrent GKT candidate theo engineering recipe; chưa full required baseline",
+      "rq": [
+        "RQ3 supporting comparator"
+      ],
+      "workstream": "model_core_readiness",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "estimated_effort": "Đã hoàn tất deliverable08/11; không xếp lịch nghiên cứu mới",
+      "compute_cost_category": "CPU local/bằng chứng đã lưu; không paidGPU",
+      "authorization_requirements": "User local engineering/writing loop; không chấp thuận methodology, data/cloud allocation hoặc final selection.",
+      "dependencies": [
+        "GKT01"
+      ],
+      "required_inputs": "Frozen GKT kernel, reviewed recurrence specification, handmade observable toy fixtures",
+      "files_components": "src/knowledge_tracing/gkt/recurrent.py;tests/gkt/test_recurrent.py",
+      "implementation_objective": "Registered recurrent network/state API với explicit recipe, causal predict-before-observe, graph/state binding và full backward paths; không trainer/fit.",
+      "acceptance_criteria": "88final CPUtests,0optimizer;47immutable outputs verified; giữ historical86/87 và scoped review.",
+      "verification_steps": "Đối chiếu manifest47SHA, final88receipt và current source hashes; không rerun model/test.",
+      "required_artifacts": [
+        "research_tracking/reports/gkt_recurrent_candidate_readiness_20261108.md",
+        "research_tracking/runs/gkt-recurrent-candidate-engineering-20261108-01/manifest.json"
+      ],
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": [],
+      "evidence_refs": [
+        "research_tracking/runs/gkt-recurrent-candidate-engineering-20261108-01/README.md"
+      ],
+      "verified_targeted_tests": 88,
+      "verified_bundle_outputs": 47,
+      "completion_commit": "6035262",
+      "source_sha256": {
+        "src/knowledge_tracing/gkt/recurrent.py": "510195d71c1ddb743f747e78d7d874c04bb809931c5ec24ae6fe907fe53ec072",
+        "tests/gkt/test_recurrent.py": "bb173f7dd9b7b8cf14dbe00dd5fc75097dc87c9f5a794d90e29fd670d26afdce"
+      },
+      "scientific_adoption_pending": "S04/S05: chưa exact author parity/final recipe, trainer, fitted inference/selection/refit, learned graph hoặc comparator efficacy/RQ completion."
+    },
+    {
+      "id": "WRITE02",
+      "research_objective": "Tiểu mục kết quả kiểm toán/chẩn đoán pilot RQ1–RQ2 có claim-source map",
+      "rq": [
+        "RQ1",
+        "RQ2"
+      ],
+      "workstream": "thesis_draft",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "estimated_effort": "Đã hoàn tất deliverable08/11; không xếp lịch nghiên cứu mới",
+      "compute_cost_category": "CPU local/bằng chứng đã lưu; không paidGPU",
+      "authorization_requirements": "User local engineering/writing loop; không chấp thuận methodology, data/cloud allocation hoặc final selection.",
+      "dependencies": [
+        "WRITE01",
+        "RQDIAG03"
+      ],
+      "required_inputs": "Immutable RQ1 transition/score-vector, RQ2 conditions/control/common-population và source-trap evidence đã lưu",
+      "files_components": "research_tracking/reports/THESIS_RQ12_DIAGNOSTIC_RESULTS_DRAFT_20261108.md;research_tracking/reports/THESIS_RQ12_DIAGNOSTIC_RESULTS_DRAFT_20261108.sources.json",
+      "implementation_objective": "Prose tiếng Việt sẵn studentedit: đơn vị/mẫu số, negativePG, preview/served,3traps, DiD/causal limits và pending evidence.",
+      "acceptance_criteria": "12claims/53JSONPointers/14links verified; parent+independentreviewPASS,3P3clarifications; numerical tables/claim values không đổi.",
+      "verification_steps": "Source binding và validation05 SHA/link/metadata checks; không metric reanalysis/model/simulator/data query.",
+      "required_artifacts": [
+        "research_tracking/reports/THESIS_RQ12_DIAGNOSTIC_RESULTS_DRAFT_20261108.md",
+        "research_tracking/reports/THESIS_RQ12_DIAGNOSTIC_RESULTS_DRAFT_20261108.sources.json",
+        "artifacts/akt/local-tests/thesis-rq12-draft-20261108-01/validation05.json"
+      ],
+      "status": "COMPLETED",
+      "completion_scope": "Bản thảo tiểu mục chẩn đoán/pilot, không hoàn tất luận văn hoặc RQ1/RQ2",
+      "blockers": [],
+      "completion_commit": "d30dafe",
+      "source_sha256": {
+        "research_tracking/reports/THESIS_RQ12_DIAGNOSTIC_RESULTS_DRAFT_20261108.md": "da64fbae222b9d116ebdc41933f02912ed04385eac43491d3a438b4f649caa8e",
+        "research_tracking/reports/THESIS_RQ12_DIAGNOSTIC_RESULTS_DRAFT_20261108.sources.json": "04e879674243dbdcbc8ba69423819662509bf8bdd7039b42d0fac92a69b50fbf"
+      },
+      "scientific_adoption_pending": "Final estimands/calibration/mastery/interventions/inference và independent evaluation; không final RQ efficacy hoặc causal ability conclusion."
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

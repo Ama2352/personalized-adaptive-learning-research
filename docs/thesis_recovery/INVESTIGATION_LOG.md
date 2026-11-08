@@ -283,3 +283,17 @@ Audit riêng đạt23,361957s,1child,44distributions và8module origins trongven
 Source-only kit cục bộ980252bytes/161payloadfiles/120Gatepaths đúng nguyên bytesGate22, ZIPb6707cfd0139898a22dd04db9095d01622c1df9b7061f05f8579ecb4ab30d233; extractor đã review không ghi đè/không chạy code. Bốn requestchunk chỉ được chuẩn bị: bridge98978 đóng theoTTL trước dispatch, chưa upload hoặc cloneupstream/chạyLinuxGate. Không giả source checkout bằngWindowsGate/Git metadata.
 
 Đã dừng các startup local chưa ready, thử import SDK riêng RC0/15,793s; bridge localhost khởi chạy thành công ở quyền thực thi đã qua automaticreview, session55463/port51539, browser_open=true. Đã hỏi một lần người dùng xác nhậnMCP ởtabmới, giữCPU. Chưa có remote action mới; phảiprobe runtime tồn tại trước dùng tiếp, không tự reinstall44gói. Không đưa token/nonce vào state.
+
+### 08/11 — Source Linux thực tế, candidate GKT và khác biệt hash newline
+
+Goal turn trước là PROGRESS: core/tooling đãcommit và CPUaudit córawproof. Sau khi userxácnhậnMCP, probe readonly cho thấyROOT/.venv44gói/auditdd3b18c2… còn nguyên, khôngreinstall. Đãupload4chunks, materialize161sourcefiles, nhận rawreceipt và đối chiếu toàn161SHA/120Gatepaths; receiptdebb7590e8fd1247bcbdf7a479c2ea204b7d8625414c989b0a4bab5c1e831c3b. Source-onlyextractor15testsPASS, preserve2Windowslongpathfixtureerrors vàcumulative23,80s/30s; không thayhelper/ZIP.
+
+Upstreamcheckout01 chạy7Gitcommandsclone/sparse/fetchPIN/checkout/status đềuexit0 trong1,502s; trueverify_upstreamđãtrảidentityvalid trướccomparisonwholeWindowsidentityfail. ControllerFAILED được giữ. Localread-onlyGitshowPIN:3files chứng minh WindowsCRLF→LFexactrawGitblob vàaktASTequal, tree904863502337ef2eefd1769d14836b62e3c3804a/commit01b7…/origin khôngđổi. LinuxrawaktSHAace9e4486ea6d8f8c52310a8ddf27212022136eda719c12d8204fab1bfcfdc67 khácphysicalWindowsbe2788c2…. Đây là khácprofilebytecheckout, không đượcnhầm thayarchitecture hoặc bỏ kiểm source. Auditriêng theoexpectedGitblob đượcderivedtừlocalPIN đangchuẩnbị; khôngreclone hoặc sửaFAILED/sourcefiles.
+
+GKT recurrent engineeringcandidate được triểnkhai theo conventionnêurõ, source/core gốckhôngđổi. Reviewer phát hiệnDenseconstructorambient-deviceP2, đãfixCPUcontext vàregression. Actualsuites86/87/88PASS đượcgiữ, tổng21,444s/120s,0optimizer,26parameterpaths finite/nonzerograd. Commit6035262/raw47GitoutputSHAverified. Không authorparity, learnedgraph/trainer/fittedbaseline hoặc S05adoption. Bảnthảo resultsRQ1/RQ2 có53pointers/12claims đãreview, đangchỉnh3câuP3 trướccommit; khôngthêmthínghiệm/suy luận thốngkê.
+
+### 08/11 — LF audit và native Linux runtime02 có raw proof
+
+Audit riêng theo Git blob LF đạt0,284787s; raw result1f116d3d… và cả14text files FAILEDcheckout/acceptedLF đã export, mọi copySHA trước/sau khớp. FAILEDcheckout01 vẫn giữ nguyên. Native runtime02 chạy CPU đạt8,189495s; result874336b8… và manifest05630c55…, raw5files/24976bytes export verified. Driver02 bổ sung Git transport/config/credential isolation sau independentreviewP2;8mock-env checks PASS. Driver01/request01 chưa dispatch và giữ nguyên, không có failed runtime01 giả.
+
+Đã dispatch Linux Gate23 trên CPU: nguyên768 software tests, native600s/outer630s; đang chạy, chưa acceptance. Không realdata/Holdout/GPU/Modal. Bản thảo results RQ1/RQ2 đãcommitd30dafe:2rawGit files,16input hashes,53JSONpointers/14links PASS; không newmetrics. RQ1 observer reproduction được parent cho phép trong cumulative120s, exactlegacyparity hoặc STOP; thông tin query mới chỉ thuộc reproduction, không chép ngược lịch sử.

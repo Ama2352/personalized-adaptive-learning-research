@@ -84,3 +84,11 @@ rq1-score-vector-20261108-01 COMPLETED/7outputs verified. Đọc lại traces v�
 **Linux future install chưa chạy:** theo [addendum acceptance](reports/akt_linux_dependency_resolution_20261108_addendum.md), có thể cài trực tiếp44URLs của [candidate lock](runs/akt-linux-dependency-resolution-20261108-01/candidate-linux-cuda.lock.txt) bằng pip `--require-hashes` trong isolated target theo stage/budget riêng; wheelhouse là tùy chọn lưu riêng. Archive resolution và wording future-step trong report không là installation, GPU hoặc thí nghiệm model mới. Site unchanged chỉ có probe/danh sách tên theo source, không full filesystem byte attestation.
 
 **Errata demo93outputs:** số12/120“nodes” trong [report visualQA](reports/demo_readiness_20261108.md) là timeline entries `#route li`; domain28concepts. [Bundle đã đóng](runs/demo-readonly-engineering-20261108-01/README.md) không sửa; không diễn giải preview timeline thành graph-node count hoặc served actions.
+
+## GKT02 recurrent candidate08/11 — chỉ engineering recipe
+
+| Hồ sơ | Trạng thái và kiểm đã có | Evidence/source và giới hạn |
+|---|---|---|
+| `gkt-recurrent-candidate-engineering-20261108-01`, commit `6035262` | ĐÃ ĐÓNG, **88finalCPUtests/47outputs**,0optimizer; cumulative controller **21,4443s** cho ba actual trials86/87/88. | [Bundle](runs/gkt-recurrent-candidate-engineering-20261108-01/README.md), [manifest](runs/gkt-recurrent-candidate-engineering-20261108-01/manifest.json) SHA `b00ca32d5c4385da9a84d3442b82638ec344a64cb191b91b1b02c5ab513d09ac`, [report](reports/gkt_recurrent_candidate_readiness_20261108.md). Recipe `gkt_static_recurrent_convention_v1`, engineering convention/unfitted. |
+
+Mốc này bổ sung kernel GKT01; giữ các trial/source versions riêng, không cộng chúng thành samples/thí nghiệm efficacy độc lập. Chưa exact author parity/final S05 adoption, trainer/fitted adapter/learned graph hoặc full required baseline; không RQ completion/GPU/realdata/Holdout. WRITE02 không thêm registry/ledger entry vì là bản thảo viết từ bằng chứng đã lưu, không experiment mới.
