@@ -777,3 +777,8 @@ G10closed48/test5bd/reportc017 commit5e1eb40,51rawGitblobsverified; outputinvent
 
 - GRAPH19 mới ở source preparation, chưa thực thi. Root yêu cầu completeE2 ở cảproducer/consumer thay một activepartialbatch: cần chứng minh fullsample/order không drop/dup sau boundary, đúng acceptance gốcGRAPH11.
 - Kế hoạch finite mới6updates/144targetexposures/8forward, vẫn2constructors1save1load, whole150s. Counter cũ4 chưa chạy, không đổi hay che kết quả. Không sửa model/protocol/hyperparameters.
+
+### 09/11 — bản thảo diễn giải cơ chế RQ1
+
+- Viết THESIS_RQ1_MECHANISMS_DRAFT_20261109.md theo mạch ngữ cảnh→đơn vị→hai cổngM→lọc/xếp hạng→hai nhóm22khác nhau→giới hạn. Dùng full–empty, không trộn baseline graph-free của bảng08/11.
+- Source/numeric reconciliation kiểm30240predicatepairs, đủ1080M/R/C/B/CIDsignatures vàquery-overlap8cells,6liên kết; không modelcall/data mới. T23 vẫn IN_PROGRESS, bản thảo không được gắn finalRQ/thesis.

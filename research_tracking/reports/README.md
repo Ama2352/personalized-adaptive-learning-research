@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**Bản thảo luận văn — RQ1:** [diễn giải cơ chế ngày 09/11](THESIS_RQ1_MECHANISMS_DRAFT_20261109.md), [đối chiếu số và nguồn](THESIS_RQ1_MECHANISMS_DRAFT_20261109.sources.json). Đi từ hai paper đến hai điều kiện mastery, bộ lọc ứng viên và readout của query; giữ riêng các kết luận chưa có, không thay bản thảo ngày 08/11 hoặc nghiệm thu toàn RQ1.
+
 **Main selected-only — thứ tự phase:** [contract14](cgakt_main_stage_contract_20261109.md), [bundle24](../runs/cgakt-main-stage-contract-engineering-20261109-01/README.md). Có raw-selection validation mỗi epoch, final best export riêng; refit/calibration không được mở bằng metadata. Chưa actual producer hoặc execution authority.
 
 **CG-AKT checkpoint CPU:** [lưu/restore epoch](cgakt_research_checkpoint_readiness_20261109.md), [bundle119](../runs/cgakt-research-checkpoint-engineering-20261109-01/README.md). Native16 đạt, model/Adam/RNG/modes và một bước tiếp diễn khớp trong cùng process. Giữ cả hai failure trước; chưa fresh-process/lifecycle resume, fitted research hoặc GPU readiness.
