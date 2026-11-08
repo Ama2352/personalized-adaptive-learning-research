@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**CG-AKT Adam09/11:** [actual3updates](cgakt_actual_adam_20261109.md),1nativecase accepted02 +pure5;48outputs giữ01rejected dù3updates đã xảy ra. Tổng6updates acrossattempts, khôngresearchfit/epoch/checkpoint/CUDA.
+
 **Đo cost context09/11:** [API for_windows](cgakt_context_api_cost_20261109.md), completeTRAIN8010080targets/144windows/144ABBAcalls. Fullpasses20,17/20,44s, fast1,10/1,23s; chỉ lookupAPI, không epoch/NN/GPUthroughput. Giữ failure01, regression2 và accepted02 trong45outputs.
 
 **CG-AKT hotpath09/11:** [135pure và25native cases](cgakt_hotpath_integrity_20261109.md), bundle41outputs;0full-cache serializer ở batch hotregions, vẫn explicitfullboundary. Không actualAdam/checkpoint/corpusfit/CUDA/throughput.

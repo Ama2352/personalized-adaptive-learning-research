@@ -1,0 +1,3188 @@
+{
+  "reservation": {
+    "kind": "SYNTHETIC_ADAM_ENGINEERING_NOT_RESEARCH_FIT",
+    "planned_steps": 3,
+    "planned_targets": 18,
+    "adapter_step_wrapper_returns": 3,
+    "rollback": false,
+    "native_work_seconds_cap": 60.0,
+    "planned_inventory": {
+      "adapter_constructors": 1,
+      "backbone_constructors": 1,
+      "wrapper_constructors": 1,
+      "gate_constructors": 1,
+      "adam_constructors": 1,
+      "architecture_forwards": 3,
+      "logical_backwards": 3,
+      "clip_calls": 3,
+      "adam_steps": 3,
+      "target_rows": 18
+    }
+  },
+  "attempts": [
+    {
+      "ordinal": 1,
+      "targets_reserved": 6,
+      "status": "STEP_WRAPPER_RETURNED",
+      "rollback": false
+    },
+    {
+      "ordinal": 2,
+      "targets_reserved": 6,
+      "status": "STEP_WRAPPER_RETURNED",
+      "rollback": false
+    },
+    {
+      "ordinal": 3,
+      "targets_reserved": 6,
+      "status": "STEP_WRAPPER_RETURNED",
+      "rollback": false
+    }
+  ],
+  "ledger": [
+    {
+      "role": "synthetic_optimizer_engineering_not_fitted",
+      "ordinal": 1,
+      "phase": "inactive_first",
+      "valid_targets": 6,
+      "total_targets": 6,
+      "stats": {
+        "stepped": true,
+        "valid_targets": 6,
+        "loss_sum": 4.162174224853516,
+        "mean_loss": 0.6936957240104675,
+        "pre_clip_norm": 1.8632642030715942,
+        "post_clip_norm": 1.0,
+        "parameter_updated": true,
+        "forward_seconds": 0.01965919998474419,
+        "backward_seconds": 0.010858399968128651,
+        "gradient_clip_seconds": 0.08127460000105202,
+        "optimizer_seconds": 0.04128329997183755
+      },
+      "gradients": {
+        "alpha": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.q_embed.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.01676714300070208
+        },
+        "backbone.qa_embed.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0027805854776994728
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.gammas": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 9.366231173592724e-07
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.03210591434091394
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0016530240649037366
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0001682319918390388
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 6.009963521390327e-06
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.054527252524644396
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0027369718931192864
+        },
+        "backbone.model.blocks_1.0.layer_norm1.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0038568768365320892
+        },
+        "backbone.model.blocks_1.0.layer_norm1.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.004340770678081938
+        },
+        "backbone.model.blocks_1.0.linear1.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.024451627017282065
+        },
+        "backbone.model.blocks_1.0.linear1.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0016238660828850708
+        },
+        "backbone.model.blocks_1.0.linear2.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.052986236557062735
+        },
+        "backbone.model.blocks_1.0.linear2.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.004227272626154086
+        },
+        "backbone.model.blocks_1.0.layer_norm2.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0036788870538388397
+        },
+        "backbone.model.blocks_1.0.layer_norm2.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.004385000510929465
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.gammas": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 6.295070770250875e-05
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.08684776582972652
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.00416045102249708
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.002559489124901787
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 8.145744296543423e-05
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.14398095793961704
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.007221964033874724
+        },
+        "backbone.model.blocks_2.0.layer_norm1.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.010133278940050859
+        },
+        "backbone.model.blocks_2.0.layer_norm1.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.008215887037911665
+        },
+        "backbone.model.blocks_2.0.linear1.weight": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.0.linear1.bias": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.0.linear2.weight": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.0.linear2.bias": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.0.layer_norm2.weight": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.0.layer_norm2.bias": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.gammas": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.00015352327726123898
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.061047407353831844
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0042320280057990935
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.007431870578714336
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0001947011886588104
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.1048439760293764
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.008440404072842815
+        },
+        "backbone.model.blocks_2.1.layer_norm1.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.010688578721794342
+        },
+        "backbone.model.blocks_2.1.layer_norm1.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.009231409638609207
+        },
+        "backbone.model.blocks_2.1.linear1.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.06874427211796347
+        },
+        "backbone.model.blocks_2.1.linear1.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.004042332617191835
+        },
+        "backbone.model.blocks_2.1.linear2.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.1352345958008938
+        },
+        "backbone.model.blocks_2.1.linear2.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.009219283227151421
+        },
+        "backbone.model.blocks_2.1.layer_norm2.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.010665850429098301
+        },
+        "backbone.model.blocks_2.1.layer_norm2.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.009273689303983
+        },
+        "backbone.out.0.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.6324382301951524
+        },
+        "backbone.out.0.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.02224648141033619
+        },
+        "backbone.out.3.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.6360471794321884
+        },
+        "backbone.out.3.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.04179097298563148
+        },
+        "backbone.out.6.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.34422585798238264
+        },
+        "backbone.out.6.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0066178529523313046
+        },
+        "gate.weight": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "gate.bias": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        }
+      },
+      "state_step_before": {
+        "alpha": null,
+        "backbone.q_embed.weight": null,
+        "backbone.qa_embed.weight": null,
+        "backbone.model.blocks_1.0.masked_attn_head.gammas": null,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": null,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": null,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": null,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": null,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": null,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": null,
+        "backbone.model.blocks_1.0.layer_norm1.weight": null,
+        "backbone.model.blocks_1.0.layer_norm1.bias": null,
+        "backbone.model.blocks_1.0.linear1.weight": null,
+        "backbone.model.blocks_1.0.linear1.bias": null,
+        "backbone.model.blocks_1.0.linear2.weight": null,
+        "backbone.model.blocks_1.0.linear2.bias": null,
+        "backbone.model.blocks_1.0.layer_norm2.weight": null,
+        "backbone.model.blocks_1.0.layer_norm2.bias": null,
+        "backbone.model.blocks_2.0.masked_attn_head.gammas": null,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": null,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": null,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": null,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": null,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": null,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": null,
+        "backbone.model.blocks_2.0.layer_norm1.weight": null,
+        "backbone.model.blocks_2.0.layer_norm1.bias": null,
+        "backbone.model.blocks_2.0.linear1.weight": null,
+        "backbone.model.blocks_2.0.linear1.bias": null,
+        "backbone.model.blocks_2.0.linear2.weight": null,
+        "backbone.model.blocks_2.0.linear2.bias": null,
+        "backbone.model.blocks_2.0.layer_norm2.weight": null,
+        "backbone.model.blocks_2.0.layer_norm2.bias": null,
+        "backbone.model.blocks_2.1.masked_attn_head.gammas": null,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": null,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": null,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": null,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": null,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": null,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": null,
+        "backbone.model.blocks_2.1.layer_norm1.weight": null,
+        "backbone.model.blocks_2.1.layer_norm1.bias": null,
+        "backbone.model.blocks_2.1.linear1.weight": null,
+        "backbone.model.blocks_2.1.linear1.bias": null,
+        "backbone.model.blocks_2.1.linear2.weight": null,
+        "backbone.model.blocks_2.1.linear2.bias": null,
+        "backbone.model.blocks_2.1.layer_norm2.weight": null,
+        "backbone.model.blocks_2.1.layer_norm2.bias": null,
+        "backbone.out.0.weight": null,
+        "backbone.out.0.bias": null,
+        "backbone.out.3.weight": null,
+        "backbone.out.3.bias": null,
+        "backbone.out.6.weight": null,
+        "backbone.out.6.bias": null,
+        "gate.weight": null,
+        "gate.bias": null
+      },
+      "state_step_after": {
+        "alpha": null,
+        "backbone.q_embed.weight": 1,
+        "backbone.qa_embed.weight": 1,
+        "backbone.model.blocks_1.0.masked_attn_head.gammas": 1,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": 1,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": 1,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": 1,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": 1,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": 1,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": 1,
+        "backbone.model.blocks_1.0.layer_norm1.weight": 1,
+        "backbone.model.blocks_1.0.layer_norm1.bias": 1,
+        "backbone.model.blocks_1.0.linear1.weight": 1,
+        "backbone.model.blocks_1.0.linear1.bias": 1,
+        "backbone.model.blocks_1.0.linear2.weight": 1,
+        "backbone.model.blocks_1.0.linear2.bias": 1,
+        "backbone.model.blocks_1.0.layer_norm2.weight": 1,
+        "backbone.model.blocks_1.0.layer_norm2.bias": 1,
+        "backbone.model.blocks_2.0.masked_attn_head.gammas": 1,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": 1,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": 1,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": 1,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": 1,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": 1,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": 1,
+        "backbone.model.blocks_2.0.layer_norm1.weight": 1,
+        "backbone.model.blocks_2.0.layer_norm1.bias": 1,
+        "backbone.model.blocks_2.0.linear1.weight": null,
+        "backbone.model.blocks_2.0.linear1.bias": null,
+        "backbone.model.blocks_2.0.linear2.weight": null,
+        "backbone.model.blocks_2.0.linear2.bias": null,
+        "backbone.model.blocks_2.0.layer_norm2.weight": null,
+        "backbone.model.blocks_2.0.layer_norm2.bias": null,
+        "backbone.model.blocks_2.1.masked_attn_head.gammas": 1,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": 1,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": 1,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": 1,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": 1,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": 1,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": 1,
+        "backbone.model.blocks_2.1.layer_norm1.weight": 1,
+        "backbone.model.blocks_2.1.layer_norm1.bias": 1,
+        "backbone.model.blocks_2.1.linear1.weight": 1,
+        "backbone.model.blocks_2.1.linear1.bias": 1,
+        "backbone.model.blocks_2.1.linear2.weight": 1,
+        "backbone.model.blocks_2.1.linear2.bias": 1,
+        "backbone.model.blocks_2.1.layer_norm2.weight": 1,
+        "backbone.model.blocks_2.1.layer_norm2.bias": 1,
+        "backbone.out.0.weight": 1,
+        "backbone.out.0.bias": 1,
+        "backbone.out.3.weight": 1,
+        "backbone.out.3.bias": 1,
+        "backbone.out.6.weight": 1,
+        "backbone.out.6.bias": 1,
+        "gate.weight": null,
+        "gate.bias": null
+      },
+      "parameter_changed": {
+        "alpha": false,
+        "backbone.q_embed.weight": true,
+        "backbone.qa_embed.weight": true,
+        "backbone.model.blocks_1.0.masked_attn_head.gammas": true,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": true,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": true,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": true,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": true,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": true,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": true,
+        "backbone.model.blocks_1.0.layer_norm1.weight": true,
+        "backbone.model.blocks_1.0.layer_norm1.bias": true,
+        "backbone.model.blocks_1.0.linear1.weight": true,
+        "backbone.model.blocks_1.0.linear1.bias": true,
+        "backbone.model.blocks_1.0.linear2.weight": true,
+        "backbone.model.blocks_1.0.linear2.bias": true,
+        "backbone.model.blocks_1.0.layer_norm2.weight": true,
+        "backbone.model.blocks_1.0.layer_norm2.bias": true,
+        "backbone.model.blocks_2.0.masked_attn_head.gammas": true,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": true,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": true,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": true,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": true,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": true,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": true,
+        "backbone.model.blocks_2.0.layer_norm1.weight": true,
+        "backbone.model.blocks_2.0.layer_norm1.bias": true,
+        "backbone.model.blocks_2.0.linear1.weight": false,
+        "backbone.model.blocks_2.0.linear1.bias": false,
+        "backbone.model.blocks_2.0.linear2.weight": false,
+        "backbone.model.blocks_2.0.linear2.bias": false,
+        "backbone.model.blocks_2.0.layer_norm2.weight": false,
+        "backbone.model.blocks_2.0.layer_norm2.bias": false,
+        "backbone.model.blocks_2.1.masked_attn_head.gammas": true,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": true,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": true,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": true,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": true,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": true,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": true,
+        "backbone.model.blocks_2.1.layer_norm1.weight": true,
+        "backbone.model.blocks_2.1.layer_norm1.bias": true,
+        "backbone.model.blocks_2.1.linear1.weight": true,
+        "backbone.model.blocks_2.1.linear1.bias": true,
+        "backbone.model.blocks_2.1.linear2.weight": true,
+        "backbone.model.blocks_2.1.linear2.bias": true,
+        "backbone.model.blocks_2.1.layer_norm2.weight": true,
+        "backbone.model.blocks_2.1.layer_norm2.bias": true,
+        "backbone.out.0.weight": true,
+        "backbone.out.0.bias": true,
+        "backbone.out.3.weight": true,
+        "backbone.out.3.bias": true,
+        "backbone.out.6.weight": true,
+        "backbone.out.6.bias": true,
+        "gate.weight": false,
+        "gate.bias": false
+      },
+      "clip": {
+        "pre_norm": 1.8632642030715942,
+        "live_post_norm": 1.000001892634701,
+        "gradients_before_clip": {
+          "alpha": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.q_embed.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.03124163362839845
+          },
+          "backbone.qa_embed.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.005180968091382174
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 1.745177201881439e-06
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.05982183204559351
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.003080022187970694
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00031346081134955704
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 1.1198155714668009e-05
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.1015987306843294
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.005099704392519171
+          },
+          "backbone.model.blocks_1.0.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.007186384336783676
+          },
+          "backbone.model.blocks_1.0.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00808800681713796
+          },
+          "backbone.model.blocks_1.0.linear1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.04555986505018369
+          },
+          "backbone.model.blocks_1.0.linear1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.003025693123500808
+          },
+          "backbone.model.blocks_1.0.linear2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.09872740926173633
+          },
+          "backbone.model.blocks_1.0.linear2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00787652984173783
+          },
+          "backbone.model.blocks_1.0.layer_norm2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.006854742116415525
+          },
+          "backbone.model.blocks_1.0.layer_norm2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.008170418724753008
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00011729386052160035
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.16182041746960976
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.007752023474323095
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.004769006949650394
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00015177681628108304
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.26827470463057335
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.013456434099683468
+          },
+          "backbone.model.blocks_2.0.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.018880985523856083
+          },
+          "backbone.model.blocks_2.0.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.015308376181259572
+          },
+          "backbone.model.blocks_2.0.linear1.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear1.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear2.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear2.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.layer_norm2.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.layer_norm2.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0002860545801400591
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.11374750800341359
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.007885390399758472
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.013847545613300613
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00036277994436670965
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.19535212914676886
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0157267109283308
+          },
+          "backbone.model.blocks_2.1.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.019915656563323118
+          },
+          "backbone.model.blocks_2.1.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0172005641364074
+          },
+          "backbone.model.blocks_2.1.linear1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.12808880805999218
+          },
+          "backbone.model.blocks_2.1.linear1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.007531937591891082
+          },
+          "backbone.model.blocks_2.1.linear2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.25197791253184787
+          },
+          "backbone.model.blocks_2.1.linear2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.01717796925919971
+          },
+          "backbone.model.blocks_2.1.layer_norm2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.01987330769540542
+          },
+          "backbone.model.blocks_2.1.layer_norm2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.01727934223282464
+          },
+          "backbone.out.0.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 1.1784001283723764
+          },
+          "backbone.out.0.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.041451093947348916
+          },
+          "backbone.out.3.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 1.185124557870083
+          },
+          "backbone.out.3.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.07786766455428556
+          },
+          "backbone.out.6.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.6413840500682316
+          },
+          "backbone.out.6.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.012330815196037292
+          },
+          "gate.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "gate.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          }
+        },
+        "gradients_after_clip": {
+          "alpha": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.q_embed.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.01676714300070208
+          },
+          "backbone.qa_embed.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0027805854776994728
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 9.366231173592724e-07
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.03210591434091394
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0016530240649037366
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0001682319918390388
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 6.009963521390327e-06
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.054527252524644396
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0027369718931192864
+          },
+          "backbone.model.blocks_1.0.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0038568768365320892
+          },
+          "backbone.model.blocks_1.0.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.004340770678081938
+          },
+          "backbone.model.blocks_1.0.linear1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.024451627017282065
+          },
+          "backbone.model.blocks_1.0.linear1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0016238660828850708
+          },
+          "backbone.model.blocks_1.0.linear2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.052986236557062735
+          },
+          "backbone.model.blocks_1.0.linear2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.004227272626154086
+          },
+          "backbone.model.blocks_1.0.layer_norm2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0036788870538388397
+          },
+          "backbone.model.blocks_1.0.layer_norm2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.004385000510929465
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 6.295070770250875e-05
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.08684776582972652
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00416045102249708
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.002559489124901787
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 8.145744296543423e-05
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.14398095793961704
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.007221964033874724
+          },
+          "backbone.model.blocks_2.0.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.010133278940050859
+          },
+          "backbone.model.blocks_2.0.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.008215887037911665
+          },
+          "backbone.model.blocks_2.0.linear1.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear1.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear2.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear2.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.layer_norm2.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.layer_norm2.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00015352327726123898
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.061047407353831844
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0042320280057990935
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.007431870578714336
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0001947011886588104
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.1048439760293764
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.008440404072842815
+          },
+          "backbone.model.blocks_2.1.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.010688578721794342
+          },
+          "backbone.model.blocks_2.1.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.009231409638609207
+          },
+          "backbone.model.blocks_2.1.linear1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.06874427211796347
+          },
+          "backbone.model.blocks_2.1.linear1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.004042332617191835
+          },
+          "backbone.model.blocks_2.1.linear2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.1352345958008938
+          },
+          "backbone.model.blocks_2.1.linear2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.009219283227151421
+          },
+          "backbone.model.blocks_2.1.layer_norm2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.010665850429098301
+          },
+          "backbone.model.blocks_2.1.layer_norm2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.009273689303983
+          },
+          "backbone.out.0.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.6324382301951524
+          },
+          "backbone.out.0.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.02224648141033619
+          },
+          "backbone.out.3.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.6360471794321884
+          },
+          "backbone.out.3.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.04179097298563148
+          },
+          "backbone.out.6.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.34422585798238264
+          },
+          "backbone.out.6.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0066178529523313046
+          },
+          "gate.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "gate.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          }
+        }
+      }
+    },
+    {
+      "role": "synthetic_optimizer_engineering_not_fitted",
+      "ordinal": 2,
+      "phase": "active_alpha0",
+      "valid_targets": 6,
+      "total_targets": 12,
+      "stats": {
+        "stepped": true,
+        "valid_targets": 6,
+        "loss_sum": 3.776461124420166,
+        "mean_loss": 0.6294102072715759,
+        "pre_clip_norm": 1.6040642261505127,
+        "post_clip_norm": 1.0,
+        "parameter_updated": true,
+        "forward_seconds": 0.015921799989882857,
+        "backward_seconds": 0.008854500018060207,
+        "gradient_clip_seconds": 0.07850539998617023,
+        "optimizer_seconds": 0.028048899956047535
+      },
+      "gradients": {
+        "alpha": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.027566296979784966
+        },
+        "backbone.q_embed.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.017019581813367213
+        },
+        "backbone.qa_embed.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0029191475731836685
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.gammas": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 3.463270608370304e-07
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.035015186620028685
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0017363652383746199
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 1.5021841551621142e-05
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 5.470102084484526e-07
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0581656130646529
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.00278903347566079
+        },
+        "backbone.model.blocks_1.0.layer_norm1.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.004125840037816886
+        },
+        "backbone.model.blocks_1.0.layer_norm1.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.004329679124480083
+        },
+        "backbone.model.blocks_1.0.linear1.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.025910488513554514
+        },
+        "backbone.model.blocks_1.0.linear1.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0016732854115782145
+        },
+        "backbone.model.blocks_1.0.linear2.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.05499253725627045
+        },
+        "backbone.model.blocks_1.0.linear2.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.00431030053129472
+        },
+        "backbone.model.blocks_1.0.layer_norm2.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0041583356502842474
+        },
+        "backbone.model.blocks_1.0.layer_norm2.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.004336050262572957
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.gammas": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 4.305655952282511e-05
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.08498604466714547
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.004719310831584416
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.004835330343115851
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.00022164414623207884
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.1439329594473001
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.007518901260215542
+        },
+        "backbone.model.blocks_2.0.layer_norm1.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.009788902439436623
+        },
+        "backbone.model.blocks_2.0.layer_norm1.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.008429338017627951
+        },
+        "backbone.model.blocks_2.0.linear1.weight": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.0.linear1.bias": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.0.linear2.weight": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.0.linear2.bias": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.0.layer_norm2.weight": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.0.layer_norm2.bias": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.gammas": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.00018991295216002027
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.06497945481146497
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.004364136857035865
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.007544393855467513
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0002883040276849195
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.11453083733799492
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.008625634180028941
+        },
+        "backbone.model.blocks_2.1.layer_norm1.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.010043241919499006
+        },
+        "backbone.model.blocks_2.1.layer_norm1.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0092786895756135
+        },
+        "backbone.model.blocks_2.1.linear1.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.07009039386357575
+        },
+        "backbone.model.blocks_2.1.linear1.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.004088849144739328
+        },
+        "backbone.model.blocks_2.1.linear2.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.13905237864716652
+        },
+        "backbone.model.blocks_2.1.linear2.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.009301202190106654
+        },
+        "backbone.model.blocks_2.1.layer_norm2.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.009797746870970162
+        },
+        "backbone.model.blocks_2.1.layer_norm2.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.009287779955039793
+        },
+        "backbone.out.0.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.6146531442546063
+        },
+        "backbone.out.0.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.022812675103743494
+        },
+        "backbone.out.3.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.6192172785604
+        },
+        "backbone.out.3.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0445971570302132
+        },
+        "backbone.out.6.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.39543634913992604
+        },
+        "backbone.out.6.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0028815018013119698
+        },
+        "gate.weight": {
+          "kind": "zero",
+          "finite": true,
+          "l2": 0.0
+        },
+        "gate.bias": {
+          "kind": "zero",
+          "finite": true,
+          "l2": 0.0
+        }
+      },
+      "state_step_before": {
+        "alpha": null,
+        "backbone.q_embed.weight": 1,
+        "backbone.qa_embed.weight": 1,
+        "backbone.model.blocks_1.0.masked_attn_head.gammas": 1,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": 1,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": 1,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": 1,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": 1,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": 1,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": 1,
+        "backbone.model.blocks_1.0.layer_norm1.weight": 1,
+        "backbone.model.blocks_1.0.layer_norm1.bias": 1,
+        "backbone.model.blocks_1.0.linear1.weight": 1,
+        "backbone.model.blocks_1.0.linear1.bias": 1,
+        "backbone.model.blocks_1.0.linear2.weight": 1,
+        "backbone.model.blocks_1.0.linear2.bias": 1,
+        "backbone.model.blocks_1.0.layer_norm2.weight": 1,
+        "backbone.model.blocks_1.0.layer_norm2.bias": 1,
+        "backbone.model.blocks_2.0.masked_attn_head.gammas": 1,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": 1,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": 1,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": 1,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": 1,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": 1,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": 1,
+        "backbone.model.blocks_2.0.layer_norm1.weight": 1,
+        "backbone.model.blocks_2.0.layer_norm1.bias": 1,
+        "backbone.model.blocks_2.0.linear1.weight": null,
+        "backbone.model.blocks_2.0.linear1.bias": null,
+        "backbone.model.blocks_2.0.linear2.weight": null,
+        "backbone.model.blocks_2.0.linear2.bias": null,
+        "backbone.model.blocks_2.0.layer_norm2.weight": null,
+        "backbone.model.blocks_2.0.layer_norm2.bias": null,
+        "backbone.model.blocks_2.1.masked_attn_head.gammas": 1,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": 1,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": 1,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": 1,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": 1,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": 1,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": 1,
+        "backbone.model.blocks_2.1.layer_norm1.weight": 1,
+        "backbone.model.blocks_2.1.layer_norm1.bias": 1,
+        "backbone.model.blocks_2.1.linear1.weight": 1,
+        "backbone.model.blocks_2.1.linear1.bias": 1,
+        "backbone.model.blocks_2.1.linear2.weight": 1,
+        "backbone.model.blocks_2.1.linear2.bias": 1,
+        "backbone.model.blocks_2.1.layer_norm2.weight": 1,
+        "backbone.model.blocks_2.1.layer_norm2.bias": 1,
+        "backbone.out.0.weight": 1,
+        "backbone.out.0.bias": 1,
+        "backbone.out.3.weight": 1,
+        "backbone.out.3.bias": 1,
+        "backbone.out.6.weight": 1,
+        "backbone.out.6.bias": 1,
+        "gate.weight": null,
+        "gate.bias": null
+      },
+      "state_step_after": {
+        "alpha": 1,
+        "backbone.q_embed.weight": 2,
+        "backbone.qa_embed.weight": 2,
+        "backbone.model.blocks_1.0.masked_attn_head.gammas": 2,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": 2,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": 2,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": 2,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": 2,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": 2,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": 2,
+        "backbone.model.blocks_1.0.layer_norm1.weight": 2,
+        "backbone.model.blocks_1.0.layer_norm1.bias": 2,
+        "backbone.model.blocks_1.0.linear1.weight": 2,
+        "backbone.model.blocks_1.0.linear1.bias": 2,
+        "backbone.model.blocks_1.0.linear2.weight": 2,
+        "backbone.model.blocks_1.0.linear2.bias": 2,
+        "backbone.model.blocks_1.0.layer_norm2.weight": 2,
+        "backbone.model.blocks_1.0.layer_norm2.bias": 2,
+        "backbone.model.blocks_2.0.masked_attn_head.gammas": 2,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": 2,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": 2,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": 2,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": 2,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": 2,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": 2,
+        "backbone.model.blocks_2.0.layer_norm1.weight": 2,
+        "backbone.model.blocks_2.0.layer_norm1.bias": 2,
+        "backbone.model.blocks_2.0.linear1.weight": null,
+        "backbone.model.blocks_2.0.linear1.bias": null,
+        "backbone.model.blocks_2.0.linear2.weight": null,
+        "backbone.model.blocks_2.0.linear2.bias": null,
+        "backbone.model.blocks_2.0.layer_norm2.weight": null,
+        "backbone.model.blocks_2.0.layer_norm2.bias": null,
+        "backbone.model.blocks_2.1.masked_attn_head.gammas": 2,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": 2,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": 2,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": 2,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": 2,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": 2,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": 2,
+        "backbone.model.blocks_2.1.layer_norm1.weight": 2,
+        "backbone.model.blocks_2.1.layer_norm1.bias": 2,
+        "backbone.model.blocks_2.1.linear1.weight": 2,
+        "backbone.model.blocks_2.1.linear1.bias": 2,
+        "backbone.model.blocks_2.1.linear2.weight": 2,
+        "backbone.model.blocks_2.1.linear2.bias": 2,
+        "backbone.model.blocks_2.1.layer_norm2.weight": 2,
+        "backbone.model.blocks_2.1.layer_norm2.bias": 2,
+        "backbone.out.0.weight": 2,
+        "backbone.out.0.bias": 2,
+        "backbone.out.3.weight": 2,
+        "backbone.out.3.bias": 2,
+        "backbone.out.6.weight": 2,
+        "backbone.out.6.bias": 2,
+        "gate.weight": 1,
+        "gate.bias": 1
+      },
+      "parameter_changed": {
+        "alpha": true,
+        "backbone.q_embed.weight": true,
+        "backbone.qa_embed.weight": true,
+        "backbone.model.blocks_1.0.masked_attn_head.gammas": true,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": true,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": true,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": true,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": true,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": true,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": true,
+        "backbone.model.blocks_1.0.layer_norm1.weight": true,
+        "backbone.model.blocks_1.0.layer_norm1.bias": true,
+        "backbone.model.blocks_1.0.linear1.weight": true,
+        "backbone.model.blocks_1.0.linear1.bias": true,
+        "backbone.model.blocks_1.0.linear2.weight": true,
+        "backbone.model.blocks_1.0.linear2.bias": true,
+        "backbone.model.blocks_1.0.layer_norm2.weight": true,
+        "backbone.model.blocks_1.0.layer_norm2.bias": true,
+        "backbone.model.blocks_2.0.masked_attn_head.gammas": true,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": true,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": true,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": true,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": true,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": true,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": true,
+        "backbone.model.blocks_2.0.layer_norm1.weight": true,
+        "backbone.model.blocks_2.0.layer_norm1.bias": true,
+        "backbone.model.blocks_2.0.linear1.weight": false,
+        "backbone.model.blocks_2.0.linear1.bias": false,
+        "backbone.model.blocks_2.0.linear2.weight": false,
+        "backbone.model.blocks_2.0.linear2.bias": false,
+        "backbone.model.blocks_2.0.layer_norm2.weight": false,
+        "backbone.model.blocks_2.0.layer_norm2.bias": false,
+        "backbone.model.blocks_2.1.masked_attn_head.gammas": true,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": true,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": true,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": true,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": true,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": true,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": true,
+        "backbone.model.blocks_2.1.layer_norm1.weight": true,
+        "backbone.model.blocks_2.1.layer_norm1.bias": true,
+        "backbone.model.blocks_2.1.linear1.weight": true,
+        "backbone.model.blocks_2.1.linear1.bias": true,
+        "backbone.model.blocks_2.1.linear2.weight": true,
+        "backbone.model.blocks_2.1.linear2.bias": true,
+        "backbone.model.blocks_2.1.layer_norm2.weight": true,
+        "backbone.model.blocks_2.1.layer_norm2.bias": true,
+        "backbone.out.0.weight": true,
+        "backbone.out.0.bias": true,
+        "backbone.out.3.weight": true,
+        "backbone.out.3.bias": true,
+        "backbone.out.6.weight": true,
+        "backbone.out.6.bias": true,
+        "gate.weight": false,
+        "gate.bias": false
+      },
+      "clip": {
+        "pre_norm": 1.6040642261505127,
+        "live_post_norm": 1.0000011295771258,
+        "gradients_before_clip": {
+          "alpha": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.04421813786029816
+          },
+          "backbone.q_embed.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.02730051843791916
+          },
+          "backbone.qa_embed.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.004682502960084258
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 5.555311839362761e-07
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.05616664138100306
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0027852430109661015
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 2.4096012863471547e-05
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 8.774400265872318e-07
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0933014341946462
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.004473791446688093
+          },
+          "backbone.model.blocks_1.0.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0066181162952378995
+          },
+          "backbone.model.blocks_1.0.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.006945087477618532
+          },
+          "backbone.model.blocks_1.0.linear1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.041562112238925454
+          },
+          "backbone.model.blocks_1.0.linear1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0026840588492306485
+          },
+          "backbone.model.blocks_1.0.linear2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.08821161379130757
+          },
+          "backbone.model.blocks_1.0.linear2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.006914002945958803
+          },
+          "backbone.model.blocks_1.0.layer_norm2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0066702413730111605
+          },
+          "backbone.model.blocks_1.0.layer_norm2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.006955307229358383
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 6.906552731169014e-05
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.13632315443748189
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.007570082175953643
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0077561849970219105
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0003555316514059617
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.2308778474215151
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.012060807674700687
+          },
+          "backbone.model.blocks_2.0.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.01570203746162867
+          },
+          "backbone.model.blocks_2.0.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.013521207554243816
+          },
+          "backbone.model.blocks_2.0.linear1.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear1.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear2.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear2.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.layer_norm2.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.layer_norm2.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00030463274046637354
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.10423128043169437
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.007000359923825216
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.012101699434181643
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0004624584501600319
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.1837149273740383
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.013836079349037578
+          },
+          "backbone.model.blocks_2.1.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.016110014625503995
+          },
+          "backbone.model.blocks_2.1.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.014883622860477765
+          },
+          "backbone.model.blocks_2.1.linear1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.11242955977059875
+          },
+          "backbone.model.blocks_2.1.linear1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.006558780504532357
+          },
+          "backbone.model.blocks_2.1.linear2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.2230490777787165
+          },
+          "backbone.model.blocks_2.1.linear2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.014919734535199038
+          },
+          "backbone.model.blocks_2.1.layer_norm2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0157162244557973
+          },
+          "backbone.model.blocks_2.1.layer_norm2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.014898204362575879
+          },
+          "backbone.out.0.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.9859437024805048
+          },
+          "backbone.out.0.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.036593017525601915
+          },
+          "backbone.out.3.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.9932648709099451
+          },
+          "backbone.out.3.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.07153674641494824
+          },
+          "backbone.out.6.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.6343056751793107
+          },
+          "backbone.out.6.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.004622116684913635
+          },
+          "gate.weight": {
+            "kind": "zero",
+            "finite": true,
+            "l2": 0.0
+          },
+          "gate.bias": {
+            "kind": "zero",
+            "finite": true,
+            "l2": 0.0
+          }
+        },
+        "gradients_after_clip": {
+          "alpha": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.027566296979784966
+          },
+          "backbone.q_embed.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.017019581813367213
+          },
+          "backbone.qa_embed.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0029191475731836685
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 3.463270608370304e-07
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.035015186620028685
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0017363652383746199
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 1.5021841551621142e-05
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 5.470102084484526e-07
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0581656130646529
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00278903347566079
+          },
+          "backbone.model.blocks_1.0.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.004125840037816886
+          },
+          "backbone.model.blocks_1.0.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.004329679124480083
+          },
+          "backbone.model.blocks_1.0.linear1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.025910488513554514
+          },
+          "backbone.model.blocks_1.0.linear1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0016732854115782145
+          },
+          "backbone.model.blocks_1.0.linear2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.05499253725627045
+          },
+          "backbone.model.blocks_1.0.linear2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00431030053129472
+          },
+          "backbone.model.blocks_1.0.layer_norm2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0041583356502842474
+          },
+          "backbone.model.blocks_1.0.layer_norm2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.004336050262572957
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 4.305655952282511e-05
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.08498604466714547
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.004719310831584416
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.004835330343115851
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00022164414623207884
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.1439329594473001
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.007518901260215542
+          },
+          "backbone.model.blocks_2.0.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.009788902439436623
+          },
+          "backbone.model.blocks_2.0.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.008429338017627951
+          },
+          "backbone.model.blocks_2.0.linear1.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear1.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear2.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear2.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.layer_norm2.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.layer_norm2.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00018991295216002027
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.06497945481146497
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.004364136857035865
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.007544393855467513
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0002883040276849195
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.11453083733799492
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.008625634180028941
+          },
+          "backbone.model.blocks_2.1.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.010043241919499006
+          },
+          "backbone.model.blocks_2.1.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0092786895756135
+          },
+          "backbone.model.blocks_2.1.linear1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.07009039386357575
+          },
+          "backbone.model.blocks_2.1.linear1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.004088849144739328
+          },
+          "backbone.model.blocks_2.1.linear2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.13905237864716652
+          },
+          "backbone.model.blocks_2.1.linear2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.009301202190106654
+          },
+          "backbone.model.blocks_2.1.layer_norm2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.009797746870970162
+          },
+          "backbone.model.blocks_2.1.layer_norm2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.009287779955039793
+          },
+          "backbone.out.0.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.6146531442546063
+          },
+          "backbone.out.0.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.022812675103743494
+          },
+          "backbone.out.3.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.6192172785604
+          },
+          "backbone.out.3.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0445971570302132
+          },
+          "backbone.out.6.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.39543634913992604
+          },
+          "backbone.out.6.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0028815018013119698
+          },
+          "gate.weight": {
+            "kind": "zero",
+            "finite": true,
+            "l2": 0.0
+          },
+          "gate.bias": {
+            "kind": "zero",
+            "finite": true,
+            "l2": 0.0
+          }
+        }
+      }
+    },
+    {
+      "role": "synthetic_optimizer_engineering_not_fitted",
+      "ordinal": 3,
+      "phase": "active_after_alpha_update",
+      "valid_targets": 6,
+      "total_targets": 18,
+      "stats": {
+        "stepped": true,
+        "valid_targets": 6,
+        "loss_sum": 3.5898962020874023,
+        "mean_loss": 0.5983160138130188,
+        "pre_clip_norm": 1.6217477321624756,
+        "post_clip_norm": 1.0,
+        "parameter_updated": true,
+        "forward_seconds": 0.02068750001490116,
+        "backward_seconds": 0.00962760002585128,
+        "gradient_clip_seconds": 0.08928319998085499,
+        "optimizer_seconds": 0.032236400002148
+      },
+      "gradients": {
+        "alpha": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.026689846068620682
+        },
+        "backbone.q_embed.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.016926143267113794
+        },
+        "backbone.qa_embed.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0026924290706116846
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.gammas": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 1.3298765425466668e-06
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.031982925124847454
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0014222207916944575
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 2.996311063647733e-05
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 1.1344697723983335e-06
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.05555838315914331
+        },
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.002310396152507068
+        },
+        "backbone.model.blocks_1.0.layer_norm1.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.003980058644447781
+        },
+        "backbone.model.blocks_1.0.layer_norm1.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0038175180621683705
+        },
+        "backbone.model.blocks_1.0.linear1.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.024899826661877403
+        },
+        "backbone.model.blocks_1.0.linear1.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0015534737350353333
+        },
+        "backbone.model.blocks_1.0.linear2.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.05080211757855632
+        },
+        "backbone.model.blocks_1.0.linear2.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.003797328257639529
+        },
+        "backbone.model.blocks_1.0.layer_norm2.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.00374172100571362
+        },
+        "backbone.model.blocks_1.0.layer_norm2.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.0037581667947311267
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.gammas": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.00010143255220261834
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.08496324177685564
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.004712776863467381
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.006244511757671545
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.00028655949972074024
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.13973955097682794
+        },
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.007376123882846013
+        },
+        "backbone.model.blocks_2.0.layer_norm1.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.009735582046768337
+        },
+        "backbone.model.blocks_2.0.layer_norm1.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.008323821714861096
+        },
+        "backbone.model.blocks_2.0.linear1.weight": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.0.linear1.bias": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.0.linear2.weight": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.0.linear2.bias": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.0.layer_norm2.weight": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.0.layer_norm2.bias": {
+          "kind": "none",
+          "finite": true,
+          "l2": null
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.gammas": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.00011905922933533817
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.062266550309891734
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.003706726129704481
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.007264759221430983
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.00027476805803772095
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.11521657211785438
+        },
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.008314242903945111
+        },
+        "backbone.model.blocks_2.1.layer_norm1.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.010184557803925293
+        },
+        "backbone.model.blocks_2.1.layer_norm1.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.009135363089545033
+        },
+        "backbone.model.blocks_2.1.linear1.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.06843523019326123
+        },
+        "backbone.model.blocks_2.1.linear1.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.003984185718372537
+        },
+        "backbone.model.blocks_2.1.linear2.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.13752713476818954
+        },
+        "backbone.model.blocks_2.1.linear2.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.009077082072093302
+        },
+        "backbone.model.blocks_2.1.layer_norm2.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.010229727684676714
+        },
+        "backbone.model.blocks_2.1.layer_norm2.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.009135713383758593
+        },
+        "backbone.out.0.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.6285068107982358
+        },
+        "backbone.out.0.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.023412543265983386
+        },
+        "backbone.out.3.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.6138468583455992
+        },
+        "backbone.out.3.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.04329162899749045
+        },
+        "backbone.out.6.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.38589519316992366
+        },
+        "backbone.out.6.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 0.007214836776256561
+        },
+        "gate.weight": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 1.8748640229418604e-06
+        },
+        "gate.bias": {
+          "kind": "nonzero",
+          "finite": true,
+          "l2": 1.3344917988433735e-06
+        }
+      },
+      "state_step_before": {
+        "alpha": 1,
+        "backbone.q_embed.weight": 2,
+        "backbone.qa_embed.weight": 2,
+        "backbone.model.blocks_1.0.masked_attn_head.gammas": 2,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": 2,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": 2,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": 2,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": 2,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": 2,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": 2,
+        "backbone.model.blocks_1.0.layer_norm1.weight": 2,
+        "backbone.model.blocks_1.0.layer_norm1.bias": 2,
+        "backbone.model.blocks_1.0.linear1.weight": 2,
+        "backbone.model.blocks_1.0.linear1.bias": 2,
+        "backbone.model.blocks_1.0.linear2.weight": 2,
+        "backbone.model.blocks_1.0.linear2.bias": 2,
+        "backbone.model.blocks_1.0.layer_norm2.weight": 2,
+        "backbone.model.blocks_1.0.layer_norm2.bias": 2,
+        "backbone.model.blocks_2.0.masked_attn_head.gammas": 2,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": 2,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": 2,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": 2,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": 2,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": 2,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": 2,
+        "backbone.model.blocks_2.0.layer_norm1.weight": 2,
+        "backbone.model.blocks_2.0.layer_norm1.bias": 2,
+        "backbone.model.blocks_2.0.linear1.weight": null,
+        "backbone.model.blocks_2.0.linear1.bias": null,
+        "backbone.model.blocks_2.0.linear2.weight": null,
+        "backbone.model.blocks_2.0.linear2.bias": null,
+        "backbone.model.blocks_2.0.layer_norm2.weight": null,
+        "backbone.model.blocks_2.0.layer_norm2.bias": null,
+        "backbone.model.blocks_2.1.masked_attn_head.gammas": 2,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": 2,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": 2,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": 2,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": 2,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": 2,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": 2,
+        "backbone.model.blocks_2.1.layer_norm1.weight": 2,
+        "backbone.model.blocks_2.1.layer_norm1.bias": 2,
+        "backbone.model.blocks_2.1.linear1.weight": 2,
+        "backbone.model.blocks_2.1.linear1.bias": 2,
+        "backbone.model.blocks_2.1.linear2.weight": 2,
+        "backbone.model.blocks_2.1.linear2.bias": 2,
+        "backbone.model.blocks_2.1.layer_norm2.weight": 2,
+        "backbone.model.blocks_2.1.layer_norm2.bias": 2,
+        "backbone.out.0.weight": 2,
+        "backbone.out.0.bias": 2,
+        "backbone.out.3.weight": 2,
+        "backbone.out.3.bias": 2,
+        "backbone.out.6.weight": 2,
+        "backbone.out.6.bias": 2,
+        "gate.weight": 1,
+        "gate.bias": 1
+      },
+      "state_step_after": {
+        "alpha": 2,
+        "backbone.q_embed.weight": 3,
+        "backbone.qa_embed.weight": 3,
+        "backbone.model.blocks_1.0.masked_attn_head.gammas": 3,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": 3,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": 3,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": 3,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": 3,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": 3,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": 3,
+        "backbone.model.blocks_1.0.layer_norm1.weight": 3,
+        "backbone.model.blocks_1.0.layer_norm1.bias": 3,
+        "backbone.model.blocks_1.0.linear1.weight": 3,
+        "backbone.model.blocks_1.0.linear1.bias": 3,
+        "backbone.model.blocks_1.0.linear2.weight": 3,
+        "backbone.model.blocks_1.0.linear2.bias": 3,
+        "backbone.model.blocks_1.0.layer_norm2.weight": 3,
+        "backbone.model.blocks_1.0.layer_norm2.bias": 3,
+        "backbone.model.blocks_2.0.masked_attn_head.gammas": 3,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": 3,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": 3,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": 3,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": 3,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": 3,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": 3,
+        "backbone.model.blocks_2.0.layer_norm1.weight": 3,
+        "backbone.model.blocks_2.0.layer_norm1.bias": 3,
+        "backbone.model.blocks_2.0.linear1.weight": null,
+        "backbone.model.blocks_2.0.linear1.bias": null,
+        "backbone.model.blocks_2.0.linear2.weight": null,
+        "backbone.model.blocks_2.0.linear2.bias": null,
+        "backbone.model.blocks_2.0.layer_norm2.weight": null,
+        "backbone.model.blocks_2.0.layer_norm2.bias": null,
+        "backbone.model.blocks_2.1.masked_attn_head.gammas": 3,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": 3,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": 3,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": 3,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": 3,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": 3,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": 3,
+        "backbone.model.blocks_2.1.layer_norm1.weight": 3,
+        "backbone.model.blocks_2.1.layer_norm1.bias": 3,
+        "backbone.model.blocks_2.1.linear1.weight": 3,
+        "backbone.model.blocks_2.1.linear1.bias": 3,
+        "backbone.model.blocks_2.1.linear2.weight": 3,
+        "backbone.model.blocks_2.1.linear2.bias": 3,
+        "backbone.model.blocks_2.1.layer_norm2.weight": 3,
+        "backbone.model.blocks_2.1.layer_norm2.bias": 3,
+        "backbone.out.0.weight": 3,
+        "backbone.out.0.bias": 3,
+        "backbone.out.3.weight": 3,
+        "backbone.out.3.bias": 3,
+        "backbone.out.6.weight": 3,
+        "backbone.out.6.bias": 3,
+        "gate.weight": 2,
+        "gate.bias": 2
+      },
+      "parameter_changed": {
+        "alpha": true,
+        "backbone.q_embed.weight": true,
+        "backbone.qa_embed.weight": true,
+        "backbone.model.blocks_1.0.masked_attn_head.gammas": true,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": true,
+        "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": true,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": true,
+        "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": true,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": true,
+        "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": true,
+        "backbone.model.blocks_1.0.layer_norm1.weight": true,
+        "backbone.model.blocks_1.0.layer_norm1.bias": true,
+        "backbone.model.blocks_1.0.linear1.weight": true,
+        "backbone.model.blocks_1.0.linear1.bias": true,
+        "backbone.model.blocks_1.0.linear2.weight": true,
+        "backbone.model.blocks_1.0.linear2.bias": true,
+        "backbone.model.blocks_1.0.layer_norm2.weight": true,
+        "backbone.model.blocks_1.0.layer_norm2.bias": true,
+        "backbone.model.blocks_2.0.masked_attn_head.gammas": true,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": true,
+        "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": true,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": true,
+        "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": true,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": true,
+        "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": true,
+        "backbone.model.blocks_2.0.layer_norm1.weight": true,
+        "backbone.model.blocks_2.0.layer_norm1.bias": true,
+        "backbone.model.blocks_2.0.linear1.weight": false,
+        "backbone.model.blocks_2.0.linear1.bias": false,
+        "backbone.model.blocks_2.0.linear2.weight": false,
+        "backbone.model.blocks_2.0.linear2.bias": false,
+        "backbone.model.blocks_2.0.layer_norm2.weight": false,
+        "backbone.model.blocks_2.0.layer_norm2.bias": false,
+        "backbone.model.blocks_2.1.masked_attn_head.gammas": true,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": true,
+        "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": true,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": true,
+        "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": true,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": true,
+        "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": true,
+        "backbone.model.blocks_2.1.layer_norm1.weight": true,
+        "backbone.model.blocks_2.1.layer_norm1.bias": true,
+        "backbone.model.blocks_2.1.linear1.weight": true,
+        "backbone.model.blocks_2.1.linear1.bias": true,
+        "backbone.model.blocks_2.1.linear2.weight": true,
+        "backbone.model.blocks_2.1.linear2.bias": true,
+        "backbone.model.blocks_2.1.layer_norm2.weight": true,
+        "backbone.model.blocks_2.1.layer_norm2.bias": true,
+        "backbone.out.0.weight": true,
+        "backbone.out.0.bias": true,
+        "backbone.out.3.weight": true,
+        "backbone.out.3.bias": true,
+        "backbone.out.6.weight": true,
+        "backbone.out.6.bias": true,
+        "gate.weight": true,
+        "gate.bias": true
+      },
+      "clip": {
+        "pre_norm": 1.6217477321624756,
+        "live_post_norm": 1.0000007977035514,
+        "gradients_before_clip": {
+          "alpha": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.04328422248363495
+          },
+          "backbone.q_embed.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.02744995135442248
+          },
+          "backbone.qa_embed.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0043664434051409115
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 2.1567255929955755e-06
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.05186826808432583
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0023064847613166076
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 4.859263656066975e-05
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 1.8398249223188587e-06
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0901017371151284
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0037468820126886422
+          },
+          "backbone.model.blocks_1.0.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.006454655069979024
+          },
+          "backbone.model.blocks_1.0.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.006191055083492667
+          },
+          "backbone.model.blocks_1.0.linear1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.040381262175733755
+          },
+          "backbone.model.blocks_1.0.linear1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.002519344046661949
+          },
+          "backbone.model.blocks_1.0.linear2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.08238826950970017
+          },
+          "backbone.model.blocks_1.0.linear2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.006158312287052258
+          },
+          "backbone.model.blocks_1.0.layer_norm2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.006068131271817035
+          },
+          "backbone.model.blocks_1.0.layer_norm2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.006094802213373921
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00016449811632476653
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.1377890291538706
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.007642939859899797
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.010127029001028076
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00046472750294583375
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.22662243878604915
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.011962219499470923
+          },
+          "backbone.model.blocks_2.0.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.01578866771648456
+          },
+          "backbone.model.blocks_2.0.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.013499147260989615
+          },
+          "backbone.model.blocks_2.0.linear1.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear1.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear2.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear2.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.layer_norm2.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.layer_norm2.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0001930841508024596
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.10098069869464148
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.006011378381125823
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.01178161401689081
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0004456047473863153
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.18685232913545988
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.013483612807482268
+          },
+          "backbone.model.blocks_2.1.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.016516793614919166
+          },
+          "backbone.model.blocks_2.1.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.014815263443663367
+          },
+          "backbone.model.blocks_2.1.linear1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.11098474741017603
+          },
+          "backbone.model.blocks_2.1.linear1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0064613480958057605
+          },
+          "backbone.model.blocks_2.1.linear2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.22303445564411387
+          },
+          "backbone.model.blocks_2.1.linear2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.014720746291548977
+          },
+          "backbone.model.blocks_2.1.layer_norm2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.016590047810414486
+          },
+          "backbone.model.blocks_2.1.layer_norm2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.01481583153684899
+          },
+          "backbone.out.0.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 1.0192801200766881
+          },
+          "backbone.out.0.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0379692622094243
+          },
+          "backbone.out.3.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.9955053607949624
+          },
+          "backbone.out.3.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0702081440975365
+          },
+          "backbone.out.6.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.6258250392350463
+          },
+          "backbone.out.6.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.011700652539730072
+          },
+          "gate.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 3.0405584009285023e-06
+          },
+          "gate.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 2.164210400223965e-06
+          }
+        },
+        "gradients_after_clip": {
+          "alpha": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.026689846068620682
+          },
+          "backbone.q_embed.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.016926143267113794
+          },
+          "backbone.qa_embed.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0026924290706116846
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 1.3298765425466668e-06
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.031982925124847454
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0014222207916944575
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 2.996311063647733e-05
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 1.1344697723983335e-06
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.05555838315914331
+          },
+          "backbone.model.blocks_1.0.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.002310396152507068
+          },
+          "backbone.model.blocks_1.0.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.003980058644447781
+          },
+          "backbone.model.blocks_1.0.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0038175180621683705
+          },
+          "backbone.model.blocks_1.0.linear1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.024899826661877403
+          },
+          "backbone.model.blocks_1.0.linear1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0015534737350353333
+          },
+          "backbone.model.blocks_1.0.linear2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.05080211757855632
+          },
+          "backbone.model.blocks_1.0.linear2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.003797328257639529
+          },
+          "backbone.model.blocks_1.0.layer_norm2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00374172100571362
+          },
+          "backbone.model.blocks_1.0.layer_norm2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.0037581667947311267
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00010143255220261834
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.08496324177685564
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.004712776863467381
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.006244511757671545
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00028655949972074024
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.13973955097682794
+          },
+          "backbone.model.blocks_2.0.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.007376123882846013
+          },
+          "backbone.model.blocks_2.0.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.009735582046768337
+          },
+          "backbone.model.blocks_2.0.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.008323821714861096
+          },
+          "backbone.model.blocks_2.0.linear1.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear1.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear2.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.linear2.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.layer_norm2.weight": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.0.layer_norm2.bias": {
+            "kind": "none",
+            "finite": true,
+            "l2": null
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.gammas": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00011905922933533817
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.v_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.062266550309891734
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.v_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.003706726129704481
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.k_linear.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.007264759221430983
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.k_linear.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.00027476805803772095
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.out_proj.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.11521657211785438
+          },
+          "backbone.model.blocks_2.1.masked_attn_head.out_proj.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.008314242903945111
+          },
+          "backbone.model.blocks_2.1.layer_norm1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.010184557803925293
+          },
+          "backbone.model.blocks_2.1.layer_norm1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.009135363089545033
+          },
+          "backbone.model.blocks_2.1.linear1.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.06843523019326123
+          },
+          "backbone.model.blocks_2.1.linear1.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.003984185718372537
+          },
+          "backbone.model.blocks_2.1.linear2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.13752713476818954
+          },
+          "backbone.model.blocks_2.1.linear2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.009077082072093302
+          },
+          "backbone.model.blocks_2.1.layer_norm2.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.010229727684676714
+          },
+          "backbone.model.blocks_2.1.layer_norm2.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.009135713383758593
+          },
+          "backbone.out.0.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.6285068107982358
+          },
+          "backbone.out.0.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.023412543265983386
+          },
+          "backbone.out.3.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.6138468583455992
+          },
+          "backbone.out.3.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.04329162899749045
+          },
+          "backbone.out.6.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.38589519316992366
+          },
+          "backbone.out.6.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 0.007214836776256561
+          },
+          "gate.weight": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 1.8748640229418604e-06
+          },
+          "gate.bias": {
+            "kind": "nonzero",
+            "finite": true,
+            "l2": 1.3344917988433735e-06
+          }
+        }
+      }
+    }
+  ],
+  "planned_inventory": {
+    "adapter_constructors": 1,
+    "backbone_constructors": 1,
+    "wrapper_constructors": 1,
+    "gate_constructors": 1,
+    "adam_constructors": 1,
+    "architecture_forwards": 3,
+    "logical_backwards": 3,
+    "clip_calls": 3,
+    "adam_steps": 3,
+    "target_rows": 18
+  }
+}

@@ -707,3 +707,25 @@ Operationalbundle45 manifestd8976cfa...eda883 đã đóng vàcommitc77e88a;45out
 ### 09/11 — actualAdam01 có3updates, tổng kiểm chưa được nhận
 
 Rootownedterminal35869 RC1/15.3190763s, JUnit1PASS. Actual1adapter/backbone/wrapper/gate/Adam,3Architectureforward/3logicalbackward/3realclip/3Adamsteps/18targets. Gradient/parameter/participation assertions đạt nhưng childmethods_restored=False nên overallREJECTED. Không đổi tên thànhfullPASS. Forbidden=[], runtime/env restored, Jobcleanupaccepted/active0/handleclosed; native7.6777780s, RSS401412096/minfree4894949376B, upstream1realfalsequery/optimizerextra0, noCUDAinit/corpus/checkpoint. StaticinstalledAdamW inheritsAdam.step +Optimizer constructor wrapsparentstep cho thấy observer capturetemporaryparent/in-looprestorecheck cóbug; actual01khôngper-entryfinalrows nên không khẳngđịnh độcquyền fieldgâyFalse. Giao stdlibParent/Childregression và02allfinalchecks/truebaseline, giữsource5bd/productionkhôngđổi, new90stagegiữold15.3191protective105.3191.
+
+
+### 09/11 — actualAdam02 nghiệm thu và LLparity
+
+Root5stdlibobservercases PASS0.3168521s/5; receiptf9b6f4de...48e24. Source37pin new02onlyobserver truebaseline/twopass/allfinalchecks, model/test5bd unchanged. Native02terminal60075RC0/14.3382919s,1PASS;1adapter/backbone/wrapper/gate/Adam,3Architectureforward/3logicalbackward/3realclip/3Adamsteps/18targets. All30methodfinalchecks accepted, Job0; native6.604061s,child13.019532s,RSS400715776/minfree4621434880B;realfalseupstream1/optimizerextra0/noCUDAinit. Graph participation states absent→1→2 whileglobalsteps1→2→3; no universalparamstep3. Cumulative actualupdates01+02=6; storedcharged34.6543178≤105.3190763 includingpure5once, historical01notrelabeled. Compactarchivepending.
+
+IndependentLLformula6handmadefixtures vsGAM._metrics/currentSklearn accepted3.4976351s/10; maxabs1.110223e-16≤predeclared1e-12. Validatescontractformula notnewkernel/realmodelselection. Actorkerneltests willreusecachedknownanswers. D36readerreuse/actualcalibrationusage boundary adoptedfrombinding22 andcommit0832e72. Allmodelworksynthetic/local; noModal/fullCV/Holdout/browser.
+
+
+### 09/11 — kernel pure01 giữ nguyên một failedknownanswer
+
+Rootactual30sallocation terminal.8424742sRC1; actualunittest8run/7pass1failure. Formula6LLknownanswers đã đi qua; testtype7lowerquantile expectedexact.75 nhưngfloatreturn.7500000000000001. Kernel0e3khôngsai phươngpháp; khôngđổi math/strictupper<0. Worker cònlatenttype(rc)isint sẽrejectunittest SystemExit(False) dùcasepass; giao02chỉtestknownanswertol1e-14 vàbool→int exitnormalization/recordrawtype, giữfull8/noSkip/Job/sourceguards. Old3aad/source/raw giữ lại, no realdata/modelselection/NN.
+
+
+### 09/11 — xác định junction offline→online của graphmodel
+
+Rootsourceinspect online.py111–126/155 vàgraphcontext227–239: existingA0onlinebackend cóhistory-querywindow, graphadapterhiệnrequireknownsealedphasewindow/inputhash. Offlinecache khôngtựhỗtrợhistory mới/ref84counterfactualqueries. TáchGRAPH16dynamiccontext/parity khỏiGRAPH17fittedloader/calibration/controller đểkhôngnhầm code/trainingdonevớiRQ3closedloopdone. Không sửanguồn/model/policy hoặc chạyprobe;3sourceSHAs lưu trongstate, backlog137DAGchecked.
+
+
+### 09/11 — khép48outputsAdam và nghiệmthu kernel8
+
+Graph10metadata dryRoot phát hiện archiver chưa chạy đòi ownedacceptedTrue cho cảfailed01. Giữhelpersourceed0f.before, sửa kiểmcleanup chung +01acceptedFalse/RC1 và02acceptedTrue/RC0 đúngraw. Dry85411e33...c0d5f rồiclosed48outputs manifest9e40daab...66396; khôngrerunmodel. Coretest5bdđược chuẩn bịcommit cùngrawproof. Kernel02same0e3source8casesaccepted.9419086s/30; actualrawexit=int0, normalizationbool chỉcompatkhôngphảicause01. Giữ7PASS1floatingknownanswerfailure01, sửatesttol1e-14khôngđổistricteligibility. Whole9terminals/externalfreeze chưaaccepted. Checkpointmodulea2f/test538sourcefrozen, pure32chưachạy.

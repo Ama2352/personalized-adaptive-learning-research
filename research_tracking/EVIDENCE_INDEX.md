@@ -1,5 +1,7 @@
 # Chỉ mục bằng chứng
 
+**CG-AKT actualAdam:** [báo cáo](reports/cgakt_actual_adam_20261109.md) / [bundle48](runs/cgakt-actual-adam-engineering-20261109-01/README.md);02accepted1case/3updates/18targetvisits,30methodchecks;01rejected3updates giữnguyên, pure5scopekhác. Chưa actualresearchfit/fullEpoch/checkpoint.
+
 **Context API cost:** [báo cáo](reports/cgakt_context_api_cost_20261109.md) / [bundle45](runs/cgakt-context-api-cost-benchmark-20261109-01/README.md), completeTRAIN80/144ABBA/equaloutputs, không NN hoặc modelselection; old01loggingfailure giữ nguyên. Không đổi rawdata/recipe hoặc lấy API timings dự báo GPUtraining.
 
 **CG-AKT context hotpath:** [báo cáo](reports/cgakt_hotpath_integrity_20261109.md) / [bundle41](runs/cgakt-context-model-hotpath-engineering-20261109-01/README.md),135pure+25native scopes riêng;8Architectureforward/5logicalbackward/0Adam,0fullserializer ở hotregions vàfullwholeinferenceboundary. Chưa costbenchmark/maintraining; old52/74 giữ nguyên.

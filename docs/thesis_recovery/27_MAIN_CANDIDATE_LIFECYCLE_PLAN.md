@@ -101,3 +101,9 @@ Kế hoạch này cụ thể hóa Recipe26, chưa thay đổi runner/pilot cũ, 
 ## Lý do thay đổi prerequisite09/11
 
 Version đầu SHA `d7460468e9989d803f0e7507ae70bafcf5c371d7a4755731749e7e9d379c0d04` giữ tại Git82c2480/c77e88a và proof rawGit48; note agent gốc SHA d608... cũng giữ nguyên. Bản hiện hành bỏ yêu cầu vật lý không deserialize calibration vốn không có trong protocol. Đây là sửa overconstraint của kế hoạch, không đổi phương pháp/metrics/splits/requiredmodels hoặc nới quyền training. Stage ordering, restricted actual model inputs và external freeze authority vẫn bắt buộc. Không sửa Protocol21/22/Recipe26 hoặc artifact lịch sử.
+
+## Bổ sung source09/11: offline graph context chưa là online controller bridge
+
+`akt/online.py:111–126` dựng window từ lịch sử hiện tại rồi gọi adapter.predict_windows; loader dòng155 tạo graph-free AKTAdapter. Graph adapter hiện `_collate`/`predict_windows` dùng sealed index và `research_graph_context.py:227–239` yêu cầu windowID/inputhash đã có trong phase. Lịch sử action mới/counterfactual reference84 ở vòng kín không tự có trong index đó. Chưa có validated graph-online loader/bridge từ hai interface hiện hành; không thể coi offline training/export là đã tích hợp vào simulator.
+
+GRAPH16 tách dynamic observable query context và parity/OOV/causality tests, có thể chuẩn bị song song pipeline train. GRAPH17 nối actual fitted checkpoint+calibration/reference/controller sauGRAPH14/16, bác engineeringweights hoặc cross-vocabularyJunyi→Grade10. Đây là chia nhỏ deliverable RQ3/demo đã có, không thêm researchquestion hoặc thay simulator/policy. Chi phí inference84items/step cần benchmark riêng; lookupbench không đo phần đó.
