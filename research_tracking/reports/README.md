@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**CG-AKT khôi phục qua process mới:** [full E2 parity](cgakt_fresh_process_checkpoint_readiness_20261109.md), [bundle50](../runs/cgakt-fresh-process-checkpoint-engineering-20261109-01/README.md). Hai worker riêng đã được xác minh và dọn tuần tự; model/Adam/RNG/modes/thứ tự và input của cả epoch kế tiếp khớp. Đáp ứng phần epoch-state recovery trên CPU; chưa lifecycle/main fitting hoặc CUDA.
+
 **Bản thảo luận văn — RQ1:** [diễn giải cơ chế ngày 09/11](THESIS_RQ1_MECHANISMS_DRAFT_20261109.md), [đối chiếu số và nguồn](THESIS_RQ1_MECHANISMS_DRAFT_20261109.sources.json). Đi từ hai paper đến hai điều kiện mastery, bộ lọc ứng viên và readout của query; giữ riêng các kết luận chưa có, không thay bản thảo ngày 08/11 hoặc nghiệm thu toàn RQ1.
 
 **Main selected-only — thứ tự phase:** [contract14](cgakt_main_stage_contract_20261109.md), [bundle24](../runs/cgakt-main-stage-contract-engineering-20261109-01/README.md). Có raw-selection validation mỗi epoch, final best export riêng; refit/calibration không được mở bằng metadata. Chưa actual producer hoặc execution authority.

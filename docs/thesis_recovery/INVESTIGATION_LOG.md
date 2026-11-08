@@ -782,3 +782,10 @@ G10closed48/test5bd/reportc017 commit5e1eb40,51rawGitblobsverified; outputinvent
 
 - Viết THESIS_RQ1_MECHANISMS_DRAFT_20261109.md theo mạch ngữ cảnh→đơn vị→hai cổngM→lọc/xếp hạng→hai nhóm22khác nhau→giới hạn. Dùng full–empty, không trộn baseline graph-free của bảng08/11.
 - Source/numeric reconciliation kiểm30240predicatepairs, đủ1080M/R/C/B/CIDsignatures vàquery-overlap8cells,6liên kết; không modelcall/data mới. T23 vẫn IN_PROGRESS, bản thảo không được gắn finalRQ/thesis.
+
+### 09/11 — GRAPH19 fresh-process full-E2 đạt
+
+- ProduceractualPID25260/creation134386548214640266 đã reaped/Job0 trướcconsumerPID46564/134386548447362484; hai owned Jobs cleanup accepted.
+- FullE2 cảhai8windows/48targets/2steps, orderedbatch+q/qa/target/inputledger/state/Adam/RNG/modes/readout exact. Physical6updates/8forward/144reusedtargetexposures; không cộngcumulative4+4 thành8.
+- Whole43,723s/150, producerRSS473MB/consumer410MB; dữ liệu handmade, không dự báoGPU/fullcorpus. Bundle50 giữbinaryref26,7MB, khôngcopybinary/119oldbundle.
+- Graph11 nghiệm thu CPUepoch-boundary state+freshprocess đã có; lifecycle/globalbudget/EarlyStopping/sampler-midcursor/GPU/mainfit vẫn không tự verified.
