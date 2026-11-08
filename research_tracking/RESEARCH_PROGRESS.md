@@ -1,5 +1,19 @@
 # Tiến độ nghiên cứu
 
+## Mới nhất08/11 — Windows Gate22 và audit existing Linux CPU venv
+
+**Windows Gate22 hiện hành768PASS/0fail/error/skip,477.7091635s≤540s**; [report](../artifacts/akt/preflight/gate2-evidence-20261108-linux-tooling-22.json) SHA`f2f702408adb2162b0102aaca80eac1b1acd59ebec56a2fb77d8b1a358b276cd`. Run-id `linux-tooling` chỉ mục đích sửa tooling, không phải actual Linux fullGate. Các heading “mới nhất/current” Gate21 hoặc pending archive phía dưới là snapshots trước cập nhật này; giữ nguyên lịch sử.
+
+| Phạm vi hiện tại | Điều đã xác minh | Điều không được tự suy |
+|---|---|---|
+| [Linux install/audit](reports/akt_linux_isolated_install_20261108.md), [bundle80outputs](runs/akt-linux-isolated-install-20261108-01/README.md) | Hai controllers01/02 đều **FAILED**.02 pip-install/report44selected và pip-check exit0 nhưng controller fail metadata guard. Audit riêng **EXISTING44_CPU_IMPORT_AUDIT_ACCEPTED_NOT_GPU_READY**,23.361956656s≤90s,1child,44versions/all RECORD origins/8CPUimports/1CPUscalar. | Không relabel02. Torch2.7.1+cu126/CUDA12.6 là build metadata, CUDA chưa initialize; chưa CUDA/image/fullLinuxGate/main-worker/cost forecast. |
+| [Tooling118PASS](reports/akt_linux_gate_tooling_readiness_20261108.md), [bundle44outputs](runs/linux-gate-tooling-engineering-20261108-01/README.md), commit `7b07d61` | Explicit selectedlock/publicpackaging giữ Windows default/strictguards; RED107PASS/11FAIL; parent raw44Git verified. |0optimizer ở targeted suite; không scientific protocol/trained baseline/RQ completion. |
+| [Linux exact-source kit](../artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/README.md) | Local archive980252bytes,161payload/120exactGate-source paths; SHA/inventory đã kiểm. | Chưa upload/extract remote, upstream clone hoặc Linux Gate/worker. |
+
+Đã kiểm124new output SHA cho80+44bundles; WindowsGate22 snapshots trong bundle80. Audit riêng chỉ kiểm existing venv/CPU imports/scalar,0pip/install/network/model/optimizer/Modal. Đây là môi trường/kỹ thuật, không efficacy. S01/S04/S05/allocation/required baselines, giới hạn RQ1/RQ2 pilot và RQ3 chưa fittedcomparisons giữ nguyên.
+
+**Kết nối/vận hành:** bridge98978 đã hết phiên. Cầu nối mới55463 đã trả `ready/browser_open` sau khi khởi chạy localhost ở quyền thực thi được duyệt; đang chờ người dùng xác nhận MCP, giữ CPU. Không kết luận người dùng kết nối sai. Phải kiểm runtime/venv cũ còn đúng identity trước khi dùng tiếp. Chưa actual Linux full software Gate, bounded public main-worker lifecycle, CUDA hardware/image hoặc end-to-end throughput/cost. Không dùng Windows pointer hoặc audit CPU làm GPU readiness.
+
 ## Trạng thái mới nhất08/11 — Gate21 và các batch engineering đã đóng
 
 **Gate21 CPU software757PASS,0fail/error/skip,467.1361735s≤540s**; [report](../artifacts/akt/preflight/gate2-evidence-20261108-elapsed-guard-21.json), current pointer/source/lock đã được reader xác minh. Gate20 vẫn **REJECTED_RESOURCE_BOUND** dù724functional PASS vì1083.995106s>540s. Không sửa Gate20 hoặc dùng nó để chấp thuận source mới. Các đoạn “current” có ngày cũ phía dưới là snapshot lịch sử.

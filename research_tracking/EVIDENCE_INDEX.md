@@ -1,5 +1,20 @@
 # Chỉ mục bằng chứng
 
+## Hiện hành08/11 — Linux CPU audit riêng và Windows Gate22
+
+Mục này cập nhật các snapshot Gate21/resolution-only/pending archive phía dưới, giữ nguyên verdict lịch sử. Đã kiểm **124output SHA**: [Linux install/audit80outputs](runs/akt-linux-isolated-install-20261108-01/README.md) và [tooling44outputs](runs/linux-gate-tooling-engineering-20261108-01/README.md). Đây là kỹ thuật/vận hành, không completed RQ hoặc fitted efficacy.
+
+| Sự kiện | Kết quả được xác minh | Giới hạn/nguồn |
+|---|---|---|
+| Install controllers01/02 | **Cả hai vẫn FAILED**.01 dừng trước pip-install;02 pip-install/report44selected và pip-check exit0 nhưng controller fail metadata guard. | [Report](reports/akt_linux_isolated_install_20261108.md), [bundle80](runs/akt-linux-isolated-install-20261108-01/README.md). Không relabel failed02 hoặc lấy `packages_installed` của failed result làm44. |
+| Audit event riêng, alias audit03/directory `post-install-audit01` | **EXISTING44_CPU_IMPORT_AUDIT_ACCEPTED_NOT_GPU_READY**,23.361956656s≤90s,1child;44versions/all RECORD-file origins trong venv,8CPUimports/1CPUscalar;Torch2.7.1+cu126, CUDA chưa initialize. |0pip/install/network/model/optimizer/Modal trong audit. CUDA12.6 là build metadata; không device/kernel proof hoặc full installed-byte attestation. |
+| Tooling local, commit `7b07d61` |118targeted PASS; parent raw44outputs Git verified; publicpackaging/selectedlock/defaultWindows/strictguards. | [Report](reports/akt_linux_gate_tooling_readiness_20261108.md), [bundle44](runs/linux-gate-tooling-engineering-20261108-01/README.md); giữ RED107PASS/11FAIL,0optimizer. |
+| **Current Windows Gate22** | **768PASS**,0fail/error/skip,**477.7091635s≤540s**. | [Report](../artifacts/akt/preflight/gate2-evidence-20261108-linux-tooling-22.json), [pointer](../artifacts/akt/preflight/gate2-current.json); snapshots report/log/XML/pointer trong bundle80. Host Windows dù run-id có `linux-tooling`; chưa Linux fullGate. |
+
+Bundle80 manifest SHA`347961c3133ff4e2af4425c050e7ec31efb228888310671b08f2ed124a2ebbc1`, report SHA`e80a7757cd1b2c9ffe242734e4b202eaf1dd06ad6aeb01579dcf268770b99780`. Gate22 report SHA`f2f702408adb2162b0102aaca80eac1b1acd59ebec56a2fb77d8b1a358b276cd`; tooling manifest SHA`6dd95a9cf2982a8a4b7c073c49618509117bdfc93457146f7b3888f2f15d9365`. Raw38files=11FAILED01+20FAILED02+7audit riêng; không ba independent model experiments.
+
+[Linux source kit](../artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/README.md) chỉ **chuẩn bị local**, ZIP980252bytes/161payload/120exactGate-source paths, chưa upload/extract remote. Bridge98978 hết hạn; startup kỹ thuật mới pending, **không kết luận user kết nối sai**. Actual Linux fullGate/main-worker/CUDA/image/throughput-cost vẫn thiếu; không suy quyền GPU/Modal hoặc S04/S05 từ audit CPU.
+
 Git class dựa trên repo-local ignore và status trong lượt audit. Ignored artifact vẫn là bằng chứng local; metadata không đồng nghĩa checksum. Dataset lớn, model binary và prediction shards không được hash lại.
 
 | ID | Tham chiếu repo-relative | Git class | Loại/mục đích | Xác minh | Ghi chú |

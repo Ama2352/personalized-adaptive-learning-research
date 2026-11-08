@@ -1,5 +1,16 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## Hiện hành08/11 — Linux install/audit và Windows Gate22
+
+Đọc cập nhật này trước các đoạn Gate21/resolution-only/pending archive lịch sử phía dưới. Đã kiểm124output SHA của hai bundle mới, không thêm model/RQ result từ kiểm môi trường.
+
+- [Linux isolated install/audit](akt_linux_isolated_install_20261108.md), [bundle80outputs](../runs/akt-linux-isolated-install-20261108-01/README.md): controllers01/02 đều giữ **FAILED**.02 pip-install/report44selected và pip-check exit0 nhưng controller fail metadata guard. Audit riêng **EXISTING44_CPU_IMPORT_AUDIT_ACCEPTED_NOT_GPU_READY**,23.361956656s≤90s,44versions/all RECORD origins/8CPUimports/1CPUscalar/Torch2.7.1+cu126, CUDA chưa initialize. Không relabel02, không actual Linux fullGate/GPU/image/main-worker acceptance.
+- [Linux Gate tooling](akt_linux_gate_tooling_readiness_20261108.md), [bundle44outputs](../runs/linux-gate-tooling-engineering-20261108-01/README.md), commit `7b07d61`:118targeted PASS, parent raw44Git verified, RED107PASS/11FAIL giữ lại;0optimizer. Publicpackaging/explicit selectedlock giữ Windows default và strictguards.
+- **Windows Gate22 hiện hành:** [report](../../artifacts/akt/preflight/gate2-evidence-20261108-linux-tooling-22.json)768PASS/0fail/error/skip,477.7091635s≤540s, SHA`f2f702408adb2162b0102aaca80eac1b1acd59ebec56a2fb77d8b1a358b276cd`; snapshots trong bundle80. Run-id `linux-tooling` không đổi host Windows thành Linux.
+- [Exact Linux source kit](../../artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/README.md): chỉ local ZIP980252bytes/161payload, chưa upload/extract/run remote. Bridge98978 expired; startup kỹ thuật mới pending, không gán lỗi cho user.
+
+Audit riêng không chạy pip/install/network/model/optimizer/Modal.44installed distributions và CUDA12.6 build metadata chưa chứng nhận CUDA hardware/image, full Linux suite/worker hoặc forecast chi phí. Report resolution/addendum cũ giữ scope metadata; S04/S05 và RQ claims không đổi.
+
 Đây là nơi thống nhất cho báo cáo/phân tích tổng hợp. Bằng chứng theo run nằm ở [../runs](../runs/); dữ liệu/models/predictions lớn giữ ở artifacts/experiments theo [bản đồ repository](../../docs/REPOSITORY_MAP.md). Các file dưới đây có vai trò khác nhau, không phải tất cả đều là kết luận nghiên cứu hoặc chương luận văn.
 
 ## Baseline đã có kết quả

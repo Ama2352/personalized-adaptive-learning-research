@@ -1,5 +1,18 @@
 # Sổ cái thí nghiệm
 
+## Hiện hành08/11 — vận hành Linux CPU, không thí nghiệm efficacy
+
+Đã kiểm124output SHA của hai bundle mới. Các mục Gate21/pending archive hoặc resolution-only phía sau là snapshot lịch sử; giữ nguyên các hàng baseline/thí nghiệm đã ghi.
+
+| Hồ sơ/sự kiện | Trạng thái và bằng chứng | Giới hạn |
+|---|---|---|
+| [Linux install/audit80outputs](runs/akt-linux-isolated-install-20261108-01/README.md) | Install01 **FAILED** trước pip-install;02 **FAILED**, dù pip-install/report44selected và pip-check exit0. [Report](reports/akt_linux_isolated_install_20261108.md). | Không đổi controller verdict hoặc fake số44 từ failed result field. |
+| Audit riêng, alias audit03/directory `post-install-audit01` | **EXISTING44_CPU_IMPORT_AUDIT_ACCEPTED_NOT_GPU_READY**,23.361956656s≤90s/1child;44versions/all RECORD origins/8CPUimports/1CPUscalar;Torch2.7.1+cu126, không CUDA initialize. |0pip/install/network/model/optimizer/Modal trong audit. Không relabel02; không full binary-byte/image/CUDA/worker/cost acceptance. |
+| [Tooling44outputs](runs/linux-gate-tooling-engineering-20261108-01/README.md), commit `7b07d61` |118targeted PASS, RED107PASS/11FAIL giữ lại; parent raw44Git verified. [Report](reports/akt_linux_gate_tooling_readiness_20261108.md). | Selectedlock/publicpackaging/defaultWindows parity;0optimizer, chưa actual Linux fullGate. |
+| Windows Gate22 | [Report](../artifacts/akt/preflight/gate2-evidence-20261108-linux-tooling-22.json) **768PASS**,477.7091635s≤540s/0fail/error/skip; report/log/XML/currentpointer trong bundle80. | Windows CPU software only. Gate21 là source trước tooling; Gate20 vẫn resourceREJECTED dù724functional PASS. |
+
+[Source kit local](../artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/README.md)980252bytes/161payload chưa remote execution; không tính là model/Gate run. Bridge98978 expired, startup kỹ thuật mới pending, không là user connection failure. Actual Linux fullGate/main-worker/CUDA/image/throughput-cost và S04/S05 chưa nghiệm thu.
+
 Ngày là ngày ghi trong manifest/artifact hoặc run ID; không đồng nhất file timestamp với quyết định nghiên cứu. COMPLETED không đồng nghĩa scientific validity.
 
 | ID | Thời điểm | Model/mục tiêu | Dataset/protocol | Run status / verification | Kết quả/diễn giải | Evidence |

@@ -261,3 +261,25 @@ Gate21 đạt 757 PASS, không fail/error/skip; elapsed 467,136 giây trong tr�
 Bước kế tiếp: đóng bundle Linux resolution, review hợp đồng cài đặt isolated CPU có thời gian/dung lượng giới hạn; chỉ sau kiểm install/origin/runtime mới chuyển kiểm worker trên T4 miễn phí. Trần Modal vẫn 30 USD free credits và 0 USD trả thêm; chưa cấp allocation hay phát sinh job.
 
 Archive Linux resolution đã đóng: [37 outputs + manifest](../../research_tracking/runs/akt-linux-dependency-resolution-20261108-01/README.md), manifest SHA eae752b3c04516020d0671167853acd5a3d55fc35e57ef992c6b960f1eb2d0ed. Addendum riêng làm rõ wheelhouse là tùy chọn, direct hash-only install vẫn cần stage kiểm riêng; không sửa snapshot đóng hoặc tạo thêm folder correction. Registry hiện72 mục.
+
+### 08/11 — Preflight install bắt lỗi API pip, bảo toàn evidence và attempt mới
+
+Attempt01 dừng sau0,383s ở base-pip-before, không có child pip-install. Đã tải11files và kiểm CRC/SHA; ZIP825c60a0fb2a0917ab1d45937747211a273cfdd4919dff926317e9eaf81a6098. Read-only diagnostics chỉ xuất key/type/so sánh devnull, không lộ config values: pip26.2.2 trả nested env mapping, guard flat tạo false-positive. Đây là lỗi tooling, không kết quả nghiên cứu hoặc sai dataset. Source01 và result không sửa.
+
+Source02 mới021dcbe8a4a4a994d56572eb0ac76743c9a1bb3854cb56ca205da7017cb1a21f chỉ đổi exact config guard và attempt/source identity. RED28=18pass/6fail/4errors; GREEN28pass và6cleanup mock checks, review độc lập PASS. Không nới index/target/hash/cleanup/cap. Parent dispatch một attempt02 mới sau khi failure01 đã nhận đủ; tối đa600s/20GiB owned workspace/min30GiB free, chỉ CPU Colab, không automatic retry hoặc Modal. Tại checkpoint này kết quả02 đang chờ, chưa được ghi PASS.
+
+### 08/11 — 44 gói đã cài, kiểm metadata tổng thể chưa đạt
+
+Attempt02 hoàn tất pip-install0 và pip-check0, install report44entries khớp resolver và log xác nhận đủ44gói. Tuy nhiên all-depth METADATA matcher tính cả12metadata vendored trong setuptools, nên distribution-origins1 làm overallFAILED sau398,914s. Đã nhận đủ raw evidence và CRC/SHA ZIPbd83a6627a4023cc9b677737a05a8b964dff2c3e3205e4daa239aefb67b9503c. Read-only diagnostic xác nhận44distributions đều có1top-levelMETADATA, riêng setuptools có13ởmọi độsâu. Không cài lại hoặc đổi statusFAILED02.
+
+Đã chuẩn bị audit riêng với root-metadata matcher, vẫn kiểm tất cả RECORDorigins và44versions,8CPUimports/1CPUscalar, không model/GPU. Tests16GREEN, oldmatcher11PASS5FAIL và cleanup7PASS; review độc lập chấp thuận sourcedd7738bfe06032ffaea6a921619767fd659e626ff53ee5a2a7203fb33f885132 sau sửa cleanup ngay sau child. Một lần audit<=90s được dispatch, tại checkpoint này còn chờ kết quả.
+
+Tooling4files đãcommit7b07d61/raw44Gitoutputsverified. Full WindowsGate22 đạt768PASS/0fail/error/skip,477,709s<=540; reportSHAf2f702408adb2162b0102aaca80eac1b1acd59ebec56a2fb77d8b1a358b276cd. Không suy sang Linux/CUDA Gate hoặc fit nghiên cứu.
+
+### 08/11 — Audit CPU đạt, source kit chuẩn bị và handoff kết nối
+
+Audit riêng đạt23,361957s,1child,44distributions và8module origins trongvenv, Torch2.7.1+cu126/CUDAmetadata12.6,CPUscalar đúng,cuda_initialized=false; cleanup/resource/PINS accepted. Không install/pip/network/model/GPU/Modal call trongaudit. Raw7files đã nhậnCRC/SHA ZIPa6231c9f20a7830b8cb20ea7bbf9207888c176add5026a89079f4419e8750fa3. Bundle combined80outputs/73exactcopies giữ cảhaiFAILED vàauditriêng cùngWindowsGate22, manifest347961c3133ff4e2af4425c050e7ec31efb228888310671b08f2ed124a2ebbc1.
+
+Source-only kit cục bộ980252bytes/161payloadfiles/120Gatepaths đúng nguyên bytesGate22, ZIPb6707cfd0139898a22dd04db9095d01622c1df9b7061f05f8579ecb4ab30d233; extractor đã review không ghi đè/không chạy code. Bốn requestchunk chỉ được chuẩn bị: bridge98978 đóng theoTTL trước dispatch, chưa upload hoặc cloneupstream/chạyLinuxGate. Không giả source checkout bằngWindowsGate/Git metadata.
+
+Đã dừng các startup local chưa ready, thử import SDK riêng RC0/15,793s; bridge localhost khởi chạy thành công ở quyền thực thi đã qua automaticreview, session55463/port51539, browser_open=true. Đã hỏi một lần người dùng xác nhậnMCP ởtabmới, giữCPU. Chưa có remote action mới; phảiprobe runtime tồn tại trước dùng tiếp, không tự reinstall44gói. Không đưa token/nonce vào state.

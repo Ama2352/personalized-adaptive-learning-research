@@ -1961,13 +1961,14 @@
       "authorization_requirements": "Localengineering authorized; no methodology/fullCV/Holdout/Modal allocation from this task",
       "status": "PARTIALLY_VERIFIED",
       "blockers": [
-        "Candidate closure Linux đã phân giải thực tế; chưa wheel-byte verification/install/origin/runtime/image/CUDA acceptance."
+        "Actual isolated44 distributions/8CPUimports đã qua audit riêng; freshLinuxGate, immutableimage và actualCUDA worker còn thiếu."
       ],
       "evidence_refs": [
         "research_tracking/runs/gpu08-environment-proposal-20261108-01/README.md",
         "artifacts/akt/colab/gpu08-linux-20261108-01/transfer/acceptance.json",
         "research_tracking/runs/akt-linux-dependency-resolution-20261108-01/README.md",
-        "research_tracking/reports/akt_linux_dependency_resolution_20261108_addendum.md"
+        "research_tracking/reports/akt_linux_dependency_resolution_20261108_addendum.md",
+        "research_tracking/runs/akt-linux-isolated-install-20261108-01/README.md"
       ]
     },
     {
@@ -1981,7 +1982,8 @@
       "dependencies": [
         "GPU07",
         "GPU08",
-        "GPU06B"
+        "GPU06B",
+        "GATETOOL01"
       ],
       "required_inputs": "NewsourceGate+GPUphase/Linuxenv contracts",
       "files_components": "source-bound synthetic mainworkerkit/runner",
@@ -2313,6 +2315,30 @@
       ],
       "verified_targeted_tests": 23,
       "scientific_adoption_pending": "S04/S05; chưa có fitted research baseline hoặc kết quả RQ3 từ batch này."
+    },
+    {
+      "id": "GATETOOL01",
+      "research_objective": "Tooling có explicit Linux lock và không cần targetpip",
+      "rq": [],
+      "workstream": "gpu_readiness",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GPU06A",
+        "GPU07"
+      ],
+      "required_inputs": "packaging đã pin, context và Gate2 contracts",
+      "files_components": "scripts/akt/check_runtime.py;refresh_gate2.py;tests/akt/test_runtime.py;test_gate2_refresh.py",
+      "implementation_objective": "Public packaging; root-bound explicit lock; hash trước/sau, defaults/caps/guards giữ nguyên.",
+      "acceptance_criteria": "Targeted118PASS; actualWindowsGate22 768PASS477,709s<=540; source/artifact hashes và default lock3e72 không đổi.",
+      "verification_steps": "Logs RED107PASS11FAIL/GREEN118; hai review; full Gate22 artifact riêng.",
+      "required_artifacts": "linux-gate-tooling-engineering-20261108-01; WindowsGate22 trong combinedCPUinstallbundle",
+      "estimated_effort": "Đã hoàn tất batch kỹ thuật",
+      "compute_cost_category": "CPU local synthetic,0optimizer trongtargeted",
+      "authorization_requirements": "Safe engineering đã được user cho phép; không cấp scientific/cloud allocation.",
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": []
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",
