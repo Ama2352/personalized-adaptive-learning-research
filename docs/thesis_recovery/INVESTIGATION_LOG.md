@@ -482,3 +482,12 @@ Same reportMD/JSON tại research_tracking/reports/BAO_CAO_TIEN_DO_GVHD_20261108
 ### 08/11 — Archive failure vận hành đã commit
 
 Commit d7d7ec8 giữ28outputs+manifest lỗiavailabilityattempt01/pureprobe; rawGit28/28verified, counter2448chỉintegrity. VerdictFAILED_PRE_NATIVE_AND_METADATA_PROBE_UNKNOWN,0native,spent0.845393699943088/60. Không relabel archivercompleted thành experimentPASS. Mục lục reports cập nhậtrevision4/cachednotebookC01–C14 scope.
+
+
+### 08/11 — Public IO/ownedprocess verified; actual history replay accepted
+
+Ledger9964dbb45purePASS/26outputs; ownedJob02e0b786tests/31outputs; reader420ce3a47fixtures/46outputs, all rawGit verified; counter2448→2551chỉintegrity. Reader01UNKNOWN,02collection/invalidXML,03actualWindowsplatformfallbackauditdenial giữ nguyên;04fixtureactualWinAPIversion10.0.26100 passed, không actualRuntimeGate. Wholeouter04 time chưa ghi, không cộng componentwaits giảoveralltime. Ledger45 subprocess0 chỉscopeguardedtestbodies/metadata declaration, không globalOSprocess attestation.
+
+History02 root source-reviewed/pinned nativeONE:108policies/4140priorpredict+update/108targetpredict+preview,54fullcontrols exact beforetruncatedphase. Outer2.5932703018s+prior3.504371=6.0976413018/60;actualJob0/handlesclosed;0teacher/NN/optimizer/newN. Analysispending; không causal learning benefit. Root raw verifier checked108ids,54controls,11outputSHA andsampledRSS124633088B. Oldfailurebundle unchanged.
+
+Costerratumc0a0db8:9conditions×2optimizationphases×2env=36nominal, no measuredruntime/cost. RQ2abilitydrafta554662 independentresidual×ability control, noexecution. Driver09c909 sourcepeerreviewPASS aftermemory+staticallowlist+freshdestination fixes; agent prematurelyranpuretrial01 beforeparentreview:19setupMAX_PATHerrors/0bodies/1.2762709s, notproductionbug. Preservetrial01; root-only executions reaffirmed; shortfixturepaths/correct finally andprocessaudit before next reviewedattempt.0actualcorpus/Modal/Holdout/export.
