@@ -248,3 +248,13 @@ Suite Gate21 là `tests/akt tests/shared_kt`; SAKT139 và Graph-GAM38 có target
 ### Đính chính thuật ngữ demo
 
 Trong [report demo lịch sử](reports/demo_readiness_20261108.md), “12/120 nodes” của visual QA là số phần tử timeline DOM **`#route li`**, không phải số concept của miền. Miền vẫn **28 concepts**; [bundle demo93outputs](runs/demo-readonly-engineering-20261108-01/README.md) và report gốc giữ nguyên bytes. Replay concept preview chưa phải served action hoặc live fitted personalization.
+
+
+## Chỉ mục bằng chứng08/11 — conditional edges, history bins và research IO
+
+- **RQDIAG07**, commit `9efd5be`, 29outputs đã kiểm raw Git: [rq1_fixed_edge_set_contrast_20261108.md](reports/rq1_fixed_edge_set_contrast_20261108.md), [manifest](runs/rq1-fixed-edge-set-contrast-20261108-01/manifest.json). Conditional full–empty edge-set contrast: 1080 paired targets; ΔLL−0.000636974; PG bất lợi cả3seed,22preview changes; không causal learning effect.
+- **RQDIAG08**, commit `ec88970`, 28outputs đã kiểm raw Git: [rq1_history_stratified_edge_contrast_20261108.md](reports/rq1_history_stratified_edge_contrast_20261108.md), [manifest](runs/rq1-history-edge-contrast-20261108-01/manifest.json). 304 descriptive cells từ1080 cached pairs; Hpast confounded time/order; concept-prior không train support; new independent N=0.
+- **RESAUTH01**, commit `750921a`, 50outputs đã kiểm raw Git: [akt_research_execution_readiness_20261108.md](reports/akt_research_execution_readiness_20261108.md), [manifest](runs/akt-research-execution-engineering-20261108-01/manifest.json). 85 final pure guard tests; runtime/Gate mocked, chưa actual authorization/training/CUDA.
+- **CORPUSIO01**, commit `47323e9`, 30outputs đã kiểm raw Git: [simulator_corpus_publisher_readiness_20261108.md](reports/simulator_corpus_publisher_readiness_20261108.md), [manifest](runs/simulator-corpus-publisher-engineering-20261108-01/manifest.json). 31 publisher tests với handmade temporary corpus; chưa actual research corpus; DONE-last không OS crash transaction.
+
+Không cộng repeated targets/tests thành independent samples hoặc phần trăm hoàn tất. Reader timeout chưa JUnit và replay PID guard fail trước native được giữ riêng; không gắn PASS.

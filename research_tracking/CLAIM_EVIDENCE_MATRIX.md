@@ -50,3 +50,13 @@ Native AKT online/offline/geometry/OOV và session isolation được kiểm b�
 ## CPU-SIM-DOMAIN — Checkpoint environment identity khi strip notebook output
 
 `runs/cpu-sim-collector-trials-20261107-01/collector-domain-audit-01.json` xác nhận full storageSHA làm domainv1 khác dù mọi cellsource identical. Collectorv2 đã tách semantic definitions/constants/input/clock khỏi storage integrity;65targeted tests kiểm actual bundler, already-stripped copy và scientific-change negative controls. V1/v2oracle/RNG/query/label parity giữ nguyên trong fixture. Không là actual Linux/CUDA/Modal checkpoint handoff proof; runtime/Volume ladder vẫn bắt buộc. Đọc report simulator_collection_runner_20261107.md trước khi trích nhận định này.
+
+
+## Phạm vi nhận định08/11 — conditional edges, history bins và research IO
+
+- **RQDIAG07**, commit `9efd5be`, 29outputs đã kiểm raw Git: [rq1_fixed_edge_set_contrast_20261108.md](reports/rq1_fixed_edge_set_contrast_20261108.md), [manifest](runs/rq1-fixed-edge-set-contrast-20261108-01/manifest.json). Conditional full–empty edge-set contrast: 1080 paired targets; ΔLL−0.000636974; PG bất lợi cả3seed,22preview changes; không causal learning effect.
+- **RQDIAG08**, commit `ec88970`, 28outputs đã kiểm raw Git: [rq1_history_stratified_edge_contrast_20261108.md](reports/rq1_history_stratified_edge_contrast_20261108.md), [manifest](runs/rq1-history-edge-contrast-20261108-01/manifest.json). 304 descriptive cells từ1080 cached pairs; Hpast confounded time/order; concept-prior không train support; new independent N=0.
+- **RESAUTH01**, commit `750921a`, 50outputs đã kiểm raw Git: [akt_research_execution_readiness_20261108.md](reports/akt_research_execution_readiness_20261108.md), [manifest](runs/akt-research-execution-engineering-20261108-01/manifest.json). 85 final pure guard tests; runtime/Gate mocked, chưa actual authorization/training/CUDA.
+- **CORPUSIO01**, commit `47323e9`, 30outputs đã kiểm raw Git: [simulator_corpus_publisher_readiness_20261108.md](reports/simulator_corpus_publisher_readiness_20261108.md), [manifest](runs/simulator-corpus-publisher-engineering-20261108-01/manifest.json). 31 publisher tests với handmade temporary corpus; chưa actual research corpus; DONE-last không OS crash transaction.
+
+Không cộng repeated targets/tests thành independent samples hoặc phần trăm hoàn tất. Reader timeout chưa JUnit và replay PID guard fail trước native được giữ riêng; không gắn PASS.

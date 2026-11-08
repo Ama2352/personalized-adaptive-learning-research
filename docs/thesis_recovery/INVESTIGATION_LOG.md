@@ -453,3 +453,17 @@ Reference boundaryfa05b6f67PASS/4RED giữ nguyên; AKT-data149279125PASS/0Torch
 Một fixed28-statepair theo công thức Paper2 cho softgainB>A tạiT nhưngA>B sau14ngày; netthetagain giữB>A/commonfactor, hardtie→A>Bkhôngstrictreversal. Khôngtrajectory/teacher/model/RNG/search/graphbenefit hoặc reachablepolicyclaim. C08/bảnthảoC01–C14 giữ nguyên. Agentonecalculation0,1298041s≤10; parentmathrecheck+18rawGitoutputs746c374verified. Báo cáoGVHDcùngfile cậpnhậtrevision3/19sources/19links/221bundleoutputs; giữ exact6909770revision2 trongGit vàbackup. NotebookvẫnC01–C14snapshot, kếtquảmới ởsupplementreport.
 
 Clarify firstA0lifecycle làsingle-candidatepilot; mainmatrix cầnallrawselectioncandidates→systemselectorfreeze→anyrefit/calibration. Không lấy A0pilotwinner làmfinalsystemselection. Corpusguard/schema cònđangcode, no fullfit/GPU/Modal/Holdout.
+
+
+### 08/11 — Review contract sau61pure tests phát hiện thiếu dữ liệu roundtrip
+
+Parent phát hiện prospective corpus schema chưa có namespace/rootseed constructor của ResearchSplitPlan và role ResearchProvenance. Chưa có corpus thật được publish; không thể giả typedplan hoặc đọc oracle để dựng lại traininginputs. Guard/publisher được yêu cầu bổ sung recipe/manifest+provenance/hash và kiểm reconstruct đúng publictypes.61PASS là oldschema mockscope, không nghiệm thu revisedcontract; giữ cum13,623353/30s, không reset cap.
+
+RQ1source review hỗ trợ full-vs-empty conditional estimator-edge-set ablation trong cùng enabledpackage; cached1080sharedquery rows, world/controller giữ cố định. Chưa tínhcontrast; no teacher/modelrerun/independentN, không directlogit-only hoặc causalpolicybenefit.
+
+
+### 08/11 — Chốt conditional graph/history evidence và IO, chưa native retry
+
+Raw Git verified9efd5be29outputs/750921a50/47323e930/ec8897028; counter integrity2283→2420, không scientific N. Root tự tính lại đủ304cells/1080cachedpairs, no native. Giữ negative profilePG, time/orderconfounding và train-support distinction. Roundtrip schema gap đã sửa trước publication; guard85purePASS/publisher31PASS, không current full Gate/CUDA/research corpus.
+
+Availabilityattempt01 fail PID trước imports/native0. ONE metadata probe xác nhận outer→venvredirector→actualPython; tổng0,8453937/60s, overallUNKNOWN vì conhost ở snapshot cuối, không persistentleak claim. Readertrial01 timeout28,0125s/khôngJUnit; exactargv process scan hiện không match, không là PASS. Hoàn thiện ownedJob/GO membership trước retry; source/time/failed receipts giữ nguyên, không resetbudget.0Modal/Holdout/newcloudexport.

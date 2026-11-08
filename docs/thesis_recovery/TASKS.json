@@ -3384,7 +3384,7 @@
     },
     {
       "id": "RESAUTH01",
-      "research_objective": "Explicit A0 simulator-research phase và input/runtime/resource authorization trước model allocation",
+      "research_objective": "85 final pure guard tests; runtime/Gate mocked, chưa actual authorization/training/CUDA.",
       "rq": [
         "RQ3"
       ],
@@ -3397,25 +3397,28 @@
       ],
       "required_inputs": "Source/recipe/protocol/budget pins; không Holdout hoặc historical artifact mutation",
       "files_components": [
-        "src/knowledge_tracing/akt/config.py",
-        "src/knowledge_tracing/akt/research_execution.py"
+        "research_tracking/reports/akt_research_execution_readiness_20261108.md",
+        "research_tracking/runs/akt-research-execution-engineering-20261108-01/manifest.json"
       ],
-      "implementation_objective": "Explicit A0 simulator-research phase và input/runtime/resource authorization trước model allocation",
-      "acceptance_criteria": "Parent-reviewed source/contract, meaningful bounded verification, durable receipts; không fake research-ready/GPU/approval",
+      "implementation_objective": "85 final pure guard tests; runtime/Gate mocked, chưa actual authorization/training/CUDA.",
+      "acceptance_criteria": "Đã kiểm source/bundle và raw Git bytes; giới hạn theo report, không RQ completion.",
       "verification_steps": "Source-level review và bounded local checks đúng scope; no paid launch",
       "required_artifacts": [
-        "src/knowledge_tracing/akt/config.py",
-        "src/knowledge_tracing/akt/research_execution.py"
+        "research_tracking/reports/akt_research_execution_readiness_20261108.md",
+        "research_tracking/runs/akt-research-execution-engineering-20261108-01/manifest.json"
       ],
       "estimated_effort": "Finite next engineering/diagnostic batch; thời gian chưa đo không là forecast",
       "compute_cost_category": "local CPU",
       "authorization_requirements": "Safe engineering/read-only; corpus/fit dispatch phải freeze exact counts/caps trước chạy; no paid/fullCV/Holdout",
-      "status": "IN_PROGRESS",
-      "blockers": []
+      "status": "COMPLETED_ENGINEERING_NOT_RESEARCH_READY",
+      "blockers": [],
+      "completion_commit": "750921a",
+      "verified_bundle_outputs": 50,
+      "not_RQ_complete": true
     },
     {
       "id": "CORPUSIO01",
-      "research_objective": "Publisher reusable corpus đúng schema guard, exclusive output và DONE-last; oracle tách model inputs",
+      "research_objective": "31 publisher tests với handmade temporary corpus; chưa actual research corpus; DONE-last không OS crash transaction.",
       "rq": [
         "RQ1",
         "RQ2",
@@ -3429,21 +3432,24 @@
       ],
       "required_inputs": "Source/recipe/protocol/budget pins; không Holdout hoặc historical artifact mutation",
       "files_components": [
-        "artifacts/simulator/corpora/",
-        "src/knowledge_tracing/simulator_research_collection.py"
+        "research_tracking/reports/simulator_corpus_publisher_readiness_20261108.md",
+        "research_tracking/runs/simulator-corpus-publisher-engineering-20261108-01/manifest.json"
       ],
-      "implementation_objective": "Publisher reusable corpus đúng schema guard, exclusive output và DONE-last; oracle tách model inputs",
-      "acceptance_criteria": "Parent-reviewed source/contract, meaningful bounded verification, durable receipts; không fake research-ready/GPU/approval",
+      "implementation_objective": "31 publisher tests với handmade temporary corpus; chưa actual research corpus; DONE-last không OS crash transaction.",
+      "acceptance_criteria": "Đã kiểm source/bundle và raw Git bytes; giới hạn theo report, không RQ completion.",
       "verification_steps": "Source-level review và bounded local checks đúng scope; no paid launch",
       "required_artifacts": [
-        "artifacts/simulator/corpora/",
-        "src/knowledge_tracing/simulator_research_collection.py"
+        "research_tracking/reports/simulator_corpus_publisher_readiness_20261108.md",
+        "research_tracking/runs/simulator-corpus-publisher-engineering-20261108-01/manifest.json"
       ],
       "estimated_effort": "Finite next engineering/diagnostic batch; thời gian chưa đo không là forecast",
       "compute_cost_category": "local CPU",
       "authorization_requirements": "Safe engineering/read-only; corpus/fit dispatch phải freeze exact counts/caps trước chạy; no paid/fullCV/Holdout",
-      "status": "IN_PROGRESS",
-      "blockers": []
+      "status": "COMPLETED_ENGINEERING_NOT_RESEARCH_READY",
+      "blockers": [],
+      "completion_commit": "47323e9",
+      "verified_bundle_outputs": 30,
+      "not_RQ_complete": true
     },
     {
       "id": "RESCORPUS01",
@@ -3479,7 +3485,7 @@
     },
     {
       "id": "RQDIAG07",
-      "research_objective": "Kiểm khả năng conditional full-vs-empty graph-package contrast từ cached shared-stream artifacts; chưa chạy phân tích mới",
+      "research_objective": "Conditional full–empty edge-set contrast: 1080 paired targets; ΔLL−0.000636974; PG bất lợi cả3seed,22preview changes; không causal learning effect.",
       "rq": [
         "RQ1"
       ],
@@ -3492,21 +3498,58 @@
       ],
       "required_inputs": "Source/recipe/protocol/budget pins; không Holdout hoặc historical artifact mutation",
       "files_components": [
-        "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/",
-        "src/knowledge_tracing/paper2_reference.py"
+        "research_tracking/reports/rq1_fixed_edge_set_contrast_20261108.md",
+        "research_tracking/runs/rq1-fixed-edge-set-contrast-20261108-01/manifest.json"
       ],
-      "implementation_objective": "Kiểm khả năng conditional full-vs-empty graph-package contrast từ cached shared-stream artifacts; chưa chạy phân tích mới",
-      "acceptance_criteria": "Parent-reviewed source/contract, meaningful bounded verification, durable receipts; không fake research-ready/GPU/approval",
+      "implementation_objective": "Conditional full–empty edge-set contrast: 1080 paired targets; ΔLL−0.000636974; PG bất lợi cả3seed,22preview changes; không causal learning effect.",
+      "acceptance_criteria": "Đã kiểm source/bundle và raw Git bytes; giới hạn theo report, không RQ completion.",
       "verification_steps": "Source-level review và bounded local checks đúng scope; no paid launch",
       "required_artifacts": [
-        "research_tracking/runs/rq1-query-observability-reproduction-20261108-01/",
-        "src/knowledge_tracing/paper2_reference.py"
+        "research_tracking/reports/rq1_fixed_edge_set_contrast_20261108.md",
+        "research_tracking/runs/rq1-fixed-edge-set-contrast-20261108-01/manifest.json"
       ],
       "estimated_effort": "Finite next engineering/diagnostic batch; thời gian chưa đo không là forecast",
       "compute_cost_category": "local CPU",
       "authorization_requirements": "Safe engineering/read-only; corpus/fit dispatch phải freeze exact counts/caps trước chạy; no paid/fullCV/Holdout",
-      "status": "IN_PROGRESS",
-      "blockers": []
+      "status": "COMPLETED_DIAGNOSTIC_NOT_RQ_COMPLETE",
+      "blockers": [],
+      "completion_commit": "9efd5be",
+      "verified_bundle_outputs": 29,
+      "not_RQ_complete": true
+    },
+    {
+      "id": "RQDIAG08",
+      "research_objective": "304 descriptive cells từ1080 cached pairs; Hpast confounded time/order; concept-prior không train support; new independent N=0.",
+      "rq": [
+        "RQ1",
+        "RQ2"
+      ],
+      "workstream": "research",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RQDIAG07"
+      ],
+      "required_inputs": "Source/recipe/protocol/budget pins; không Holdout hoặc historical artifact mutation",
+      "files_components": [
+        "research_tracking/reports/rq1_history_stratified_edge_contrast_20261108.md",
+        "research_tracking/runs/rq1-history-edge-contrast-20261108-01/manifest.json"
+      ],
+      "implementation_objective": "304 descriptive cells từ1080 cached pairs; Hpast confounded time/order; concept-prior không train support; new independent N=0.",
+      "acceptance_criteria": "Đã kiểm source/bundle và raw Git bytes; giới hạn theo report, không RQ completion.",
+      "verification_steps": "Source-level review và bounded local checks đúng scope; no paid launch",
+      "required_artifacts": [
+        "research_tracking/reports/rq1_history_stratified_edge_contrast_20261108.md",
+        "research_tracking/runs/rq1-history-edge-contrast-20261108-01/manifest.json"
+      ],
+      "estimated_effort": "Finite next engineering/diagnostic batch; thời gian chưa đo không là forecast",
+      "compute_cost_category": "local CPU",
+      "authorization_requirements": "Safe engineering/read-only; corpus/fit dispatch phải freeze exact counts/caps trước chạy; no paid/fullCV/Holdout",
+      "status": "COMPLETED_DIAGNOSTIC_NOT_RQ_COMPLETE",
+      "blockers": [],
+      "completion_commit": "ec88970",
+      "verified_bundle_outputs": 28,
+      "not_RQ_complete": true
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",
