@@ -1,0 +1,55 @@
+{
+  "pretest_review": {
+    "initial_source_sha256": "360eaa696549c3a751cf2effb910800a431abb1841dc7ca74909a6c29d2d54f6",
+    "findings": "Missing actual helper/upstream source binding; A0 registering unvalidated branch parameters",
+    "fixed_before_first_run": true,
+    "observed_pre_fix_failed_tests": false,
+    "physical_initial_snapshot_available": false,
+    "positive_after": "23targeted tests passed; no fabricated red tests; constructor/batch/forward source guards and A0-none tested"
+  },
+  "gate20": {
+    "functional_passed": 724,
+    "resource_verdict": "REJECTED",
+    "elapsed_seconds": 1083.9951060999883,
+    "timeout_seconds": 540,
+    "report_sha256": "9d86b215bd936f04880bcd9bc775f2016784f279572109c39c017d46375fe351",
+    "audit_sha256": "e6a53ade40d01ee4229fcc3fe5b8d3e7364c984e3c37a632e4e49810b4c1a9c7",
+    "cause": "UNRESOLVED; no throughput/regression/cost inference"
+  },
+  "gate21": {
+    "functional_counts": {
+      "passed": 757,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "resource_verdict": "ACCEPTED",
+    "elapsed_seconds": 467.13617350001005,
+    "timeout_seconds": 540
+  },
+  "four_gate_build_changes": {
+    "scripts/akt/refresh_gate2.py": {
+      "old": "78e7be9cdf95171ffe36eb756fc1c1c908762a913c4768ac22f72d9bed36a963",
+      "new": "3c271766392bddbd63e3e04f5516334686add1cbfef789c81c14d3425e7b14da"
+    },
+    "src/knowledge_tracing/akt/authorization.py": {
+      "old": "e95c7928330d7353b4d52a7e59abe011c2cb8cc0e774c15f2baaa41aac9312e2",
+      "new": "bd6be914e3b5049927ba6358ee4872097a46469fede9ad1b71ee63df951ac7f0"
+    },
+    "tests/akt/test_gate2_refresh.py": {
+      "old": "90db5ec8f5e4997f78a561ea866b03bfb282dfbd80411d7afc116021b5d87a47",
+      "new": "eecb668bd92f76fd0dcb551cdf8437e417dad8b0a53460641d9f9d1ecff5882a"
+    },
+    "tests/akt/test_runner.py": {
+      "old": "1fffc5155bdc05371dfe268a20e8eb311701d276535ba2448c67a887cfb3a7be",
+      "new": "ef7630468d9edb7101f278bbfb81c98f636592a86f3e6480c37a2cdc843c9a63"
+    }
+  },
+  "targeted_dependency_change": "authorization.py only; old/new byte versions separately preserved",
+  "four_old_guard_source_basis": {
+    "bundle": "gate2-budget-fix-20261108-01",
+    "manifest_sha256": "d43bcfdcbc4af505271cd7b6b1a2f2f66b37b0a777af0c7adeb9b999c23b5760",
+    "exact_old_gate20_hashes": true
+  },
+  "snapshot_limit": "Old35unchanged wrapper files materialized by exact historical SHA; oldauth from immutable historical bundle. Never claim all old snapshots were physical pre-run copies."
+}

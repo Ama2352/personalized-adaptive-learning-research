@@ -1,0 +1,363 @@
+"""Một epoch toy observable CPU, không là protocol hoặc fitted research artifact.
+
+Không CLI/Junyi fold, collector, calibration/final/refit hay OnlineSession.
+Approval/origin là khai báo của caller, không chứng thực nguồn dữ liệu độc lập.
+"""
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass, replace
+from functools import wraps
+import hashlib
+import io
+import json
+import math
+from pathlib import Path
+import random
+import re
+import time
+import traceback
+
+import numpy as np
+import torch
+
+from knowledge_tracing.simulator_bridge import identity_hash
+from .checkpoint import restore_checkpoint, save_checkpoint
+from .config import AKTConfig, PROJECT_ROOT, SOURCE_COMMIT, validate_config
+from .model import AKTAdapter
+from .online import inference_recipe
+from .provenance import verify_upstream
+from .resources import memory_snapshot
+from .simulator_data import (
+    SimulatorEncoding, SimulatorShard, SimulatorUnseenQuery,
+    fit_simulator_encoding, iter_simulator_windows, scoring_targets,
+)
+from .training import train_epoch
+
+PURPOSE = "simulator_engineering_only_v1"
+POLICY = "handcrafted-observable-fixture-v1"
+_GIB = 1024**3
+
+
+def _cpu_only(function):
+    @wraps(function)
+    def guarded(*args, **kwargs):
+        # Check before constructors, deserialization or Adam's lazy state allocation.
+        if torch.cuda.is_available() or torch.cuda.is_initialized():
+            raise RuntimeError("CPU engineering requires CUDA hidden/unavailable and uninitialized")
+        with torch.device("cpu"):
+            return function(*args, **kwargs)
+    return guarded
+
+
+@dataclass(frozen=True)
+class SyntheticEngineeringBudget:
+    approval_reference: str
+    expected_train_sha256: str
+    expected_selection_sha256: str
+    approved: bool
+    max_train_learners: int = 2
+    max_selection_learners: int = 1
+    max_events_per_learner: int = 12
+    max_optimizer_steps: int = 4
+    max_seconds: float = 60.0
+    max_rss_bytes: int = 2 * _GIB
+    min_available_ram_bytes: int = _GIB
+
+    def __post_init__(self):
+        if self.approved is not True or not isinstance(self.approval_reference, str) or not self.approval_reference.strip():
+            raise PermissionError("explicit synthetic engineering approval required")
+        if len(self.approval_reference) > 1000:
+            raise ValueError("approval reference too long")
+        for value in (self.expected_train_sha256, self.expected_selection_sha256):
+            if not isinstance(value, str) or not re.fullmatch(r"[a-f0-9]{64}", value):
+                raise ValueError("explicit input SHA-256 required")
+        for name, ceiling in (("max_train_learners", 2), ("max_selection_learners", 1),
+                              ("max_events_per_learner", 12), ("max_optimizer_steps", 4),
+                              ("max_rss_bytes", 2 * _GIB)):
+            value = getattr(self, name)
+            if type(value) is not int or not 1 <= value <= ceiling:
+                raise ValueError("synthetic hard cap: " + name)
+        if (type(self.max_seconds) not in (int, float) or not math.isfinite(self.max_seconds)
+                or not 0 < self.max_seconds <= 60):
+            raise ValueError("synthetic hard cap: max_seconds")
+        if type(self.min_available_ram_bytes) is not int or self.min_available_ram_bytes < _GIB:
+            raise ValueError("available RAM floor is at least 1 GiB")
+
+
+@dataclass(frozen=True)
+class EngineeringEpochResult:
+    output_dir: Path
+    checkpoint_sha256: str
+    optimizer_steps: int
+    train_targets: int
+    selection_coverage: dict
+    reload_max_abs_delta: float
+    weight_role: str = "engineering_only"
+
+
+class IncompleteEngineeringEpoch(RuntimeError):
+    """Budget interrupted training: retain diagnostics, never publish checkpoint."""
+
+
+def _sha(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _source_inventory():
+    native = sorted(Path(__file__).parent.glob("*.py"))
+    shared = [Path(__file__).parent.parent / name for name in
+              ("simulator_data.py", "simulator_bridge.py", "shared_kt.py")]
+    return {p.relative_to(PROJECT_ROOT).as_posix(): _sha(p) for p in native + shared}
+
+
+def _write(path, value):
+    with Path(path).open("x", encoding="utf8") as stream:
+        json.dump(value, stream, ensure_ascii=False, indent=2, allow_nan=False, default=str)
+        stream.write("\n")
+
+
+def _guard(budget, deadline):
+    if time.monotonic() >= deadline:
+        raise TimeoutError("synthetic engineering wall budget exhausted")
+    sample = memory_snapshot()
+    if max(sample["process_rss_bytes"], sample["process_peak_rss_bytes"] or 0) > budget.max_rss_bytes:
+        raise MemoryError("synthetic engineering RSS cap")
+    if sample["system_available_ram_bytes"] < budget.min_available_ram_bytes:
+        raise MemoryError("synthetic engineering available RAM floor")
+    return sample
+
+
+def _validate_scope(config, train, selection, budget):
+    if type(config) is not AKTConfig or type(budget) is not SyntheticEngineeringBudget:
+        raise ValueError("exact config/budget types required")
+    validate_config(config)
+    if (config.execution_enabled is not True or config.phase != "smoke" or config.device != "cpu"
+            or config.max_epochs != 1 or config.recovery is not None):
+        raise PermissionError("enabled CPU smoke one-epoch engineering only; no recovery/refit")
+    if type(config.threads) is not int or not 1 <= config.threads <= 2 or type(config.seed) is not int or not 0 <= config.seed < 2**32:
+        raise ValueError("bounded CPU threads and NumPy-compatible explicit seed required")
+    if config.source_root.resolve() != (PROJECT_ROOT / "artifacts/akt/dependencies/upstream").resolve():
+        raise ValueError("only trusted pinned upstream path")
+    for name, ceiling in (("max_train_users", budget.max_train_learners),
+                          ("max_val_users", budget.max_selection_learners),
+                          ("max_targets_per_side", budget.max_train_learners * budget.max_events_per_learner),
+                          ("max_steps", budget.max_optimizer_steps), ("max_seconds", budget.max_seconds),
+                          ("max_wall_seconds", budget.max_seconds), ("max_rss_bytes", budget.max_rss_bytes)):
+        value = getattr(config, name)
+        if value is None or value > ceiling:
+            raise ValueError("config exceeds explicit engineering budget: " + name)
+    if config.min_available_ram_bytes < budget.min_available_ram_bytes:
+        raise ValueError("config RAM floor below engineering budget")
+    if config.max_total_targets is None or config.max_total_targets > 3 * budget.max_events_per_learner:
+        raise ValueError("explicit tiny total-target cap required")
+    if type(train) is not SimulatorShard or type(selection) is not SimulatorShard:
+        raise ValueError("exact observable shards required; oracle forbidden")
+    if train.role != "train" or selection.role != "selection":
+        raise ValueError("only train/selection roles; no calibration/final/refit")
+    if train.plan != selection.plan or train.bank != selection.bank:
+        raise ValueError("plan/domain mismatch")
+    if not train.bank.environment_id.startswith("synthetic-akt-engineering-"):
+        raise ValueError("explicit synthetic engineering domain required")
+    if len(train.bank.items) > 36:
+        raise ValueError("tiny handcrafted item bank cap exceeded")
+    for shard, ceiling in ((train, budget.max_train_learners), (selection, budget.max_selection_learners)):
+        shard.audit
+        if len(shard.trajectories) > ceiling or shard.max_events_per_learner > budget.max_events_per_learner:
+            raise ValueError("tiny learner/event cap exceeded")
+        if any(t.collection_policy_id != POLICY for t in shard.trajectories):
+            raise ValueError("handcrafted observable fixture declaration required")
+    if train.identity != budget.expected_train_sha256 or selection.identity != budget.expected_selection_sha256:
+        raise ValueError("input SHA mismatch")
+    train_count = sum(len(t.observations) for t in train.trajectories)
+    selection_count = sum(len(t.observations) for t in selection.trajectories)
+    if (len(train.trajectories) > config.max_train_users or len(selection.trajectories) > config.max_val_users
+            or max(train_count, selection_count) > config.max_targets_per_side
+            or train_count + selection_count > config.max_total_targets):
+        raise ValueError("actual inputs exceed config caps")
+    output = config.output_dir.absolute()
+    roots = (PROJECT_ROOT / "artifacts/akt/synthetic", PROJECT_ROOT / "experiments/akt/results")
+    if output.parent not in roots or output.name != config.run_id or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,47}", config.run_id):
+        raise ValueError("fresh direct synthetic/results run directory required")
+    if config.run_id.upper() in {"CON", "PRN", "AUX", "NUL", *(f"COM{i}" for i in range(1,10)), *(f"LPT{i}" for i in range(1,10))}:
+        raise ValueError("Windows device run ID forbidden")
+    for part in (output, *output.parents):
+        if part.is_symlink() or getattr(part, "is_junction", lambda: False)():
+            raise ValueError("symlink/junction output forbidden")
+        if part == PROJECT_ROOT:
+            break
+    if output.exists():
+        raise FileExistsError(output)
+    return output
+
+
+def _weights(adapter):
+    return identity_hash({name: hashlib.sha256(value.detach().cpu().contiguous().numpy().tobytes()).hexdigest()
+                          for name, value in adapter.native.state_dict().items()})
+
+
+def _evaluate(adapter, selection, encoding, budget, deadline):
+    before, source_before = _weights(adapter), selection.identity
+    expected = scoring_targets(selection, encoding)
+    targets = {(t.learner_id, t.query.source_row, t.global_rank): t for t in expected}
+    predictions = {}
+    pending = []
+    def flush():
+        if not pending:
+            return
+        _guard(budget, deadline)
+        values = adapter.predict_windows(pending)
+        _guard(budget, deadline)
+        for window, scores in zip(pending, values, strict=True):
+            for local in np.flatnonzero(window.target_mask):
+                key = (window.inputs.user_ids[local], int(window.inputs.source_rows[local]), int(window.global_ranks[local]))
+                if key in predictions or key not in targets:
+                    raise ValueError("duplicate/foreign selection target")
+                predictions[key] = float(scores[local])
+        pending.clear()
+    for entry in iter_simulator_windows(selection, encoding, context=adapter.config.context,
+                                        target_block=adapter.config.target_block, training=False):
+        _guard(budget, deadline)
+        if isinstance(entry, SimulatorUnseenQuery):
+            key = (entry.learner_id, entry.query.source_row, entry.global_rank)
+            if key in predictions or key not in targets:
+                raise ValueError("duplicate/foreign unseen target")
+            predictions[key] = None
+        else:
+            pending.append(entry)
+            if len(pending) >= adapter.config.batch_size:
+                flush()
+    flush()
+    if predictions.keys() != targets.keys():
+        raise ValueError("selection target ledger mismatch")
+    rows, loss_sum, known = [], 0.0, 0
+    for key, target in targets.items():
+        probability = predictions[key]
+        if (probability is not None) != target.trained_item:
+            raise ValueError("OOV support mismatch")
+        if probability is not None:
+            if not math.isfinite(probability) or not 0 <= probability <= 1:
+                raise ValueError("invalid engineering prediction")
+            p = min(1 - 1e-12, max(1e-12, probability))
+            loss_sum -= target.correct * math.log(p) + (1-target.correct) * math.log1p(-p)
+            known += 1
+        rows.append({"learner_id": key[0], "source_row": key[1], "global_rank": key[2],
+                     "item_id": target.query.item_id, "probability": probability,
+                     "support_reason": "engineering_known_item" if probability is not None else "oov_item",
+                     "weight_role": "engineering_only"})
+    if not known:
+        raise ValueError("selection has no supported toy targets")
+    if _weights(adapter) != before or selection.identity != source_before:
+        raise ValueError("selection mutated weights or observable inputs")
+    return {"expected_rows": len(rows), "known_rows": known, "unseen_rows": len(rows)-known,
+            "engineering_mean_log_loss": loss_sum/known}, rows
+
+
+@_cpu_only
+def load_engineering_checkpoint(path: Path, config: AKTConfig, encoding: SimulatorEncoding, *,
+                                expected_sha256: str, expected_identity: dict):
+    """Hash bounded actual deserialization bytes; never create a fitted backend."""
+    if (expected_identity.get("purpose") != PURPOSE or expected_identity.get("weight_role") != "engineering_only"
+            or "training_domain" in expected_identity or config.device != "cpu"
+            or expected_identity.get("encoding_sha256") != encoding.identity
+            or expected_identity.get("sources_sha256") != _source_inventory()
+            or expected_identity.get("inference_recipe") != inference_recipe(config)):
+        raise ValueError("engineering checkpoint scope/encoding/recipe mismatch")
+    with Path(path).open("rb") as stream:
+        payload_bytes = stream.read(8*1024**2 + 1)
+    if len(payload_bytes) > 8*1024**2 or hashlib.sha256(payload_bytes).hexdigest() != expected_sha256:
+        raise ValueError("engineering checkpoint payload SHA/size mismatch")
+    payload = torch.load(io.BytesIO(payload_bytes), weights_only=True, map_location="cpu")
+    if (payload.get("identity") != expected_identity or payload.get("progress", {}).get("complete") is not True
+            or payload["progress"].get("role") != PURPOSE or payload["progress"].get("epoch") != 1):
+        raise ValueError("not a complete engineering epoch checkpoint")
+    adapter = AKTAdapter(config, encoding.exercise_encoding())
+    optimizer = torch.optim.Adam(adapter.native.parameters(), lr=config.lr, betas=config.betas,
+                                 eps=config.eps, weight_decay=config.weight_decay)
+    restore_checkpoint(adapter, optimizer, payload)
+    return adapter
+
+
+@_cpu_only
+def run_engineering_epoch(config: AKTConfig, *, train: SimulatorShard, selection: SimulatorShard,
+                          budget: SyntheticEngineeringBudget) -> EngineeringEpochResult:
+    output = _validate_scope(config, train, selection, budget)
+    budget = replace(budget, max_rss_bytes=min(budget.max_rss_bytes, config.max_rss_bytes),
+                     min_available_ram_bytes=max(budget.min_available_ram_bytes, config.min_available_ram_bytes))
+    deadline = time.monotonic() + min(budget.max_seconds, config.max_wall_seconds)
+    _guard(budget, deadline)
+    output.mkdir(parents=True, exist_ok=False)
+    source_before = {}
+    previous_threads = torch.get_num_threads()
+    try:
+        source_before = _source_inventory()
+        torch.set_num_threads(config.threads)
+        upstream = verify_upstream(config.source_root, SOURCE_COMMIT)
+        encoding = fit_simulator_encoding(train)
+        identity = {"purpose": PURPOSE, "weight_role": "engineering_only", "engineering_bank_identity": train.bank.identity,
+                    "plan_sha256": train.plan.identity, "train_sha256": train.identity,
+                    "selection_sha256": selection.identity, "encoding_sha256": encoding.identity,
+                    "inference_recipe": inference_recipe(config), "config": json.loads(json.dumps(asdict(config), default=str)),
+                    "budget": asdict(budget), "sources_sha256": source_before, "upstream": upstream,
+                    "unused_legacy_fields": ["outer_fold", "inner_val_fraction", "patience", "min_delta"]}
+        _write(output/"invocation.json", identity)
+        random.seed(config.seed)
+        np.random.seed(config.seed)
+        torch.manual_seed(config.seed)
+        adapter = AKTAdapter(config, encoding.exercise_encoding())
+        optimizer = torch.optim.Adam(adapter.native.parameters(), lr=config.lr, betas=config.betas,
+                                     eps=config.eps, weight_decay=config.weight_decay)
+        windows = tuple(iter_simulator_windows(train, encoding, context=config.context,
+                                               target_block=config.target_block, training=True))
+        ledger = [(w.window.inputs.user_ids[i], int(w.window.inputs.source_rows[i]), int(w.window.global_ranks[i]))
+                  for w in windows for i in np.flatnonzero(w.window.target_mask)]
+        if len(ledger) != len(set(ledger)) or len(ledger) != sum(len(t.observations) for t in train.trajectories):
+            raise ValueError("train target ledger mismatch")
+        before = _weights(adapter)
+        stats = train_epoch(adapter, lambda: iter(windows), optimizer=optimizer, epoch=1,
+            budget={"max_steps": config.max_steps, "max_targets": config.max_targets_per_side,
+                    "max_seconds": min(config.max_seconds, max(0.0, deadline-time.monotonic())),
+                    "max_rss_bytes": config.max_rss_bytes, "min_available_ram_bytes": config.min_available_ram_bytes})
+        _write(output/"training.json", {**asdict(stats), "target_ledger": ledger})
+        if not stats.complete or stats.valid_targets != len(ledger):
+            raise IncompleteEngineeringEpoch("no complete checkpoint for a partial engineering epoch")
+        if before == _weights(adapter) or not stats.parameter_update_steps:
+            raise ValueError("toy training did not update parameters")
+        _guard(budget, deadline)
+        coverage, rows = _evaluate(adapter, selection, encoding, budget, deadline)
+        if train.identity != budget.expected_train_sha256 or _source_inventory() != source_before:
+            raise ValueError("source/train input drift")
+        checkpoint = output/"epoch1.pt"
+        save_checkpoint(checkpoint, adapter, optimizer, identity=identity,
+                        progress={"complete": True, "epoch": 1, "role": PURPOSE})
+        digest = _sha(checkpoint)
+        _guard(budget, deadline)
+        reloaded = load_engineering_checkpoint(checkpoint, config, encoding,
+                                               expected_sha256=digest, expected_identity=identity)
+        reload_coverage, reload_rows = _evaluate(reloaded, selection, encoding, budget, deadline)
+        delta = max(abs(a["probability"]-b["probability"]) for a,b in zip(rows,reload_rows,strict=True)
+                    if a["probability"] is not None)
+        if coverage != reload_coverage or delta > 1e-7 or _weights(reloaded) != _weights(adapter):
+            raise ValueError("engineering checkpoint reload parity failed")
+        if _source_inventory() != source_before or train.identity != budget.expected_train_sha256 or selection.identity != budget.expected_selection_sha256:
+            raise ValueError("source/input drift before completion")
+        _write(output/"selection.json", {"weight_role": "engineering_only", "coverage": coverage,
+                                         "predictions": rows, "reload_max_abs_delta": delta})
+        _write(output/"result.json", {"status": "complete_engineering_only", "checkpoint_sha256": digest,
+            "optimizer_steps": stats.optimizer_steps, "train_targets": stats.valid_targets,
+            "selection_coverage": coverage, "reload_max_abs_delta": delta, "sources_post_sha256": _source_inventory(),
+            "runtime": {"torch": torch.__version__, "device": "cpu", "memory": _guard(budget, deadline)},
+            "not_adopted": ["research allocation", "mastery/calibration", "controller", "refit/final", "fitted OnlineSession"]})
+        return EngineeringEpochResult(output, digest, stats.optimizer_steps, stats.valid_targets, coverage, delta)
+    except Exception as error:
+        try:
+            source_after = _source_inventory()
+        except Exception as inventory_error:
+            source_after = {"inventory_error": type(inventory_error).__name__}
+        _write(output/"failure.json", {"status": "failed_engineering_only", "error_type": type(error).__name__,
+                                      "error": str(error), "sources_before_sha256": source_before,
+                                      "sources_after_sha256": source_after, "complete_result_published": False})
+        with (output/"failure.log").open("x",encoding="utf8") as stream:
+            stream.write(traceback.format_exc())
+        raise
+    finally:
+        torch.set_num_threads(previous_threads)
