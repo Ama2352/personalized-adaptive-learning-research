@@ -2,7 +2,7 @@
 
 ## Cập nhật08/11 — reconnect CPU đã kiểm, source mới chưa upload
 
-User xác nhận MCP và giữ CPU. Probe stdlib đầu xác nhận project/target Python cũ còn tồn tại, Python3.13.18 và cfg hash `0b853774…033366`, không có `/dev/nvidia0`; chưa import Torch hoặc gọi device API. Lượt readonly tiếp theo dùng nguyên discovery source `51c4b980…157e54a` và profile `0944dc50…09b8228` với attempt mới, không chạy lại ID cũ.
+User xác nhận MCP và giữ CPU. Probe stdlib đầu xác nhận project/target Python cũ còn tồn tại, Python3.13.18 và cfg hash `0b853774…033366`, không có `/dev/nvidia0`; chưa import Torch hoặc gọi device API. Lượt readonly tiếp theo dùng nguyên discovery source `51c4b98053ba4eaac42b8c8be51ac29645c0b5fdcdf243b19d07c760a8a9db5f` và profile `0944dc50…09b8228` với attempt mới, không chạy lại ID cũ.
 
 [Bundle reconnect CPU](../research_tracking/runs/akt-cpu-reconnect-20261108-01/README.md), [manifest](../research_tracking/runs/akt-cpu-reconnect-20261108-01/manifest.json):165source hashes khớp baseline,44distribution metadata/RECORD và9origin records (gồm pip) không đổi; native0,175275s, launcher0,343111s≤30s, cả hai cleanup accepted. Prefix `/usr` dưới `-I -S` không được giả thành normal venv prefix. Đây chỉ metadata/source audit; còn thiếu fresh startup/full installed-byte/origin audit và normal CPU import trên source mới.
 

@@ -422,3 +422,8 @@ FreshRAM snapshot3.546GB<4GiBGatefloor,khônglaunchGate. 06architectuređãđố
 UserxácnhậnMCPgiữCPU;newbridge17125/session4a53…actualconnectedtrue+websocketlive. Mộtcellstdlibreadonlythật xácnhậnROOT/targetpythoncòntồntại,Python3.13.18/cfg0b853774…033366,/dev/nvidia0absent,newgraphsourceabsent. Khôngtargetinterpreter/Torch/pip/install/train/deviceAPI. Khôngsuy44packages/source165freshchỉtừcfg;nextwarmmetadataauditđượcgiaoagentchuẩnbịlocal.
 
 Metadataquestion_bank84/28x3difficultiesconfirmed vàmanualresponsecurvemeanθ1250=0.5637150147511514;τ0.5choequal3refs tươngứngθ1200. 18interfaceđãlưuđểS04review,khôngapplycontroller/thresh/calibration. GlobalGoalactive; noModal/fullCV/Holdout.
+
+
+### 08/11 — Actual CPU warm metadata nhận và commit1f6b9d4
+
+MCPCPU03đãchạymộtlượtreadonly, native0.175275s/launcher0.343111s≤30,bothcleanuptrue,165sourcemap/44METADATA+RECORD/9originsincludingpip/ABI khớpbaselineCPU02.9outputsrawGitverified,manifestec87a2e3…7b697f. KhôngTorch/importnormal/sitehooks/pip/install/training/deviceAPI. Parentinitialannotation8originsđượcsửa9trongparent-acceptance02,initialsummarygiữnguyên;remainingfieldlàfutureauditskhôngmissingpaths. Runbookabbreviatedcontrollerhashđãđínhchínhfull51c…9db5f,khôngsửaactualartifact. Newsourcekitc934chưa upload,Gate24vẫnhistorical.
