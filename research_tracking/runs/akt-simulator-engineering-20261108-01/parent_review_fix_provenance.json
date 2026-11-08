@@ -1,0 +1,19 @@
+{
+  "provenance": "Parent read-only source review after trial02; not reproduced pre-fix failures",
+  "ambient_cpu_device": {
+    "before_source_sha256": "5ae344b34bfecc8d7e574d33fac67f941a4df5a8d3bf7c3d817b8017e25b07d9",
+    "reason": "Native constructor allocates before .to(cpu); Adam lazy state follows ambient default device. Generic save_checkpoint may collect CUDA RNG when visible.",
+    "fix": "Explicit CPU context around full run/reload and reject CUDA available/initialized before constructors/load.",
+    "observed_after": "Happy actual update+internal reload under enclosing meta; direct meta reload0updates; mocked CUDA availability/init rejection0GPU.",
+    "observed_failed_pre_fix_test": false
+  },
+  "dependency_binding": {
+    "before": "9 selected native source files, omitted behavior imports",
+    "reason": "inference_recipe, encoding/provenance/resources/types and shared simulator history/domain behavior could drift without subset inventory changing.",
+    "fix": "Dynamically enumerate all29native py plus3root shared modules; no test file in model identity.",
+    "observed_after": "Exact32source binding pre/post actual lifecycle; simulated resources.py mismatch rejects before torch.load.",
+    "observed_failed_pre_fix_test": false
+  },
+  "history": "trial01/02 PASS are genuine historical snapshots; no fabricated red tests; first report existed after trial02 and is preserved in report-before-parent-fixes.md",
+  "rng": "Python/NumPy/Torch global seeds and checkpoint RNG restoration are not caller-RNG preserving"
+}

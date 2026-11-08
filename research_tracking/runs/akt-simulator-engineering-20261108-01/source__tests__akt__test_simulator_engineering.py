@@ -1,0 +1,229 @@
+"""Handcrafted observables only. Actual suite training: happy1 + partial1 steps."""
+from dataclasses import asdict, replace
+import hashlib
+import json
+from pathlib import Path
+import uuid
+
+import pytest
+import torch
+
+from knowledge_tracing.akt.config import PROJECT_ROOT, load_config
+from knowledge_tracing.akt.online import load_online_akt
+from knowledge_tracing.akt.simulator_data import SimulatorShard, fit_simulator_encoding
+from knowledge_tracing.akt import simulator_engineering as engineering
+from knowledge_tracing.simulator_bridge import SimulatorBank, SimulatorItem, ItemQuery, Observation, identity_hash
+from knowledge_tracing.simulator_data import ObservableTrajectory, ROLES, SimulatorSplitPlan
+
+
+def toy(*, train_learners=2, events=4, selection_role="selection", domain="synthetic-akt-engineering-handmade-v1", plan_seed=42):
+    bank = SimulatorBank(domain, tuple(SimulatorItem(i, i.upper(), 0) for i in "abz"))
+    plan = SimulatorSplitPlan("handmade-engineering-test-v1",plan_seed,tuple((r,train_learners if r=="train" else 1) for r in ROLES))
+    def shard(role, sequence):
+        trajectories=[]
+        for user,assignment in enumerate(plan.assignments(role)):
+            observations=tuple(Observation(ItemQuery(item,rank+1,1000*(1+user)+(100 if role!="train" else 0)+rank+1),rank%2)
+                               for rank,item in enumerate(sequence))
+            trajectories.append(ObservableTrajectory(assignment.learner_id,plan.identity,identity_hash(bank.identity),
+                                                      engineering.POLICY,observations))
+        return SimulatorShard(plan,bank,role,events,tuple(trajectories))
+    return shard("train",("ab"*events)[:events]),shard(selection_role,("azba"*events)[:events])
+
+
+def config(label):
+    template=load_config(PROJECT_ROOT/"experiments/akt/configs/smoke.json")
+    run="simeng-20261108-"+label+"-"+uuid.uuid4().hex[:8]
+    return replace(template,run_id=run,output_dir=PROJECT_ROOT/"artifacts/akt/synthetic"/run,
+                   execution_enabled=True,batch_size=2,max_train_users=2,max_val_users=1,
+                   max_targets_per_side=24,max_total_targets=36,max_steps=4,max_seconds=60,max_wall_seconds=60,
+                   max_rss_bytes=2*1024**3,min_available_ram_bytes=1024**3)
+
+
+def budget(train,selection,**changes):
+    return replace(engineering.SyntheticEngineeringBudget(
+        approval_reference="Parent authorized 20261108: handcrafted toy CPU engineering; no research cohort",
+        expected_train_sha256=train.identity,expected_selection_sha256=selection.identity,approved=True),**changes)
+
+
+@pytest.fixture(scope="module")
+def completed():
+    train,selection=toy()
+    cfg=config("complete")
+    # Actual happy update and internal reload under a hostile non-CPU default.
+    # Meta is a metadata-only device; no CUDA execution or extra optimizer step.
+    with torch.device("meta"):
+        assert torch.empty(1).device.type=="meta"
+        result=engineering.run_engineering_epoch(cfg,train=train,selection=selection,budget=budget(train,selection))
+        assert torch.empty(1).device.type=="meta"
+    return cfg,train,selection,result
+
+
+def test_actual_complete_epoch_reload_and_target_accounting(completed):
+    cfg,train,selection,result=completed
+    assert result.weight_role=="engineering_only" and result.optimizer_steps==1 and result.train_targets==8
+    assert result.selection_coverage["expected_rows"]==4
+    assert result.selection_coverage["known_rows"]==3 and result.selection_coverage["unseen_rows"]==1
+    assert result.reload_max_abs_delta<=1e-7
+    training=json.loads((cfg.output_dir/"training.json").read_text())
+    assert training["complete"] and training["parameter_update_steps"]==1 and training["nonzero_gradient_steps"]==1
+    assert len(training["target_ledger"])==len({tuple(row) for row in training["target_ledger"]})==8
+    rows=json.loads((cfg.output_dir/"selection.json").read_text())["predictions"]
+    assert len({(r["learner_id"],r["source_row"],r["global_rank"]) for r in rows})==4
+    assert [r["global_rank"] for r in rows if r["probability"] is None]==[1]
+    assert all(r["weight_role"]=="engineering_only" and "correct" not in r for r in rows)
+    invocation=json.loads((cfg.output_dir/"invocation.json").read_text())
+    assert invocation["upstream"]["commit"]==cfg.source_commit
+    assert "fold" not in invocation and "training_domain" not in invocation
+    assert not (cfg.output_dir/"failure.json").exists()
+
+
+def test_production_online_rejects_toy_complete_checkpoint(completed):
+    cfg,train,selection,result=completed
+    identity=json.loads((cfg.output_dir/"invocation.json").read_text())
+    with pytest.raises(ValueError,match="domain"):
+        load_online_akt(cfg.output_dir/"epoch1.pt",cfg,train.bank,
+                        expected_sha256=result.checkpoint_sha256,expected_identity=identity)
+
+
+def test_no_overwrite_completed_output(completed):
+    cfg,train,selection,_=completed
+    before=hashlib.sha256((cfg.output_dir/"epoch1.pt").read_bytes()).hexdigest()
+    with pytest.raises(FileExistsError):
+        engineering.run_engineering_epoch(cfg,train=train,selection=selection,budget=budget(train,selection))
+    assert hashlib.sha256((cfg.output_dir/"epoch1.pt").read_bytes()).hexdigest()==before
+
+
+def test_actual_partial_epoch_has_failure_receipt_and_no_checkpoint():
+    train,selection=toy()
+    cfg=replace(config("partial"),batch_size=1,max_steps=1)
+    with pytest.raises(engineering.IncompleteEngineeringEpoch):
+        engineering.run_engineering_epoch(cfg,train=train,selection=selection,budget=budget(train,selection))
+    stats=json.loads((cfg.output_dir/"training.json").read_text())
+    assert not stats["complete"] and stats["optimizer_steps"]==1 and stats["valid_targets"]==4
+    assert (cfg.output_dir/"failure.log").exists() and (cfg.output_dir/"failure.json").exists()
+    assert not (cfg.output_dir/"epoch1.pt").exists() and not (cfg.output_dir/"result.json").exists()
+
+
+@pytest.mark.parametrize("field,value",[("approved",False),("approval_reference",""),
+    ("max_train_learners",3),("max_selection_learners",2),("max_events_per_learner",13),
+    ("max_optimizer_steps",5),("max_seconds",61),("max_rss_bytes",2*1024**3+1),
+    ("min_available_ram_bytes",1024**3-1),("expected_train_sha256","bad")])
+def test_approval_and_budget_hard_bounds(field,value):
+    train,selection=toy()
+    with pytest.raises((ValueError,PermissionError)):
+        budget(train,selection,**{field:value})
+
+
+@pytest.mark.parametrize("case",["disabled","cuda","refit","source","input","domain","plan","learners","events","policy","outside","nested","configcap","threads","seed","devicepath"])
+def test_preflight_negative_scopes_before_native_model(case,monkeypatch):
+    train,selection=toy()
+    cfg=config("negative")
+    if case=="disabled":cfg=replace(cfg,execution_enabled=False)
+    elif case=="cuda":cfg=replace(cfg,device="cuda")
+    elif case=="refit":cfg=replace(cfg,phase="fold")
+    elif case=="source":cfg=replace(cfg,source_commit="0"*40)
+    elif case=="domain":train,selection=toy(domain="not-an-engineering-domain")
+    elif case=="plan":_,selection=toy(plan_seed=43)
+    elif case=="learners":train,selection=toy(train_learners=3)
+    elif case=="events":train,selection=toy(events=13)
+    elif case=="policy":train=replace(train,trajectories=tuple(replace(t,collection_policy_id="collector-or-oracle") for t in train.trajectories))
+    elif case=="outside":cfg=replace(cfg,output_dir=PROJECT_ROOT/"artifacts/akt/local-tests"/cfg.run_id)
+    elif case=="nested":cfg=replace(cfg,output_dir=cfg.output_dir.parent/"nested"/cfg.run_id)
+    elif case=="configcap":cfg=replace(cfg,max_steps=5)
+    elif case=="threads":cfg=replace(cfg,threads=3)
+    elif case=="seed":cfg=replace(cfg,seed=2**32)
+    elif case=="devicepath":cfg=replace(cfg,run_id="CON",output_dir=cfg.output_dir.parent/"CON")
+    approved=budget(train,selection)
+    if case=="input":approved=replace(approved,expected_train_sha256="0"*64)
+    monkeypatch.setattr(engineering,"AKTAdapter",lambda *a,**k:pytest.fail("native model reached after invalid scope"))
+    with pytest.raises((ValueError,PermissionError)):
+        engineering.run_engineering_epoch(cfg,train=train,selection=selection,budget=approved)
+    assert not cfg.output_dir.exists()
+
+
+@pytest.mark.parametrize("role",["train","calibration","final"])
+def test_selection_wrong_role_rejected(role,monkeypatch):
+    train,selection=toy(selection_role=role)
+    cfg=config("role")
+    monkeypatch.setattr(engineering,"AKTAdapter",lambda *a,**k:pytest.fail("native model reached"))
+    with pytest.raises(ValueError,match="roles"):
+        engineering.run_engineering_epoch(cfg,train=train,selection=selection,budget=budget(train,selection))
+
+
+def test_oracle_payload_forbidden_before_lifecycle():
+    train,_=toy()
+    payload=train.trajectories[0].payload()
+    payload["theta_true"]=[1200]
+    with pytest.raises(ValueError,match="oracle"):
+        ObservableTrajectory.from_payload(payload)
+
+
+def test_checkpoint_payload_and_encoding_negative_without_training(completed):
+    cfg,train,_,result=completed
+    encoding=fit_simulator_encoding(train)
+    identity=json.loads((cfg.output_dir/"invocation.json").read_text())
+    with pytest.raises(ValueError,match="SHA"):
+        engineering.load_engineering_checkpoint(cfg.output_dir/"epoch1.pt",cfg,encoding,
+                                                expected_sha256="0"*64,expected_identity=identity)
+    with pytest.raises(ValueError,match="scope/encoding"):
+        engineering.load_engineering_checkpoint(cfg.output_dir/"epoch1.pt",cfg,encoding,
+             expected_sha256=result.checkpoint_sha256,expected_identity={**identity,"encoding_sha256":"0"*64})
+    with pytest.raises(ValueError,match="scope/encoding"):
+        engineering.load_engineering_checkpoint(cfg.output_dir/"epoch1.pt",cfg,encoding,
+             expected_sha256=result.checkpoint_sha256,expected_identity={**identity,"sources_sha256":{}})
+
+
+def test_guard_real_snapshot_and_injected_negative_controls(monkeypatch):
+    train,selection=toy()
+    b=budget(train,selection)
+    sample=engineering._guard(b,float("inf"))
+    assert sample["pid"]>0
+    monkeypatch.setattr(engineering,"memory_snapshot",lambda:{**sample,"process_rss_bytes":b.max_rss_bytes+1})
+    with pytest.raises(MemoryError,match="RSS"):
+        engineering._guard(b,float("inf"))
+    monkeypatch.setattr(engineering,"memory_snapshot",lambda:{**sample,"system_available_ram_bytes":0})
+    with pytest.raises(MemoryError,match="floor"):
+        engineering._guard(b,float("inf"))
+    with pytest.raises(TimeoutError):
+        engineering._guard(b,0)
+
+
+def test_direct_reload_overrides_meta_default_without_training(completed):
+    cfg,train,_,result=completed
+    identity=json.loads((cfg.output_dir/"invocation.json").read_text())
+    with torch.device("meta"):
+        model=engineering.load_engineering_checkpoint(cfg.output_dir/"epoch1.pt",cfg,fit_simulator_encoding(train),
+                expected_sha256=result.checkpoint_sha256,expected_identity=identity)
+        assert torch.empty(1).device.type=="meta"
+        assert all(parameter.device.type=="cpu" for parameter in model.native.parameters())
+
+
+@pytest.mark.parametrize("cuda_state",["available","initialized"])
+def test_cuda_guard_fails_before_model_or_checkpoint_read(cuda_state,monkeypatch):
+    train,selection=toy()
+    cfg=config("cuda-guard")
+    monkeypatch.setattr(torch.cuda,"is_available",lambda:cuda_state=="available")
+    monkeypatch.setattr(torch.cuda,"is_initialized",lambda:cuda_state=="initialized")
+    monkeypatch.setattr(engineering,"AKTAdapter",lambda *a,**k:pytest.fail("native model reached"))
+    with pytest.raises(RuntimeError,match="CUDA hidden/unavailable"):
+        engineering.run_engineering_epoch(cfg,train=train,selection=selection,budget=budget(train,selection))
+    with pytest.raises(RuntimeError,match="CUDA hidden/unavailable"):
+        engineering.load_engineering_checkpoint(cfg.output_dir/"missing.pt",cfg,fit_simulator_encoding(train),
+                                                expected_sha256="0"*64,expected_identity={})
+    assert not cfg.output_dir.exists()
+
+
+def test_behavior_dependency_inventory_and_drift_before_deserialize(completed,monkeypatch):
+    cfg,train,_,result=completed
+    identity=json.loads((cfg.output_dir/"invocation.json").read_text())
+    inventory=engineering._source_inventory()
+    native={p.relative_to(PROJECT_ROOT).as_posix() for p in (PROJECT_ROOT/"src/knowledge_tracing/akt").glob("*.py")}
+    roots={"src/knowledge_tracing/"+name for name in ("simulator_data.py","simulator_bridge.py","shared_kt.py")}
+    assert set(inventory)==native|roots
+    assert not any(path.startswith("tests/") for path in inventory)
+    drift={**inventory,"src/knowledge_tracing/akt/resources.py":"0"*64}
+    monkeypatch.setattr(engineering,"_source_inventory",lambda:drift)
+    monkeypatch.setattr(torch,"load",lambda *a,**k:pytest.fail("deserialized before source check"))
+    with pytest.raises(ValueError,match="scope/encoding/recipe"):
+        engineering.load_engineering_checkpoint(cfg.output_dir/"epoch1.pt",cfg,fit_simulator_encoding(train),
+                                                expected_sha256=result.checkpoint_sha256,expected_identity=identity)
