@@ -740,3 +740,9 @@ G10closed48/test5bd/reportc017 commit5e1eb40,51rawGitblobsverified; outputinvent
 - Đối chiếu lại 54 raw Git blobs ở commit859617f với bytes local: 50 outputs bundle, manifest và ba source/test/report. Chỉ số inventory tăng4427→4477; không là cỡ mẫu hoặc phần trăm tiến độ.
 - Đính chính nhãn failure pure01 trong state: nguyên nhân quan sát là phép so sánh quantile quá chặt ở test, không có bằng chứng bool exit gây lỗi. Giữ nguyên raw failure và code kernel.
 - GRAPH11 vẫn chưa thực thi: xử lý review về RNG/mode, dtype và binding protocol trước allocation. Main selection/fitted online/GPU và nghiên cứu đầy đủ còn thiếu.
+
+### 09/11 — nối các readout RQ1 trên snapshot đã lưu
+
+- RQDIAG13 đã ghép đủ1080cặp của hai bundle đóng, kiểm concept/M-set/CID và8fixtures. Trong22rawcriterion-differences và22CID-differences chỉ2cặp trùng nhau;5Query-M differences không trùngCID. Query-M chỉ mộtconcept, không toànM-set28.
+- Đây là post-hoc descriptive cross-tab:0modelcalls,0newindependentN, không calibration truth/causal mediation/learning benefit. Cả16nhóm/8zero cells giữ trong bundle24; crosscheck độc lập pooled khớp8ô.
+- Checkpoint35metadata và online35NumPy fixtures cũng accepted nhưng chưa đồng nghĩa checkpoint native/fullGRAPH16 hoặc fitted research. Các gói tương ứng được review/đóng riêng.

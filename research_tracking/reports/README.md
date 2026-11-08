@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**RQ1 — nối readout với quyết định:** [đối chiếu từng snapshot](rq1_query_decision_overlap_20261109.md). Hai nhóm cùng có 22 thay đổi (tiêu chí xác suất tham chiếu và CID) chỉ trùng 2 snapshot; 20 trường hợp mỗi phía không trùng. Cùng 1.080 cặp cũ, không model call hoặc mẫu độc lập mới, không kết luận nhân quả. [Bundle bằng chứng](../runs/rq1-query-decision-overlap-20261109-01/README.md).
+
 **Kernel selection09/11:** [8fixtures thống kê](research_selection_kernel_readiness_20261109.md) với6LLknownanswers đãđốichiếu evaluatorbaseline;50outputs giữ7PASS1FAIL01 và8PASS02. Chỉ response-pooled/sharedbootstrap/tie/fallback logic, chưa nine-terminaladmission hoặc externalfreeze.
 
 **CG-AKT Adam09/11:** [actual3updates](cgakt_actual_adam_20261109.md),1nativecase accepted02 +pure5;48outputs giữ01rejected dù3updates đã xảy ra. Tổng6updates acrossattempts, khôngresearchfit/epoch/checkpoint/CUDA.

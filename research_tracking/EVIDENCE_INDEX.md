@@ -1,5 +1,7 @@
 # Chỉ mục bằng chứng
 
+**RQ1 — query/decision overlap:** [báo cáo](reports/rq1_query_decision_overlap_20261109.md) / [bundle24](runs/rq1-query-decision-overlap-20261109-01/README.md). Tám fixtures đạt và join đủ 1.080 cặp cũ: hai marginal22 chỉ trùng2. Query-M một khái niệm khác M-set28; không temporal crossing, calibration truth hoặc causal mediation. Kiểm chéo pooled độc lập khớp đủ8ô.
+
 **Selection statisticsonly:** [báo cáo](reports/research_selection_kernel_readiness_20261109.md) / [bundle50](runs/research-selection-kernel-engineering-20261109-01/README.md),8purefixtures+6canonicalformulaParityfixtures scopekhác. Không realwinner/all9admission/refit authority; sourcekernel0e3 khôngđổi khi sửaquantiletest.
 
 **CG-AKT actualAdam:** [báo cáo](reports/cgakt_actual_adam_20261109.md) / [bundle48](runs/cgakt-actual-adam-engineering-20261109-01/README.md);02accepted1case/3updates/18targetvisits,30methodchecks;01rejected3updates giữnguyên, pure5scopekhác. Chưa actualresearchfit/fullEpoch/checkpoint.
