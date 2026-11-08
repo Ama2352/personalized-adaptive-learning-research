@@ -772,3 +772,8 @@ G10closed48/test5bd/reportc017 commit5e1eb40,51rawGitblobsverified; outputinvent
 - Giữ nguyên yêu cầu fresh-process của GRAPH11 bằng subtaskGRAPH19: parent11 phụ thuộc19, task19 chỉ cần actualsame-process evidence đã có vàGRAPH10, không tạo dependencycycle.
 - GRAPH20 là actual concreteguard/selected-only producer; parentGRAPH12 cần20, không dùng typedstage thay fileauthority. Đủ9models vàhai môi trường vẫn bắt buộc, producerA*Grade10 đầu tiên không làm mất SAKT/GKT/Junyi requirements.
 - Đã kiểm toàn bộ141task IDs/dependencies bằng DFS, không cycle; nguồn/phương pháp21/22/23/26 không đổi.
+
+### 09/11 — review tăng độ mạnh kiểm fresh-process trước chạy
+
+- GRAPH19 mới ở source preparation, chưa thực thi. Root yêu cầu completeE2 ở cảproducer/consumer thay một activepartialbatch: cần chứng minh fullsample/order không drop/dup sau boundary, đúng acceptance gốcGRAPH11.
+- Kế hoạch finite mới6updates/144targetexposures/8forward, vẫn2constructors1save1load, whole150s. Counter cũ4 chưa chạy, không đổi hay che kết quả. Không sửa model/protocol/hyperparameters.
