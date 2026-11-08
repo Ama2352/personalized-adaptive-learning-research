@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**RQ1 bổ sung09/11:** [đề xuất có nằm trong tập sẵn sàng của cấu hình kia không?](rq1_cross_ready_membership_20261109.md), phân tích đủ1.080cặp đã lưu:55ready-change/preview-giữ,17preview-change/M–R-giữ,5jointchanges. RecordedR không capturedC/B; chưa causal hoặc score-only.
+
 **SAKT09/11:** [epoch/prediction bridge đã kiểm](sakt_research_epoch_readiness_20261109.md),22PASS trên dữ liệu tự dựng; chưa baseline fitted, checkpoint/recovery hoặc profile nghiên cứu.
 
 **Ước lượng cạnh đã thực chạy:** [Method24 trên TRAIN mô phỏng](edge_confidence_native_results_20261108.md),2.352solverfits trong45,17giây CPU; chưa CG-AKT neural hoặc bằng chứng cạnh đúng.

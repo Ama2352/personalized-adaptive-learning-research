@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "status": "PROPOSED_SOURCE_ONLY_ROOT_REVIEW_BEFORE_TESTS_OR_CACHED_EXECUTION",
+  "role": "POST_HOC_CACHED_RECORDED_READY_MEMBERSHIP",
+  "planned_bundle": "rq1-cross-ready-membership-20261108-01",
+  "source_relative": "scripts/research/analyze_rq1_cross_ready.py",
+  "source_sha256": "423968f864c84c8fc66a6678bf9351b195cc3ce47d38eb8696ddbab0ee830398",
+  "tests_relative": "tests/shared_kt/test_rq1_cross_ready.py",
+  "tests_sha256": "074aa0dffc8c70932bd1f87cd63de0a6b0214f82fa44da95ad85637a52d6ace2",
+  "inputs_sha256": {
+    "manifest.json": "906d1698482b78708cf16ce9453a8ed866e7dc0ef47cf0b8dca81c2d89b7b044",
+    "event_flags.json": "1cdbba3f3d66f99f87bb14d35e3f664877d246026db473b1b399a8ab6ed9d188",
+    "observed_legacy.jsonl.gz": "eeef1796da63e3fb8c9c02b4af2065491a9ff744cfe276b05f78d12f90f4206d",
+    "observed_query_sidecar.jsonl.gz": "6452e88c62c4fe33b1ce759015c6ef0f1cab4c79f82d57e1a029069662564939",
+    "parity.json": "4636f1caef8d121b919922928b1f785e81d62eb4be2f378424b34424fd5e980f"
+  },
+  "actual_input_bytes": {
+    "manifest.json": 7783,
+    "event_flags.json": 947596,
+    "observed_legacy.jsonl.gz": 109956,
+    "observed_query_sidecar.jsonl.gz": 203576,
+    "parity.json": 322183
+  },
+  "total_actual_input_bytes": 1591094,
+  "expected_primary_rows": 1080,
+  "raw_rows_per_stream": 3240,
+  "node_count": 28,
+  "groups": 16,
+  "joint_MRA_cells_including_zero": 128,
+  "own_cross_membership_cells_including_zero": 256,
+  "worker_seconds": 7,
+  "outer_seconds": 10,
+  "cleanup_reserve_seconds": 2,
+  "pure_tests_cap_seconds": 10,
+  "proposed_batch_cumulative_cap_seconds": 20,
+  "pure_test_functions_static": 4,
+  "pure_logical_cases_static": 9,
+  "new_independent_N": 0,
+  "new_model_teacher_optimizer_calls": 0,
+  "decompressed_caps_bytes": {
+    "legacy": 16777216,
+    "query_sidecar": 8388608,
+    "per_line": 65536
+  },
+  "outputs": [
+    "summary.json",
+    "event_flags.json",
+    "validation.json",
+    "result.json"
+  ],
+  "output_file_cap_bytes": 4194304,
+  "output_total_cap_bytes": 8388608,
+  "source_timing_vi": "Historical runner predict trên original → preview select trên deepcopy → ready_set/S/M trên original → update và fixed logged-item bookkeeping. Recorded R không là captured C/B bên trong select của copy; old runner có own-R assertion khi tạo pilot, không được nâng thành invariant source universal.",
+  "analysis_vi": "Đủ1080keys vàactualquery/y của3variants; exact11oldflags vàoldmarginals. M_added/R_added là full trừ empty. M/R/fullpreview8jointcells; own/cross4membershipbits16cells. Không requireownR=true, giữoutsidecases vàgắnlimitedinterpretation; không rowdrop/intersection. Newknowledge làsetidentities/crossRmembership khiR+previewcùngđổi, không gọi8jointcells làphát hiện mới soPMRAfull-GFcũ.",
+  "limits_vi": "Preview khôngserved; RkhôngcapturedC/B; bothcrossready khôngscore-only explanation. Không causalmediation, calibration, trueedgequality, learningbenefit, p/CI, threshold search, pairedclosed-loop effects sau divergence, newN. Hai packagecùngenabled; môi trường/controllergiữnguồn, edgescóupdateeffects.",
+  "failure_vi": "Mismatch STOP, không sửarecipe/dropcases/retry. Lỗi trướcoutputmkdir giữownedstderr/receipt; lỗi saupublication giữfailure.json. Inner pendingresult khôngouteracceptance; ROOTkiểmRC/resource/cleanup/sourceSHA vàwhole10s saupersistence.",
+  "synthetic_tests_vi": "9purecases/4functions: knownhandsets, own-Routside+qidonly preserved,6join/flagnegativevariants,all8+16zerocells. Không đọcsourcebundle/gzip/corpus,0model/solver. Chưa chạyAST/pytest/analyzer.",
+  "proposed_output_name": "rq1-cross-ready-attempt01",
+  "automatic_retry": false
+}

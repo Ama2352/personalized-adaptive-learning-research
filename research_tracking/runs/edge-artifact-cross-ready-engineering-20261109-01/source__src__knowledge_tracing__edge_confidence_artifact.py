@@ -1,0 +1,598 @@
+"""Đọc scores Method24 đã nghiệm thu; không fit hoặc tạo confidence tensor.
+
+Chỉ metadata/edge summaries được parse. CSV/fit ledger lớn chỉ stream-hash.
+External pins là trust boundary của caller hợp tác, không chữ ký/authority.
+Provenance mô tả producer lịch sử, không chứng nhận runtime hiện tại. Không mở
+corpus/oracle, source files hay các đường dẫn runtime ghi trong metadata.
+"""
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass
+import hashlib
+import json
+import math
+from pathlib import Path, PurePosixPath
+import stat
+import time
+from typing import TYPE_CHECKING, Literal
+
+from .simulator_bridge import SimulatorBank, identity_hash
+
+if TYPE_CHECKING:
+    from .shared_kt import PrerequisiteGraph
+
+ROOT = Path(__file__).resolve().parents[2]
+SEMANTICS = 'conditional_predictive_stability_not_edge_truth_probability'
+PURPOSE = 'method24_train_only_conditional_surrogate'
+PUBLIC = ('corpus.json', 'bank.json', 'plan.json', 'train.jsonl', 'train.manifest.json',
+          'selection.jsonl', 'selection.manifest.json', 'calibration.jsonl', 'calibration.manifest.json', 'DONE.json')
+DATA = ('recipe.json', 'folds.json', 'fit-ledger.jsonl', 'baseline-oof.csv', 'edge-oof.csv',
+        'learner-deltas.csv', 'edges.jsonl', 'graph.json')
+OUTPUTS = ('reservation.json', 'runtime.json', 'resources.json', 'input-source-inventory.json',
+           *DATA, 'worker_result.json', 'DONE.json')
+META_FILES = {'outer_run_sha256': 'method24_run01.json', 'request_sha256': 'method24_request01.json',
+              'config_sha256': 'method24_config01.json', 'runtime_profile_sha256': 'method24_runtime_profile01.json',
+              'terminal_sha256': 'method24_terminal_observation01.json',
+              'owned_receipt_sha256': 'method24_owned_receipt01.json'}
+
+
+def _need(ok, message):
+    if not ok:
+        raise ValueError(message)
+
+
+def _sha(value):
+    _need(type(value) is str and len(value) == 64 and all(c in '0123456789abcdef' for c in value), 'lowercase SHA256 required')
+
+
+def _text(value):
+    _need(type(value) is str and bool(value.strip()), 'nonempty string required')
+
+
+def _integer(value, low=0):
+    _need(type(value) is int and low <= value < 2**63, 'integer/count required')
+    return value
+
+
+def _finite(value):
+    _need(type(value) in (int, float) and math.isfinite(value), 'finite number required')
+    return value
+
+
+def _closed(value, keys, label):
+    _need(type(value) is dict and set(value) == set(keys), label + ' schema')
+
+
+def _bindings(rows):
+    _need(type(rows) is tuple and bool(rows), 'immutable nonempty hash bindings required')
+    _need(all(type(r) is tuple and len(r) == 2 for r in rows), 'hash binding row')
+    for name, digest in rows:
+        _text(name); _sha(digest)
+    _need(len(dict(rows)) == len(rows) and rows == tuple(sorted(rows)), 'unique sorted hash bindings required')
+    return dict(rows)
+
+
+def _path(relative):
+    _need(type(relative) is str and '\\' not in relative and ':' not in relative, 'relative POSIX path required')
+    p = PurePosixPath(relative)
+    _need(p.parts and not p.is_absolute() and p.as_posix() == relative and '..' not in p.parts, 'unsafe artifact path')
+    _need(p.parts[:2] == ('artifacts', 'akt') or p.parts[:2] == ('research_tracking', 'runs'), 'artifact roots only')
+    _need(not any(x.lower() in {'oracle', 'dataset', 'credentials'} for x in p.parts), 'protected/oracle path rejected')
+    alias = lambda x: x.is_symlink() or getattr(x, 'is_junction', lambda: False)()
+    _need(ROOT.is_dir() and ROOT.resolve() == ROOT.absolute() and not alias(ROOT), 'physical project root required')
+    target = ROOT
+    for part in p.parts:
+        target /= part
+        _need(not alias(target), 'symlink/junction artifact path')
+    return target
+
+
+@dataclass(frozen=True)
+class Method24ArtifactRef:
+    """V1 layout hiện có; mọi metadata pin do caller cấp từ receipt đã review."""
+    operation_directory: str
+    output_directory: str
+    outer_run_sha256: str
+    request_sha256: str
+    config_sha256: str
+    runtime_profile_sha256: str
+    terminal_sha256: str
+    owned_receipt_sha256: str
+    done_sha256: str
+
+    def __post_init__(self):
+        _text(self.operation_directory); _text(self.output_directory)
+        for name, value in asdict(self).items():
+            if name.endswith('sha256'):
+                _sha(value)
+
+
+@dataclass(frozen=True)
+class Method24TrainingBinding:
+    """Expected context từ public-corpus/producer receipts; không nhận labels."""
+    corpus_id: str
+    corpus_sha256: str
+    corpus_done_sha256: str
+    plan_sha256: str
+    train_provenance_sha256: str
+    train_observable_sha256: str
+    domain_sha256: str
+    method_source_sha256: str
+    config_sha256: str
+    runtime_profile_sha256: str
+    public_files_sha256: tuple[tuple[str, str], ...]
+    source_files_sha256: tuple[tuple[str, str], ...]
+    runtime_files_sha256: tuple[tuple[str, str], ...]
+
+    def __post_init__(self):
+        _text(self.corpus_id)
+        for name, value in asdict(self).items():
+            if name.endswith('sha256') and name not in ('public_files_sha256', 'source_files_sha256', 'runtime_files_sha256'):
+                _sha(value)
+        public = _bindings(self.public_files_sha256)
+        sources = _bindings(self.source_files_sha256)
+        _bindings(self.runtime_files_sha256)
+        _need(set(public) == set(PUBLIC), 'exact10 public input bindings')
+        _need(public['corpus.json'] == self.corpus_sha256 and public['DONE.json'] == self.corpus_done_sha256
+              and public['train.jsonl'] == self.train_observable_sha256, 'public/train context mismatch')
+        _need(sources.get('src/knowledge_tracing/edge_confidence.py') == self.method_source_sha256, 'method source expectation mismatch')
+
+
+@dataclass(frozen=True)
+class Method24ReadLimits:
+    max_metadata_bytes: int
+    max_edge_file_bytes: int
+    max_line_bytes: int
+    max_output_bytes: int
+    max_read_bytes: int
+    max_nodes: int
+    max_edges: int
+    max_wall_seconds: float
+
+    def __post_init__(self):
+        for name, value in asdict(self).items():
+            if name == 'max_wall_seconds':
+                _need(_finite(value) > 0, 'positive wall cap required')
+            else:
+                _integer(value, 1)
+        _need(self.max_line_bytes <= self.max_edge_file_bytes <= self.max_output_bytes
+              and self.max_output_bytes <= self.max_read_bytes, 'inconsistent read caps')
+
+
+@dataclass(frozen=True)
+class LoadedEdgePredictiveScore:
+    parent_id: str
+    child_id: str
+    supported: bool
+    score: float | None
+    reason: str | None
+    full_child_targets: int
+    eligible_targets: int
+    excluded_targets: int
+    eligible_learners: int
+    point_delta: float | None
+    bootstrap_positive: int | None
+    bootstrap_replicates: int
+
+
+@dataclass(frozen=True)
+class LoadedMethod24Scores:
+    """Null-preserving data; không converter sang legacy EdgeConfidence."""
+    graph_binding: str
+    declared_nodes: tuple[str, ...]
+    declared_edges: tuple[tuple[str, str], ...]
+    edge_scores: tuple[LoadedEdgePredictiveScore, ...]
+    training: Method24TrainingBinding
+    artifacts_sha256: tuple[tuple[str, str], ...]
+    prepared_sha256: str
+    producer_result_sha256: str
+    exported_graph_sha256: str
+    actual_solver_calls: int
+    processed_fit_slots: int
+    score_semantics: str = SEMANTICS
+    fit_scope: str = 'train80'
+    oracle_inputs_used: bool = False
+
+    @property
+    def identity(self):
+        return identity_hash(asdict(self))
+
+
+class _Reader:
+    def __init__(self, limits):
+        self.limits = limits
+        self.started, self.wall_started = time.monotonic(), time.time()
+        self.read_bytes = 0
+        self.files = {}
+
+    def guard(self):
+        elapsed = max(time.monotonic() - self.started, time.time() - self.wall_started)
+        _need(math.isfinite(elapsed) and 0 <= elapsed <= self.limits.max_wall_seconds, 'Method24 reader deadline exceeded')
+
+    @staticmethod
+    def stamp(path):
+        info = path.stat()
+        _need(stat.S_ISREG(info.st_mode), 'regular artifact file required')
+        return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns
+
+    def stream(self, relative, expected, cap, *, lines=False):
+        _sha(expected); self.guard()
+        path = _path(relative)
+        before = self.stamp(path)
+        _need(before[2] <= cap, 'artifact file byte cap exceeded')
+        digest = hashlib.sha256(); count = 0
+        with path.open('rb') as handle:
+            while True:
+                raw = handle.readline(self.limits.max_line_bytes + 1) if lines else handle.read(65536)
+                if not raw:
+                    break
+                if lines:
+                    _need(len(raw) <= self.limits.max_line_bytes, 'edge line byte cap exceeded')
+                count += len(raw); self.read_bytes += len(raw)
+                _need(count <= cap and self.read_bytes <= self.limits.max_read_bytes, 'cumulative read byte cap exceeded')
+                digest.update(raw); self.guard()
+                yield raw
+        _need(before == self.stamp(path) and count == before[2] and digest.hexdigest() == expected, 'artifact SHA/size/stamp drift')
+        if relative in self.files:
+            _need(self.files[relative] == (before, expected), 'artifact changed between reads')
+        self.files[relative] = before, expected
+        self.guard()
+
+    def json(self, relative, expected):
+        raw = b''.join(self.stream(relative, expected, self.limits.max_metadata_bytes))
+        value = _json(raw)
+        _need(type(value) is dict, 'metadata JSON object required')
+        return value
+
+    def finish(self):
+        for relative, (before, _) in self.files.items():
+            _need(self.stamp(_path(relative)) == before, 'artifact changed after verification')
+            self.guard()
+
+
+def _json(raw):
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            _need(key not in result, 'duplicate JSON key')
+            result[key] = value
+        return result
+    def invalid(value):
+        raise ValueError('nonfinite JSON constant: ' + value)
+    def floating(value):
+        number = float(value)
+        _need(math.isfinite(number), 'nonfinite JSON number')
+        return number
+    return json.loads(raw, object_pairs_hook=pairs, parse_constant=invalid, parse_float=floating)
+
+
+def _runtime_files(profile):
+    _closed(profile, ('schema_version', 'scope', 'lock_relative', 'lock_sha256', 'protocol_relative',
+        'protocol_sha256', 'entry_sha256', 'cfg_sha256', 'method_source_sha256', 'extra_sources', 'packages', 'limits_vi'), 'profile')
+    _need(type(profile['schema_version']) is int and profile['schema_version'] == 1, 'profile version')
+    files = {profile['lock_relative']: profile['lock_sha256'], profile['protocol_relative']: profile['protocol_sha256'],
+             '.venv/Scripts/python.exe': profile['entry_sha256'], '.venv/pyvenv.cfg': profile['cfg_sha256']}
+    _need(type(profile['extra_sources']) is dict and type(profile['packages']) is dict, 'runtime profile mappings')
+    files.update(profile['extra_sources'])
+    for item in profile['packages'].values():
+        _closed(item, ('distribution', 'version', 'required', 'metadata_relative', 'metadata_sha256',
+            'record_relative', 'record_sha256', 'module_relative', 'module_sha256'), 'package')
+        _text(item['version']); _need(type(item['required']) is bool, 'package required flag')
+        for key in ('metadata', 'record', 'module'):
+            name, digest = item[key + '_relative'], item[key + '_sha256']
+            _need(name not in files, 'duplicate runtime profile file')
+            files[name] = digest
+    for name, digest in files.items():
+        _text(name); _sha(digest)
+    return files
+
+
+def _edge_record(row, recipe, learners, concepts):
+    fields = ('parent_id', 'child_id', 'full_child_targets', 'eligible_targets', 'excluded_targets', 'eligible_learners',
+        'eligible_class_counts', 'unary_evaluation_labels', 'fold_population', 'supported', 'reason', 'learner_deltas',
+        'point_delta', 'bootstrap_seed', 'bootstrap_positive', 'bootstrap_replicates', 'confidence')
+    _closed(row, fields, 'edge summary')
+    parent, child = row['parent_id'], row['child_id']
+    _need(parent in concepts and child in concepts and parent != child, 'edge candidate domain/self-loop')
+    for key in ('full_child_targets', 'eligible_targets', 'excluded_targets', 'eligible_learners', 'bootstrap_seed', 'bootstrap_replicates'):
+        _integer(row[key])
+    full, eligible, excluded = (row[k] for k in ('full_child_targets', 'eligible_targets', 'excluded_targets'))
+    _need(full > 0 and eligible + excluded == full and row['eligible_learners'] <= len(learners), 'edge support denominators')
+    classes = row['eligible_class_counts']
+    _need(type(classes) is list and len(classes) == 2, 'edge label counts')
+    for count in classes:
+        _integer(count)
+    _need(sum(classes) == eligible and type(row['unary_evaluation_labels']) is bool
+          and row['unary_evaluation_labels'] == (bool(eligible) and min(classes) == 0), 'edge class accounting')
+    population = row['fold_population']
+    _need(type(population) is list and len(population) == recipe['folds'], 'edge fold population')
+    for fold, entry in enumerate(population):
+        _need(type(entry) is list and len(entry) == 4, 'fold population row')
+        for count in entry:
+            _integer(count)
+        _need(entry[0] == fold and entry[2] <= entry[1] and entry[3] <= entry[2], 'fold population counts')
+    _need(sum(x[1] for x in population) == full and sum(x[2] for x in population) == eligible
+          and sum(x[3] for x in population) == row['eligible_learners'], 'fold/full eligible accounting')
+    _need(type(row['supported']) is bool and row['bootstrap_replicates'] == recipe['bootstrap_replicates'], 'edge flags/recipe')
+    deltas = row['learner_deltas']
+    _need(type(deltas) is list and all(type(x) is list and len(x) == 2 for x in deltas), 'learner delta schema')
+    ids = []
+    for learner, delta in deltas:
+        _need(learner in learners, 'nontrain learner in edge delta')
+        _finite(delta); ids.append(learner)
+    _need(ids == sorted(set(ids)), 'duplicate/noncanonical learner deltas')
+    if row['supported']:
+        _need(row['reason'] is None and row['eligible_learners'] >= recipe['min_eligible_learners']
+              and len(deltas) == row['eligible_learners'], 'supported edge eligibility')
+        score = _finite(row['confidence']); positive = _integer(row['bootstrap_positive'])
+        point = _finite(row['point_delta'])
+        _need(0 <= positive <= row['bootstrap_replicates'] and score == positive / row['bootstrap_replicates']
+              and 0 <= score <= 1 and point == math.fsum(x[1] for x in deltas) / len(deltas), 'edge score/delta accounting')
+    else:
+        _text(row['reason'])
+        _need(row['confidence'] is None and row['point_delta'] is None and row['bootstrap_positive'] is None
+              and not deltas, 'unsupported must preserve null score/reason')
+    return LoadedEdgePredictiveScore(parent, child, row['supported'], row['confidence'], row['reason'], full,
+        eligible, excluded, row['eligible_learners'], row['point_delta'], row['bootstrap_positive'], row['bootstrap_replicates'])
+
+
+def _acyclic(nodes, edges):
+    children = {n: [] for n in nodes}; degree = {n: 0 for n in nodes}
+    for parent, child in edges:
+        children[parent].append(child); degree[child] += 1
+    pending = [n for n in nodes if degree[n] == 0]; visited = 0
+    while pending:
+        node = pending.pop(); visited += 1
+        for child in children[node]:
+            degree[child] -= 1
+            if degree[child] == 0:
+                pending.append(child)
+    return visited == len(nodes)
+
+
+def load_method24_scores(artifact: Method24ArtifactRef, *, expected_training: Method24TrainingBinding,
+                         bank: SimulatorBank, declared_graph: PrerequisiteGraph,
+                         graph_binding: Literal['declared', 'method24_learned'],
+                         limits: Method24ReadLimits) -> LoadedMethod24Scores:
+    """Đọc accepted V1 envelope; không infer authority từ decision string riêng."""
+    _need(type(artifact) is Method24ArtifactRef and type(expected_training) is Method24TrainingBinding
+          and type(limits) is Method24ReadLimits, 'exact typed external pins/caps required')
+    reader = _Reader(limits)
+    operation = _path(artifact.operation_directory); output = _path(artifact.output_directory)
+    _need(operation.is_dir() and output.is_dir() and output.parent == operation, 'exact operation/output layout')
+    failure_names = ('method24_outer_failure01.log', 'method24_postbudget_failure01.json')
+    _need(not any(_path(artifact.operation_directory + '/' + name).exists() for name in failure_names), 'outer failure/postbudget override')
+    _need({p.name for p in output.iterdir()} == set(OUTPUTS), 'exact14 output population; no partial/failure files')
+    metadata = {field: reader.json(artifact.operation_directory + '/' + name, getattr(artifact, field))
+                for field, name in META_FILES.items()}
+    run, request, config, profile, terminal, owned = (metadata[k] for k in META_FILES)
+    expected = expected_training
+    _closed(run, ('status', 'error', 'elapsed_before_receipt_seconds', 'request_sha256', 'reserved_solver_calls',
+        'actual_solver_calls', 'artifacts', 'owned_cleanup_accepted', 'automatic_retry', 'graph_status',
+        'terminal_RC0_and_no_postbudget_failure_required', 'teacher_calls', 'neural_optimizer_steps', 'modal_spend_usd'), 'outer run')
+    _need(run['status'] == 'ACCEPTED_CONDITIONAL_TRAIN_SURROGATE_NOT_EDGE_TRUTH' and run['error'] is None
+          and run['owned_cleanup_accepted'] is True and run['automatic_retry'] is False
+          and run['terminal_RC0_and_no_postbudget_failure_required'] is True, 'accepted outer receipt required')
+    _closed(terminal, ('kind', 'tool_session_id', 'observed_exit_code', 'stdout_json', 'scope_vi'), 'terminal observation')
+    _need(terminal['kind'] == 'ROOT_OBSERVATION_OF_TOOL_TERMINAL_NOT_WORKER_GENERATED'
+          and type(terminal['observed_exit_code']) is int and terminal['observed_exit_code'] == 0, 'terminal RC0 required')
+    final = terminal['stdout_json']
+    _closed(final, ('status', 'elapsed_seconds', 'error', 'run_sha256'), 'terminal stdout')
+    _need(final['status'] == run['status'] and final['error'] is None and final['run_sha256'] == artifact.outer_run_sha256,
+          'terminal/outer binding mismatch')
+    _need(owned.get('accepted') is True and owned.get('GO_released') is True
+          and owned.get('cleanup_accepted') is True and owned.get('cleanup_errors') == [] and owned.get('errors') == []
+          and type(owned.get('job_active_after_cleanup')) is int and owned['job_active_after_cleanup'] == 0
+          and owned.get('popen_handle_closed') is True and owned.get('actual_worker_in_job_before_GO') is True
+          and type(owned.get('returncode')) is int and owned['returncode'] == 0
+          and type(owned.get('worker_returncode_before_cleanup')) is int and owned['worker_returncode_before_cleanup'] == 0,
+          'owned terminal/cleanup proof required')
+    _closed(owned, ('status', 'GO_released', 'command', 'parent', 'approval_reference', 'job_name',
+        'helper_sha256', 'worker_sha256', 'actual_worker', 'popen', 'preGO_owned_tokens',
+        'actual_worker_in_job_before_GO', 'worker_returncode_before_cleanup', 'active_process_samples',
+        'job_active_before_cleanup', 'job_active_after_cleanup', 'popen_handle_closed', 'cleanup_errors',
+        'cleanup_accepted', 'observed_owned_tokens', 'output_sha256', 'accepted', 'errors', 'elapsed_seconds',
+        'max_seconds', 'cleanup_reserve_seconds', 'returncode', 'automatic_retry', 'elapsed_scope'), 'owned receipt')
+    _need(owned['status'] == 'ACCEPTED_OWNED_PROCESS_LAUNCH_NOT_SCIENTIFIC_ACCEPTANCE'
+          and owned['automatic_retry'] is False
+          and 0 <= _finite(owned['elapsed_seconds']) <= _finite(owned['max_seconds']), 'owned resource verdict')
+    _closed(request, ('approval_reference', 'config_sha256', 'output_relative', 'public_sha256', 'purpose',
+        'runtime_profile_sha256', 'schema_version', 'source_count', 'source_sha256'), 'request')
+    _need(type(request['schema_version']) is int and request['schema_version'] == 1 and request['purpose'] == PURPOSE
+          and request['output_relative'] == artifact.output_directory and request['config_sha256'] == artifact.config_sha256 == expected.config_sha256
+          and request['runtime_profile_sha256'] == artifact.runtime_profile_sha256 == expected.runtime_profile_sha256
+          and run['request_sha256'] == artifact.request_sha256, 'external request/config/profile binding')
+    sources = dict(expected.source_files_sha256); runtime_files = dict(expected.runtime_files_sha256); public = dict(expected.public_files_sha256)
+    _need(request['source_sha256'] == sources and request['public_sha256'] == public
+          and type(request['source_count']) is int and request['source_count'] == len(sources), 'external source/public expectations')
+    _closed(config, ('schema_version', 'purpose', 'corpus', 'recipe', 'counts', 'caps', 'scope_vi'), 'config')
+    _need(type(config['schema_version']) is int and config['schema_version'] == 1 and config['purpose'] == PURPOSE, 'config purpose/version')
+    c = config['corpus']
+    _closed(c, ('id', 'corpus_sha256', 'done_sha256', 'plan_sha256', 'train_provenance_sha256',
+        'train_observable_sha256', 'prior_inventory_relative', 'prior_inventory_sha256'), 'corpus context')
+    _need(c['id'] == expected.corpus_id and c['corpus_sha256'] == expected.corpus_sha256
+          and c['done_sha256'] == expected.corpus_done_sha256 and c['plan_sha256'] == expected.plan_sha256
+          and c['train_provenance_sha256'] == expected.train_provenance_sha256
+          and c['train_observable_sha256'] == expected.train_observable_sha256, 'wrong train/corpus/plan lineage')
+    _need(_runtime_files(profile) == runtime_files and profile['method_source_sha256'] == expected.method_source_sha256,
+          'producer runtime/method expectation mismatch')
+    recipe = config['recipe']
+    _closed(recipe, ('method_id', 'seed', 'folds', 'laplace_alpha', 'support_scale', 'C', 'tol', 'max_iter',
+        'clip', 'bootstrap_replicates', 'min_eligible_learners'), 'recipe')
+    _need(recipe['method_id'] == 'train-lagged-edge-confidence-v1', 'wrong method recipe')
+    for key in ('seed', 'folds', 'max_iter', 'bootstrap_replicates', 'min_eligible_learners'):
+        _integer(recipe[key], 0 if key == 'seed' else 1)
+    for key in ('laplace_alpha', 'support_scale', 'C', 'tol', 'clip'):
+        _need(_finite(recipe[key]) > 0, 'positive recipe value')
+    _need(recipe['folds'] == 3 and recipe['bootstrap_replicates'] == 200 and recipe['min_eligible_learners'] == 20,
+          'Method24 V1 fold/bootstrap/support recipe')
+    counts = config['counts']
+    _closed(counts, ('train_learners', 'train_events', 'concepts', 'edges', 'fit_slots', 'oof_rows',
+        'baseline_oof_rows', 'dag_budget', 'source_files'), 'workload counts')
+    for value in counts.values():
+        _integer(value, 1)
+    caps = config['caps']
+    _closed(caps, ('outer_seconds', 'active_seconds', 'cleanup_seconds', 'outer_finalization_seconds',
+        'export_reserve_seconds', 'max_rss_bytes', 'min_available_ram_bytes', 'poll_seconds',
+        'max_total_output_bytes', 'max_oof_file_bytes', 'max_stdout_stderr_bytes'), 'producer caps')
+    for key, value in caps.items():
+        if key.endswith('seconds'):
+            _need(_finite(value) > 0, 'positive producer time cap')
+        else:
+            _integer(value, 1)
+    for key in ('outer_seconds', 'active_seconds', 'max_total_output_bytes', 'max_oof_file_bytes'):
+        _need(key in caps and _finite(caps[key]) > 0, 'producer caps missing')
+    _need(0 <= _finite(run['elapsed_before_receipt_seconds']) <= _finite(final['elapsed_seconds']) <= caps['outer_seconds'], 'producer outer elapsed rejected')
+    _integer(run['actual_solver_calls']); _integer(run['reserved_solver_calls'])
+    _need(0 <= run['actual_solver_calls'] <= run['reserved_solver_calls'] == counts['fit_slots'], 'unknown/inconsistent actual solver counts')
+    _need(type(run['artifacts']) is dict and set(run['artifacts']) == set(OUTPUTS), 'outer exact14 file map')
+    total = 0
+    for name, item in run['artifacts'].items():
+        _closed(item, ('sha256', 'bytes'), 'output hash entry'); _sha(item['sha256']); _integer(item['bytes'])
+        total += item['bytes']
+        if name == 'edge-oof.csv':
+            _need(item['bytes'] <= caps['max_oof_file_bytes'], 'producer OOF byte cap')
+    _need(total <= min(limits.max_output_bytes, caps['max_total_output_bytes']), 'whole output byte cap')
+    _need(run['artifacts']['DONE.json']['sha256'] == artifact.done_sha256, 'external DONE pin mismatch')
+    for name in OUTPUTS:
+        item = run['artifacts'][name]
+        relative = artifact.output_directory + '/' + name
+        for _ in reader.stream(relative, item['sha256'], item['bytes']):
+            pass
+    def output_json(name):
+        return reader.json(artifact.output_directory + '/' + name, run['artifacts'][name]['sha256'])
+    done, worker, inventory, runtime = (output_json(n) for n in
+        ('DONE.json', 'worker_result.json', 'input-source-inventory.json', 'runtime.json'))
+    _closed(worker, ('actual_solver_calls', 'config_sha256', 'data_sha256', 'edge_summaries', 'graph_edges',
+        'graph_status', 'modal_spend_usd', 'neural_optimizer_steps', 'oof_rows', 'outer_acceptance_required',
+        'owner', 'prepared_sha256', 'processed_fit_slots', 'request_sha256', 'resources', 'result_sha256',
+        'status', 'supported_edges', 'teacher_calls'), 'worker result')
+    for key in ('actual_solver_calls', 'edge_summaries', 'graph_edges', 'oof_rows', 'processed_fit_slots', 'supported_edges'):
+        _integer(worker[key])
+    _closed(done, ('schema_version', 'status', 'request_sha256', 'files_sha256'), 'DONE')
+    _need(type(done['schema_version']) is int and done['schema_version'] == 1
+          and done['status'] == 'COMPLETE_METHOD24_PENDING_OUTER_ACCEPTANCE' and done['request_sha256'] == artifact.request_sha256
+          and done['files_sha256'] == {n: run['artifacts'][n]['sha256'] for n in OUTPUTS if n != 'DONE.json'}, 'DONE exact13/outer agreement')
+    _need(worker.get('status') == 'COMPLETE_CONDITIONAL_SURROGATE_PENDING_OUTER_ACCEPTANCE'
+          and worker.get('outer_acceptance_required') is True and worker.get('request_sha256') == artifact.request_sha256
+          and worker.get('config_sha256') == artifact.config_sha256 and worker.get('actual_solver_calls') == run['actual_solver_calls']
+          and worker.get('processed_fit_slots') == counts['fit_slots'] and worker.get('oof_rows') == counts['oof_rows']
+          and worker.get('edge_summaries') == counts['edges']
+          and worker.get('data_sha256') == {n: run['artifacts'][n] for n in DATA}, 'worker scope/count/data mismatch')
+    for value in ('teacher_calls', 'neural_optimizer_steps', 'modal_spend_usd'):
+        _need(type(run[value]) in (int, float) and run[value] == 0 and type(worker.get(value)) in (int, float)
+              and worker[value] == 0, 'nonzero teacher/neural/spend scope')
+    owner = worker['owner']
+    _need(owner.get('worker') == owned.get('actual_worker') and owner.get('parent_owner') == owned.get('parent')
+          and owner.get('job_name') == owned.get('job_name') and owned.get('approval_reference') == request['approval_reference'], 'worker ownership identity mismatch')
+    _need(owned['worker_sha256'] == sources.get(artifact.operation_directory + '/method24_worker01.py')
+          and owned['helper_sha256'] == sources.get('scripts/research/windows_owned_worker.py'), 'owned source hash mismatch')
+    _closed(inventory, ('oracle_files_opened', 'public_after', 'public_before', 'public_schema_audit_roles',
+        'runtime_after', 'runtime_before', 'sources_after', 'sources_before', 'train_only_optimization'), 'input/source inventory')
+    _need(inventory['oracle_files_opened'] is False and inventory['train_only_optimization'] is True
+          and inventory['public_schema_audit_roles'] == ['train', 'selection', 'calibration']
+          and inventory['public_before'] == inventory['public_after'] == public
+          and inventory['sources_before'] == inventory['sources_after'] == sources
+          and inventory['runtime_before'] == inventory['runtime_after'] == runtime_files, 'input/source/runtime drift or oracle usage')
+    _closed(runtime, ('environment_threads', 'native_windows_metadata', 'origins_after', 'origins_before',
+        'prefix', 'process_counts', 'profile_sha256', 'scope', 'sys_executable', 'threadpools'), 'runtime observation')
+    _need(runtime['profile_sha256'] == artifact.runtime_profile_sha256, 'runtime profile reference mismatch')
+    for side in ('origins_before', 'origins_after'):
+        origins = runtime[side]
+        _need(set(origins) <= set(profile['packages']), 'unknown runtime origin')
+        for name, item in profile['packages'].items():
+            if item['required']:
+                _need(name in origins, 'required producer origin absent')
+            if name in origins:
+                _need(origins[name] == dict(origin=item['module_relative'], sha256=item['module_sha256'], version=item['version']), 'wrong producer runtime origin')
+    _need(type(runtime['threadpools']) is list and 1 <= len(runtime['threadpools']) <= 16
+          and all(type(row) is dict and type(row.get('num_threads')) is int and row['num_threads'] == 1 for row in runtime['threadpools'])
+          and runtime['environment_threads'] == dict(OMP_NUM_THREADS='1', MKL_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1'), 'producer thread contract')
+    _need(type(runtime['process_counts']) is dict and all(type(v) is int for v in runtime['process_counts'].values())
+          and runtime['process_counts'] == dict(fit_phase_popen_attempts=0, metadata_bootstrap_helpers=1,
+          outside_metadata_phase_popen_attempts=0, overall_permitted_worker_child_popen_events=1), 'nonmetadata child process scope')
+    native_meta = runtime['native_windows_metadata']
+    _need(native_meta.get('phase') == 'NATIVE_WINDOWS_METADATA_BOOTSTRAP_ONLY' and native_meta.get('phase_closed') is True
+          and type(native_meta.get('helper_calls')) is int and native_meta['helper_calls'] == 1
+          and type(native_meta.get('blocked_bootstrap_attempts')) is int and native_meta['blocked_bootstrap_attempts'] == 0
+          and type(native_meta.get('outside_phase_popen_attempts')) is int and native_meta['outside_phase_popen_attempts'] == 0,
+          'metadata phase not closed/accepted')
+    resources = output_json('resources.json')
+    _closed(resources, ('samples', 'observed_peak_rss_bytes', 'observed_minimum_available_ram_bytes', 'guard_scope'), 'resources')
+    _integer(resources['samples'], 1); _integer(resources['observed_peak_rss_bytes']); _integer(resources['observed_minimum_available_ram_bytes'])
+    _need(resources == worker['resources'] and resources['observed_peak_rss_bytes'] <= caps['max_rss_bytes']
+          and resources['observed_minimum_available_ram_bytes'] >= caps['min_available_ram_bytes'], 'producer RAM verdict')
+    reservation = output_json('reservation.json')
+    _closed(reservation, ('automatic_retry', 'fit_slots', 'neural_optimizer_steps', 'oof_rows', 'owner',
+        'request_sha256', 'solver_calls', 'status', 'teacher_calls'), 'reservation')
+    _need(reservation['automatic_retry'] is False and reservation['status'] == 'RESERVED_NOT_ACTUAL_FIT_COUNTS'
+          and reservation['solver_calls'] is None and reservation['request_sha256'] == artifact.request_sha256
+          and reservation['fit_slots'] == counts['fit_slots'] and reservation['oof_rows'] == counts['oof_rows']
+          and reservation['neural_optimizer_steps'] == 0 and reservation['teacher_calls'] == 0
+          and reservation['owner'] == owner, 'reservation/actual distinction')
+    _need(output_json('recipe.json') == recipe, 'recipe output drift')
+    folds = output_json('folds.json')
+    _closed(folds, ('prepared_sha256', 'folds', 'learner_ids'), 'folds')
+    _sha(folds['prepared_sha256']); _sha(worker['prepared_sha256']); _sha(worker['result_sha256'])
+    _need(folds['prepared_sha256'] == worker['prepared_sha256'], 'prepared identity drift')
+    learners = folds['learner_ids']
+    _need(type(learners) is list and learners == sorted(set(learners)) and len(learners) == counts['train_learners'], 'train learner population')
+    for learner in learners:
+        _text(learner)
+    assignments = folds['folds']
+    _need(type(assignments) is list and len(assignments) == len(learners)
+          and all(type(r) is list and len(r) == 2 and type(r[1]) is int and 0 <= r[1] < recipe['folds'] for r in assignments)
+          and [r[0] for r in assignments] == learners, 'learner fold mapping')
+    # Data-only graph type is imported only here; no Torch/sklearn/pandas imports.
+    from .shared_kt import PrerequisiteGraph
+    _need(type(bank) is SimulatorBank and type(declared_graph) is PrerequisiteGraph
+          and identity_hash(bank.identity) == expected.domain_sha256, 'actual bank/domain expectation mismatch')
+    concepts = tuple(sorted({item.concept_id for item in bank.items}))
+    _need(len(concepts) == counts['concepts'] <= limits.max_nodes and counts['edges'] == len(concepts)*(len(concepts)-1) <= limits.max_edges
+          and counts['fit_slots'] == recipe['folds'] * len(concepts)**2
+          and counts['baseline_oof_rows'] == counts['train_events']
+          and counts['oof_rows'] == counts['train_events']*(len(concepts)-1) and counts['source_files'] == len(sources), 'candidate/workload geometry')
+    _need(declared_graph == PrerequisiteGraph.from_edges(declared_graph.nodes, declared_graph.edges)
+          and declared_graph.edge_direction == 'prerequisite_to_dependent'
+          and declared_graph.nodes == concepts, 'canonical full-domain declared graph required')
+    records = {}; child_counts = {}
+    for raw in reader.stream(artifact.output_directory + '/edges.jsonl', run['artifacts']['edges.jsonl']['sha256'], limits.max_edge_file_bytes, lines=True):
+        row = _edge_record(_json(raw), recipe, set(learners), set(concepts))
+        pair = row.parent_id, row.child_id
+        _need(pair not in records and len(records) < limits.max_edges, 'duplicate/too many edge summaries')
+        records[pair] = row
+        if row.child_id in child_counts:
+            _need(child_counts[row.child_id] == row.full_child_targets, 'child denominator differs across parents')
+        child_counts[row.child_id] = row.full_child_targets
+    _need(set(records) == {(p, c) for p in concepts for c in concepts if p != c}
+          and sum(child_counts.values()) == counts['train_events']
+          and sum(r.supported for r in records.values()) == worker.get('supported_edges'), 'incomplete candidate/support population')
+    graph = output_json('graph.json')
+    _closed(graph, ('status', 'edge_confidence_sha256', 'nodes', 'requested_edges', 'edges', 'rejected_cycles',
+        'considered_positive_supported', 'content_sha256'), 'learned graph')
+    _need(graph['content_sha256'] == identity_hash({k: v for k, v in graph.items() if k != 'content_sha256'})
+          and graph['edge_confidence_sha256'] == worker['result_sha256'], 'exported graph identity drift')
+    pairs = graph['edges']
+    _need(type(pairs) is list and all(type(r) is list and len(r) == 2 for r in pairs), 'graph edge schema')
+    pairs = tuple(tuple(r) for r in pairs)
+    _need(len(set(pairs)) == len(pairs) and all(p in records and records[p].supported and records[p].point_delta > 0 for p in pairs)
+          and graph['nodes'] == list(concepts) and _acyclic(concepts, pairs), 'invalid/cyclic learned graph')
+    _need(type(graph['requested_edges']) is int and graph['requested_edges'] == counts['dag_budget']
+          and graph['status'] in ('SUPPORTED_DAG', 'UNSUPPORTED_EDGE_BUDGET')
+          and graph['status'] == worker.get('graph_status') == run['graph_status']
+          and len(pairs) == worker.get('graph_edges') and len(pairs) <= counts['dag_budget']
+          and (graph['status'] == 'SUPPORTED_DAG') == (len(pairs) == counts['dag_budget'])
+          and graph['considered_positive_supported'] == sum(r.supported and r.point_delta > 0 for r in records.values()), 'learned graph status/budget mismatch')
+    _need(graph_binding in ('declared', 'method24_learned'), 'explicit graph binding mode required')
+    if graph_binding == 'method24_learned':
+        _need(graph['status'] == 'SUPPORTED_DAG' and counts['dag_budget'] == 31
+              and set(declared_graph.edges) == set(pairs), 'learned graph must be exact accepted31-edge DAG')
+    result = LoadedMethod24Scores(graph_binding, declared_graph.nodes, declared_graph.edges,
+        tuple(records[p] for p in declared_graph.edges), expected,
+        tuple(sorted((path, item[1]) for path, item in reader.files.items())), worker['prepared_sha256'],
+        worker['result_sha256'], graph['content_sha256'], run['actual_solver_calls'], worker['processed_fit_slots'])
+    _need(not any(_path(artifact.operation_directory + '/' + n).exists() for n in failure_names), 'late outer failure override')
+    reader.finish()
+    _need(not any(_path(artifact.operation_directory + '/' + n).exists() for n in failure_names), 'late outer failure override')
+    reader.guard()
+    return result
