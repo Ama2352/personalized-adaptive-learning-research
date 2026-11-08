@@ -1,0 +1,20 @@
+.....................F.....................                              [100%]
+================================== FAILURES ===================================
+_ test_recipe_no_implicit_or_oracle_policy_or_unbounded_clock[start_unix_seconds-9223372036854775808] _
+
+field = 'start_unix_seconds', value = 9223372036854775808
+
+    @pytest.mark.parametrize('field,value', [('events_per_learner', True), ('events_per_learner', 0),
+        ('events_per_learner', m.EVENT_STRIDE+1), ('start_unix_seconds', -1), ('gap_seconds', 0),
+        ('policy', 'oracle_theta_policy'), ('start_unix_seconds', 2**63)])
+    def test_recipe_no_implicit_or_oracle_policy_or_unbounded_clock(field, value):
+        args = dict(policy='uniform_items', events_per_learner=3, start_unix_seconds=100, gap_seconds=1)
+        args[field] = value
+>       with pytest.raises((ValueError, OverflowError)):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE any of (ValueError, OverflowError)
+
+tests\shared_kt\test_simulator_research_collection.py:163: Failed
+=========================== short test summary info ===========================
+FAILED tests/shared_kt/test_simulator_research_collection.py::test_recipe_no_implicit_or_oracle_policy_or_unbounded_clock[start_unix_seconds-9223372036854775808]
+1 failed, 42 passed in 1.20s
