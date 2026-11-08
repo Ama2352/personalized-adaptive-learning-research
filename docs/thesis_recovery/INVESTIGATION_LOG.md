@@ -618,3 +618,17 @@ Standalone14vàowned14 kiểm source01; cached01 dừng0,991527s vì guard chapt
 SAKT checkpoint source1b074/test0d9:31PASS trong27,729152s/90,2SAKTCore/5forward/3logicalbackward/2Adamconstructors/3Adambodies/11save/20load/1modelrestore/1optimizerrestore. Đã sửa coverage optimizer state thiếu và second-moments âm qua review trước nativeexecution; giữ snapshot7ab/15e4 chưa chạy. Adam numeric roundtrip được kiểm, SGD format chưa thực chạy. Scope cuối epoch, không cursor/fullresearchresume hoặc selected-fit authority. Bundle70outputs manifest378046f4605a431d4a404975cb46201f8b982d059736d34d329bf26ceacb4611. Dry-check đầu dừng vì thứ tự tên generated outputs khác ASCII sort; Root chỉ chuẩn hóa thứ tự metadata, giữ bản e940 và không đổi61copies/70outputs/native results.
 
 Gate current-source: collection07 đạt1417; native01 dừng vì UUIDparent chưa tạo,19setupERROR. Fix đã77PASS8,263686s; collection08 đạt1418. Native02 chạy đủ1418=1415PASS+3FAIL,0E/S,291,590948s/630; three DuckDBexport paths262/264chars có parent tồn tại. Đang sửa scratchbasename độc lập runID, không đổi model/predictionlayout/coverage/caps;77focused02 đạt6,503306s vàcollection09 đạt1418/42,561093s. Native03 session39909 đang chạy lúc ghi checkpoint; cần pollactualhandle đếnterminal, không suy trạng thái từ log hoặc tựrestart. Chưa current fullGatePASS/Modal/fullCV/Holdout. Browser chưa mở trong đoạn này.
+
+## 09/11 — HTML mới đã kiểm và current CPU Gate hoàn tất
+
+Bản09/11 đã bổ sung4/51/17theo mạch các bước nghiên cứu, giữ nguyên9SVG/bảng số liệu cũ và thêm1SVG tập cuối/CID. QA1365/390:10SVG,6tables,0textcollisions/outofbounds/documentoverflow,anchorsvalid,0externalassets/hash. Đã xem ảnh hình mới; finally đóng browser và tool xác nhận không còn tab. Gói đọc vẫn đúng2files, bản trước bảo toàn tạiGitab471ca; proof nằm ngoài reader folder.
+
+Native03 đã TERMINALRC0:1418/1418PASS,0fail/error/skip,stdlib19/no-torch271/remaining1128 khớp exact collectedJUnitIDs. Outer stored358,7608751s; Root toolterminal358,8051586s/630. Nguồn154/lock/runtime không drift, Job0/cleanupaccepted, pointerunchanged vì chưa yêu cầu publish. Đây là WindowsCPU software Gate, không CUDA/actualresearchfit hoặc quyền chi Modal. Source9608/test255c giữ scratchbasename38char và không đổi publicrunID/predictionlayout/targetpopulation. Bằng chứng thành công không thay rawfailures01/02. GóiCI đang chuẩn bị closure.
+
+SAKT70outputs+RQ167outputs đã commit7f1d1fc/2bf3ea2; rawGit batch kiểm137outputs+2manifests+4source/report=143blobs. Scope31pass thuộc revision1b/0d; đang chuẩn bị delta kiểm Adamstep phải khớp cumulativecounter, không gán PASS31 cho code delta chưa chạy. Sau khiGate03terminal mới release productionfreeze cho hai fileSAKT. Không có jobGPU/Modal/Holdout/fullCV.
+
+### 09/11 — đóng bằng chứng, giữ nguyên lịch sử
+
+Báo cáo HTML10 biểu đồ đã commit `8c08198`, đủ hai file đọc, desktop/mobile không chồng chữ; browser đóng, không server preview. Hai sửa Gate và bundle196 outputs đã commit `d658d77`; đối chiếu nguyên byte359 Git blobs gồm154source,196outputs,manifest/report và7file trình bày/QA. Gate03:1418PASS trên Windows CPU, pointer chưa promote; không CUDA/RQ hoặc quyền chi credit.
+
+SAKT counter refinement đã thực chạy33PASS/0FES trong22,2962247s/90,3Adamsteps,13save/23load/2model+2optimizer restores. Khớp counter tích lũy ở epoch2 và từ chối stale positive step; chưa actual corpus fit. Đang đóng delta nhỏ, giữ old31/bundle70 nguyên byte. RQ1 next trace chỉ mới contract/source preparation, chưa native replay hay mở oracle.
