@@ -1,5 +1,20 @@
 # Kiến trúc AKT và CG-AKT đề xuất
 
+## Trạng thái đối chiếu implementation08/11
+
+Các phần thiết kế phía dưới vẫn là **đề xuất cho thí nghiệm nghiên cứu**, không tự được phê duyệt bởi prototype. Đã có hai mốc engineering cụ thể:
+
+| Thành phần | Bằng chứng hiện có | Phần chưa đạt |
+|---|---|---|
+| A0/A1/A2/A3 forward/backward | `4a256a4`, [43 targeted CPU tests](../../research_tracking/reports/akt_graph_confidence_gate_readiness_20261108.md); confidence explicit, gate sigmoid, native bypass khi off/no support/zero mass | Chưa fitted/calibrated confidence, CUDA hoặc kết quả nghiên cứu |
+| Graph-aware lifecycle | `f8e9ab0`, [GRAPH04](../../research_tracking/reports/akt_graph_training_readiness_20261108.md); toy A3 một complete epoch/8targets, cập nhật backbone/message/readout/gate, selection4=3known+1OOV, full checkpoint reload delta0; negative partial không publish checkpoint | Chưa full corpus/context rollover100, graph resume, production fitted backend hoặc full software Gate hiện tại |
+
+Recipe đã cài chỉ là engineering: message `Linear(mean observed correctness)`; gate `Linear4→1` rồi sigmoid với features `S/(1+S)`, mean confidence, population variance confidence trên **ALL declared query parents**, observed-parent fraction. Confidence0,25/0,75 trong fixture do caller khai báo, không được gọi là edge reliability đã học. Tuple score/calibration/reference/mastery chưa được suy ra từ các feature này. Các initializer, module recipe, graph/confidence/provenance, effective-window geometry và source hash đều nằm trong identity; không pickle arbitrary callable.
+
+Whole actual suite GRAPH04 giữ **45PASS/1FAIL**; test inventory cũ thiếu hai helper graph được sửa và kiểm riêng bằng stored artifact/0fit. Không gọi là46suitePASS hoặc thay Gate24 cũ bằng targeted result. Bốn optimizer updates tổng gồm base/graph happy+partial, không bốn model variants đã fitted. Thời gian46,688882s là budget kiểm thử, không throughput dự báo GPU.
+
+**Điểm chưa thể bỏ qua trước research fit:** S04 chốt reference item bank/weights, calibration target/partition, threshold và controller; S05 chốt model×environment×graph conditions/seed/evaluation allocation. Junyi và Grade10 vẫn là hai domain train riêng. Primary matched effective window ở prototype không tự phê duyệt primary methodology. Main confidence estimator, graph-realization split và learned-graph comparator vẫn chưa được thay bằng fixture structural score. Gate-off giữ same trained backbone; system fallback sang checkpoint A0 độc lập **chưa cài**.
+
 Cập nhật engineering07/11: domain/session/reference và AKT online/checkpoint bridge đã được triển khai prototype theo18_SIMULATOR_KT_INTERFACE.md. Không tự adopt mastery/calibration/controller protocol hoặc graph architecture bên dưới; các phần đó vẫn cần review. Junyi checkpoint thiếu simulator identity bị từ chối.
 
 Đây là design cần review trước implementation. Upstream AKT NonRasch giữ source commit đã pinned. Không sửa architecture trong phiên điều tra.
