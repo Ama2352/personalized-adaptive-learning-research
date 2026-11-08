@@ -697,3 +697,13 @@ Trước retry, Rootchạy2stdlibAST actualevent regressions, PASS0.0937658s. Ne
 ### 09/11 — cache cost đã commit; bàn giao actualAdam
 
 Operationalbundle45 manifestd8976cfa...eda883 đã đóng vàcommitc77e88a;45outputs+manifest+canonicalreport+plan27=48rawGitblobsverified. Outputinventory4334→4379, khôngresearchN. PublicreportHTMLkhông thêm sốđo kỹthuật này; browser/previewđãđóng. GRAPH10newtest5bdc3e53...42f4afc+plan1ed42255...661ca76 đượcRootreviewsource, chưaexecute; tácgiảđangchuẩn bịownedworker90s/1GiB/free2GiB cho1A3/1Adam/3fwd/back/clip/steps/18targets. Configmax_steps3chỉresourcecap, hypersunchanged. Metadataactualfalseavailabilityupstream1, cho phép≤16realfalsequeries chỉwithin countedAdamctor/stepphases nếuDynamolazyimport; vẫndenyCUDAinit/alloc. NewtestWIP chưacommit, khôngsourcePASS/fittedclaim; main4sources đãcommitf8b90fb giữnguyên. No nativejobs/Modal/Holdout/fullCV.
+
+
+### 09/11 — D36 sửa prerequisite không cần thiết của plan27
+
+Đọc trực tiếp Protocol22:22–24 cho thấy canonicalpublicreader audit3roles trướcallocation hợp lệ; không dùng calibration để optimize/select mới là boundary. Root và reviewer độc lập xác nhận plan27 no-deserialization/scopedreader bắtbuộc quá chặt. Giữ bản đầu tại82c2480/rawGit48, sửa27/GRAPH12: reuse existingreader+restrictedtypedphaseinputs+actualusageledgers; scopedreader optionaldeferred. Không đổi21/22/26/splits/metrics/models, vẫn allcandidatefreeze trướcmainrefit. Đây là giảm việc engineering không cầnthiết, không nới scientificinformationboundary hoặc trainingauthority.
+
+
+### 09/11 — actualAdam01 có3updates, tổng kiểm chưa được nhận
+
+Rootownedterminal35869 RC1/15.3190763s, JUnit1PASS. Actual1adapter/backbone/wrapper/gate/Adam,3Architectureforward/3logicalbackward/3realclip/3Adamsteps/18targets. Gradient/parameter/participation assertions đạt nhưng childmethods_restored=False nên overallREJECTED. Không đổi tên thànhfullPASS. Forbidden=[], runtime/env restored, Jobcleanupaccepted/active0/handleclosed; native7.6777780s, RSS401412096/minfree4894949376B, upstream1realfalsequery/optimizerextra0, noCUDAinit/corpus/checkpoint. StaticinstalledAdamW inheritsAdam.step +Optimizer constructor wrapsparentstep cho thấy observer capturetemporaryparent/in-looprestorecheck cóbug; actual01khôngper-entryfinalrows nên không khẳngđịnh độcquyền fieldgâyFalse. Giao stdlibParent/Childregression và02allfinalchecks/truebaseline, giữsource5bd/productionkhôngđổi, new90stagegiữold15.3191protective105.3191.

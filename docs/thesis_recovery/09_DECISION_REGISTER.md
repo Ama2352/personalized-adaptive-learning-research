@@ -1,5 +1,10 @@
 # Sổ quyết định và vấn đề mở
 
+## D36 — Ranh giới sử dụng calibration, không bắt buộc viết lại reader09/11
+
+ROOT đối chiếu Protocol22 mục2, dòng22–24: canonical reader được audit schema/nhãn binary cả ba Development roles trước allocation; không dùng calibration để tối ưu/chọn epoch/candidate/hyperparameters/winner. Plan27 ban đầu yêu cầu public scoped reader/no deserialization calibration quá chặt, không phải requirement đã chốt. Reuse reader + typed phase inputs/call ledgers; defer optional reader hardening, giảm critical path. Main selected-only→allcandidate rawfreeze→freshrefit→Tfit vẫn giữ; không Holdout/final/oracle, không reseed để có support/metric đẹp. Sửa kế hoạch theo evidence binding, không đổi methodology hoặc cấp cloud/fullCV authority.
+
+
 ## D35 — CG-AKT tối thiểu đã chọn cho implementation09/11
 
 Theo quyền user giao lựa chọn an toàn/tiết kiệm, ROOT chọn [Recipe26](26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md): D1 centered-parentmean, alpha0, gate4 zero-init; graph/confidence train80 giữ qua neural refit90. Unsupported declared edge dùng0 kèm flag/reason; learned-DAG admission tách riêng. Giữ tất cả models/RQs; không GVHD sign-off, không training/spending authority. Main selected-only/external-freeze ordering theo D34 vẫn bắt buộc; draft25 nguyên byte giữ vai trò thiết kế trước adoption.
