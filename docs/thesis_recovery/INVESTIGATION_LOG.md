@@ -467,3 +467,8 @@ RQ1source review hỗ trợ full-vs-empty conditional estimator-edge-set ablatio
 Raw Git verified9efd5be29outputs/750921a50/47323e930/ec8897028; counter integrity2283→2420, không scientific N. Root tự tính lại đủ304cells/1080cachedpairs, no native. Giữ negative profilePG, time/orderconfounding và train-support distinction. Roundtrip schema gap đã sửa trước publication; guard85purePASS/publisher31PASS, không current full Gate/CUDA/research corpus.
 
 Availabilityattempt01 fail PID trước imports/native0. ONE metadata probe xác nhận outer→venvredirector→actualPython; tổng0,8453937/60s, overallUNKNOWN vì conhost ở snapshot cuối, không persistentleak claim. Readertrial01 timeout28,0125s/khôngJUnit; exactargv process scan hiện không match, không là PASS. Hoàn thiện ownedJob/GO membership trước retry; source/time/failed receipts giữ nguyên, không resetbudget.0Modal/Holdout/newcloudexport.
+
+
+### 08/11 — Freeze profile corpus đầu tiên, chưa dispatch
+
+Metadata-only actual ResearchSplitPlan kiểm role48/6/6 và modulo profile16/2/2,12600events dự kiến; config8e780048/plan7222b7c.150finalIDs chỉmetadata,0finalevents; no collector/model.120s toàn operation gồmpublication≤30, không150s; no seedsearch/auto retry. Dependencies ownedJob/publicreader/driverinventory ghi riêng, không blocked user decision. A0lifecycle BATCH3B mới thiết kế, không fitted model.

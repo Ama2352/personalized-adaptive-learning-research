@@ -3463,15 +3463,17 @@
       "priority": "P0",
       "owner": "Codex",
       "dependencies": [
-        "CORPUSIO01"
+        "CORPUSIO01",
+        "CORPUSREAD01",
+        "PROCOWN01"
       ],
-      "required_inputs": "Source/recipe/protocol/budget pins; không Holdout hoặc historical artifact mutation",
+      "required_inputs": "Config8e780048...,plan7222b7c...,source/runtime/profile/driver inventory trước dispatch; final metadata150,finalevents0",
       "files_components": [
-        "artifacts/simulator/corpora/",
-        "experiments/akt/configs/"
+        "experiments/akt/configs/simulator-research-corpus01.json",
+        "research_tracking/reports/first_development_corpus_plan_20261108.md"
       ],
       "implementation_objective": "Freeze first development corpus60learners48/6/6,210events/learner và exact resource/input/output contract trước dispatch",
-      "acceptance_criteria": "Parent-reviewed source/contract, meaningful bounded verification, durable receipts; không fake research-ready/GPU/approval",
+      "acceptance_criteria": "48/6/6×210=12600events;84item coverage mỗi role; public reader roundtrip; source SHA trước=sau; outeraccepted cleanup;120s total inclpublication30/RSS512MiB/freeRAM1GiB/0retry.",
       "verification_steps": "Source-level review và bounded local checks đúng scope; no paid launch",
       "required_artifacts": [
         "artifacts/simulator/corpora/",
@@ -3480,8 +3482,12 @@
       "estimated_effort": "Finite next engineering/diagnostic batch; thời gian chưa đo không là forecast",
       "compute_cost_category": "local CPU",
       "authorization_requirements": "Safe engineering/read-only; corpus/fit dispatch phải freeze exact counts/caps trước chạy; no paid/fullCV/Holdout",
-      "status": "PLANNED",
-      "blockers": []
+      "status": "PROFILE_FROZEN_DISPATCH_BLOCKED",
+      "blockers": [
+        "Public reader chưa accepted",
+        "Owned Windows launch/cleanup chưa accepted",
+        "Driver/source/profile inventory chưa frozen"
+      ]
     },
     {
       "id": "RQDIAG07",
@@ -3550,6 +3556,134 @@
       "completion_commit": "ec88970",
       "verified_bundle_outputs": 28,
       "not_RQ_complete": true
+    },
+    {
+      "id": "PROCOWN01",
+      "research_objective": "Owned Windows venv worker: bind shim/real worker PID+creation identity và Job membership trước GO; cleanup normal/timeout đúng owned scope.",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "research",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [],
+      "required_inputs": "Source/recipe/protocol/budget pins; không Holdout hoặc historical artifact mutation",
+      "files_components": [
+        "scripts/research/windows_owned_worker.py"
+      ],
+      "implementation_objective": "Owned Windows venv worker: bind shim/real worker PID+creation identity và Job membership trước GO; cleanup normal/timeout đúng owned scope.",
+      "acceptance_criteria": "Pure normal/timeout/identity-negative receipts trong cumulative20s;0native/model; actual worker Job membership trước GO và Jobempty/handlesclosed trước accepted. Không broadkill.",
+      "verification_steps": "Source-level review và bounded local checks đúng scope; no paid launch",
+      "required_artifacts": [
+        "scripts/research/windows_owned_worker.py"
+      ],
+      "estimated_effort": "Finite next engineering/diagnostic batch; thời gian chưa đo không là forecast",
+      "compute_cost_category": "local CPU",
+      "authorization_requirements": "Local engineering theo user; exact source/workload/resource dispatch review trước native/neural execution, no Modal/fullCV/Holdout.",
+      "status": "IN_PROGRESS",
+      "blockers": []
+    },
+    {
+      "id": "CORPUSREAD01",
+      "research_objective": "Public-only typed reader của9model inputs+DONE, restart plan/provenance/clock/rows/role audits; không oracle.",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "research",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "CORPUSIO01",
+        "PROCOWN01"
+      ],
+      "required_inputs": "Source/recipe/protocol/budget pins; không Holdout hoặc historical artifact mutation",
+      "files_components": [
+        "src/knowledge_tracing/simulator_corpus_reader.py",
+        "tests/shared_kt/test_simulator_corpus_reader.py"
+      ],
+      "implementation_objective": "Public-only typed reader của9model inputs+DONE, restart plan/provenance/clock/rows/role audits; không oracle.",
+      "acceptance_criteria": "Rootsource review và complete JUnit/outeraccepted receipt; trial01 timeout28.0125s giữ UNKNOWN, explicit revised cumulative cap trước retry. Không claim PASS từ dots.",
+      "verification_steps": "Source-level review và bounded local checks đúng scope; no paid launch",
+      "required_artifacts": [
+        "src/knowledge_tracing/simulator_corpus_reader.py",
+        "tests/shared_kt/test_simulator_corpus_reader.py"
+      ],
+      "estimated_effort": "Finite next engineering/diagnostic batch; thời gian chưa đo không là forecast",
+      "compute_cost_category": "local CPU",
+      "authorization_requirements": "Local engineering theo user; exact source/workload/resource dispatch review trước native/neural execution, no Modal/fullCV/Holdout.",
+      "status": "IN_PROGRESS",
+      "blockers": []
+    },
+    {
+      "id": "RQDIAG09",
+      "research_objective": "Controlled available-history fixedstream replay last10/50/full, giữ exact fullprefix controls trước truncated interpretation.",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "research",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RQDIAG07",
+        "PROCOWN01"
+      ],
+      "required_inputs": "Source/recipe/protocol/budget pins; không Holdout hoặc historical artifact mutation",
+      "files_components": [
+        "research_tracking/reports/rq1_history_stratified_edge_contrast_20261108.md"
+      ],
+      "implementation_objective": "Controlled available-history fixedstream replay last10/50/full, giữ exact fullprefix controls trước truncated interpretation.",
+      "acceptance_criteria": "Version02/source/plan freeze trước chạy,108policies và4140priorpredict/update caps,54fullcontrols parity trước kết quả; cumulative60s đã dùng0.845393699943088. Fail giữ receipts, không rerun/reset.",
+      "verification_steps": "Source-level review và bounded local checks đúng scope; no paid launch",
+      "required_artifacts": [
+        "research_tracking/reports/rq1_history_stratified_edge_contrast_20261108.md"
+      ],
+      "estimated_effort": "Finite next engineering/diagnostic batch; thời gian chưa đo không là forecast",
+      "compute_cost_category": "local CPU",
+      "authorization_requirements": "Local engineering theo user; exact source/workload/resource dispatch review trước native/neural execution, no Modal/fullCV/Holdout.",
+      "status": "IN_PROGRESS",
+      "blockers": []
+    },
+    {
+      "id": "A0LIFE01",
+      "research_objective": "BATCH3B consume accepted guard/publiccorpus trước lazyTorch; reuse native train_epoch/EarlyStopping/checkpoint; selected80→rawselection→freeze→freshrefit90→calibration10 exports.",
+      "rq": [
+        "RQ1",
+        "RQ2",
+        "RQ3"
+      ],
+      "workstream": "research",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RESAUTH01",
+        "AKTDATA01",
+        "CORPUSREAD01",
+        "RESCORPUS01",
+        "PROCOWN01"
+      ],
+      "required_inputs": "Source/recipe/protocol/budget pins; không Holdout hoặc historical artifact mutation",
+      "files_components": [
+        "docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md",
+        "src/knowledge_tracing/akt/training.py"
+      ],
+      "implementation_objective": "BATCH3B consume accepted guard/publiccorpus trước lazyTorch; reuse native train_epoch/EarlyStopping/checkpoint; selected80→rawselection→freeze→freshrefit90→calibration10 exports.",
+      "acceptance_criteria": "Phase-limited inputs không calibration optimizer/epochselection, global cumulative budget/no reset, fresh refit optimizer, complete fulltarget/null/provenance/checkpoint/calibrator contracts. Pure verification trước actual neural cap/Gate/runtime authorization riêng. Không mainwinner claim.",
+      "verification_steps": "Source-level review và bounded local checks đúng scope; no paid launch",
+      "required_artifacts": [
+        "docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md",
+        "src/knowledge_tracing/akt/training.py"
+      ],
+      "estimated_effort": "Finite next engineering/diagnostic batch; thời gian chưa đo không là forecast",
+      "compute_cost_category": "local CPU",
+      "authorization_requirements": "Local engineering theo user; exact source/workload/resource dispatch review trước native/neural execution, no Modal/fullCV/Holdout.",
+      "status": "DESIGNED_NOT_IMPLEMENTED",
+      "blockers": []
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",
