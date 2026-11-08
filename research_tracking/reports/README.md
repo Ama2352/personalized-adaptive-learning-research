@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**Cần review phương pháp trước research fit:** [S04/S05 — lựa chọn cụ thể, chưa áp dụng](s04_s05_decision_options_DRY_20261108.md), [27 nguồn và kiểm metadata](s04_s05_decision_options_DRY_20261108.sources.json), commit `762bb20`. Bao gồm reference/mastery/calibration/controller, split/refit, required model×environment matrix, Plan B cần duyệt và chi phí logical reference queries. Đây là proposal, không kết quả nghiên cứu hoặc quyền chạy CV/Modal. Câu hỏi duyệt đã được gửi cho user; việc chuẩn bị môi trường vẫn tiếp tục độc lập.
+
 
 ## Mốc mới08/11 — graph lifecycle, GPU-host preparation và demo closed-loop
 
