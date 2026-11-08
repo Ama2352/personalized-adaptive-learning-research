@@ -1,0 +1,2335 @@
+........................FFFFFFFFFFFFFFFFFFFFFFFF......................FF [ 86%]
+FFFFFFFFFF.                                                              [100%]
+================================== FAILURES ===================================
+________ test_real_http_fixed_routes_and_security_headers[/-text/html] ________
+
+serving = 51327, route = '/', mime = 'text/html'
+
+    @pytest.mark.parametrize("route,mime",[("/","text/html"),("/assets/demo.css","text/css"),("/assets/demo.js","text/javascript"),("/api/catalog","application/json"),("/api/replay?profile=PG&seed=20000&variant=graph_package&step=0","application/json")])
+    def test_real_http_fixed_routes_and_security_headers(serving,route,mime):
+>       status,headers,body=request(serving,route)
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:142: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_real_http_fixed_routes_and_security_headers[/assets/demo.css-text/css] _
+
+serving = 51327, route = '/assets/demo.css', mime = 'text/css'
+
+    @pytest.mark.parametrize("route,mime",[("/","text/html"),("/assets/demo.css","text/css"),("/assets/demo.js","text/javascript"),("/api/catalog","application/json"),("/api/replay?profile=PG&seed=20000&variant=graph_package&step=0","application/json")])
+    def test_real_http_fixed_routes_and_security_headers(serving,route,mime):
+>       status,headers,body=request(serving,route)
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:142: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_real_http_fixed_routes_and_security_headers[/assets/demo.js-text/javascript] _
+
+serving = 51327, route = '/assets/demo.js', mime = 'text/javascript'
+
+    @pytest.mark.parametrize("route,mime",[("/","text/html"),("/assets/demo.css","text/css"),("/assets/demo.js","text/javascript"),("/api/catalog","application/json"),("/api/replay?profile=PG&seed=20000&variant=graph_package&step=0","application/json")])
+    def test_real_http_fixed_routes_and_security_headers(serving,route,mime):
+>       status,headers,body=request(serving,route)
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:142: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_real_http_fixed_routes_and_security_headers[/api/catalog-application/json] _
+
+serving = 51327, route = '/api/catalog', mime = 'application/json'
+
+    @pytest.mark.parametrize("route,mime",[("/","text/html"),("/assets/demo.css","text/css"),("/assets/demo.js","text/javascript"),("/api/catalog","application/json"),("/api/replay?profile=PG&seed=20000&variant=graph_package&step=0","application/json")])
+    def test_real_http_fixed_routes_and_security_headers(serving,route,mime):
+>       status,headers,body=request(serving,route)
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:142: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_real_http_fixed_routes_and_security_headers[/api/replay?profile=PG&seed=20000&variant=graph_package&step=0-application/json] _
+
+serving = 51327
+route = '/api/replay?profile=PG&seed=20000&variant=graph_package&step=0'
+mime = 'application/json'
+
+    @pytest.mark.parametrize("route,mime",[("/","text/html"),("/assets/demo.css","text/css"),("/assets/demo.js","text/javascript"),("/api/catalog","application/json"),("/api/replay?profile=PG&seed=20000&variant=graph_package&step=0","application/json")])
+    def test_real_http_fixed_routes_and_security_headers(serving,route,mime):
+>       status,headers,body=request(serving,route)
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:142: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_________________________ test_http_query_allowlist[] _________________________
+
+serving = 51327, query = ''
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=-1] _
+
+serving = 51327, query = 'profile=PG&seed=20000&variant=graph_free&step=-1'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=120] _
+
+serving = 51327, query = 'profile=PG&seed=20000&variant=graph_free&step=120'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=00] _
+
+serving = 51327, query = 'profile=PG&seed=20000&variant=graph_free&step=00'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=1&file=secret] _
+
+serving = 51327
+query = 'profile=PG&seed=20000&variant=graph_free&step=1&file=secret'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=1&step=2] _
+
+serving = 51327
+query = 'profile=PG&seed=20000&variant=graph_free&step=1&step=2'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+____ test_http_query_allowlist[profile=PG&seed=20000&variant=other&step=1] ____
+
+serving = 51327, query = 'profile=PG&seed=20000&variant=other&step=1'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_http_query_allowlist[profile=unknown&seed=20000&variant=graph_free&step=1] _
+
+serving = 51327, query = 'profile=unknown&seed=20000&variant=graph_free&step=1'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+___ test_http_query_allowlist[profile=PG&seed=42&variant=graph_free&step=1] ___
+
+serving = 51327, query = 'profile=PG&seed=42&variant=graph_free&step=1'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91] _
+
+serving = 51327
+query = 'profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=1.0] _
+
+serving = 51327, query = 'profile=PG&seed=20000&variant=graph_free&step=1.0'
+
+    @pytest.mark.parametrize("query",["","profile=PG&seed=20000&variant=graph_free&step=-1","profile=PG&seed=20000&variant=graph_free&step=120","profile=PG&seed=20000&variant=graph_free&step=00","profile=PG&seed=20000&variant=graph_free&step=1&file=secret","profile=PG&seed=20000&variant=graph_free&step=1&step=2","profile=PG&seed=20000&variant=other&step=1","profile=unknown&seed=20000&variant=graph_free&step=1","profile=PG&seed=42&variant=graph_free&step=1","profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91","profile=PG&seed=20000&variant=graph_free&step=1.0"])
+    def test_http_query_allowlist(serving,query):
+>       assert request(serving,"/api/replay?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+___________ test_no_filesystem_or_export_routes[/../dataset/secret] ___________
+
+serving = 51327, route = '/../dataset/secret'
+
+    @pytest.mark.parametrize("route",["/../dataset/secret","/%2e%2e/dataset/secret","/assets/../evidence.py","/api/file?path=dataset","/assets/demo.js?x=1","/api/catalog?x=1","/exports"])
+    def test_no_filesystem_or_export_routes(serving,route):
+>       assert request(serving,route)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_________ test_no_filesystem_or_export_routes[/%2e%2e/dataset/secret] _________
+
+serving = 51327, route = '/%2e%2e/dataset/secret'
+
+    @pytest.mark.parametrize("route",["/../dataset/secret","/%2e%2e/dataset/secret","/assets/../evidence.py","/api/file?path=dataset","/assets/demo.js?x=1","/api/catalog?x=1","/exports"])
+    def test_no_filesystem_or_export_routes(serving,route):
+>       assert request(serving,route)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_________ test_no_filesystem_or_export_routes[/assets/../evidence.py] _________
+
+serving = 51327, route = '/assets/../evidence.py'
+
+    @pytest.mark.parametrize("route",["/../dataset/secret","/%2e%2e/dataset/secret","/assets/../evidence.py","/api/file?path=dataset","/assets/demo.js?x=1","/api/catalog?x=1","/exports"])
+    def test_no_filesystem_or_export_routes(serving,route):
+>       assert request(serving,route)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_________ test_no_filesystem_or_export_routes[/api/file?path=dataset] _________
+
+serving = 51327, route = '/api/file?path=dataset'
+
+    @pytest.mark.parametrize("route",["/../dataset/secret","/%2e%2e/dataset/secret","/assets/../evidence.py","/api/file?path=dataset","/assets/demo.js?x=1","/api/catalog?x=1","/exports"])
+    def test_no_filesystem_or_export_routes(serving,route):
+>       assert request(serving,route)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+__________ test_no_filesystem_or_export_routes[/assets/demo.js?x=1] ___________
+
+serving = 51327, route = '/assets/demo.js?x=1'
+
+    @pytest.mark.parametrize("route",["/../dataset/secret","/%2e%2e/dataset/secret","/assets/../evidence.py","/api/file?path=dataset","/assets/demo.js?x=1","/api/catalog?x=1","/exports"])
+    def test_no_filesystem_or_export_routes(serving,route):
+>       assert request(serving,route)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+____________ test_no_filesystem_or_export_routes[/api/catalog?x=1] ____________
+
+serving = 51327, route = '/api/catalog?x=1'
+
+    @pytest.mark.parametrize("route",["/../dataset/secret","/%2e%2e/dataset/secret","/assets/../evidence.py","/api/file?path=dataset","/assets/demo.js?x=1","/api/catalog?x=1","/exports"])
+    def test_no_filesystem_or_export_routes(serving,route):
+>       assert request(serving,route)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+________________ test_no_filesystem_or_export_routes[/exports] ________________
+
+serving = 51327, route = '/exports'
+
+    @pytest.mark.parametrize("route",["/../dataset/secret","/%2e%2e/dataset/secret","/assets/../evidence.py","/api/file?path=dataset","/assets/demo.js?x=1","/api/catalog?x=1","/exports"])
+    def test_no_filesystem_or_export_routes(serving,route):
+>       assert request(serving,route)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+________________ test_head_and_no_mutations_or_foreign_origin _________________
+
+serving = 51327
+
+    def test_head_and_no_mutations_or_foreign_origin(serving):
+>       assert request(serving,"/",method="HEAD")[2]==b""
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_closed_http_fixed_routes_and_review_semantics[/api/closed-loop?profile=PG&seed=20000&variant=graph_package&step=61-application/json] _
+
+serving = 51327
+route = '/api/closed-loop?profile=PG&seed=20000&variant=graph_package&step=61'
+mime = 'application/json'
+
+    @pytest.mark.parametrize("route,mime",[("/api/closed-loop?profile=PG&seed=20000&variant=graph_package&step=61","application/json"),
+        ("/evidence/closed-loop/report","text/plain"),("/evidence/closed-loop/sources","application/json")])
+    def test_closed_http_fixed_routes_and_review_semantics(serving,route,mime):
+>       status,headers,body=request(serving,route)
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:296: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_closed_http_fixed_routes_and_review_semantics[/evidence/closed-loop/report-text/plain] _
+
+serving = 51327, route = '/evidence/closed-loop/report', mime = 'text/plain'
+
+    @pytest.mark.parametrize("route,mime",[("/api/closed-loop?profile=PG&seed=20000&variant=graph_package&step=61","application/json"),
+        ("/evidence/closed-loop/report","text/plain"),("/evidence/closed-loop/sources","application/json")])
+    def test_closed_http_fixed_routes_and_review_semantics(serving,route,mime):
+>       status,headers,body=request(serving,route)
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:296: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_closed_http_fixed_routes_and_review_semantics[/evidence/closed-loop/sources-application/json] _
+
+serving = 51327, route = '/evidence/closed-loop/sources'
+mime = 'application/json'
+
+    @pytest.mark.parametrize("route,mime",[("/api/closed-loop?profile=PG&seed=20000&variant=graph_package&step=61","application/json"),
+        ("/evidence/closed-loop/report","text/plain"),("/evidence/closed-loop/sources","application/json")])
+    def test_closed_http_fixed_routes_and_review_semantics(serving,route,mime):
+>       status,headers,body=request(serving,route)
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:296: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_closed_query_allowlist[profile=PG&seed=20000&variant=graph_package&step=00] _
+
+serving = 51327, query = 'profile=PG&seed=20000&variant=graph_package&step=00'
+
+    @pytest.mark.parametrize("query",["profile=PG&seed=20000&variant=graph_package&step=00",
+        "profile=PG&seed=20000&variant=graph_package&step=120","profile=PG&seed=20000&variant=other&step=1",
+        "profile=PG&seed=20000&variant=graph_free&step=1&file=private","profile=PG&seed=20000&variant=graph_free&step=1&step=2"])
+    def test_closed_query_allowlist(serving,query):
+>       assert request(serving,"/api/closed-loop?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:316: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_closed_query_allowlist[profile=PG&seed=20000&variant=graph_package&step=120] _
+
+serving = 51327, query = 'profile=PG&seed=20000&variant=graph_package&step=120'
+
+    @pytest.mark.parametrize("query",["profile=PG&seed=20000&variant=graph_package&step=00",
+        "profile=PG&seed=20000&variant=graph_package&step=120","profile=PG&seed=20000&variant=other&step=1",
+        "profile=PG&seed=20000&variant=graph_free&step=1&file=private","profile=PG&seed=20000&variant=graph_free&step=1&step=2"])
+    def test_closed_query_allowlist(serving,query):
+>       assert request(serving,"/api/closed-loop?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:316: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+___ test_closed_query_allowlist[profile=PG&seed=20000&variant=other&step=1] ___
+
+serving = 51327, query = 'profile=PG&seed=20000&variant=other&step=1'
+
+    @pytest.mark.parametrize("query",["profile=PG&seed=20000&variant=graph_package&step=00",
+        "profile=PG&seed=20000&variant=graph_package&step=120","profile=PG&seed=20000&variant=other&step=1",
+        "profile=PG&seed=20000&variant=graph_free&step=1&file=private","profile=PG&seed=20000&variant=graph_free&step=1&step=2"])
+    def test_closed_query_allowlist(serving,query):
+>       assert request(serving,"/api/closed-loop?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:316: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_closed_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=1&file=private] _
+
+serving = 51327
+query = 'profile=PG&seed=20000&variant=graph_free&step=1&file=private'
+
+    @pytest.mark.parametrize("query",["profile=PG&seed=20000&variant=graph_package&step=00",
+        "profile=PG&seed=20000&variant=graph_package&step=120","profile=PG&seed=20000&variant=other&step=1",
+        "profile=PG&seed=20000&variant=graph_free&step=1&file=private","profile=PG&seed=20000&variant=graph_free&step=1&step=2"])
+    def test_closed_query_allowlist(serving,query):
+>       assert request(serving,"/api/closed-loop?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:316: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_closed_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=1&step=2] _
+
+serving = 51327
+query = 'profile=PG&seed=20000&variant=graph_free&step=1&step=2'
+
+    @pytest.mark.parametrize("query",["profile=PG&seed=20000&variant=graph_package&step=00",
+        "profile=PG&seed=20000&variant=graph_package&step=120","profile=PG&seed=20000&variant=other&step=1",
+        "profile=PG&seed=20000&variant=graph_free&step=1&file=private","profile=PG&seed=20000&variant=graph_free&step=1&step=2"])
+    def test_closed_query_allowlist(serving,query):
+>       assert request(serving,"/api/closed-loop?"+query)[0]==400
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:316: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_closed_no_arbitrary_document_or_private_file_routes[/evidence/closed-loop/report?file=dataset] _
+
+serving = 51327, path = '/evidence/closed-loop/report?file=dataset'
+
+    @pytest.mark.parametrize("path",["/evidence/closed-loop/report?file=dataset","/evidence/closed-loop/private",
+        "/evidence/closed-loop/../../dataset","/evidence?path=secret"])
+    def test_closed_no_arbitrary_document_or_private_file_routes(serving,path):
+>       assert request(serving,path)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:322: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_closed_no_arbitrary_document_or_private_file_routes[/evidence/closed-loop/private] _
+
+serving = 51327, path = '/evidence/closed-loop/private'
+
+    @pytest.mark.parametrize("path",["/evidence/closed-loop/report?file=dataset","/evidence/closed-loop/private",
+        "/evidence/closed-loop/../../dataset","/evidence?path=secret"])
+    def test_closed_no_arbitrary_document_or_private_file_routes(serving,path):
+>       assert request(serving,path)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:322: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_closed_no_arbitrary_document_or_private_file_routes[/evidence/closed-loop/../../dataset] _
+
+serving = 51327, path = '/evidence/closed-loop/../../dataset'
+
+    @pytest.mark.parametrize("path",["/evidence/closed-loop/report?file=dataset","/evidence/closed-loop/private",
+        "/evidence/closed-loop/../../dataset","/evidence?path=secret"])
+    def test_closed_no_arbitrary_document_or_private_file_routes(serving,path):
+>       assert request(serving,path)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:322: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+_ test_closed_no_arbitrary_document_or_private_file_routes[/evidence?path=secret] _
+
+serving = 51327, path = '/evidence?path=secret'
+
+    @pytest.mark.parametrize("path",["/evidence/closed-loop/report?file=dataset","/evidence/closed-loop/private",
+        "/evidence/closed-loop/../../dataset","/evidence?path=secret"])
+    def test_closed_no_arbitrary_document_or_private_file_routes(serving,path):
+>       assert request(serving,path)[0]==404
+               ^^^^^^^^^^^^^^^^^^^^^
+
+tests\demo\test_viewer.py:322: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\demo\test_viewer.py:39: in request
+    connection.request(method, target, headers=headers or {})
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1338: in request
+    self._send_request(method, url, body, headers, encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1384: in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1333: in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1093: in _send_output
+    self.send(msg)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1037: in send
+    self.connect()
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\http\client.py:1003: in connect
+    self.sock = self._create_connection(
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:864: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+address = ('127.0.0.1', 51327), timeout = 3, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               PermissionError: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py:849: PermissionError
+=========================== short test summary info ===========================
+FAILED tests/demo/test_viewer.py::test_real_http_fixed_routes_and_security_headers[/-text/html]
+FAILED tests/demo/test_viewer.py::test_real_http_fixed_routes_and_security_headers[/assets/demo.css-text/css]
+FAILED tests/demo/test_viewer.py::test_real_http_fixed_routes_and_security_headers[/assets/demo.js-text/javascript]
+FAILED tests/demo/test_viewer.py::test_real_http_fixed_routes_and_security_headers[/api/catalog-application/json]
+FAILED tests/demo/test_viewer.py::test_real_http_fixed_routes_and_security_headers[/api/replay?profile=PG&seed=20000&variant=graph_package&step=0-application/json]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[] - PermissionErr...
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=-1]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=120]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=00]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=1&file=secret]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=1&step=2]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=20000&variant=other&step=1]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=unknown&seed=20000&variant=graph_free&step=1]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=42&variant=graph_free&step=1]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=%EF%BC%91]
+FAILED tests/demo/test_viewer.py::test_http_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=1.0]
+FAILED tests/demo/test_viewer.py::test_no_filesystem_or_export_routes[/../dataset/secret]
+FAILED tests/demo/test_viewer.py::test_no_filesystem_or_export_routes[/%2e%2e/dataset/secret]
+FAILED tests/demo/test_viewer.py::test_no_filesystem_or_export_routes[/assets/../evidence.py]
+FAILED tests/demo/test_viewer.py::test_no_filesystem_or_export_routes[/api/file?path=dataset]
+FAILED tests/demo/test_viewer.py::test_no_filesystem_or_export_routes[/assets/demo.js?x=1]
+FAILED tests/demo/test_viewer.py::test_no_filesystem_or_export_routes[/api/catalog?x=1]
+FAILED tests/demo/test_viewer.py::test_no_filesystem_or_export_routes[/exports]
+FAILED tests/demo/test_viewer.py::test_head_and_no_mutations_or_foreign_origin
+FAILED tests/demo/test_viewer.py::test_closed_http_fixed_routes_and_review_semantics[/api/closed-loop?profile=PG&seed=20000&variant=graph_package&step=61-application/json]
+FAILED tests/demo/test_viewer.py::test_closed_http_fixed_routes_and_review_semantics[/evidence/closed-loop/report-text/plain]
+FAILED tests/demo/test_viewer.py::test_closed_http_fixed_routes_and_review_semantics[/evidence/closed-loop/sources-application/json]
+FAILED tests/demo/test_viewer.py::test_closed_query_allowlist[profile=PG&seed=20000&variant=graph_package&step=00]
+FAILED tests/demo/test_viewer.py::test_closed_query_allowlist[profile=PG&seed=20000&variant=graph_package&step=120]
+FAILED tests/demo/test_viewer.py::test_closed_query_allowlist[profile=PG&seed=20000&variant=other&step=1]
+FAILED tests/demo/test_viewer.py::test_closed_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=1&file=private]
+FAILED tests/demo/test_viewer.py::test_closed_query_allowlist[profile=PG&seed=20000&variant=graph_free&step=1&step=2]
+FAILED tests/demo/test_viewer.py::test_closed_no_arbitrary_document_or_private_file_routes[/evidence/closed-loop/report?file=dataset]
+FAILED tests/demo/test_viewer.py::test_closed_no_arbitrary_document_or_private_file_routes[/evidence/closed-loop/private]
+FAILED tests/demo/test_viewer.py::test_closed_no_arbitrary_document_or_private_file_routes[/evidence/closed-loop/../../dataset]
+FAILED tests/demo/test_viewer.py::test_closed_no_arbitrary_document_or_private_file_routes[/evidence?path=secret]
+36 failed, 47 passed in 25.13s
