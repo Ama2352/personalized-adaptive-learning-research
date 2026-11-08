@@ -1,0 +1,462 @@
+{
+  "adapter_mapping_provenance": "caller_declared_inference_mapping_NOT_training_attested",
+  "budget": {
+    "approval_reference": "PARENT_GKT06_SOURCE_PURE38_MODEL_PHASE_APPROVED",
+    "max_checkpoint_bytes": 1000000,
+    "max_prediction_bytes": 20000,
+    "max_seconds": 44,
+    "max_steps": 2,
+    "max_targets": 12
+  },
+  "data_sha256": "8d25219ddd7c0a220e1f38c14f293eac8486b5552487fc0aaf347d3207e0411a",
+  "elapsed_seconds": 1.4853959000029135,
+  "epochs": [
+    {
+      "checkpoint_identity": {
+        "approval_reference": "PARENT_GKT06_SOURCE_PURE38_MODEL_PHASE_APPROVED",
+        "binding": {
+          "domain": "gkt06-observable-fixture",
+          "node_ids": [
+            "A",
+            "B",
+            "C"
+          ],
+          "node_unit": "concept",
+          "vocabulary_sha256": "0a2b4ad995acc6f5a040c90e6daa08ca78405335b76027f3fd2889b714991a1a"
+        },
+        "flags": {
+          "completion_unit": "train_step",
+          "fitted_research_model": false,
+          "hidden_state_saved": false,
+          "optimizer_saved": false,
+          "resume_supported": false,
+          "rng_saved": false
+        },
+        "graph_sha256": "1b0c4715a83b5962255549199349c505664adca82602f2fdfe437adb95323b8c",
+        "model_class": "GKTStaticRecurrentCandidate",
+        "model_config": {
+          "adjacency_kind": "static",
+          "embedding_dim": 2,
+          "message_dim": 2,
+          "node_unit": "concept",
+          "num_nodes": 3,
+          "require_nonnegative": true,
+          "require_zero_diagonal": true,
+          "state_dim": 2
+        },
+        "recipe": {
+          "dropout": 0.0,
+          "gru_variant": "cho2014_reset_before_bias_free",
+          "initial_state_policy": "zeros",
+          "mlp_hidden_dim": 3,
+          "normalization": "none",
+          "precision": "float64",
+          "recipe_id": "gkt_static_recurrent_convention_v1"
+        },
+        "recipe_sha256": "620936b0704b1fbf1b82f633fa54ac1a33e6731e0b0b2b9fe21525422def1d67",
+        "schema_version": 1,
+        "source_sha256": {
+          "src/knowledge_tracing/gkt/config.py": "8785a608e017ed4f6f77f8bd027ed3b3ee8a57d6e5b34bbb6d787acd9952c5d2",
+          "src/knowledge_tracing/gkt/core.py": "4663e25d158a08d344d2f5f85735d8db927f96e14199b5d16f40b8e32701b3e1",
+          "src/knowledge_tracing/gkt/recurrent.py": "510195d71c1ddb743f747e78d7d874c04bb809931c5ec24ae6fe907fe53ec072",
+          "src/knowledge_tracing/gkt/training.py": "6def666d82cf02dfefcf8980c2670ac24f3a137a86e9093e66cb87bc2cabc4e5",
+          "src/knowledge_tracing/gkt/training_checkpoint.py": "5ddfea74c17cddf8f3ba72e60dcde1f2d36c6950ad2b22f7d2d55361ed2a89d8"
+        },
+        "trained_step": {
+          "batch_sha256": "83a0f92c08ff5198746e8e97e4fecfaa89159d6a79aea601abb86119232209c0",
+          "complete_train_step": true,
+          "cumulative_steps": 1,
+          "cumulative_targets": 6,
+          "grad_norm": 0.21430815186339502,
+          "loss_sum": 4.427796949911403,
+          "mean_loss": 0.7379661583185672,
+          "model_sha256_after": "499eda8f62c77eb2bab82a1cdd9f2e8f1325fe0d3e7701bf561ca32a16dbde3d",
+          "model_sha256_before": "664d506ce2ca62907ea47dfac2d8cdc90f8cd7e30bd50db4aa11b2761e2e0ac8",
+          "observed_events": 6,
+          "optimizer_sha256_after": "aa961858e572bf9460f13797452a82032818a1ffc3a767cfa8c6f6bb6406ab2c",
+          "optimizer_sha256_before": "1ec4dafc1ada120b2b24db88d497c695c330058311d7fc9798bc7431c49e159d",
+          "optimizer_steps": 1,
+          "selected_source_rows": [
+            11,
+            12,
+            13,
+            1,
+            2,
+            3
+          ],
+          "selected_targets": 6,
+          "settings": {
+            "betas": [
+              0.8,
+              0.9
+            ],
+            "eps": 1e-07,
+            "lr": 0.01,
+            "max_grad_norm": 0.5,
+            "objective": "mean_bce_on_explicit_loss_mask",
+            "optimizer": "adam",
+            "precision": "float64",
+            "weight_decay": 0.0
+          },
+          "status": "complete",
+          "training_source_sha256": {
+            "src/knowledge_tracing/gkt/config.py": "8785a608e017ed4f6f77f8bd027ed3b3ee8a57d6e5b34bbb6d787acd9952c5d2",
+            "src/knowledge_tracing/gkt/core.py": "4663e25d158a08d344d2f5f85735d8db927f96e14199b5d16f40b8e32701b3e1",
+            "src/knowledge_tracing/gkt/recurrent.py": "510195d71c1ddb743f747e78d7d874c04bb809931c5ec24ae6fe907fe53ec072",
+            "src/knowledge_tracing/gkt/training.py": "6def666d82cf02dfefcf8980c2670ac24f3a137a86e9093e66cb87bc2cabc4e5"
+          }
+        },
+        "weight_role": "synthetic_trained_engineering_only"
+      },
+      "checkpoint_manifest_sha256": "2f9d7451b1db041647977845fa778e5238219e0bcd3174084be8264d1e42d082",
+      "checkpoint_relative_directory": "epoch-001\\weights",
+      "complete_epoch": true,
+      "epoch": 1,
+      "optimized_source_rows": [
+        11,
+        12,
+        13,
+        1,
+        2,
+        3
+      ],
+      "optimizer_steps": 1,
+      "selection": {
+        "eligible_population_sha256": "ec535b6ad533b0b50b5c99762a71f494c89d0122e475bdfa3f00f9cdbf40b6c7",
+        "expected_population_sha256": "5eabec9d58956b0ab03d0bce063cba3194fb39aedd5d14f76390dd499dcb26b1",
+        "loss_sum": 1.4745793669226748,
+        "mean_loss": 0.7372896834613374,
+        "population": {
+          "expected_targets": 4,
+          "research_fitted_targets": 0,
+          "scored_targets": 2,
+          "unsupported_targets": 2
+        }
+      },
+      "selection_csv_sha256": "f8fba0e8452443cdda5c4e5000d2645d0573fe574075ae0b4cf19e62de8d48ff",
+      "train_loss_sum": 4.427796949911403,
+      "train_mean_loss": 0.7379661583185672
+    },
+    {
+      "checkpoint_identity": {
+        "approval_reference": "PARENT_GKT06_SOURCE_PURE38_MODEL_PHASE_APPROVED",
+        "binding": {
+          "domain": "gkt06-observable-fixture",
+          "node_ids": [
+            "A",
+            "B",
+            "C"
+          ],
+          "node_unit": "concept",
+          "vocabulary_sha256": "0a2b4ad995acc6f5a040c90e6daa08ca78405335b76027f3fd2889b714991a1a"
+        },
+        "flags": {
+          "completion_unit": "train_step",
+          "fitted_research_model": false,
+          "hidden_state_saved": false,
+          "optimizer_saved": false,
+          "resume_supported": false,
+          "rng_saved": false
+        },
+        "graph_sha256": "1b0c4715a83b5962255549199349c505664adca82602f2fdfe437adb95323b8c",
+        "model_class": "GKTStaticRecurrentCandidate",
+        "model_config": {
+          "adjacency_kind": "static",
+          "embedding_dim": 2,
+          "message_dim": 2,
+          "node_unit": "concept",
+          "num_nodes": 3,
+          "require_nonnegative": true,
+          "require_zero_diagonal": true,
+          "state_dim": 2
+        },
+        "recipe": {
+          "dropout": 0.0,
+          "gru_variant": "cho2014_reset_before_bias_free",
+          "initial_state_policy": "zeros",
+          "mlp_hidden_dim": 3,
+          "normalization": "none",
+          "precision": "float64",
+          "recipe_id": "gkt_static_recurrent_convention_v1"
+        },
+        "recipe_sha256": "620936b0704b1fbf1b82f633fa54ac1a33e6731e0b0b2b9fe21525422def1d67",
+        "schema_version": 1,
+        "source_sha256": {
+          "src/knowledge_tracing/gkt/config.py": "8785a608e017ed4f6f77f8bd027ed3b3ee8a57d6e5b34bbb6d787acd9952c5d2",
+          "src/knowledge_tracing/gkt/core.py": "4663e25d158a08d344d2f5f85735d8db927f96e14199b5d16f40b8e32701b3e1",
+          "src/knowledge_tracing/gkt/recurrent.py": "510195d71c1ddb743f747e78d7d874c04bb809931c5ec24ae6fe907fe53ec072",
+          "src/knowledge_tracing/gkt/training.py": "6def666d82cf02dfefcf8980c2670ac24f3a137a86e9093e66cb87bc2cabc4e5",
+          "src/knowledge_tracing/gkt/training_checkpoint.py": "5ddfea74c17cddf8f3ba72e60dcde1f2d36c6950ad2b22f7d2d55361ed2a89d8"
+        },
+        "trained_step": {
+          "batch_sha256": "1736155b9c5d80c9c748aaaed2d837c66f1b6a2ce60369151094bf59087058c1",
+          "complete_train_step": true,
+          "cumulative_steps": 2,
+          "cumulative_targets": 12,
+          "grad_norm": 0.2089348327743817,
+          "loss_sum": 4.389817025704637,
+          "mean_loss": 0.7316361709507729,
+          "model_sha256_after": "09552eb8be494f036736a8500231f5f501e903cede2917405eccfe355a28fdb4",
+          "model_sha256_before": "499eda8f62c77eb2bab82a1cdd9f2e8f1325fe0d3e7701bf561ca32a16dbde3d",
+          "observed_events": 6,
+          "optimizer_sha256_after": "0f23ebc5be0603be6ff433a3b278401fab1eb6e84f8723dba44316bfaab712aa",
+          "optimizer_sha256_before": "aa961858e572bf9460f13797452a82032818a1ffc3a767cfa8c6f6bb6406ab2c",
+          "optimizer_steps": 1,
+          "selected_source_rows": [
+            1,
+            2,
+            3,
+            11,
+            12,
+            13
+          ],
+          "selected_targets": 6,
+          "settings": {
+            "betas": [
+              0.8,
+              0.9
+            ],
+            "eps": 1e-07,
+            "lr": 0.01,
+            "max_grad_norm": 0.5,
+            "objective": "mean_bce_on_explicit_loss_mask",
+            "optimizer": "adam",
+            "precision": "float64",
+            "weight_decay": 0.0
+          },
+          "status": "complete",
+          "training_source_sha256": {
+            "src/knowledge_tracing/gkt/config.py": "8785a608e017ed4f6f77f8bd027ed3b3ee8a57d6e5b34bbb6d787acd9952c5d2",
+            "src/knowledge_tracing/gkt/core.py": "4663e25d158a08d344d2f5f85735d8db927f96e14199b5d16f40b8e32701b3e1",
+            "src/knowledge_tracing/gkt/recurrent.py": "510195d71c1ddb743f747e78d7d874c04bb809931c5ec24ae6fe907fe53ec072",
+            "src/knowledge_tracing/gkt/training.py": "6def666d82cf02dfefcf8980c2670ac24f3a137a86e9093e66cb87bc2cabc4e5"
+          }
+        },
+        "weight_role": "synthetic_trained_engineering_only"
+      },
+      "checkpoint_manifest_sha256": "4a4234d1f70384231b30bd4184960961d0f90b8730e34f037c11162f91a34c9d",
+      "checkpoint_relative_directory": "epoch-002\\weights",
+      "complete_epoch": true,
+      "epoch": 2,
+      "optimized_source_rows": [
+        1,
+        2,
+        3,
+        11,
+        12,
+        13
+      ],
+      "optimizer_steps": 1,
+      "selection": {
+        "eligible_population_sha256": "ec535b6ad533b0b50b5c99762a71f494c89d0122e475bdfa3f00f9cdbf40b6c7",
+        "expected_population_sha256": "5eabec9d58956b0ab03d0bce063cba3194fb39aedd5d14f76390dd499dcb26b1",
+        "loss_sum": 1.4669647741761467,
+        "mean_loss": 0.7334823870880733,
+        "population": {
+          "expected_targets": 4,
+          "research_fitted_targets": 0,
+          "scored_targets": 2,
+          "unsupported_targets": 2
+        }
+      },
+      "selection_csv_sha256": "87fc639fed1c94f5cac8ad1e6d182e2d57d44d669f60599f28b38aa0b50b8f54",
+      "train_loss_sum": 4.389817025704637,
+      "train_mean_loss": 0.7316361709507729
+    }
+  ],
+  "fitted_research_model": false,
+  "graph_provenance": {
+    "domain": "gkt06-observable-fixture",
+    "kind": "caller_declared_static",
+    "node_order_sha256": "0a2b4ad995acc6f5a040c90e6daa08ca78405335b76027f3fd2889b714991a1a",
+    "source_sha256": "1b0c4715a83b5962255549199349c505664adca82602f2fdfe437adb95323b8c"
+  },
+  "hidden_state_saved": false,
+  "initial_model_sha256": "664d506ce2ca62907ea47dfac2d8cdc90f8cd7e30bd50db4aa11b2761e2e0ac8",
+  "initial_optimizer_sha256": "1ec4dafc1ada120b2b24db88d497c695c330058311d7fc9798bc7431c49e159d",
+  "initialization_provenance": "caller_owned_initial_parameters_NOT_fit_attested",
+  "mapping_origin": "caller_declared_static_registry; mechanical usage only",
+  "mapping_usage": [
+    {
+      "completed": {
+        "model_sha256_after": "499eda8f62c77eb2bab82a1cdd9f2e8f1325fe0d3e7701bf561ca32a16dbde3d",
+        "optimizer_sha256_after": "aa961858e572bf9460f13797452a82032818a1ffc3a767cfa8c6f6bb6406ab2c",
+        "optimizer_sha256_before": "1ec4dafc1ada120b2b24db88d497c695c330058311d7fc9798bc7431c49e159d",
+        "optimizer_steps": 1
+      },
+      "prepared": {
+        "batch_sha256": "83a0f92c08ff5198746e8e97e4fecfaa89159d6a79aea601abb86119232209c0",
+        "eligible_source_rows": [
+          11,
+          12,
+          13,
+          1,
+          2,
+          3
+        ],
+        "epoch": 1,
+        "mapped_node_indices": [
+          0,
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "mapping_sha256": "ce1e12bee4f30a2b16654ffa770ff844fbdb5aae771eb7de07fa6e00dcfdb1eb",
+        "model_sha256_before": "664d506ce2ca62907ea47dfac2d8cdc90f8cd7e30bd50db4aa11b2761e2e0ac8",
+        "source_rows": [
+          11,
+          12,
+          13,
+          1,
+          2,
+          3
+        ],
+        "training_encoding_sha256": "f8a8161e12de0ff27394eee9f1f821e1713c6d6677d449daf343b11d49c068a0"
+      },
+      "prepared_sha256": "6d52de47da33e27453859a27b500440aa4f2f585e6abd36bcf65b2d5a1e22c3d"
+    },
+    {
+      "completed": {
+        "model_sha256_after": "09552eb8be494f036736a8500231f5f501e903cede2917405eccfe355a28fdb4",
+        "optimizer_sha256_after": "0f23ebc5be0603be6ff433a3b278401fab1eb6e84f8723dba44316bfaab712aa",
+        "optimizer_sha256_before": "aa961858e572bf9460f13797452a82032818a1ffc3a767cfa8c6f6bb6406ab2c",
+        "optimizer_steps": 1
+      },
+      "prepared": {
+        "batch_sha256": "1736155b9c5d80c9c748aaaed2d837c66f1b6a2ce60369151094bf59087058c1",
+        "eligible_source_rows": [
+          1,
+          2,
+          3,
+          11,
+          12,
+          13
+        ],
+        "epoch": 2,
+        "mapped_node_indices": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "mapping_sha256": "ce1e12bee4f30a2b16654ffa770ff844fbdb5aae771eb7de07fa6e00dcfdb1eb",
+        "model_sha256_before": "499eda8f62c77eb2bab82a1cdd9f2e8f1325fe0d3e7701bf561ca32a16dbde3d",
+        "source_rows": [
+          1,
+          2,
+          3,
+          11,
+          12,
+          13
+        ],
+        "training_encoding_sha256": "f8a8161e12de0ff27394eee9f1f821e1713c6d6677d449daf343b11d49c068a0"
+      },
+      "prepared_sha256": "964b2e69139c8499decf3c737badd9fb99af5be23e57f3d547c0d3fa0298f543"
+    }
+  ],
+  "optimizer_counters": {
+    "returned_steps": 2,
+    "returned_targets": 12,
+    "started_steps": 2,
+    "started_targets": 12
+  },
+  "optimizer_saved": false,
+  "plan": {
+    "batch_size": 2,
+    "max_epochs": 2,
+    "min_delta": 0.0,
+    "selection_policy": "min_selection_mean_bce",
+    "shuffle_seed": 42,
+    "tie_policy": "earliest_epoch"
+  },
+  "recipe": {
+    "dropout": 0.0,
+    "first_target_policy": "query_only",
+    "gru_variant": "cho2014_reset_before_bias_free",
+    "history_policy": "full_prefix",
+    "initial_state_policy": "zeros",
+    "item_support_policy": "train_observed_items_only",
+    "mlp_hidden_dim": 3,
+    "normalization": "none",
+    "oov_policy": "unsupported_history",
+    "precision": "float64",
+    "recipe_id": "gkt_static_recurrent_convention_v1"
+  },
+  "resume_supported": false,
+  "rng_saved": false,
+  "role": "synthetic_selected_engineering_only",
+  "schema_version": 1,
+  "selected_checkpoint_manifest_sha256": "4a4234d1f70384231b30bd4184960961d0f90b8730e34f037c11162f91a34c9d",
+  "selected_epoch": 2,
+  "selected_mapping_usage_sha256": "dedcc82254e34f42ab35131a913486ca4fc351688b767393ef1832a3a463e056",
+  "selected_prediction_sha256": "87fc639fed1c94f5cac8ad1e6d182e2d57d44d669f60599f28b38aa0b50b8f54",
+  "sources_sha256": {
+    "src/knowledge_tracing/gkt/__init__.py": "90c9db6ea986694aa9e5b7a9aa6bf1c54f7afa9f8e449d3a6d30880d24c3a1aa",
+    "src/knowledge_tracing/gkt/adapter.py": "2e6c4ed64433dac63f54344710303cf0908b0c66cc63735a71f3f6d23f42c0f4",
+    "src/knowledge_tracing/gkt/config.py": "8785a608e017ed4f6f77f8bd027ed3b3ee8a57d6e5b34bbb6d787acd9952c5d2",
+    "src/knowledge_tracing/gkt/core.py": "4663e25d158a08d344d2f5f85735d8db927f96e14199b5d16f40b8e32701b3e1",
+    "src/knowledge_tracing/gkt/pipeline.py": "59c256fbcde715934041f911fb3ad5a6b6ae9bd63d2304cacd3ae4d0c4e235ec",
+    "src/knowledge_tracing/gkt/recurrent.py": "510195d71c1ddb743f747e78d7d874c04bb809931c5ec24ae6fe907fe53ec072",
+    "src/knowledge_tracing/gkt/training.py": "6def666d82cf02dfefcf8980c2670ac24f3a137a86e9093e66cb87bc2cabc4e5",
+    "src/knowledge_tracing/gkt/training_checkpoint.py": "5ddfea74c17cddf8f3ba72e60dcde1f2d36c6950ad2b22f7d2d55361ed2a89d8",
+    "src/knowledge_tracing/gkt/training_data.py": "db5a9c41d29eaf5ccb834965cfe1e7952a3b9dfe2a4dca573d91791909403339",
+    "src/knowledge_tracing/shared_kt.py": "06922d5a6bfd6c806fd1abb61232f58a9ccd63826e30cefaf87ce3d3b36dffa8",
+    "src/knowledge_tracing/simulator_bridge.py": "b29105acd8de84b060ca27573bb7f7cf8e85599a4596e50e4a21ab63c82329d2",
+    "src/knowledge_tracing/simulator_data.py": "79e28c1a8fc9b3bd5f3283868d7aba1a5bbc7c76764725a8b01098b2ae33cd9f"
+  },
+  "status": "complete_epoch_candidates_ready_for_publication",
+  "training_encoding": {
+    "graph_provenance": {
+      "domain": "gkt06-observable-fixture",
+      "kind": "caller_declared_static",
+      "node_order_sha256": "0a2b4ad995acc6f5a040c90e6daa08ca78405335b76027f3fd2889b714991a1a",
+      "source_sha256": "1b0c4715a83b5962255549199349c505664adca82602f2fdfe437adb95323b8c"
+    },
+    "graph_sha256": "1b0c4715a83b5962255549199349c505664adca82602f2fdfe437adb95323b8c",
+    "mapping_origin": "caller_declared_static_registry; usage proved by actual optimization receipts",
+    "mapping_sha256": "ce1e12bee4f30a2b16654ffa770ff844fbdb5aae771eb7de07fa6e00dcfdb1eb",
+    "node_order_sha256": "0a2b4ad995acc6f5a040c90e6daa08ca78405335b76027f3fd2889b714991a1a",
+    "node_vocabulary_sha256": "0a2b4ad995acc6f5a040c90e6daa08ca78405335b76027f3fd2889b714991a1a",
+    "registry_sha256": "5f15dac6608b151b7321706afb39b0946f36faf7f190f0e803d341c977e11116",
+    "train_item_support": [
+      [
+        "a",
+        2
+      ],
+      [
+        "a2",
+        1
+      ],
+      [
+        "b",
+        2
+      ]
+    ],
+    "train_item_vocabulary": [
+      "a",
+      "a2",
+      "b"
+    ],
+    "train_item_vocabulary_sha256": "c29d2fc914ca914c5dc803388f398785020796d8a033036ce0a06a3dfd8aa73d",
+    "train_shard_sha256": "bce358ff6e7b7219e29619cadc6306c1219d78e5cf6b9117608a9938bdff54e8",
+    "training_map": [
+      [
+        "a",
+        "A"
+      ],
+      [
+        "a2",
+        "A"
+      ],
+      [
+        "b",
+        "B"
+      ]
+    ]
+  },
+  "training_mapping_usage_verified": true
+}

@@ -1,0 +1,3 @@
+# GKT role-bound epoch pipeline engineering — 08/11/2026
+
+38 pure cases trước parent review, sau đó một actual2epoch toy run:2reservations/2Adam body returns/2complete GKT batches,6train targets mỗi epoch; selection4=2scored+2unsupported/0research_fitted. Selected epoch2 là criterion fixture explicit, không positive efficacy acceptance. Cumulative conservative31,254267/60s.52source snapshots, exact fullCSV/checkpoint metadata/run/event lineage;2model binaries chỉ SHA references tại output gốc. Mapping usage mechanical verified, semantic map/initial fitted origin không attested. Không corpus/final scientific fit/refit/resume/OnlineSession/S04S05 adoption. Parent actual review, không invented independent-agent verdict/failure. Copy/hash only; không sửa sau closure.
