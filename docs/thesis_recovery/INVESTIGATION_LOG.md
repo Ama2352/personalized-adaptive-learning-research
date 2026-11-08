@@ -646,3 +646,32 @@ Bundle43outputs manifestf885cf43... đã đóng và commit `bc70f53`;47rawGit bl
 ROOT đối chiếu draft25/Protocol21/lifecycle22/hạch toán23 và independent source memo b4a2b7bc..., chọn Recipe26 theo quyền user đã giao: D1+alpha0/gate4 và train80 graph/confidence freeze qua neuralrefit90. Không đổi RQs/baselines hoặc cấp training/GPU; giữ draft25 nguyên byte. Làm rõ selector upper0.975/2000cluster draws/seed42 trước kết quả, giữ rowweighted LL.
 
 Trace RQ1 source01:12purePASS0.9320891s; native01reject1.6197814s tại local Windows platform.gethostname trong pandas import, trước policy/update. Đây là lỗi setup có thể tránh bằng kinh nghiệm worker Windows trước, không kết luận nghiên cứu. Đang preserve và chuẩn bị02 metadata bootstrap thật/guard đóng pha, không nới network guard hay reset tổng60s.
+
+### 09/11 — trace02 dừng hữu hạn, không dùng partial làm kết quả
+
+14pure fixtures PASS trong1.1860165s. Native02 chạy với real Windows metadata bootstrap nhưng ownedactive deadline chặn tại34.7511308s terminal, Job0/cleanupaccepted/Popenclosed. Chỉ hai trajectory receipts hoàn chỉnh; ít nhất240updates đã chạy, phần còn lại UNKNOWN≤2160reserved, không giả0 hay full2160. Không workerfinal/all2160parity nên không diễn giải partialgzip hoặc theta/pi scientific evidence. Conservative originalcharge11.6197814+10+34.7511308=56.3709122/60s; dừng allocation, preserve và audit chi phí observer trước proposal mới. Không cloud hoặc Holdout.
+
+### 09/11 — condition nghiên cứu hoàn thiện, đo overhead riêng
+
+66metadata cases PASS/0FES trong2.9972164s/30; bundle13 commit `1a8e053`. Failurebundle63 commit `211fa1f`;83rawGit blobs của hai gói/source/report/Recipe26 đã đối chiếu. Không model/artifact/corpus thật trong66cases. Source mới làm oldGate154 stale đúng cơ chế source-discovery; refresh sau khi research batch ổn định, không dùngoldGate cấp training.
+
+Operational benchmark riêng ≤5s accepted1.2128429s,19mutationchecks, không model/data/NumPy/RNG. JSON/SHA-view ratio1.2684 và globalprofile/directledger ratio8.9735 chỉ trên fixture dựng sẵn; không dự báo nativeGAM tốc độ9lần hoặc chứng nhận native schema. Đây hỗ trợ ưu tiên tối ưu observer; originalnative60 vẫnSTOP56.3709122. Hai agents triển khai context/model mới; chưa execute.
+
+### 09/11 — context109 accepted và replay RQ1 allocation mới
+
+Hai context attempts đầu67PASS39SETUPERROR lần lượt do fixture source_row0 và field inputs.labels không tồn tại. Giữ log/source trước sửa. Context03:109PASS gồm66condition+43context, freshcold imports accepted,10.6885863s/90; chưa NN. Source5a5ada91/testac6b, conditiontest2fdd sửa reload/classidentity, old66/adcc bundle giữ nguyên.
+
+ROOT chọn allocation RQ1v03 mới300s (pure10+nativewhole290), old60STOP56.3709122 và operational5 ghi riêng; không reset hoặc đổiobserver/guards. Actualpure14PASS1.5116972s; native session17771 đang chạy,2.160updates/6.480predict là caps chưa là actualtotal.18gzip sẽ đóng riêng, metadata persist trướcnative; khôngscientificinterpretation khi chưaall2160/18fingerprints/cleanup. Không GPU/credits.
+
+Phát hiện architecturalcost cần sửa trướcpaidtraining: graph adapter có7fullcontextJSON hashes mỗi trainbatch. Chưa có timing mainrun, không suy tốc độ từtinytest; finitecoreverification tiếp trước rồi thay bằng selectedwindow seals/boundaryaudit có kiểm chứng.
+
+### 09/11 — full trace RQ1 đã được nhận
+
+Native03 terminalaccepted200.3490072s trongcap290 (allocation300 gồmpure10); storedouter200.0550102s ghi riêng. OuterSHA81cf9dd9...,worker891a69a3...:18closedgz/18trajectories, all2160legacy/fullpreview vàinitial/final fingerprints khớp; actual2160updates/6480predict/67060S/284290M. Peak133324800B, no teacher/optimizer/oracle/newN. Chưa bảng phân tích theta/pi hoặc kết luận số mới; analyzer cần8purefixtures vàsource/input review riêng. Hai failures cũ vẫngiữ nguyên.
+
+
+### 09/11 — khép chẩn đoán mastery, core CG-AKT và nối báo cáo
+
+RQ1:18trace hoàn chỉnh/all2160parity, analyzer8fixtures và phép đếm độc lập đã khép92outputs (`fe798c4`);30.240conceptsnapshotpairs có3.428U-only/noM và90T/M-only. Không temporal crossings/accuracy/causal learning benefit/newN. Đã đọc phản biện source algebra, không suy finite pi ordering thành định lý toàn cục. Context109/52 (`6b95740`), observerfixture24 (`c3e3c87`) và nativecore18/74 (`1ec4b87`) cũng đã đóng. Core thật8forward/5logicalbackward/0Adam, chỉ tinyA3+samebackboneoff. RawGit255blobs gồm242outputs được kiểm trước hotpatch; cập nhật outputinventory4051→4293, không researchN.
+
+Báo cáo hai file09/11 đã nối chặng5 và bảng mastery; giữ nguyên10SVG. Browser actual1365/390px,0externalassets/0brokenanchors/nooverflow; Root đã xem hai ảnh rồi publish bằng beforeinventory/hash-CAS. Browser đóng trongfinally, không previewserver. Hotpath mới condition66+context69=135PASS/12.7690966s; native25/representativecost vẫn pending. Không chiModal/fullCV/Holdout.

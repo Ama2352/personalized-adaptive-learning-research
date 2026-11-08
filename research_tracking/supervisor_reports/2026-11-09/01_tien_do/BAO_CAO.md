@@ -10,7 +10,7 @@
 
 Paper 1 cho thấy tính liên tục của lộ trình chịu ảnh hưởng của cách chọn bài, trong khi đồ thị mở rộng chưa cải thiện ổn định mức thành thạo. Paper 2 quan sát cải thiện dự báo nhỏ ở một số nhóm mô phỏng nhưng chưa phát hiện lợi ích rõ ở kết quả học tập chính. Khóa luận đi tiếp từ khoảng trống này: vì sao đồ thị chưa giúp ổn định, khi nào nó có ích và liệu CG-AKT sử dụng độ tin cậy cạnh có cải thiện được không?
 
-**Đã có bằng chứng chẩn đoán mới cho RQ1–RQ2 và bước ước lượng cạnh đã thực chạy cho RQ3. Chưa RQ nào hoàn tất; chưa có kết quả CG-AKT đã huấn luyện để kết luận mô hình này tốt hơn.**
+**Đã có bằng chứng chẩn đoán mới cho RQ1–RQ2, gồm phép đo trực tiếp hai điều kiện xét thành thạo; RQ3 đã có dữ liệu, bước ước lượng cạnh và lõi CG-AKT được kiểm tính toán. Chưa RQ nào hoàn tất; chưa có kết quả CG-AKT đã huấn luyện để kết luận mô hình này tốt hơn.**
 
 ## Quá trình đã thực hiện
 
@@ -26,10 +26,14 @@ Paper 1 cho thấy tính liên tục của lộ trình chịu ảnh hưởng c�
 
 **Từ đó, nhóm chuẩn bị phép kiểm CG-AKT.** Đã tạo corpus mô phỏng riêng gồm 60 người học ×210 lượt, phân vai 48 huấn luyện /6 chọn số vòng học /6 hiệu chỉnh xác suất. Bước ước lượng cạnh từ TRAIN đã hoàn tất 2.352 lần khớp mô hình CPU và tạo đồ thị ứng viên 31 cạnh theo quy tắc định trước. Điểm cạnh phản ánh mức ổn định của lợi ích dự báo, không phải xác suất tiên quyết đúng; chưa chứng minh khôi phục đúng đồ thị hoặc cải thiện CG-AKT. Điểm của 31 cạnh đã được đọc lại theo đúng hợp đồng dữ liệu; cầu tính toán SAKT cũng đã được kiểm tra trên dữ liệu nhỏ. Đây là chuẩn bị phần mềm, chưa là kết quả SAKT hoặc CG-AKT đã huấn luyện trên corpus nghiên cứu.
 
+**Cuối cùng, nhóm quay lại đo trực tiếp quyết định thành thạo.** Đã phát lại đủ 18 lượt trên chín lịch sử cũ, khớp toàn bộ 2.160 thời điểm với kết quả đã lưu. Trên 30.240 cặp khái niệm–thời điểm, có 3.428 cặp khác điều kiện bất định nhưng vẫn cùng đánh giá chưa thành thạo, vì điểm kiến thức ước lượng của cả hai dưới ngưỡng. Cả 90 cặp khác quyết định thành thạo đều khác điều kiện kiến thức, khi hai phía cùng đạt điều kiện bất định. Đây là bất đồng giữa cấu hình ở cùng thời điểm, không phải 90 lần học vượt ngưỡng. Đã xác định thêm nơi tác động bị giữ lại; chưa nói được đánh giá nào đúng hơn hay giúp học tốt hơn.
+
+**Lõi CG-AKT đầu tiên cũng đã được kiểm bằng tính toán và gradient thật trên CPU.** Có confidence theo cạnh, gate điều chỉnh ảnh hưởng và đường tắt graph; dữ liệu kiểm được dựng sẵn. Chưa huấn luyện trên corpus nghiên cứu, chưa chứng minh các biến thể hoặc hệ thống chọn bài tốt hơn. Chuỗi huấn luyện, checkpoint, lựa chọn mô hình và đánh giá vòng kín còn phải hoàn thiện.
+
 ## Còn phải chứng minh
 
-- **RQ1:** lượng hóa vai trò của hiệu chỉnh xác suất, ngưỡng thành thạo và bộ chọn bài; nối chẩn đoán với kết quả học tập.
+- **RQ1:** đánh giá độ đúng của quyết định thành thạo, hiệu chỉnh xác suất và vai trò chính sách; nối chẩn đoán nội bộ đã có với kết quả học tập.
 - **RQ2:** kiểm khả năng khái quát qua đồ thị nhiễu, nhóm khái niệm và người học mới, với đối chứng đúng quần thể.
-- **RQ3:** hoàn tất mô hình và so sánh không đồ thị / đồ thị cố định / confidence / gate theo cùng quy trình, sau đó đánh giá chọn bài và kết quả học vòng kín.
+- **RQ3:** hoàn thiện workflow huấn luyện/checkpoint từ lõi đã kiểm; so sánh không đồ thị / đồ thị cố định / confidence / gate cùng các baseline bắt buộc, rồi đánh giá chọn bài và kết quả học vòng kín.
 
 Các mô hình và demo trong đề cương vẫn được giữ. Kết quả không cải thiện hoặc cổng chọn tắt đồ thị vẫn được báo cáo nếu bằng chứng hỗ trợ; chưa có kết luận ưu thế của CG-AKT hoặc hiệu quả giáo dục trên người học thật.
