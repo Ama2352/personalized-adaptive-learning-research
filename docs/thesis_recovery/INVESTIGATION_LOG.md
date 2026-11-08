@@ -365,3 +365,7 @@ GKT06 đã đóng95outputs/manifest95cf82b4927abb35fff02dbffbf7416c14ac8bc83398d
 ### 08/11 — Chỉ mục GKT06 theo commit đã kiểm
 
 Thêm GKT06 phụ thuộc GKT05/DATA02,95outputs rawGitverified f204f69; old90tasks/81registryrecords giữ nguyên, DAG và linkedartifacts tồn tại. Actual2epochs là engineering fixture, không finalresearchfit; không đổi phươngpháp hoặc dùng Holdout/Modal.
+
+### 08/11 — Parent xác minh giải thích ranking RQ1
+
+Parent đọc source selector và analyzerposthoc, kiểm độc lập3240nativekeymin/27trajectories/18first-prefixcomparisons từ raw metadata.8full+2emptyfirstbreaks cùngmembership/tiecontext nhưngBscores khác dẫn tớiCID khác;1fullmembershipdiff và7emptynegative giữ riêng. P served-item nằm sau select trongloop, không là causalparent củasame-stepselection. FullS28 không cần đểreplaylocalBkey, nhưngcalibration/globalmastery/choosequestion vẫnthiếu. Đây làposthocsourceexplanation/current-source reconstruction, không causalmediation/edgebenefit/newN; canonicalreport đangchờparentclosure. Không newmodel/RNG/optimizer/Modal/Holdout.
