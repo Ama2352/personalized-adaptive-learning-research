@@ -239,3 +239,25 @@ Mở1officialColabMCPbridgeTTL1800s để kiểm môi trườngLinuxCPU; fronten
 ### RQ1 — vector score chứ không chỉ scalar P
 
 Reanalysis mới dùng boundedexistingvalidator, toàn bộoutputSHAfixedstreamverified. FullSvector đổi1080/1080snapshots (27017/30240conceptscorepairs) nhưngM90/A22; emptyS267/MRA0. HaiP-same/A-change có25Schanges, songmọifullsnapshotSchange nên khôngnecessity/mediationproof. PooledΔLL−0.00069357/Brier−0.00036471 cải thiệnmô tả; táchprofilePGΔLL+0.00255845/Brier+0.00116521 xấu ởcả3seed, PY/PYHâm. Independentstaticreview đãchỉnhnarrativeđểkhôngcheprofileharm/khônggánSthànhlatentprobability. 18legacycomparisons×2scalars match1e-12,0newmodel/events/realdata/Holdout/cloud. Sevenoutputbundleclosed, thêmRQDIAG03 làcompletedanalysis chứkhôngcompletedRQ1.
+
+### Checkpoint — trainers, graph factory và resource-gate anomaly
+
+SAKT trainer139PASS và51outputblobs đãcommit9952bc7/rawGitSHAverified; AKTsimulator40targeted/Gate19701PASS/93outputs đãcommit000ea22/rawGitSHAverified. Tổng từbatch mới441outputblobsverified; GraphGAM38PASS/97cheapnativeupdates/27outputsđãđóngchưacommit. A0/A1differentiableprototype23PASS/0optimizer chưaCG-AKTfull/A2/A3/train_epoch, sourcefrozen, cầnGate nguồn mới.
+
+Gate20 báo724PASS nhưngelapsed1083.995106>declared540: refitcase922.520s so1.682/3.087s ởGate18/19, cùngtraining/refit/testsourcehash. KhôngcoiPASSnàyđạtbudget. MaingiữnguyênreportSHA9d86b215bd936f04880bcd9bc775f2016784f279572109c39c017d46375fe351, copycurrentpointerSHAtrước/sau vàpublishresourceauditREJECTED e6a53ade40d01ee4229fcc3fe5b8d3e7364c984e3c37a632e4e49810b4c1a9c7; actualvalidatorrejects. KhôngGPU/Modalrun dựavàogatenày. SleepcauseUNKNOWNvìSystemeventaccessdenied; officialWindowsWaitvQPCsemantics compatiblechứkhôngproof. Oneauthorizedisolatedrefit rerunOMP/MKL/OpenBLAS2 đạt1PASS7.896stest/12.056scontroller<45, sourceunchanged;khôngattributethreadscausevìoldthreadsnotrecorded.
+
+Gatefixred-first44tests=25fail19pass, saubudgetvalidator/publisher/reader/envfix47PASS7.493s, cumulative20.164s/0optimizer. Mandatoryfiniteelapsed≤timeout1..600, default300unchanged; exit0+nonemptyJUnit vẫnrejectoverbudget/preserveexclusiveREJECTEDreceipt/nopointerchange. Cấu hình/model/hyper/splits/BKTkhôngđổi. Source/authchange làmprototypeolddependencieskhác, cầntargeted23newreceipt +Gate21 sau freeze, khôngnớitimecap hoặc sửaoldGate20.
+
+ActualColabconnection08/11 đãchạystdlibprobeLinuxx86_64/Python3.13.18 vàtạoROOT/.venv --without-pip isolated, system_site_packagesfalse, targettorch/numpy/pipspecNone,0installs/GPUsteps. Basepip26.2.2 --python target kiểmreadonly. Frontendlosttrướcresolverdispatch; requestkhôngđượcgửi/0resolverprocess. ChuẩnbịsourceWindows29pins(TorchCPU→cu126explicit)+CUDA14/Triton1, actualLinuxresolverplan khôngWindowsmarkeroverride; source39c68ed7921ccd7660ab1e625ab5df6ca3d2cfd473339b2b9babc7de3665b861 chỉboundedfetch/dryrun/noinstall. Preexecprocessgroupcleanup vàpostexitbudgetguardsđãthêm; khôngclaimno-wheelGET/hardnetworkcap. Resumableone-shotdriverđangchuẩnbịoffline, failed/incompleteattemptkhôngtựretry. Bridgecurrentlastknownoffline/session98978, open2lần; đừngtáitạoduplicatejobs hoặc reuseclosed44560. NoModalspending/accountsecrets.
+
+### 08/11 — Hoàn tất phân giải Linux và thay Gate20 bằng Gate21 hợp lệ
+
+Sau khi người dùng kết nối lại MCP, một lần thực thi resolver trên Colab CPU đã hoàn tất trong 10,095 giây: 44 gói, gồm 14 gói NVIDIA. Venv vẫn trống; không cài đặt, không bước mô hình/GPU và không gọi Modal. Đã tải đủ 14 tệp raw, kiểm CRC/đường dẫn ZIP và SHA-256 trước/sau sao chép. Archive SHA: 5decb9a6cb011e2461e7c0a4978fd358fb2f40feaf5f487004c6227073a98acf. Đây là candidate dependency closure từ metadata, chưa phải wheel bytes, isolated install, image hoặc CUDA acceptance.
+
+Gate21 đạt 757 PASS, không fail/error/skip; elapsed 467,136 giây trong trần 540 giây. Report SHA: b74f4b96fe6a288f380b3ec69cfba2c01f95c089a8f8d98cdadc0aeb5f8d9c8e. Gate20 vẫn bị từ chối vì vượt thời gian; pointer mới hợp lệ không đổi verdict của Gate20.
+
+Đã commit và kiểm raw Git blobs: Graph-GAM variant factory 96004e2 (27 outputs), Gate2 elapsed guard 4af8f85 (68 outputs), graph-AKT A0/A1 prototype 6377265 (196 outputs). Cộng với 441 output trước đó, hiện 732 output blobs mới được xác minh trong Git. Prototype chưa có A2/A3, research train_epoch hoặc chứng minh CG-AKT cải thiện; không thay quyết định S04/S05. Backlog cập nhật 81 task và registry 71 mục, phân biệt hoàn tất kỹ thuật với hoàn tất nghiên cứu.
+
+Bước kế tiếp: đóng bundle Linux resolution, review hợp đồng cài đặt isolated CPU có thời gian/dung lượng giới hạn; chỉ sau kiểm install/origin/runtime mới chuyển kiểm worker trên T4 miễn phí. Trần Modal vẫn 30 USD free credits và 0 USD trả thêm; chưa cấp allocation hay phát sinh job.
+
+Archive Linux resolution đã đóng: [37 outputs + manifest](../../research_tracking/runs/akt-linux-dependency-resolution-20261108-01/README.md), manifest SHA eae752b3c04516020d0671167853acd5a3d55fc35e57ef992c6b960f1eb2d0ed. Addendum riêng làm rõ wheelhouse là tùy chọn, direct hash-only install vẫn cần stage kiểm riêng; không sửa snapshot đóng hoặc tạo thêm folder correction. Registry hiện72 mục.

@@ -1,6 +1,27 @@
 # Tiến độ nghiên cứu
 
-**Vòng tiếp theo đang làm:** SAKT03 và SIMTRAIN01 chỉ dùng dữ liệu giả để kiểm kỹ thuật. Module/test AKT mới cần Gate19 sau freeze; Gate18 bên dưới là snapshot nguồn đã kiểm trước batch mới, không tự áp dụng cho nguồn đang sửa. Colab CPU chờ xác nhận frontend, chưa remote call/GPU/Modal.
+## Trạng thái mới nhất08/11 — Gate21 và các batch engineering đã đóng
+
+**Gate21 CPU software757PASS,0fail/error/skip,467.1361735s≤540s**; [report](../artifacts/akt/preflight/gate2-evidence-20261108-elapsed-guard-21.json), current pointer/source/lock đã được reader xác minh. Gate20 vẫn **REJECTED_RESOURCE_BOUND** dù724functional PASS vì1083.995106s>540s. Không sửa Gate20 hoặc dùng nó để chấp thuận source mới. Các đoạn “current” có ngày cũ phía dưới là snapshot lịch sử.
+
+| Phạm vi hiện có | Bằng chứng mới đã đóng | Phần chưa được suy thành hoàn tất |
+|---|---|---|
+| SAKT03 | [139PASS/51outputs](runs/sakt-training-engineering-20261108-01/README.md), commit `9952bc7`; CPU synthetic train/validation/checkpoint engineering | Chưa fitted baseline nghiên cứu, selection/refit/resume/calibration hoặc complete Grade10 training bridge |
+| SIMTRAIN01 | [40targeted PASS/93outputs](runs/akt-simulator-engineering-20261108-01/README.md), commit `000ea22`; Gate19 lịch sử701PASS, toy train/selection lifecycle | Chưa full research corpus/trainer/epoch-selection protocol; không efficacy |
+| Graph-GAM variants | [38PASS/27outputs](runs/graph-gam-variant-engineering-20261108-01/README.md), commit `96004e2`;97native state updates,0optimizer/global fit | Parent/local adaptation kết hợp; chưa fitted comparator CV hoặc instructional benefit |
+| Resource guard | [47PASS/68outputs](runs/gate2-budget-fix-20261108-01/README.md), commit `4af8f85`; actual RED19PASS/25FAIL giữ lại | Operational fix, không training/GPU acceptance; snapshot rejected pointer trong archive là lịch sử trước Gate21 |
+| A0/A1 native graph branch | [23targeted PASS/196outputs](runs/akt-graph-prototype-engineering-20261108-01/README.md), commit `6377265`;0optimizer; bundle chứa Gate21 accepted | Parent-mean fixedc1/g1 toy prototype; A2/A3/confidence/learned gate/graph-aware trainer và fitted CG comparisons còn thiếu |
+| Linux dependency resolution | [37outputs](runs/akt-linux-dependency-resolution-20261108-01/README.md), actual CPU44packages/14NVIDIA,0install | Candidate index hashes/metadata closure, chưa wheel bytes/import/image/CUDA |
+
+Sáu bundle có472outputs đã đối chiếu SHA; parent đã kiểm raw Git27/68/196outputs ở ba commit Graph-GAM/budgetfix/graph prototype. Tests/source readiness không thay kết quả RQ: RQ1/RQ2 vẫn pilot/descriptive có giới hạn; RQ3 chưa có trained scientific A0–A3 comparisons. S01/S04/S05 và minimum experiment allocation chưa được tự chấp thuận. SAKT/GKT và required baselines tiếp tục giữ trong phạm vi đề cương; GKT hiện là partial kernel.
+
+Gate21 có suite `tests/akt tests/shared_kt`; targeted SAKT139 và Graph-GAM38 được kiểm riêng, không cộng hoặc gán lại vào757tests.
+
+**Colab CPU/Linux mới đã archive:** [report](reports/akt_linux_dependency_resolution_20261108.md), [bundle37outputs](runs/akt-linux-dependency-resolution-20261108-01/README.md) và [raw14files/SHA verified](../artifacts/akt/colab/gpu08-linux-20261108-01/received/manifest.json). Resolution44packages/14NVIDIA,0install; kiểm offline46active constraints và tái dựng lock là validation cùng evidence. Site unchanged là probe/danh sách tên theo source, không full byte attestation. Candidate hashes chưa chứng minh wheel bytes/install/image/CUDA runtime/main-worker. Không GPU/Modal mới từ batch này; actual Linux/CUDA training và Gate4 vẫn thiếu.
+
+**Bước tiếp theo chưa chạy:** [addendum acceptance](reports/akt_linux_dependency_resolution_20261108_addendum.md) làm rõ cài trực tiếp44URLs trong candidate lock bằng pip `--require-hashes` có thể dùng stage/budget/isolated target riêng; giữ wheelhouse là tùy chọn tách biệt. Wording future-step trong report gốc không bổ sung runtime evidence hoặc approval cài đặt.
+
+**Đính chính demo:** “12/120 nodes” của [report visualQA](reports/demo_readiness_20261108.md) là số phần tử timeline `#route li`, domain vẫn28concepts. Giữ nguyên [bundle demo93outputs](runs/demo-readonly-engineering-20261108-01/README.md); đây là preview replay, chưa served-action/live fitted personalization.
 
 ## Snapshot engineering08/11 — xem giới hạn từng bằng chứng
 

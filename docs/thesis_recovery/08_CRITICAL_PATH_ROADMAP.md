@@ -1,5 +1,31 @@
 # Lộ trình phục hồi đến 29/12/2026
 
+## Cập nhật điều hành08/11 — thay thế giả định ngân sách và phân công cũ
+
+**Giới hạn đang có là30USD free credits Modal, trả thêm0USD; không phải150/300/600USD.** Các envelope PlanA/B/C bên dưới là kịch bản lịch sử06/11, đã bị giới hạn mới thay thế và không được dùng làm allocation hoặc căn cứ launch. Không tự cộng credit tháng sau/reset07/12; user chỉ cho biết reset tháng kế, chưa xác minh ngày/giờ hoặc số dư qua dashboard. Xem [hồ sơ ngân sách hiện hành](07_GPU_TRAINING_AND_COST_PLAN.md) và [state](INVESTIGATION_STATE.json).
+
+Owner thực thi engineering hiện là Codex theo user, chia subagents theo module; không còn giả định phải đợi một trong hai sinh viên viết code. Quyết định phương pháp/đề cương và xác nhận kết quả cuối vẫn cần người có thẩm quyền. Loop chỉ tiếp tục khi phiên được cấp thực thi; không coi việc máy/ứng dụng tắt là một job cloud đang chạy.
+
+**Khuyến nghị hiện hành:** giữ hướng khoa học tối thiểu của PlanA, giữ đầy đủ baseline/deliverable bắt buộc, song song diagnostic evidence + model readiness + writing/demo; mọi mở rộng của PlanB/C chỉ sau khi evidence bắt buộc đủ và cost đo thực tế còn chỗ. Chưa chứng minh30USD đủ cho phạm vi PlanA. Nếu forecast không khớp giới hạn, phải xin duyệt phân bổ model×environment/protocol hoặc ghi phạm vi chưa đạt, không tự bỏ model hoặc gọi partialCV là5fold.
+
+Đã có RQ1/RQ2 pilot diagnostics và bản thảo phương pháp; Graph-GAM/Paper2 source tái dùng; AKT context worker WindowsCPU và actual-guard toy lifecycle đã được kiểm. Trainer SAKT đạt139 test, AKT simulator toy đạt40 test, Graph-GAM variant factory đạt38 test; các bundle đã đóng và commit riêng. A0/A1 graph-AKT prototype đạt23 test với0 optimizer step; Gate21 đạt757 PASS trong467,14s, trần540s. GKT mới có kernel, demo mới là artifact viewer. Colab CPU đã phân giải44 dependency và tải14 tệp bằng chứng; chưa isolated install hoặc CUDA worker mới. Tất cả các mục này chưa là scientific selected-fit. [Delta đầy đủ](../../research_tracking/reports/model_completion_contract_20261108.md) là snapshot trước batch trainer mới; xem [chỉ mục bằng chứng hiện hành](../../research_tracking/EVIDENCE_INDEX.md) để theo dõi bổ sung mà không đổi snapshot lịch sử.
+
+| Thời hạn kiểm soát | Ưu tiên và dependency | Bằng chứng nghiệm thu / điểm dừng |
+|---|---|---|
+|08–12/11 |Đóng các batch trainer/masks/role/checkpoint, Graph-GAM variant isolation; chuẩn bị Linux dependency lock; GVHD chốt S01/S04/S05 từ bộ tài liệu đã có |Source-bound tests + toy lifecycle; source ambiguity được ghi; model×environment/estimands/mastery/calibration phải được chốt trước research corpus/fit |
+|13–19/11 |IsolatedLinux + actual new-worker CUDA smoke/recovery trên Colabfree khi kết nối; scientific simulator trainer/selection/refit contracts và A0/A1 integration; minimal confidence/gate |Không lấy probev12 hoặc tinyCPUtiming làm throughput; chưa launch Modal khi thiếu runtime/recovery/representative benchmark/caps |
+|20–26/11 |Các fits simulator A0–A3 và required comparators theo allocation đã duyệt; tiếp tục trap controls và viết kết quả; Junyi theo cost/authorized protocol |First registered model comparisons cùngpopulation/role identities, negative findings giữ nguyên; không chạy full Cartesian hoặc tune bằngHoldout |
+|27/11–03/12 |Hoàn thiện core evidence RQ1–RQ3, required learned/noisygraph và inference families; CV/refit Junyi chỉ từngrun đã được duyệt |03/12 là scientific scope checkpoint: thiếu mandatory evidence phải báo rõ/đề xuất điều chỉnh với GVHD; không chờ đến tuần cuối mới phát hiện thiếu baseline |
+|04–10/12 |Đóng so sánh còn được duyệt, CI/Holm/coverage/calibration, demo có selected artifacts và full thesis/article draft |Không mở sweep mới vì kết quả chưa dương; demo viewer hiện có chỉ là fallback đọcpilot |
+|11–14/12 |Repro audit, sửa lỗi diễn giải/artifact, GVHD đọc bản đầy đủ |Freeze experiments14/12; mọi ngoại lệ cần lý do khoa học và review |
+|15–29/12 |Hoàn chỉnh luận văn/bài báo/demo/slides, rehearsal/defense và nộp |Giữ buffer thực tế; deadline29/12 không dời theo training chậm |
+
+Ngày08/11 còn51ngày đến hạn. Effort58–78person-days và elapsed của bản lịch sử dưới đây chưa được chuyển thành năng suất agent đã đo; không suy ra chạy nhiềuagent sẽ tự bảo đảm lịch. Critical path hiện là **S04/S05→role-aware scientific training contracts + Linux/CUDA acceptance→approved fits→served closed-loop traces/statistics→claims/draft review**, không là BKT→GAM→AKT tuần tự. Writing/demo/diagnostics độc lập tiếp tục trong khi cloud hoặc approval còn chờ.
+
+Trước Modal, reserve chi phí dự kiến startup/CPU/RAM/storage/retry và ngân sách chưa dùng; không chi toàn bộ30USD vào một lệnh train. Chưa tự cấp một tranche cụ thể: stage specification/cost projection và chủ tài khoản phải duyệt. Colab thiếu kết nối/quota không tự cho phép fallback Modal. Nếu authorization/feedback chậm quá12/11, lập impact cụ thể cho milestones sau; tiếp tục phần thuần engineering nhưng không dùng default tự chọn để đóng RQ.
+
+## Snapshot kế hoạch06/11 — giữ để đối chiếu quyết định cũ
+
 Ngày cơ sở06/11, còn53 ngày. Effort là person-days6h tập trung, elapsed gồm queue/debug/review. Capacity assumption hai sinh viên mỗi người4–5 ngày/tuần, cần xác nhận thời gian thực. Không suy deadline chỉ từ GPU hours. Tổng dự kiến PlanB khoảng58–78 person-days, khả năng cao vượt capacity nếu ít hơn4 ngày/tuần hoặc advisor turnaround>3 ngày. Dành margin15–29/12, freeze experiments14/12.
 
 ## Quyết định KEEP / REUSE / MODIFY / DEFER

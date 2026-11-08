@@ -52,3 +52,22 @@ Gate2-12 nguồn v1 đạt396tests374.84s; sau semantic fix cần source-bound g
 ## RQ1 score-vector08/11 — phân tích lại cùng pilot
 
 rq1-score-vector-20261108-01 COMPLETED/7outputs verified. Đọc lại traces vàcomparisons của cpu-rq12-20261107-03, khôngnewlearner/events/model/simulator. Fullpackage1080S-change/90M-change/22A-preview-change, empty267S-change/0MRA;18legacygroups×2lossmetrics match1e-12. PG predictive losses dương ở3/3seed-profile rows trong khi pooleddelta âm; khôngclaimgraphhelpsmọiprofile/causality/mediation. 1080events khôngindependentn, chỉ3seedblocks. Bundle mới không được tính thành additional experiment samples.
+
+## Sổ bổ sung kỹ thuật08/11 — không cộng thành thí nghiệm efficacy
+
+Đã kiểm472/472output SHA của sáu bundle dưới đây. Mốc commit là locator tích hợp; tests, native state updates và training/fitted research là các loại bằng chứng khác nhau. Parent đã xác minh raw Git27/68/196outputs ở các commit Graph-GAM/budgetfix/graph prototype tương ứng; không chạy Git trong cập nhật này. Các hàng thí nghiệm lịch sử phía trên giữ nguyên.
+
+| Hồ sơ | Trạng thái và kết quả được kiểm | Bằng chứng/giới hạn |
+|---|---|---|
+| SAKT synthetic trainer, `9952bc7` | ĐÃ ĐÓNG/139PASS/51outputs | [Bundle](runs/sakt-training-engineering-20261108-01/README.md), [report](reports/sakt_training_readiness_20261108.md). Partial CPU training-ready; chưa selected-fit/refit/resume/calibration hoặc complete simulator bridge. |
+| AKT toy role trainer, `000ea22` | ĐÃ ĐÓNG/40targeted PASS/93outputs; Gate19 lịch sử701PASS | [Bundle](runs/akt-simulator-engineering-20261108-01/README.md), [report](reports/akt_simulator_engineering_readiness_20261108.md). Mechanical one-epoch toy lifecycle/intentional incomplete proof, chưa full scientific trainer/corpus hoặc benchmark. |
+| Graph-GAM variant factory, `96004e2` | ĐÃ ĐÓNG/38PASS/27outputs;97native state updates,0optimizer/global fit | [Bundle](runs/graph-gam-variant-engineering-20261108-01/README.md), [report](reports/graph_gam_variant_readiness_20261108.md). Coupled parent/local adaptation; không edge-only causal effect hoặc fitted CV. |
+| Gate2 elapsed bugfix, `4af8f85` | ĐÃ ĐÓNG/47targeted PASS/68outputs; RED19PASS/25FAIL giữ nguyên | [Bundle](runs/gate2-budget-fix-20261108-01/README.md), [report](reports/gate2_elapsed_budget_fix_20261108.md). Operational acceptance fix,0optimizer ở targeted suite; archive snapshot chưa cấp full Gate. |
+| Native A0/A1 graph prototype, `6377265` | ĐÃ ĐÓNG/23targeted PASS/196outputs/0optimizer; Gate21 accepted757PASS | [Bundle](runs/akt-graph-prototype-engineering-20261108-01/README.md), [report targeted](reports/akt_graph_prototype_readiness_20261108.md). Same-backbone residual/fallback/causal-input engineering; chưa A2/A3/trainer/fitted CG-AKT. |
+| Actual Linux dependency resolution | ĐÃ ĐÓNG/37outputs;44packages/14NVIDIA;0install | [Bundle](runs/akt-linux-dependency-resolution-20261108-01/README.md), [report](reports/akt_linux_dependency_resolution_20261108.md).14raw files/SHA verified;46active constraints kiểm offline. Chưa wheel-byte/install/image/CUDA acceptance. |
+
+[Gate21](../artifacts/akt/preflight/gate2-evidence-20261108-elapsed-guard-21.json) có elapsed467.1361735s≤540s,0fail/error/skip; current pointer/source/lock đã xác minh bằng reader. **Gate20:724functional PASS nhưng ngân sách REJECTED1083.995106s>540s**; [audit](../artifacts/akt/preflight/gate2-resource-audit-20261108-graph-prototype-20.json) và original bytes giữ nguyên. Không cộng hai gate hoặc hai targeted rerun thành các thí nghiệm nghiên cứu độc lập, không suy throughput/GPU readiness từ thời gian suite.
+
+**Linux future install chưa chạy:** theo [addendum acceptance](reports/akt_linux_dependency_resolution_20261108_addendum.md), có thể cài trực tiếp44URLs của [candidate lock](runs/akt-linux-dependency-resolution-20261108-01/candidate-linux-cuda.lock.txt) bằng pip `--require-hashes` trong isolated target theo stage/budget riêng; wheelhouse là tùy chọn lưu riêng. Archive resolution và wording future-step trong report không là installation, GPU hoặc thí nghiệm model mới. Site unchanged chỉ có probe/danh sách tên theo source, không full filesystem byte attestation.
+
+**Errata demo93outputs:** số12/120“nodes” trong [report visualQA](reports/demo_readiness_20261108.md) là timeline entries `#route li`; domain28concepts. [Bundle đã đóng](runs/demo-readonly-engineering-20261108-01/README.md) không sửa; không diễn giải preview timeline thành graph-node count hoặc served actions.

@@ -87,3 +87,22 @@ Chỉ mục này không thêm GPU/runtime verdict khi chưa có evidence bundle 
 - [Model completion delta](model_completion_contract_20261108.md): required comparators vẫn giữ đủ; core/inference/trainer/fitted results/simulator bridge là các mức khác nhau. SAKT03 và SIMTRAIN01 tiếp tục synthetic-only, chưa adoption S04/S05.
 
 - [RQ1 score-vector diagnostic](rq1_score_vector_diagnostic_20261108.md) và [.sources.json](rq1_score_vector_diagnostic_20261108.sources.json):Sdiff1080/M90/A22, PG losses xấu hơn trongcả3seed-profile rows; no model/simulator rerun, không suy mastery calibration từ S.
+
+## Bổ sung08/11 — bằng chứng kỹ thuật đã đóng và Gate21
+
+Sáu bundle sau đã kiểm đủ472output SHA; các mục cũ giữ đúng vai trò snapshot lịch sử. Các kết quả này chưa là fitted research comparisons hoặc hoàn thành RQ1–RQ3.
+
+- [SAKT training readiness](sakt_training_readiness_20261108.md), [bundle51outputs](../runs/sakt-training-engineering-20261108-01/README.md), mốc commit `9952bc7`:139PASS, synthetic CPU training/validation/checkpoint engineering; không selected-fit/refit/resume/calibration hoặc complete Grade10 training bridge.
+- [AKT simulator engineering](akt_simulator_engineering_readiness_20261108.md), [bundle93outputs](../runs/akt-simulator-engineering-20261108-01/README.md), mốc commit `000ea22`:40targeted PASS/Gate19 lịch sử701PASS, toy role-aware lifecycle; intentional incomplete path được giữ. Không full simulator corpus/trainer protocol hoặc research efficacy.
+- [Graph-GAM variants](graph_gam_variant_readiness_20261108.md), [bundle27outputs](../runs/graph-gam-variant-engineering-20261108-01/README.md), commit `96004e2`:38PASS/97native online state updates,0optimizer/global fit. Adaptation parent/local kết hợp; empty graph không tự là graph-free endpoint.
+- [Gate2 elapsed budget fix](gate2_elapsed_budget_fix_20261108.md), [bundle68outputs](../runs/gate2-budget-fix-20261108-01/README.md), commit `4af8f85`:47targeted PASS, giữ actual RED19PASS/25FAIL. Ngân sách hữu hạn và resource fields bắt buộc ở cả publisher/reader; software fix không cấp quyền chạy nghiên cứu.
+- [A0/A1 graph prototype](akt_graph_prototype_readiness_20261108.md), [bundle196outputs](../runs/akt-graph-prototype-engineering-20261108-01/README.md), commit `6377265`:23targeted PASS/0optimizer sau source rebind; bundle mới kèm **Gate21 757PASS,467.1361735s≤540s**, current pointer/source/lock được reader xác minh. Report targeted/addendum ghi trạng thái trước Gate21; accepted verdict mới nằm trong bundle. Chưa A2/A3/confidence/gate/graph-aware trainer hoặc CG performance.
+- [Linux dependency resolution](akt_linux_dependency_resolution_20261108.md), [bundle37outputs](../runs/akt-linux-dependency-resolution-20261108-01/README.md): actual CPU resolution44packages/14NVIDIA, raw14files verified,0install. Kiểm offline46active constraints/tái dựng lock là validation cùng evidence, không runtime experiment thứ hai; index hashes không chứng nhận toàn wheel bytes/import/image/CUDA.
+
+**Gate20 bị từ chối resource acceptance** dù724functional PASS vì1083.995106s>540s. Giữ report/log/XML và audit thu hồi trong bundles, không sửa verdict lịch sử thành accepted. Gate21 chỉ chứng nhận CPU software suite tại source snapshot; chưa actual Linux/CUDA main-worker hoặc Gate4/full training.
+
+Gate21 chỉ chạy `tests/akt tests/shared_kt`; các số139SAKT và38Graph-GAM thuộc targeted suites riêng.
+
+**Làm rõ future install:** [addendum acceptance](akt_linux_dependency_resolution_20261108_addendum.md) xác định pip `--require-hashes` có thể cài trực tiếp44URLs trong [candidate lock](../runs/akt-linux-dependency-resolution-20261108-01/candidate-linux-cuda.lock.txt) theo stage/budget riêng; lưu wheelhouse là tùy chọn tách biệt. Đây là bước chưa chạy, không nâng resolution thành installed origins hoặc runtime/CUDA readiness; không sửa wording/report gốc đã freeze.
+
+**Errata demo:** “12/120 nodes” trong [report gốc](demo_readiness_20261108.md) là số mục timeline **`#route li`**; miền28concepts. Giữ nguyên [bundle93outputs](../runs/demo-readonly-engineering-20261108-01/README.md), không biến timeline preview thành số concept hoặc served-action evidence.

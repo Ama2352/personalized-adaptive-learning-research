@@ -1961,10 +1961,13 @@
       "authorization_requirements": "Localengineering authorized; no methodology/fullCV/Holdout/Modal allocation from this task",
       "status": "PARTIALLY_VERIFIED",
       "blockers": [
-        "Full transitive Linux hash lock, isolated install/runtime and image digest not yet verified."
+        "Candidate closure Linux đã phân giải thực tế; chưa wheel-byte verification/install/origin/runtime/image/CUDA acceptance."
       ],
       "evidence_refs": [
-        "research_tracking/runs/gpu08-environment-proposal-20261108-01/README.md"
+        "research_tracking/runs/gpu08-environment-proposal-20261108-01/README.md",
+        "artifacts/akt/colab/gpu08-linux-20261108-01/transfer/acceptance.json",
+        "research_tracking/runs/akt-linux-dependency-resolution-20261108-01/README.md",
+        "research_tracking/reports/akt_linux_dependency_resolution_20261108_addendum.md"
       ]
     },
     {
@@ -2150,10 +2153,15 @@
       "estimated_effort": "1 bounded engineering batch; no research corpus training scheduled",
       "compute_cost_category": "Local CPU synthetic only",
       "authorization_requirements": "User sustained local engineering request; Synthetic suite <=120s/32 optimizer steps; no real data/GPU/fitted-role promotion.",
-      "status": "IN_PROGRESS",
+      "status": "COMPLETED_ENGINEERING_ONLY",
       "blockers": [
         "S04/S05 pending for scientific adoption/full fit, not pure synthetic engineering."
-      ]
+      ],
+      "evidence_refs": [
+        "research_tracking/runs/sakt-training-engineering-20261108-01/README.md"
+      ],
+      "verified_targeted_tests": 139,
+      "scientific_adoption_pending": "S04/S05; chưa có fitted research baseline hoặc kết quả RQ3 từ batch này."
     },
     {
       "id": "SIMTRAIN01",
@@ -2178,10 +2186,15 @@
       "estimated_effort": "1 bounded engineering batch; no research corpus training scheduled",
       "compute_cost_category": "Local CPU synthetic only",
       "authorization_requirements": "User sustained local engineering request; Per run <=2train+1selection learner/12events per learner/4updates/60s/2GiBRAM; suite <=90s/16updates.",
-      "status": "IN_PROGRESS",
+      "status": "COMPLETED_ENGINEERING_ONLY",
       "blockers": [
         "S04/S05 pending for scientific adoption/full fit, not pure synthetic engineering."
-      ]
+      ],
+      "evidence_refs": [
+        "research_tracking/runs/akt-simulator-engineering-20261108-01/README.md"
+      ],
+      "verified_targeted_tests": 40,
+      "scientific_adoption_pending": "S04/S05; chưa có fitted research baseline hoặc kết quả RQ3 từ batch này."
     },
     {
       "id": "RQDIAG03",
@@ -2211,6 +2224,95 @@
       "authorization_requirements": "Existing local research-evidence engineering authorization; no new data/paid execution.",
       "status": "COMPLETED",
       "blockers": []
+    },
+    {
+      "id": "GAMVAR01",
+      "research_objective": "Graph-GAM factory biến thể tường minh",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "model_engineering",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "T06"
+      ],
+      "required_inputs": "Nguồn pinned và fixture toy đã đóng trong manifest",
+      "files_components": "graph-gam-variant-engineering-20261108-01",
+      "implementation_objective": "Graph-GAM factory biến thể tường minh",
+      "acceptance_criteria": "Test có output xác nhận; source và artifact hashes khớp; không suy kết luận nghiên cứu từ fixture.",
+      "verification_steps": "Kiểm log/JUnit/manifest và raw Git blobs; không chạy lại thí nghiệm đóng.",
+      "required_artifacts": "README, manifest, log, source snapshots",
+      "estimated_effort": "Đã hoàn thành batch kỹ thuật có giới hạn",
+      "compute_cost_category": "CPU local synthetic",
+      "authorization_requirements": "Đã được user cho phép local engineering; không cấp quyền cloud/real-data/final protocol.",
+      "blockers": [],
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "evidence_refs": [
+        "research_tracking/runs/graph-gam-variant-engineering-20261108-01/README.md"
+      ],
+      "verified_targeted_tests": 38,
+      "scientific_adoption_pending": "S04/S05; chưa có fitted research baseline hoặc kết quả RQ3 từ batch này."
+    },
+    {
+      "id": "GATEFIX01",
+      "research_objective": "Chặn Gate2 vượt thời gian kể cả subprocess trả 0",
+      "rq": [],
+      "workstream": "model_engineering",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GPU07"
+      ],
+      "required_inputs": "Nguồn pinned và fixture toy đã đóng trong manifest",
+      "files_components": "gate2-budget-fix-20261108-01",
+      "implementation_objective": "Chặn Gate2 vượt thời gian kể cả subprocess trả 0",
+      "acceptance_criteria": "Test có output xác nhận; source và artifact hashes khớp; không suy kết luận nghiên cứu từ fixture.",
+      "verification_steps": "Kiểm log/JUnit/manifest và raw Git blobs; không chạy lại thí nghiệm đóng.",
+      "required_artifacts": "README, manifest, log, source snapshots",
+      "estimated_effort": "Đã hoàn thành batch kỹ thuật có giới hạn",
+      "compute_cost_category": "CPU local synthetic",
+      "authorization_requirements": "Đã được user cho phép local engineering; không cấp quyền cloud/real-data/final protocol.",
+      "blockers": [],
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "evidence_refs": [
+        "research_tracking/runs/gate2-budget-fix-20261108-01/README.md"
+      ],
+      "verified_targeted_tests": 47
+    },
+    {
+      "id": "GRAPH02",
+      "research_objective": "Prototype A0/A1 forward/backward có native backbone",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "model_engineering",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GRAPH01",
+        "SIMTRAIN01",
+        "GATEFIX01"
+      ],
+      "required_inputs": "Nguồn pinned và fixture toy đã đóng trong manifest",
+      "files_components": "akt-graph-prototype-engineering-20261108-01",
+      "implementation_objective": "Prototype A0/A1 forward/backward có native backbone",
+      "acceptance_criteria": "Test có output xác nhận; source và artifact hashes khớp; không suy kết luận nghiên cứu từ fixture.",
+      "verification_steps": "Kiểm log/JUnit/manifest và raw Git blobs; không chạy lại thí nghiệm đóng.",
+      "required_artifacts": "README, manifest, log, source snapshots",
+      "estimated_effort": "Đã hoàn thành batch kỹ thuật có giới hạn",
+      "compute_cost_category": "CPU local synthetic",
+      "authorization_requirements": "Đã được user cho phép local engineering; không cấp quyền cloud/real-data/final protocol.",
+      "blockers": [],
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "evidence_refs": [
+        "research_tracking/runs/akt-graph-prototype-engineering-20261108-01/README.md"
+      ],
+      "verified_targeted_tests": 23,
+      "scientific_adoption_pending": "S04/S05; chưa có fitted research baseline hoặc kết quả RQ3 từ batch này."
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

@@ -358,21 +358,22 @@
     "gpu_executed": false
   },
   "current_software_gate": {
-    "status": "PENDING_REFRESH_NEXT_NATIVE_MODULE",
-    "last_verified": "Gate18 661PASS source snapshot",
-    "reason": "New AKT simulator engineering module/test in progress; do not promote old Gate to changed source.",
-    "next": "Gate19 after new native sources/tests frozen; safe fixtures only."
+    "status": "PASS",
+    "passed": 757,
+    "elapsed_seconds": 467.1361735,
+    "timeout_seconds": 540,
+    "report": "artifacts/akt/preflight/gate2-evidence-20261108-elapsed-guard-21.json",
+    "sha256": "b74f4b96fe6a288f380b3ec69cfba2c01f95c089a8f8d98cdadc0aeb5f8d9c8e",
+    "scope": "Windows CPU source-bound; không cấp quyền GPU, scientific fit hoặc Modal."
   },
   "previous_software_gate": {
-    "run_id": "20261107-simulator-batch-10",
-    "passed": 296,
-    "failed": 0,
-    "errors": 0,
-    "skipped": 0,
-    "pytest_seconds": 292.02,
-    "report_sha256": "a7416bd1ab431fa650712ec63bb9ad77a096a5f0ec5f56abf56084505fcd0f46",
-    "scope": "CPU synthetic software only",
-    "past_gate_fields": "Historical snapshots; this top-level field is current"
+    "status": "REJECTED_RESOURCE_BOUND",
+    "functional_passed": 724,
+    "observed_elapsed_seconds": 1083.9951060999883,
+    "allowed_timeout_seconds": 540,
+    "original_report_sha256": "9d86b215bd936f04880bcd9bc775f2016784f279572109c39c017d46375fe351",
+    "current_pointer_rejects": true,
+    "next": "Diagnose isolated refit anomaly; postelapsed acceptance guard + regression tests; new source-bound gate required."
   },
   "simulator_data_boundary_engineering_20261107": {
     "status": "COMPLETED_CPU_ENGINEERING",
@@ -768,18 +769,18 @@
     "overall_thesis": "NOT_READY_FOR_FINAL_RESEARCH",
     "RQ1": "PARTIAL_DIAGNOSTIC_EVIDENCE",
     "RQ2": "PARTIAL_CONTROLLED_PILOTS_AND_CONFOUNDING_AUDIT",
-    "RQ3": "GRAPH_KERNEL_ONLY_NOT_TRAINED_CGAKT",
-    "AKT_CUDA": "BOUNDED_SYNTHETIC_ACCEPTED",
-    "AKT_MAIN_LINUX_GPU_WORKER": "PARTIAL_RUNTIME_COMPONENT_VERIFIED_CPU_PHASE_STILL_GPU_BLOCKED",
-    "SAKT": "CORE_AND_RANDOM_WEIGHT_FROZEN_INFERENCE_VERIFIED_TRAINER_FITTED_BRIDGE_PENDING",
-    "GKT": "REQUIRED_PENDING",
+    "RQ3": "A0_A1_BACKBONE_PROTOTYPE_NOT_TRAINED_CGAKT",
+    "AKT_CUDA": "HISTORICAL_KITV12_SYNTHETIC_ONLY_NEW_WORKER_NOT_VALIDATED",
+    "AKT_MAIN_LINUX_GPU_WORKER": "CPU_CONTEXT_VERIFIED_LINUX_DEPENDENCY_RESOLVED_INSTALL_AND_ACTUAL_CUDA_PENDING",
+    "SAKT": "TOY_CPU_TRAINER_AND_CHECKPOINT_VERIFIED_NOT_RESEARCH_FITTED",
+    "GKT": "PARTIAL_CORE_NO_RECURRENT_RESEARCH_TRAINER",
     "Modal": "NO_COMPUTE_SPEND_NO_AUTOMATIC_ALLOCATION",
-    "primary_next_task": "GPU07",
+    "primary_next_task": "GPU08_ISOLATED_INSTALL",
     "methodology_pending": [
       "S04",
       "S05"
     ],
-    "supersedes": "Prior connection/kit/gate snapshots are historical; current_software_gate and colab_cuda_acceptance_20261107 govern current readiness"
+    "supersedes": "Các kit/gate cũ là snapshot lịch sử; Gate21 chỉ WindowsCPU, không chứng nhận CUDA worker mới."
   },
   "software_gate_before_linux_batch": {
     "status": "PASS",
@@ -883,25 +884,26 @@
       "out_of_pocket_limit_usd": 0,
       "new_spending_authorized": false
     },
-    "latest_verified_commit": "4d2cdf58cfb28dc57a028bdc9803a3c2a9ab4f88",
-    "commit_evidence": "artifacts/akt/local-tests/git-evidence-verification-e4a44e9.json",
+    "latest_verified_commit": "370a7f65483cca16ee41c6d19be450dc1212b1f9",
+    "commit_evidence": "artifacts/akt/local-tests/git-evidence-verification-370a7f6.json",
     "closed_science_outputs": 39,
-    "current_main": "Local AKT simulator role-aware engineering lifecycle integration + prepare GPU08 Linux resolution; Colab frontend confirmation pending.",
-    "parallel": [
-      "SAKT isolated synthetic CPU trainer/checkpoint with independent read-only reviewer",
-      "Minimal AKT simulator role-aware trainer design before research adoption"
-    ],
+    "current_main": "Đã xác minh closure Linux trên Colab CPU và tải 14 tệp có SHA; chuẩn bị bước cài isolated có giới hạn trước actual CUDA worker.",
+    "parallel": {
+      "graph_gate_prototype": "Bundle196outputs đóng; A0/A1 prototype23PASS,0optimizer; chuẩn bị bounded install draft.",
+      "rq12_evidence_synthesis": "Cập nhật chỉ mục bằng chứng và giới hạn kết luận.",
+      "platform_fixture_compat": "Độc lập kiểm raw Linux closure, đóng bundle/report; không cài đặt hay remote calls."
+    },
     "next": [
-      "Finish reviewed SAKT03/SIMTRAIN01 scoped synthetic batches",
-      "Refresh native Gate19 after freeze",
-      "Commit verified evidence + source; use free Colab CPU for Linux resolution when frontend connects",
-      "No Modal/fullCV/Holdout or methodology adoption without exact authorization"
+      "Đóng/commit raw Linux resolution bundle; đối chiếu bytes Git.",
+      "Review bounded isolated install contract; chỉ CPU Colab, không global packages.",
+      "Actual install/origin/pip-check/runtime rồi mới đề xuất bounded free-T4 worker, không thay bằng kitv12.",
+      "S04/S05 phải chốt trước research fit/calibration/controller adoption; không tự suy từ test."
     ],
     "pending_external": [
       "S01 exact Paper1 revision",
       "S04 mastery/calibration/controller adoption",
       "S05 model/environment/protocol allocation",
-      "Full Linux CUDA dependency lock and actual new-worker hardware test"
+      "Exact future Modal run allocation and verified free-credit guards before any spending"
     ],
     "recovery": "Đọc state, INVESTIGATION_LOG và TASKS trước khi tiếp tục; không chạy lại job/bundle đóng; kiểm tra tiến trình đang chạy và SHA source.",
     "limits": "Hoạt động trong phiên agent còn được cấp thực thi; không cam kết chạy khi máy hoặc ứng dụng tắt; không tự lập lịch hay gửi báo cáo ra ngoài.",
@@ -916,16 +918,32 @@
       "gkt_kernel": "661a44b",
       "gpu08_metadata": "dc2b802",
       "akt_context": "fbb0ed2",
-      "readonly_demo": "4d2cdf5"
+      "readonly_demo": "4d2cdf5",
+      "sakt_trainer": "9952bc7",
+      "akt_simulator_engineering": "000ea22",
+      "rq1_score_vector": "5eede59",
+      "graph_gam_variants": "96004e2",
+      "gate2_elapsed_guard": "4af8f85",
+      "graph_akt_prototype": "6377265",
+      "linux_dependency_resolution": "370a7f6"
     },
-    "verified_new_output_blobs": 290,
+    "verified_new_output_blobs": 769,
     "colab_connection": {
-      "status": "WAITING_FRONTEND_CONFIRMATION",
-      "opened_free_cpu_bridge": true,
-      "remote_runtime_calls": 0,
-      "user_question_pending": true,
-      "private_current_state": "artifacts/akt/private/colab-bridge/current.json",
-      "no_paid_fallback": true
+      "status": "RESOLVER_COMPLETED_EVIDENCE_RECEIVED",
+      "last_controller_session": 98978,
+      "browser_open_count_in_this_controller": 2,
+      "old_closed_controller_do_not_reuse": 44560,
+      "last_confirmed_remote": "Linux x86_64/Python3.13.18; /content/KLTN_GPU08_20261108_01/.venv isolated, torch/numpy/pip specs None; zero installs/model steps.",
+      "local_acceptance": "artifacts/akt/colab/gpu08-linux-20261108-01/transfer/acceptance.json",
+      "resolver_execution": "44 packages/14 Nvidia; elapsed10.095s; zero installs/model steps/Modal.",
+      "approved_resolver_source_sha256": "39c68ed7921ccd7660ab1e625ab5df6ca3d2cfd473339b2b9babc7de3665b861",
+      "resume_driver": "resume_resolver.py executed once; cached-complete reuse and incomplete-attempt stop guards.",
+      "recovery": "Prepare everything first; ask frontend confirmation only when ready. Reuse verified complete results, stop on incomplete existing attempt, never duplicate/retry blindly.",
+      "no_modal_or_paid_fallback": true,
+      "linux_resolution_bundle": "research_tracking/runs/akt-linux-dependency-resolution-20261108-01/README.md",
+      "dependency_candidates": 44,
+      "nvidia_candidates": 14,
+      "install_status": "NOT_EXECUTED_PENDING_FINAL_SOURCE_REVIEW"
     },
     "latest_rq1_evidence": {
       "run_id": "rq1-score-vector-20261108-01",
@@ -933,7 +951,8 @@
       "new_samples": 0,
       "rq_complete": false,
       "profile_harm_preserved": true
-    }
+    },
+    "new_blocker": "GPU08 isolated install/runtime/image và GPU09 actual worker CUDA còn thiếu; Gate20 rejection đã được thay bằng Gate21 hợp lệ, không sửa lịch sử."
   },
   "last_verified_software_gate": {
     "status": "PASS",
@@ -946,5 +965,54 @@
     "report": "artifacts/akt/preflight/gate2-evidence-20261108-context-18.json",
     "sha256": "8d51380ed58b104aea0c0de37bdeb097d12e45071252ec973a696dc1fc7ac66d",
     "scope": "Windows CPU source-bound; no actual new-worker CUDA/Gate4/research authorization"
+  },
+  "engineering_checkpoint_20261108": {
+    "sakt_trainer": {
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "tests": 139,
+      "bundle_outputs": 51,
+      "commit": "9952bc7"
+    },
+    "akt_simulator": {
+      "status": "COMPLETED_TOY_ROLE_LIFECYCLE",
+      "targeted_tests": 40,
+      "accepted_historical_gate": "Gate19 701PASS/368.18s within540",
+      "bundle_outputs": 93,
+      "commit": "000ea22"
+    },
+    "graph_gam": {
+      "status": "TOY_FACTORY_VERIFIED_NOT_CV",
+      "tests": 38,
+      "native_update_calls": 97,
+      "bundle_outputs": 27,
+      "git": "96004e2 raw27Gitblobsverified"
+    },
+    "graph_akt": {
+      "status": "A0_A1_FORWARD_BACKWARD_PROTOTYPE_NOT_TRAIN_EPOCH",
+      "targeted_tests": 23,
+      "optimizer_steps": 0,
+      "gate": "Gate21 accepted; bundle196outputs closed"
+    },
+    "gate20": {
+      "functional_passed": 724,
+      "elapsed_seconds": 1083.9951060999883,
+      "timeout_seconds": 540,
+      "original_report_sha256": "9d86b215bd936f04880bcd9bc775f2016784f279572109c39c017d46375fe351",
+      "resource_audit_sha256": "e6a53ade40d01ee4229fcc3fe5b8d3e7364c984e3c37a632e4e49810b4c1a9c7",
+      "accepted": false,
+      "original_bytes_preserved": true,
+      "current_pointer_rejects": false,
+      "cause": "UNKNOWN; power-event access denied; Windows wait/suspend semantics only compatible explanation.",
+      "pointer_note": "Lúc thu hồi đã reject; pointer hiện trỏ Gate21 mới hợp lệ, không phải chấp thuận lại Gate20."
+    },
+    "gate_fix": {
+      "targeted_passed": 47,
+      "optimizer_steps": 0,
+      "red_first": {
+        "passed": 19,
+        "failed": 25
+      },
+      "full_gate": "Gate21 PASS757/467.136s<=540"
+    }
   }
 }

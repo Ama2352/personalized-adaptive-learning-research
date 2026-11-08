@@ -152,3 +152,29 @@ GKT archive force_add_paths.json rỗng do check-ignore stdin sai; danh sách ex
 ## RQ1 bổ sung vector S08/11
 
 - [rq1-score-vector-20261108-01](runs/rq1-score-vector-20261108-01/README.md):7outputs verified, reanalysis cùng1.080pairs/candidate, không thêm samples. [Narrative](reports/rq1_score_vector_diagnostic_20261108.md) tách P/S/M/R/A, score-change không bảo đảm mastery/action change; pooled loss che PG worse. Không causal/CI/finalRQ.
+
+## Bổ sung08/11 — trainer synthetic, variants và Gate21 hợp lệ ngân sách
+
+Đã kiểm trực tiếp SHA-256 **472/472 outputs của sáu bundle** dưới đây và mục Linux tiếp theo. Đây là bằng chứng kỹ thuật/vận hành; số outputs và tests không phải số thí nghiệm nghiên cứu hoặc mức hoàn thành RQ. Parent đã đối chiếu raw Git cho27/68/196outputs ở các mốc Graph-GAM/budgetfix/graph prototype tương ứng; lần cập nhật này không chạy Git. Giữ nguyên các verdict lịch sử phía trên.
+
+| Bằng chứng đã đóng | Kết quả được xác minh | Phạm vi và phần chưa hoàn tất |
+|---|---|---|
+| [SAKT synthetic trainer](runs/sakt-training-engineering-20261108-01/README.md), **51 outputs**, mốc commit `9952bc7`; [báo cáo](reports/sakt_training_readiness_20261108.md) | 139 PASS; CPU training/validation và raw-state checkpoint có sidecar ràng buộc; giữ failure ambient-meta trước sửa. | `synthetic_trained_engineering_only`, chưa fitted nghiên cứu, epoch selection/refit/resume/calibration hoặc complete Grade10 role-aware bridge. |
+| [AKT toy role trainer](runs/akt-simulator-engineering-20261108-01/README.md), **93 outputs**, mốc commit `000ea22`; [báo cáo](reports/akt_simulator_engineering_readiness_20261108.md) | 40 targeted PASS; Gate19 lịch sử701 PASS; complete checkpoint/reload và intentional incomplete path được giữ. | Plumbing một epoch CPU toy có train/selection roles; không full corpus, scientific epoch selection hoặc benchmark. Gate19 không thay Gate21 ở nguồn sau sửa ngân sách. |
+| [Graph-GAM isolated variants](runs/graph-gam-variant-engineering-20261108-01/README.md), **27 outputs**, commit `96004e2`; [báo cáo](reports/graph_gam_variant_readiness_20261108.md) | 38 PASS, **97 native online state updates**, 0 optimizer/global fit; parity nguồn và cô lập session/cache/graph. | Adaptation kết hợp parent/local; empty graph vẫn có local pathway. Không graph-edge-only causal effect, fitted CV hoặc hiệu quả học tập. |
+| [Sửa elapsed Gate2](runs/gate2-budget-fix-20261108-01/README.md), **68 outputs**, commit `4af8f85`; [báo cáo](reports/gate2_elapsed_budget_fix_20261108.md) | 47 targeted PASS; giữ actual RED19 PASS/25 FAIL. Publisher và reader từ chối overtime/malformed resource fields ngay cả khi rehash. | Operational bugfix, 0 optimizer ở targeted tests. Snapshot pointer trong bundle còn rejected; không tự là full Gate cho nguồn mới. |
+| [A0/A1 native graph prototype](runs/akt-graph-prototype-engineering-20261108-01/README.md), **196 outputs**, commit `6377265`; [báo cáo targeted](reports/akt_graph_prototype_readiness_20261108.md) | 23 targeted PASS sau dependency rebind, **0 optimizer**; bundle kèm accepted Gate21 **757 PASS**, elapsed **467.1361735s ≤540s**. | Parent-mean observed correctness, fixed `c=1,g=1`, same-backbone fallback/gradient và OOV guards; chưa A2/A3/confidence/gate/trainer integration hoặc fitted CG-AKT. Max12events không chứng minh full100-step rollover. |
+
+[Gate21 report](../artifacts/akt/preflight/gate2-evidence-20261108-elapsed-guard-21.json) SHA-256 `b74f4b96fe6a288f380b3ec69cfba2c01f95c089a8f8d98cdadc0aeb5f8d9c8e`; reader xác minh [current pointer](../artifacts/akt/preflight/gate2-current.json), source/lock và ngân sách hợp lệ tại lần cập nhật này. **Gate20 vẫn bị loại vì1083.995106s >540s dù724 chức năng PASS**; [audit thu hồi](../artifacts/akt/preflight/gate2-resource-audit-20261108-graph-prototype-20.json) và bytes lịch sử nằm trong hai bundle liên quan. Gate21 là CPU software acceptance, không CUDA/main-worker GPU readiness, Gate4 hoặc chấp thuận train nghiên cứu.
+
+Suite Gate21 là `tests/akt tests/shared_kt`; SAKT139 và Graph-GAM38 có targeted receipts riêng, không mặc nhiên nằm trong757tests này.
+
+### Dependency Linux thực tế — archive chuyên biệt đã đóng
+
+[Báo cáo canonical](reports/akt_linux_dependency_resolution_20261108.md), [bundle37outputs](runs/akt-linux-dependency-resolution-20261108-01/README.md) đã kiểm đủ output SHA; manifest SHA `eae752b3c04516020d0671167853acd5a3d55fc35e57ef992c6b960f1eb2d0ed`. [Raw manifest đã nhận](../artifacts/akt/colab/gpu08-linux-20261108-01/received/manifest.json) có **14/14 files khớp SHA/size**. Actual Colab CPU/Linux x86_64 phân giải **44 packages/14 NVIDIA**, **0 cài đặt**; kiểm offline46active dependency constraints và tái dựng candidate lock, không là runtime experiment thứ hai. “Site unchanged” là probe/danh sách tên theo source, chưa full content-hash attestation. Candidate index hashes chưa chứng minh wheel bytes, install/image/runtime CUDA; không GPU/Modal hoặc thay đổi readiness nghiên cứu.
+
+**Làm rõ bước tương lai, chưa thực hiện:** [bổ sung acceptance](reports/akt_linux_dependency_resolution_20261108_addendum.md) làm rõ khả năng dùng pip `--require-hashes` cài trực tiếp từ44URLs trong [candidate lock](runs/akt-linux-dependency-resolution-20261108-01/candidate-linux-cuda.lock.txt), với stage/budget/isolated target được chấp thuận; giữ wheelhouse là lựa chọn lưu trữ riêng, không bắt buộc phải tạo trước. Wording future-step trong report gốc không là bằng chứng install hoặc runtime mới.
+
+### Đính chính thuật ngữ demo
+
+Trong [report demo lịch sử](reports/demo_readiness_20261108.md), “12/120 nodes” của visual QA là số phần tử timeline DOM **`#route li`**, không phải số concept của miền. Miền vẫn **28 concepts**; [bundle demo93outputs](runs/demo-readonly-engineering-20261108-01/README.md) và report gốc giữ nguyên bytes. Replay concept preview chưa phải served action hoặc live fitted personalization.
