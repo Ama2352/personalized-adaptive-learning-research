@@ -1,0 +1,27 @@
+{
+  "notebook": "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb",
+  "notebook_sha256": "353f487a3d6ed3826f2546d03c0aa2ad2279cf5c4b7fe8e375f4cafb0408280f",
+  "methods": {
+    "elo_probability": {
+      "cell": 9,
+      "start_line": 1,
+      "end_line": 2,
+      "source": "def elo_probability(theta: float, difficulty: float) -> float:\n    return float(1.0 / (1.0 + 10.0 ** ((difficulty - theta) / 400.0)))",
+      "sha256": "23c2f76a39550fbed2233b9b84fb3fde0049ce0ba012bd9ddddc79b81e509cf0"
+    },
+    "theta_at": {
+      "cell": 9,
+      "start_line": 30,
+      "end_line": 36,
+      "source": "def theta_at(self, cid: str, timestamp: pd.Timestamp) -> float:\n        previous = self.last_seen[cid]\n        if previous is None:\n            return self.theta[cid]\n        days = max(0.0, (timestamp - previous).total_seconds() / 86400.0)\n        learned_gain = max(0.0, self.theta[cid] - self.base[cid])\n        return self.base[cid] + learned_gain * math.exp(-TRUE_FORGET_RATE * days)",
+      "sha256": "52f6af6a08121c11e176bdb501bf648fc3342314176ebbf9af1957892d9e259f"
+    },
+    "soft_mastery": {
+      "cell": 19,
+      "start_line": 16,
+      "end_line": 17,
+      "source": "def soft_mastery(snapshot):\n    return float(np.mean([elo_probability(theta, MASTERY_ELO) for theta in snapshot.values()]))",
+      "sha256": "1a195fbbcf2e28d5d1c9bd9877407798191507df6a2b8bd3f243c3108800ea0b"
+    }
+  }
+}
