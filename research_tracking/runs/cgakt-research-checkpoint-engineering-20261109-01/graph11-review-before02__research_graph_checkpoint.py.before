@@ -1,0 +1,735 @@
+"""Checkpoint complete-epoch CG-AKT CPU; không quyền fit hoặc lifecycle resume.
+
+Tracker dùng callback/batch_factory của train_epoch, không thêm training loop.
+Named participation ghi gradTensor (kể cả toàn zero), không suy từ weight change.
+Identity/ledger là consistency contract hợp tác, không chống caller giả toàn bộ
+metadata. Chỉ đọc checkpoint do owned producer tin cậy tạo; weights_only và byte
+caps không phải bộ giải mã an toàn cho mọi archive thù địch. Lỗi sau mutation
+poison adapter, không rollback. Không checkpoint cursor/selection/global budget.
+"""
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass
+import hashlib
+import io
+import json
+import math
+import os
+from pathlib import Path
+import random
+
+ROOT = Path(__file__).resolve().parents[3]
+ROLE = 'cgakt_research_complete_epoch_training_state_v1'
+STATUS = 'COMPLETE_CGAKT_EPOCH_TRAINING_STATE'
+RECIPE = 'cgakt-centered-parentmean-scalar-v1'
+RECIPE_SHA256 = '13a81ad6a5173e1f215e3df01f3917fcbc1cce128c87c93985b57af76faa353a'
+
+
+def _need(value, message):
+    if not value:
+        raise ValueError(message)
+
+
+def _sha(value):
+    _need(type(value) is str and len(value) == 64 and all(c in '0123456789abcdef' for c in value), 'SHA256 required')
+
+
+def _count(value):
+    _need(type(value) is int and 0 <= value < 2**63, 'nonnegative integer counter required')
+
+
+def _json(value):
+    def path_only(item):
+        if isinstance(item, Path): return str(item)
+        raise TypeError('unsupported metadata object')
+    return json.loads(json.dumps(value, sort_keys=True, allow_nan=False, default=path_only))
+
+
+def _raw(value):
+    return (json.dumps(value, sort_keys=True, allow_nan=False, separators=(',', ':'))+'\n').encode()
+
+
+def _digest(value):
+    return hashlib.sha256(_raw(value)).hexdigest()
+
+
+def _closed(value, names, message):
+    _need(type(value) is dict and set(value) == set(names), message)
+
+
+def _decode(raw):
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            _need(key not in result, 'duplicate JSON key'); result[key] = value
+        return result
+    def bad(value):
+        raise ValueError('nonfinite JSON number')
+    result = json.loads(raw, object_pairs_hook=pairs, parse_constant=bad)
+    _json(result)  # Reject floating overflow as well as literal NaN/Infinity.
+    return result
+
+
+@dataclass(frozen=True)
+class GraphCheckpointLimits:
+    max_checkpoint_bytes: int
+    max_metadata_bytes: int
+    max_tensor_bytes: int
+
+    def __post_init__(self):
+        for value in asdict(self).values():
+            _need(type(value) is int and value > 0, 'explicit positive checkpoint byte caps required')
+
+
+@dataclass(frozen=True)
+class GraphCheckpointProfile:
+    protocol21_sha256: str
+    protocol26_sha256: str
+    runtime_receipt_sha256: str
+    runtime_profile_sha256: str
+    initial_backbone_sha256: str
+    candidate_allocation_sha256: str
+    purpose: str
+    external_system_freeze_sha256: str | None
+
+    def __post_init__(self):
+        for name, value in asdict(self).items():
+            if name not in ('purpose', 'external_system_freeze_sha256'):
+                _sha(value)
+        _need(self.protocol26_sha256 == RECIPE_SHA256, 'adopted recipe26 required')
+        _need(self.purpose in ('selected_fit_candidate', 'frozen_candidate_refit'), 'explicit graph fit purpose required')
+        if self.purpose == 'frozen_candidate_refit':
+            _sha(self.external_system_freeze_sha256)
+        else:
+            _need(self.external_system_freeze_sha256 is None, 'selection cannot claim a future system freeze')
+
+
+def source_inventory():
+    """Pins cố định và dependency inventories thật, không mở path từ payload."""
+    from . import research_graph_context as contexts, research_graph_condition as conditions
+    from . import research_simulator_data as data
+    rows = dict(contexts.source_inventory())
+    data_rows = tuple(('src/knowledge_tracing/'+name, digest) for name, digest in data.source_identity())
+    for relative, digest in (*conditions.source_inventory(), *data_rows):
+        _need(relative not in rows or rows[relative] == digest, 'dependency source inventory disagreement')
+        rows[relative] = digest
+    # Không import graph_model/Torch chỉ để inspect metadata.
+    paths = ('src/knowledge_tracing/akt/research_graph_checkpoint.py',
+        'src/knowledge_tracing/akt/research_graph_model.py', 'src/knowledge_tracing/akt/training.py',
+        'src/knowledge_tracing/akt/model.py', 'src/knowledge_tracing/akt/filesystem.py',
+        'src/knowledge_tracing/akt/config.py', 'src/knowledge_tracing/akt/tensors.py',
+        'src/knowledge_tracing/akt/types.py', 'src/knowledge_tracing/akt/upstream.py',
+        'src/knowledge_tracing/akt/provenance.py', 'artifacts/akt/dependencies/upstream/akt.py',
+        'artifacts/akt/dependencies/upstream/README.md', 'artifacts/akt/dependencies/upstream/LICENSE')
+    for relative in paths:
+        path = _physical(ROOT/relative)
+        raw = _bytes(path, 262144)
+        digest = hashlib.sha256(raw).hexdigest()
+        _need(relative not in rows or rows[relative] == digest, 'dependency physical bytes disagree')
+        rows[relative] = digest
+    return tuple(sorted(rows.items()))
+
+
+def graph_checkpoint_identity(*, config, encoding, condition, index, profile):
+    """Binding trước constructor/deserialization; SHA freeze không cấp authority."""
+    from .config import AKTConfig, validate_config
+    from . import research_graph_condition as conditions, research_graph_context as contexts
+    from . import research_simulator_data as data
+    _need(type(profile) is GraphCheckpointProfile and type(config) is AKTConfig,
+          'typed config/checkpoint profile required')
+    _need(type(encoding) is data.ResearchAKTEncoding and type(condition) is conditions.ResearchGraphCondition
+          and type(index) is contexts.ResearchGraphContextIndex, 'typed graph data identity required')
+    validate_config(config)
+    _need(config.phase == 'simulator-research' and config.device == 'cpu', 'CPU simulator research only')
+    encoding.assert_integrity(); condition.assert_integrity(); index.assert_integrity()
+    scope = index.neural_binding.phase_scope
+    _need(scope in ('select_train80', 'refit_union90'), 'complete optimization epoch only')
+    _need((scope == 'select_train80') == (profile.purpose == 'selected_fit_candidate'), 'phase/purpose mismatch')
+    _need(index.condition_sha256 == condition.identity and index.encoding_sha256 == encoding.identity
+          and index.context == config.context and index.target_block == config.target_block,
+          'graph/encoding/geometry mismatch')
+    _need(index.neural_binding == conditions.bind_graph_neural_phase(condition,
+        phase_scope=scope, encoding_sha256=encoding.identity, vocabulary_sha256=index.vocabulary_sha256,
+        fit80_encoding_sha256=index.neural_binding.fit80_encoding_sha256,
+        encoding_fit_scope=encoding.optimization_scope, neural_shards_sha256=tuple(sorted(encoding.origin_shard_sha256)),
+        selection_freeze_sha256=encoding.selection_freeze_sha256), 'graph neural phase lineage mismatch')
+    # Paths/run ids không numerical config; không giả portability bằng đổi source SHA.
+    numerical = asdict(config)
+    for name in ('project_root', 'source_root', 'output_dir', 'run_id', 'max_train_users', 'max_val_users',
+                 'max_targets_per_side', 'max_total_targets', 'max_steps', 'max_seconds', 'max_wall_seconds',
+                 'max_rss_bytes', 'min_available_ram_bytes'):
+        numerical.pop(name, None)
+    return _json(dict(schema_version=1, role=ROLE, recipe=RECIPE, recipe_sha256=RECIPE_SHA256,
+        config=numerical, encoding=encoding.payload(), encoding_sha256=encoding.identity,
+        condition=condition._payload(), condition_sha256=condition.identity,
+        phase_index_sha256=index.identity, phase_sha256=index.phase_sha256,
+        neural_binding=asdict(index.neural_binding), profile=asdict(profile), sources=source_inventory(),
+        iterator_resume_supported=False, lifecycle_resume_supported=False,
+        fitted_research_model=False, selection_state_saved=False, global_budget_saved=False))
+
+
+def _torch():
+    import torch
+    _need(not torch.cuda.is_available() and not torch.cuda.is_initialized(), 'CPU checkpoint requires CUDA hidden/unavailable')
+    return torch
+
+
+def _tensor(value, *, shape=None, dtype=None):
+    torch = _torch()
+    _need(type(value) is torch.Tensor and value.device.type == 'cpu' and value.layout == torch.strided
+          and value.dtype == (torch.float32 if dtype is None else dtype)
+          and (shape is None or tuple(value.shape) == tuple(shape)) and bool(torch.isfinite(value).all()),
+          'finite exact CPU tensor shape/dtype required')
+
+
+def _state_sha(state):
+    digest = hashlib.sha256()
+    for name, value in state.items():
+        _tensor(value)
+        digest.update(_raw([name, str(value.dtype), list(value.shape)]))
+        digest.update(value.detach().contiguous().numpy().tobytes())
+    return digest.hexdigest()
+
+
+def _optimizer_sha(state):
+    torch = _torch()
+    def node(value):
+        if type(value) is torch.Tensor:
+            _tensor(value)
+            return ['tensor', str(value.dtype), list(value.shape),
+                hashlib.sha256(value.detach().contiguous().numpy().tobytes()).hexdigest()]
+        if type(value) is dict:
+            return ['dict', [[type(k).__name__, k, node(v)] for k, v in sorted(value.items(), key=lambda r: str(r[0]))]]
+        if type(value) in (list, tuple): return [type(value).__name__, [node(v) for v in value]]
+        _need(value is None or type(value) in (bool, int, float, str), 'unsupported Adam scalar payload')
+        return [type(value).__name__, value]
+    return _digest(node(state))
+
+
+def _owned(adapter, optimizer, *, fresh=False, full_boundary=True):
+    torch = _torch()
+    from .research_graph_model import ResearchGraphAKTAdapter
+    _need(type(adapter) is ResearchGraphAKTAdapter and type(optimizer) is torch.optim.Adam, 'exact graph adapter/native Adam required')
+    if full_boundary: adapter.audit_context_boundary()
+    else: adapter._integrity()
+    _need(adapter._ticket is None and adapter.native._call is None, 'pending graph ticket/native call')
+    _need(adapter.config.device == 'cpu' and adapter.config.phase == 'simulator-research', 'CPU research config required')
+    named = tuple(adapter.native.named_parameters())
+    actual = [p for group in optimizer.param_groups for p in group['params']]
+    _need(named and len(actual) == len(named) == len({id(p) for p in actual})
+          and {id(p) for p in actual} == {id(p) for _, p in named}, 'exact once every registered parameter ownership')
+    for _, parameter in named:
+        _tensor(parameter.detach()); _need(parameter.requires_grad, 'all owned parameters trainable')
+    for group in optimizer.param_groups:
+        _need(all(group[k] == getattr(adapter.config, k) for k in ('lr', 'betas', 'eps', 'weight_decay')),
+              'Adam/config settings mismatch')
+        _need(all(group.get(k, False) is False for k in
+            ('amsgrad', 'maximize', 'capturable', 'differentiable', 'decoupled_weight_decay'))
+            and all(group.get(k) in (None, False) for k in ('foreach', 'fused')), 'unsupported Adam behavior')
+    if fresh:
+        _need(adapter._optimizer is None and not optimizer.state and all(p.grad is None for _, p in named),
+              'fresh healthy adapter/fresh owned Adam required')
+    else:
+        _need(adapter._optimizer in (None, optimizer), 'foreign attached optimizer')
+    return named
+
+
+def _layout(adapter, optimizer):
+    names = {id(p): name for name, p in adapter.native.named_parameters()}
+    return [[names[id(p)] for p in group['params']] for group in optimizer.param_groups]
+
+
+def _participation_rows(value, names, bodies):
+    _need(type(value) in (tuple, list) and all(type(r) in (tuple, list) and len(r) == 2 for r in value), 'named participation rows required')
+    _need([r[0] for r in value] == list(names), 'exact ordered parameter participation required')
+    for _, count in value:
+        _count(count); _need(count <= bodies, 'participation exceeds body returns')
+    return dict(value)
+
+
+def _validate_states(adapter, optimizer, state, saved_optimizer, *, counts, bodies, layout, limits, full_boundary=True):
+    """Không mutation; absent/empty/initialized được phân biệt đúng native Adam."""
+    torch = _torch(); named = _owned(adapter, optimizer, full_boundary=full_boundary)
+    counts = _participation_rows(counts, [n for n, _ in named], bodies)
+    expected = adapter.native.state_dict()
+    _need(isinstance(state, dict) and list(state) == list(expected), 'registered model state keys/order')
+    total = 0
+    for name, value in state.items():
+        _tensor(value, shape=expected[name].shape); total += value.numel()*value.element_size()
+    _closed(saved_optimizer, ('state', 'param_groups'), 'Adam state schema')
+    groups = saved_optimizer['param_groups']; entries = saved_optimizer['state']
+    _need(type(groups) is list and type(entries) is dict and len(groups) == len(optimizer.param_groups)
+          and layout == _layout(adapter, optimizer), 'Adam named group layout mismatch')
+    parameters = dict(named); number_names = {}
+    for saved, live, names in zip(groups, optimizer.param_groups, layout):
+        _need(type(saved) is dict and type(saved.get('params')) is list and len(saved['params']) == len(names)
+              and _json({k:v for k,v in saved.items() if k != 'params'})
+              == _json({k:v for k,v in live.items() if k != 'params'}), 'Adam group settings changed')
+        for number, name in zip(saved['params'], names):
+            _count(number); _need(number not in number_names, 'duplicate Adam index')
+            number_names[number] = name
+    _need(all(type(n) is int and n in number_names for n in entries), 'foreign Adam index')
+    representation = []
+    for number, name in number_names.items():
+        count = counts[name]; entry = entries.get(number)
+        if number not in entries:
+            _need(count == 0, 'missing participated Adam state'); representation.append((name, 'absent')); continue
+        _need(type(entry) is dict, 'literal None/non-dict Adam state forbidden')
+        if not entry:
+            _need(count == 0, 'empty participated Adam state'); representation.append((name, 'empty')); continue
+        _need(count > 0, 'initialized Adam state without participation')
+        _closed(entry, ('step', 'exp_avg', 'exp_avg_sq'), 'Adam moment schema')
+        _tensor(entry['step'])
+        _need(entry['step'].numel() == 1 and entry['step'].item() == count, 'Adam step must equal exact named participation')
+        for key in ('exp_avg', 'exp_avg_sq'):
+            _tensor(entry[key], shape=parameters[name].shape)
+        _need(bool((entry['exp_avg_sq'] >= 0).all()), 'negative Adam second moment')
+        total += sum(t.numel()*t.element_size() for t in entry.values())
+        representation.append((name, 'initialized'))
+    _need(total <= limits.max_tensor_bytes, 'checkpoint tensor byte cap')
+    return total, sorted(representation)
+
+
+def _population(index):
+    windows, targets = [], []
+    _need(not index.unsupported_targets, 'training checkpoint cannot hide unsupported targets')
+    for window in index.windows:
+        windows.append(window.window_id)
+        targets.extend((e.learner_id, e.source_row, e.global_rank) for e in window.contexts if e is not None)
+    _need(windows and len(set(windows)) == len(windows) and targets and len(set(targets)) == len(targets)
+          and len(targets) == index.full_targets, 'complete index population required')
+    return tuple(windows), tuple(sorted(targets))
+
+
+@dataclass(frozen=True)
+class GraphEpochReceipt:
+    completed_epochs: int
+    optimizer_body_returns: int
+    optimized_targets: int
+    parameter_participation: tuple[tuple[str, int], ...]
+    phase_index_sha256: str
+    windows_sha256: str
+    targets_sha256: str
+    ordered_batches_sha256: str
+    epoch_steps: int
+    epoch_targets: int
+    model_sha256: str
+    optimizer_sha256: str
+
+
+class GraphAdamParticipation:
+    """Owned hooks + train_epoch callbacks; không tự chạy forward/optimizer.
+
+    Dùng begin_epoch(epoch), batch_factory=collate, progress_callback=progress,
+    rồi finish_epoch(actual EpochStats). event_sink bắt buộc do caller fsync.
+    Local counters cập nhật TRƯỚC sink; lỗi sink/hook không có rollback claim.
+    """
+    def __init__(self, adapter, optimizer, *, event_sink):
+        named = _owned(adapter, optimizer, fresh=True)
+        self.adapter, self.optimizer, self.event_sink = adapter, optimizer, event_sink
+        _need(callable(event_sink), 'durable caller event sink required')
+        self.initial_backbone_sha256 = _state_sha(adapter.native.backbone.state_dict())
+        self.counts = {name: 0 for name, _ in named}
+        self.started = self.returned = self.completed_epochs = self.optimized_targets = 0
+        self.failed = False; self.pending = None; self.epoch = None; self.last_receipt = None
+        self._pre_handle = optimizer.register_step_pre_hook(self._pre)
+        self._post_handle = optimizer.register_step_post_hook(self._post)
+
+    def _emit(self, kind, **fields):
+        try:
+            self.event_sink(dict(kind=kind, started=self.started, body_returned=self.returned, **fields))
+        except BaseException:
+            self.failed = True; raise
+
+    def begin_epoch(self, epoch):
+        _count(epoch)
+        _need(not self.failed and self.epoch is None and self.pending is None
+              and epoch == self.completed_epochs+1, 'next complete epoch only')
+        _owned(self.adapter, self.optimizer)
+        expected, targets = _population(self.adapter.index)
+        self.epoch = dict(number=epoch, expected=expected, targets=targets, batches=[], seen=[],
+            returned_at_start=self.returned, targets_at_start=self.optimized_targets, last_progress=None)
+        self.last_receipt = None
+
+    def collate(self, entries):
+        _need(not self.failed and self.epoch is not None and self.pending is None, 'one pending tracked batch only')
+        entries = tuple(entries)
+        batch = self.adapter.collate_training(entries)
+        try:
+            ids = tuple(e.window.window_id for e in entries)
+            keys = tuple((e.learner_id, e.source_row, e.global_rank)
+                for contexts in self.adapter._ticket.context for e in contexts if e is not None)
+            _need(ids and len(set(ids)) == len(ids) and not set(ids).intersection(self.epoch['seen'])
+                  and set(ids) <= set(self.epoch['expected']), 'duplicate/foreign epoch windows')
+            _need(len(keys) == int((batch.target_mask & batch.valid_mask).sum().item()), 'batch/index target count mismatch')
+            self.pending = dict(ids=ids, keys=keys, started=False, returned=False, accepted=False)
+            return batch
+        except BaseException:
+            self.failed = True; raise
+
+    def _pre(self, optimizer, args, kwargs):
+        try:
+            _need(optimizer is self.optimizer and not self.failed and self.pending is not None
+                  and not self.pending['started'], 'untracked/repeated optimizer step')
+            _owned(self.adapter, optimizer, full_boundary=False)
+            active = tuple(name for name, p in self.adapter.native.named_parameters() if p.grad is not None)
+            _need(active, 'optimizer step without participating parameters')
+            for name, parameter in self.adapter.native.named_parameters():
+                if name in active: _tensor(parameter.grad, shape=parameter.shape)
+            self.pending.update(started=True, active=active)
+            self.started += 1
+            self._emit('optimizer_started', active_names=list(active))
+        except BaseException:
+            self.failed = True; raise
+
+    def _post(self, optimizer, args, kwargs):
+        # Body đã return trước hook này; lưu sự thật đó ngay cả validation lỗi.
+        self.returned += 1
+        try:
+            _need(self.pending is not None and self.pending['started'] and not self.pending['returned'], 'unmatched Adam body return')
+            self.pending['returned'] = True
+            for name in self.pending['active']: self.counts[name] += 1
+            self._emit('optimizer_body_returned', active_names=list(self.pending['active']))
+            _validate_states(self.adapter, optimizer, self.adapter.native.state_dict(), optimizer.state_dict(),
+                counts=list(self.counts.items()), bodies=self.returned, layout=_layout(self.adapter, optimizer),
+                limits=GraphCheckpointLimits(2**63-1, 2**63-1, 2**63-1), full_boundary=False)
+        except BaseException:
+            self.failed = True; raise
+
+    def progress(self, event):
+        try:
+            _need(not self.failed and self.epoch is not None and event['epoch'] == self.epoch['number'], 'foreign epoch progress')
+            _owned(self.adapter, self.optimizer, full_boundary=False)
+            if self.pending is not None:
+                _need(self.pending['returned'] and self.started == self.returned, 'pending optimizer body at progress')
+                self.epoch['seen'].extend(self.pending['ids'])
+                self.epoch['batches'].append(dict(windows=self.pending['ids'], targets=self.pending['keys']))
+                self.optimized_targets += len(self.pending['keys']); self.pending = None
+            training = event['training']
+            _need(training['optimizer_steps'] == self.returned-self.epoch['returned_at_start']
+                  and training['valid_targets'] == self.optimized_targets-self.epoch['targets_at_start'], 'epoch/global counter mismatch')
+            self.epoch['last_progress'] = _json(event)
+        except BaseException:
+            self.failed = True; raise
+
+    def finish_epoch(self, stats):
+        from .training import EpochStats
+        _need(type(stats) is EpochStats and not self.failed and self.epoch is not None and self.pending is None,
+              'actual completed EpochStats/no pending work required')
+        _owned(self.adapter, self.optimizer)
+        epoch = self.epoch; final = epoch['last_progress']
+        keys = tuple(sorted(k for batch in epoch['batches'] for k in batch['targets']))
+        _need(stats.complete is True and stats.stop_reason == 'epoch_complete' and final is not None
+              and final['complete_epoch'] is True and final['stop_reason'] == 'epoch_complete', 'partial epoch refused')
+        _need(len(epoch['seen']) == len(set(epoch['seen'])) == len(epoch['expected'])
+              and set(epoch['seen']) == set(epoch['expected']) and keys == epoch['targets'], 'full phase window/target coverage required')
+        steps = self.returned-epoch['returned_at_start']; count = len(keys)
+        _need(self.started == self.returned and steps > 0 and stats.optimizer_steps == steps
+              and stats.valid_targets == stats.optimized_target_rows == stats.processed_target_rows == count
+              and stats.windows_processed == stats.collated_windows == len(epoch['expected'])
+              and stats.batches == len(epoch['batches']) == steps, 'complete epoch stats reconciliation failed')
+        self.completed_epochs += 1
+        self.last_receipt = GraphEpochReceipt(self.completed_epochs, self.returned, self.optimized_targets,
+            tuple(self.counts.items()), self.adapter.index.identity, _digest(sorted(epoch['expected'])),
+            _digest(keys), _digest(epoch['batches']), steps, count, _state_sha(self.adapter.native.state_dict()),
+            _optimizer_sha(self.optimizer.state_dict()))
+        self.epoch = None
+        self._emit('complete_epoch', epoch=self.completed_epochs, receipt_sha256=_digest(asdict(self.last_receipt)))
+        return self.last_receipt
+
+    def close(self):
+        """Gỡ hooks khi discard container; không biến pending step thành complete."""
+        self._pre_handle.remove(); self._post_handle.remove()
+
+
+def _rng():
+    import numpy as np
+    torch = _torch(); value = np.random.get_state()
+    return dict(python=random.getstate(), numpy=(value[0], value[1].tolist(), *value[2:]), torch=torch.get_rng_state().clone())
+
+
+def _validate_rng(value):
+    import numpy as np
+    torch = _torch()
+    _closed(value, ('python', 'numpy', 'torch'), 'CPU RNG schema')
+    random.Random().setstate(value['python'])
+    state = value['numpy']
+    _need(type(state) is tuple and len(state) == 5 and state[0] == 'MT19937'
+          and type(state[1]) is list and len(state[1]) == 624
+          and all(type(n) is int and 0 <= n < 2**32 for n in state[1])
+          and type(state[2]) is int and 0 <= state[2] <= 624
+          and type(state[3]) is int and state[3] in (0, 1)
+          and type(state[4]) in (int, float) and math.isfinite(state[4]), 'NumPy RNG state invalid')
+    numpy = (state[0], np.asarray(state[1], dtype=np.uint32), *state[2:])
+    np.random.RandomState().set_state(numpy)
+    _tensor(value['torch'], dtype=torch.uint8)
+    torch.Generator(device='cpu').set_state(value['torch'])
+    return numpy
+
+
+def _physical(path):
+    path = Path(path).absolute()
+    _need(ROOT.resolve() == ROOT.absolute() and path.is_relative_to(ROOT), 'fixed physical project root required')
+    cursor = ROOT
+    for part in ('', *path.relative_to(ROOT).parts):
+        if part:
+            _need(part not in ('.', '..'), 'unsafe checkpoint component'); cursor /= part
+        _need(not cursor.is_symlink() and not getattr(cursor, 'is_junction', lambda: False)(), 'checkpoint/source alias forbidden')
+    _need(path.resolve() == path, 'checkpoint ancestor alias forbidden')
+    return path
+
+
+def _directory(path):
+    path = _physical(path)
+    root = ROOT/'experiments/akt/results'
+    _need(path.is_relative_to(root) and len(path.relative_to(root).parts) >= 3, 'owned AKT run checkpoint directory required')
+    return path
+
+
+def _bytes(path, cap):
+    path = _physical(path)
+    before = path.stat()
+    _need(path.is_file() and before.st_size <= cap, 'bounded regular checkpoint file required')
+    with path.open('rb') as stream: raw = stream.read(cap+1)
+    after = path.stat()
+    _need(len(raw) == before.st_size <= cap and
+        (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns)
+        == (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns), 'checkpoint size/stamp drift')
+    return raw
+
+
+def _publish(directory, name, raw, cap):
+    from .filesystem import publish_new_file
+    _need(len(raw) <= cap, 'publication byte cap')
+    path = directory/(name+'.pending')
+    with path.open('xb') as stream:
+        stream.write(raw); stream.flush(); os.fsync(stream.fileno())
+    publish_new_file(path, directory/name)
+    _need(_bytes(directory/name, cap) == raw, 'publication readback mismatch')
+
+
+@dataclass(frozen=True)
+class GraphCheckpointRef:
+    directory: Path
+    complete_sha256: str
+    metadata_sha256: str
+    checkpoint_sha256: str
+
+
+@dataclass(frozen=True)
+class InspectedGraphCheckpoint:
+    reference: GraphCheckpointRef
+    metadata_bytes: bytes
+    metadata_sha256: str
+
+
+def _live_identity(adapter, profile):
+    return graph_checkpoint_identity(config=adapter.config, encoding=adapter.research_encoding,
+        condition=adapter.condition, index=adapter.index, profile=profile)
+
+
+def save_graph_epoch_state(directory, *, adapter, optimizer, participation, epoch_receipt,
+                           expected_identity, profile, limits):
+    _need(type(limits) is GraphCheckpointLimits and type(participation) is GraphAdamParticipation
+          and type(epoch_receipt) is GraphEpochReceipt, 'typed checkpoint limits/tracker/receipt required')
+    _owned(adapter, optimizer)
+    _need(participation.adapter is adapter and participation.optimizer is optimizer and not participation.failed
+          and participation.epoch is None and participation.pending is None and participation.started == participation.returned
+          and participation.last_receipt is epoch_receipt, 'owned last complete epoch receipt required')
+    identity = _live_identity(adapter, profile)
+    _need(identity == expected_identity and profile.initial_backbone_sha256 == participation.initial_backbone_sha256,
+          'checkpoint expected identity/initial backbone drift')
+    _need(epoch_receipt.optimizer_body_returns == participation.returned
+          and epoch_receipt.parameter_participation == tuple(participation.counts.items())
+          and epoch_receipt.model_sha256 == _state_sha(adapter.native.state_dict())
+          and epoch_receipt.optimizer_sha256 == _optimizer_sha(optimizer.state_dict())
+          and epoch_receipt.phase_index_sha256 == adapter.index.identity, 'epoch/model/participation drift after completion')
+    state, opt = adapter.native.state_dict(), optimizer.state_dict()
+    layout = _layout(adapter, optimizer)
+    total, representations = _validate_states(adapter, optimizer, state, opt,
+        counts=epoch_receipt.parameter_participation, bodies=epoch_receipt.optimizer_body_returns,
+        layout=layout, limits=limits)
+    rng = _rng(); _validate_rng(rng)
+    _need(total+rng['torch'].numel() <= limits.max_tensor_bytes, 'state plus CPU RNG byte cap')
+    payload = dict(identity=identity, receipt=asdict(epoch_receipt), model_state_dict=state, optimizer_state_dict=opt,
+        rng=rng, module_modes=[(n, m.training) for n, m in adapter.native.named_modules()])
+    torch = _torch()
+    buffer = io.BytesIO()
+    with torch.device('cpu'): torch.save(payload, buffer)
+    raw = buffer.getvalue()
+    _need(len(raw) <= limits.max_checkpoint_bytes, 'checkpoint byte cap')
+    metadata = dict(schema_version=1, role=ROLE, identity=identity, receipt=asdict(epoch_receipt),
+        producer_config=_json(asdict(adapter.config)),
+        layout=layout, state_representation=representations, checkpoint_sha256=hashlib.sha256(raw).hexdigest(),
+        checkpoint_bytes=len(raw), restore_scope='completed_epoch_boundary', iterator_resume_supported=False,
+        lifecycle_resume_supported=False, fitted_research_model=False)
+    meta = _raw(metadata); _need(len(meta) <= limits.max_metadata_bytes, 'metadata byte cap')
+    directory = _directory(directory); _need(directory.parent.is_dir(), 'caller must own existing run/checkpoint parent')
+    directory.mkdir(exist_ok=False)
+    try:
+        _publish(directory, 'state.pt', raw, limits.max_checkpoint_bytes)
+        _publish(directory, 'metadata.json', meta, limits.max_metadata_bytes)
+        _need(_live_identity(adapter, profile) == identity and _state_sha(adapter.native.state_dict()) == epoch_receipt.model_sha256,
+              'source/model drift during publication')
+        _need(_optimizer_sha(optimizer.state_dict()) == epoch_receipt.optimizer_sha256, 'optimizer drift during publication')
+        _validate_states(adapter, optimizer, state, optimizer.state_dict(), counts=epoch_receipt.parameter_participation,
+            bodies=epoch_receipt.optimizer_body_returns, layout=layout, limits=limits)
+        complete = _raw(dict(schema_version=1, status=STATUS,
+            metadata_sha256=hashlib.sha256(meta).hexdigest(), checkpoint_sha256=metadata['checkpoint_sha256']))
+        _publish(directory, 'COMPLETE.json', complete, limits.max_metadata_bytes)
+        return GraphCheckpointRef(directory, hashlib.sha256(complete).hexdigest(), hashlib.sha256(meta).hexdigest(), metadata['checkpoint_sha256'])
+    except BaseException as error:
+        try:
+            with (directory/'failure.json').open('xb') as stream:
+                stream.write(_raw(dict(status='FAILED_NOT_RESUMABLE', error_type=type(error).__name__, rollback=False)))
+                stream.flush(); os.fsync(stream.fileno())
+        except BaseException as secondary:
+            error.add_note('failure receipt unavailable: '+type(secondary).__name__)
+        raise
+
+
+def _receipt(value, identity):
+    _closed(value, GraphEpochReceipt.__dataclass_fields__, 'epoch receipt schema')
+    for name in ('completed_epochs', 'optimizer_body_returns', 'optimized_targets', 'epoch_steps', 'epoch_targets'):
+        _count(value[name]); _need(value[name] > 0, 'nonempty completed epoch required')
+    for name in ('phase_index_sha256', 'windows_sha256', 'targets_sha256', 'ordered_batches_sha256', 'model_sha256', 'optimizer_sha256'):
+        _sha(value[name])
+    _need(value['phase_index_sha256'] == identity['phase_index_sha256']
+          and value['epoch_steps'] <= value['optimizer_body_returns']
+          and value['optimized_targets'] == value['epoch_targets']*value['completed_epochs'], 'epoch/global receipt mismatch')
+    rows = value['parameter_participation']
+    _need(type(rows) is list and rows and all(type(r) is list and len(r) == 2 and type(r[0]) is str for r in rows)
+          and len({r[0] for r in rows}) == len(rows), 'named parameter receipt shape')
+    _participation_rows(rows, [r[0] for r in rows], value['optimizer_body_returns'])
+    return value
+
+
+def _identity_shape(value):
+    _closed(value, ('schema_version', 'role', 'recipe', 'recipe_sha256', 'config', 'encoding',
+        'encoding_sha256', 'condition', 'condition_sha256', 'phase_index_sha256', 'phase_sha256',
+        'neural_binding', 'profile', 'sources', 'iterator_resume_supported', 'lifecycle_resume_supported',
+        'fitted_research_model', 'selection_state_saved', 'global_budget_saved'), 'checkpoint identity schema')
+    _need(type(value['schema_version']) is int and value['schema_version'] == 1 and value['role'] == ROLE
+          and value['recipe'] == RECIPE and value['recipe_sha256'] == RECIPE_SHA256
+          and all(value[k] is False for k in ('iterator_resume_supported', 'lifecycle_resume_supported',
+              'fitted_research_model', 'selection_state_saved', 'global_budget_saved')), 'checkpoint identity role/flags')
+    for name in ('encoding_sha256', 'condition_sha256', 'phase_index_sha256', 'phase_sha256'): _sha(value[name])
+    _need(type(value['profile']) is dict and type(value['config']) is dict and type(value['neural_binding']) is dict,
+          'checkpoint identity objects required')
+    profile = GraphCheckpointProfile(**value['profile'])
+    scope = value['neural_binding'].get('phase_scope')
+    _need(scope in ('select_train80', 'refit_union90') and
+        (scope == 'select_train80') == (profile.purpose == 'selected_fit_candidate')
+        and value['config'].get('phase') == 'simulator-research' and value['config'].get('device') == 'cpu',
+        'checkpoint optimization phase/purpose/CPU identity required')
+
+
+def inspect_graph_epoch_state(directory, *, expected_identity, expected_complete_sha256, limits):
+    """JSON/SHA/size trước Torch/model ctor; kết quả không execution authority."""
+    _need(type(limits) is GraphCheckpointLimits, 'typed explicit checkpoint limits required')
+    _sha(expected_complete_sha256)
+    _identity_shape(expected_identity)
+    _need(expected_identity.get('role') == ROLE and expected_identity.get('sources') == _json(source_inventory())
+          and expected_identity.get('recipe_sha256') == RECIPE_SHA256, 'expected identity/source drift')
+    directory = _directory(directory)
+    _need(directory.is_dir() and {p.name for p in directory.iterdir()} == {'state.pt', 'metadata.json', 'COMPLETE.json'},
+          'partial/failed/extra checkpoint files')
+    complete_raw = _bytes(directory/'COMPLETE.json', limits.max_metadata_bytes)
+    _need(hashlib.sha256(complete_raw).hexdigest() == expected_complete_sha256, 'external COMPLETE SHA mismatch')
+    complete = _decode(complete_raw)
+    _closed(complete, ('schema_version', 'status', 'metadata_sha256', 'checkpoint_sha256'), 'COMPLETE schema')
+    _need(type(complete['schema_version']) is int and complete['schema_version'] == 1 and complete['status'] == STATUS,
+          'COMPLETE status/schema')
+    _sha(complete['metadata_sha256']); _sha(complete['checkpoint_sha256'])
+    meta_raw = _bytes(directory/'metadata.json', limits.max_metadata_bytes)
+    _need(hashlib.sha256(meta_raw).hexdigest() == complete['metadata_sha256'], 'metadata byte SHA mismatch')
+    meta = _decode(meta_raw)
+    _closed(meta, ('schema_version', 'role', 'identity', 'receipt', 'producer_config', 'layout', 'state_representation',
+        'checkpoint_sha256', 'checkpoint_bytes', 'restore_scope', 'iterator_resume_supported',
+        'lifecycle_resume_supported', 'fitted_research_model'), 'metadata schema')
+    _need(type(meta['schema_version']) is int and meta['schema_version'] == 1 and meta['role'] == ROLE
+          and meta['identity'] == expected_identity and meta['restore_scope'] == 'completed_epoch_boundary'
+          and meta['iterator_resume_supported'] is False and meta['lifecycle_resume_supported'] is False
+          and meta['fitted_research_model'] is False and meta['checkpoint_sha256'] == complete['checkpoint_sha256'],
+          'checkpoint identity/role/scope mismatch before deserialization')
+    _receipt(meta['receipt'], expected_identity)
+    _need(type(meta['producer_config']) is dict and all(k in meta['producer_config'] for k in
+        ('run_id', 'output_dir', 'max_steps', 'max_seconds', 'max_wall_seconds', 'max_rss_bytes', 'min_available_ram_bytes')),
+        'producer config/budget provenance required')
+    _count(meta['checkpoint_bytes']); _need(meta['checkpoint_bytes'] > 0, 'nonempty checkpoint required')
+    raw = _bytes(directory/'state.pt', limits.max_checkpoint_bytes)
+    _need(len(raw) == meta['checkpoint_bytes'] and hashlib.sha256(raw).hexdigest() == complete['checkpoint_sha256'], 'checkpoint byte/SHA mismatch')
+    return InspectedGraphCheckpoint(GraphCheckpointRef(directory, expected_complete_sha256,
+        complete['metadata_sha256'], complete['checkpoint_sha256']), meta_raw, complete['metadata_sha256'])
+
+
+def restore_graph_epoch_state(inspected, *, fresh_adapter, fresh_owned_optimizer, expected_identity,
+                             profile, limits, event_sink):
+    """Owned restore strict; final private attach được giao riêng cho loader này.
+
+    Validation trước mutation; lỗi mutation poison/discard, không rollback. RNG
+    restored cuối. Không restore sampler, earlystop, selector hay budget.
+    """
+    _need(type(inspected) is InspectedGraphCheckpoint and callable(event_sink), 'typed inspected checkpoint/durable sink required')
+    adapter, optimizer = fresh_adapter, fresh_owned_optimizer
+    _owned(adapter, optimizer, fresh=True)
+    _need(_live_identity(adapter, profile) == expected_identity
+          and _state_sha(adapter.native.backbone.state_dict()) == profile.initial_backbone_sha256,
+          'fresh constructor/source/initial backbone mismatch')
+    verified = inspect_graph_epoch_state(inspected.reference.directory, expected_identity=expected_identity,
+        expected_complete_sha256=inspected.reference.complete_sha256, limits=limits)
+    _need(verified == inspected, 'inspection receipt changed')
+    meta = _decode(verified.metadata_bytes)
+    raw = _bytes(verified.reference.directory/'state.pt', limits.max_checkpoint_bytes)
+    _need(hashlib.sha256(raw).hexdigest() == verified.reference.checkpoint_sha256, 'checkpoint drift before load')
+    torch = _torch()
+    with torch.device('cpu'):
+        payload = torch.load(io.BytesIO(raw), map_location='cpu', weights_only=True)
+    _closed(payload, ('identity', 'receipt', 'model_state_dict', 'optimizer_state_dict', 'rng', 'module_modes'), 'payload schema')
+    _need(payload['identity'] == expected_identity and _json(payload['receipt']) == meta['receipt'], 'payload identity/progress drift')
+    receipt = meta['receipt']
+    total, representation = _validate_states(adapter, optimizer, payload['model_state_dict'], payload['optimizer_state_dict'],
+        counts=receipt['parameter_participation'], bodies=receipt['optimizer_body_returns'], layout=meta['layout'], limits=limits)
+    _need(_json(representation) == meta['state_representation']
+          and _state_sha(payload['model_state_dict']) == receipt['model_sha256']
+          and _optimizer_sha(payload['optimizer_state_dict']) == receipt['optimizer_sha256'], 'state representation/model/optimizer digest mismatch')
+    numpy_rng = _validate_rng(payload['rng'])
+    _need(total+payload['rng']['torch'].numel() <= limits.max_tensor_bytes, 'tensor plus CPU RNG byte cap')
+    modules = dict(adapter.native.named_modules()); modes = payload['module_modes']
+    _need(type(modes) is list and all(type(r) is tuple and len(r) == 2 and type(r[1]) is bool for r in modes)
+          and [r[0] for r in modes] == list(modules), 'registered module mode mismatch')
+    windows, targets = _population(adapter.index)
+    _need(receipt['windows_sha256'] == _digest(sorted(windows)) and receipt['targets_sha256'] == _digest(targets)
+          and receipt['epoch_targets'] == len(targets), 'restored full phase population mismatch')
+    _need(_live_identity(adapter, profile) == expected_identity, 'source/phase drift before mutation')
+    try:
+        with torch.device('cpu'):
+            adapter.native.load_state_dict(payload['model_state_dict'], strict=True)
+            optimizer.load_state_dict(payload['optimizer_state_dict'])
+        for parameter in adapter.native.parameters(): parameter.grad = None
+        for name, mode in modes: modules[name].training = mode
+        _owned(adapter, optimizer)
+        _need(_state_sha(adapter.native.state_dict()) == receipt['model_sha256'], 'restored model digest mismatch')
+        _validate_states(adapter, optimizer, adapter.native.state_dict(), optimizer.state_dict(),
+            counts=receipt['parameter_participation'], bodies=receipt['optimizer_body_returns'], layout=meta['layout'], limits=limits)
+        # Root-approved narrow junction: nonempty restored Adam is adopted ONLY
+        # here after exact fresh ownership/state/source/full-boundary validation.
+        adapter._optimizer = optimizer
+        tracker = object.__new__(GraphAdamParticipation)
+        tracker.adapter, tracker.optimizer, tracker.event_sink = adapter, optimizer, event_sink
+        tracker.initial_backbone_sha256 = profile.initial_backbone_sha256
+        tracker.counts = dict(receipt['parameter_participation'])
+        tracker.started = tracker.returned = receipt['optimizer_body_returns']
+        tracker.completed_epochs, tracker.optimized_targets = receipt['completed_epochs'], receipt['optimized_targets']
+        tracker.failed = False; tracker.pending = tracker.epoch = tracker.last_receipt = None
+        tracker._pre_handle = optimizer.register_step_pre_hook(tracker._pre)
+        tracker._post_handle = optimizer.register_step_post_hook(tracker._post)
+        event_sink(dict(kind='verified_epoch_state_restored', checkpoint_sha256=verified.reference.checkpoint_sha256,
+            optimizer_body_returned=tracker.returned, lifecycle_resume_supported=False))
+        import numpy as np
+        random.setstate(payload['rng']['python']); np.random.set_state(numpy_rng); torch.set_rng_state(payload['rng']['torch'])
+        return tracker
+    except BaseException:
+        adapter._failed = True
+        if 'tracker' in locals(): tracker.failed = True; tracker.close()
+        raise

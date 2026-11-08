@@ -1,0 +1,946 @@
+{
+  "status": "REJECTED_GRAPH11_KEEP_ALL",
+  "counts": {
+    "tests": 16,
+    "failures": 0,
+    "errors": 16,
+    "skipped": 0
+  },
+  "pytest_exit_code": 1,
+  "original_error": null,
+  "junit_error": null,
+  "native_started": {
+    "adapter_constructors": 2,
+    "backbone_constructors": 2,
+    "wrapper_constructors": 2,
+    "gate_constructors": 2,
+    "forwards": 5,
+    "logical_backwards": 3,
+    "clip_calls": 3,
+    "adam_constructors": 2,
+    "adam_steps": 3,
+    "adapter_steps": 3,
+    "torch_save": 7,
+    "torch_load": 8,
+    "model_restore": 1,
+    "adam_restore": 1
+  },
+  "native_body_returned": {
+    "adapter_constructors": 2,
+    "backbone_constructors": 2,
+    "wrapper_constructors": 2,
+    "gate_constructors": 2,
+    "forwards": 5,
+    "logical_backwards": 3,
+    "clip_calls": 3,
+    "adam_constructors": 2,
+    "adam_steps": 3,
+    "adapter_steps": 3,
+    "torch_save": 7,
+    "torch_load": 8,
+    "model_restore": 1,
+    "adam_restore": 1
+  },
+  "source_before": {
+    "artifacts/akt/dependencies/upstream/akt.py": "be2788c20cac602e86ef3a51e5294b37dd7b200f818be4e173dbd69069a3ec6d",
+    "artifacts/akt/dependencies/upstream/LICENSE": "891133edce0d8693f5b916d4257ce70b71a02aa110cb02cc5d47326544ea4522",
+    "artifacts/akt/dependencies/upstream/README.md": "df8eea9919dcdb343f3a841540af18e2039b8b0c33af449ca9c752d11f56ee8b",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/check_graph_checkpoint_native02.py": "223f1c36b55617f3e2ff7e65bf175095ae0ab925d2138986d99a61d3c4b7316d",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method_patch_observer02.py": "57a762f20e7147f7195ee6538fecdf960cd83d556a6ac4989656e2b7c1fed42b",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/run_graph_checkpoint_native02.py": "d5cc52980dd6a550b4e0a03d168bb6c6419fd9b6753c6cb75b8659c660028e37",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/upstream_git_eol_preflight01.json": "a0307845fbd04ff1b7e52dea821ed9159462005876c4facfdd18be62c40ca6fd",
+    "docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md": "c0d6e8a698d7d5083986e9848898a643390fc5e76100fc0b8c6286c306e6bea6",
+    "docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md": "13a81ad6a5173e1f215e3df01f3917fcbc1cce128c87c93985b57af76faa353a",
+    "requirements-akt.lock.txt": "3e721fdb49543ad0888cf02a863826ebc6144c0d1dd670f2490ebcc0d69b8c0a",
+    "scripts/research/windows_owned_worker.py": "0dc8723170467e9ae73c4e233a357b9d584c66a8c183c478bdcff358fb0a95a1",
+    "src/knowledge_tracing/__init__.py": "b84a9a4118d8b3476daae25a7981c97909524ace7ef93860bba7e6ec9e5bccb8",
+    "src/knowledge_tracing/akt/__init__.py": "03a3e9c1a2030b62b050c846fccb4349066ff247864484683f4acf8f5b725986",
+    "src/knowledge_tracing/akt/authorization.py": "bd6be914e3b5049927ba6358ee4872097a46469fede9ad1b71ee63df951ac7f0",
+    "src/knowledge_tracing/akt/checkpoint.py": "bc1a6fbdcaa55c864cb9f18d531dcede440f9cf364dc9025420615520394fc91",
+    "src/knowledge_tracing/akt/cli.py": "a0b6ca1e57f8b7d7507f078b85aec8caad3431bc5bf28c94f6c0452b91751c82",
+    "src/knowledge_tracing/akt/config.py": "beb2f8830c9d411fa1c00f0acf81ffe0c5200d6c09045d949b9cebade30dc85f",
+    "src/knowledge_tracing/akt/context.py": "73455648b43212c23282f6fa2f417329f5d9f81b831f88aa8bbbfc546fffca39",
+    "src/knowledge_tracing/akt/data.py": "0f898de8edb17c188364839d9f44952071ec5c2c5bd507a13a4da99971242a94",
+    "src/knowledge_tracing/akt/device_budget.py": "79d6dff68f0cc36ec94c5f92097f5bdfe94f4f367386e989c03543d9a8dc4906",
+    "src/knowledge_tracing/akt/encoding.py": "4b8288b9e50fd0763f9ee15db39775a8d3b7b42bb72540a644cbf8a177d351f8",
+    "src/knowledge_tracing/akt/evaluation.py": "d2d960faf5120c47a9092bd2a372f370d2ea631aac680ea426751e2091f35694",
+    "src/knowledge_tracing/akt/filesystem.py": "695cdb730534eed48a4b42a0595090237282fd3333254785348e122d831417bb",
+    "src/knowledge_tracing/akt/graph_prototype.py": "9fc6b8271da503ce16d25147a320bf0ffb9312e5416abae40fbb034f26d3157a",
+    "src/knowledge_tracing/akt/graph_training.py": "91ae634a33b74d7fbd26abf6c08934f1329488246610e40c4c903ceffecd92f4",
+    "src/knowledge_tracing/akt/model.py": "e40b068bc305d0157a03f4baea3cd8e06c5777611c492f02fb65f792760e9e9f",
+    "src/knowledge_tracing/akt/online.py": "f41c9c5835a2d3bd8406ea83855a608f0d7d8fa794e4de56b655acb02381ffbb",
+    "src/knowledge_tracing/akt/prediction.py": "6feed174e0f5e08b420e4cf24ee3511ed6d546e8f74335aa495d72c395c9aa3c",
+    "src/knowledge_tracing/akt/provenance.py": "493d82af749baefcacec9ece0a7abe3297e64398eb4cd93c1d639ca41752cb59",
+    "src/knowledge_tracing/akt/recovery.py": "93eed09fa9962a1c54bccda2ce9985317c20faeb7397758b652eb0a48709f900",
+    "src/knowledge_tracing/akt/research_execution.py": "5ea3d7283f6d8da6eab712d4e4fedb48cd41717f99cd3ae51fb7b8651b16c7b6",
+    "src/knowledge_tracing/akt/research_graph_checkpoint.py": "f40b47e6ea0eb090b1edd3d4ffcb0b1feb5890aa238805aafd1d26ca4896c905",
+    "src/knowledge_tracing/akt/research_graph_condition.py": "6678f04c3c0b3655aa797edd3e491877d17ac3f0fa12f7dfc9971f637d875cf0",
+    "src/knowledge_tracing/akt/research_graph_context.py": "8bfe0dca095d1de6c898fd849be6c5d1ee7033dffc13c20b24c7857de92bb029",
+    "src/knowledge_tracing/akt/research_graph_model.py": "77e365e4ffc6861f34a9ae05cbca947f057be967389f74f75bf5caacc7ee2397",
+    "src/knowledge_tracing/akt/research_graph_online.py": "c44ad90a699e76ce3bcf2e0cc7264a7f9d87f6639ee59f8033d51a87ef1b2c88",
+    "src/knowledge_tracing/akt/research_lifecycle.py": "cf16402f26d27732cedce83aa01bb46a84537c21cdbed11b80c5fb920fad0fff",
+    "src/knowledge_tracing/akt/research_runner.py": "19627a1aa1bbf76069f1a07e0b56a3b5c79a1651863a31c37ac1c08c6cf62092",
+    "src/knowledge_tracing/akt/research_simulator_data.py": "9596c2dc5ae86cdf89e5f68c15224a6794b6056093dabee6b26502dfabdf092b",
+    "src/knowledge_tracing/akt/resources.py": "8c1e5970efb6aa9966a8f583e11172632426f3318d396c3e28d24b5d16b9c5ba",
+    "src/knowledge_tracing/akt/resumable.py": "bc979222ab166297abb5dd2efa8e50fd7f5c2a1c6ed92b8d938da2ac0a4aa2b1",
+    "src/knowledge_tracing/akt/runner.py": "a79dbcd8b5341eeddaf8a5606ed984209ef7786fdb8d70804f6619faf7ce2852",
+    "src/knowledge_tracing/akt/sampler.py": "1cf04adeecbbf01d3dceaf2343b8e6b45062fcdef253bc4fc268945f3b86a298",
+    "src/knowledge_tracing/akt/simulator_data.py": "06110c6f3d85c9feab65e54a57c79595e30957df76ccdd26e464389417760a73",
+    "src/knowledge_tracing/akt/simulator_engineering.py": "abeff620df572bb1438dfa681c0fa4f322a2a7416580b3777fb7abd12f8704fb",
+    "src/knowledge_tracing/akt/splits.py": "c37757f75291de5ed9c3320b632e1b502fb705a40dd3f5daf3371003ffe15e27",
+    "src/knowledge_tracing/akt/tensors.py": "688fb915f8aa4958f47ee541e9ed92be577c0e14bc9c29e1d969be94863a4867",
+    "src/knowledge_tracing/akt/training.py": "ca074a15dd5e45d016fd29d78b0b5ddbb0ccee3555b194699464d4cded6bf979",
+    "src/knowledge_tracing/akt/types.py": "312e57e4fa507f12b449841969b3a9c2b35c592909178b3040102b254aa20304",
+    "src/knowledge_tracing/akt/upstream.py": "c31715c7659470b6d2e839512f2f9ac1f9b83023a9ba1dbfb6db12d4dd687515",
+    "src/knowledge_tracing/akt/watchdog.py": "b94fd1c6468a440138b26be4cdcdefecfb1087805db9eac4d419be9b3663ac2e",
+    "src/knowledge_tracing/akt/windows.py": "e8d00ea0f8b9d07bdc979575109c1f1fc22498d55410bff05a12559bebdb2068",
+    "src/knowledge_tracing/edge_confidence_artifact.py": "ecc313c5a52c3fbb56e06e84bbd1c0808191b956a35bad1ffced200728e01746",
+    "src/knowledge_tracing/graph_augmentation.py": "105aa918f1dc5d8fcfae22c9d8e7d2e13c1832b71d8b6a7ce8deed67d443ff08",
+    "src/knowledge_tracing/graph_context.py": "3db94ec43271d336898f61f81f12aeb569c6de52219eeed535af709711c97264",
+    "src/knowledge_tracing/shared_kt.py": "06922d5a6bfd6c806fd1abb61232f58a9ccd63826e30cefaf87ce3d3b36dffa8",
+    "src/knowledge_tracing/simulator_bridge.py": "b29105acd8de84b060ca27573bb7f7cf8e85599a4596e50e4a21ab63c82329d2",
+    "src/knowledge_tracing/simulator_data.py": "79e28c1a8fc9b3bd5f3283868d7aba1a5bbc7c76764725a8b01098b2ae33cd9f",
+    "src/knowledge_tracing/simulator_research_data.py": "51eb7275a6a4a6b26b763a21a8fe6dc15b0973fc19b3c5557175eaa298db7e53",
+    "tests/akt/test_research_graph_checkpoint.py": "1baf37dd836eba6f096dadb27d953a58199aea748c4bcccaf85028a612b6cdc0",
+    "tests/akt/test_research_graph_context.py": "d54b188ce56fa913551ce54c33209151a1b9456fac0031c541930370471299a8",
+    "tests/akt/test_research_graph_model.py": "579359ff7b8ac64a75f9a343200724091d0d5b78af9a87e3d33ad023f1742ffc",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/check_graph_checkpoint_monitor02.py": "b4975a210b287b237e8b565e3260f1a1a74b499188c908ac9cb34b660af323ae",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/graph_checkpoint_native01_monitor_failure_note.json": "ceea693a03757131ec623fb36165457b296eab874b0b899aaacd6b4220482c9c"
+  },
+  "source_after": {
+    "artifacts/akt/dependencies/upstream/akt.py": "be2788c20cac602e86ef3a51e5294b37dd7b200f818be4e173dbd69069a3ec6d",
+    "artifacts/akt/dependencies/upstream/LICENSE": "891133edce0d8693f5b916d4257ce70b71a02aa110cb02cc5d47326544ea4522",
+    "artifacts/akt/dependencies/upstream/README.md": "df8eea9919dcdb343f3a841540af18e2039b8b0c33af449ca9c752d11f56ee8b",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/check_graph_checkpoint_native02.py": "223f1c36b55617f3e2ff7e65bf175095ae0ab925d2138986d99a61d3c4b7316d",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method_patch_observer02.py": "57a762f20e7147f7195ee6538fecdf960cd83d556a6ac4989656e2b7c1fed42b",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/run_graph_checkpoint_native02.py": "d5cc52980dd6a550b4e0a03d168bb6c6419fd9b6753c6cb75b8659c660028e37",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/upstream_git_eol_preflight01.json": "a0307845fbd04ff1b7e52dea821ed9159462005876c4facfdd18be62c40ca6fd",
+    "docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md": "c0d6e8a698d7d5083986e9848898a643390fc5e76100fc0b8c6286c306e6bea6",
+    "docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md": "13a81ad6a5173e1f215e3df01f3917fcbc1cce128c87c93985b57af76faa353a",
+    "requirements-akt.lock.txt": "3e721fdb49543ad0888cf02a863826ebc6144c0d1dd670f2490ebcc0d69b8c0a",
+    "scripts/research/windows_owned_worker.py": "0dc8723170467e9ae73c4e233a357b9d584c66a8c183c478bdcff358fb0a95a1",
+    "src/knowledge_tracing/__init__.py": "b84a9a4118d8b3476daae25a7981c97909524ace7ef93860bba7e6ec9e5bccb8",
+    "src/knowledge_tracing/akt/__init__.py": "03a3e9c1a2030b62b050c846fccb4349066ff247864484683f4acf8f5b725986",
+    "src/knowledge_tracing/akt/authorization.py": "bd6be914e3b5049927ba6358ee4872097a46469fede9ad1b71ee63df951ac7f0",
+    "src/knowledge_tracing/akt/checkpoint.py": "bc1a6fbdcaa55c864cb9f18d531dcede440f9cf364dc9025420615520394fc91",
+    "src/knowledge_tracing/akt/cli.py": "a0b6ca1e57f8b7d7507f078b85aec8caad3431bc5bf28c94f6c0452b91751c82",
+    "src/knowledge_tracing/akt/config.py": "beb2f8830c9d411fa1c00f0acf81ffe0c5200d6c09045d949b9cebade30dc85f",
+    "src/knowledge_tracing/akt/context.py": "73455648b43212c23282f6fa2f417329f5d9f81b831f88aa8bbbfc546fffca39",
+    "src/knowledge_tracing/akt/data.py": "0f898de8edb17c188364839d9f44952071ec5c2c5bd507a13a4da99971242a94",
+    "src/knowledge_tracing/akt/device_budget.py": "79d6dff68f0cc36ec94c5f92097f5bdfe94f4f367386e989c03543d9a8dc4906",
+    "src/knowledge_tracing/akt/encoding.py": "4b8288b9e50fd0763f9ee15db39775a8d3b7b42bb72540a644cbf8a177d351f8",
+    "src/knowledge_tracing/akt/evaluation.py": "d2d960faf5120c47a9092bd2a372f370d2ea631aac680ea426751e2091f35694",
+    "src/knowledge_tracing/akt/filesystem.py": "695cdb730534eed48a4b42a0595090237282fd3333254785348e122d831417bb",
+    "src/knowledge_tracing/akt/graph_prototype.py": "9fc6b8271da503ce16d25147a320bf0ffb9312e5416abae40fbb034f26d3157a",
+    "src/knowledge_tracing/akt/graph_training.py": "91ae634a33b74d7fbd26abf6c08934f1329488246610e40c4c903ceffecd92f4",
+    "src/knowledge_tracing/akt/model.py": "e40b068bc305d0157a03f4baea3cd8e06c5777611c492f02fb65f792760e9e9f",
+    "src/knowledge_tracing/akt/online.py": "f41c9c5835a2d3bd8406ea83855a608f0d7d8fa794e4de56b655acb02381ffbb",
+    "src/knowledge_tracing/akt/prediction.py": "6feed174e0f5e08b420e4cf24ee3511ed6d546e8f74335aa495d72c395c9aa3c",
+    "src/knowledge_tracing/akt/provenance.py": "493d82af749baefcacec9ece0a7abe3297e64398eb4cd93c1d639ca41752cb59",
+    "src/knowledge_tracing/akt/recovery.py": "93eed09fa9962a1c54bccda2ce9985317c20faeb7397758b652eb0a48709f900",
+    "src/knowledge_tracing/akt/research_execution.py": "5ea3d7283f6d8da6eab712d4e4fedb48cd41717f99cd3ae51fb7b8651b16c7b6",
+    "src/knowledge_tracing/akt/research_graph_checkpoint.py": "f40b47e6ea0eb090b1edd3d4ffcb0b1feb5890aa238805aafd1d26ca4896c905",
+    "src/knowledge_tracing/akt/research_graph_condition.py": "6678f04c3c0b3655aa797edd3e491877d17ac3f0fa12f7dfc9971f637d875cf0",
+    "src/knowledge_tracing/akt/research_graph_context.py": "8bfe0dca095d1de6c898fd849be6c5d1ee7033dffc13c20b24c7857de92bb029",
+    "src/knowledge_tracing/akt/research_graph_model.py": "77e365e4ffc6861f34a9ae05cbca947f057be967389f74f75bf5caacc7ee2397",
+    "src/knowledge_tracing/akt/research_graph_online.py": "c44ad90a699e76ce3bcf2e0cc7264a7f9d87f6639ee59f8033d51a87ef1b2c88",
+    "src/knowledge_tracing/akt/research_lifecycle.py": "cf16402f26d27732cedce83aa01bb46a84537c21cdbed11b80c5fb920fad0fff",
+    "src/knowledge_tracing/akt/research_runner.py": "19627a1aa1bbf76069f1a07e0b56a3b5c79a1651863a31c37ac1c08c6cf62092",
+    "src/knowledge_tracing/akt/research_simulator_data.py": "9596c2dc5ae86cdf89e5f68c15224a6794b6056093dabee6b26502dfabdf092b",
+    "src/knowledge_tracing/akt/resources.py": "8c1e5970efb6aa9966a8f583e11172632426f3318d396c3e28d24b5d16b9c5ba",
+    "src/knowledge_tracing/akt/resumable.py": "bc979222ab166297abb5dd2efa8e50fd7f5c2a1c6ed92b8d938da2ac0a4aa2b1",
+    "src/knowledge_tracing/akt/runner.py": "a79dbcd8b5341eeddaf8a5606ed984209ef7786fdb8d70804f6619faf7ce2852",
+    "src/knowledge_tracing/akt/sampler.py": "1cf04adeecbbf01d3dceaf2343b8e6b45062fcdef253bc4fc268945f3b86a298",
+    "src/knowledge_tracing/akt/simulator_data.py": "06110c6f3d85c9feab65e54a57c79595e30957df76ccdd26e464389417760a73",
+    "src/knowledge_tracing/akt/simulator_engineering.py": "abeff620df572bb1438dfa681c0fa4f322a2a7416580b3777fb7abd12f8704fb",
+    "src/knowledge_tracing/akt/splits.py": "c37757f75291de5ed9c3320b632e1b502fb705a40dd3f5daf3371003ffe15e27",
+    "src/knowledge_tracing/akt/tensors.py": "688fb915f8aa4958f47ee541e9ed92be577c0e14bc9c29e1d969be94863a4867",
+    "src/knowledge_tracing/akt/training.py": "ca074a15dd5e45d016fd29d78b0b5ddbb0ccee3555b194699464d4cded6bf979",
+    "src/knowledge_tracing/akt/types.py": "312e57e4fa507f12b449841969b3a9c2b35c592909178b3040102b254aa20304",
+    "src/knowledge_tracing/akt/upstream.py": "c31715c7659470b6d2e839512f2f9ac1f9b83023a9ba1dbfb6db12d4dd687515",
+    "src/knowledge_tracing/akt/watchdog.py": "b94fd1c6468a440138b26be4cdcdefecfb1087805db9eac4d419be9b3663ac2e",
+    "src/knowledge_tracing/akt/windows.py": "e8d00ea0f8b9d07bdc979575109c1f1fc22498d55410bff05a12559bebdb2068",
+    "src/knowledge_tracing/edge_confidence_artifact.py": "ecc313c5a52c3fbb56e06e84bbd1c0808191b956a35bad1ffced200728e01746",
+    "src/knowledge_tracing/graph_augmentation.py": "105aa918f1dc5d8fcfae22c9d8e7d2e13c1832b71d8b6a7ce8deed67d443ff08",
+    "src/knowledge_tracing/graph_context.py": "3db94ec43271d336898f61f81f12aeb569c6de52219eeed535af709711c97264",
+    "src/knowledge_tracing/shared_kt.py": "06922d5a6bfd6c806fd1abb61232f58a9ccd63826e30cefaf87ce3d3b36dffa8",
+    "src/knowledge_tracing/simulator_bridge.py": "b29105acd8de84b060ca27573bb7f7cf8e85599a4596e50e4a21ab63c82329d2",
+    "src/knowledge_tracing/simulator_data.py": "79e28c1a8fc9b3bd5f3283868d7aba1a5bbc7c76764725a8b01098b2ae33cd9f",
+    "src/knowledge_tracing/simulator_research_data.py": "51eb7275a6a4a6b26b763a21a8fe6dc15b0973fc19b3c5557175eaa298db7e53",
+    "tests/akt/test_research_graph_checkpoint.py": "1baf37dd836eba6f096dadb27d953a58199aea748c4bcccaf85028a612b6cdc0",
+    "tests/akt/test_research_graph_context.py": "d54b188ce56fa913551ce54c33209151a1b9456fac0031c541930370471299a8",
+    "tests/akt/test_research_graph_model.py": "579359ff7b8ac64a75f9a343200724091d0d5b78af9a87e3d33ad023f1742ffc",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/check_graph_checkpoint_monitor02.py": "b4975a210b287b237e8b565e3260f1a1a74b499188c908ac9cb34b660af323ae",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/graph_checkpoint_native01_monitor_failure_note.json": "ceea693a03757131ec623fb36165457b296eab874b0b899aaacd6b4220482c9c"
+  },
+  "runtime_before": {
+    "D:/Dev/KLTN/.venv/pyvenv.cfg": "e6ce18340141206a9176f045f8dce3d0da8de284d916dccfa4279c445f87ea33",
+    "D:/Dev/KLTN/.venv/Scripts/python.exe": "935016795f3e6908e75acbc2040a01e2e4cdb494a57c42f63a0d6eedb2372256",
+    "D:/Dev/KLTN/.venv/Lib/site-packages/pytest/__init__.py": "ee37885c9583f843390684dfb496907f87a0905128e7a3cf4ad227f49ff34c2d",
+    "D:/Dev/KLTN/.venv/Lib/site-packages/psutil/__init__.py": "7b6a0675824eb1fa2ff0cb1eb36e358dc454703e51dfa4e9a0e6ccd26a159f0c",
+    "C:/Users/AmaDev/AppData/Local/Programs/Python/Python313/Lib/platform.py": "e398f1c9a6581395534242c9d256997ba8921602bb50f21d63ea5999cd800482",
+    "C:/Users/AmaDev/AppData/Local/Programs/Python/Python313/python.exe": "5341746f92483a93e44c313de830f2fba2956f0759094404a16b2fed06c9a2ed",
+    "D:/Dev/KLTN/.venv/Lib/site-packages/torch/__init__.py": "9e46616b9d27c3553ae7587381510cc5a42e8b6fa1c37694c7dc9ea829b11c9b",
+    "D:/Dev/KLTN/.venv/Lib/site-packages/torch/optim/adam.py": "dca23a7bfdf3a086292528269b815df7fba9f0cf764a18e84b26b3fee2c7147c",
+    "D:/Dev/KLTN/.venv/Lib/site-packages/torch/optim/optimizer.py": "59118a947ba542b6ef8c5e3075c87a43ef16cd5442a94e08cdcc23930c7164b7",
+    "D:/Dev/KLTN/.venv/Lib/site-packages/torch/_tensor.py": "a59e1894c1d4f3e889e2006a74dd8a7fc9c401c9b822639ecc778ffa1a3d2a50",
+    "D:/Dev/KLTN/.venv/Lib/site-packages/torch/storage.py": "a818b321c6d33ee486892fc4cb278d503d85399e5dd215678b4040489bc6c01d",
+    "D:/Dev/KLTN/.venv/Lib/site-packages/numpy/__init__.py": "a6958cb364663b7acce81ccfd58eeb65a2b34d5376157f924777b97211a73be4"
+  },
+  "runtime_after": {
+    "D:/Dev/KLTN/.venv/pyvenv.cfg": "e6ce18340141206a9176f045f8dce3d0da8de284d916dccfa4279c445f87ea33",
+    "D:/Dev/KLTN/.venv/Scripts/python.exe": "935016795f3e6908e75acbc2040a01e2e4cdb494a57c42f63a0d6eedb2372256",
+    "D:/Dev/KLTN/.venv/Lib/site-packages/pytest/__init__.py": "ee37885c9583f843390684dfb496907f87a0905128e7a3cf4ad227f49ff34c2d",
+    "D:/Dev/KLTN/.venv/Lib/site-packages/psutil/__init__.py": "7b6a0675824eb1fa2ff0cb1eb36e358dc454703e51dfa4e9a0e6ccd26a159f0c",
+    "C:/Users/AmaDev/AppData/Local/Programs/Python/Python313/Lib/platform.py": "e398f1c9a6581395534242c9d256997ba8921602bb50f21d63ea5999cd800482",
+    "C:/Users/AmaDev/AppData/Local/Programs/Python/Python313/python.exe": "5341746f92483a93e44c313de830f2fba2956f0759094404a16b2fed06c9a2ed",
+    "D:/Dev/KLTN/.venv/Lib/site-packages/torch/__init__.py": "9e46616b9d27c3553ae7587381510cc5a42e8b6fa1c37694c7dc9ea829b11c9b",
+    "D:/Dev/KLTN/.venv/Lib/site-packages/torch/optim/adam.py": "dca23a7bfdf3a086292528269b815df7fba9f0cf764a18e84b26b3fee2c7147c",
+    "D:/Dev/KLTN/.venv/Lib/site-packages/torch/optim/optimizer.py": "59118a947ba542b6ef8c5e3075c87a43ef16cd5442a94e08cdcc23930c7164b7",
+    "D:/Dev/KLTN/.venv/Lib/site-packages/torch/_tensor.py": "a59e1894c1d4f3e889e2006a74dd8a7fc9c401c9b822639ecc778ffa1a3d2a50",
+    "D:/Dev/KLTN/.venv/Lib/site-packages/torch/storage.py": "a818b321c6d33ee486892fc4cb278d503d85399e5dd215678b4040489bc6c01d",
+    "D:/Dev/KLTN/.venv/Lib/site-packages/numpy/__init__.py": "a6958cb364663b7acce81ccfd58eeb65a2b34d5376157f924777b97211a73be4"
+  },
+  "allocation_sha256": "b70792347610f22e7e0c28eb3cb62afab80abe928601fb718a65f30a57ae6950",
+  "packet_sha256_after": "b70792347610f22e7e0c28eb3cb62afab80abe928601fb718a65f30a57ae6950",
+  "local_git_calls": [
+    {
+      "round": 1,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream rev-parse HEAD"
+    },
+    {
+      "round": 1,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream status --porcelain --untracked-files=all"
+    },
+    {
+      "round": 1,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream remote get-url origin"
+    },
+    {
+      "round": 1,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream hash-object akt.py"
+    },
+    {
+      "round": 1,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream rev-parse HEAD:akt.py"
+    },
+    {
+      "round": 1,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream hash-object README.md"
+    },
+    {
+      "round": 1,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream rev-parse HEAD:README.md"
+    },
+    {
+      "round": 1,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream hash-object LICENSE"
+    },
+    {
+      "round": 1,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream rev-parse HEAD:LICENSE"
+    },
+    {
+      "round": 1,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream rev-parse HEAD^{tree}"
+    },
+    {
+      "round": 2,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream rev-parse HEAD"
+    },
+    {
+      "round": 2,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream status --porcelain --untracked-files=all"
+    },
+    {
+      "round": 2,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream remote get-url origin"
+    },
+    {
+      "round": 2,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream hash-object akt.py"
+    },
+    {
+      "round": 2,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream rev-parse HEAD:akt.py"
+    },
+    {
+      "round": 2,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream hash-object README.md"
+    },
+    {
+      "round": 2,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream rev-parse HEAD:README.md"
+    },
+    {
+      "round": 2,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream hash-object LICENSE"
+    },
+    {
+      "round": 2,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream rev-parse HEAD:LICENSE"
+    },
+    {
+      "round": 2,
+      "executable": null,
+      "command": "git -C D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream rev-parse HEAD^{tree}"
+    }
+  ],
+  "original_loaders": [
+    {
+      "round": 1,
+      "original": true,
+      "cached": false
+    },
+    {
+      "round": 2,
+      "original": true,
+      "cached": false
+    }
+  ],
+  "cuda_false_queries": {
+    "total": 14982,
+    "counts_by_phase_kind": {
+      "local_git_provenance:is_available": 2,
+      "checkpoint_metadata:is_available": 7490,
+      "checkpoint_metadata:is_initialized": 7490
+    },
+    "first_samples": [
+      {
+        "kind": "is_available",
+        "phase": "local_git_provenance",
+        "actual": false
+      },
+      {
+        "kind": "is_available",
+        "phase": "checkpoint_metadata",
+        "actual": false
+      },
+      {
+        "kind": "is_initialized",
+        "phase": "checkpoint_metadata",
+        "actual": false
+      },
+      {
+        "kind": "is_available",
+        "phase": "checkpoint_metadata",
+        "actual": false
+      },
+      {
+        "kind": "is_initialized",
+        "phase": "checkpoint_metadata",
+        "actual": false
+      },
+      {
+        "kind": "is_available",
+        "phase": "checkpoint_metadata",
+        "actual": false
+      },
+      {
+        "kind": "is_initialized",
+        "phase": "checkpoint_metadata",
+        "actual": false
+      },
+      {
+        "kind": "is_available",
+        "phase": "checkpoint_metadata",
+        "actual": false
+      },
+      {
+        "kind": "is_initialized",
+        "phase": "checkpoint_metadata",
+        "actual": false
+      },
+      {
+        "kind": "is_available",
+        "phase": "checkpoint_metadata",
+        "actual": false
+      },
+      {
+        "kind": "is_initialized",
+        "phase": "checkpoint_metadata",
+        "actual": false
+      },
+      {
+        "kind": "is_available",
+        "phase": "checkpoint_metadata",
+        "actual": false
+      },
+      {
+        "kind": "is_initialized",
+        "phase": "checkpoint_metadata",
+        "actual": false
+      },
+      {
+        "kind": "is_available",
+        "phase": "checkpoint_metadata",
+        "actual": false
+      },
+      {
+        "kind": "is_initialized",
+        "phase": "checkpoint_metadata",
+        "actual": false
+      },
+      {
+        "kind": "is_available",
+        "phase": "checkpoint_metadata",
+        "actual": false
+      }
+    ],
+    "true_results": 0
+  },
+  "declared_cuda_query_cap": 100000,
+  "target_observations": [
+    {
+      "reserved": 24,
+      "returned": 24
+    },
+    {
+      "reserved": 24,
+      "returned": 24
+    },
+    {
+      "reserved": 24,
+      "returned": 24
+    }
+  ],
+  "timings": {
+    "adam_body_seconds": [
+      0.03650530002778396,
+      0.018118900014087558,
+      0.03363530000206083
+    ],
+    "tracker_pre_seconds": [
+      0.105378300009761,
+      0.17841789999511093,
+      0.11312019999604672
+    ],
+    "tracker_post_seconds": [
+      0.191597199998796,
+      0.19251369999255985,
+      0.17061779997311532
+    ],
+    "state_validation_seconds": [
+      0.1906903000199236,
+      0.19045180000830442,
+      0.1954002999700606,
+      0.32968480000272393,
+      0.16865469998447224,
+      0.09469019999960437,
+      0.137739599973429,
+      0.209479300014209,
+      0.1649978999630548,
+      0.1604007999994792,
+      0.19535829999949783,
+      0.19462049996946007,
+      0.19944409996969625
+    ],
+    "adapter_optimizer_seconds": [
+      0.33871159999398515,
+      0.3963546000304632,
+      0.3266783999861218
+    ],
+    "adapter_total_seconds": [
+      0.6680023000226356,
+      0.849808800034225,
+      0.5551743999822065
+    ]
+  },
+  "raw_backward_dispatch": {
+    "started": 6,
+    "returned": 6
+  },
+  "native_proof": {},
+  "timing_scope_vi": "real Adam body wrapper vs registered tracker hooks/state-audit/adapter optimizer_seconds; not throughput/cost projection.",
+  "resources": {
+    "samples": 291,
+    "observed_peak_rss_bytes": 634081280,
+    "observed_minimum_available_ram_bytes": 4490706944
+  },
+  "monitor_errors": [],
+  "monitor_stopped": true,
+  "forbidden_attempts": [],
+  "method_restoration": {
+    "accepted": true,
+    "patched_targets": 39,
+    "restore_errors": [],
+    "final_checks": [
+      {
+        "owner": "torch.cuda",
+        "name": "is_available",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.cuda",
+        "name": "is_initialized",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "knowledge_tracing.akt.research_graph_checkpoint",
+        "name": "_torch",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "knowledge_tracing.akt.research_graph_checkpoint.GraphAdamParticipation",
+        "name": "_pre",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "knowledge_tracing.akt.research_graph_checkpoint.GraphAdamParticipation",
+        "name": "_post",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "knowledge_tracing.akt.research_graph_checkpoint",
+        "name": "_validate_states",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "knowledge_tracing.akt.upstream",
+        "name": "load_upstream",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "knowledge_tracing.akt.research_graph_model",
+        "name": "build_native",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "knowledge_tracing.akt.research_graph_model.ResearchGraphAKTAdapter",
+        "name": "__init__",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "knowledge_tracing.akt.research_graph_model.ResearchGraphNative",
+        "name": "__init__",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.nn.modules.linear.Linear",
+        "name": "__init__",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "knowledge_tracing.akt.research_graph_model.ResearchGraphAKTAdapter",
+        "name": "step",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.optim.adam.Adam",
+        "name": "__init__",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.optim.adam.Adam",
+        "name": "step",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.Tensor",
+        "name": "backward",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.autograd",
+        "name": "backward",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.autograd",
+        "name": "grad",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.nn.utils",
+        "name": "clip_grad_norm_",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch",
+        "name": "save",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch",
+        "name": "load",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "knowledge_tracing.akt.research_graph_model.ResearchGraphNative",
+        "name": "load_state_dict",
+        "expected_own": false,
+        "actual_own": false,
+        "baseline_inherited_from": "torch.nn.modules.module.Module",
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.optim.adam.Adam",
+        "name": "load_state_dict",
+        "expected_own": false,
+        "actual_own": false,
+        "baseline_inherited_from": "torch.optim.optimizer.Optimizer",
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.optim.adamw.AdamW",
+        "name": "__init__",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.optim.adamw.AdamW",
+        "name": "step",
+        "expected_own": false,
+        "actual_own": false,
+        "baseline_inherited_from": "torch.optim.adam.Adam",
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.optim.sgd.SGD",
+        "name": "__init__",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.optim.sgd.SGD",
+        "name": "step",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "knowledge_tracing.edge_confidence_artifact",
+        "name": "load_method24_scores",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.cuda",
+        "name": "init",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.cuda",
+        "name": "_lazy_init",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.cuda",
+        "name": "set_device",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.cuda",
+        "name": "synchronize",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.cuda",
+        "name": "manual_seed",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.cuda",
+        "name": "manual_seed_all",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.Tensor",
+        "name": "cuda",
+        "expected_own": false,
+        "actual_own": false,
+        "baseline_inherited_from": "torch._C.TensorBase",
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "torch.nn.modules.module.Module",
+        "name": "cuda",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "akt_upstream_reference.AKT",
+        "name": "__init__",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "akt_upstream_reference.Architecture",
+        "name": "forward",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "akt_upstream_reference.AKT",
+        "name": "__init__",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      },
+      {
+        "owner": "akt_upstream_reference.Architecture",
+        "name": "forward",
+        "expected_own": true,
+        "actual_own": true,
+        "baseline_inherited_from": null,
+        "own_presence_matches": true,
+        "own_value_matches": true,
+        "resolved_identity_matches": true,
+        "restored": true
+      }
+    ]
+  },
+  "native_os_metadata": {
+    "system": "Windows",
+    "machine": "AMD64",
+    "release": "11",
+    "version": "10.0.26200",
+    "commands": [
+      {
+        "executable": "C:\\WINDOWS\\system32\\cmd.exe",
+        "command": "C:\\WINDOWS\\system32\\cmd.exe /c \"ver\""
+      }
+    ],
+    "fixture_replaced": false
+  },
+  "torch_profile": {
+    "version": "2.7.1+cpu",
+    "origin": "D:\\Dev\\KLTN\\.venv\\Lib\\site-packages\\torch\\__init__.py",
+    "numpy_version": "2.5.4",
+    "numpy_origin": "D:\\Dev\\KLTN\\.venv\\Lib\\site-packages\\numpy\\__init__.py",
+    "threads_during": 2,
+    "cuda_build": null,
+    "threads_after": 2,
+    "cuda_initialized_after": false
+  },
+  "environment_restored": true,
+  "owned_run": "experiments/akt/results/graph11-handmade-00805473dc",
+  "elapsed_seconds": 36.21998119354248,
+  "native_work_seconds": 28.373351600021124,
+  "scope_vi": "Fresh containers in SAME owned process; completeE1 persistence+controlled partial continuation; NOT fresh-OS-process/lifecycle/main/fitted research proof."
+}

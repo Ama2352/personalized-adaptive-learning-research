@@ -758,3 +758,10 @@ G10closed48/test5bd/reportc017 commit5e1eb40,51rawGitblobsverified; outputinvent
 - Core đủ9claims/9K-y, commonU5, full/perlearner/unsupportedcoverage đạt8fixtures, không realfile admission/freeze. Bundle27 đóng; source/kernel cũ giữ nguyên.
 - RawGit của RQ1/online đã đối chiếu57blobs/49outputs tại e02d38b/bf2ca6c; inventory4526 không nghiên cứuN.
 - Nativecheckpoint01 thực sự chạy3Adam/4forward rồi observer stat trúng pendingfile vừađổi tên; RAM574MB/free4,53GB trong giới hạn. JUnit/result chưa có, không nghiệm thu checkpoint, không suy0updates. Child125/outer1, cleanupJob0. Giữ raw và kiểm canary trước retry riêng, không mở ngân sách lúc job đang chạy.
+
+### 09/11 — GRAPH11 checkpoint CPU đạt native16, chưa fresh-process
+
+- Native03 đạt16/0FES: completeE1=8windows/48targets/2steps; controlled continuation mỗi nhánh24targets cho model/Adam exact. Perturb rồi restore trực tiếp3RNG/modes;6payload negatives reject trước mutators.39method checks restored,Job0.
+- Giữ Native01monitor-race3updates vàNative02inner-RAM3updates; accepted03 có4updates, tổng10actual bodies. Pure35 vàcanary5 được kiểm lại trên source/pins mới, không cộng thành70/10unique logic.
+- Đã đóng119outputs nhỏ, binaries47refs chỉhash/size, không copy454MB vàoGit. Dry inventory giữ thêm trong docs/evidence vì bundle dùng closure-review SHA. CPf40 không đổi qua các retries; chỉfixtureRAM/monitor/harness được sửa.
+- GRAPH11 chưa complete vì acceptance ban đầu yêu cầu freshOSprocess. GRAPH19 sẽ kiểm hai owned workers riêng; không đổi mục tiêu thànhsame-process. Mainproducer/GPU/lifecycle vẫn thiếu.

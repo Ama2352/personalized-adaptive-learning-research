@@ -1,5 +1,7 @@
 # Chỉ mục bằng chứng
 
+**CG-AKT complete-epoch persistence:** [báo cáo](reports/cgakt_research_checkpoint_readiness_20261109.md) / [bundle119](runs/cgakt-research-checkpoint-engineering-20261109-01/README.md). Native03:16PASS, fullE1=8windows/48targets/2steps và controlled continuation parity; named Adam participation, RNG/modes và malformed payloads. Hai failures giữ nguyên; không fresh-OS-process/lifecycle/fit/CUDA claim. Binaries giữ nguyên trong experiments, bundle chỉ SHA/size references.
+
 **Main9 consistency:** [báo cáo](reports/research_admission_core_readiness_20261109.md) / [bundle27](runs/research-admission-core-engineering-20261109-01/README.md), 8 manufactured cases/0 model calls. Core giữ đủ chín mô hình, coverage và common-U statistics; actual selected-only producer, kiểm file thật và external freeze vẫn chưa hoàn tất.
 
 **CG-AKT dynamic query:** [báo cáo](reports/cgakt_online_query_context_20261109.md) / [bundle25](runs/cgakt-online-query-context-engineering-20261109-01/README.md), 35 NumPy cases/0 Torch. Past-only geometry, counterfactual item identity, domain/OOV và ownership; GRAPH16 còn model parity, GRAPH17 còn fitted integration.

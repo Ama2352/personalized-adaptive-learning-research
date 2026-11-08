@@ -1,0 +1,62 @@
+{
+  "category": "MONITOR_ATOMIC_PUBLICATION_RACE_NOT_RAM_OR_TRAINING_FAILURE",
+  "evidence": {
+    "path": "artifacts/akt/local-tests/akt-research-runner-20261108-01/graph-checkpoint-native01/resource-failure.json",
+    "sha256": "a990de1440eb15481ca55daa68102703e5644827b376f2dba7203ef7e4d764a1",
+    "outer_final_path": "artifacts/akt/local-tests/akt-research-runner-20261108-01/graph-checkpoint-native01-owned/final.json",
+    "outer_final_sha256": "4d11c8616374afbe965ed06a145539ea69c3fb3e715e1a4922317d77f995985e",
+    "owned_receipt_sha256": "102b8a04f5bd980591bd31ab8657ff1bfcf6f37e311dfa4d337a8c97af67f055"
+  },
+  "actual_error": "[WinError 2] The system cannot find the file specified: 'D:\\\\Dev\\\\KLTN\\\\experiments\\\\akt\\\\results\\\\graph11-handmade-c5b1862c71\\\\checkpoints\\\\authenticated-invalid-python_rng\\\\state.pt.pending'",
+  "observed_resources": {
+    "samples": 227,
+    "observed_peak_rss_bytes": 574152704,
+    "observed_minimum_available_ram_bytes": 4533239808
+  },
+  "actual_started": {
+    "adapter_constructors": 2,
+    "backbone_constructors": 2,
+    "wrapper_constructors": 2,
+    "gate_constructors": 2,
+    "forwards": 4,
+    "logical_backwards": 3,
+    "clip_calls": 3,
+    "adam_constructors": 2,
+    "adam_steps": 3,
+    "adapter_steps": 3,
+    "torch_save": 3,
+    "torch_load": 2,
+    "model_restore": 0,
+    "adam_restore": 0
+  },
+  "actual_body_returned": {
+    "adapter_constructors": 2,
+    "backbone_constructors": 2,
+    "wrapper_constructors": 2,
+    "gate_constructors": 2,
+    "forwards": 4,
+    "logical_backwards": 3,
+    "clip_calls": 3,
+    "adam_constructors": 2,
+    "adam_steps": 3,
+    "adapter_steps": 3,
+    "torch_save": 3,
+    "torch_load": 2,
+    "model_restore": 0,
+    "adam_restore": 0
+  },
+  "terminal_seconds_root_observation": 27.0467988,
+  "test_counts": null,
+  "junit_claim": "No JUnit/result; NOT16failures, NOT0updates",
+  "repair_scope": "Monitor stat: allow ONLY known .pending FileNotFoundError while atomicpublish, finalCOMPLETE validation unchanged",
+  "old_attempt_preserved": true,
+  "no_tests_or_native_executed_by_agent": true,
+  "future_cumulative": {
+    "prior_seconds": 27.0467988,
+    "new_whole_ceiling_seconds": 90,
+    "ceiling_total_seconds": 117.0467988,
+    "prior_actual_adam_bodies": 3,
+    "new_max_adam_bodies": 4,
+    "total_max_adam_bodies": 7
+  }
+}
