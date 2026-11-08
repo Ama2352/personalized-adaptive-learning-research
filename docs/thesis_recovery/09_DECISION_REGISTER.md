@@ -1,5 +1,19 @@
 # Sổ quyết định và vấn đề mở
 
+## Quyết định nhóm08/11 — S04-A/S05-Plan B development đã adopt
+
+Chỉ thị user hiện hành, root chuyển tiếp: **“Phương pháp nào an toàn và tiết kiệm tiền thì chọn, ko chờ chốt”.** Theo quyền này, nhóm/root chọn [ProtocolV1](21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md) và [source/authority map](21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.sources.json). Không tiếp tục chờ advisor cho routine method engineering; không gán lựa chọn nhóm thành phê duyệt GVHD hoặc bỏ required deliverables. Các đoạn S04/S05 “cần chốt/chưa adopt” và “mọi đề xuất chưa được phê duyệt” bên dưới là snapshot trước mốc mới này.
+
+| ID | Quyết định hiện hành | Scope/giới hạn |
+|---|---|---|
+| D30 | User giao nhóm chọn phương pháp an toàn, tiết kiệm; root chọn S04-A/S05-PlanB | Group method adoption, không data/cloud/fullCV/Holdout/paid execution authority mới |
+| D31 | S04-A:3equal reference items; tau_ref0,5637150147511514; one-temperature response calibration; common controller targetsuccess0,70 | Fit80/selection10/calibration10; raw selector/independentA0 trước refit90%; calibration10 sau refit; không P(K), oracle features hoặc reselect trên learners đã train |
+| D32 | S05-B staged:1trainingseed, frozenJunyi fold4, đủ BKT/GAM/Graph-GAM/AKT/SAKT/GKT và A0–A3/expert/learned ở hai environments |9simulator neural fits/18Junyi neural phases; historical baselines giữ scope; không5fold/trainingseedvariance/RQcompletion |
+| D33 | H_dev30 cho resourcebounded development; finalH500 chỉ historicalalignment proposal theo Paper2fullsource | Không claim history>50/longhorizon; final horizon cần measuredbudget/prefreeze. Q_dev3.402.000logicalresponses, finalH500illustration56.700.000; không independentN/kernelcalls/runtimeforecast |
+
+Next critical path là research-mode corpus/split/calibration/controller/selected-trainer wiring; không thêm toy-only milestones để thay evidence. Numerical first-corpus/neural/epoch/resource configs còn phải chọn và pin trước execution, không sửa frozenAKT hyperparameters qua protocol. Root điều phối theo user authority đã có; không trì hoãn routine choices vì chưa có advisor sign-off. Final proposal-completion vẫn phải audit đủ models/environments/learnedgraph/noise/history/replicates/horizon/demo/article và giới hạn scientificclaims; không tự waive. Budget30USDfree/net0, Colab trướcModal, no automatic paidfallback giữ nguyên.
+
+
 ## Mốc hiện hành08/11 — phân biệt nghiệm thu kỹ thuật và quyết định nghiên cứu
 
 - **D25, supported/engineering:** A0–A3 prototype đã có confidence theo cạnh và gate explicit (`4a256a4`). GRAPH04 vừa kiểm actual train–selection–checkpoint/reload/export trên toy: một graph complete epoch/8train targets, selection4=3scored+1OOV, reload delta0; một partial epoch giữ ledger và không publish checkpoint. Tổng bốn updates gồm hai baseline kiểm tương thích. Actual suite45PASS/1FAIL giữ nguyên; test inventory kỳ vọng thiếu hai helper đã sửa và kiểm riêng bằng stored artifact/0fit. Gói GRAPH04 đã đóng và commit `f8e9ab0`,89outputs raw Git verified; không gọi fitted CG-AKT nghiên cứu hoặc full Gate PASS.

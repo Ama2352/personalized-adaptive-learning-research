@@ -1,5 +1,7 @@
 # Theo dõi bằng chứng nghiên cứu KLTN
 
+**Protocol Development hiện hành:** [S04-A/S05-B V1](../docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md) đã được nhóm chọn theo quyền user giao ngày08/11. Các snapshot chờ S04/S05 cũ được giữ làm lịch sử; việc chọn phương pháp không cấp quyền chi Modal, fullCV hoặc Holdout.
+
 **Điểm bắt đầu cho người viết báo cáo:** [Bản đồ repository](../docs/REPOSITORY_MAP.md) và [mục lục báo cáo](reports/README.md). `reports/` là nơi thống nhất bản phân tích/số liệu tổng hợp; `runs/` là bundles bằng chứng theo run. Hai phần phục vụ diễn giải và kiểm chứng, chưa phải bản luận văn hoàn chỉnh. Output bootstrap baseline đã chuyển từ root `reports/` vào đây, có [hồ sơ relocation](reports/report_relocation_20261107.json).
 
 **Collector/KT simulator mới:** [báo cáo DATA05–07](reports/simulator_collection_runner_20261107.md) phân biệt collector fixture, adapter, domain portability fix và corpus/trainer chưa hoàn thành. Registry được bổ sung từ các terminal run manifests đã tồn tại; đó là cập nhật chỉ mục, không là số thí nghiệm mới. Current source-bound software gate xem investigation state, không lấy số tests trong các snapshot lịch sử bên dưới.
