@@ -1,0 +1,528 @@
+EEEF..............................EFE..EEEFEEE                           [100%]
+=================================== ERRORS ====================================
+__ ERROR at setup of test_actual_complete_epoch_reload_and_target_accounting __
+
+    @pytest.fixture(scope="module")
+    def completed():
+        train,selection=toy()
+        cfg=config("complete")
+        # Actual happy update and internal reload under a hostile non-CPU default.
+        # Meta is a metadata-only device; no CUDA execution or extra optimizer step.
+        with torch.device("meta"):
+            assert torch.empty(1).device.type=="meta"
+>           result=engineering.run_engineering_epoch(cfg,train=train,selection=selection,budget=budget(train,selection))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_simulator_engineering.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\simulator_engineering.py:52: in guarded
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:374: in run_engineering_epoch
+    return _run_engineering_epoch(config,train=train,selection=selection,budget=budget)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:392: in _run_engineering_epoch
+    _guard(budget, deadline)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+budget = SyntheticEngineeringBudget(approval_reference='Parent authorized 20261108: handcrafted toy CPU engineering; no researc..._per_learner=12, max_optimizer_steps=4, max_seconds=60.0, max_rss_bytes=2147483648, min_available_ram_bytes=1073741824)
+deadline = 258494.3943811
+
+    def _guard(budget, deadline):
+        if time.monotonic() >= deadline:
+            raise TimeoutError("synthetic engineering wall budget exhausted")
+        sample = memory_snapshot()
+        if max(sample["process_rss_bytes"], sample["process_peak_rss_bytes"] or 0) > budget.max_rss_bytes:
+            raise MemoryError("synthetic engineering RSS cap")
+        if sample["system_available_ram_bytes"] < budget.min_available_ram_bytes:
+>           raise MemoryError("synthetic engineering available RAM floor")
+E           MemoryError: synthetic engineering available RAM floor
+
+src\knowledge_tracing\akt\simulator_engineering.py:130: MemoryError
+__ ERROR at setup of test_production_online_rejects_toy_complete_checkpoint ___
+
+    @pytest.fixture(scope="module")
+    def completed():
+        train,selection=toy()
+        cfg=config("complete")
+        # Actual happy update and internal reload under a hostile non-CPU default.
+        # Meta is a metadata-only device; no CUDA execution or extra optimizer step.
+        with torch.device("meta"):
+            assert torch.empty(1).device.type=="meta"
+>           result=engineering.run_engineering_epoch(cfg,train=train,selection=selection,budget=budget(train,selection))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_simulator_engineering.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\simulator_engineering.py:52: in guarded
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:374: in run_engineering_epoch
+    return _run_engineering_epoch(config,train=train,selection=selection,budget=budget)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:392: in _run_engineering_epoch
+    _guard(budget, deadline)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+budget = SyntheticEngineeringBudget(approval_reference='Parent authorized 20261108: handcrafted toy CPU engineering; no researc..._per_learner=12, max_optimizer_steps=4, max_seconds=60.0, max_rss_bytes=2147483648, min_available_ram_bytes=1073741824)
+deadline = 258494.3943811
+
+    def _guard(budget, deadline):
+        if time.monotonic() >= deadline:
+            raise TimeoutError("synthetic engineering wall budget exhausted")
+        sample = memory_snapshot()
+        if max(sample["process_rss_bytes"], sample["process_peak_rss_bytes"] or 0) > budget.max_rss_bytes:
+            raise MemoryError("synthetic engineering RSS cap")
+        if sample["system_available_ram_bytes"] < budget.min_available_ram_bytes:
+>           raise MemoryError("synthetic engineering available RAM floor")
+E           MemoryError: synthetic engineering available RAM floor
+
+src\knowledge_tracing\akt\simulator_engineering.py:130: MemoryError
+____________ ERROR at setup of test_no_overwrite_completed_output _____________
+
+    @pytest.fixture(scope="module")
+    def completed():
+        train,selection=toy()
+        cfg=config("complete")
+        # Actual happy update and internal reload under a hostile non-CPU default.
+        # Meta is a metadata-only device; no CUDA execution or extra optimizer step.
+        with torch.device("meta"):
+            assert torch.empty(1).device.type=="meta"
+>           result=engineering.run_engineering_epoch(cfg,train=train,selection=selection,budget=budget(train,selection))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_simulator_engineering.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\simulator_engineering.py:52: in guarded
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:374: in run_engineering_epoch
+    return _run_engineering_epoch(config,train=train,selection=selection,budget=budget)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:392: in _run_engineering_epoch
+    _guard(budget, deadline)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+budget = SyntheticEngineeringBudget(approval_reference='Parent authorized 20261108: handcrafted toy CPU engineering; no researc..._per_learner=12, max_optimizer_steps=4, max_seconds=60.0, max_rss_bytes=2147483648, min_available_ram_bytes=1073741824)
+deadline = 258494.3943811
+
+    def _guard(budget, deadline):
+        if time.monotonic() >= deadline:
+            raise TimeoutError("synthetic engineering wall budget exhausted")
+        sample = memory_snapshot()
+        if max(sample["process_rss_bytes"], sample["process_peak_rss_bytes"] or 0) > budget.max_rss_bytes:
+            raise MemoryError("synthetic engineering RSS cap")
+        if sample["system_available_ram_bytes"] < budget.min_available_ram_bytes:
+>           raise MemoryError("synthetic engineering available RAM floor")
+E           MemoryError: synthetic engineering available RAM floor
+
+src\knowledge_tracing\akt\simulator_engineering.py:130: MemoryError
+_ ERROR at setup of test_checkpoint_payload_and_encoding_negative_without_training _
+
+    @pytest.fixture(scope="module")
+    def completed():
+        train,selection=toy()
+        cfg=config("complete")
+        # Actual happy update and internal reload under a hostile non-CPU default.
+        # Meta is a metadata-only device; no CUDA execution or extra optimizer step.
+        with torch.device("meta"):
+            assert torch.empty(1).device.type=="meta"
+>           result=engineering.run_engineering_epoch(cfg,train=train,selection=selection,budget=budget(train,selection))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_simulator_engineering.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\simulator_engineering.py:52: in guarded
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:374: in run_engineering_epoch
+    return _run_engineering_epoch(config,train=train,selection=selection,budget=budget)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:392: in _run_engineering_epoch
+    _guard(budget, deadline)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+budget = SyntheticEngineeringBudget(approval_reference='Parent authorized 20261108: handcrafted toy CPU engineering; no researc..._per_learner=12, max_optimizer_steps=4, max_seconds=60.0, max_rss_bytes=2147483648, min_available_ram_bytes=1073741824)
+deadline = 258494.3943811
+
+    def _guard(budget, deadline):
+        if time.monotonic() >= deadline:
+            raise TimeoutError("synthetic engineering wall budget exhausted")
+        sample = memory_snapshot()
+        if max(sample["process_rss_bytes"], sample["process_peak_rss_bytes"] or 0) > budget.max_rss_bytes:
+            raise MemoryError("synthetic engineering RSS cap")
+        if sample["system_available_ram_bytes"] < budget.min_available_ram_bytes:
+>           raise MemoryError("synthetic engineering available RAM floor")
+E           MemoryError: synthetic engineering available RAM floor
+
+src\knowledge_tracing\akt\simulator_engineering.py:130: MemoryError
+_ ERROR at setup of test_direct_reload_overrides_meta_default_without_training _
+
+    @pytest.fixture(scope="module")
+    def completed():
+        train,selection=toy()
+        cfg=config("complete")
+        # Actual happy update and internal reload under a hostile non-CPU default.
+        # Meta is a metadata-only device; no CUDA execution or extra optimizer step.
+        with torch.device("meta"):
+            assert torch.empty(1).device.type=="meta"
+>           result=engineering.run_engineering_epoch(cfg,train=train,selection=selection,budget=budget(train,selection))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_simulator_engineering.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\simulator_engineering.py:52: in guarded
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:374: in run_engineering_epoch
+    return _run_engineering_epoch(config,train=train,selection=selection,budget=budget)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:392: in _run_engineering_epoch
+    _guard(budget, deadline)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+budget = SyntheticEngineeringBudget(approval_reference='Parent authorized 20261108: handcrafted toy CPU engineering; no researc..._per_learner=12, max_optimizer_steps=4, max_seconds=60.0, max_rss_bytes=2147483648, min_available_ram_bytes=1073741824)
+deadline = 258494.3943811
+
+    def _guard(budget, deadline):
+        if time.monotonic() >= deadline:
+            raise TimeoutError("synthetic engineering wall budget exhausted")
+        sample = memory_snapshot()
+        if max(sample["process_rss_bytes"], sample["process_peak_rss_bytes"] or 0) > budget.max_rss_bytes:
+            raise MemoryError("synthetic engineering RSS cap")
+        if sample["system_available_ram_bytes"] < budget.min_available_ram_bytes:
+>           raise MemoryError("synthetic engineering available RAM floor")
+E           MemoryError: synthetic engineering available RAM floor
+
+src\knowledge_tracing\akt\simulator_engineering.py:130: MemoryError
+_ ERROR at setup of test_behavior_dependency_inventory_and_drift_before_deserialize _
+
+    @pytest.fixture(scope="module")
+    def completed():
+        train,selection=toy()
+        cfg=config("complete")
+        # Actual happy update and internal reload under a hostile non-CPU default.
+        # Meta is a metadata-only device; no CUDA execution or extra optimizer step.
+        with torch.device("meta"):
+            assert torch.empty(1).device.type=="meta"
+>           result=engineering.run_engineering_epoch(cfg,train=train,selection=selection,budget=budget(train,selection))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_simulator_engineering.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\simulator_engineering.py:52: in guarded
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:374: in run_engineering_epoch
+    return _run_engineering_epoch(config,train=train,selection=selection,budget=budget)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:392: in _run_engineering_epoch
+    _guard(budget, deadline)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+budget = SyntheticEngineeringBudget(approval_reference='Parent authorized 20261108: handcrafted toy CPU engineering; no researc..._per_learner=12, max_optimizer_steps=4, max_seconds=60.0, max_rss_bytes=2147483648, min_available_ram_bytes=1073741824)
+deadline = 258494.3943811
+
+    def _guard(budget, deadline):
+        if time.monotonic() >= deadline:
+            raise TimeoutError("synthetic engineering wall budget exhausted")
+        sample = memory_snapshot()
+        if max(sample["process_rss_bytes"], sample["process_peak_rss_bytes"] or 0) > budget.max_rss_bytes:
+            raise MemoryError("synthetic engineering RSS cap")
+        if sample["system_available_ram_bytes"] < budget.min_available_ram_bytes:
+>           raise MemoryError("synthetic engineering available RAM floor")
+E           MemoryError: synthetic engineering available RAM floor
+
+src\knowledge_tracing\akt\simulator_engineering.py:130: MemoryError
+_ ERROR at setup of test_actual_a3_epoch_updates_all_parts_and_publishes_only_complete _
+
+    @pytest.fixture(scope='module')
+    def graph_completed():
+        cfg,train,selection,encoding,budget=inputs('complete')
+        previous_threads=torch.get_num_threads()
+        with torch.device('meta'):
+>           result=engineering.run_graph_engineering_epoch(cfg,train=train,selection=selection,budget=budget,setup=setup())
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_graph_lifecycle.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\simulator_engineering.py:52: in guarded
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:383: in run_graph_engineering_epoch
+    return _run_engineering_epoch(config,train=train,selection=selection,budget=budget,graph_setup=setup)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:392: in _run_engineering_epoch
+    _guard(budget, deadline)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+budget = SyntheticEngineeringBudget(approval_reference='Root bounded GRAPH04 engineering; actual<=4steps/60s alltrials', expect..._per_learner=12, max_optimizer_steps=4, max_seconds=60.0, max_rss_bytes=2147483648, min_available_ram_bytes=1073741824)
+deadline = 258497.2789494
+
+    def _guard(budget, deadline):
+        if time.monotonic() >= deadline:
+            raise TimeoutError("synthetic engineering wall budget exhausted")
+        sample = memory_snapshot()
+        if max(sample["process_rss_bytes"], sample["process_peak_rss_bytes"] or 0) > budget.max_rss_bytes:
+            raise MemoryError("synthetic engineering RSS cap")
+        if sample["system_available_ram_bytes"] < budget.min_available_ram_bytes:
+>           raise MemoryError("synthetic engineering available RAM floor")
+E           MemoryError: synthetic engineering available RAM floor
+
+src\knowledge_tracing\akt\simulator_engineering.py:130: MemoryError
+_ ERROR at setup of test_graph_csv_coverage_truth_sidecar_and_reload_telemetry _
+
+    @pytest.fixture(scope='module')
+    def graph_completed():
+        cfg,train,selection,encoding,budget=inputs('complete')
+        previous_threads=torch.get_num_threads()
+        with torch.device('meta'):
+>           result=engineering.run_graph_engineering_epoch(cfg,train=train,selection=selection,budget=budget,setup=setup())
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_graph_lifecycle.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\simulator_engineering.py:52: in guarded
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:383: in run_graph_engineering_epoch
+    return _run_engineering_epoch(config,train=train,selection=selection,budget=budget,graph_setup=setup)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:392: in _run_engineering_epoch
+    _guard(budget, deadline)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+budget = SyntheticEngineeringBudget(approval_reference='Root bounded GRAPH04 engineering; actual<=4steps/60s alltrials', expect..._per_learner=12, max_optimizer_steps=4, max_seconds=60.0, max_rss_bytes=2147483648, min_available_ram_bytes=1073741824)
+deadline = 258497.2789494
+
+    def _guard(budget, deadline):
+        if time.monotonic() >= deadline:
+            raise TimeoutError("synthetic engineering wall budget exhausted")
+        sample = memory_snapshot()
+        if max(sample["process_rss_bytes"], sample["process_peak_rss_bytes"] or 0) > budget.max_rss_bytes:
+            raise MemoryError("synthetic engineering RSS cap")
+        if sample["system_available_ram_bytes"] < budget.min_available_ram_bytes:
+>           raise MemoryError("synthetic engineering available RAM floor")
+E           MemoryError: synthetic engineering available RAM floor
+
+src\knowledge_tracing\akt\simulator_engineering.py:130: MemoryError
+_ ERROR at setup of test_confidence_recipe_drift_rejected_before_deserialization_or_constructor _
+
+    @pytest.fixture(scope='module')
+    def graph_completed():
+        cfg,train,selection,encoding,budget=inputs('complete')
+        previous_threads=torch.get_num_threads()
+        with torch.device('meta'):
+>           result=engineering.run_graph_engineering_epoch(cfg,train=train,selection=selection,budget=budget,setup=setup())
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_graph_lifecycle.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\simulator_engineering.py:52: in guarded
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:383: in run_graph_engineering_epoch
+    return _run_engineering_epoch(config,train=train,selection=selection,budget=budget,graph_setup=setup)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:392: in _run_engineering_epoch
+    _guard(budget, deadline)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+budget = SyntheticEngineeringBudget(approval_reference='Root bounded GRAPH04 engineering; actual<=4steps/60s alltrials', expect..._per_learner=12, max_optimizer_steps=4, max_seconds=60.0, max_rss_bytes=2147483648, min_available_ram_bytes=1073741824)
+deadline = 258497.2789494
+
+    def _guard(budget, deadline):
+        if time.monotonic() >= deadline:
+            raise TimeoutError("synthetic engineering wall budget exhausted")
+        sample = memory_snapshot()
+        if max(sample["process_rss_bytes"], sample["process_peak_rss_bytes"] or 0) > budget.max_rss_bytes:
+            raise MemoryError("synthetic engineering RSS cap")
+        if sample["system_available_ram_bytes"] < budget.min_available_ram_bytes:
+>           raise MemoryError("synthetic engineering available RAM floor")
+E           MemoryError: synthetic engineering available RAM floor
+
+src\knowledge_tracing\akt\simulator_engineering.py:130: MemoryError
+_____ ERROR at setup of test_base_loader_does_not_promote_graph_artifact ______
+
+    @pytest.fixture(scope='module')
+    def graph_completed():
+        cfg,train,selection,encoding,budget=inputs('complete')
+        previous_threads=torch.get_num_threads()
+        with torch.device('meta'):
+>           result=engineering.run_graph_engineering_epoch(cfg,train=train,selection=selection,budget=budget,setup=setup())
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_graph_lifecycle.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\simulator_engineering.py:52: in guarded
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:383: in run_graph_engineering_epoch
+    return _run_engineering_epoch(config,train=train,selection=selection,budget=budget,graph_setup=setup)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:392: in _run_engineering_epoch
+    _guard(budget, deadline)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+budget = SyntheticEngineeringBudget(approval_reference='Root bounded GRAPH04 engineering; actual<=4steps/60s alltrials', expect..._per_learner=12, max_optimizer_steps=4, max_seconds=60.0, max_rss_bytes=2147483648, min_available_ram_bytes=1073741824)
+deadline = 258497.2789494
+
+    def _guard(budget, deadline):
+        if time.monotonic() >= deadline:
+            raise TimeoutError("synthetic engineering wall budget exhausted")
+        sample = memory_snapshot()
+        if max(sample["process_rss_bytes"], sample["process_peak_rss_bytes"] or 0) > budget.max_rss_bytes:
+            raise MemoryError("synthetic engineering RSS cap")
+        if sample["system_available_ram_bytes"] < budget.min_available_ram_bytes:
+>           raise MemoryError("synthetic engineering available RAM floor")
+E           MemoryError: synthetic engineering available RAM floor
+
+src\knowledge_tracing\akt\simulator_engineering.py:130: MemoryError
+_ ERROR at setup of test_optimizer_config_drift_rejected_before_checkpoint_read _
+
+    @pytest.fixture(scope='module')
+    def graph_completed():
+        cfg,train,selection,encoding,budget=inputs('complete')
+        previous_threads=torch.get_num_threads()
+        with torch.device('meta'):
+>           result=engineering.run_graph_engineering_epoch(cfg,train=train,selection=selection,budget=budget,setup=setup())
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_graph_lifecycle.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\simulator_engineering.py:52: in guarded
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:383: in run_graph_engineering_epoch
+    return _run_engineering_epoch(config,train=train,selection=selection,budget=budget,graph_setup=setup)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:392: in _run_engineering_epoch
+    _guard(budget, deadline)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+budget = SyntheticEngineeringBudget(approval_reference='Root bounded GRAPH04 engineering; actual<=4steps/60s alltrials', expect..._per_learner=12, max_optimizer_steps=4, max_seconds=60.0, max_rss_bytes=2147483648, min_available_ram_bytes=1073741824)
+deadline = 258497.2789494
+
+    def _guard(budget, deadline):
+        if time.monotonic() >= deadline:
+            raise TimeoutError("synthetic engineering wall budget exhausted")
+        sample = memory_snapshot()
+        if max(sample["process_rss_bytes"], sample["process_peak_rss_bytes"] or 0) > budget.max_rss_bytes:
+            raise MemoryError("synthetic engineering RSS cap")
+        if sample["system_available_ram_bytes"] < budget.min_available_ram_bytes:
+>           raise MemoryError("synthetic engineering available RAM floor")
+E           MemoryError: synthetic engineering available RAM floor
+
+src\knowledge_tracing\akt\simulator_engineering.py:130: MemoryError
+================================== FAILURES ===================================
+_______ test_actual_partial_epoch_has_failure_receipt_and_no_checkpoint _______
+
+    def test_actual_partial_epoch_has_failure_receipt_and_no_checkpoint():
+        train,selection=toy()
+        cfg=replace(config("partial"),batch_size=1,max_steps=1)
+        with pytest.raises(engineering.IncompleteEngineeringEpoch):
+>           engineering.run_engineering_epoch(cfg,train=train,selection=selection,budget=budget(train,selection))
+
+tests\akt\test_simulator_engineering.py:100: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\simulator_engineering.py:52: in guarded
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:374: in run_engineering_epoch
+    return _run_engineering_epoch(config,train=train,selection=selection,budget=budget)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:392: in _run_engineering_epoch
+    _guard(budget, deadline)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+budget = SyntheticEngineeringBudget(approval_reference='Parent authorized 20261108: handcrafted toy CPU engineering; no researc..._per_learner=12, max_optimizer_steps=4, max_seconds=60.0, max_rss_bytes=2147483648, min_available_ram_bytes=1073741824)
+deadline = 258495.4614714
+
+    def _guard(budget, deadline):
+        if time.monotonic() >= deadline:
+            raise TimeoutError("synthetic engineering wall budget exhausted")
+        sample = memory_snapshot()
+        if max(sample["process_rss_bytes"], sample["process_peak_rss_bytes"] or 0) > budget.max_rss_bytes:
+            raise MemoryError("synthetic engineering RSS cap")
+        if sample["system_available_ram_bytes"] < budget.min_available_ram_bytes:
+>           raise MemoryError("synthetic engineering available RAM floor")
+E           MemoryError: synthetic engineering available RAM floor
+
+src\knowledge_tracing\akt\simulator_engineering.py:130: MemoryError
+___________ test_guard_real_snapshot_and_injected_negative_controls ___________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000237A50337D0>
+
+    def test_guard_real_snapshot_and_injected_negative_controls(monkeypatch):
+        train,selection=toy()
+        b=budget(train,selection)
+>       sample=engineering._guard(b,float("inf"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_simulator_engineering.py:179: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+budget = SyntheticEngineeringBudget(approval_reference='Parent authorized 20261108: handcrafted toy CPU engineering; no researc..._per_learner=12, max_optimizer_steps=4, max_seconds=60.0, max_rss_bytes=2147483648, min_available_ram_bytes=1073741824)
+deadline = inf
+
+    def _guard(budget, deadline):
+        if time.monotonic() >= deadline:
+            raise TimeoutError("synthetic engineering wall budget exhausted")
+        sample = memory_snapshot()
+        if max(sample["process_rss_bytes"], sample["process_peak_rss_bytes"] or 0) > budget.max_rss_bytes:
+            raise MemoryError("synthetic engineering RSS cap")
+        if sample["system_available_ram_bytes"] < budget.min_available_ram_bytes:
+>           raise MemoryError("synthetic engineering available RAM floor")
+E           MemoryError: synthetic engineering available RAM floor
+
+src\knowledge_tracing\akt\simulator_engineering.py:130: MemoryError
+_ test_partial_graph_epoch_retains_step_events_but_no_checkpoint_or_complete __
+
+    def test_partial_graph_epoch_retains_step_events_but_no_checkpoint_or_complete():
+        cfg,train,selection,encoding,budget=inputs('partial')
+        cfg=replace(cfg,batch_size=1,max_steps=1)
+        with pytest.raises(engineering.IncompleteEngineeringEpoch):
+>           engineering.run_graph_engineering_epoch(cfg,train=train,selection=selection,budget=budget,setup=setup())
+
+tests\akt\test_graph_lifecycle.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\simulator_engineering.py:52: in guarded
+    return function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:383: in run_graph_engineering_epoch
+    return _run_engineering_epoch(config,train=train,selection=selection,budget=budget,graph_setup=setup)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\simulator_engineering.py:392: in _run_engineering_epoch
+    _guard(budget, deadline)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+budget = SyntheticEngineeringBudget(approval_reference='Root bounded GRAPH04 engineering; actual<=4steps/60s alltrials', expect..._per_learner=12, max_optimizer_steps=4, max_seconds=60.0, max_rss_bytes=2147483648, min_available_ram_bytes=1073741824)
+deadline = 258497.8960414
+
+    def _guard(budget, deadline):
+        if time.monotonic() >= deadline:
+            raise TimeoutError("synthetic engineering wall budget exhausted")
+        sample = memory_snapshot()
+        if max(sample["process_rss_bytes"], sample["process_peak_rss_bytes"] or 0) > budget.max_rss_bytes:
+            raise MemoryError("synthetic engineering RSS cap")
+        if sample["system_available_ram_bytes"] < budget.min_available_ram_bytes:
+>           raise MemoryError("synthetic engineering available RAM floor")
+E           MemoryError: synthetic engineering available RAM floor
+
+src\knowledge_tracing\akt\simulator_engineering.py:130: MemoryError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_simulator_engineering.py::test_actual_partial_epoch_has_failure_receipt_and_no_checkpoint
+FAILED tests/akt/test_simulator_engineering.py::test_guard_real_snapshot_and_injected_negative_controls
+FAILED tests/akt/test_graph_lifecycle.py::test_partial_graph_epoch_retains_step_events_but_no_checkpoint_or_complete
+ERROR tests/akt/test_simulator_engineering.py::test_actual_complete_epoch_reload_and_target_accounting
+ERROR tests/akt/test_simulator_engineering.py::test_production_online_rejects_toy_complete_checkpoint
+ERROR tests/akt/test_simulator_engineering.py::test_no_overwrite_completed_output
+ERROR tests/akt/test_simulator_engineering.py::test_checkpoint_payload_and_encoding_negative_without_training
+ERROR tests/akt/test_simulator_engineering.py::test_direct_reload_overrides_meta_default_without_training
+ERROR tests/akt/test_simulator_engineering.py::test_behavior_dependency_inventory_and_drift_before_deserialize
+ERROR tests/akt/test_graph_lifecycle.py::test_actual_a3_epoch_updates_all_parts_and_publishes_only_complete
+ERROR tests/akt/test_graph_lifecycle.py::test_graph_csv_coverage_truth_sidecar_and_reload_telemetry
+ERROR tests/akt/test_graph_lifecycle.py::test_confidence_recipe_drift_rejected_before_deserialization_or_constructor
+ERROR tests/akt/test_graph_lifecycle.py::test_base_loader_does_not_promote_graph_artifact
+ERROR tests/akt/test_graph_lifecycle.py::test_optimizer_config_drift_rejected_before_checkpoint_read
+3 failed, 32 passed, 11 errors in 8.30s

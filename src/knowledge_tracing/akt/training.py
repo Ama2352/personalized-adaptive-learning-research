@@ -23,7 +23,7 @@ from .resources import memory_snapshot
 from .recovery import training_config_hash, training_budget, preserve_checkpoint
 from .sampler import ReplayableWindowCursor
 from .splits import InnerSplit
-from .tensors import collate_windows
+from .tensors import AKTBatch, collate_windows
 from .types import LearnerEvents, TrainingWindow, UnseenTarget
 from .windows import iter_windows
 
@@ -113,9 +113,15 @@ def train_epoch(adapter: AKTAdapter, windows_factory: Callable[[], Iterator[Trai
                 optimizer: torch.optim.Optimizer, epoch: int, budget: dict,
                 progress_callback: Callable[[dict], None] | None = None,
                 resource_callback: Callable[[dict], None] | None = None,
-                recovery: dict | None = None) -> EpochStats:
+                recovery: dict | None = None,
+                batch_factory: Callable[[tuple[TrainingWindow, ...]], AKTBatch] | None = None) -> EpochStats:
     if epoch < 1:
         raise ValueError('invalid epoch')
+    if batch_factory is not None:
+        if not callable(batch_factory):
+            raise ValueError('batch_factory must be callable')
+        if recovery is not None:
+            raise ValueError('custom batch factory has no recovery contract')
     adapter.native.train()
     started = time.perf_counter()
     loss_sum, valid_targets, steps, complete = 0.0, 0, 0, True
@@ -260,9 +266,15 @@ def train_epoch(adapter: AKTAdapter, windows_factory: Callable[[], Iterator[Trai
         if budget.get('max_targets') is not None and valid_targets + batch_targets > budget['max_targets']:
             stop_reason = 'target_budget'
             return False
-        batch = collate_windows([entry.window for entry in pending],
-                                n_items=len(adapter.encoding.vocabulary.values),
-                                device=adapter.config.device, targets=[entry.targets for entry in pending])
+        if batch_factory is None:
+            batch = collate_windows([entry.window for entry in pending],
+                                    n_items=len(adapter.encoding.vocabulary.values),
+                                    device=adapter.config.device, targets=[entry.targets for entry in pending])
+        else:
+            # Preserve learner/window/global identities until the owned adapter seals the batch.
+            batch = batch_factory(tuple(pending))
+            if type(batch) is not AKTBatch or batch.q_data.shape[0] != len(pending):
+                raise ValueError('custom factory must return an AKTBatch for every pending window')
         batches += 1
         collated_windows += len(pending)
         batch_shape = f'{batch.q_data.shape[0]}x{batch.q_data.shape[1]}'

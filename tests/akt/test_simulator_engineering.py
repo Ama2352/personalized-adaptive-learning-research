@@ -218,7 +218,8 @@ def test_behavior_dependency_inventory_and_drift_before_deserialize(completed,mo
     identity=json.loads((cfg.output_dir/"invocation.json").read_text())
     inventory=engineering._source_inventory()
     native={p.relative_to(PROJECT_ROOT).as_posix() for p in (PROJECT_ROOT/"src/knowledge_tracing/akt").glob("*.py")}
-    roots={"src/knowledge_tracing/"+name for name in ("simulator_data.py","simulator_bridge.py","shared_kt.py")}
+    roots={"src/knowledge_tracing/"+name for name in ("simulator_data.py","simulator_bridge.py","shared_kt.py",
+                                                    "graph_context.py","graph_augmentation.py")}
     assert set(inventory)==native|roots
     assert not any(path.startswith("tests/") for path in inventory)
     drift={**inventory,"src/knowledge_tracing/akt/resources.py":"0"*64}

@@ -1,0 +1,437 @@
+"""Adapter toy graph-aware cho lifecycle hiện có; không trainer/protocol thứ hai.
+
+Recipe/source/ticket là consistency contract hợp tác, không chứng thực hostile
+caller. Không fitted OnlineSession, estimator confidence hoặc recovery protocol.
+"""
+from __future__ import annotations
+
+from collections.abc import Callable, Sequence
+from dataclasses import asdict, dataclass
+import hashlib
+import json
+import math
+import time
+
+import numpy as np
+import torch
+from torch import nn
+
+from knowledge_tracing.graph_context import EdgeConfidence
+from knowledge_tracing.shared_kt import PrerequisiteGraph
+from knowledge_tracing.simulator_bridge import identity_hash
+from .config import AKTConfig
+from .graph_prototype import (
+    GraphAKTBatch, GraphAKTPrototype, GraphPrototypeSpec, _cpu, _scope,
+    _source_inventory, _binding, _checked_confidence, prepare_graph_batch,
+)
+from .simulator_data import SimulatorEncoding, SimulatorShard, SimulatorUnseenQuery, iter_simulator_windows
+from .tensors import AKTBatch, collate_windows
+from .types import TrainingWindow, WindowInputs
+
+GRAPH_POLICY = "handmade-graph-engineering-only"
+
+
+def _finite(value):
+    if type(value) not in (int, float) or not math.isfinite(value) or abs(value) > np.finfo(np.float32).max:
+        raise ValueError("explicit finite FP32-representable recipe number required")
+    return float(value)
+
+
+@dataclass(frozen=True)
+class LinearModuleRecipe:
+    in_features: int
+    out_features: int
+    bias: bool
+    initial_weight: tuple[tuple[float, ...], ...]
+    initial_bias: tuple[float, ...] | None
+
+    def __post_init__(self):
+        if (type(self.in_features) is not int or type(self.out_features) is not int
+                or not 1 <= self.in_features <= 4 or not 1 <= self.out_features <= 32 or type(self.bias) is not bool):
+            raise ValueError("bounded explicit Linear dimensions/bias required")
+        weight = tuple(tuple(_finite(x) for x in row) for row in self.initial_weight)
+        if len(weight) != self.out_features or any(len(row) != self.in_features for row in weight):
+            raise ValueError("Linear initial weight geometry mismatch")
+        bias = None if self.initial_bias is None else tuple(_finite(x) for x in self.initial_bias)
+        if (self.bias and (bias is None or len(bias) != self.out_features)) or (not self.bias and bias is not None):
+            raise ValueError("Linear bias schema mismatch")
+        object.__setattr__(self, "initial_weight", weight)
+        object.__setattr__(self, "initial_bias", bias)
+
+
+@dataclass(frozen=True)
+class GraphModuleRecipe:
+    message: LinearModuleRecipe | None
+    readout_initial: tuple[float, ...] | None
+    gate: LinearModuleRecipe | None
+
+    def __post_init__(self):
+        if any(x is not None and type(x) is not LinearModuleRecipe for x in (self.message, self.gate)):
+            raise ValueError("only explicit reviewed Linear module recipes; no callable/pickle")
+        readout = None if self.readout_initial is None else tuple(_finite(x) for x in self.readout_initial)
+        if self.message is None:
+            if readout is not None or self.gate is not None:
+                raise ValueError("no message means no branch/readout/gate")
+        elif self.message.in_features != 1 or readout is None or len(readout) != self.message.out_features:
+            raise ValueError("message1->D and explicit readout[D] required")
+        if self.gate is not None and (self.gate.in_features, self.gate.out_features) != (4, 1):
+            raise ValueError("engineering gate must be Linear4->1")
+        object.__setattr__(self, "readout_initial", readout)
+
+
+@dataclass(frozen=True)
+class GraphEngineeringSetup:
+    graph: PrerequisiteGraph
+    spec: GraphPrototypeSpec
+    confidence: EdgeConfidence | None
+    module_recipe: GraphModuleRecipe
+
+    def __post_init__(self):
+        if (type(self.graph) is not PrerequisiteGraph or type(self.spec) is not GraphPrototypeSpec
+                or type(self.module_recipe) is not GraphModuleRecipe):
+            raise ValueError("exact graph/spec/module recipe required")
+        if (self.graph != PrerequisiteGraph.from_edges(self.graph.nodes, self.graph.edges)
+                or len(self.graph.nodes) > 4 or len(self.graph.edges) > 16):
+            raise ValueError("canonical tiny directed graph required")
+        c = self.confidence
+        if c is not None and (type(c) is not EdgeConfidence or c.kind == "oracle_label"
+                             or {(p, q) for p, q, _ in c.values} != set(self.graph.edges)):
+            raise ValueError("nonoracle confidence must cover exact graph")
+        variant = self.spec.variant
+        if variant in {"A2", "A3"} and c is None:
+            raise ValueError("A2/A3 require explicit confidence/provenance")
+        if variant in {"A0", "A1"} and c is not None and c.kind != "fixed_uniform":
+            raise ValueError("A0/A1 require fixed-uniform confidence")
+        r = self.module_recipe
+        if (variant == "A0") != (r.message is None) or (variant == "A3") != (r.gate is not None):
+            raise ValueError("variant/module recipe mismatch")
+
+
+def _validate_adapter_scope(config, train, selection, encoding, setup):
+    if type(setup) is not GraphEngineeringSetup:
+        raise ValueError("exact reviewed graph engineering setup required")
+    _scope(config, train, encoding, setup.graph)
+    _scope(config, selection, encoding, setup.graph)
+    if (config.execution_enabled is not True or train.role != "train" or selection.role != "selection"
+            or train.plan != selection.plan or train.bank != selection.bank
+            or len(train.trajectories) > 2 or len(selection.trajectories) > 1 or config.batch_size > 2
+            or set(t.learner_id for t in train.trajectories) & set(t.learner_id for t in selection.trajectories)):
+        raise PermissionError("enabled tiny learner-disjoint graph train/selection engineering only")
+    if any(t.collection_policy_id != GRAPH_POLICY for shard in (train, selection) for t in shard.trajectories):
+        raise ValueError("declared handmade graph engineering observables required")
+    for name, cap in (("max_steps", 4), ("max_seconds", 60), ("max_wall_seconds", 60),
+                      ("max_train_users", 2), ("max_val_users", 1), ("max_targets_per_side", 24),
+                      ("max_total_targets", 36), ("max_rss_bytes", 2*1024**3)):
+        value = getattr(config, name)
+        if type(value) not in (int, float) or not math.isfinite(value) or not 0 < value <= cap:
+            raise ValueError("explicit bounded graph engineering config: " + name)
+    if (any(type(getattr(config, name)) is not int for name in
+            ("max_steps", "max_train_users", "max_val_users", "max_targets_per_side", "max_total_targets", "max_rss_bytes"))
+            or type(config.min_available_ram_bytes) is not int or config.min_available_ram_bytes < 1024**3):
+        raise ValueError("integer step cap and at least1GiB RAM floor required")
+
+
+def graph_checkpoint_identity(config, train, selection, encoding, setup):
+    """JSON-compatible identity BEFORE deserialization/neural construction.
+
+    Chỉ đọc config/observables và bytes của sources được reuse; không tạo
+    module/optimizer hoặc load checkpoint.
+"""
+    _validate_adapter_scope(config, train, selection, encoding, setup)
+    sources = _source_inventory(config)
+    confidence = _checked_confidence(setup.graph, setup.confidence)
+    result = dict(schema_version=1, purpose="simulator_graph_engineering_only_v1", weight_role="engineering_only",
+        setup=asdict(setup), effective_confidence=asdict(confidence), bank=train.bank.identity,
+        plan_sha256=train.plan.identity, train_sha256=train.identity, selection_sha256=selection.identity,
+        encoding_sha256=encoding.identity, model_binding=_binding(config, train.bank, encoding, setup.graph,
+            sources, confidence, setup.spec.gate_feature_recipe), source_identity_sha256=identity_hash(sources),
+        resume_supported=False, fitted_research=False, constructor="explicit-linear-graph-modules-v1")
+    return json.loads(json.dumps(result, allow_nan=False))
+
+
+def _array_identity(value):
+    array = np.asarray(value)
+    if array.dtype.hasobject:
+        raise ValueError("object arrays are not canonical window data")
+    return dict(shape=list(array.shape), dtype=str(array.dtype),
+                sha256=hashlib.sha256(array.tobytes(order="C")).hexdigest())
+
+
+def _window_identity(window):
+    if type(window) is not WindowInputs:
+        raise ValueError("original canonical WindowInputs required")
+    inputs = window.inputs
+    return identity_hash(dict(window_id=window.window_id, learners=inputs.user_ids,
+        inputs={name: None if getattr(inputs, name) is None else _array_identity(getattr(inputs, name))
+                for name in ("item_ids", "timestamps", "prior_responses", "source_rows", "sequence_offsets", "concept_ids")},
+        geometry={name: _array_identity(getattr(window, name)) for name in
+                  ("target_mask", "global_ranks", "history_available", "history_used", "context_reset")}))
+
+
+def _training_identity(entry):
+    if type(entry) is not TrainingWindow:
+        raise ValueError("canonical train-only TrainingWindow required")
+    return identity_hash(dict(window=_window_identity(entry.window), targets=_array_identity(entry.targets)))
+
+
+def _batch_identity(batch):
+    if type(batch) is not AKTBatch:
+        raise ValueError("exact collated AKTBatch required")
+    tensors = {}
+    for name in ("q_data", "qa_data", "loss_targets", "valid_mask", "target_mask"):
+        value = getattr(batch, name)
+        if value.device.type != "cpu":
+            raise ValueError("CPU training batch required")
+        tensors[name] = _array_identity(value.detach().contiguous().numpy())
+    return identity_hash(dict(tensors=tensors, source_rows=_array_identity(batch.source_rows)))
+
+
+@dataclass
+class _Ticket:
+    batch: AKTBatch
+    graph_batch: GraphAKTBatch
+    payload: str
+    version: int
+    consumed: bool = False
+
+    def consume(self, batch, version):
+        if self.consumed or batch is not self.batch or version != self.version or _batch_identity(batch) != self.payload:
+            raise ValueError("foreign, mutated, consumed or stale graph training ticket")
+        self.consumed = True
+        return self.graph_batch
+
+
+def _owned_parameters(optimizer, parameters):
+    actual = [p for group in optimizer.param_groups for p in group["params"]]
+    expected = tuple(parameters)
+    if (not expected or len({id(p) for p in actual}) != len(actual)
+            or len(actual) != len(expected) or {id(p) for p in actual} != {id(p) for p in expected}):
+        raise ValueError("Adam must own all and only backbone/message/readout/gate parameters exactly once")
+
+
+def _gate_value(values, index, mass):
+    """Giữ gate computed=0; None chỉ khi context inactive/native bypass."""
+    return None if values is None or mass <= 0 else float(values[index])
+
+
+def _model_identity(model):
+    rows = {}
+    for name, value in model.state_dict().items():
+        if value.device.type != "cpu" or not torch.isfinite(value).all():
+            raise ValueError("finite CPU model state required")
+        rows[name] = _array_identity(value.detach().contiguous().numpy())
+    return identity_hash(rows)
+
+
+def _linear(recipe):
+    module = nn.Linear(recipe.in_features, recipe.out_features, bias=recipe.bias, device="cpu", dtype=torch.float32)
+    with torch.no_grad():
+        module.weight.copy_(torch.tensor(recipe.initial_weight, device="cpu", dtype=torch.float32))
+        if recipe.bias:
+            module.bias.copy_(torch.tensor(recipe.initial_bias, device="cpu", dtype=torch.float32))
+    return module
+
+
+class GraphTrainingAdapter:
+    """Một owned graph model; reuse train_epoch/canonical selection lifecycle.
+
+event_sink của lifecycle phải append+flush+fsync trước khi return. None là
+prediction-only: không step. Local events giữ cả khi sink/post-step thất bại.
+Checkpoint constructor chỉ nhận reviewed dataclasses, không deserialize callable.
+"""
+    @_cpu
+    def __init__(self, *, config: AKTConfig, train: SimulatorShard, selection: SimulatorShard,
+                 encoding: SimulatorEncoding, setup: GraphEngineeringSetup,
+                 event_sink: Callable[[dict], None] | None = None):
+        if event_sink is not None and not callable(event_sink):
+            raise ValueError("exact reviewed setup and optional durable event sink required")
+        self._checkpoint_identity = graph_checkpoint_identity(config, train, selection, encoding, setup)
+        self.config, self.setup, self.simulator_encoding = config, setup, encoding
+        self.encoding = encoding.exercise_encoding()
+        self._train, self._selection = train, selection
+        self._train_sha, self._selection_sha = train.identity, selection.identity
+        train_windows = tuple(iter_simulator_windows(train, encoding, context=config.context,
+                              target_block=config.target_block, training=True))
+        self._train_windows = {w.window.window_id:_training_identity(w) for w in train_windows}
+        selection_windows = [w for w in iter_simulator_windows(selection, encoding, context=config.context,
+                             target_block=config.target_block, training=False) if not isinstance(w, SimulatorUnseenQuery)]
+        self._selection_windows = {w.window_id:_window_identity(w) for w in selection_windows}
+        if (not self._train_windows or len(self._train_windows) != len(train_windows)
+                or len(self._selection_windows) != len(selection_windows)):
+            raise ValueError("nonempty unambiguous canonical windows required")
+        # Caller explicitly supplies every branch initializer. Preserve backbone RNG exposure.
+        with torch.random.fork_rng(devices=[]):
+            r = setup.module_recipe
+            message = None if r.message is None else _linear(r.message)
+            readout = None if r.readout_initial is None else nn.Parameter(torch.tensor(r.readout_initial, device="cpu", dtype=torch.float32))
+            gate = None if r.gate is None else _linear(r.gate)
+        self.native = GraphAKTPrototype(config=config, train=train, encoding=encoding, graph=setup.graph,
+            spec=setup.spec, confidence=setup.confidence, message_module=message, readout=readout, gate_module=gate)
+        self._event_sink = event_sink
+        self.step_events = []
+        self.prediction_metadata = {}
+        self._ticket = None
+        self._version = self._started = self._body_returns = 0
+        self._failed = False
+        self._optimizer = None
+        self._expected_weights = _model_identity(self.native)
+        if self.graph_checkpoint_identity() != self._checkpoint_identity:
+            raise ValueError("graph identity/source changed during construction")
+
+    def _inputs(self):
+        if (self._train.identity != self._train_sha or self._selection.identity != self._selection_sha
+                or _source_inventory(self.config) != self.native.sources):
+            raise ValueError("graph source/train/selection drift")
+
+    def _emit(self, event, **fields):
+        row = dict(event=event, model_version=self._version, optimizer_started=self._started,
+                   optimizer_body_returns=self._body_returns, **fields)
+        self.step_events.append(row)
+        try:
+            if self._event_sink is not None:
+                self._event_sink(dict(row))
+        except Exception as error:
+            row["event_sink_error"] = type(error).__name__
+            raise
+
+    def graph_checkpoint_identity(self):
+        """Serializability/provenance only; không training_domain/fitted certificate."""
+        return graph_checkpoint_identity(self.config, self._train, self._selection, self.simulator_encoding, self.setup)
+
+    @_cpu
+    def collate(self, entries: Sequence[TrainingWindow]) -> AKTBatch:
+        self._inputs()
+        if self._failed or self._ticket is not None or _model_identity(self.native) != self._expected_weights:
+            raise ValueError("failed adapter, outstanding ticket or external/stale weight change")
+        if not 1 <= len(entries) <= self.config.batch_size:
+            raise ValueError("bounded nonempty train windows required")
+        ids = tuple(e.window.window_id for e in entries if type(e) is TrainingWindow)
+        if len(ids) != len(entries) or len(set(ids)) != len(ids):
+            raise ValueError("unique canonical train window IDs required")
+        if any(self._train_windows.get(e.window.window_id) != _training_identity(e) for e in entries):
+            raise ValueError("foreign/altered learner, geometry or train labels")
+        graph = prepare_graph_batch(self._train, self.simulator_encoding, config=self.config, graph=self.setup.graph,
+            confidence=self.setup.confidence, gate_feature_recipe=self.setup.spec.gate_feature_recipe, window_ids=ids)
+        base = collate_windows([e.window for e in entries], n_items=len(self.encoding.vocabulary.values),
+                              device="cpu", targets=[e.targets for e in entries])
+        if any(not torch.equal(getattr(base, name), getattr(graph.base, name)) for name in
+               ("q_data", "qa_data", "valid_mask", "target_mask")) or not np.array_equal(base.source_rows, graph.base.source_rows):
+            raise ValueError("graph/base causal collation mismatch")
+        self._ticket = _Ticket(base, graph, _batch_identity(base), self._version)
+        return base
+
+    @_cpu
+    def step(self, batch: AKTBatch, optimizer: torch.optim.Optimizer) -> dict:
+        self._inputs()
+        if self._failed or self._event_sink is None or type(optimizer) is not torch.optim.Adam:
+            raise PermissionError("fresh owned adapter, durable sink and exact Adam required")
+        if self._started >= self.config.max_steps or _model_identity(self.native) != self._expected_weights:
+            raise ValueError("step budget or external/stale weight change")
+        parameters = tuple(self.native.parameters())
+        _owned_parameters(optimizer, parameters)
+        if self._optimizer is not None and self._optimizer is not optimizer or self._optimizer is None and optimizer.state:
+            raise ValueError("same fresh owned optimizer required; no resume")
+        for group in optimizer.param_groups:
+            if any(group[key] != expected for key, expected in
+                   (("lr", self.config.lr), ("betas", self.config.betas), ("eps", self.config.eps), ("weight_decay", self.config.weight_decay))):
+                raise ValueError("optimizer/config drift")
+            if any(group.get(key, False) is not False for key in
+                   ("maximize", "capturable", "differentiable", "amsgrad", "decoupled_weight_decay")):
+                raise ValueError("unsupported optimizer behavior outside explicit Adam config")
+            if any(group.get(key) not in (None, False) for key in ("foreach", "fused")):
+                raise ValueError("explicit CPU Adam implementation flags required")
+        if self._ticket is None:
+            raise ValueError("collate before each graph step")
+        graph = self._ticket.consume(batch, self._version)
+        self._ticket = None
+        self._optimizer = optimizer
+        self.prediction_metadata.clear()
+        hooks = []
+        started, returned = self._started, self._body_returns
+        try:
+            optimizer.zero_grad(set_to_none=True)
+            began = time.perf_counter()
+            loss, probabilities, count = self.native(graph, batch.loss_targets)
+            forward_seconds = time.perf_counter()-began
+            n = int((batch.loss_targets >= 0).sum())
+            if n < 1 or int(count) != n or not torch.isfinite(loss) or not torch.isfinite(probabilities).all():
+                raise ValueError("invalid graph loss/count/probabilities")
+            began = time.perf_counter(); (loss/n).backward(); backward_seconds = time.perf_counter()-began
+            began = time.perf_counter()
+            norm = torch.nn.utils.clip_grad_norm_(parameters, self.config.max_grad_norm, error_if_nonfinite=True)
+            gradient_clip_seconds = time.perf_counter()-began
+            before = {name:p.detach().clone() for name,p in self.native.named_parameters()}
+            def pre(opt, args, kwargs):
+                self._started += 1
+                self._emit("optimizer_started", ticket_sha256=_batch_identity(batch), valid_targets=n)
+            def post(opt, args, kwargs):
+                self._body_returns += 1
+                self._emit("optimizer_body_returned", valid_targets=n)
+            hooks.append(optimizer.register_step_pre_hook(pre))
+            hooks.append(optimizer.register_step_post_hook(post))
+            began = time.perf_counter(); optimizer.step(); optimizer_seconds = time.perf_counter()-began
+            if self._started != started+1 or self._body_returns != returned+1:
+                raise RuntimeError("optimizer call missing exact start/body-return accounting; work unknown")
+            changed = tuple(name for name,p in self.native.named_parameters() if not torch.equal(before[name],p))
+            self._expected_weights = _model_identity(self.native)
+            self._version += 1
+            self._emit("graph_batch_completed", valid_targets=n, changed_parameters=changed)
+            self._inputs()
+            return dict(stepped=True, valid_targets=n, loss_sum=float(loss.detach()), mean_loss=float(loss.detach())/n,
+                pre_clip_norm=float(norm), post_clip_norm=min(float(norm),self.config.max_grad_norm),
+                parameter_updated=bool(changed), forward_seconds=forward_seconds, backward_seconds=backward_seconds,
+                gradient_clip_seconds=gradient_clip_seconds, optimizer_seconds=optimizer_seconds)
+        except Exception as error:
+            self._failed = True
+            try:
+                self._emit("graph_batch_failed_no_rollback", error_type=type(error).__name__,
+                    optimizer_start_reservations=self._started-started, optimizer_body_returns_this_batch=self._body_returns-returned)
+            except Exception:
+                pass  # Preserve the original exception and the local sink-error event.
+            raise
+        finally:
+            for hook in hooks:
+                hook.remove()
+
+    @_cpu
+    def predict_windows(self, windows: Sequence[WindowInputs]) -> list[np.ndarray]:
+        self._inputs()
+        if self._failed or not 1 <= len(windows) <= self.config.batch_size:
+            raise ValueError("bounded canonical selection windows on healthy adapter required")
+        ids = tuple(w.window_id for w in windows if type(w) is WindowInputs)
+        if len(ids) != len(windows) or len(set(ids)) != len(ids) or any(
+                self._selection_windows.get(w.window_id) != _window_identity(w) for w in windows):
+            raise ValueError("original selection learner/window/inputs required; no OOV rescue")
+        graph = prepare_graph_batch(self._selection, self.simulator_encoding, config=self.config, graph=self.setup.graph,
+            confidence=self.setup.confidence, gate_feature_recipe=self.setup.spec.gate_feature_recipe, window_ids=ids)
+        before = _model_identity(self.native)
+        modes = tuple((module,module.training) for module in self.native.modules())
+        try:
+            self.native.eval()
+            with torch.no_grad():
+                detail = self.native.forward_details(graph)
+            values = detail.native_result[1].reshape(graph.base.q_data.shape)
+            base = detail.base_probabilities.reshape(graph.base.q_data.shape)
+            if not torch.isfinite(values).all() or torch.any(values < 0) or torch.any(values > 1):
+                raise ValueError("invalid graph selection probabilities")
+            width = values.shape[1]
+            for row, contexts in enumerate(graph.contexts):
+                for local, query in enumerate(contexts):
+                    if query is None:
+                        continue
+                    i = row*width+local
+                    applied = bool(detail.applied_mask[i])
+                    mass = detail.confidence_mass[i]
+                    residual = 0. if detail.base_logits is None else float(detail.augmented_logits[i]-detail.base_logits[i])
+                    key = query.learner_id, query.source_row, query.global_rank
+                    self.prediction_metadata[key] = dict(base_probability=float(base[row,local]), graph_applied=applied,
+                        gate_value=_gate_value(detail.gate_values, i, mass),
+                        confidence_mass=mass, normalizer=max(1.,mass), graph_residual=residual,
+                        window_id=query.window_id, effective_start=query.evidence.effective_start)
+            self._inputs()
+            if _model_identity(self.native) != before:
+                raise ValueError("selection mutated full graph weights")
+            return [values[i,:len(w.inputs.item_ids)].cpu().numpy().astype(np.float64,copy=True) for i,w in enumerate(windows)]
+        finally:
+            for module,mode in modes:
+                module.training = mode

@@ -1,0 +1,968 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="15" skipped="0" tests="34" time="2.188" timestamp="2026-11-08T15:11:26.174980+07:00" hostname="Ama"><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_gate_telemetry_keeps_computed_zero_distinct_from_inactive[values0-1.0-0.0]" time="0.002" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_gate_telemetry_keeps_computed_zero_distinct_from_inactive[values1-1.0-0.5]" time="0.001" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_gate_telemetry_keeps_computed_zero_distinct_from_inactive[values2-0.0-None]" time="0.002" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_gate_telemetry_keeps_computed_zero_distinct_from_inactive[None-1.0-None]" time="0.004" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_identity_before_deserialization_without_neural_construction[A0]" time="0.006"><failure message="ValueError: duplicate source row or chronology violation">self = &lt;test_graph_training.TestPureContracts object at 0x0000027EF65FA210&gt;
+variant = 'A0'
+
+    @pytest.mark.parametrize("variant",["A0","A1","A2","A3"])
+    def test_identity_before_deserialization_without_neural_construction(self,variant):
+&gt;       config,train,selection,encoding=observables();s=setup(variant)
+                                        ^^^^^^^^^^^^^
+
+tests\akt\test_graph_training.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_graph_training.py:47: in observables
+    train=shard("train",("abac","baac"));selection=shard("selection",("azac",))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_graph_training.py:46: in shard
+    return SimulatorShard(plan,bank,role,12,tuple(trajectories))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:8: in __init__
+    ???
+src\knowledge_tracing\akt\simulator_data.py:32: in __post_init__
+    validate_role_shard(rows, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-b47c5ba4f62aa30d336f32014c977f26072fc78ba56cb13eaf9be16dde5e6495', plan_sha256='...tamp=3, source_row=12), correct=0), Observation(query=ItemQuery(item_id='c', timestamp=4, source_row=13), correct=1))))
+plan = SimulatorSplitPlan(namespace='graph04-handmade-no-neural-v1', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+bank = SimulatorBank(environment_id='synthetic-akt-graph-engineering-graph04-v1', items=(SimulatorItem(item_id='a', concept_i...imulatorItem(item_id='c', concept_id='C', difficulty=0.0), SimulatorItem(item_id='z', concept_id='C', difficulty=0.0)))
+role = 'train', max_events_per_learner = 12
+
+    def validate_role_shard(trajectories, *, plan: SimulatorSplitPlan, bank: SimulatorBank,
+                            role: str, max_events_per_learner: int):
+        """Chỉ nhận shard role yêu cầu; không cần đọc các shard khác để audit train.
+    
+    source_row phải unique trong shard; collection policy chỉ là metadata audit.
+    Không xác minh RNG thật đã được generator dùng: cần generator manifest riêng.
+    """
+        if role not in ROLES:
+            raise ValueError('explicit simulator role required')
+        expected = {a.learner_id for a in plan.assignments(role)}
+        if type(max_events_per_learner) is not int or max_events_per_learner &lt; 1:
+            raise ValueError('explicit positive event budget required')
+        seen, rows, items, policies = set(), set(), set(), set()
+        domain = identity_hash(bank.identity)
+        events = 0
+        shard = tuple(trajectories)
+        for trajectory in shard:
+            if not isinstance(trajectory, ObservableTrajectory):
+                raise ValueError('invalid trajectory schema')
+            learner = trajectory.learner_id
+            if learner not in expected or learner in seen:
+                raise ValueError('wrong-role or duplicate learner')
+            if trajectory.plan_sha256 != plan.identity or trajectory.domain_sha256 != domain:
+                raise ValueError('trajectory plan/domain mismatch')
+            if len(trajectory.observations) &gt; max_events_per_learner:
+                raise ValueError('trajectory exceeds event budget')
+            seen.add(learner)
+            policies.add(trajectory.collection_policy_id)
+            previous = None
+            for observation in trajectory.observations:
+                query = observation.query
+                key = query.timestamp, query.source_row
+                if query.item_id not in bank.item_ids:
+                    raise ValueError('item outside simulator domain')
+                if query.source_row in rows or (previous is not None and key &lt;= previous):
+&gt;                   raise ValueError('duplicate source row or chronology violation')
+E                   ValueError: duplicate source row or chronology violation
+
+src\knowledge_tracing\simulator_data.py:151: ValueError</failure></testcase><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_identity_before_deserialization_without_neural_construction[A1]" time="0.004"><failure message="ValueError: duplicate source row or chronology violation">self = &lt;test_graph_training.TestPureContracts object at 0x0000027EF6710050&gt;
+variant = 'A1'
+
+    @pytest.mark.parametrize("variant",["A0","A1","A2","A3"])
+    def test_identity_before_deserialization_without_neural_construction(self,variant):
+&gt;       config,train,selection,encoding=observables();s=setup(variant)
+                                        ^^^^^^^^^^^^^
+
+tests\akt\test_graph_training.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_graph_training.py:47: in observables
+    train=shard("train",("abac","baac"));selection=shard("selection",("azac",))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_graph_training.py:46: in shard
+    return SimulatorShard(plan,bank,role,12,tuple(trajectories))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:8: in __init__
+    ???
+src\knowledge_tracing\akt\simulator_data.py:32: in __post_init__
+    validate_role_shard(rows, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-b47c5ba4f62aa30d336f32014c977f26072fc78ba56cb13eaf9be16dde5e6495', plan_sha256='...tamp=3, source_row=12), correct=0), Observation(query=ItemQuery(item_id='c', timestamp=4, source_row=13), correct=1))))
+plan = SimulatorSplitPlan(namespace='graph04-handmade-no-neural-v1', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+bank = SimulatorBank(environment_id='synthetic-akt-graph-engineering-graph04-v1', items=(SimulatorItem(item_id='a', concept_i...imulatorItem(item_id='c', concept_id='C', difficulty=0.0), SimulatorItem(item_id='z', concept_id='C', difficulty=0.0)))
+role = 'train', max_events_per_learner = 12
+
+    def validate_role_shard(trajectories, *, plan: SimulatorSplitPlan, bank: SimulatorBank,
+                            role: str, max_events_per_learner: int):
+        """Chỉ nhận shard role yêu cầu; không cần đọc các shard khác để audit train.
+    
+    source_row phải unique trong shard; collection policy chỉ là metadata audit.
+    Không xác minh RNG thật đã được generator dùng: cần generator manifest riêng.
+    """
+        if role not in ROLES:
+            raise ValueError('explicit simulator role required')
+        expected = {a.learner_id for a in plan.assignments(role)}
+        if type(max_events_per_learner) is not int or max_events_per_learner &lt; 1:
+            raise ValueError('explicit positive event budget required')
+        seen, rows, items, policies = set(), set(), set(), set()
+        domain = identity_hash(bank.identity)
+        events = 0
+        shard = tuple(trajectories)
+        for trajectory in shard:
+            if not isinstance(trajectory, ObservableTrajectory):
+                raise ValueError('invalid trajectory schema')
+            learner = trajectory.learner_id
+            if learner not in expected or learner in seen:
+                raise ValueError('wrong-role or duplicate learner')
+            if trajectory.plan_sha256 != plan.identity or trajectory.domain_sha256 != domain:
+                raise ValueError('trajectory plan/domain mismatch')
+            if len(trajectory.observations) &gt; max_events_per_learner:
+                raise ValueError('trajectory exceeds event budget')
+            seen.add(learner)
+            policies.add(trajectory.collection_policy_id)
+            previous = None
+            for observation in trajectory.observations:
+                query = observation.query
+                key = query.timestamp, query.source_row
+                if query.item_id not in bank.item_ids:
+                    raise ValueError('item outside simulator domain')
+                if query.source_row in rows or (previous is not None and key &lt;= previous):
+&gt;                   raise ValueError('duplicate source row or chronology violation')
+E                   ValueError: duplicate source row or chronology violation
+
+src\knowledge_tracing\simulator_data.py:151: ValueError</failure></testcase><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_identity_before_deserialization_without_neural_construction[A2]" time="0.002"><failure message="ValueError: duplicate source row or chronology violation">self = &lt;test_graph_training.TestPureContracts object at 0x0000027EF6710270&gt;
+variant = 'A2'
+
+    @pytest.mark.parametrize("variant",["A0","A1","A2","A3"])
+    def test_identity_before_deserialization_without_neural_construction(self,variant):
+&gt;       config,train,selection,encoding=observables();s=setup(variant)
+                                        ^^^^^^^^^^^^^
+
+tests\akt\test_graph_training.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_graph_training.py:47: in observables
+    train=shard("train",("abac","baac"));selection=shard("selection",("azac",))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_graph_training.py:46: in shard
+    return SimulatorShard(plan,bank,role,12,tuple(trajectories))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:8: in __init__
+    ???
+src\knowledge_tracing\akt\simulator_data.py:32: in __post_init__
+    validate_role_shard(rows, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-b47c5ba4f62aa30d336f32014c977f26072fc78ba56cb13eaf9be16dde5e6495', plan_sha256='...tamp=3, source_row=12), correct=0), Observation(query=ItemQuery(item_id='c', timestamp=4, source_row=13), correct=1))))
+plan = SimulatorSplitPlan(namespace='graph04-handmade-no-neural-v1', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+bank = SimulatorBank(environment_id='synthetic-akt-graph-engineering-graph04-v1', items=(SimulatorItem(item_id='a', concept_i...imulatorItem(item_id='c', concept_id='C', difficulty=0.0), SimulatorItem(item_id='z', concept_id='C', difficulty=0.0)))
+role = 'train', max_events_per_learner = 12
+
+    def validate_role_shard(trajectories, *, plan: SimulatorSplitPlan, bank: SimulatorBank,
+                            role: str, max_events_per_learner: int):
+        """Chỉ nhận shard role yêu cầu; không cần đọc các shard khác để audit train.
+    
+    source_row phải unique trong shard; collection policy chỉ là metadata audit.
+    Không xác minh RNG thật đã được generator dùng: cần generator manifest riêng.
+    """
+        if role not in ROLES:
+            raise ValueError('explicit simulator role required')
+        expected = {a.learner_id for a in plan.assignments(role)}
+        if type(max_events_per_learner) is not int or max_events_per_learner &lt; 1:
+            raise ValueError('explicit positive event budget required')
+        seen, rows, items, policies = set(), set(), set(), set()
+        domain = identity_hash(bank.identity)
+        events = 0
+        shard = tuple(trajectories)
+        for trajectory in shard:
+            if not isinstance(trajectory, ObservableTrajectory):
+                raise ValueError('invalid trajectory schema')
+            learner = trajectory.learner_id
+            if learner not in expected or learner in seen:
+                raise ValueError('wrong-role or duplicate learner')
+            if trajectory.plan_sha256 != plan.identity or trajectory.domain_sha256 != domain:
+                raise ValueError('trajectory plan/domain mismatch')
+            if len(trajectory.observations) &gt; max_events_per_learner:
+                raise ValueError('trajectory exceeds event budget')
+            seen.add(learner)
+            policies.add(trajectory.collection_policy_id)
+            previous = None
+            for observation in trajectory.observations:
+                query = observation.query
+                key = query.timestamp, query.source_row
+                if query.item_id not in bank.item_ids:
+                    raise ValueError('item outside simulator domain')
+                if query.source_row in rows or (previous is not None and key &lt;= previous):
+&gt;                   raise ValueError('duplicate source row or chronology violation')
+E                   ValueError: duplicate source row or chronology violation
+
+src\knowledge_tracing\simulator_data.py:151: ValueError</failure></testcase><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_identity_before_deserialization_without_neural_construction[A3]" time="0.003"><failure message="ValueError: duplicate source row or chronology violation">self = &lt;test_graph_training.TestPureContracts object at 0x0000027EF6603C50&gt;
+variant = 'A3'
+
+    @pytest.mark.parametrize("variant",["A0","A1","A2","A3"])
+    def test_identity_before_deserialization_without_neural_construction(self,variant):
+&gt;       config,train,selection,encoding=observables();s=setup(variant)
+                                        ^^^^^^^^^^^^^
+
+tests\akt\test_graph_training.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_graph_training.py:47: in observables
+    train=shard("train",("abac","baac"));selection=shard("selection",("azac",))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_graph_training.py:46: in shard
+    return SimulatorShard(plan,bank,role,12,tuple(trajectories))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:8: in __init__
+    ???
+src\knowledge_tracing\akt\simulator_data.py:32: in __post_init__
+    validate_role_shard(rows, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-b47c5ba4f62aa30d336f32014c977f26072fc78ba56cb13eaf9be16dde5e6495', plan_sha256='...tamp=3, source_row=12), correct=0), Observation(query=ItemQuery(item_id='c', timestamp=4, source_row=13), correct=1))))
+plan = SimulatorSplitPlan(namespace='graph04-handmade-no-neural-v1', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+bank = SimulatorBank(environment_id='synthetic-akt-graph-engineering-graph04-v1', items=(SimulatorItem(item_id='a', concept_i...imulatorItem(item_id='c', concept_id='C', difficulty=0.0), SimulatorItem(item_id='z', concept_id='C', difficulty=0.0)))
+role = 'train', max_events_per_learner = 12
+
+    def validate_role_shard(trajectories, *, plan: SimulatorSplitPlan, bank: SimulatorBank,
+                            role: str, max_events_per_learner: int):
+        """Chỉ nhận shard role yêu cầu; không cần đọc các shard khác để audit train.
+    
+    source_row phải unique trong shard; collection policy chỉ là metadata audit.
+    Không xác minh RNG thật đã được generator dùng: cần generator manifest riêng.
+    """
+        if role not in ROLES:
+            raise ValueError('explicit simulator role required')
+        expected = {a.learner_id for a in plan.assignments(role)}
+        if type(max_events_per_learner) is not int or max_events_per_learner &lt; 1:
+            raise ValueError('explicit positive event budget required')
+        seen, rows, items, policies = set(), set(), set(), set()
+        domain = identity_hash(bank.identity)
+        events = 0
+        shard = tuple(trajectories)
+        for trajectory in shard:
+            if not isinstance(trajectory, ObservableTrajectory):
+                raise ValueError('invalid trajectory schema')
+            learner = trajectory.learner_id
+            if learner not in expected or learner in seen:
+                raise ValueError('wrong-role or duplicate learner')
+            if trajectory.plan_sha256 != plan.identity or trajectory.domain_sha256 != domain:
+                raise ValueError('trajectory plan/domain mismatch')
+            if len(trajectory.observations) &gt; max_events_per_learner:
+                raise ValueError('trajectory exceeds event budget')
+            seen.add(learner)
+            policies.add(trajectory.collection_policy_id)
+            previous = None
+            for observation in trajectory.observations:
+                query = observation.query
+                key = query.timestamp, query.source_row
+                if query.item_id not in bank.item_ids:
+                    raise ValueError('item outside simulator domain')
+                if query.source_row in rows or (previous is not None and key &lt;= previous):
+&gt;                   raise ValueError('duplicate source row or chronology violation')
+E                   ValueError: duplicate source row or chronology violation
+
+src\knowledge_tracing\simulator_data.py:151: ValueError</failure></testcase><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_explicit_recipe_rejects_non_fp32_numbers[True]" time="0.005" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_explicit_recipe_rejects_non_fp32_numbers[nan]" time="0.002" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_explicit_recipe_rejects_non_fp32_numbers[inf]" time="0.002" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_explicit_recipe_rejects_non_fp32_numbers[1e+100]" time="0.002" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_recipe_schema_is_not_arbitrary_callable_or_pickle[dimensions]" time="0.002" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_recipe_schema_is_not_arbitrary_callable_or_pickle[bias]" time="0.002" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_recipe_schema_is_not_arbitrary_callable_or_pickle[shape]" time="0.002" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_recipe_schema_is_not_arbitrary_callable_or_pickle[gate]" time="0.002" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_recipe_schema_is_not_arbitrary_callable_or_pickle[callable]" time="0.002" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_new_variants_require_explicit_nonoracle_confidence[A2]" time="0.002" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_new_variants_require_explicit_nonoracle_confidence[A3]" time="0.004" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_variant_recipe_mismatch_before_constructor" time="0.002" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_serialized_identity_changes_for_actual_semantic_inputs[confidence]" time="0.004"><failure message="ValueError: duplicate source row or chronology violation">self = &lt;test_graph_training.TestPureContracts object at 0x0000027EF66DF0B0&gt;
+field = 'confidence'
+
+    @pytest.mark.parametrize("field",["confidence","graph","recipe"])
+    def test_serialized_identity_changes_for_actual_semantic_inputs(self,field):
+&gt;       config,train,selection,encoding=observables();s=setup()
+                                        ^^^^^^^^^^^^^
+
+tests\akt\test_graph_training.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_graph_training.py:47: in observables
+    train=shard("train",("abac","baac"));selection=shard("selection",("azac",))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_graph_training.py:46: in shard
+    return SimulatorShard(plan,bank,role,12,tuple(trajectories))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:8: in __init__
+    ???
+src\knowledge_tracing\akt\simulator_data.py:32: in __post_init__
+    validate_role_shard(rows, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-b47c5ba4f62aa30d336f32014c977f26072fc78ba56cb13eaf9be16dde5e6495', plan_sha256='...tamp=3, source_row=12), correct=0), Observation(query=ItemQuery(item_id='c', timestamp=4, source_row=13), correct=1))))
+plan = SimulatorSplitPlan(namespace='graph04-handmade-no-neural-v1', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+bank = SimulatorBank(environment_id='synthetic-akt-graph-engineering-graph04-v1', items=(SimulatorItem(item_id='a', concept_i...imulatorItem(item_id='c', concept_id='C', difficulty=0.0), SimulatorItem(item_id='z', concept_id='C', difficulty=0.0)))
+role = 'train', max_events_per_learner = 12
+
+    def validate_role_shard(trajectories, *, plan: SimulatorSplitPlan, bank: SimulatorBank,
+                            role: str, max_events_per_learner: int):
+        """Chỉ nhận shard role yêu cầu; không cần đọc các shard khác để audit train.
+    
+    source_row phải unique trong shard; collection policy chỉ là metadata audit.
+    Không xác minh RNG thật đã được generator dùng: cần generator manifest riêng.
+    """
+        if role not in ROLES:
+            raise ValueError('explicit simulator role required')
+        expected = {a.learner_id for a in plan.assignments(role)}
+        if type(max_events_per_learner) is not int or max_events_per_learner &lt; 1:
+            raise ValueError('explicit positive event budget required')
+        seen, rows, items, policies = set(), set(), set(), set()
+        domain = identity_hash(bank.identity)
+        events = 0
+        shard = tuple(trajectories)
+        for trajectory in shard:
+            if not isinstance(trajectory, ObservableTrajectory):
+                raise ValueError('invalid trajectory schema')
+            learner = trajectory.learner_id
+            if learner not in expected or learner in seen:
+                raise ValueError('wrong-role or duplicate learner')
+            if trajectory.plan_sha256 != plan.identity or trajectory.domain_sha256 != domain:
+                raise ValueError('trajectory plan/domain mismatch')
+            if len(trajectory.observations) &gt; max_events_per_learner:
+                raise ValueError('trajectory exceeds event budget')
+            seen.add(learner)
+            policies.add(trajectory.collection_policy_id)
+            previous = None
+            for observation in trajectory.observations:
+                query = observation.query
+                key = query.timestamp, query.source_row
+                if query.item_id not in bank.item_ids:
+                    raise ValueError('item outside simulator domain')
+                if query.source_row in rows or (previous is not None and key &lt;= previous):
+&gt;                   raise ValueError('duplicate source row or chronology violation')
+E                   ValueError: duplicate source row or chronology violation
+
+src\knowledge_tracing\simulator_data.py:151: ValueError</failure></testcase><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_serialized_identity_changes_for_actual_semantic_inputs[graph]" time="0.004"><failure message="ValueError: duplicate source row or chronology violation">self = &lt;test_graph_training.TestPureContracts object at 0x0000027EF67195D0&gt;
+field = 'graph'
+
+    @pytest.mark.parametrize("field",["confidence","graph","recipe"])
+    def test_serialized_identity_changes_for_actual_semantic_inputs(self,field):
+&gt;       config,train,selection,encoding=observables();s=setup()
+                                        ^^^^^^^^^^^^^
+
+tests\akt\test_graph_training.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_graph_training.py:47: in observables
+    train=shard("train",("abac","baac"));selection=shard("selection",("azac",))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_graph_training.py:46: in shard
+    return SimulatorShard(plan,bank,role,12,tuple(trajectories))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:8: in __init__
+    ???
+src\knowledge_tracing\akt\simulator_data.py:32: in __post_init__
+    validate_role_shard(rows, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-b47c5ba4f62aa30d336f32014c977f26072fc78ba56cb13eaf9be16dde5e6495', plan_sha256='...tamp=3, source_row=12), correct=0), Observation(query=ItemQuery(item_id='c', timestamp=4, source_row=13), correct=1))))
+plan = SimulatorSplitPlan(namespace='graph04-handmade-no-neural-v1', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+bank = SimulatorBank(environment_id='synthetic-akt-graph-engineering-graph04-v1', items=(SimulatorItem(item_id='a', concept_i...imulatorItem(item_id='c', concept_id='C', difficulty=0.0), SimulatorItem(item_id='z', concept_id='C', difficulty=0.0)))
+role = 'train', max_events_per_learner = 12
+
+    def validate_role_shard(trajectories, *, plan: SimulatorSplitPlan, bank: SimulatorBank,
+                            role: str, max_events_per_learner: int):
+        """Chỉ nhận shard role yêu cầu; không cần đọc các shard khác để audit train.
+    
+    source_row phải unique trong shard; collection policy chỉ là metadata audit.
+    Không xác minh RNG thật đã được generator dùng: cần generator manifest riêng.
+    """
+        if role not in ROLES:
+            raise ValueError('explicit simulator role required')
+        expected = {a.learner_id for a in plan.assignments(role)}
+        if type(max_events_per_learner) is not int or max_events_per_learner &lt; 1:
+            raise ValueError('explicit positive event budget required')
+        seen, rows, items, policies = set(), set(), set(), set()
+        domain = identity_hash(bank.identity)
+        events = 0
+        shard = tuple(trajectories)
+        for trajectory in shard:
+            if not isinstance(trajectory, ObservableTrajectory):
+                raise ValueError('invalid trajectory schema')
+            learner = trajectory.learner_id
+            if learner not in expected or learner in seen:
+                raise ValueError('wrong-role or duplicate learner')
+            if trajectory.plan_sha256 != plan.identity or trajectory.domain_sha256 != domain:
+                raise ValueError('trajectory plan/domain mismatch')
+            if len(trajectory.observations) &gt; max_events_per_learner:
+                raise ValueError('trajectory exceeds event budget')
+            seen.add(learner)
+            policies.add(trajectory.collection_policy_id)
+            previous = None
+            for observation in trajectory.observations:
+                query = observation.query
+                key = query.timestamp, query.source_row
+                if query.item_id not in bank.item_ids:
+                    raise ValueError('item outside simulator domain')
+                if query.source_row in rows or (previous is not None and key &lt;= previous):
+&gt;                   raise ValueError('duplicate source row or chronology violation')
+E                   ValueError: duplicate source row or chronology violation
+
+src\knowledge_tracing\simulator_data.py:151: ValueError</failure></testcase><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_serialized_identity_changes_for_actual_semantic_inputs[recipe]" time="0.003"><failure message="ValueError: duplicate source row or chronology violation">self = &lt;test_graph_training.TestPureContracts object at 0x0000027EF67196D0&gt;
+field = 'recipe'
+
+    @pytest.mark.parametrize("field",["confidence","graph","recipe"])
+    def test_serialized_identity_changes_for_actual_semantic_inputs(self,field):
+&gt;       config,train,selection,encoding=observables();s=setup()
+                                        ^^^^^^^^^^^^^
+
+tests\akt\test_graph_training.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_graph_training.py:47: in observables
+    train=shard("train",("abac","baac"));selection=shard("selection",("azac",))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_graph_training.py:46: in shard
+    return SimulatorShard(plan,bank,role,12,tuple(trajectories))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:8: in __init__
+    ???
+src\knowledge_tracing\akt\simulator_data.py:32: in __post_init__
+    validate_role_shard(rows, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-b47c5ba4f62aa30d336f32014c977f26072fc78ba56cb13eaf9be16dde5e6495', plan_sha256='...tamp=3, source_row=12), correct=0), Observation(query=ItemQuery(item_id='c', timestamp=4, source_row=13), correct=1))))
+plan = SimulatorSplitPlan(namespace='graph04-handmade-no-neural-v1', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+bank = SimulatorBank(environment_id='synthetic-akt-graph-engineering-graph04-v1', items=(SimulatorItem(item_id='a', concept_i...imulatorItem(item_id='c', concept_id='C', difficulty=0.0), SimulatorItem(item_id='z', concept_id='C', difficulty=0.0)))
+role = 'train', max_events_per_learner = 12
+
+    def validate_role_shard(trajectories, *, plan: SimulatorSplitPlan, bank: SimulatorBank,
+                            role: str, max_events_per_learner: int):
+        """Chỉ nhận shard role yêu cầu; không cần đọc các shard khác để audit train.
+    
+    source_row phải unique trong shard; collection policy chỉ là metadata audit.
+    Không xác minh RNG thật đã được generator dùng: cần generator manifest riêng.
+    """
+        if role not in ROLES:
+            raise ValueError('explicit simulator role required')
+        expected = {a.learner_id for a in plan.assignments(role)}
+        if type(max_events_per_learner) is not int or max_events_per_learner &lt; 1:
+            raise ValueError('explicit positive event budget required')
+        seen, rows, items, policies = set(), set(), set(), set()
+        domain = identity_hash(bank.identity)
+        events = 0
+        shard = tuple(trajectories)
+        for trajectory in shard:
+            if not isinstance(trajectory, ObservableTrajectory):
+                raise ValueError('invalid trajectory schema')
+            learner = trajectory.learner_id
+            if learner not in expected or learner in seen:
+                raise ValueError('wrong-role or duplicate learner')
+            if trajectory.plan_sha256 != plan.identity or trajectory.domain_sha256 != domain:
+                raise ValueError('trajectory plan/domain mismatch')
+            if len(trajectory.observations) &gt; max_events_per_learner:
+                raise ValueError('trajectory exceeds event budget')
+            seen.add(learner)
+            policies.add(trajectory.collection_policy_id)
+            previous = None
+            for observation in trajectory.observations:
+                query = observation.query
+                key = query.timestamp, query.source_row
+                if query.item_id not in bank.item_ids:
+                    raise ValueError('item outside simulator domain')
+                if query.source_row in rows or (previous is not None and key &lt;= previous):
+&gt;                   raise ValueError('duplicate source row or chronology violation')
+E                   ValueError: duplicate source row or chronology violation
+
+src\knowledge_tracing\simulator_data.py:151: ValueError</failure></testcase><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_scope_guards_before_any_neural_allocation[disabled]" time="0.003"><failure message="ValueError: duplicate source row or chronology violation">self = &lt;test_graph_training.TestPureContracts object at 0x0000027EF671CAD0&gt;
+case = 'disabled'
+
+    @pytest.mark.parametrize("case",["disabled","step_cap","role","train_changed"])
+    def test_scope_guards_before_any_neural_allocation(self,case):
+&gt;       config,train,selection,encoding=observables()
+                                        ^^^^^^^^^^^^^
+
+tests\akt\test_graph_training.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_graph_training.py:47: in observables
+    train=shard("train",("abac","baac"));selection=shard("selection",("azac",))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_graph_training.py:46: in shard
+    return SimulatorShard(plan,bank,role,12,tuple(trajectories))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:8: in __init__
+    ???
+src\knowledge_tracing\akt\simulator_data.py:32: in __post_init__
+    validate_role_shard(rows, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-b47c5ba4f62aa30d336f32014c977f26072fc78ba56cb13eaf9be16dde5e6495', plan_sha256='...tamp=3, source_row=12), correct=0), Observation(query=ItemQuery(item_id='c', timestamp=4, source_row=13), correct=1))))
+plan = SimulatorSplitPlan(namespace='graph04-handmade-no-neural-v1', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+bank = SimulatorBank(environment_id='synthetic-akt-graph-engineering-graph04-v1', items=(SimulatorItem(item_id='a', concept_i...imulatorItem(item_id='c', concept_id='C', difficulty=0.0), SimulatorItem(item_id='z', concept_id='C', difficulty=0.0)))
+role = 'train', max_events_per_learner = 12
+
+    def validate_role_shard(trajectories, *, plan: SimulatorSplitPlan, bank: SimulatorBank,
+                            role: str, max_events_per_learner: int):
+        """Chỉ nhận shard role yêu cầu; không cần đọc các shard khác để audit train.
+    
+    source_row phải unique trong shard; collection policy chỉ là metadata audit.
+    Không xác minh RNG thật đã được generator dùng: cần generator manifest riêng.
+    """
+        if role not in ROLES:
+            raise ValueError('explicit simulator role required')
+        expected = {a.learner_id for a in plan.assignments(role)}
+        if type(max_events_per_learner) is not int or max_events_per_learner &lt; 1:
+            raise ValueError('explicit positive event budget required')
+        seen, rows, items, policies = set(), set(), set(), set()
+        domain = identity_hash(bank.identity)
+        events = 0
+        shard = tuple(trajectories)
+        for trajectory in shard:
+            if not isinstance(trajectory, ObservableTrajectory):
+                raise ValueError('invalid trajectory schema')
+            learner = trajectory.learner_id
+            if learner not in expected or learner in seen:
+                raise ValueError('wrong-role or duplicate learner')
+            if trajectory.plan_sha256 != plan.identity or trajectory.domain_sha256 != domain:
+                raise ValueError('trajectory plan/domain mismatch')
+            if len(trajectory.observations) &gt; max_events_per_learner:
+                raise ValueError('trajectory exceeds event budget')
+            seen.add(learner)
+            policies.add(trajectory.collection_policy_id)
+            previous = None
+            for observation in trajectory.observations:
+                query = observation.query
+                key = query.timestamp, query.source_row
+                if query.item_id not in bank.item_ids:
+                    raise ValueError('item outside simulator domain')
+                if query.source_row in rows or (previous is not None and key &lt;= previous):
+&gt;                   raise ValueError('duplicate source row or chronology violation')
+E                   ValueError: duplicate source row or chronology violation
+
+src\knowledge_tracing\simulator_data.py:151: ValueError</failure></testcase><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_scope_guards_before_any_neural_allocation[step_cap]" time="0.008"><failure message="ValueError: duplicate source row or chronology violation">self = &lt;test_graph_training.TestPureContracts object at 0x0000027EF671CC90&gt;
+case = 'step_cap'
+
+    @pytest.mark.parametrize("case",["disabled","step_cap","role","train_changed"])
+    def test_scope_guards_before_any_neural_allocation(self,case):
+&gt;       config,train,selection,encoding=observables()
+                                        ^^^^^^^^^^^^^
+
+tests\akt\test_graph_training.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_graph_training.py:47: in observables
+    train=shard("train",("abac","baac"));selection=shard("selection",("azac",))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_graph_training.py:46: in shard
+    return SimulatorShard(plan,bank,role,12,tuple(trajectories))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:8: in __init__
+    ???
+src\knowledge_tracing\akt\simulator_data.py:32: in __post_init__
+    validate_role_shard(rows, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-b47c5ba4f62aa30d336f32014c977f26072fc78ba56cb13eaf9be16dde5e6495', plan_sha256='...tamp=3, source_row=12), correct=0), Observation(query=ItemQuery(item_id='c', timestamp=4, source_row=13), correct=1))))
+plan = SimulatorSplitPlan(namespace='graph04-handmade-no-neural-v1', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+bank = SimulatorBank(environment_id='synthetic-akt-graph-engineering-graph04-v1', items=(SimulatorItem(item_id='a', concept_i...imulatorItem(item_id='c', concept_id='C', difficulty=0.0), SimulatorItem(item_id='z', concept_id='C', difficulty=0.0)))
+role = 'train', max_events_per_learner = 12
+
+    def validate_role_shard(trajectories, *, plan: SimulatorSplitPlan, bank: SimulatorBank,
+                            role: str, max_events_per_learner: int):
+        """Chỉ nhận shard role yêu cầu; không cần đọc các shard khác để audit train.
+    
+    source_row phải unique trong shard; collection policy chỉ là metadata audit.
+    Không xác minh RNG thật đã được generator dùng: cần generator manifest riêng.
+    """
+        if role not in ROLES:
+            raise ValueError('explicit simulator role required')
+        expected = {a.learner_id for a in plan.assignments(role)}
+        if type(max_events_per_learner) is not int or max_events_per_learner &lt; 1:
+            raise ValueError('explicit positive event budget required')
+        seen, rows, items, policies = set(), set(), set(), set()
+        domain = identity_hash(bank.identity)
+        events = 0
+        shard = tuple(trajectories)
+        for trajectory in shard:
+            if not isinstance(trajectory, ObservableTrajectory):
+                raise ValueError('invalid trajectory schema')
+            learner = trajectory.learner_id
+            if learner not in expected or learner in seen:
+                raise ValueError('wrong-role or duplicate learner')
+            if trajectory.plan_sha256 != plan.identity or trajectory.domain_sha256 != domain:
+                raise ValueError('trajectory plan/domain mismatch')
+            if len(trajectory.observations) &gt; max_events_per_learner:
+                raise ValueError('trajectory exceeds event budget')
+            seen.add(learner)
+            policies.add(trajectory.collection_policy_id)
+            previous = None
+            for observation in trajectory.observations:
+                query = observation.query
+                key = query.timestamp, query.source_row
+                if query.item_id not in bank.item_ids:
+                    raise ValueError('item outside simulator domain')
+                if query.source_row in rows or (previous is not None and key &lt;= previous):
+&gt;                   raise ValueError('duplicate source row or chronology violation')
+E                   ValueError: duplicate source row or chronology violation
+
+src\knowledge_tracing\simulator_data.py:151: ValueError</failure></testcase><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_scope_guards_before_any_neural_allocation[role]" time="0.003"><failure message="ValueError: duplicate source row or chronology violation">self = &lt;test_graph_training.TestPureContracts object at 0x0000027EF66D8A10&gt;
+case = 'role'
+
+    @pytest.mark.parametrize("case",["disabled","step_cap","role","train_changed"])
+    def test_scope_guards_before_any_neural_allocation(self,case):
+&gt;       config,train,selection,encoding=observables()
+                                        ^^^^^^^^^^^^^
+
+tests\akt\test_graph_training.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_graph_training.py:47: in observables
+    train=shard("train",("abac","baac"));selection=shard("selection",("azac",))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_graph_training.py:46: in shard
+    return SimulatorShard(plan,bank,role,12,tuple(trajectories))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:8: in __init__
+    ???
+src\knowledge_tracing\akt\simulator_data.py:32: in __post_init__
+    validate_role_shard(rows, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-b47c5ba4f62aa30d336f32014c977f26072fc78ba56cb13eaf9be16dde5e6495', plan_sha256='...tamp=3, source_row=12), correct=0), Observation(query=ItemQuery(item_id='c', timestamp=4, source_row=13), correct=1))))
+plan = SimulatorSplitPlan(namespace='graph04-handmade-no-neural-v1', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+bank = SimulatorBank(environment_id='synthetic-akt-graph-engineering-graph04-v1', items=(SimulatorItem(item_id='a', concept_i...imulatorItem(item_id='c', concept_id='C', difficulty=0.0), SimulatorItem(item_id='z', concept_id='C', difficulty=0.0)))
+role = 'train', max_events_per_learner = 12
+
+    def validate_role_shard(trajectories, *, plan: SimulatorSplitPlan, bank: SimulatorBank,
+                            role: str, max_events_per_learner: int):
+        """Chỉ nhận shard role yêu cầu; không cần đọc các shard khác để audit train.
+    
+    source_row phải unique trong shard; collection policy chỉ là metadata audit.
+    Không xác minh RNG thật đã được generator dùng: cần generator manifest riêng.
+    """
+        if role not in ROLES:
+            raise ValueError('explicit simulator role required')
+        expected = {a.learner_id for a in plan.assignments(role)}
+        if type(max_events_per_learner) is not int or max_events_per_learner &lt; 1:
+            raise ValueError('explicit positive event budget required')
+        seen, rows, items, policies = set(), set(), set(), set()
+        domain = identity_hash(bank.identity)
+        events = 0
+        shard = tuple(trajectories)
+        for trajectory in shard:
+            if not isinstance(trajectory, ObservableTrajectory):
+                raise ValueError('invalid trajectory schema')
+            learner = trajectory.learner_id
+            if learner not in expected or learner in seen:
+                raise ValueError('wrong-role or duplicate learner')
+            if trajectory.plan_sha256 != plan.identity or trajectory.domain_sha256 != domain:
+                raise ValueError('trajectory plan/domain mismatch')
+            if len(trajectory.observations) &gt; max_events_per_learner:
+                raise ValueError('trajectory exceeds event budget')
+            seen.add(learner)
+            policies.add(trajectory.collection_policy_id)
+            previous = None
+            for observation in trajectory.observations:
+                query = observation.query
+                key = query.timestamp, query.source_row
+                if query.item_id not in bank.item_ids:
+                    raise ValueError('item outside simulator domain')
+                if query.source_row in rows or (previous is not None and key &lt;= previous):
+&gt;                   raise ValueError('duplicate source row or chronology violation')
+E                   ValueError: duplicate source row or chronology violation
+
+src\knowledge_tracing\simulator_data.py:151: ValueError</failure></testcase><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_scope_guards_before_any_neural_allocation[train_changed]" time="0.004"><failure message="ValueError: duplicate source row or chronology violation">self = &lt;test_graph_training.TestPureContracts object at 0x0000027EF66D8A70&gt;
+case = 'train_changed'
+
+    @pytest.mark.parametrize("case",["disabled","step_cap","role","train_changed"])
+    def test_scope_guards_before_any_neural_allocation(self,case):
+&gt;       config,train,selection,encoding=observables()
+                                        ^^^^^^^^^^^^^
+
+tests\akt\test_graph_training.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_graph_training.py:47: in observables
+    train=shard("train",("abac","baac"));selection=shard("selection",("azac",))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_graph_training.py:46: in shard
+    return SimulatorShard(plan,bank,role,12,tuple(trajectories))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:8: in __init__
+    ???
+src\knowledge_tracing\akt\simulator_data.py:32: in __post_init__
+    validate_role_shard(rows, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-b47c5ba4f62aa30d336f32014c977f26072fc78ba56cb13eaf9be16dde5e6495', plan_sha256='...tamp=3, source_row=12), correct=0), Observation(query=ItemQuery(item_id='c', timestamp=4, source_row=13), correct=1))))
+plan = SimulatorSplitPlan(namespace='graph04-handmade-no-neural-v1', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+bank = SimulatorBank(environment_id='synthetic-akt-graph-engineering-graph04-v1', items=(SimulatorItem(item_id='a', concept_i...imulatorItem(item_id='c', concept_id='C', difficulty=0.0), SimulatorItem(item_id='z', concept_id='C', difficulty=0.0)))
+role = 'train', max_events_per_learner = 12
+
+    def validate_role_shard(trajectories, *, plan: SimulatorSplitPlan, bank: SimulatorBank,
+                            role: str, max_events_per_learner: int):
+        """Chỉ nhận shard role yêu cầu; không cần đọc các shard khác để audit train.
+    
+    source_row phải unique trong shard; collection policy chỉ là metadata audit.
+    Không xác minh RNG thật đã được generator dùng: cần generator manifest riêng.
+    """
+        if role not in ROLES:
+            raise ValueError('explicit simulator role required')
+        expected = {a.learner_id for a in plan.assignments(role)}
+        if type(max_events_per_learner) is not int or max_events_per_learner &lt; 1:
+            raise ValueError('explicit positive event budget required')
+        seen, rows, items, policies = set(), set(), set(), set()
+        domain = identity_hash(bank.identity)
+        events = 0
+        shard = tuple(trajectories)
+        for trajectory in shard:
+            if not isinstance(trajectory, ObservableTrajectory):
+                raise ValueError('invalid trajectory schema')
+            learner = trajectory.learner_id
+            if learner not in expected or learner in seen:
+                raise ValueError('wrong-role or duplicate learner')
+            if trajectory.plan_sha256 != plan.identity or trajectory.domain_sha256 != domain:
+                raise ValueError('trajectory plan/domain mismatch')
+            if len(trajectory.observations) &gt; max_events_per_learner:
+                raise ValueError('trajectory exceeds event budget')
+            seen.add(learner)
+            policies.add(trajectory.collection_policy_id)
+            previous = None
+            for observation in trajectory.observations:
+                query = observation.query
+                key = query.timestamp, query.source_row
+                if query.item_id not in bank.item_ids:
+                    raise ValueError('item outside simulator domain')
+                if query.source_row in rows or (previous is not None and key &lt;= previous):
+&gt;                   raise ValueError('duplicate source row or chronology violation')
+E                   ValueError: duplicate source row or chronology violation
+
+src\knowledge_tracing\simulator_data.py:151: ValueError</failure></testcase><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_window_identity_includes_learner_and_all_original_geometry" time="0.003"><failure message="ValueError: duplicate source row or chronology violation">self = &lt;test_graph_training.TestPureContracts object at 0x0000027EF67033E0&gt;
+
+    def test_window_identity_includes_learner_and_all_original_geometry(self):
+&gt;       config,train,selection,encoding=observables()
+                                        ^^^^^^^^^^^^^
+
+tests\akt\test_graph_training.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_graph_training.py:47: in observables
+    train=shard("train",("abac","baac"));selection=shard("selection",("azac",))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_graph_training.py:46: in shard
+    return SimulatorShard(plan,bank,role,12,tuple(trajectories))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:8: in __init__
+    ???
+src\knowledge_tracing\akt\simulator_data.py:32: in __post_init__
+    validate_role_shard(rows, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-b47c5ba4f62aa30d336f32014c977f26072fc78ba56cb13eaf9be16dde5e6495', plan_sha256='...tamp=3, source_row=12), correct=0), Observation(query=ItemQuery(item_id='c', timestamp=4, source_row=13), correct=1))))
+plan = SimulatorSplitPlan(namespace='graph04-handmade-no-neural-v1', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+bank = SimulatorBank(environment_id='synthetic-akt-graph-engineering-graph04-v1', items=(SimulatorItem(item_id='a', concept_i...imulatorItem(item_id='c', concept_id='C', difficulty=0.0), SimulatorItem(item_id='z', concept_id='C', difficulty=0.0)))
+role = 'train', max_events_per_learner = 12
+
+    def validate_role_shard(trajectories, *, plan: SimulatorSplitPlan, bank: SimulatorBank,
+                            role: str, max_events_per_learner: int):
+        """Chỉ nhận shard role yêu cầu; không cần đọc các shard khác để audit train.
+    
+    source_row phải unique trong shard; collection policy chỉ là metadata audit.
+    Không xác minh RNG thật đã được generator dùng: cần generator manifest riêng.
+    """
+        if role not in ROLES:
+            raise ValueError('explicit simulator role required')
+        expected = {a.learner_id for a in plan.assignments(role)}
+        if type(max_events_per_learner) is not int or max_events_per_learner &lt; 1:
+            raise ValueError('explicit positive event budget required')
+        seen, rows, items, policies = set(), set(), set(), set()
+        domain = identity_hash(bank.identity)
+        events = 0
+        shard = tuple(trajectories)
+        for trajectory in shard:
+            if not isinstance(trajectory, ObservableTrajectory):
+                raise ValueError('invalid trajectory schema')
+            learner = trajectory.learner_id
+            if learner not in expected or learner in seen:
+                raise ValueError('wrong-role or duplicate learner')
+            if trajectory.plan_sha256 != plan.identity or trajectory.domain_sha256 != domain:
+                raise ValueError('trajectory plan/domain mismatch')
+            if len(trajectory.observations) &gt; max_events_per_learner:
+                raise ValueError('trajectory exceeds event budget')
+            seen.add(learner)
+            policies.add(trajectory.collection_policy_id)
+            previous = None
+            for observation in trajectory.observations:
+                query = observation.query
+                key = query.timestamp, query.source_row
+                if query.item_id not in bank.item_ids:
+                    raise ValueError('item outside simulator domain')
+                if query.source_row in rows or (previous is not None and key &lt;= previous):
+&gt;                   raise ValueError('duplicate source row or chronology violation')
+E                   ValueError: duplicate source row or chronology violation
+
+src\knowledge_tracing\simulator_data.py:151: ValueError</failure></testcase><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_target_label_drift_not_silently_accepted_as_training_inputs" time="0.003"><failure message="ValueError: duplicate source row or chronology violation">self = &lt;test_graph_training.TestPureContracts object at 0x0000027EF67034D0&gt;
+
+    def test_target_label_drift_not_silently_accepted_as_training_inputs(self):
+&gt;       config,train,selection,encoding=observables()
+                                        ^^^^^^^^^^^^^
+
+tests\akt\test_graph_training.py:141: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_graph_training.py:47: in observables
+    train=shard("train",("abac","baac"));selection=shard("selection",("azac",))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_graph_training.py:46: in shard
+    return SimulatorShard(plan,bank,role,12,tuple(trajectories))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:8: in __init__
+    ???
+src\knowledge_tracing\akt\simulator_data.py:32: in __post_init__
+    validate_role_shard(rows, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-b47c5ba4f62aa30d336f32014c977f26072fc78ba56cb13eaf9be16dde5e6495', plan_sha256='...tamp=3, source_row=12), correct=0), Observation(query=ItemQuery(item_id='c', timestamp=4, source_row=13), correct=1))))
+plan = SimulatorSplitPlan(namespace='graph04-handmade-no-neural-v1', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+bank = SimulatorBank(environment_id='synthetic-akt-graph-engineering-graph04-v1', items=(SimulatorItem(item_id='a', concept_i...imulatorItem(item_id='c', concept_id='C', difficulty=0.0), SimulatorItem(item_id='z', concept_id='C', difficulty=0.0)))
+role = 'train', max_events_per_learner = 12
+
+    def validate_role_shard(trajectories, *, plan: SimulatorSplitPlan, bank: SimulatorBank,
+                            role: str, max_events_per_learner: int):
+        """Chỉ nhận shard role yêu cầu; không cần đọc các shard khác để audit train.
+    
+    source_row phải unique trong shard; collection policy chỉ là metadata audit.
+    Không xác minh RNG thật đã được generator dùng: cần generator manifest riêng.
+    """
+        if role not in ROLES:
+            raise ValueError('explicit simulator role required')
+        expected = {a.learner_id for a in plan.assignments(role)}
+        if type(max_events_per_learner) is not int or max_events_per_learner &lt; 1:
+            raise ValueError('explicit positive event budget required')
+        seen, rows, items, policies = set(), set(), set(), set()
+        domain = identity_hash(bank.identity)
+        events = 0
+        shard = tuple(trajectories)
+        for trajectory in shard:
+            if not isinstance(trajectory, ObservableTrajectory):
+                raise ValueError('invalid trajectory schema')
+            learner = trajectory.learner_id
+            if learner not in expected or learner in seen:
+                raise ValueError('wrong-role or duplicate learner')
+            if trajectory.plan_sha256 != plan.identity or trajectory.domain_sha256 != domain:
+                raise ValueError('trajectory plan/domain mismatch')
+            if len(trajectory.observations) &gt; max_events_per_learner:
+                raise ValueError('trajectory exceeds event budget')
+            seen.add(learner)
+            policies.add(trajectory.collection_policy_id)
+            previous = None
+            for observation in trajectory.observations:
+                query = observation.query
+                key = query.timestamp, query.source_row
+                if query.item_id not in bank.item_ids:
+                    raise ValueError('item outside simulator domain')
+                if query.source_row in rows or (previous is not None and key &lt;= previous):
+&gt;                   raise ValueError('duplicate source row or chronology violation')
+E                   ValueError: duplicate source row or chronology violation
+
+src\knowledge_tracing\simulator_data.py:151: ValueError</failure></testcase><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_consume_once_exact_object_ticket_and_stale_version" time="0.004"><failure message="ValueError: duplicate source row or chronology violation">self = &lt;test_graph_training.TestPureContracts object at 0x0000027EF6703570&gt;
+
+    def test_consume_once_exact_object_ticket_and_stale_version(self):
+&gt;       config,train,selection,encoding=observables()
+                                        ^^^^^^^^^^^^^
+
+tests\akt\test_graph_training.py:146: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_graph_training.py:47: in observables
+    train=shard("train",("abac","baac"));selection=shard("selection",("azac",))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_graph_training.py:46: in shard
+    return SimulatorShard(plan,bank,role,12,tuple(trajectories))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:8: in __init__
+    ???
+src\knowledge_tracing\akt\simulator_data.py:32: in __post_init__
+    validate_role_shard(rows, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-b47c5ba4f62aa30d336f32014c977f26072fc78ba56cb13eaf9be16dde5e6495', plan_sha256='...tamp=3, source_row=12), correct=0), Observation(query=ItemQuery(item_id='c', timestamp=4, source_row=13), correct=1))))
+plan = SimulatorSplitPlan(namespace='graph04-handmade-no-neural-v1', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+bank = SimulatorBank(environment_id='synthetic-akt-graph-engineering-graph04-v1', items=(SimulatorItem(item_id='a', concept_i...imulatorItem(item_id='c', concept_id='C', difficulty=0.0), SimulatorItem(item_id='z', concept_id='C', difficulty=0.0)))
+role = 'train', max_events_per_learner = 12
+
+    def validate_role_shard(trajectories, *, plan: SimulatorSplitPlan, bank: SimulatorBank,
+                            role: str, max_events_per_learner: int):
+        """Chỉ nhận shard role yêu cầu; không cần đọc các shard khác để audit train.
+    
+    source_row phải unique trong shard; collection policy chỉ là metadata audit.
+    Không xác minh RNG thật đã được generator dùng: cần generator manifest riêng.
+    """
+        if role not in ROLES:
+            raise ValueError('explicit simulator role required')
+        expected = {a.learner_id for a in plan.assignments(role)}
+        if type(max_events_per_learner) is not int or max_events_per_learner &lt; 1:
+            raise ValueError('explicit positive event budget required')
+        seen, rows, items, policies = set(), set(), set(), set()
+        domain = identity_hash(bank.identity)
+        events = 0
+        shard = tuple(trajectories)
+        for trajectory in shard:
+            if not isinstance(trajectory, ObservableTrajectory):
+                raise ValueError('invalid trajectory schema')
+            learner = trajectory.learner_id
+            if learner not in expected or learner in seen:
+                raise ValueError('wrong-role or duplicate learner')
+            if trajectory.plan_sha256 != plan.identity or trajectory.domain_sha256 != domain:
+                raise ValueError('trajectory plan/domain mismatch')
+            if len(trajectory.observations) &gt; max_events_per_learner:
+                raise ValueError('trajectory exceeds event budget')
+            seen.add(learner)
+            policies.add(trajectory.collection_policy_id)
+            previous = None
+            for observation in trajectory.observations:
+                query = observation.query
+                key = query.timestamp, query.source_row
+                if query.item_id not in bank.item_ids:
+                    raise ValueError('item outside simulator domain')
+                if query.source_row in rows or (previous is not None and key &lt;= previous):
+&gt;                   raise ValueError('duplicate source row or chronology violation')
+E                   ValueError: duplicate source row or chronology violation
+
+src\knowledge_tracing\simulator_data.py:151: ValueError</failure></testcase><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_tensor_mutation_invalidates_pending_ticket" time="0.002"><failure message="ValueError: duplicate source row or chronology violation">self = &lt;test_graph_training.TestPureContracts object at 0x0000027EF6703610&gt;
+
+    def test_tensor_mutation_invalidates_pending_ticket(self):
+&gt;       config,train,selection,encoding=observables()
+                                        ^^^^^^^^^^^^^
+
+tests\akt\test_graph_training.py:157: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_graph_training.py:47: in observables
+    train=shard("train",("abac","baac"));selection=shard("selection",("azac",))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_graph_training.py:46: in shard
+    return SimulatorShard(plan,bank,role,12,tuple(trajectories))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:8: in __init__
+    ???
+src\knowledge_tracing\akt\simulator_data.py:32: in __post_init__
+    validate_role_shard(rows, plan=self.plan, bank=self.bank, role=self.role,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+trajectories = (ObservableTrajectory(learner_id='sim-b47c5ba4f62aa30d336f32014c977f26072fc78ba56cb13eaf9be16dde5e6495', plan_sha256='...tamp=3, source_row=12), correct=0), Observation(query=ItemQuery(item_id='c', timestamp=4, source_row=13), correct=1))))
+plan = SimulatorSplitPlan(namespace='graph04-handmade-no-neural-v1', root_seed=42, role_counts=(('train', 2), ('selection', 1), ('calibration', 1), ('final', 1)))
+bank = SimulatorBank(environment_id='synthetic-akt-graph-engineering-graph04-v1', items=(SimulatorItem(item_id='a', concept_i...imulatorItem(item_id='c', concept_id='C', difficulty=0.0), SimulatorItem(item_id='z', concept_id='C', difficulty=0.0)))
+role = 'train', max_events_per_learner = 12
+
+    def validate_role_shard(trajectories, *, plan: SimulatorSplitPlan, bank: SimulatorBank,
+                            role: str, max_events_per_learner: int):
+        """Chỉ nhận shard role yêu cầu; không cần đọc các shard khác để audit train.
+    
+    source_row phải unique trong shard; collection policy chỉ là metadata audit.
+    Không xác minh RNG thật đã được generator dùng: cần generator manifest riêng.
+    """
+        if role not in ROLES:
+            raise ValueError('explicit simulator role required')
+        expected = {a.learner_id for a in plan.assignments(role)}
+        if type(max_events_per_learner) is not int or max_events_per_learner &lt; 1:
+            raise ValueError('explicit positive event budget required')
+        seen, rows, items, policies = set(), set(), set(), set()
+        domain = identity_hash(bank.identity)
+        events = 0
+        shard = tuple(trajectories)
+        for trajectory in shard:
+            if not isinstance(trajectory, ObservableTrajectory):
+                raise ValueError('invalid trajectory schema')
+            learner = trajectory.learner_id
+            if learner not in expected or learner in seen:
+                raise ValueError('wrong-role or duplicate learner')
+            if trajectory.plan_sha256 != plan.identity or trajectory.domain_sha256 != domain:
+                raise ValueError('trajectory plan/domain mismatch')
+            if len(trajectory.observations) &gt; max_events_per_learner:
+                raise ValueError('trajectory exceeds event budget')
+            seen.add(learner)
+            policies.add(trajectory.collection_policy_id)
+            previous = None
+            for observation in trajectory.observations:
+                query = observation.query
+                key = query.timestamp, query.source_row
+                if query.item_id not in bank.item_ids:
+                    raise ValueError('item outside simulator domain')
+                if query.source_row in rows or (previous is not None and key &lt;= previous):
+&gt;                   raise ValueError('duplicate source row or chronology violation')
+E                   ValueError: duplicate source row or chronology violation
+
+src\knowledge_tracing\simulator_data.py:151: ValueError</failure></testcase><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_parameter_ownership_without_optimizer_construction[missing_gate]" time="0.002" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_parameter_ownership_without_optimizer_construction[foreign]" time="0.002" /><testcase classname="tests.akt.test_graph_training.TestPureContracts" name="test_parameter_ownership_without_optimizer_construction[duplicate]" time="0.002" /></testsuite></testsuites>

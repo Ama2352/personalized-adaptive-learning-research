@@ -1,0 +1,3 @@
+# GRAPH04: bằng chứng lifecycle graph-aware handmade CPU toy
+
+34pure adapterPASS+8callbackPASS; actual01RAMfloor failure0updates giữ nguyên. Actual02 raw45PASS1FAIL, trong đó6graph tests PASS: graphcomplete1step8targets, selection4=3known+1OOV, reload0, allbranch/gate changes; graphpartial1step không checkpoint/COMPLETE. Tổng4global steps gồm basehappy/basepartial; oldbase inventoryfixture sửa và gọi lại riêng với storedartifact,0update. Không đổi thành46suitePASS. Actual+readonly46,688882/60s. Binary chỉ SHArefs tại outputgốc. Không researchfit/calibration/OnlineSession/resume/S04S05/GPU hoặc fullGate. Archive completed chỉ có nghĩa copy/SHA integrity; xem report/receipts cho giới hạn. Không sửa sau closure.

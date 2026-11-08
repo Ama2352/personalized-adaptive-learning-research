@@ -1,0 +1,173 @@
+"""Pure contracts GRAPH04: spies cấm neural constructor/optimizer; không fit."""
+from dataclasses import replace
+import json
+from types import SimpleNamespace
+
+import numpy as np
+import pytest
+import torch
+
+from knowledge_tracing.akt import graph_training as gt
+from knowledge_tracing.akt.config import PROJECT_ROOT, load_config
+from knowledge_tracing.akt.graph_prototype import GraphPrototypeSpec, RECIPE, GATE_RECIPE
+from knowledge_tracing.akt.simulator_data import SimulatorShard, fit_simulator_encoding, iter_simulator_windows
+from knowledge_tracing.akt.tensors import collate_windows
+from knowledge_tracing.graph_context import EdgeConfidence
+from knowledge_tracing.shared_kt import PrerequisiteGraph
+from knowledge_tracing.simulator_bridge import SimulatorBank, SimulatorItem, ItemQuery, Observation, identity_hash
+from knowledge_tracing.simulator_data import SimulatorSplitPlan, ObservableTrajectory, ROLES
+
+
+def linear_message():
+    return gt.LinearModuleRecipe(1, 2, True, ((.25,), (-.125,)), (.1, -.1))
+
+
+def setup(variant="A3"):
+    graph = PrerequisiteGraph.from_edges(("A", "B", "C"), (("A", "C"), ("B", "C")))
+    confidence = EdgeConfidence("structural_score", (("A", "C", .25), ("B", "C", .75)), "1"*64)
+    if variant in {"A0", "A1"}:
+        confidence = None
+    spec = GraphPrototypeSpec(variant, RECIPE, "GRAPH04 proposed handmade engineering only", "effective_window",
+                              gate_feature_recipe=GATE_RECIPE if variant=="A3" else None)
+    modules = gt.GraphModuleRecipe(None, None, None) if variant=="A0" else gt.GraphModuleRecipe(
+        linear_message(), (.7, -.4), gt.LinearModuleRecipe(4, 1, True, ((.2,.2,.2,.2),), (-.1,)) if variant=="A3" else None)
+    return gt.GraphEngineeringSetup(graph, spec, confidence, modules)
+
+
+def observables():
+    bank = SimulatorBank("synthetic-akt-graph-engineering-graph04-v1", tuple(SimulatorItem(i,c,0.)
+        for i,c in (("a","A"),("b","B"),("c","C"),("z","C"))))
+    plan = SimulatorSplitPlan("graph04-handmade-no-neural-v1",42,tuple((r,2 if r=="train" else 1) for r in ROLES))
+    def shard(role,sequences):
+        trajectories=[]
+        for learner,(assignment,items) in enumerate(zip(plan.assignments(role),sequences,strict=True)):
+            offset=(1000 if role!="train" else 0)+100*(learner+1)
+            rows=tuple(Observation(ItemQuery(item,i+1,offset+i),i%2) for i,item in enumerate(items))
+            trajectories.append(ObservableTrajectory(assignment.learner_id,plan.identity,identity_hash(bank.identity),gt.GRAPH_POLICY,rows))
+        return SimulatorShard(plan,bank,role,12,tuple(trajectories))
+    train=shard("train",("abac","baac"));selection=shard("selection",("azac",))
+    config=replace(load_config(PROJECT_ROOT/"experiments/akt/configs/smoke.json"),execution_enabled=True,
+        batch_size=2,max_train_users=2,max_val_users=1,max_targets_per_side=24,max_total_targets=36,
+        max_steps=4,max_seconds=60,max_wall_seconds=60,max_rss_bytes=2*1024**3,min_available_ram_bytes=1024**3)
+    return config,train,selection,fit_simulator_encoding(train)
+
+
+@pytest.fixture(autouse=True)
+def no_neural_or_optimizer(monkeypatch):
+    def forbidden(*args,**kwargs):
+        raise AssertionError("PURE_ONLY: native/Linear/Adam constructor or checkpoint load invoked")
+    monkeypatch.setattr(gt.GraphAKTPrototype,"__init__",forbidden)
+    monkeypatch.setattr(torch.nn.Linear,"__init__",forbidden)
+    monkeypatch.setattr(torch.optim.Adam,"__init__",forbidden)
+    monkeypatch.setattr(torch,"load",forbidden)
+    monkeypatch.setattr(torch.cuda,"is_available",lambda:False)
+    monkeypatch.setattr(torch.cuda,"is_initialized",lambda:False)
+
+
+class TestPureContracts:
+    @pytest.mark.parametrize("values,mass,expected",[([0.],1.,0.),([.5],1.,.5),([0.],0.,None),(None,1.,None)])
+    def test_gate_telemetry_keeps_computed_zero_distinct_from_inactive(self,values,mass,expected):
+        assert gt._gate_value(values,0,mass)==expected
+
+    @pytest.mark.parametrize("variant",["A0","A1","A2","A3"])
+    def test_identity_before_deserialization_without_neural_construction(self,variant):
+        config,train,selection,encoding=observables();s=setup(variant)
+        identity=gt.graph_checkpoint_identity(config,train,selection,encoding,s)
+        assert json.loads(json.dumps(identity,allow_nan=False))==identity
+        assert identity["purpose"]=="simulator_graph_engineering_only_v1"
+        assert identity["resume_supported"] is False and identity["fitted_research"] is False
+        assert identity["train_sha256"]==train.identity and identity["selection_sha256"]==selection.identity
+        assert identity["setup"]["module_recipe"]["message"] is None if variant=="A0" else identity["setup"]["module_recipe"]["message"]["in_features"]==1
+
+    @pytest.mark.parametrize("value",[True,float("nan"),float("inf"),1e100])
+    def test_explicit_recipe_rejects_non_fp32_numbers(self,value):
+        with pytest.raises(ValueError):gt.LinearModuleRecipe(1,1,True,((value,),),(0.,))
+
+    @pytest.mark.parametrize("case",["dimensions","bias","shape","gate","callable"])
+    def test_recipe_schema_is_not_arbitrary_callable_or_pickle(self,case):
+        with pytest.raises((ValueError,TypeError)):
+            if case=="dimensions":gt.LinearModuleRecipe(True,2,True,((1.,),(1.,)),(0.,0.))
+            elif case=="bias":gt.LinearModuleRecipe(1,1,False,((1.,),),(0.,))
+            elif case=="shape":gt.LinearModuleRecipe(1,2,True,((1.,),),(0.,0.))
+            elif case=="gate":gt.GraphModuleRecipe(linear_message(),(.1,.2),gt.LinearModuleRecipe(2,1,True,((1.,1.),),(0.,)))
+            else:gt.GraphModuleRecipe(lambda:None,(.1,),None)
+
+    @pytest.mark.parametrize("variant",["A2","A3"])
+    def test_new_variants_require_explicit_nonoracle_confidence(self,variant):
+        s=setup(variant)
+        with pytest.raises(ValueError):replace(s,confidence=None)
+        oracle=EdgeConfidence("oracle_label",(("A","C",1.),("B","C",0.)),"2"*64)
+        with pytest.raises(ValueError):replace(s,confidence=oracle)
+
+    def test_variant_recipe_mismatch_before_constructor(self):
+        with pytest.raises(ValueError):replace(setup("A0"),module_recipe=setup("A1").module_recipe)
+        with pytest.raises(ValueError):replace(setup("A2"),module_recipe=setup("A3").module_recipe)
+
+    @pytest.mark.parametrize("field",["confidence","graph","recipe"])
+    def test_serialized_identity_changes_for_actual_semantic_inputs(self,field):
+        config,train,selection,encoding=observables();s=setup()
+        old=gt.graph_checkpoint_identity(config,train,selection,encoding,s)
+        if field=="confidence":changed=replace(s,confidence=replace(s.confidence,provenance_sha256="a"*64))
+        elif field=="graph":
+            graph=PrerequisiteGraph.from_edges(s.graph.nodes,(("A","C"),))
+            confidence=EdgeConfidence("structural_score",(("A","C",.25),),"1"*64)
+            changed=replace(s,graph=graph,confidence=confidence)
+        else:changed=replace(s,module_recipe=replace(s.module_recipe,readout_initial=(.8,-.4)))
+        assert gt.graph_checkpoint_identity(config,train,selection,encoding,changed)!=old
+
+    @pytest.mark.parametrize("case",["disabled","step_cap","role","train_changed"])
+    def test_scope_guards_before_any_neural_allocation(self,case):
+        config,train,selection,encoding=observables()
+        if case=="disabled":config=replace(config,execution_enabled=False)
+        elif case=="step_cap":config=replace(config,max_steps=5)
+        elif case=="role":selection=train
+        else:
+            t=train.trajectories[0]
+            train=replace(train,trajectories=(replace(t,observations=(replace(t.observations[0],correct=1),*t.observations[1:])),*train.trajectories[1:]))
+        with pytest.raises((ValueError,PermissionError)):
+            gt.GraphTrainingAdapter(config=config,train=train,selection=selection,encoding=encoding,setup=setup())
+
+    def test_window_identity_includes_learner_and_all_original_geometry(self):
+        config,train,selection,encoding=observables()
+        windows=tuple(iter_simulator_windows(train,encoding,context=100,target_block=100,training=False))
+        w=windows[0];original=gt._window_identity(w)
+        changed=replace(w,inputs=replace(w.inputs,user_ids=tuple("other" for _ in w.inputs.user_ids)))
+        assert gt._window_identity(changed)!=original
+        changed=replace(w,global_ranks=w.global_ranks+1)
+        assert gt._window_identity(changed)!=original
+        changed=replace(w,inputs=replace(w.inputs,timestamps=w.inputs.timestamps+1))
+        assert gt._window_identity(changed)!=original
+
+    def test_target_label_drift_not_silently_accepted_as_training_inputs(self):
+        config,train,selection,encoding=observables()
+        entry=next(iter_simulator_windows(train,encoding,context=100,target_block=100,training=True))
+        assert gt._training_identity(replace(entry,targets=1-entry.targets))!=gt._training_identity(entry)
+
+    def test_consume_once_exact_object_ticket_and_stale_version(self):
+        config,train,selection,encoding=observables()
+        entry=next(iter_simulator_windows(train,encoding,context=100,target_block=100,training=True))
+        base=collate_windows([entry.window],n_items=len(encoding.support),device="cpu",targets=[entry.targets])
+        # Pure container sentinel: no graph/model construction or trained-role assertion.
+        sentinel=object();ticket=gt._Ticket(base,sentinel,gt._batch_identity(base),0)
+        with pytest.raises(ValueError):ticket.consume(replace(base),0)
+        with pytest.raises(ValueError):ticket.consume(base,1)
+        assert ticket.consume(base,0) is sentinel
+        with pytest.raises(ValueError):ticket.consume(base,0)
+
+    def test_tensor_mutation_invalidates_pending_ticket(self):
+        config,train,selection,encoding=observables()
+        entry=next(iter_simulator_windows(train,encoding,context=100,target_block=100,training=True))
+        base=collate_windows([entry.window],n_items=len(encoding.support),device="cpu",targets=[entry.targets])
+        ticket=gt._Ticket(base,object(),gt._batch_identity(base),0)
+        base.loss_targets[0,0]=1-base.loss_targets[0,0]
+        with pytest.raises(ValueError):ticket.consume(base,0)
+
+    @pytest.mark.parametrize("case",["missing_gate","foreign","duplicate"])
+    def test_parameter_ownership_without_optimizer_construction(self,case):
+        parameters=(object(),object(),object())
+        actual=list(parameters)
+        if case=="missing_gate":actual=actual[:-1]
+        elif case=="foreign":actual[-1]=object()
+        else:actual.append(actual[-1])
+        with pytest.raises(ValueError):gt._owned_parameters(SimpleNamespace(param_groups=[dict(params=actual)]),parameters)
+        gt._owned_parameters(SimpleNamespace(param_groups=[dict(params=list(parameters))]),parameters)

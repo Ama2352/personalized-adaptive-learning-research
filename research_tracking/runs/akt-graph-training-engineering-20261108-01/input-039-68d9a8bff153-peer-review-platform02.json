@@ -1,0 +1,36 @@
+{
+  "role": "INDEPENDENT_READ_ONLY_STATIC_FIX_REVIEW_NOT_EXECUTION",
+  "reviewer": "platform_fixture_compat",
+  "status": "SCOPED_STATIC_REVIEW_PASS",
+  "supersedes_findings_receipt": "peer-review-platform01.json",
+  "source_scope_sha256": {
+    "src/knowledge_tracing/akt/simulator_engineering.py": "ced557bb67ff700bb0709fe06d425b8634804e3b0f8111d34fb2cb95a36f46c2",
+    "src/knowledge_tracing/akt/training.py": "ca074a15dd5e45d016fd29d78b0b5ddbb0ccee3555b194699464d4cded6bf979",
+    "src/knowledge_tracing/akt/graph_training.py": "91ae634a33b74d7fbd26abf6c08934f1329488246610e40c4c903ceffecd92f4",
+    "tests/akt/test_batch_factory.py": "c107905fc992467ceade49c490c7e21735f569909b6d057b8555720dd148d82e",
+    "tests/akt/test_graph_training.py": "0fa4c0ffe40ee37c87a3283347d6897dc85473f538ee5f46850009c7854c6b6b",
+    "tests/akt/test_graph_lifecycle.py": "2b5245ccd5f370bcc1fae4e9ec19cd002ecb79eb3d31674fda569569dc632f28"
+  },
+  "fixed_findings_vi": [
+    "Graph checkpoint loader line342 compare expected_identity.config với cùng JSONserialized asdict(config) trước bounded read và weights_only torch.load; wrong-lr regression source đã đọc, chưa execute bởi reviewer.",
+    "Graph publication lines481–482 có post-COMPLETE resource guard. Failure sau publication giữ original marker/result và ghi failure.json/run_accepted=false; không delete/repair artifacts, marker đơn lẻ không đủ acceptance."
+  ],
+  "remaining_scoped_blockers": [],
+  "verified_by_reading_vi": [
+    "Default base collator và recovery path giữ nguyên; optional callback explicit và recovery combination failclosed trước native training.",
+    "Canonical original window/train-label fingerprints, source/config/setup/confidence/bank/plan/vocab binding và train/selection learner disjoint.",
+    "Graph context từ observable prefix[:rank], selection inputs không nhận current unshifted answer; OOV giữ unsupported. Labels xuất CSV riêng sau prediction; train labels chỉ loss tensors.",
+    "Owned exact Adam allparameters, consume-once ticket và weight version; optimizer start/body-return/failure events không claim rollback hoặc retry failed adapter.",
+    "Graph source/fullconfig/modelrecipe identity trước bounded8MiB single BytesIO payload; strict registered fullstate key/shape/dtype/finiteness trước restore.",
+    "One complete epoch trước checkpoint; graph metadata rows/reload exactparity và separate prediction/target CSV; COMPLETE sau exports + postguard."
+  ],
+  "conditions_for_actual_acceptance_vi": [
+    "Actual bounded driver còn phải kiểm returned result, COMPLETE, absence failure.json, hashes/CSV/telemetry/optimizer events và outer cumulative wall/update budgets.",
+    "Global Torch thread restoration/normal function teardown nằm sau cuối native guard; outer actual wall deadline bắt buộc, không suy cooperative source checks là harddeadline.",
+    "Không có concurrent invocation isolation hoặc hostile in-process caller attestation; global Torch threads/RNG dùng cho serial toy lifecycle.",
+    "Đây không fitted research baseline/selected-fit/OnlineSession/resume/calibration/refit/CUDA claim."
+  ],
+  "reviewer_source_test_edits": 0,
+  "reviewer_tests_model_optimizer_GPU_remote_runs": 0,
+  "actual_training_or_numeric_pass_verified_by_reviewer": false
+}

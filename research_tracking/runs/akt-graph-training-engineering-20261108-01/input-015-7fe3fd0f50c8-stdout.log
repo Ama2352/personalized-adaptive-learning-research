@@ -1,0 +1,25 @@
+.......................................F......                           [100%]
+================================== FAILURES ===================================
+_______ test_behavior_dependency_inventory_and_drift_before_deserialize _______
+
+completed = (AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/artifacts/akt/synthetic/simeng..._rows': 1, 'engineering_mean_log_loss': 0.6769417012413578}, reload_max_abs_delta=0.0, weight_role='engineering_only'))
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024DBE0CD1D0>
+
+    def test_behavior_dependency_inventory_and_drift_before_deserialize(completed,monkeypatch):
+        cfg,train,_,result=completed
+        identity=json.loads((cfg.output_dir/"invocation.json").read_text())
+        inventory=engineering._source_inventory()
+        native={p.relative_to(PROJECT_ROOT).as_posix() for p in (PROJECT_ROOT/"src/knowledge_tracing/akt").glob("*.py")}
+        roots={"src/knowledge_tracing/"+name for name in ("simulator_data.py","simulator_bridge.py","shared_kt.py")}
+>       assert set(inventory)==native|roots
+E       AssertionError: assert {'src/knowled...text.py', ...} == {'src/knowled...text.py', ...}
+E         
+E         Extra items in the left set:
+E         'src/knowledge_tracing/graph_context.py'
+E         'src/knowledge_tracing/graph_augmentation.py'
+E         Use -v to get more diff
+
+tests\akt\test_simulator_engineering.py:222: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_simulator_engineering.py::test_behavior_dependency_inventory_and_drift_before_deserialize
+1 failed, 45 passed in 12.54s

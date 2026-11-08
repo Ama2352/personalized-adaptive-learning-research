@@ -1,0 +1,34 @@
+{
+  "status": "FAILED",
+  "counts": {
+    "tests": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "command": [
+    "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+    "-c",
+    "import torch,pytest,knowledge_tracing.akt.upstream as u;torch.set_num_threads(2);exec(\"def forbidden(*a,**k):\n raise AssertionError('No native constructor/Adam step in pure suite')\");u.build_native=forbidden;torch.optim.Adam.step=forbidden;raise SystemExit(pytest.main())",
+    "-q",
+    "tests/akt/test_batch_factory.py",
+    "-o",
+    "cache_dir=D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\graph-lifecycle-engineering-20261108-01\\callback-pure01\\cache",
+    "--junitxml=D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\graph-lifecycle-engineering-20261108-01\\callback-pure01\\pytest.xml"
+  ],
+  "source_before": {
+    "src/knowledge_tracing/akt/training.py": "ca074a15dd5e45d016fd29d78b0b5ddbb0ccee3555b194699464d4cded6bf979",
+    "tests/akt/test_batch_factory.py": "c107905fc992467ceade49c490c7e21735f569909b6d057b8555720dd148d82e"
+  },
+  "source_after": {
+    "src/knowledge_tracing/akt/training.py": "ca074a15dd5e45d016fd29d78b0b5ddbb0ccee3555b194699464d4cded6bf979",
+    "tests/akt/test_batch_factory.py": "c107905fc992467ceade49c490c7e21735f569909b6d057b8555720dd148d82e"
+  },
+  "elapsed_seconds": 0.21012740000151098,
+  "previous_seconds": 0,
+  "cumulative_seconds": 0.21012740000151098,
+  "cap_seconds": 30,
+  "child_reaped": true,
+  "native_construction": "forbidden by raising spy",
+  "optimizer_step": "forbidden by raising spy"
+}

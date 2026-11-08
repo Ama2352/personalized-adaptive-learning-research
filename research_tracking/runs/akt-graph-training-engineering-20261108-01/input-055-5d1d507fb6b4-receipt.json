@@ -1,0 +1,45 @@
+{
+  "status": "PASS_PURE_ONLY",
+  "command": [
+    "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+    "-c",
+    "import torch,pytest;torch.set_num_threads(2);raise SystemExit(pytest.main())",
+    "-q",
+    "tests/akt/test_graph_training.py",
+    "-k",
+    "TestPureContracts",
+    "-o",
+    "cache_dir=D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\graph-training-adapter-20261108-01\\pure02\\cache",
+    "--basetemp=D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\graph-training-adapter-20261108-01\\pure02\\tmp",
+    "--junitxml=D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\graph-training-adapter-20261108-01\\pure02\\pytest.xml"
+  ],
+  "counts": {
+    "tests": 34,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "returncode": 0,
+  "error": null,
+  "source_before": {
+    "src/knowledge_tracing/akt/graph_training.py": "91ae634a33b74d7fbd26abf6c08934f1329488246610e40c4c903ceffecd92f4",
+    "tests/akt/test_graph_training.py": "0fa4c0ffe40ee37c87a3283347d6897dc85473f538ee5f46850009c7854c6b6b"
+  },
+  "source_after": {
+    "src/knowledge_tracing/akt/graph_training.py": "91ae634a33b74d7fbd26abf6c08934f1329488246610e40c4c903ceffecd92f4",
+    "tests/akt/test_graph_training.py": "0fa4c0ffe40ee37c87a3283347d6897dc85473f538ee5f46850009c7854c6b6b"
+  },
+  "controller_seconds": 7.245418899983633,
+  "wall_seconds": 7.24543309211731,
+  "previous_seconds": 11.137144200009061,
+  "cumulative_seconds": 18.382563099992694,
+  "cumulative_cap_seconds": 30.0,
+  "ledger": "GRAPH04-pure independent of rootcallback17.699122s and actual-stage60s",
+  "child_reaped": true,
+  "actual_neural_constructors": 0,
+  "actual_optimizer_constructors": 0,
+  "actual_optimizer_steps": 0,
+  "actual_checkpoint_loads": 0,
+  "spies": "Autouse raises for GraphAKTPrototype.__init__, nn.Linear.__init__, Adam.__init__, torch.load; CUDA guards mocked false",
+  "scope": "Pure role/recipe/window/ticket/parameter metadata only; no model fit/GPU/cloud/data run"
+}

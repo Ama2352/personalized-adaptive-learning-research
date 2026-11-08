@@ -1,0 +1,50 @@
+{
+  "role": "INDEPENDENT_READ_ONLY_STATIC_REVIEW_NOT_EXECUTION",
+  "reviewer": "platform_fixture_compat",
+  "status": "TWO_WRAPPER_P2_FINDINGS_PENDING_AUTHOR_REVIEW",
+  "files_before_sha256": {
+    "src/knowledge_tracing/akt/simulator_engineering.py": "fa54a53cf0a4dcd6489e8fb0309d9060cdfc80cae569a6b57d4fae12b6137091",
+    "src/knowledge_tracing/akt/training.py": "ca074a15dd5e45d016fd29d78b0b5ddbb0ccee3555b194699464d4cded6bf979",
+    "src/knowledge_tracing/akt/graph_training.py": "1465d03e3bd9a35d9e0d861e6d03ea614f5f33e54a89ee02052836fe1632e5a6",
+    "tests/akt/test_batch_factory.py": "c107905fc992467ceade49c490c7e21735f569909b6d057b8555720dd148d82e",
+    "tests/akt/test_graph_training.py": "9293d3f0e9db56b53c6cdcfafb00006e93118d32a8e53d7b8b089c6faeec966a"
+  },
+  "files_after_sha256": {
+    "src/knowledge_tracing/akt/simulator_engineering.py": "fa54a53cf0a4dcd6489e8fb0309d9060cdfc80cae569a6b57d4fae12b6137091",
+    "src/knowledge_tracing/akt/training.py": "ca074a15dd5e45d016fd29d78b0b5ddbb0ccee3555b194699464d4cded6bf979",
+    "src/knowledge_tracing/akt/graph_training.py": "91ae634a33b74d7fbd26abf6c08934f1329488246610e40c4c903ceffecd92f4",
+    "tests/akt/test_batch_factory.py": "c107905fc992467ceade49c490c7e21735f569909b6d057b8555720dd148d82e",
+    "tests/akt/test_graph_training.py": "0fa4c0ffe40ee37c87a3283347d6897dc85473f538ee5f46850009c7854c6b6b"
+  },
+  "concurrent_author_revision_vi": "Agent graph sửa float(np.finfo.max) và fixture source_row unique trong lúc review; reviewer đã đọc hai nhánh hiện tại. Không claim toàn5files unchanged. Wrapper/trainer/callback test hashes unchanged. Không sửa source/test hoặc raw snapshots.",
+  "findings": [
+    {
+      "priority": "P2",
+      "file": "src/knowledge_tracing/akt/simulator_engineering.py",
+      "lines": [477, 480],
+      "issue_vi": "Final resource guard chạy trước COMPLETE open/write/flush/fsync rồi return ngay. Slow publication có thể vượt wall/RSS cap sau guard mà API vẫn trả accepted.",
+      "recommendation_vi": "Graph-only postpublication guard/observed postwall trước return; nếu marker đã hiện rồi failure thì failure receipt phải ghi run_accepted=false và marker_published truthfully. Không suy marker đủ thay native resource acceptance."
+    },
+    {
+      "priority": "P2",
+      "file": "src/knowledge_tracing/akt/simulator_engineering.py",
+      "lines": [336, 350],
+      "issue_vi": "Graph loader không so expected_identity.config với config hiện tại trước torch.load. inference_recipe và graph_model identity bỏ lr/betas/eps/weight_decay và các training config fields, nên đổi chúng có thể qua pre-deserialization guards dù contract nói fullidentity.",
+      "recommendation_vi": "Nếu contract là exact full config, compare cùng canonical serialized asdict(config) với expected_identity.config trước bounded read/torch.load. Nếu chỉ inference identity thì ghi rõ limitation, không claim full config bound."
+    }
+  ],
+  "scoped_checks_vi": [
+    "Default train_epoch branch giữ nguyên collator; callback optional chỉ đổi owned batch creation, recovery+callback reject trước native.train/state loading.",
+    "Graph contexts dùng trajectory prefix[:rank]; labels train chỉ vào loss_targets. Selection graph inputs dùng prior responses và original window/source identities, OOV không được rescue.",
+    "Ticket consume-once/object/payload/version và source/input drift guards; Adam exact ownership includes backbone/message/readout/gate; start/body-return/failure events giữ unknown work không rollback claim.",
+    "Graph constructor/setup/confidence/source identities checked trước bounded8MiB single-payload weights_only BytesIO load; model fullstate key/shape/dtype/finiteness checks và strict state restore.",
+    "One complete epoch before checkpoint; selection labels exported separately after prediction; graph rows exact reload parity; COMPLETE sau CSV exports. Hai publication/config findings ở trên còn pending."
+  ],
+  "limits_vi": [
+    "Static review only;0 tests/model/optimizer/GPU/remote by reviewer. Không xác nhận numeric training/reload, actual runtime hay model efficacy.",
+    "Cooperative in-process source/provenance contract; caller event sinks/modules không là hostile-code boundary. Global Torch threads/RNG dùng ở serial toy lifecycle, chưa có concurrent-call isolation claim.",
+    "Current graph tests là pure spies; author báo first34tests19PASS15FAIL do duplicate fixture source_row, không modelsteps. Reviewer không tự parse/chứng thực test receipts ở review này."
+  ],
+  "reviewer_source_edits": 0,
+  "reviewer_test_model_optimizer_remote_runs": 0
+}
