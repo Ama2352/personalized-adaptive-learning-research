@@ -516,3 +516,12 @@ Runner riêng raw/calcanonical/Tfit objective, join11identitykeys/support/nulls.
 StaticAST67modules:20topimportTorch,13notinTorchassertions ở6modules, plus developmentworker đòi noNumPy/Pandas/Torch; no conftest. ExistingmonolithicGate incompatible, chưa executedfailure. Agent được giao3processpartition exactcoverage/global600 không hạassertions. Method24nativeDesign c2cb... đãreview, haiworker/outer đangprepare chưafit.0Modal/Holdout/fullCV; GVHDdatedsnapshot immutable.
 
 Calibratedbatch3fd5ca2 đã rawGit28/28outputs+manifest và2source/testpins verified. Counter2785→2813 chỉintegrity. SourceGate đangagent sửa nên chưafullGate; Method24worker chuẩn bị, thesisdiagnosticsappendix đượcgiao read-onlydesign.0paid/realmodel/Holdout, phiênownedmetrics2350 terminalRC0 đãpollđúnghandle, khôngrerun.
+
+
+### 08/11 — Gate targeted timeout, rồi user yêu cầu chỉ2reportfiles
+
+Gate-source5b7/tests9a0 reviewed:3groups inventory67. Targeted01 terminalRC1/52dots/noJUnit/result UNKNOWN, exactscriptprocessscan0.02 ownedJob cleanupaccepted/job0/handlesclosed nhưng launchrejected active-deadline,57dots/noJUnit/result; outerrecord34.0555539+priorcharge20=54.0555539/60.0verifiedPASS; khôngfullGate, khôngNN. Stopretries; thứ tự logs không xác định lasttest hoặc nguyênnhân chính, chi phífilesystem/cleanup làhypothesis.
+
+User explicit muốn hiện hành đúng1summary+1Colab detailedprocess. Inventory25historicalfiles byteexactGit2e63cd9 trước; xóa23bảncopy trongpacket, giữnguyênsource/runs/protected/artifacts. BAO_CAO viếtlạiclaimsK1–K6; graphagent đangenrichnotebook, scienceagent sửaindexlinks. Lịch sử đủGit; khôngtạo thêmfolderarchive/docattachments.
+
+GateUNKNOWN/rejected2attempts đãđóng archive27outputs, kindrejected_or_unknown, gate_execution_acceptedfalse; completedchỉarchiveintegrity. Các script/test chính chưacommit implementationpassed vì chưa cóJUnit accepted. Userreportnotebook đangenrich, folder chỉ2file.

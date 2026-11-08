@@ -1,0 +1,49 @@
+{
+  "kind": "BOUNDED_TARGETED_GATE_PARTITION_TESTS_NOT_FULL_GATE",
+  "attempt01": {
+    "status": "TERMINAL_EXEC_RC1_NO_JUNIT_NO_RESULT_UNKNOWN_NOT_PASS",
+    "tool_session": 78174,
+    "tool_exit_code": 1,
+    "stdout_progress_dots": 52,
+    "source_before": {
+      "scripts/akt/refresh_gate2.py": "5b7e60d342f8c2ab27536d3ec02d208a9bdb04728ca5ccdf7371b13d784fa31b",
+      "tests/akt/test_gate2_refresh.py": "9a0a41ffde24d0d12996f7294d000d50d9cbc8c1adced6853a0abf2c0c7de758"
+    },
+    "matching_live_python_pids": [],
+    "declared_cooperative_timer_seconds": 16,
+    "declared_cap_seconds": 20,
+    "conservative_charge_seconds": 20,
+    "hypothesis_vi": "Có52progressdots nhưng khôngJUnit/result; có thể hết hạn trong teardown/filesystem. Không khẳng định52PASS hay0test. Lần tiếp nếu có cần ownedJob harddeadline và lớn hơn trong tổngcap60, giữ source/test không đổi."
+  },
+  "attempt02": {
+    "status": "REJECTED_PURE_TEST_ATTEMPT",
+    "counts": null,
+    "outer_elapsed_seconds": 34.055553913116455,
+    "prior_charge_seconds": 20,
+    "cumulative_seconds": 54.055553913116455,
+    "cap_seconds": 60,
+    "owned_accepted": false,
+    "actual_full_gate": false,
+    "actual_model_calls": 0
+  },
+  "attempt02_progress_dots": 57,
+  "owned_cleanup": {
+    "accepted": false,
+    "cleanup_accepted": true,
+    "job_active_after_cleanup": 0,
+    "popen_handle_closed": true,
+    "errors": [
+      {
+        "stage": "launch_or_run",
+        "type": "TimeoutError",
+        "message": "active deadline preserves cleanup reserve"
+      }
+    ]
+  },
+  "current_source_sha256": {
+    "scripts/akt/refresh_gate2.py": "5b7e60d342f8c2ab27536d3ec02d208a9bdb04728ca5ccdf7371b13d784fa31b",
+    "tests/akt/test_gate2_refresh.py": "9a0a41ffde24d0d12996f7294d000d50d9cbc8c1adced6853a0abf2c0c7de758"
+  },
+  "work_stopped_before_retries": true,
+  "scope_vi": "Không JUnit/result cuối cho cả2lượt; không công nhận testPASS hay fullGate. Giữ source/script/log/rawreceipts ở đường dẫn gốc; không rerun khi chỉ còn~6s trong cap60. Tiếp tục document/report độc lập."
+}
