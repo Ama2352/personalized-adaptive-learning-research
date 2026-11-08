@@ -1,0 +1,1102 @@
+{
+  "scope": "STATIC_POTENTIAL_CALLS_NOT_DYNAMIC_SIDE_EFFECT_ATTESTATION",
+  "modules": [
+    {
+      "module": "tests/akt/test_research_execution.py",
+      "sha256": "9289f3aa4c8948f3e62344d11f01ea596764f78a42f1e2291aafc92178f72ba4",
+      "top_level_inventory": [
+        {
+          "line": 2,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from dataclasses import asdict, replace"
+        },
+        {
+          "line": 3,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import ast"
+        },
+        {
+          "line": 4,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import builtins"
+        },
+        {
+          "line": 5,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import hashlib"
+        },
+        {
+          "line": 6,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import json"
+        },
+        {
+          "line": 7,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from pathlib import Path"
+        },
+        {
+          "line": 8,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from types import SimpleNamespace"
+        },
+        {
+          "line": 9,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import os"
+        },
+        {
+          "line": 10,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import subprocess"
+        },
+        {
+          "line": 11,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import sys"
+        },
+        {
+          "line": 13,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import pytest"
+        },
+        {
+          "line": 15,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.akt import config as cfg"
+        },
+        {
+          "line": 16,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.akt import research_execution as guard"
+        },
+        {
+          "line": 17,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.simulator_bridge import identity_hash"
+        },
+        {
+          "line": 18,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.simulator_research_data import ResearchSplitPlan, ResearchProvenance"
+        },
+        {
+          "line": 20,
+          "kind": "Assign",
+          "potential_calls": [
+            {
+              "line": 20,
+              "function": "Path(__file__).resolve"
+            },
+            {
+              "line": 20,
+              "function": "Path"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 30,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 29,
+              "function": "pytest.fixture"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 173,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 170,
+              "function": "pytest.mark.parametrize"
+            },
+            {
+              "line": 171,
+              "function": "float"
+            },
+            {
+              "line": 171,
+              "function": "float"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 180,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 177,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 207,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 206,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 223,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 220,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 250,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 249,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 261,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 260,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 282,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 281,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 337,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 335,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 346,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 343,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 358,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 357,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 379,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 374,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        }
+      ]
+    },
+    {
+      "module": "tests/akt/test_research_lifecycle.py",
+      "sha256": "47f776e6dea4a8e123546d336e367219610f7b84b05660743755fb2bc9f22961",
+      "top_level_inventory": [
+        {
+          "line": 2,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from dataclasses import FrozenInstanceError, replace"
+        },
+        {
+          "line": 3,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import ast"
+        },
+        {
+          "line": 4,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import builtins"
+        },
+        {
+          "line": 5,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import json"
+        },
+        {
+          "line": 6,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from pathlib import Path"
+        },
+        {
+          "line": 7,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import subprocess"
+        },
+        {
+          "line": 8,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import sys"
+        },
+        {
+          "line": 10,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import pytest"
+        },
+        {
+          "line": 12,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.akt import config as cfg"
+        },
+        {
+          "line": 13,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.akt.research_execution import ResearchResourceBudget, SimulatorResearchSpec"
+        },
+        {
+          "line": 14,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.akt import research_lifecycle as life"
+        },
+        {
+          "line": 15,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.simulator_research_data import SelectionFreeze"
+        },
+        {
+          "line": 18,
+          "kind": "Assign",
+          "potential_calls": [
+            {
+              "line": 18,
+              "function": "dict"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 22,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 21,
+              "function": "pytest.fixture"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 105,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 100,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 122,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 120,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 162,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 161,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 193,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 190,
+              "function": "pytest.mark.parametrize"
+            },
+            {
+              "line": 190,
+              "function": "dict"
+            },
+            {
+              "line": 191,
+              "function": "dict"
+            },
+            {
+              "line": 191,
+              "function": "dict"
+            },
+            {
+              "line": 191,
+              "function": "float"
+            },
+            {
+              "line": 192,
+              "function": "dict"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 222,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 220,
+              "function": "pytest.mark.parametrize"
+            },
+            {
+              "line": 220,
+              "function": "dict"
+            },
+            {
+              "line": 220,
+              "function": "dict"
+            },
+            {
+              "line": 221,
+              "function": "dict"
+            },
+            {
+              "line": 221,
+              "function": "dict"
+            },
+            {
+              "line": 221,
+              "function": "float"
+            },
+            {
+              "line": 221,
+              "function": "dict"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 230,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 228,
+              "function": "pytest.mark.parametrize"
+            },
+            {
+              "line": 228,
+              "function": "dict"
+            },
+            {
+              "line": 228,
+              "function": "dict"
+            },
+            {
+              "line": 229,
+              "function": "dict"
+            },
+            {
+              "line": 229,
+              "function": "dict"
+            },
+            {
+              "line": 229,
+              "function": "dict"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 271,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 269,
+              "function": "pytest.mark.parametrize"
+            },
+            {
+              "line": 269,
+              "function": "dict"
+            },
+            {
+              "line": 269,
+              "function": "dict"
+            },
+            {
+              "line": 270,
+              "function": "dict"
+            },
+            {
+              "line": 270,
+              "function": "dict"
+            }
+          ],
+          "imports": null
+        }
+      ]
+    },
+    {
+      "module": "tests/akt/test_research_runner.py",
+      "sha256": "3d19d8116bdcdd34742b21c7d6f450e8f6367b22c299765856a579d86da2b145",
+      "top_level_inventory": [
+        {
+          "line": 2,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from dataclasses import dataclass, replace"
+        },
+        {
+          "line": 3,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import builtins"
+        },
+        {
+          "line": 4,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import hashlib"
+        },
+        {
+          "line": 5,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import io"
+        },
+        {
+          "line": 6,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import json"
+        },
+        {
+          "line": 7,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import math"
+        },
+        {
+          "line": 8,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from pathlib import Path"
+        },
+        {
+          "line": 9,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import struct"
+        },
+        {
+          "line": 10,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import sys"
+        },
+        {
+          "line": 11,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import weakref"
+        },
+        {
+          "line": 12,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from types import SimpleNamespace as NS"
+        },
+        {
+          "line": 14,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import pytest"
+        },
+        {
+          "line": 16,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.akt import research_runner as runner"
+        },
+        {
+          "line": 17,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.akt.config import AKTConfig, PROJECT_ROOT"
+        },
+        {
+          "line": 18,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.akt.research_execution import AuthorizedResearchExecution, ResearchResourceBudget, SimulatorResearchSpec"
+        },
+        {
+          "line": 20,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.akt.research_lifecycle import LifecycleInvocation, LifecycleLedger, PURPOSE"
+        },
+        {
+          "line": 21,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.simulator_bridge import ItemQuery, Observation, SimulatorBank, SimulatorItem, identity_hash"
+        },
+        {
+          "line": 22,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.simulator_research_data import ResearchSplitPlan, SelectionFreeze"
+        },
+        {
+          "line": 23,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.simulator_corpus_reader import CorpusReadLimits"
+        },
+        {
+          "line": 35,
+          "kind": "Expr",
+          "potential_calls": [
+            {
+              "line": 35,
+              "function": "sys.addaudithook"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 39,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 38,
+              "function": "pytest.fixture"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 244,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 243,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 348,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 345,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 416,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 415,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        }
+      ]
+    },
+    {
+      "module": "tests/akt/test_research_simulator_data.py",
+      "sha256": "bee16620e1bdc2c98dd66e65b2ddddd82160098582b83b53a34120b50fb3645b",
+      "top_level_inventory": [
+        {
+          "line": 2,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from dataclasses import replace"
+        },
+        {
+          "line": 3,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import builtins"
+        },
+        {
+          "line": 4,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import sys"
+        },
+        {
+          "line": 6,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import numpy as np"
+        },
+        {
+          "line": 7,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import pytest"
+        },
+        {
+          "line": 9,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.akt import research_simulator_data as data"
+        },
+        {
+          "line": 10,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.akt.types import TrainingWindow, WindowInputs"
+        },
+        {
+          "line": 11,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.akt.simulator_data import SimulatorShard, fit_simulator_encoding, iter_simulator_windows"
+        },
+        {
+          "line": 13,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.simulator_bridge import ItemQuery, Observation, SimulatorBank, SimulatorItem, identity_hash"
+        },
+        {
+          "line": 14,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.simulator_data import ObservableTrajectory"
+        },
+        {
+          "line": 15,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.simulator_research_data import ResearchSplitPlan, ResearchProvenance, ShardLimits, SelectionFreeze"
+        },
+        {
+          "line": 21,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 20,
+              "function": "pytest.fixture"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 107,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 104,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 114,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 113,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 157,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 156,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 226,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 225,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        }
+      ]
+    },
+    {
+      "module": "tests/shared_kt/test_simulator_corpus_publisher.py",
+      "sha256": "3f890563ee346b3196a1ee41fb1ba10cc47ad9bb5c1a4c07f88a2d5432d16fd0",
+      "top_level_inventory": [
+        {
+          "line": 2,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from copy import deepcopy"
+        },
+        {
+          "line": 3,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from dataclasses import asdict, replace"
+        },
+        {
+          "line": 4,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import hashlib"
+        },
+        {
+          "line": 5,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import inspect"
+        },
+        {
+          "line": 6,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import json"
+        },
+        {
+          "line": 7,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from pathlib import Path"
+        },
+        {
+          "line": 8,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from types import SimpleNamespace"
+        },
+        {
+          "line": 9,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import sys"
+        },
+        {
+          "line": 11,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import pytest"
+        },
+        {
+          "line": 13,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing import simulator_corpus_publisher as pub"
+        },
+        {
+          "line": 14,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing import simulator_research_collection as collection"
+        },
+        {
+          "line": 15,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.simulator_bridge import ItemQuery, Observation, SimulatorBank, SimulatorItem, identity_hash"
+        },
+        {
+          "line": 16,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.simulator_data import ObservableTrajectory"
+        },
+        {
+          "line": 17,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing.simulator_research_data import ResearchSplitPlan, ResearchProvenance, ShardLimits, audit_research_shard"
+        },
+        {
+          "line": 26,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 25,
+              "function": "pytest.fixture"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 222,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 221,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 235,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 234,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 308,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 307,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        }
+      ]
+    },
+    {
+      "module": "tests/shared_kt/test_simulator_corpus_reader.py",
+      "sha256": "b92ecab03a1bbcef58406cd6e3cf53628a76181511497a446ee9c44753e0e2fb",
+      "top_level_inventory": [
+        {
+          "line": 6,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from dataclasses import FrozenInstanceError, replace"
+        },
+        {
+          "line": 7,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import ast"
+        },
+        {
+          "line": 8,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import builtins"
+        },
+        {
+          "line": 9,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import hashlib"
+        },
+        {
+          "line": 10,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import inspect"
+        },
+        {
+          "line": 11,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import json"
+        },
+        {
+          "line": 12,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from pathlib import Path"
+        },
+        {
+          "line": 13,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import sys"
+        },
+        {
+          "line": 15,
+          "kind": "Import",
+          "potential_calls": [],
+          "imports": "import pytest"
+        },
+        {
+          "line": 17,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from knowledge_tracing import simulator_corpus_reader as reader"
+        },
+        {
+          "line": 19,
+          "kind": "ImportFrom",
+          "potential_calls": [],
+          "imports": "from test_simulator_corpus_publisher import template, case, publish"
+        },
+        {
+          "line": 26,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 25,
+              "function": "pytest.fixture"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 126,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 125,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 140,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 138,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 160,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 159,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 178,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 177,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 192,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 191,
+              "function": "pytest.mark.parametrize"
+            },
+            {
+              "line": 191,
+              "function": "float"
+            }
+          ],
+          "imports": null
+        },
+        {
+          "line": 222,
+          "kind": "FunctionDef",
+          "potential_calls": [
+            {
+              "line": 221,
+              "function": "pytest.mark.parametrize"
+            }
+          ],
+          "imports": null
+        }
+      ]
+    }
+  ]
+}

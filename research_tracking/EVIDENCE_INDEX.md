@@ -1,8 +1,14 @@
 # Chỉ mục bằng chứng
 
+## Mốc09/11 — báo cáo hiện hành và hồ sơ kiểm tra local
+
+**Điểm đọc hiện hành:** [tóm tắt09/11](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md) và [HTML minh họa](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html), commit `ab471ca`. Chín SVG và sáu bảng đã kiểm desktop/mobile; không chồng chữ hoặc tràn khung. Đã đóng browser ngay sau QA; không mở máy chủ preview.
+
+**Hồ sơ vận hành:** [collection01–05](reports/gate_collection_trials_20261109.md) và [bundle đã đóng](runs/gate-collection-engineering-20261109-01/README.md),127outputs có kiểm toàn vẹn. Năm lượt đều rejected, chưa collection toàn bộ hoặc full Gate PASS. Nguồn154files đối chiếu raw Git commit `2c337d4`, không nhân bản lại; giữ raw failures, namespace snapshots, guards và cleanup. Đây không phải kết quả mô hình hoặc bằng chứng RQ mới.
+
 ## Mốc đã nghiệm thu08/11 — history, ability, corpus và gói GVHD theo ngày
 
-**Điểm đọc hiện hành:** [bản tóm tắt](supervisor_reports/2026-11-08/01_tien_do/BAO_CAO.md) và [báo cáo HTML](supervisor_reports/2026-11-08/01_tien_do/BAO_CAO_NGHIEN_CUU.html).8hình/5bảng; baseline5metrics và nguồn số liệu đã đối chiếu; nhãn hình không chồng lấn trên desktop/mobile. QA/hash ở docs/thesis_recovery/evidence/, không trong file đọc.
+**Snapshot08/11:** [bản tóm tắt](supervisor_reports/2026-11-08/01_tien_do/BAO_CAO.md) và [báo cáo HTML](supervisor_reports/2026-11-08/01_tien_do/BAO_CAO_NGHIEN_CUU.html).8hình/5bảng số liệu; baseline5metrics và nguồn số liệu đã đối chiếu; nhãn hình không chồng lấn trên desktop/mobile. QA/hash ở docs/thesis_recovery/evidence/, không trong file đọc.
 
 **LỊCH SỬ — commit `2e63cd9`:** gói25snapshotfiles +1chỉ mục =26artifacts và notebook8code cells/4SVG/22nguồn/40JSONPointers/cached-output exact đã nghiệm thu ở snapshot cũ. SHA `0f2130aba7b04a187b31ac9c0fd9d4b81df290ced470e5aa04bbf92625267620` và các receipts/README/BANG_CHUNG/NGUON đã bỏ khỏi layout hiện hành vẫn được bảo toàn trong Git tại commit này; không dùng các số hoặc SHA đó chứng nhận notebook đang được chỉnh. Hai-file format không tạo thí nghiệm/RQcompletion mới. Chưa actual Colab/Jupyter-kernel/visual QA.
 

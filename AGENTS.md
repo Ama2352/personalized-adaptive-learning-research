@@ -19,3 +19,4 @@
 - `_context/` là ngữ cảnh/protocol BKT ban đầu; không thay ba RQ toàn KLTN bằng mục tiêu baseline ở đây. Kế hoạch/thông tin tổng thể nằm trong `docs/thesis_recovery/` và `research_tracking/`.
 - Chỉ dùng `.venv` trong repository cho Python/pip local; không tự cài dependency vào Python global hoặc `venv/` cũ. File tạm đặt trong vùng làm việc/test đã quy định, không rải ra root; chỉ dọn sau inventory và xác nhận không cần cho evidence hoặc resume.
 - Sau mỗi gói thay đổi hoàn thiện: kiểm tra phù hợp, lưu ghi chú/bằng chứng cần thiết và commit riêng theo yêu cầu người dùng. Không commit dataset, credentials hoặc artifacts lớn; không push tự động.
+- Sau mỗi lượt kiểm giao diện, lưu bằng chứng cần thiết rồi đóng các tab kiểm thử và tắt máy chủ preview do agent mở; ưu tiên dọn trong `finally` kể cả khi kiểm tra lỗi. Không đóng tab hoặc tiến trình không thuộc lượt kiểm của agent.

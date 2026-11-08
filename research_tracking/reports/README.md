@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**Kiểm vận hành09/11:** [hồ sơ collection01–05](gate_collection_trials_20261109.md) đã đóng bundle127outputs; giữ nguyên tất cả failure. Chưa collection toàn bộ hoặc full Gate PASS; đây không phải thí nghiệm trả lời RQ.
+
 **Consumer confidence09/11:** [đã đọc artifact thực](edge_confidence_artifact_readiness_20261109.md),66purePASS và31typed scores read-only; không fit lại hoặc hiệu quả CG-AKT.
 
 **RQ1 bổ sung09/11:** [đề xuất có nằm trong tập sẵn sàng của cấu hình kia không?](rq1_cross_ready_membership_20261109.md), phân tích đủ1.080cặp đã lưu:55ready-change/preview-giữ,17preview-change/M–R-giữ,5jointchanges. RecordedR không capturedC/B; chưa causal hoặc score-only.
@@ -12,7 +14,7 @@
 
 **Bổ sung kỹ thuật sau gói GVHD08/11:** [metric sau calibration](akt_calibrated_reporting_readiness_20261108.md) có36purePASS và một lần kiểm evaluator pandas/sklearn thật trên5hàng tự dựng;0model/solver/realdata. Số AUC/Brier fixture không là kết quả RQ. Full Gate vẫn cần tách process trước khi chạy; không lấy batch này thay actual training/CUDA.
 
-**Đọc báo cáo tiến độ GVHD:** chuyển sang [gói theo ngày08/11 — đợt01](../supervisor_reports/2026-11-08/01_tien_do/BAO_CAO.md), chỉ gồm bản tóm tắt và [báo cáo HTML độc lập](../supervisor_reports/2026-11-08/01_tien_do/BAO_CAO_NGHIEN_CUU.html) có diễn giải thí nghiệm, bảng và biểu đồ. Notebook của đợt này đã được thay bằng HTML tại `31ce8ff`. Các đoạn revision4/chưa sinh corpus bên dưới là snapshot cũ, không mô tả trạng thái hiện tại. Corpus thực đã nghiệm thu tại `1990d4c`; controlled history tại `8f95fd6`, controlled ability tại `8b6487c`.
+**Đọc báo cáo tiến độ GVHD:** mở [gói ngày09/11 — đợt01](../supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md), chỉ gồm bản tóm tắt và [báo cáo HTML độc lập](../supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html) có diễn tiến nghiên cứu, số liệu và chín biểu đồ. Đã kiểm giao diện và đóng browser sau kiểm; bản08/11 giữ nguyên để đối chiếu. Notebook lịch sử đã được thay bằng HTML tại `31ce8ff`. Các đoạn revision4/chưa sinh corpus bên dưới là snapshot cũ, không mô tả trạng thái hiện tại. Corpus thực đã nghiệm thu tại `1990d4c`; controlled history tại `8f95fd6`, controlled ability tại `8b6487c`.
 
 **Báo cáo hiện hành revision4 (`e502848`):** [GVHD](BAO_CAO_TIEN_DO_GVHD_20261108.md),32source inputs/25links đã kiểm. Bổ sung [full–empty edge contrast](rq1_fixed_edge_set_contrast_20261108.md) và [history bins](rq1_history_stratified_edge_contrast_20261108.md): kết quả gộp cải thiện nhỏ nhưng PG bất lợi; history/time còn confounding, không causal learning benefit hoặc RQ completion. Notebook bên dưới vẫn snapshot C01–C14, chưa chứa hai phân tích mới.
 
