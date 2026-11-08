@@ -534,3 +534,8 @@ Report2file nghiệm thu local: summaryd9549b3b…10541, notebook1fa77f7c…fc71
 Desktopproposal941e.../Paper1984e.../Paper25a661... byteidentical3repo namedPDFs; tríchdirectpypdfbundled bằng.venv,0install. Oldmapv21 giữlịchsử, không relabelnhưUserPDF. New3extracts+inventory copySHA before=after, xem renderproposaltr3/P1tr4/P2tr4. Reportmạch3components→2paper→3RQ→whymeasure→results→limits, KcardsfoldedNotebook. Giữexact58records/16code/6SVG, nguồn73gồmprimary3PDF. Rootcachedreplay/source/pointer/linkQA PASS, hai read-onlyreviews; userfolderđúng2file. Khôngđổi approvedRQ/scope; primaryPaper2grossgain khácnetfinalgain; đúngIV-A tr4, PDFP1đãkhớp còncoderevisionchưakhớp.
 
 BackendsourceMethod24 absoluteownedbridge+initializer11fixed, pure01cap45rejected37.502s noJUnit; journal7completecases≠21PASS/actualfit0. FS8synthetic.115s khôngchứngminhnguyênnhân timeout. Gate2node diagnostic accepted2PASS/8.26158helper/20, khôngfull76Gate; prior54.055chargegiữ. ChưaactualNativefit/GPU/Modal/Holdout/fullCV.
+
+
+### 08/11 — Nghiệm thu kiểm worker confidence, chưa fit
+
+Lượt trước là tiến triển: đã đối chiếu đúng3PDF và chốt báo cáo theo bối cảnh. Lượt này kiểm trực tiếp terminal Method24pure02:21PASS/0fail/error/skip,37.260902643s/150; source5 trước=sau, không heavy imports/Popen từtest, env restored, owned cleanup/job0/handleclosed. Giữ pure01rejected37.502s/45 và7casejournal, không biến thànhPASS. Hai source fixes absolute-ownedlaunch/initializer11 được lưu trong bundle51outputs, hashcopytrước=sau. Actualsolver/NN/corpus0. Stagefitactive110/outer120 không đổi; runtime/ABI/request/realfit vẫn chưa nghiệm thu.

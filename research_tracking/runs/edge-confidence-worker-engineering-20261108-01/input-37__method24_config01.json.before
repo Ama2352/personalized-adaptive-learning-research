@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "purpose": "method24_train_only_conditional_surrogate",
+  "corpus": {
+    "id": "grade10-development-lifecycle01-20261108",
+    "corpus_sha256": "555ed695c7c7121af474edb542fa3eef664b340162ced46cdfc001a5d7a4ad72",
+    "done_sha256": "66232663868baafd2f012b4d79afad373e2fd5e831d30622153163b94e1b733f",
+    "plan_sha256": "7222b7c34051f41d99648421b940167c2da705efa604070957a23812273e02ed",
+    "train_provenance_sha256": "10287bccb20804a1504981c5a5d6551e280369fac283df74a4eabf5aed15e9e5",
+    "train_observable_sha256": "e2f3d7c0e1cf1fefa8b3c952d21a0531436f86259d6a7c8a07699cc0435fc07b",
+    "prior_inventory_relative": "artifacts/akt/local-tests/development-corpus-20261108-01/canonical-corpus-inventory01.json",
+    "prior_inventory_sha256": "794781989ba26d5be9142df996fcbb71db5e8f880e4b90d3c0681a5a2c43d19f"
+  },
+  "recipe": {
+    "method_id": "train-lagged-edge-confidence-v1", "seed": 42, "folds": 3,
+    "laplace_alpha": 1.0, "support_scale": 5.0, "C": 1.0, "tol": 0.000001,
+    "max_iter": 200, "clip": 0.000001, "bootstrap_replicates": 200, "min_eligible_learners": 20
+  },
+  "counts": {
+    "train_learners": 48, "train_events": 10080, "concepts": 28, "edges": 756,
+    "fit_slots": 2352, "oof_rows": 272160, "baseline_oof_rows": 10080, "dag_budget": 31
+  },
+  "caps": {
+    "outer_seconds": 120, "active_seconds": 110, "cleanup_seconds": 3,
+    "outer_finalization_seconds": 7, "export_reserve_seconds": 8,
+    "max_rss_bytes": 536870912, "min_available_ram_bytes": 1073741824,
+    "poll_seconds": 0.1, "max_total_output_bytes": 134217728,
+    "max_oof_file_bytes": 100663296, "max_stdout_stderr_bytes": 65536
+  },
+  "scope_vi": "Config hữu hạn không tự cấp quyền fit. TRAIN-only optimization; public reader audit9files+DONE, không oracle/collector/final/NN. ROOT review source/request/runtime/resources trước dispatch."
+}

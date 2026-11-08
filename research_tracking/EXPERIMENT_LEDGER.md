@@ -164,3 +164,6 @@ Mốc này bổ sung kernel GKT01; giữ các trial/source versions riêng, khô
 - **CORPUSIO01**, commit `47323e9`, 30outputs đã kiểm raw Git: [simulator_corpus_publisher_readiness_20261108.md](reports/simulator_corpus_publisher_readiness_20261108.md), [manifest](runs/simulator-corpus-publisher-engineering-20261108-01/manifest.json). 31 publisher tests với handmade temporary corpus; chưa actual research corpus; DONE-last không OS crash transaction.
 
 Không cộng repeated targets/tests thành independent samples hoặc phần trăm hoàn tất. Reader timeout chưa JUnit và replay PID guard fail trước native được giữ riêng; không gắn PASS.
+
+
+- **Confidence worker engineering,08/11:**21purePASS/37,2609s/150; source5+env+ownedcleanup verified. Lượt trước45s không cóJUnit, giữ rejected. [Bundle](runs/edge-confidence-worker-engineering-20261108-01/README.md); chưa actualsolverfit/OOF graph/RQ3 result.

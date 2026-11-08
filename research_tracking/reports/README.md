@@ -183,3 +183,6 @@ Gate21 chỉ chạy `tests/akt tests/shared_kt`; các số139SAKT và38Graph-GAM
 **Làm rõ future install:** [addendum acceptance](akt_linux_dependency_resolution_20261108_addendum.md) xác định pip `--require-hashes` có thể cài trực tiếp44URLs trong [candidate lock](../runs/akt-linux-dependency-resolution-20261108-01/candidate-linux-cuda.lock.txt) theo stage/budget riêng; lưu wheelhouse là tùy chọn tách biệt. Đây là bước chưa chạy, không nâng resolution thành installed origins hoặc runtime/CUDA readiness; không sửa wording/report gốc đã freeze.
 
 **Errata demo:** “12/120 nodes” trong [report gốc](demo_readiness_20261108.md) là số mục timeline **`#route li`**; miền28concepts. Giữ nguyên [bundle93outputs](../runs/demo-readonly-engineering-20261108-01/README.md), không biến timeline preview thành số concept hoặc served-action evidence.
+
+
+- [Worker độ tin cậy cạnh](edge_confidence_worker_readiness_20261108.md):21purePASS và cả lượt timeout trước được giữ trong bundle; chưa actualsolver/corpus/AKTfit hoặc hiệu quả RQ3.
