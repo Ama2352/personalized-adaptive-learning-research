@@ -632,3 +632,7 @@ SAKT70outputs+RQ167outputs đã commit7f1d1fc/2bf3ea2; rawGit batch kiểm137out
 Báo cáo HTML10 biểu đồ đã commit `8c08198`, đủ hai file đọc, desktop/mobile không chồng chữ; browser đóng, không server preview. Hai sửa Gate và bundle196 outputs đã commit `d658d77`; đối chiếu nguyên byte359 Git blobs gồm154source,196outputs,manifest/report và7file trình bày/QA. Gate03:1418PASS trên Windows CPU, pointer chưa promote; không CUDA/RQ hoặc quyền chi credit.
 
 SAKT counter refinement đã thực chạy33PASS/0FES trong22,2962247s/90,3Adamsteps,13save/23load/2model+2optimizer restores. Khớp counter tích lũy ở epoch2 và từ chối stale positive step; chưa actual corpus fit. Đang đóng delta nhỏ, giữ old31/bundle70 nguyên byte. RQ1 next trace chỉ mới contract/source preparation, chưa native replay hay mở oracle.
+
+### 09/11 — cập nhật con trỏ Gate cục bộ
+
+ROOT đã kiểm sole-writer window và raw Git154 nguồn `d658d77`, giữ trước/sau pointer, rồi validate bằng preflight và reader chuẩn trước/sau atomic replace. Promotion accepted trong 1.7734846999519505s, không late rejection hoặc lỗi. Không chạy lại tests/model, không cấp quyền CUDA/training/chi cloud; fullGate03 closedbundle vẫn giữ noPublish tại thời điểm chạy. Receipt phục hồi nguyên byte trước/sau nằm ở docs/thesis_recovery/evidence/gate_pointer_promotion_20261109.json.
