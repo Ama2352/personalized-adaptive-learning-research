@@ -1,0 +1,73 @@
+{
+  "status": "APPROVED_ENGINEERING_IMPLEMENTATION_NOT_FIT_AUTHORIZATION",
+  "recipe_id": "train-lagged-edge-confidence-v1",
+  "created_date": "2026-11-08",
+  "source_type": "adopted_group_protocol_and_local_public_dependency_source_read_only",
+  "input_scope": "train-only48learners10080events; no selection/calibration/oracle feature or fit input",
+  "source_sha256": {
+    "docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md": "c0d6e8a698d7d5083986e9848898a643390fc5e76100fc0b8c6286c306e6bea6",
+    "src/knowledge_tracing/simulator_corpus_reader.py": "e582bf293e7699f1dc98096fcc693437610f2253bddb11ba4fff8952a35f6a90",
+    "src/knowledge_tracing/simulator_bridge.py": "b29105acd8de84b060ca27573bb7f7cf8e85599a4596e50e4a21ab63c82329d2",
+    "src/knowledge_tracing/simulator_research_data.py": "51eb7275a6a4a6b26b763a21a8fe6dc15b0973fc19b3c5557175eaa298db7e53",
+    "src/knowledge_tracing/simulator_data.py": "79e28c1a8fc9b3bd5f3283868d7aba1a5bbc7c76764725a8b01098b2ae33cd9f",
+    "requirements-akt.lock.txt": "3e721fdb49543ad0888cf02a863826ebc6144c0d1dd670f2490ebcc0d69b8c0a",
+    ".venv/Lib/site-packages/sklearn/linear_model/_logistic.py": "80fb5439089025c955f032464d5c9540c5e1f2c0f0d31f80c7d8417b0169806f"
+  },
+  "local_dependency": {
+    "distribution": "scikit-learn",
+    "version_from_installed_METADATA": "1.9.1",
+    "public_api_source": ".venv/Lib/site-packages/sklearn/linear_model/_logistic.py",
+    "anchors": ["LogisticRegression:974", "__init__:1277", "fit:1333", "predict_proba:1573"],
+    "imported_or_fitted_for_this_plan": false
+  },
+  "actual_corpus_bindings": {
+    "corpus_id": "grade10-development-lifecycle01-20261108",
+    "corpus_sha256": "555ed695c7c7121af474edb542fa3eef664b340162ced46cdfc001a5d7a4ad72",
+    "done_sha256": "66232663868baafd2f012b4d79afad373e2fd5e831d30622153163b94e1b733f",
+    "train_observable_sha256": "e2f3d7c0e1cf1fefa8b3c952d21a0531436f86259d6a7c8a07699cc0435fc07b",
+    "train_manifest_sha256": "37101c7d6d1d1a74310c58179455cd844c47d5d4cba9d4878ac6316127bf6f49",
+    "train_provenance_sha256": "10287bccb20804a1504981c5a5d6551e280369fac283df74a4eabf5aed15e9e5",
+    "research_plan_sha256": "7222b7c34051f41d99648421b940167c2da705efa604070957a23812273e02ed",
+    "bank_domain_sha256": "ecbd9da6c5bf334fb392f369ddcdde0b32aaadf6155c0c1426f7099166e91001",
+    "bank_file_sha256": "4ef02907ee9071ba2ed6b4bba4d4dab728d390e9bbff8218a4e39bbb32f48034",
+    "closed_metadata_bundle_manifest_sha256": "cbd81b65363b2d50c62fb1d145793375cb44e523410d2aea2a062ba974624c9c"
+  },
+  "implementation_ownership": [
+    "src/knowledge_tracing/edge_confidence.py",
+    "tests/shared_kt/test_edge_confidence.py"
+  ],
+  "implementation_not_executed": {
+    "src/knowledge_tracing/edge_confidence.py": "a91aec2558d1fa63c18212aadda265e2dd0e01f369756447022b21bacfc235e9",
+    "tests/shared_kt/test_edge_confidence.py": "965b881c3159df2f0af5c85823ba01232787898e248af2b1aed0a12e028046db"
+  },
+  "logical_workload_not_measured": {
+    "learners": 48,
+    "events": 10080,
+    "concepts": 28,
+    "candidate_directed_nonself_edges": 756,
+    "folds": 3,
+    "baseline_fits": 84,
+    "augmented_fits": 2268,
+    "total_fits": 2352,
+    "training_row_appearances": 564480,
+    "oof_row_predictions_with_baseline_reuse": 282240,
+    "bootstrap_replicates_per_supported_edge": 200,
+    "learned_dag_budget": 31
+  },
+  "execution_performed_for_this_plan": {
+    "fits": 0,
+    "tests": 0,
+    "teacher_or_model_calls": 0,
+    "remote_calls": 0,
+    "new_dependencies": 0
+  },
+  "pending_review_choices": [
+    "ROOT approved implementation after unary-OOF and label-free seed clarifications; no actual fit authorized.",
+    "Current full public reader opens9publicfiles+DONE for schema audit; ROOT accepted train-only OPTIMIZATION boundary and module receives only PublicRoleData(train).",
+    "120second/512MiB execution feasibility has not been measured; no actual fit authorization follows from this plan."
+  ],
+  "approved_method_clarifications": {
+    "two_class_required_for": "child-training-fold FIT only; unary eligible OOF still scored with flag/no AUC",
+    "label_free_randomization_identity": "methodversion + fixed42 + planidentity + orderedTRAINlearnerIDs (+ edgeIDs for bootstrap); fulltrainSHA remains separate provenance"
+  }
+}

@@ -1,0 +1,609 @@
+"""Method24: train-only lagged surrogate; chưa là causal edge probability.
+
+Không file I/O/collector/Torch. Prepare chỉ dùng observables TRAIN; full public
+reader có thể audit các vai khác trước khi caller project TRAIN. Source/runtime
+hashes do caller ghim là cooperative bindings, không execution authorization.
+Sklearn/NumPy chỉ import khi fit/bootstrap thật được gọi. ROOT quản lý outer
+RAM/process/time/output guards; deadline nội bộ là cooperative.
+"""
+from collections import Counter, defaultdict
+from dataclasses import asdict, dataclass, replace
+import hashlib
+import json
+import math
+from numbers import Real
+import time
+import warnings
+
+from .simulator_bridge import SimulatorBank, identity_hash
+from .simulator_corpus_reader import PublicRoleData
+from .simulator_data import ObservableTrajectory
+from .simulator_research_data import ResearchSplitPlan, ShardLimits, audit_research_shard
+
+METHOD_ID = 'train-lagged-edge-confidence-v1'
+
+
+def _require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def _sha(value):
+    _require(type(value) is str and len(value) == 64 and
+             all(c in '0123456789abcdef' for c in value), 'lowercase SHA256 required')
+
+
+def _number(value):
+    return not isinstance(value, bool) and isinstance(value, Real) and math.isfinite(value)
+
+
+def _positive(value, ceiling):
+    _require(type(value) is int and 0 < value <= ceiling, 'explicit bounded positive integer required')
+
+
+def _json(value):
+    return json.dumps(value, sort_keys=True, ensure_ascii=False, allow_nan=False, separators=(',', ':'))
+
+
+def _row_hash(rows):
+    digest = hashlib.sha256()
+    for row in rows:
+        digest.update((_json(asdict(row)) + '\n').encode())
+    return digest.hexdigest()
+
+
+@dataclass(frozen=True, slots=True)
+class EdgeConfidenceRecipe:
+    method_id: str
+    seed: int
+    folds: int
+    laplace_alpha: float
+    support_scale: float
+    C: float
+    tol: float
+    max_iter: int
+    clip: float
+    bootstrap_replicates: int
+    min_eligible_learners: int
+
+    def __post_init__(self):
+        expected = dict(method_id=METHOD_ID, seed=42, folds=3, laplace_alpha=1.,
+                        support_scale=5., C=1., tol=1e-6, max_iter=200, clip=1e-6,
+                        bootstrap_replicates=200, min_eligible_learners=20)
+        for name, value in expected.items():
+            actual = getattr(self, name)
+            valid = type(actual) is type(value) if type(value) in (str, int) else _number(actual)
+            _require(valid and actual == value, 'explicit approved Method24 recipe required: ' + name)
+
+    @property
+    def identity(self):
+        return identity_hash(asdict(self))
+
+
+@dataclass(frozen=True, slots=True)
+class EdgePreparationLimits:
+    max_learners: int
+    max_events_per_learner: int
+    max_total_events: int
+    max_wall_seconds: float
+
+    def __post_init__(self):
+        for name, ceiling in (('max_learners', 48), ('max_events_per_learner', 210), ('max_total_events', 10080)):
+            _positive(getattr(self, name), ceiling)
+        _require(_number(self.max_wall_seconds) and 0 < self.max_wall_seconds <= 120, 'explicit preparation time cap')
+
+
+@dataclass(frozen=True, slots=True)
+class EdgeFitLimits:
+    max_fits: int
+    max_oof_rows: int
+    max_wall_seconds: float
+
+    def __post_init__(self):
+        _positive(self.max_fits, 2352)
+        _positive(self.max_oof_rows, 272160)
+        _require(_number(self.max_wall_seconds) and 0 < self.max_wall_seconds <= 110, 'explicit active fit cap with outer reserve')
+
+
+@dataclass(frozen=True, slots=True)
+class EdgeRuntimeBinding:
+    sklearn_version: str
+    numpy_version: str
+    lock_sha256: str
+    method_source_sha256: str
+
+    def __post_init__(self):
+        _require(all(type(v) is str and bool(v.strip()) for v in (self.sklearn_version, self.numpy_version)), 'explicit runtime versions')
+        _sha(self.lock_sha256)
+        _sha(self.method_source_sha256)
+
+
+@dataclass(frozen=True, slots=True)
+class LaggedRow:
+    learner_id: str
+    child_id: str
+    source_row: int
+    timestamp: int
+    global_rank: int
+    correct: int
+    base: tuple[float, ...]
+    concept_successes: tuple[int, ...]
+    concept_counts: tuple[int, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class PreparedEdgeConfidence:
+    recipe: EdgeConfidenceRecipe
+    plan_sha256: str
+    bank_sha256: str
+    train_provenance_sha256: str
+    train_observable_sha256: str
+    train_shard_sha256: str
+    source_bindings: tuple[tuple[str, str], ...]
+    concepts: tuple[str, ...]
+    learner_ids: tuple[str, ...]
+    folds: tuple[tuple[str, int], ...]
+    rows: tuple[LaggedRow, ...]
+    content_sha256: str
+
+    def _payload(self):
+        return dict(recipe=asdict(self.recipe), plan_sha256=self.plan_sha256, bank_sha256=self.bank_sha256,
+                    train_provenance_sha256=self.train_provenance_sha256,
+                    train_observable_sha256=self.train_observable_sha256, train_shard_sha256=self.train_shard_sha256,
+                    source_bindings=self.source_bindings, concepts=self.concepts, learner_ids=self.learner_ids,
+                    folds=self.folds, rows_sha256=_row_hash(self.rows), rows=len(self.rows))
+
+    @property
+    def identity(self):
+        self.assert_integrity()
+        return self.content_sha256
+
+    def assert_integrity(self):
+        _require(type(self.recipe) is EdgeConfidenceRecipe and type(self.rows) is tuple and
+                 0 < len(self.rows) <= 10080 and type(self.concepts) is tuple and
+                 2 <= len(self.concepts) <= 28 and self.concepts == tuple(sorted(set(self.concepts))) and
+                 all(type(v) is str and bool(v.strip()) for v in self.concepts), 'prepared geometry/schema mismatch')
+        _label_free_context(self.recipe, self.plan_sha256, self.learner_ids)
+        for digest in (self.bank_sha256, self.train_provenance_sha256, self.train_observable_sha256, self.train_shard_sha256):
+            _sha(digest)
+        _require(len(self.learner_ids) <= 48 and self.folds == label_free_fold_assignments(
+            self.recipe, self.plan_sha256, self.learner_ids), 'prepared learner/fold mismatch')
+        seen = set()
+        for row in self.rows:
+            _require(type(row) is LaggedRow and row.learner_id in self.learner_ids and row.child_id in self.concepts and
+                     type(row.correct) is int and row.correct in (0, 1) and
+                     type(row.source_row) is int and row.source_row > 0 and row.source_row not in seen and
+                     type(row.global_rank) is int and 0 <= row.global_rank < 210 and
+                     type(row.timestamp) is int and row.timestamp >= 0, 'prepared target schema mismatch')
+            seen.add(row.source_row)
+            _require(type(row.base) is tuple and len(row.base) == 4 and all(_number(v) and 0 <= v <= 1 for v in row.base) and
+                     type(row.concept_counts) is tuple and type(row.concept_successes) is tuple and
+                     len(row.concept_counts) == len(row.concept_successes) == len(self.concepts), 'prepared feature geometry mismatch')
+            _require(all(type(n) is int and type(s) is int and 0 <= s <= n for n, s in
+                         zip(row.concept_counts, row.concept_successes)) and sum(row.concept_counts) == row.global_rank,
+                     'prepared past counts mismatch')
+        _require(identity_hash(self._payload()) == self.content_sha256, 'prepared observables changed')
+
+
+def _label_free_context(recipe, plan_sha256, learner_ids):
+    _require(type(recipe) is EdgeConfidenceRecipe, 'typed recipe required')
+    _sha(plan_sha256)
+    _require(type(learner_ids) is tuple and learner_ids == tuple(sorted(set(learner_ids))) and
+             learner_ids and all(type(v) is str and bool(v.strip()) for v in learner_ids), 'ordered unique TRAIN IDs required')
+    return recipe.method_id, recipe.seed, plan_sha256, learner_ids
+
+
+def label_free_fold_assignments(recipe, plan_sha256, learner_ids):
+    method, seed, plan, ids = _label_free_context(recipe, plan_sha256, learner_ids)
+    ranked = sorted(ids, key=lambda learner: (identity_hash([method, 'fold', seed, plan, ids, learner]), learner))
+    return tuple(sorted((learner, rank % recipe.folds) for rank, learner in enumerate(ranked)))
+
+
+def label_free_bootstrap_seed(recipe, plan_sha256, learner_ids, parent_id, child_id):
+    method, seed, plan, ids = _label_free_context(recipe, plan_sha256, learner_ids)
+    _require(all(type(v) is str and bool(v.strip()) for v in (parent_id, child_id)) and parent_id != child_id,
+             'ordered nonself edge IDs required')
+    return int(identity_hash([method, 'learner-bootstrap', seed, plan, ids, parent_id, child_id])[:16], 16)
+
+
+def _mean(successes, count):
+    return (successes + 1.) / (count + 2.)
+
+
+def _support(count):
+    return count / (count + 5.)
+
+
+def prepare_train_lagged_rows(train, bank, plan, *, expected_train_provenance_sha256,
+                              expected_train_observable_sha256, recipe, limits):
+    """Emit before update, all TRAIN targets; no role filtering after outcomes."""
+    start = time.monotonic()
+    _require(type(train) is PublicRoleData and train.role == 'train', 'TRAIN PublicRoleData only')
+    _require(type(bank) is SimulatorBank and type(plan) is ResearchSplitPlan and
+             type(recipe) is EdgeConfidenceRecipe and type(limits) is EdgePreparationLimits, 'typed inputs/recipe/limits')
+    _sha(expected_train_provenance_sha256)
+    _sha(expected_train_observable_sha256)
+    fresh = audit_research_shard(train.trajectories, plan=plan, bank=bank, role='train',
+        provenance=train.provenance, expected_provenance_sha256=expected_train_provenance_sha256,
+        limits=ShardLimits(limits.max_learners, limits.max_events_per_learner, limits.max_total_events), reference_items=bank.item_ids)
+    _require(fresh['reference_complete'], 'full train reference bank support required')
+    stored, manifest = train.audit, train.manifest
+    _require(stored['audit'] == fresh['audit'] and stored['provenance_sha256'] == train.provenance.identity and
+             manifest['observable_sha256'] == expected_train_observable_sha256 and
+             manifest['provenance_sha256'] == expected_train_provenance_sha256, 'train metadata/provenance binding mismatch')
+    trajectories = tuple(sorted(train.trajectories, key=lambda t: t.learner_id))
+    digest = hashlib.sha256()
+    for trajectory in trajectories:
+        _require(ObservableTrajectory.from_payload(trajectory.payload()) == trajectory, 'strict observable roundtrip')
+        digest.update((_json(trajectory.payload()) + '\n').encode())
+    _require(digest.hexdigest() == expected_train_observable_sha256, 'actual TRAIN bytes differ from pinned JSONL')
+    concepts = tuple(sorted({item.concept_id for item in bank.items}))
+    index = {concept: i for i, concept in enumerate(concepts)}
+    item_concept = {item.item_id: item.concept_id for item in bank.items}
+    rows, labels = [], Counter()
+    for trajectory in trajectories:
+        successes, counts = [0] * len(concepts), [0] * len(concepts)
+        overall_successes = 0
+        for rank, observation in enumerate(trajectory.observations):
+            _require(time.monotonic() - start <= limits.max_wall_seconds, 'preparation deadline')
+            child = item_concept[observation.query.item_id]
+            c = index[child]
+            rows.append(LaggedRow(trajectory.learner_id, child, observation.query.source_row,
+                observation.query.timestamp, rank, observation.correct,
+                (_mean(successes[c], counts[c]), _support(counts[c]), _mean(overall_successes, rank), _support(rank)),
+                tuple(successes), tuple(counts)))
+            labels[observation.correct] += 1
+            successes[c] += observation.correct
+            counts[c] += 1
+            overall_successes += observation.correct
+    _require((labels[0], labels[1]) == train.class_counts, 'actual TRAIN class counts mismatch')
+    learners = tuple(t.learner_id for t in trajectories)
+    folds = label_free_fold_assignments(recipe, plan.identity, learners)
+    _require(set(f for _, f in folds) == set(range(recipe.folds)), 'nonempty whole-learner folds required')
+    value = PreparedEdgeConfidence(recipe, plan.identity, identity_hash(bank.identity), train.provenance.identity,
+        expected_train_observable_sha256, fresh['audit']['shard_sha256'], train.provenance.source_bindings,
+        concepts, learners, folds, tuple(rows), '')
+    result = replace(value, content_sha256=identity_hash(value._payload()))
+    _require(time.monotonic() - start <= limits.max_wall_seconds, 'preparation deadline after sealing')
+    return result
+
+
+@dataclass(frozen=True, slots=True)
+class FitRecord:
+    kind: str
+    parent_id: str | None
+    child_id: str
+    heldout_fold: int
+    training_targets: int
+    training_learners: tuple[str, ...]
+    training_row_ids_sha256: str
+    class_counts: tuple[int, int]
+    supported: bool
+    reason: str | None
+    solver_called: bool
+    coefficients: tuple[float, ...]
+    intercept: float | None
+    iterations: int | None
+    warning_types: tuple[str, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class _FitOutcome:
+    model: object | None
+    reason: str | None
+    solver_called: bool
+    coefficients: tuple[float, ...] = ()
+    intercept: float | None = None
+    iterations: int | None = None
+    warning_types: tuple[str, ...] = ()
+
+
+def _finite_fit_outcome(outcome):
+    """Unsupported parameters still need finite-only audit serialization."""
+    if (any(not _number(v) for v in outcome.coefficients) or
+            (outcome.intercept is not None and not _number(outcome.intercept))):
+        return replace(outcome, model=None, reason='NONFINITE_PARAMETER_UNSUPPORTED', coefficients=(), intercept=None)
+    return outcome
+
+
+def _fit_logistic(x, y, recipe, runtime):
+    """Only public sklearn fits/predicts; no custom optimizer/logistic model."""
+    import numpy as np
+    import sklearn
+    from sklearn.exceptions import ConvergenceWarning
+    from sklearn.linear_model import LogisticRegression
+    _require(np.__version__ == runtime.numpy_version and sklearn.__version__ == runtime.sklearn_version,
+             'actual dependency versions differ from pinned runtime')
+    model = LogisticRegression(C=recipe.C, l1_ratio=0., solver='lbfgs', tol=recipe.tol,
+        max_iter=recipe.max_iter, fit_intercept=True, class_weight=None, random_state=recipe.seed,
+        warm_start=False, verbose=0)
+    try:
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter('always')
+            model.fit(np.asarray(x, dtype=np.float64), np.asarray(y, dtype=np.int64))
+        warning_types = tuple(type(w.message).__name__ for w in caught)
+        iterations = int(model.n_iter_[0])
+        coefficients = tuple(float(v) for v in model.coef_[0])
+        intercept = float(model.intercept_[0])
+        supported = (not any(issubclass(w.category, ConvergenceWarning) for w in caught) and
+                     iterations < recipe.max_iter and list(model.classes_) == [0, 1] and
+                     len(coefficients) == len(x[0]) and all(_number(v) for v in (*coefficients, intercept)))
+        return _finite_fit_outcome(_FitOutcome(
+            model if supported else None, None if supported else 'CONVERGENCE_OR_PARAMETER_UNSUPPORTED',
+            True, coefficients, intercept, iterations, warning_types))
+    except Exception as error:
+        return _FitOutcome(None, 'SOLVER_EXCEPTION:' + type(error).__name__, True)
+
+
+def _fit_one(x, y, recipe, runtime):
+    if set(y) != {0, 1}:
+        return _FitOutcome(None, 'FIT_REQUIRES_TWO_CLASSES', False)
+    return _fit_logistic(x, y, recipe, runtime)
+
+
+def _probabilities(fit, x):
+    if fit.model is None:
+        return None
+    if not x:
+        return ()
+    try:
+        predictions = fit.model.predict_proba(x)
+        _require(len(predictions) == len(x), 'prediction population mismatch')
+        values = []
+        for row in predictions:
+            _require(len(row) == 2 and all(_number(v) and 0 <= v <= 1 for v in row) and
+                     abs(float(row[0]) + float(row[1]) - 1) <= 1e-12, 'invalid binary probabilities')
+            values.append(float(row[1]))
+        return tuple(values)
+    except Exception:
+        return None
+
+
+def _loss(y, p, clip):
+    p = max(clip, min(1. - clip, p))
+    return -math.log(p) if y else -math.log1p(-p)
+
+
+def _resample_indices(seed, population, replicates):
+    import numpy as np
+    rng = np.random.Generator(np.random.PCG64(seed))
+    return rng.integers(0, population, size=(replicates, population), endpoint=False)
+
+
+@dataclass(frozen=True, slots=True)
+class OOFRow:
+    parent_id: str
+    child_id: str
+    learner_id: str
+    source_row: int
+    heldout_fold: int
+    correct: int
+    eligible: bool
+    base_probability: float | None
+    augmented_probability: float | None
+    paired_delta: float | None
+    reason: str | None
+
+
+@dataclass(frozen=True, slots=True)
+class EdgeSummary:
+    parent_id: str
+    child_id: str
+    full_child_targets: int
+    eligible_targets: int
+    excluded_targets: int
+    eligible_learners: int
+    eligible_class_counts: tuple[int, int]
+    unary_evaluation_labels: bool
+    fold_population: tuple[tuple[int, int, int, int], ...]
+    supported: bool
+    reason: str | None
+    learner_deltas: tuple[tuple[str, float], ...]
+    point_delta: float | None
+    bootstrap_seed: int
+    bootstrap_positive: int | None
+    bootstrap_replicates: int
+    confidence: float | None
+
+
+def _summarize_edge(rows, recipe, seed, fits_supported):
+    _require(bool(rows) and len({(r.parent_id, r.child_id) for r in rows}) == 1, 'one complete edge OOF population')
+    eligible = tuple(r for r in rows if r.eligible)
+    classes = Counter(r.correct for r in eligible)
+    learners = tuple(sorted({r.learner_id for r in eligible}))
+    populations = tuple((f, sum(r.heldout_fold == f for r in rows),
+                         sum(r.heldout_fold == f for r in eligible),
+                         len({r.learner_id for r in eligible if r.heldout_fold == f})) for f in range(recipe.folds))
+    reason = None
+    if not fits_supported or any(r.paired_delta is None for r in eligible):
+        reason = 'FOLD_FIT_OR_PREDICTION_UNSUPPORTED'
+    elif len(learners) < recipe.min_eligible_learners:
+        reason = 'INSUFFICIENT_ELIGIBLE_LEARNERS'
+    deltas, point, positive, confidence = (), None, None, None
+    if reason is None:
+        grouped = defaultdict(list)
+        for row in eligible:
+            _require(_number(row.paired_delta), 'nonfinite paired loss')
+            grouped[row.learner_id].append(row.paired_delta)
+        deltas = tuple((learner, math.fsum(grouped[learner]) / len(grouped[learner])) for learner in learners)
+        point = math.fsum(d for _, d in deltas) / len(deltas)
+        indices = _resample_indices(seed, len(deltas), recipe.bootstrap_replicates)
+        _require(len(indices) == recipe.bootstrap_replicates, 'bootstrap replicate count mismatch')
+        positive = 0
+        for draw in indices:
+            _require(len(draw) == len(deltas), 'bootstrap learner denominator mismatch')
+            values = []
+            for i in draw:
+                _require(not isinstance(i, bool) and int(i) == i and 0 <= i < len(deltas), 'invalid bootstrap index')
+                values.append(deltas[int(i)][1])
+            positive += math.fsum(values) / len(values) > 0
+        confidence = positive / recipe.bootstrap_replicates
+    first = rows[0]
+    return EdgeSummary(first.parent_id, first.child_id, len(rows), len(eligible), len(rows)-len(eligible),
+        len(learners), (classes[0], classes[1]), bool(eligible) and min(classes[0], classes[1]) == 0,
+        populations, reason is None, reason, deltas, point, seed, positive, recipe.bootstrap_replicates, confidence)
+
+
+@dataclass(frozen=True, slots=True)
+class EdgeConfidenceResult:
+    status: str
+    prepared_sha256: str
+    recipe: EdgeConfidenceRecipe
+    runtime: EdgeRuntimeBinding
+    fit_records: tuple[FitRecord, ...]
+    oof_rows: tuple[OOFRow, ...]
+    edges: tuple[EdgeSummary, ...]
+    elapsed_seconds: float
+    content_sha256: str
+
+    def _payload(self):
+        return dict(status=self.status, prepared_sha256=self.prepared_sha256, recipe=asdict(self.recipe),
+                    runtime=asdict(self.runtime), fit_records=[asdict(r) for r in self.fit_records],
+                    oof_rows_sha256=_row_hash(self.oof_rows), oof_rows=len(self.oof_rows),
+                    edges=[asdict(e) for e in self.edges], elapsed_seconds=self.elapsed_seconds)
+
+    @property
+    def identity(self):
+        self.assert_integrity()
+        return self.content_sha256
+
+    def assert_integrity(self):
+        _require(identity_hash(self._payload()) == self.content_sha256, 'edge result changed')
+
+
+class EdgeFitInterrupted(RuntimeError):
+    """Partial processing never becomes complete confidence/graph output."""
+    def __init__(self, reason, records, oof_rows, elapsed):
+        super().__init__(reason)
+        self.fit_records = tuple(records)
+        self.oof_rows = tuple(oof_rows)
+        self.elapsed_seconds = elapsed
+
+
+def fit_crossfit_edge_confidence(prepared, *, expected_prepared_sha256, runtime, limits):
+    start = time.monotonic()
+    _require(type(prepared) is PreparedEdgeConfidence and type(runtime) is EdgeRuntimeBinding and
+             type(limits) is EdgeFitLimits, 'typed prepared/runtime/limits required')
+    _sha(expected_prepared_sha256)
+    _require(prepared.identity == expected_prepared_sha256, 'prepared external identity mismatch')
+    concepts, recipe = prepared.concepts, prepared.recipe
+    expected_fits = recipe.folds * len(concepts) ** 2
+    expected_oof = len(prepared.rows) * (len(concepts)-1)
+    _require(expected_fits <= limits.max_fits and expected_oof <= limits.max_oof_rows, 'whole workload exceeds fit/OOF cap')
+    fold_of = dict(prepared.folds)
+    _require(prepared.folds == label_free_fold_assignments(recipe, prepared.plan_sha256, prepared.learner_ids), 'fold binding drift')
+    by_child = {child: tuple(r for r in prepared.rows if r.child_id == child) for child in concepts}
+    records, oof, edges = [], [], []
+
+    def guard():
+        if time.monotonic()-start > limits.max_wall_seconds:
+            raise EdgeFitInterrupted('ACTIVE_FIT_DEADLINE', records, oof, time.monotonic()-start)
+
+    def fitted(kind, parent, child, fold, rows, x):
+        guard()
+        y = tuple(r.correct for r in rows)
+        outcome = _finite_fit_outcome(_fit_one(x, y, recipe, runtime))
+        classes = Counter(y)
+        records.append(FitRecord(kind, parent, child, fold, len(rows), tuple(sorted({r.learner_id for r in rows})),
+            identity_hash([(r.learner_id, r.source_row) for r in rows]), (classes[0], classes[1]), outcome.model is not None,
+            outcome.reason, outcome.solver_called, outcome.coefficients, outcome.intercept, outcome.iterations, outcome.warning_types))
+        guard()
+        return outcome
+
+    for child in concepts:
+        guard()
+        child_rows = by_child[child]
+        baseline = {}
+        for fold in range(recipe.folds):
+            training = tuple(r for r in child_rows if fold_of[r.learner_id] != fold)
+            heldout = tuple(r for r in child_rows if fold_of[r.learner_id] == fold)
+            fit = fitted('baseline', None, child, fold, training, tuple(r.base for r in training))
+            baseline[fold] = (heldout, _probabilities(fit, tuple(r.base for r in heldout)))
+            guard()
+        for parent_index, parent in enumerate(concepts):
+            if parent == child:
+                continue
+            edge_rows, all_folds = [], True
+            def augmented(row):
+                n, s = row.concept_counts[parent_index], row.concept_successes[parent_index]
+                return row.base + (_mean(s, n), _support(n))
+            for fold in range(recipe.folds):
+                training = tuple(r for r in child_rows if fold_of[r.learner_id] != fold)
+                heldout, base_prob = baseline[fold]
+                fit = fitted('augmented', parent, child, fold, training, tuple(augmented(r) for r in training))
+                aug_prob = _probabilities(fit, tuple(augmented(r) for r in heldout))
+                all_folds = all_folds and base_prob is not None and aug_prob is not None
+                for i, row in enumerate(heldout):
+                    eligible = row.concept_counts[parent_index] >= 1
+                    b = base_prob[i] if base_prob is not None else None
+                    a = aug_prob[i] if aug_prob is not None else None
+                    delta = _loss(row.correct, b, recipe.clip)-_loss(row.correct, a, recipe.clip) if eligible and b is not None and a is not None else None
+                    entry = OOFRow(parent, child, row.learner_id, row.source_row, fold, row.correct, eligible, b, a,
+                                   delta, 'PARENT_NOT_PAST' if not eligible else (None if delta is not None else 'FIT_UNSUPPORTED'))
+                    edge_rows.append(entry)
+                    oof.append(entry)
+                guard()
+            seed = label_free_bootstrap_seed(recipe, prepared.plan_sha256, prepared.learner_ids, parent, child)
+            edges.append(_summarize_edge(tuple(edge_rows), recipe, seed, all_folds))
+            guard()
+    _require(len(records) == expected_fits and len(oof) == expected_oof and
+             len(edges) == len(concepts)*(len(concepts)-1), 'incomplete fit/OOF population')
+    prepared.assert_integrity()
+    guard()
+    value = EdgeConfidenceResult('COMPLETE_CONDITIONAL_SURROGATE_NOT_EDGE_TRUTH', prepared.content_sha256,
+        recipe, runtime, tuple(records), tuple(oof), tuple(edges), time.monotonic()-start, '')
+    result = replace(value, content_sha256=identity_hash(value._payload()))
+    guard()  # Hashing/finalization is inside active cap; caller reserves cleanup.
+    return result
+
+
+@dataclass(frozen=True, slots=True)
+class LearnedGraphResult:
+    status: str
+    edge_confidence_sha256: str
+    nodes: tuple[str, ...]
+    requested_edges: int
+    edges: tuple[tuple[str, str], ...]
+    rejected_cycles: tuple[tuple[str, str], ...]
+    considered_positive_supported: int
+    content_sha256: str
+
+
+def select_positive_dag(result, *, edge_budget):
+    _require(type(result) is EdgeConfidenceResult and result.status == 'COMPLETE_CONDITIONAL_SURROGATE_NOT_EDGE_TRUTH',
+             'complete conditional-surrogate result required')
+    _positive(edge_budget, 31)
+    result.assert_integrity()
+    pairs = tuple((e.parent_id, e.child_id) for e in result.edges)
+    nodes = tuple(sorted({v for pair in pairs for v in pair}))
+    _require(len(nodes) >= 2 and len(pairs) == len(set(pairs)) and
+             set(pairs) == {(p, c) for p in nodes for c in nodes if p != c}, 'complete nonself candidate pool required')
+    _require(all(not e.supported or (_number(e.point_delta) and _number(e.confidence) and
+                                    0 <= e.confidence <= 1) for e in result.edges), 'nonfinite supported edge')
+    candidates = sorted((e for e in result.edges if e.supported and e.point_delta is not None and e.point_delta > 0),
+                        key=lambda e: (-e.point_delta, e.parent_id, e.child_id))
+    children = {node: set() for node in nodes}
+    selected, cycles = [], []
+    def reaches(start, target):
+        pending, seen = [start], set()
+        while pending:
+            node = pending.pop()
+            if node == target:
+                return True
+            if node not in seen:
+                seen.add(node)
+                pending.extend(children[node] - seen)
+        return False
+    for edge in candidates:
+        pair = edge.parent_id, edge.child_id
+        if reaches(edge.child_id, edge.parent_id):
+            cycles.append(pair)
+        else:
+            children[edge.parent_id].add(edge.child_id)
+            selected.append(pair)
+        if len(selected) == edge_budget:
+            break
+    fields = dict(status='SUPPORTED_DAG' if len(selected) == edge_budget else 'UNSUPPORTED_EDGE_BUDGET',
+        edge_confidence_sha256=result.content_sha256, nodes=nodes, requested_edges=edge_budget,
+        edges=tuple(selected), rejected_cycles=tuple(cycles), considered_positive_supported=len(candidates))
+    return LearnedGraphResult(**fields, content_sha256=identity_hash(fields))

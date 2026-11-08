@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**Ước lượng cạnh đã thực chạy:** [Method24 trên TRAIN mô phỏng](edge_confidence_native_results_20261108.md),2.352solverfits trong45,17giây CPU; chưa CG-AKT neural hoặc bằng chứng cạnh đúng.
+
 **SAKT — cầu nối dữ liệu:** [bản nghiệm thu kỹ thuật](sakt_research_data_readiness_20261108.md),20 data fixtures và3 native compatibility fixtures đã kiểm; chưa fitted model hoặc kết quả RQ.
 
 **Bổ sung kỹ thuật sau gói GVHD08/11:** [metric sau calibration](akt_calibrated_reporting_readiness_20261108.md) có36purePASS và một lần kiểm evaluator pandas/sklearn thật trên5hàng tự dựng;0model/solver/realdata. Số AUC/Brier fixture không là kết quả RQ. Full Gate vẫn cần tách process trước khi chạy; không lấy batch này thay actual training/CUDA.

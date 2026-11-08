@@ -569,3 +569,8 @@ Lượt goaltrước tiến triển: đã xuấtHTML31ce8ff vàsửaalltextcolli
 ## 08/11 — cầu nối SAKT và kiểm bootstrap Windows
 
 SAKT data20PASS/3,282903s trong60s; native public exports3PASS/6,049573s trong30s, actual2constructors/8forwards,0optimizer/corpus. View dùng InitVar để không giữ corpus đầy đủ. Đóng bundle52outputs với raw receipts và erratum, chưa fitted SAKT/RQ completion. Metric commit8cc0cc1 đã đối chiếu42rawGitoutputs+2sourcefiles. Method24 bootstrap43purePASS/83,446560s trong150s,0fit; review độc lập phát hiện latecounter cần kiểm lại sau runtime snapshot nên chưa native dispatch. User sẽ giải phóng RAM; fullGate vẫn giữ4GiB floor, chưa chi Modal.
+
+
+## 08/11 — Method24 actualTRAIN đã hoàn tất, chưa neuralCG-AKT
+
+Sau45purePASS/87,961597s và exactrequestreview, ROOT chạy một operationCPU110active/120outer trênTRAIN48×210. TerminalRC0/45,1694439s; actual2352solverfits,272160OOFrows,756supported summaries và31edgeDAG. Peak263442432B/minfree1599983616B, ownedcleanupaccepted,0NN/Modal. Bundle113outputs nhỏ giữ failure/revisions và14nativeSHA/sizepointers;5exports lớn69MBtổngnative giữ nguyên. Confidence không P(edge true), chưaoraclevalidation/RQ3benefit. SAKT8082e04 rawGit52outputs+manifest+3sources verified. HTML viết lại theo diễn tiến vàprogressupfront; browserpreviewđóng sauQA, không đểtabtreo.
