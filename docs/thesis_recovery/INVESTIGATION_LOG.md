@@ -636,3 +636,7 @@ SAKT counter refinement đã thực chạy33PASS/0FES trong22,2962247s/90,3Adams
 ### 09/11 — cập nhật con trỏ Gate cục bộ
 
 ROOT đã kiểm sole-writer window và raw Git154 nguồn `d658d77`, giữ trước/sau pointer, rồi validate bằng preflight và reader chuẩn trước/sau atomic replace. Promotion accepted trong 1.7734846999519505s, không late rejection hoặc lỗi. Không chạy lại tests/model, không cấp quyền CUDA/training/chi cloud; fullGate03 closedbundle vẫn giữ noPublish tại thời điểm chạy. Receipt phục hồi nguyên byte trước/sau nằm ở docs/thesis_recovery/evidence/gate_pointer_promotion_20261109.json.
+
+### 09/11 — SAKT strict-counter delta hoàn thiện
+
+Bundle43outputs manifestf885cf43... đã đóng và commit `bc70f53`;47rawGit blobs gồm43outputs,manifest,source/test/report đã đối chiếu nguyên byte. Lỗi dry metadata sorting được giữ với original inventory; không testfailure, không chạy lại33. Current33PASS không biến31revision cũ thành64independent tests. SAKT vẫn chưa research baseline fitted; ưu tiên tiếp theo là nối selected-only và refit sau system freeze, không thêm tính năng resume không cần thiết.
