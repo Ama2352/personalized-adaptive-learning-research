@@ -4129,11 +4129,198 @@
       "required_inputs": "Condition6678, contextAPI, nativeNonRasch bridge, Recipe26",
       "files_components": "src/knowledge_tracing/akt/research_graph_context.py; research_graph_model.py; hai test modules tương ứng",
       "implementation_objective": "Processlocal seal, selected whole-record/input hashes, trainingticket/nativecall evidence hashes; explicit fullaudit quanh toàn pass/epoch.",
-      "acceptance_criteria": "135purecases và native25targeted thực chạy; samebaseline numeric/gradient behavior; selected/ticket/header tamper rejected; unselected drift atselection/fullboundary; measuredcost before throughputclaim.",
-      "verification_steps": "135purePASS đã có; native25/benchmark chưa chạy.",
+      "acceptance_criteria": "Correctness accepted: selected/header/ticket/native evidence tamper checks, full/default semantics and boundaries preserved. Representativecost remainsGRAPH09; nottrainingreadiness.",
+      "verification_steps": "135purePASS/12.7690966s và25nativePASS/14.5938191s;8Architectureforward/5logicalbackward/0Adam;0fullpayloadhotattempts;explicitbefore/afterwholeinference.",
       "required_artifacts": "Pins before/after, retained originalversions/failures, finite logs/counters/resource and operational cost receipts.",
-      "status": "IN_PROGRESS_PURE_ACCEPTED_NATIVE_AND_BENCHMARK_PENDING",
-      "verified_cases": 135
+      "status": "COMPLETED_CORRECTNESS_ENGINEERING_COST_SEPARATE_GRAPH09",
+      "verified_cases": 160,
+      "evidence_bundle": "research_tracking/runs/cgakt-context-model-hotpath-engineering-20261109-01",
+      "source_commit": "f8b90fb"
+    },
+    {
+      "id": "GRAPH09",
+      "research_objective": "Đo cost graph context trên complete TRAIN80 simulator đã có",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GRAPH08"
+      ],
+      "required_inputs": "Plan27 và adoptedProtocol21/Recipe26; source/input/allocation pins được review cho từng gói.",
+      "files_components": "src/knowledge_tracing/akt/research_graph_context.py; existing simulatorcorpus publicreader; P/check_graph_context_hash_benchmark01.py",
+      "implementation_objective": "Canonical publicreader audit các roleDevelopment chỉ provenance; chỉ transform/ABBA TRAIN80, cùngindex/groups/defaultfull/fast. KhôngNN/teacher/selectionmetric.",
+      "acceptance_criteria": "Finite90s/512MiBRSS/free1GiB proposal phải Rootreview exactpacket trước dispatch; allreturned evidence equal; build/seal/timings/calls/resources riêng; failcap=UNKNOWN, không suy GPUthroughput.",
+      "verification_steps": "Source review, finite fixture tests/owned runtime tương ứng; không tự coi source-only là passed.",
+      "required_artifacts": "Source/test/pins, raw logs/counters/resource/cleanup, manifest/README giới hạn khi nghiệm thu; giữ cả failures quan trọng.",
+      "estimated_effort": "Một gói hữu hạn; cụ thể hóa trước execution, không runtimeforecast.",
+      "elapsed_duration": "Chưa đo",
+      "compute_cost_category": "local_CPU_preparation; GRAPH15 actualGPU separately_authorized",
+      "authorization_requirements": "User đã giao localengineering; Root review finite commands/caps trước execution. FullCV/Holdout/finalselection/paidGPU vẫn quyền riêng, không chiModal từ taskstatus.",
+      "status": "SOURCE_PREPARATION_NOT_EXECUTED",
+      "blockers": []
+    },
+    {
+      "id": "GRAPH10",
+      "research_objective": "Kiểm actual Adam và tham số tham gia nhánh CG-AKT",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GRAPH08"
+      ],
+      "required_inputs": "Plan27 và adoptedProtocol21/Recipe26; source/input/allocation pins được review cho từng gói.",
+      "files_components": "src/knowledge_tracing/akt/research_graph_model.py; tests/akt/test_research_graph_model.py; future owned fixture worker",
+      "implementation_objective": "Reuse tiny frozenfixture/nativegeometry, actualadaptercollate_training→AKTAdapter.step; sốconstructor/steps/targets giới hạn trước execution. Kiểm alpha,gate,backbone và zero-mass inactive batches.",
+      "acceptance_criteria": "Rootactualcounters/finitegrads/parameterupdates; graph-off parity; inactiveNone/absentAdamstate hợp lệ; đúngconfig/freshoptimizer. Không userdata/researchfit. Controller hữu hạn review trước gọi.",
+      "verification_steps": "Source review, finite fixture tests/owned runtime tương ứng; không tự coi source-only là passed.",
+      "required_artifacts": "Source/test/pins, raw logs/counters/resource/cleanup, manifest/README giới hạn khi nghiệm thu; giữ cả failures quan trọng.",
+      "estimated_effort": "Một gói hữu hạn; cụ thể hóa trước execution, không runtimeforecast.",
+      "elapsed_duration": "Chưa đo",
+      "compute_cost_category": "local_CPU_preparation; GRAPH15 actualGPU separately_authorized",
+      "authorization_requirements": "User đã giao localengineering; Root review finite commands/caps trước execution. FullCV/Holdout/finalselection/paidGPU vẫn quyền riêng, không chiModal từ taskstatus.",
+      "status": "NOT_STARTED",
+      "blockers": []
+    },
+    {
+      "id": "GRAPH11",
+      "research_objective": "Checkpoint graph cuối epoch và owned optimizer restore",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GRAPH10"
+      ],
+      "required_inputs": "Plan27 và adoptedProtocol21/Recipe26; source/input/allocation pins được review cho từng gói.",
+      "files_components": "src/knowledge_tracing/akt/research_graph_model.py; checkpoint.py; new researchgraph checkpoint scope/tests",
+      "implementation_objective": "Bind recipe/variant/condition/initialbackbone/graph-confidence80/vocab/bank/phase/freeze/source/runtime; lưu/restore backbone+alpha+gate+Adam/RNG/counters. Typed ownedrestore thay guard chỉacceptfreshAdam, không xóa hoặc điền optimizerstate giả.",
+      "acceptance_criteria": "Continuous vs fresh-process epoch-boundary resume numerical/source/sample parity; corrupt/foreign/latephase states rejected; counter participation hợp lệ. Không claim mid-epoch recovery nếu chưa thực hiện.",
+      "verification_steps": "Source review, finite fixture tests/owned runtime tương ứng; không tự coi source-only là passed.",
+      "required_artifacts": "Source/test/pins, raw logs/counters/resource/cleanup, manifest/README giới hạn khi nghiệm thu; giữ cả failures quan trọng.",
+      "estimated_effort": "Một gói hữu hạn; cụ thể hóa trước execution, không runtimeforecast.",
+      "elapsed_duration": "Chưa đo",
+      "compute_cost_category": "local_CPU_preparation; GRAPH15 actualGPU separately_authorized",
+      "authorization_requirements": "User đã giao localengineering; Root review finite commands/caps trước execution. FullCV/Holdout/finalselection/paidGPU vẫn quyền riêng, không chiModal từ taskstatus.",
+      "status": "NOT_STARTED",
+      "blockers": []
+    },
+    {
+      "id": "GRAPH12",
+      "research_objective": "Main-stage contracts và public role-scoped corpus reader",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GRAPH07"
+      ],
+      "required_inputs": "Plan27 và adoptedProtocol21/Recipe26; source/input/allocation pins được review cho từng gói.",
+      "files_components": "src/knowledge_tracing/akt/research_execution.py; research_lifecycle.py; src/knowledge_tracing/simulator_corpus_reader.py; public scoped API/tests",
+      "implementation_objective": "Theo plan27, typed selected-only/refit-after-freeze/calibration entitlements và candidateallocation; public scopedreader/type reuse validators, giữ wholepilot API. Selected80 terminal không auto-refit hoặc materialize calibrationevents.",
+      "acceptance_criteria": "Actualopen-path fixtures chứng minh rolevisibility; selected cannotrefit/calibrate; refitcannotconstruct trước actualclosedexternalfreeze; noforgedCompleteCorpus/private-reader workaround. Routineimplementation, không đổi Protocol21/Recipe26.",
+      "verification_steps": "Source review, finite fixture tests/owned runtime tương ứng; không tự coi source-only là passed.",
+      "required_artifacts": "Source/test/pins, raw logs/counters/resource/cleanup, manifest/README giới hạn khi nghiệm thu; giữ cả failures quan trọng.",
+      "estimated_effort": "Một gói hữu hạn; cụ thể hóa trước execution, không runtimeforecast.",
+      "elapsed_duration": "Chưa đo",
+      "compute_cost_category": "local_CPU_preparation; GRAPH15 actualGPU separately_authorized",
+      "authorization_requirements": "User đã giao localengineering; Root review finite commands/caps trước execution. FullCV/Holdout/finalselection/paidGPU vẫn quyền riêng, không chiModal từ taskstatus.",
+      "status": "NOT_STARTED",
+      "blockers": []
+    },
+    {
+      "id": "GRAPH13",
+      "research_objective": "Cached external selector và freeze artifact có authority",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GRAPH12"
+      ],
+      "required_inputs": "Plan27 và adoptedProtocol21/Recipe26; source/input/allocation pins được review cho từng gói.",
+      "files_components": "docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md; future cached selector/export/freeze source/tests",
+      "implementation_objective": "Consume tất cả rawbest80 predictionexports trong allocation; samefullkeys/labels/common-supporteduniverse; response-pooledLL,2000learner-cluster shareddraws seed42,upper.975,stableIDtie,A1/A3eligible,A0fallback.",
+      "acceptance_criteria": "Allcandidate/lineage/coverage/draws verified; missing/duplicate/unfrozen/calibratedselection rejected. Cache-onlyfixtures handcheckLL/resamples/negative-resultfallback. Không modelcalls hoặc finalHoldoutselection.",
+      "verification_steps": "Source review, finite fixture tests/owned runtime tương ứng; không tự coi source-only là passed.",
+      "required_artifacts": "Source/test/pins, raw logs/counters/resource/cleanup, manifest/README giới hạn khi nghiệm thu; giữ cả failures quan trọng.",
+      "estimated_effort": "Một gói hữu hạn; cụ thể hóa trước execution, không runtimeforecast.",
+      "elapsed_duration": "Chưa đo",
+      "compute_cost_category": "local_CPU_preparation; GRAPH15 actualGPU separately_authorized",
+      "authorization_requirements": "User đã giao localengineering; Root review finite commands/caps trước execution. FullCV/Holdout/finalselection/paidGPU vẫn quyền riêng, không chiModal từ taskstatus.",
+      "status": "NOT_STARTED",
+      "blockers": []
+    },
+    {
+      "id": "GRAPH14",
+      "research_objective": "Nối selected-only fit và fresh refit90/calibration10",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GRAPH11",
+        "GRAPH12",
+        "GRAPH13"
+      ],
+      "required_inputs": "Plan27 và adoptedProtocol21/Recipe26; source/input/allocation pins được review cho từng gói.",
+      "files_components": "src/knowledge_tracing/akt/research_runner.py; research_simulator_data.py; research_graph_model.py; research checkpoint/selector/publicscopedAPI",
+      "implementation_objective": "Small typedcandidatefactory A0–A3; sameinitialbackbone/freshAdam; graphcollate tickets/index phase +fullboundary audits; reuse epoch/ledger/EarlyStopping; rawbestselectedexports trước mọimainrefit. Fresh90 theo selectedepoch, graphconfidence80frozen; Tfit10 sauweightsfinal.",
+      "acceptance_criteria": "Bounded manufactured complete-lifecycle proof +allphase/artifactcontracts; no mainrefit beforeallselectedfreeze; checkpoint/reload/coverage/OOV and rawvsTcalibration labels exact. Requiredcomparisons stillmatrix23, không refitonlywinner đểgiảm hiddenbudget.",
+      "verification_steps": "Source review, finite fixture tests/owned runtime tương ứng; không tự coi source-only là passed.",
+      "required_artifacts": "Source/test/pins, raw logs/counters/resource/cleanup, manifest/README giới hạn khi nghiệm thu; giữ cả failures quan trọng.",
+      "estimated_effort": "Một gói hữu hạn; cụ thể hóa trước execution, không runtimeforecast.",
+      "elapsed_duration": "Chưa đo",
+      "compute_cost_category": "local_CPU_preparation; GRAPH15 actualGPU separately_authorized",
+      "authorization_requirements": "User đã giao localengineering; Root review finite commands/caps trước execution. FullCV/Holdout/finalselection/paidGPU vẫn quyền riêng, không chiModal từ taskstatus.",
+      "status": "NOT_STARTED",
+      "blockers": []
+    },
+    {
+      "id": "GRAPH15",
+      "research_objective": "Port research graph pipeline sang device GPU có kiểm soát",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GRAPH11",
+        "GRAPH12"
+      ],
+      "required_inputs": "Plan27 và adoptedProtocol21/Recipe26; source/input/allocation pins được review cho từng gói.",
+      "files_components": "src/knowledge_tracing/akt/research_graph_model.py; config.py; research_execution.py; research_runner.py; runtime/GPU fixture kit",
+      "implementation_objective": "Tách CPU-only guards hiện tại thành explicit permitteddevice paths, tensors/context/loss/checkpoint/runtime/admission coherent; giữ windows/targets/recipe/hyperparameters. Chưa đổi configJSON lẻ để bypass CPU guard.",
+      "acceptance_criteria": "CPU parity +actual boundedCUDA ladderforward/backward/optimizer/checkpoint/recovery/export, measuredtargets/sec/VRAM/RAM, current-sourceGate/runtime verified; không GPUspending/fullCV authority từ testpass.",
+      "verification_steps": "Source review, finite fixture tests/owned runtime tương ứng; không tự coi source-only là passed.",
+      "required_artifacts": "Source/test/pins, raw logs/counters/resource/cleanup, manifest/README giới hạn khi nghiệm thu; giữ cả failures quan trọng.",
+      "estimated_effort": "Một gói hữu hạn; cụ thể hóa trước execution, không runtimeforecast.",
+      "elapsed_duration": "Chưa đo",
+      "compute_cost_category": "local_CPU_preparation; GRAPH15 actualGPU separately_authorized",
+      "authorization_requirements": "User đã giao localengineering; Root review finite commands/caps trước execution. FullCV/Holdout/finalselection/paidGPU vẫn quyền riêng, không chiModal từ taskstatus.",
+      "status": "NOT_STARTED",
+      "blockers": []
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",
