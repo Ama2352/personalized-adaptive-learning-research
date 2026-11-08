@@ -544,3 +544,8 @@ Lượt trước là tiến triển: đã đối chiếu đúng3PDF và chốt b
 ### 08/11 — AKT/reference binding và object lifetime
 
 Sửa bankSHA đúng item_bank, calibrator.to_payload đúng strictloader. Kiểm36pure trước release2,804354100s/45, sau3del release36pure2,822563171s/45; không72unique. Schema JSON roundtrip→reference scorer thật84items/28concepts với synthetic backend, wrongbank/missingrecipe rejected. Weakrefs assert refit gone trước load, reloadpayload/optimizer gone trước predict và allmodels gone trướcTfit. KhôngTorch/NumPy/pandas/sklearn/SciPy/subprocess từtest; nguồn/env/ownedJob0 verified. Bundle42outputs; source19627a/tests3d19d8. Đây không actual NN/corpusfit/calibration research/RSSguarantee. Method24archive4fece2c51outputs+manifest rawGit verified.
+
+
+### 08/11 — Gate process isolation có kiểm76cases, chưa fullGate
+
+Một allocation phần mềm mới240s được ghim trước; nochildTimer, externalowned237/cleanup5, phasesdurable76unique/228reports. Actual76PASS62.045502901s/240, noFES/heavy/Popen/protectedopens;source8/env/job0/handlesclosed accepted. Source5b7/tests9a0 giữ nguyên so targeted trước; trước54.0555s thiếuJUnit vẫnrejected. Bundle51outputs kèm diagnostic2node vàFS8files, không khẳng định nguyênnhân timeout hoặc fullGate đãchạy. Bankbinding8dd3e7c42outputs+source2rawGit verified; tổngintegritycounter2933 khôngresearchprogress.

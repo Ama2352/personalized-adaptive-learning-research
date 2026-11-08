@@ -279,3 +279,5 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 - **Confidence worker,08/11:** [báo cáo](reports/edge_confidence_worker_readiness_20261108.md), [bundle51outputs](runs/edge-confidence-worker-engineering-20261108-01/README.md).21purePASS,0solver/corpus/NN; priorrejected giữ nguyên, không research effect.
 
 - **AKT/reference binding,08/11:** [báo cáo](reports/akt_reference_calibrator_binding_20261108.md), [bundle42outputs](runs/akt-reference-binding-engineering-20261108-01/README.md).36purePASS current source, actualschema/reference scorer với syntheticbackend; không fittedNN/RSSacceptance.
+
+- **Gate process isolation,08/11:** [báo cáo](reports/akt_gate_process_isolation_20261108.md), [bundle51outputs](runs/akt-gate-process-isolation-engineering-20261108-01/README.md).76targetedPASS62,0455s,0actualFullGate; giữ2node/FSdiagnostics và priorrejected archive riêng.

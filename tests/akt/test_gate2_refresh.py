@@ -51,24 +51,52 @@ def _publisher(tmp_path, monkeypatch, *, elapsed):
     pointer = directory / 'gate2-current.json'
     pointer.write_bytes(b'original pointer must remain intact\n')
     observed = {}
+    modules = [*module['STRICT_STDLIB'], *module['NO_TORCH'], 'tests/akt/test_fixture_remaining.py']
+    for relative in modules:
+        path = root / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text('def test_fixture(): pass\n', encoding='utf-8')
+    clock = SimpleNamespace(now=100.0)
 
     def child(command, **kwargs):
         observed.update(kwargs)
+        files = command[command.index('pytest')+1:command.index('-q')]
+        group = ('stdlib' if files == list(module['STRICT_STDLIB']) else
+                 'no-torch' if files == list(module['NO_TORCH']) else 'remaining')
+        calls = observed.setdefault('children', [])
+        calls.append(dict(group=group, files=files, timeout=kwargs['timeout']))
+        problem = observed.get('xml_problems', {}).get(group)
+        counts = dict(tests=len(files), failures=0, errors=0, skipped=0)
+        if problem == 'zero':
+            counts['tests'] = 0
+        elif problem:
+            counts[problem] = 1
+        cases = ''.join('<testcase classname="'+relative[:-3].replace('/', '.')+'" name="test_fixture"/>'
+                        for relative in files) if counts['tests'] else ''
+        if observed.get('duplicate_case') and group == 'no-torch':
+            cases = cases.replace(files[0][:-3].replace('/', '.'), module['STRICT_STDLIB'][0][:-3].replace('/', '.'))
+        attrs = ' '.join(name+'="'+str(value)+'"' for name,value in counts.items())
         Path(command[command.index('--junitxml') + 1]).write_text(
-            '<testsuites><testsuite tests="3" failures="0" errors="0" skipped="0"/></testsuites>',
-            encoding='utf-8')
-        kwargs['stdout'].write(b'3 passed, synthetic child receipt\n')
-        return SimpleNamespace(returncode=0)
+            '<testsuites><testsuite '+attrs+'>'+cases+'</testsuite></testsuites>', encoding='utf-8')
+        kwargs['stdout'].write(b'Synthetic process group only; no actual pytest/native execution.\n')
+        costs = observed.get('per_child_seconds')
+        if costs is None:
+            clock.now = 100.0 + elapsed
+        else:
+            clock.now += costs[len(calls)-1]
+        return SimpleNamespace(returncode=observed.get('returncodes', {}).get(group, 0))
 
-    clock = iter((100.0, 100.0 + elapsed))
     monkeypatch.setitem(namespace, 'ROOT', root)
     monkeypatch.setitem(namespace, 'sys', SimpleNamespace(prefix=str(root / '.venv'), executable='fixture-python'))
-    monkeypatch.setitem(namespace, 'time', SimpleNamespace(perf_counter=lambda: next(clock)))
+    monkeypatch.setitem(namespace, 'time', SimpleNamespace(perf_counter=lambda: clock.now))
+    monkeypatch.setitem(namespace, '_fixture_clock', clock)
     monkeypatch.setitem(namespace, 'subprocess', SimpleNamespace(run=child, STDOUT=-2))
     monkeypatch.setitem(namespace, 'verify_upstream', lambda *args: {'commit': 'synthetic source'})
     monkeypatch.setitem(namespace, 'gate2_build_hashes', lambda: {'fixture.py': 'source hash'})
     def reader(*args, **kwargs):
         observed['reader_kwargs'] = kwargs
+        if 'reader_elapsed' in observed:
+            clock.now = 100.0 + observed['reader_elapsed']
         return {'status': 'PASS'}
     monkeypatch.setitem(namespace, 'require_gate2_evidence', reader)
     # Track/revert keys changed by the real function; never alter Git config on disk.
@@ -88,7 +116,7 @@ def test_gate2_exit_zero_clock_overrun_rejected_without_pointer_change(tmp_path,
     rejected = json.loads(report.read_text())
     assert rejected['status'] == 'REJECTED_RESOURCE_BOUND'
     assert rejected['elapsed_seconds'] == 1084.0 and rejected['timeout_seconds'] == 540
-    assert rejected['test_result']['passed'] == 3
+    assert rejected['test_result']['passed'] == 1  # First process finished before the clock overrun.
     assert rejected['build_hashes'] == {'fixture.py': 'source hash'}
     assert rejected['test_log_sha256'] == hashlib.sha256(
         (directory / 'gate2-tests-synthetic-overrun.log').read_bytes()).hexdigest()
@@ -106,9 +134,15 @@ def test_gate2_inbudget_publisher_retains_counts_and_bounds_child_threads(tmp_pa
     assert result['published_current'] is True
     report = json.loads((directory / 'gate2-evidence-synthetic-valid.json').read_text())
     assert report['status'] == 'PASS' and report['elapsed_seconds'] == 1.0
-    assert report['timeout_seconds'] == 30 and report['test_result']['passed'] == 3
+    assert report['timeout_seconds'] == 30 and report['test_result']['passed'] == 8
     assert json.loads(pointer.read_text())['evidence_file'] == 'gate2-evidence-synthetic-valid.json'
-    assert observed['timeout'] == 30
+    assert [r['timeout'] for r in observed['children']] == [30, 29, 29]
+    assert [r['name'] for r in report['process_groups']] == ['stdlib', 'no-torch', 'remaining']
+    flat = [p for r in report['process_groups'] for p in r['modules']]
+    assert len(flat) == len(set(flat)) == 8
+    assert report['suite'] == 'tests/akt tests/shared_kt' and report['schema_version'] == 1
+    assert observed['env']['PYTEST_DISABLE_PLUGIN_AUTOLOAD'] == '1'
+    assert observed['env']['PYTEST_ADDOPTS'] == observed['env']['PYTEST_PLUGINS'] == ''
     assert {name: observed['env'][name] for name in
             ('OMP_NUM_THREADS', 'MKL_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'CUDA_VISIBLE_DEVICES')} == {
                 'OMP_NUM_THREADS': '2', 'MKL_NUM_THREADS': '2', 'OPENBLAS_NUM_THREADS': '2',
@@ -127,7 +161,7 @@ def test_gate2_publisher_rejects_invalid_elapsed_and_preserves_strict_json(tmp_p
         raise AssertionError(f'nonstandard JSON constant: {value}')
     rejected = json.loads(raw, parse_constant=reject_numeric_constant)
     assert rejected['status'] == 'REJECTED_RESOURCE_BOUND'
-    assert rejected['timeout_seconds'] == 30 and rejected['test_result']['passed'] == 3
+    assert rejected['timeout_seconds'] == 30 and rejected['test_result']['passed'] == 1
     assert pointer.read_bytes() == original
 
 
@@ -241,3 +275,116 @@ def test_gate2_selected_lock_drift_rejects_before_publication(tmp_path, monkeypa
         refresh('synthetic-drift', publish_current=True, timeout_seconds=30, lock_file=selected)
     assert observed and pointer.read_bytes() == original
     assert not (directory / 'gate2-evidence-synthetic-drift.json').exists()
+
+
+def test_gate2_partition_is_disjoint_complete_and_keeps_pure_import_contexts(tmp_path, monkeypatch):
+    refresh, directory, _, _ = _publisher(tmp_path, monkeypatch, elapsed=0.)
+    ns = refresh.__globals__; root = directory.parents[2]
+    groups = ns['test_partition'](root)
+    assert groups[0] == ('stdlib', list(ns['STRICT_STDLIB']))
+    assert groups[1] == ('no-torch', list(ns['NO_TORCH']))
+    assert 'tests/shared_kt/test_simulator_corpus_publisher.py' in groups[1][1]
+    assert 'tests/shared_kt/test_simulator_corpus_reader.py' in groups[1][1]
+    flat = [p for _, modules in groups for p in modules]
+    expected = sorted(p.relative_to(root).as_posix() for base in ('tests/akt', 'tests/shared_kt')
+                      for p in (root / base).glob('test_*.py'))
+    assert sorted(flat) == expected and len(flat) == len(set(flat)) == 8
+
+
+@pytest.mark.parametrize('index', range(7))
+def test_gate2_missing_required_pure_module_fails_before_child(tmp_path, monkeypatch, index):
+    refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=0.)
+    ns = refresh.__globals__; root = directory.parents[2]
+    (root / (*ns['STRICT_STDLIB'], *ns['NO_TORCH'])[index]).unlink()
+    original = pointer.read_bytes()
+    with pytest.raises(ValueError, match='every explicit pure'):
+        refresh('missing-group', publish_current=True, timeout_seconds=30)
+    assert not observed and pointer.read_bytes() == original
+
+
+def test_gate2_empty_remaining_group_is_not_silently_omitted(tmp_path, monkeypatch):
+    refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=0.)
+    (directory.parents[2] / 'tests/akt/test_fixture_remaining.py').unlink()
+    original = pointer.read_bytes()
+    with pytest.raises(ValueError, match='without empty groups'):
+        refresh('empty-group', publish_current=True, timeout_seconds=30)
+    assert not observed and pointer.read_bytes() == original
+
+
+@pytest.mark.parametrize('group,completed_calls', [('stdlib', 1), ('no-torch', 2), ('remaining', 3)])
+def test_gate2_any_child_failure_stops_and_never_publishes(tmp_path, monkeypatch, group, completed_calls):
+    refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=0.)
+    observed['returncodes'] = {group: 1}; original = pointer.read_bytes()
+    with pytest.raises(RuntimeError, match='group .* failed'):
+        refresh('child-failure', publish_current=True, timeout_seconds=30)
+    assert len(observed['children']) == completed_calls and pointer.read_bytes() == original
+    assert not (directory / 'gate2-evidence-child-failure.json').exists()
+
+
+@pytest.mark.parametrize('problem', ['failures', 'errors', 'skipped', 'zero'])
+def test_gate2_bad_second_group_junit_never_publishes(tmp_path, monkeypatch, problem):
+    refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=0.)
+    observed['xml_problems'] = {'no-torch': problem}; original = pointer.read_bytes()
+    with pytest.raises(ValueError, match='without failures'):
+        refresh('bad-group-xml', publish_current=True, timeout_seconds=30)
+    assert len(observed['children']) == 2 and pointer.read_bytes() == original
+    assert not (directory / 'gate2-evidence-bad-group-xml.json').exists()
+
+
+def test_gate2_budget_is_cumulative_and_no_third_child_after_exhaustion(tmp_path, monkeypatch):
+    refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=0.)
+    observed['per_child_seconds'] = [15., 15., 0.]; original = pointer.read_bytes()
+    with pytest.raises(TimeoutError, match='elapsed'):
+        refresh('global-deadline', publish_current=True, timeout_seconds=30)
+    assert [c['timeout'] for c in observed['children']] == [30., 15.]
+    report = json.loads((directory / 'gate2-evidence-global-deadline.json').read_bytes())
+    assert report['status'] == 'REJECTED_RESOURCE_BOUND' and report['elapsed_seconds'] == 30.
+    assert report['test_result']['passed'] == 7 and pointer.read_bytes() == original
+
+
+def test_gate2_exit_zero_final_child_overruns_remaining_global_budget(tmp_path, monkeypatch):
+    refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=0.)
+    observed['per_child_seconds'] = [12., 12., 12.]; original = pointer.read_bytes()
+    with pytest.raises(TimeoutError, match='elapsed'):
+        refresh('late-child', publish_current=True, timeout_seconds=30)
+    assert [c['timeout'] for c in observed['children']] == [30., 18., 6.]
+    report = json.loads((directory / 'gate2-evidence-late-child.json').read_bytes())
+    assert report['status'] == 'REJECTED_RESOURCE_BOUND' and report['elapsed_seconds'] == 36.
+    assert report['test_result']['passed'] == 8 and pointer.read_bytes() == original
+
+
+def test_gate2_duplicate_testcase_across_processes_rejects_aggregate(tmp_path, monkeypatch):
+    refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=0.)
+    observed['duplicate_case'] = True; original = pointer.read_bytes()
+    with pytest.raises(ValueError, match='duplicate or invalid testcase'):
+        refresh('duplicate-case', publish_current=True, timeout_seconds=30)
+    assert len(observed['children']) == 3 and pointer.read_bytes() == original
+    assert not (directory / 'gate2-evidence-duplicate-case.json').exists()
+
+
+def test_gate2_final_reader_deadline_rejects_fresh_report_before_pointer(tmp_path, monkeypatch):
+    refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.)
+    observed['reader_elapsed'] = 31.; original = pointer.read_bytes()
+    with pytest.raises(TimeoutError, match='elapsed'):
+        refresh('late-reader', publish_current=True, timeout_seconds=30)
+    assert pointer.read_bytes() == original
+    report = json.loads((directory / 'gate2-evidence-late-reader.json').read_bytes())
+    assert report['status'] == 'REJECTED_RESOURCE_BOUND' and report['elapsed_seconds'] == 31.
+    assert report['test_result']['passed'] == 8
+
+
+def test_gate2_postpublication_deadline_restores_exact_previous_pointer(tmp_path, monkeypatch):
+    refresh, directory, pointer, _ = _publisher(tmp_path, monkeypatch, elapsed=1.)
+    clock = refresh.__globals__['_fixture_clock']; original = pointer.read_bytes()
+    replace = Path.replace
+    def late_replace(path, target):
+        result = replace(path, target)
+        if Path(target) == pointer:
+            clock.now = 131.
+        return result
+    monkeypatch.setattr(Path, 'replace', late_replace)
+    with pytest.raises(TimeoutError, match='elapsed'):
+        refresh('late-publication', publish_current=True, timeout_seconds=30)
+    assert pointer.read_bytes() == original
+    report = json.loads((directory / 'gate2-evidence-late-publication.json').read_bytes())
+    assert report['status'] == 'REJECTED_RESOURCE_BOUND' and report['late_pointer_rollback'] is True

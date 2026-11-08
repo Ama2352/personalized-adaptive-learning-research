@@ -1,0 +1,508 @@
+{
+  "schema_version": 1,
+  "status": "READ_ONLY_SCOPED_REVIEW_PASS_NOT_FULL_GATE_ACCEPTANCE",
+  "scope_vi": "Phân tích metadata đã có; không chạy pytest, production, model, Git hoặc sửa nguồn. Chỉ tạo JSON này; không sửa terminal/output inventory gốc.",
+  "gate_two_node_verification": {
+    "source_bindings_current_match": true,
+    "terminal_four_outputs_match": true,
+    "journal_lines": 98,
+    "journal_sequences_monotonic": true,
+    "paired_operation_records": 34,
+    "operation_stats_recomputed_exact": true,
+    "counts": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "nodes": [
+      "tests/akt/test_gate2_refresh.py::test_gate2_selected_lock_drift_rejects_before_publication",
+      "tests/akt/test_gate2_refresh.py::test_gate2_partition_is_disjoint_complete_and_keeps_pure_import_contexts"
+    ],
+    "stage_reports": [
+      {
+        "nodeid": "tests/akt/test_gate2_refresh.py::test_gate2_selected_lock_drift_rejects_before_publication",
+        "when": "setup",
+        "outcome": "passed",
+        "duration_seconds": 0.006292100006248802
+      },
+      {
+        "nodeid": "tests/akt/test_gate2_refresh.py::test_gate2_selected_lock_drift_rejects_before_publication",
+        "when": "call",
+        "outcome": "passed",
+        "duration_seconds": 0.31424179999157786
+      },
+      {
+        "nodeid": "tests/akt/test_gate2_refresh.py::test_gate2_selected_lock_drift_rejects_before_publication",
+        "when": "teardown",
+        "outcome": "passed",
+        "duration_seconds": 0.002855599974282086
+      },
+      {
+        "nodeid": "tests/akt/test_gate2_refresh.py::test_gate2_partition_is_disjoint_complete_and_keeps_pure_import_contexts",
+        "when": "setup",
+        "outcome": "passed",
+        "duration_seconds": 0.008985399967059493
+      },
+      {
+        "nodeid": "tests/akt/test_gate2_refresh.py::test_gate2_partition_is_disjoint_complete_and_keeps_pure_import_contexts",
+        "when": "call",
+        "outcome": "passed",
+        "duration_seconds": 0.06480849999934435
+      },
+      {
+        "nodeid": "tests/akt/test_gate2_refresh.py::test_gate2_partition_is_disjoint_complete_and_keeps_pure_import_contexts",
+        "when": "teardown",
+        "outcome": "passed",
+        "duration_seconds": 0.003940800030250102
+      }
+    ],
+    "operation_stats": {
+      "runpy.run_path": {
+        "calls": 2,
+        "wall_ns_inclusive": 83117600,
+        "cpu_ns_inclusive": 62500000,
+        "max_wall_ns": 65393300,
+        "errors": 0,
+        "wall_seconds_inclusive": 0.0831176,
+        "max_wall_seconds": 0.0653933
+      },
+      "_publisher": {
+        "calls": 2,
+        "wall_ns_inclusive": 125323300,
+        "cpu_ns_inclusive": 109375000,
+        "max_wall_ns": 84706100,
+        "errors": 0,
+        "wall_seconds_inclusive": 0.1253233,
+        "max_wall_seconds": 0.0847061
+      },
+      "selected_lock_file": {
+        "calls": 2,
+        "wall_ns_inclusive": 8088500,
+        "cpu_ns_inclusive": 0,
+        "max_wall_ns": 4584200,
+        "errors": 0,
+        "wall_seconds_inclusive": 0.0080885,
+        "max_wall_seconds": 0.0045842
+      },
+      "test_partition": {
+        "calls": 3,
+        "wall_ns_inclusive": 30381100,
+        "cpu_ns_inclusive": 46875000,
+        "max_wall_ns": 12181000,
+        "errors": 0,
+        "wall_seconds_inclusive": 0.0303811,
+        "max_wall_seconds": 0.012181
+      },
+      "sha256_file": {
+        "calls": 24,
+        "wall_ns_inclusive": 56442000,
+        "cpu_ns_inclusive": 31250000,
+        "max_wall_ns": 3555300,
+        "errors": 0,
+        "wall_seconds_inclusive": 0.056442,
+        "max_wall_seconds": 0.0035553
+      },
+      "combine_junit": {
+        "calls": 1,
+        "wall_ns_inclusive": 6867600,
+        "cpu_ns_inclusive": 0,
+        "max_wall_ns": 6867600,
+        "errors": 0,
+        "wall_seconds_inclusive": 0.0068676,
+        "max_wall_seconds": 0.0068676
+      }
+    },
+    "owned_accepted": true,
+    "cleanup_accepted": true,
+    "job_active_after_cleanup": 0,
+    "popen_handle_closed": true,
+    "timing_seconds": {
+      "pytest_console": 1.32,
+      "junit_suite": 0.54,
+      "worker": 4.65722,
+      "postwrite_worker": 4.7892456,
+      "owned_through_cleanup": 8.261581897735596,
+      "pytest_import_journal_interval": 0.4364837,
+      "session_finish_to_pytest_return_journal_interval": 2.6080839
+    },
+    "no_heavy_module_or_test_subprocess": true,
+    "full_gate_executed": false
+  },
+  "method24_comparison": {
+    "planned_test_functions_ast": 14,
+    "planned_logical_cases_ast": 21,
+    "planned_case_inventory": [
+      {
+        "function": "test_complete_worker_argv_parser_contract_and_missing_deadline",
+        "line": 107,
+        "cases": 1
+      },
+      {
+        "function": "test_runtime_packet_includes_optional_pandas_without_forbidding_it",
+        "line": 114,
+        "cases": 1
+      },
+      {
+        "function": "test_protected_source_rejected_before_unapproved_open",
+        "line": 123,
+        "cases": 1
+      },
+      {
+        "function": "test_valid_absolute_owned_manifest_uses_real_helper_path_guards",
+        "line": 136,
+        "cases": 1
+      },
+      {
+        "function": "test_unowned_or_forged_absolute_manifest_rejects_before_runtime_or_fit",
+        "line": 144,
+        "cases": 5
+      },
+      {
+        "function": "test_exclusive_and_frozen_config_guards",
+        "line": 162,
+        "cases": 4
+      },
+      {
+        "function": "test_wrong_owner_rejected_before_writes_or_runtime",
+        "line": 179,
+        "cases": 1
+      },
+      {
+        "function": "test_fresh_ram_floor_before_heavy_import_or_output",
+        "line": 185,
+        "cases": 1
+      },
+      {
+        "function": "test_ram_after_reader_overrides_success_and_never_reaches_fit",
+        "line": 232,
+        "cases": 1
+      },
+      {
+        "function": "test_fake_positive_flow_is_pending_outer_no_real_solver_or_dag_promotion",
+        "line": 240,
+        "cases": 1
+      },
+      {
+        "function": "test_writer_caps_and_roundtrip_rows_without_large_asdict",
+        "line": 255,
+        "cases": 1
+      },
+      {
+        "function": "test_monitor_violation_uses_exact_self_exit_marker_without_actual_thread",
+        "line": 267,
+        "cases": 1
+      },
+      {
+        "function": "test_parent_resource_guard_and_cleanup_rejection_precede_artifact_reads",
+        "line": 288,
+        "cases": 1
+      },
+      {
+        "function": "test_outer_post_receipt_hash_time_overrides_prior_success_without_process",
+        "line": 296,
+        "cases": 1
+      }
+    ],
+    "not_45_cases_vi": "45 là tổng cap giây của outer, không phải số test; 21 logical cases khớp acceptance counts==21. Đếm nhanh23 trong tin nhắn trước đã được đính chính trước receipt này.",
+    "original_source_hash_matches_now": {
+      "method24_worker01.py": true,
+      "run_method24_native01.py": true,
+      "method24_config01.json": true,
+      "method24_runtime_profile01.json": true,
+      "test_method24_native01.py": true
+    },
+    "terminal_status": "REJECTED_PURE_ATTEMPT",
+    "counts": null,
+    "no_junit_or_result": true,
+    "durable_complete_cases": [
+      {
+        "nodeid": "artifacts/akt/local-tests/akt-research-runner-20261108-01/test_method24_native01.py::test_complete_worker_argv_parser_contract_and_missing_deadline",
+        "stages_seconds": {
+          "setup": 0.00032349996035918593,
+          "call": 0.012398499995470047,
+          "teardown": 0.000202300027012825
+        },
+        "last_elapsed_seconds": 0.6597317999694496
+      },
+      {
+        "nodeid": "artifacts/akt/local-tests/akt-research-runner-20261108-01/test_method24_native01.py::test_runtime_packet_includes_optional_pandas_without_forbidding_it",
+        "stages_seconds": {
+          "setup": 1.5033103000023402,
+          "call": 0.10630659997696057,
+          "teardown": 0.001968400028999895
+        },
+        "last_elapsed_seconds": 2.2786119999946095
+      },
+      {
+        "nodeid": "artifacts/akt/local-tests/akt-research-runner-20261108-01/test_method24_native01.py::test_protected_source_rejected_before_unapproved_open",
+        "stages_seconds": {
+          "setup": 0.36682049999944866,
+          "call": 0.035468999994918704,
+          "teardown": 0.0002636000281199813
+        },
+        "last_elapsed_seconds": 2.689661899989005
+      },
+      {
+        "nodeid": "artifacts/akt/local-tests/akt-research-runner-20261108-01/test_method24_native01.py::test_valid_absolute_owned_manifest_uses_real_helper_path_guards",
+        "stages_seconds": {
+          "setup": 3.2702455000253394,
+          "call": 0.31824870000127703,
+          "teardown": 0.0013217999949119985
+        },
+        "last_elapsed_seconds": 6.371327199973166
+      },
+      {
+        "nodeid": "artifacts/akt/local-tests/akt-research-runner-20261108-01/test_method24_native01.py::test_unowned_or_forged_absolute_manifest_rejects_before_runtime_or_fit[outside]",
+        "stages_seconds": {
+          "setup": 11.44742410001345,
+          "call": 3.6762030000099912,
+          "teardown": 0.0009916999842971563
+        },
+        "last_elapsed_seconds": 21.5655345999985
+      },
+      {
+        "nodeid": "artifacts/akt/local-tests/akt-research-runner-20261108-01/test_method24_native01.py::test_unowned_or_forged_absolute_manifest_rejects_before_runtime_or_fit[unowned]",
+        "stages_seconds": {
+          "setup": 5.093330600007903,
+          "call": 0.7742392999934964,
+          "teardown": 0.00039359997026622295
+        },
+        "last_elapsed_seconds": 27.47093179996591
+      },
+      {
+        "nodeid": "artifacts/akt/local-tests/akt-research-runner-20261108-01/test_method24_native01.py::test_unowned_or_forged_absolute_manifest_rejects_before_runtime_or_fit[nonce]",
+        "stages_seconds": {
+          "setup": 5.466416899987962,
+          "call": 0.5755454999743961,
+          "teardown": 0.0004819000023417175
+        },
+        "last_elapsed_seconds": 33.537930999998935
+      }
+    ],
+    "durable_incomplete_cases": [
+      {
+        "nodeid": "artifacts/akt/local-tests/akt-research-runner-20261108-01/test_method24_native01.py::test_unowned_or_forged_absolute_manifest_rejects_before_runtime_or_fit[parent]",
+        "stages_seconds": {},
+        "last_elapsed_seconds": 33.539743900008034
+      }
+    ],
+    "complete_case_stage_sum_seconds": {
+      "setup": 27.147871399996802,
+      "call": 5.49841059994651,
+      "teardown": 0.0056233000359497964
+    },
+    "owned_elapsed_seconds": 37.500142097473145,
+    "outer_final_elapsed_seconds": 37.50245213508606,
+    "outer_cap_seconds": 45,
+    "owned_cap_seconds": 42,
+    "child_timer_seconds": 37,
+    "remaining_original_outer_allocation_seconds": 7.49754786491394,
+    "returncode": 124,
+    "cleanup_accepted": true,
+    "job_active_after_cleanup": 0,
+    "suite_accepted": false
+  },
+  "findings_vi": [
+    "Hai node Gate đạt đúng 2 PASS và dọn owned Job về0. Nguồn ba file, driver, terminal4output SHA và các cặp operation journal đều kiểm độc lập khớp. Không có verdict cho toàn76ca/full Gate.",
+    "Các operation Gate được bọc có tổng wall inclusive từ0.00687 đến0.12532giây mỗi loại trong lần này. Không thấy pending operation hoặc lỗi operation. Các scope timing khác nhau; không cộng lồng operation thành tổng độc quyền.",
+    "Journal còn ghi khoảng2.608giây từ session_finish đến pytest_main_return; đây là ranh giới teardown/finalization quan sát được, chưa định danh một thao tác nội bộ. Hai-node nhanh không xác nhận hoặc bác bỏ nguyên nhân hai timeout cũ.",
+    "Method24:7ca có đủ ba phase passed; ca[parent] mới start, chưa có setup terminal. Mất JUnit/result và RC124 khiến cả attempt REJECTED; không gọi7chấm là suite accepted.",
+    "Fixture case scope=function tải hai module definitions, tạo cây file source/public/package metadata, băm bằng safe() thật, prepare_request/fsync, lập argv/launch và tải helper definitions cho từng ca. safe() lặp resolve/symlink/junction theo từng thành phần. Đây là đường chi phí cần phân biệt, chưa chứng minh là bottleneck thực.",
+    "Setup7ca hoàn tất mất tổng27.147871giây; call tổng5.498411giây. Setup[outside]11.447424giây, setup[nonce]5.466417giây/call.575545giây. Journal chưa tách import/create/write/hash/resolve/fsync để quy nguyên nhân.",
+    "Filesystem tmp_path là filesystem tạm trên Windows, không phải tmpfs/RAM. Không suy antivirus/RAM/FS gây chậm từ mtime hoặc giai thoại. CPU clock Windows có granularity; cpu_ns inclusive có thể lớn hơn wall nhỏ, không diễn giải thành negative wait."
+  ],
+  "next_finite_plan_proposed_not_authorized": {
+    "gate": "Giữ nguyên54.055553913116455giây objective cũ; diagnostic8.261581897735596giây là allocation riêng đã được ROOT cho phép, không reset. Chưa lặp toàn76ca; trước full Gate phải có đủ allocation mới và source ổn định/RAM preflight do ROOT quyết định.",
+    "method24": "Giữ nguyên attempt21ca rejected, charge outer37.50245213508606/45giây. Còn7.49754786491394giây không đủ biện minh tự chạy lại fixture từng mất11.447giây. Chỉ chuẩn bị source instrumentation trước, không dispatch.",
+    "discriminating_diagnostic": "Nếu ROOT cấp allocation cộng dồn riêng: tối đa1existing node[outside], outer20giây gồm cleanup3, journal operation read-only quanh loadworker/loadouter, mktemp+mkdir, từng nhóm put+safe+hash, prepare_request/readJSON/hash/fsync, launch/helper. Giữ args/results/path guards/purity nguyên; real clock riêng, không print per-byte. Durable marker trước/sau block và operation aggregate; timeout giữ UNKNOWN cho block chưa đóng. Cộng chi phí mới vào37.50245 cũ, không đổi verdict cũ hoặc tự đặt tổng cap.",
+    "fixture_revision_after_measurement": "Chỉ khi dữ liệu chứng minh: tái dùng immutable config/profile bytes và parsed templates, deep-copy mutable values từng ca; vẫn module/root/launch/request/physical path riêng. Không chia sẻ mutated root, không stub safe/hash trong guard tests, không bỏ case/skip hoặc nới assertion. Cần ROOT review và allocation cumulative rõ trước execution.",
+    "acceptance": "Đủ21logicalcases đúng1lần với JUnit0fail/error/skip + outer resource/source/Job cleanup mới được gọi suite PASS; diagnostic1case không thay thế21/full Gate. Không solver/fit/runtime promotion."
+  },
+  "limitations_vi": [
+    "Không chứng minh nguyên nhân timeout cũ; không performance guarantee trên host khác hoặc full suite.",
+    "Original Method24 termination os._exit(124) của Timer37 có thể bỏ finally/JUnit; không sửa/fill dữ liệu thiếu.",
+    "Các số mới chỉ tổng hợp journal đã lưu; không native replay, inference, training hoặc mẫu nghiên cứu mới."
+  ],
+  "input_inventory_before": {
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/gate_diagnostic03/result.json": {
+      "sha256": "8c6743248c67fb711516127d58a6fe453f80e59f3d09243ecf3c998fc6a964d8",
+      "bytes": 4937
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/gate_diagnostic03/terminal.json": {
+      "sha256": "1ae2a59e9c947b69da6ac473be803c73573379bfade9febe51317e582984345f",
+      "bytes": 623
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/gate_diagnostic03/junit.xml": {
+      "sha256": "d71c029899808792b9805f45502aee67549bbfca5f6a7979016f5d1818b5e81d",
+      "bytes": 516
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/gate_diagnostic03/pytest.log": {
+      "sha256": "7b66c3ada682df0cf3c290902da10297bacdbe7074d440102d9953fb93895d45",
+      "bytes": 100
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/gate_diagnostic03/stage-journal.jsonl": {
+      "sha256": "eb6458fd885dcc6721b2f50e794d34a0102f9c7cb401082f501004d6cebe7089",
+      "bytes": 41849
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/gate_diagnostic03.py": {
+      "sha256": "2b525eb0f06e067f561be919660c829c16c4dbecc694b46ada94f6f27085dce7",
+      "bytes": 16234
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/gate_diagnostic03-owned/receipt.json": {
+      "sha256": "61dd4a687e6cce05b7fec4d5698f138d9f5c3820025b55ba4c4488a6a0c8dabd",
+      "bytes": 4125
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method24-pure01/case_events.jsonl": {
+      "sha256": "59c30e11015ff8f1e45ae0571d545470f0d36195b96444cf13393f52a7266d2b",
+      "bytes": 7716
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method24-pure01/pytest.log": {
+      "sha256": "095a3e32f2239e579df5fc641e994cc09d528003da2e2df0c146a8b342abf069",
+      "bytes": 7
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method24-pure01/source_before.json": {
+      "sha256": "9393d0872ab4849534dd5f997e681cdfc80b9360a98623e5ffefb5748094e638",
+      "bytes": 502
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method24-pure01-owned/receipt.json": {
+      "sha256": "0fa473c02bcae6900e2358cc22488faf279bb5cbb413c68d327969740853eea2",
+      "bytes": 7362
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method24-pure01-owned/final.json": {
+      "sha256": "1bba713f244a5553781a8b06980d17a86b00c1b5b22a11cd2702ce17e2ff6332",
+      "bytes": 195
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/test_method24_native01.py": {
+      "sha256": "6b75602e00e7278ba951ba0af9e026f9dba2e84b908445066c8cdece54c491f4",
+      "bytes": 17646
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method24_worker01.py": {
+      "sha256": "4afbf824b845f8d518ea4eab43978df01672580ce4d77fa61597a8696f0e0705",
+      "bytes": 30691
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/run_method24_native01.py": {
+      "sha256": "5e6ac0b402ebd8ffdc2cc1b983b75c155ad1e782639d068cabe04eec49c02b93",
+      "bytes": 12513
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method24_config01.json": {
+      "sha256": "d2a9d8d682c01fa423eade202655d9b2b5aa121bf69abc879de2ca050f3a440c",
+      "bytes": 1892
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method24_runtime_profile01.json": {
+      "sha256": "c008d6a734c53152b33ad4b6a99a3657528c33c71606dd265dc4b61ef8387bc8",
+      "bytes": 5171
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/check_method24_pure01.py": {
+      "sha256": "65c456d3e11be9cc70d2283a4265308a14942797ed7b45a9429ea556ad0201ba",
+      "bytes": 3767
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/run_method24_pure01.py": {
+      "sha256": "55ab133b997c05c07ab671cd2822797ddb2b8cd7174b96954a21af58df6d5609",
+      "bytes": 2060
+    },
+    "scripts/akt/refresh_gate2.py": {
+      "sha256": "5b7e60d342f8c2ab27536d3ec02d208a9bdb04728ca5ccdf7371b13d784fa31b",
+      "bytes": 16583
+    },
+    "tests/akt/test_gate2_refresh.py": {
+      "sha256": "9a0a41ffde24d0d12996f7294d000d50d9cbc8c1adced6853a0abf2c0c7de758",
+      "bytes": 22432
+    },
+    "scripts/research/windows_owned_worker.py": {
+      "sha256": "0dc8723170467e9ae73c4e233a357b9d584c66a8c183c478bdcff358fb0a95a1",
+      "bytes": 26733
+    }
+  },
+  "input_inventory_after": {
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/gate_diagnostic03/result.json": {
+      "sha256": "8c6743248c67fb711516127d58a6fe453f80e59f3d09243ecf3c998fc6a964d8",
+      "bytes": 4937
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/gate_diagnostic03/terminal.json": {
+      "sha256": "1ae2a59e9c947b69da6ac473be803c73573379bfade9febe51317e582984345f",
+      "bytes": 623
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/gate_diagnostic03/junit.xml": {
+      "sha256": "d71c029899808792b9805f45502aee67549bbfca5f6a7979016f5d1818b5e81d",
+      "bytes": 516
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/gate_diagnostic03/pytest.log": {
+      "sha256": "7b66c3ada682df0cf3c290902da10297bacdbe7074d440102d9953fb93895d45",
+      "bytes": 100
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/gate_diagnostic03/stage-journal.jsonl": {
+      "sha256": "eb6458fd885dcc6721b2f50e794d34a0102f9c7cb401082f501004d6cebe7089",
+      "bytes": 41849
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/gate_diagnostic03.py": {
+      "sha256": "2b525eb0f06e067f561be919660c829c16c4dbecc694b46ada94f6f27085dce7",
+      "bytes": 16234
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/gate_diagnostic03-owned/receipt.json": {
+      "sha256": "61dd4a687e6cce05b7fec4d5698f138d9f5c3820025b55ba4c4488a6a0c8dabd",
+      "bytes": 4125
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method24-pure01/case_events.jsonl": {
+      "sha256": "59c30e11015ff8f1e45ae0571d545470f0d36195b96444cf13393f52a7266d2b",
+      "bytes": 7716
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method24-pure01/pytest.log": {
+      "sha256": "095a3e32f2239e579df5fc641e994cc09d528003da2e2df0c146a8b342abf069",
+      "bytes": 7
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method24-pure01/source_before.json": {
+      "sha256": "9393d0872ab4849534dd5f997e681cdfc80b9360a98623e5ffefb5748094e638",
+      "bytes": 502
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method24-pure01-owned/receipt.json": {
+      "sha256": "0fa473c02bcae6900e2358cc22488faf279bb5cbb413c68d327969740853eea2",
+      "bytes": 7362
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method24-pure01-owned/final.json": {
+      "sha256": "1bba713f244a5553781a8b06980d17a86b00c1b5b22a11cd2702ce17e2ff6332",
+      "bytes": 195
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/test_method24_native01.py": {
+      "sha256": "6b75602e00e7278ba951ba0af9e026f9dba2e84b908445066c8cdece54c491f4",
+      "bytes": 17646
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method24_worker01.py": {
+      "sha256": "4afbf824b845f8d518ea4eab43978df01672580ce4d77fa61597a8696f0e0705",
+      "bytes": 30691
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/run_method24_native01.py": {
+      "sha256": "5e6ac0b402ebd8ffdc2cc1b983b75c155ad1e782639d068cabe04eec49c02b93",
+      "bytes": 12513
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method24_config01.json": {
+      "sha256": "d2a9d8d682c01fa423eade202655d9b2b5aa121bf69abc879de2ca050f3a440c",
+      "bytes": 1892
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/method24_runtime_profile01.json": {
+      "sha256": "c008d6a734c53152b33ad4b6a99a3657528c33c71606dd265dc4b61ef8387bc8",
+      "bytes": 5171
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/check_method24_pure01.py": {
+      "sha256": "65c456d3e11be9cc70d2283a4265308a14942797ed7b45a9429ea556ad0201ba",
+      "bytes": 3767
+    },
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/run_method24_pure01.py": {
+      "sha256": "55ab133b997c05c07ab671cd2822797ddb2b8cd7174b96954a21af58df6d5609",
+      "bytes": 2060
+    },
+    "scripts/akt/refresh_gate2.py": {
+      "sha256": "5b7e60d342f8c2ab27536d3ec02d208a9bdb04728ca5ccdf7371b13d784fa31b",
+      "bytes": 16583
+    },
+    "tests/akt/test_gate2_refresh.py": {
+      "sha256": "9a0a41ffde24d0d12996f7294d000d50d9cbc8c1adced6853a0abf2c0c7de758",
+      "bytes": 22432
+    },
+    "scripts/research/windows_owned_worker.py": {
+      "sha256": "0dc8723170467e9ae73c4e233a357b9d584c66a8c183c478bdcff358fb0a95a1",
+      "bytes": 26733
+    }
+  },
+  "all_read_inputs_unchanged": true
+}

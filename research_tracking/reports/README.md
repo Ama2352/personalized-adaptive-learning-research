@@ -188,3 +188,5 @@ Gate21 chỉ chạy `tests/akt tests/shared_kt`; các số139SAKT và38Graph-GAM
 - [Worker độ tin cậy cạnh](edge_confidence_worker_readiness_20261108.md):21purePASS và cả lượt timeout trước được giữ trong bundle; chưa actualsolver/corpus/AKTfit hoặc hiệu quả RQ3.
 
 - [AKT/reference/calibrator](akt_reference_calibrator_binding_20261108.md):36purePASS sau sửa bank/schema và giải phóng model/Adam sớm; chưa native lifecycle hoặc kết quả nghiên cứu.
+
+- [Gate chia tiến trình](akt_gate_process_isolation_20261108.md):76targeted fixtures PASS, giữ đầy đủ67modules/3processes; actual full Gate/runtime và RAM acceptance vẫn chưa chạy.
