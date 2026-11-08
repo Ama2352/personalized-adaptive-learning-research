@@ -173,3 +173,5 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 - **Gate process isolation engineering,08/11:**76fixturePASS62,0455s/240, không native/model/Gatepublication. [Bundle](runs/akt-gate-process-isolation-engineering-20261108-01/README.md); nguồn/env/process cleanup verified; actual67moduleGate còn pending.
 
 - **RQ1 cached readiness exposure,08/11:** ROOT một lượt2,9229504s/10,3240R/orderexact,0model/simulator. [Bundle28outputs](runs/rq1-ready-set-exposure-20261108-01/README.md).500roots/699strict-nonroot/2041exposure; không3.240người học độc lập, không paired effect sau histories phânkỳ hoặc RQcompletion.
+
+- **AKT bootstrap Log Loss consistency08/11:**13fixturePASS7,78717s/45,0model/solver/corpus. [Bundle](runs/akt-metric-consistency-engineering-20261108-01/README.md). Thayepsilon reportingkhớpcanonical, khôngrerunhistoricalbenchmark hoặc RQcompletion.

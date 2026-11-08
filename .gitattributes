@@ -202,3 +202,7 @@ scripts/akt/refresh_gate2.py -text whitespace=blank-at-eol,blank-at-eof,space-be
 tests/akt/test_gate2_refresh.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 # Snapshot QA HTML giữ nguyên CRLF/byte identity của receipt trên Windows.
 docs/thesis_recovery/evidence/supervisor_html_20261108_* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Nguồn/traceback consistency metrics giữ đúng byte đã kiểm.
+src/knowledge_tracing/akt/evaluation.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tests/akt/test_evaluation.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+research_tracking/runs/akt-metric-consistency-engineering-20261108-01/*.log -whitespace

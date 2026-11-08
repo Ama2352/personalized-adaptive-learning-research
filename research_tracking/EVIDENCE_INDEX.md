@@ -283,3 +283,5 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 - **Gate process isolation,08/11:** [báo cáo](reports/akt_gate_process_isolation_20261108.md), [bundle51outputs](runs/akt-gate-process-isolation-engineering-20261108-01/README.md).76targetedPASS62,0455s,0actualFullGate; giữ2node/FSdiagnostics và priorrejected archive riêng.
 
 - **RQ1 readiness exposure,08/11:** [báo cáo](reports/rq1_ready_set_exposure_results_20261108.md), [bundle28outputs](runs/rq1-ready-set-exposure-20261108-01/README.md). ExactR3240;500roots táchriêng;2740nonroots=2041exposure+699strict.0newN/native; shared3seedfamilies/current-source, không causal/calibratedmastery.
+
+- **Metric consistency08/11:** [báo cáo](reports/akt_metric_consistency_20261108.md), [bundle42outputs](runs/akt-metric-consistency-engineering-20261108-01/README.md).13fixturePASS/0NN/corpus; giữpartialJUnitcontrollerfailure; khôngchấm lại số liệu lịch sử.

@@ -5,6 +5,7 @@ import pytest
 
 from knowledge_tracing.akt.evaluation import (compare_common_rows, paired_stats_for_comparison,
                                                score_akt_shards)
+from knowledge_tracing.gam_kt.evaluation import _metrics as canonical_metrics
 from knowledge_tracing.paired_bootstrap import fold_differences
 
 
@@ -139,6 +140,40 @@ def test_paired_sufficient_stats_map_candidate_minus_reference_and_match_direct_
     }
     for metric in direct:
         assert paired[metric] == pytest.approx(direct[metric])
+
+
+def test_paired_endpoint_log_loss_matches_canonical_per_learner_and_fold_delta():
+    rows = [
+        ('u1', 1, 0.0, 0.25), ('u1', 0, 1.0, 0.75), ('u1', 1, 1.0, 0.0),
+        ('u2', 0, 0.0, 1.0), ('u2', 1, 0.5, 1.0),
+    ]
+    with duckdb.connect() as con:
+        con.execute('CREATE TABLE common_rows(user_id VARCHAR, correct INTEGER, '
+                    'bkt_prediction DOUBLE, akt_prediction DOUBLE)')
+        con.executemany('INSERT INTO common_rows VALUES (?, ?, ?, ?)', rows)
+        stats = paired_stats_for_comparison(con, 'common_rows', reference='bkt', candidate='akt')
+
+    def canonical_log_loss(selected, probability_index):
+        return canonical_metrics(pd.DataFrame({
+            'correct': [row[1] for row in selected],
+            'prediction': [row[probability_index] for row in selected],
+        }))['log_loss']
+
+    assert list(stats.user_ids) == ['u1', 'u2']
+    for position, user in enumerate(stats.user_ids):
+        selected = [row for row in rows if row[0] == user]
+        assert stats.row_count[position] == len(selected)
+        assert stats.log_loss_bkt[position] == pytest.approx(
+            len(selected) * canonical_log_loss(selected, 2), rel=0, abs=1e-12)
+        assert stats.log_loss_gam[position] == pytest.approx(
+            len(selected) * canonical_log_loss(selected, 3), rel=0, abs=1e-12)
+
+    multiplicities = np.array([2, 1])
+    expanded = [row for user, count in zip(stats.user_ids, multiplicities)
+                for _ in range(count) for row in rows if row[0] == user]
+    expected = canonical_log_loss(expanded, 3) - canonical_log_loss(expanded, 2)
+    assert fold_differences(stats, multiplicities)['log_loss'] == pytest.approx(
+        expected, rel=0, abs=1e-12)
 
 
 def test_paired_stats_rejects_unapproved_identifiers():

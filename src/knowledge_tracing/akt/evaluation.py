@@ -273,7 +273,7 @@ def paired_stats_for_comparison(connection: duckdb.DuckDBPyConnection, common_vi
     if bad:
         con.execute('DROP TABLE _paired_source')
         raise ValueError('invalid paired target or probability')
-    eps = 1e-15
+    eps = np.finfo(np.float64).eps
     base = con.execute(
         'SELECT user_id,count(*) AS n, '
         'sum(-(correct*ln(greatest(reference_p,?))+(1-correct)*ln(greatest(1-reference_p,?)))) AS ll_ref, '
