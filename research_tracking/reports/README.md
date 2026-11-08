@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**CG-AKT hotpath09/11:** [135pure và25native cases](cgakt_hotpath_integrity_20261109.md), bundle41outputs;0full-cache serializer ở batch hotregions, vẫn explicitfullboundary. Không actualAdam/checkpoint/corpusfit/CUDA/throughput.
+
 **RQ1 — kết quả trực tiếp bên trong mastery:** [trạng thái và hai điều kiện](rq1_native_mastery_reference_diagnostic_20261109.md), [bundle92](../runs/rq1-prediction-mastery-trace-20261109-01/README.md). Đủ2.160 snapshots khớp nguồn; trên30.240cặp khái niệm–thời điểm,3.428bất đồng điều kiện bất định bị điểm kiến thức thấp giữ lại,90bất đồng phân loại do điều kiện kiến thức. Không90temporal transitions, accuracy/calibration hoặc learning benefit.
 
 **CG-AKT core:** [A3 forward/gradient thực trên CPU](cgakt_research_core_20261109.md), [bundle74](../runs/cgakt-research-core-engineering-20261109-01/README.md).18PASS với8forward/5backward/0optimizer; chưa fittedA0/A1/A2/CG-AKT hoặc main-training readiness.

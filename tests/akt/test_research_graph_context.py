@@ -4,6 +4,8 @@ Hai selection learners x205event; train/calibration records nhỏ chỉ để c�
 role/vocabulary lineage thật của fixture. Không corpus/trained-weight attestation.
 """
 from dataclasses import asdict, FrozenInstanceError, replace
+from contextlib import contextmanager
+import copy
 import builtins
 import importlib
 from types import SimpleNamespace
@@ -304,3 +306,135 @@ def test_context_payload_and_sources_are_sealed(case, monkeypatch):
     monkeypatch.setattr(context, 'source_inventory', lambda: sources[:-1])
     with pytest.raises(ValueError, match='source drift'):
         case['index'].for_windows((case['windows'][0],))
+
+
+@contextmanager
+def altered(obj, field, value):
+    """Chỉ mô phỏng accidental frozen bypass; luôn restore shared fixture."""
+    original = getattr(obj, field)
+    object.__setattr__(obj, field, value)
+    try:
+        yield
+    finally:
+        object.__setattr__(obj, field, original)
+
+
+@pytest.fixture(scope='module')
+def access(case):
+    return case['index'].seal_for_access()
+
+
+def test_fast_access_equals_full_path_and_keeps_original_root(case, access):
+    index = case['index']
+    assert access.root_sha256 == index.identity
+    assert index.for_windows(case['windows'], access_seal=access) == index.for_windows(case['windows'])
+    index.check_selected_records(tuple(w.window_id for w in case['windows']), access_seal=access)
+    with pytest.raises(FrozenInstanceError):
+        access.root_sha256 = H
+
+
+def test_foreign_process_local_seal_is_not_transferable_to_clone(case, access):
+    clone = copy.copy(case['index'])
+    clone.assert_integrity()  # Identical durable data/root, different live object.
+    assert clone.content_sha256 == access.root_sha256
+    with pytest.raises(ValueError, match='foreign'):
+        clone.for_windows((case['windows'][0],), access_seal=access)
+
+
+@pytest.mark.parametrize('field', ['condition_sha256', 'phase_sha256', 'encoding_sha256',
+    'vocabulary_sha256', 'content_sha256', 'full_targets', 'role', 'context'])
+def test_fast_header_global_metadata_tamper(case, access, field):
+    index = case['index']
+    old = getattr(index, field)
+    new = old+1 if type(old) is int else 'CHANGED' if field == 'role' else H
+    with altered(index, field, new):
+        with pytest.raises(ValueError, match='header/root drift'):
+            index.for_windows((case['windows'][0],), access_seal=access)
+
+
+@pytest.mark.parametrize('field', ['windows', 'unsupported_targets', 'record_sha256'])
+def test_fast_tuple_identity_anchors(case, access, field):
+    obj = access if field == 'record_sha256' else case['index']
+    old = getattr(obj, field)
+    replacement = tuple(list(old))
+    assert replacement == old and replacement is not old
+    with altered(obj, field, replacement):
+        with pytest.raises(ValueError, match='tuple replacement'):
+            case['index'].for_windows((case['windows'][0],), access_seal=access)
+
+
+@pytest.mark.parametrize('field', ['parent_mean', 'parent_support', 'observed_rows', 'query', 'key'])
+def test_selected_nested_evidence_tamper_rejected_before_return(case, access, field):
+    index, window = case['index'], case['windows'][0]
+    indexed = next(w for w in index.windows if w.window_id == window.window_id)
+    record = next(r for r in indexed.contexts if r is not None and r.audit.parents and r.audit.parents[0].support)
+    if field == 'parent_mean':
+        obj, name, value = record.audit.parents[0], 'mean_observed_correctness', .125
+    elif field == 'parent_support':
+        obj, name, value = record.audit.parents[0], 'support', record.audit.parents[0].support+1
+    elif field == 'observed_rows':
+        obj, name, value = record.audit, 'observed_rows', ()
+    elif field == 'query':
+        obj, name, value = record.audit, 'query', replace(record.audit.query, timestamp=record.audit.query.timestamp+1)
+    else:
+        obj, name, value = record, 'global_rank', record.global_rank+1
+    with altered(obj, name, value):
+        with pytest.raises(ValueError, match='selected evidence'):
+            index.for_windows((window,), access_seal=access)
+        with pytest.raises(ValueError, match='selected evidence'):
+            index.check_selected_records((window.window_id,), access_seal=access)
+        with pytest.raises(ValueError, match='payload drift'):
+            index.assert_integrity()
+
+
+def test_unselected_tamper_is_lazy_until_selected_or_full_boundary(case, access):
+    index = case['index']
+    selected, other = case['windows'][0], case['windows'][1]
+    indexed = next(w for w in index.windows if w.window_id == other.window_id)
+    record = next(r for r in indexed.contexts if r is not None)
+    with altered(record.audit, 'effective_start', record.audit.effective_start+1):
+        # Intentional lazy bound: do not claim immediate whole-cache validation.
+        assert index.for_windows((selected,), access_seal=access)
+        with pytest.raises(ValueError, match='selected evidence'):
+            index.for_windows((other,), access_seal=access)
+        with pytest.raises(ValueError, match='payload drift'):
+            index.for_windows((selected,))  # Default path remains full audit.
+        with pytest.raises(ValueError, match='payload drift'):
+            index.identity
+
+
+@pytest.mark.parametrize('kind', ['foreign', 'duplicate', 'empty'])
+def test_selected_manifest_request_is_bounded_and_exact(case, access, kind):
+    name = case['windows'][0].window_id
+    ids = ('foreign',) if kind == 'foreign' else (name, name) if kind == 'duplicate' else ()
+    with pytest.raises(ValueError):
+        case['index'].check_selected_records(ids, access_seal=access)
+
+
+@pytest.mark.parametrize('field', ['prior_responses', 'source_rows'])
+def test_fast_path_keeps_original_input_hash(case, access, field):
+    original = case['windows'][0]
+    array = getattr(original.inputs, field).copy()
+    array[-1] += 1
+    changed_window = replace(original, inputs=replace(original.inputs, **{field: array}))
+    with pytest.raises(ValueError, match='payload drift'):
+        case['index'].for_windows((changed_window,), access_seal=access)
+
+
+def test_fast_path_preserves_source_guard(case, access, monkeypatch):
+    sources = case['index'].sources_sha256
+    monkeypatch.setattr(context, 'source_inventory', lambda: sources[:-1])
+    with pytest.raises(ValueError, match='source drift'):
+        case['index'].for_windows((case['windows'][0],), access_seal=access)
+
+
+def test_fast_path_does_not_call_full_serializer_but_explicit_audit_does(case, access, monkeypatch):
+    def forbidden(self):
+        raise AssertionError('FULL_SERIALIZER_WITNESS')
+    monkeypatch.setattr(context.ResearchGraphContextIndex, '_payload', forbidden)
+    assert case['index'].for_windows((case['windows'][0],), access_seal=access)
+    case['index'].check_selected_records((case['windows'][0].window_id,), access_seal=access)
+    with pytest.raises(AssertionError, match='FULL_SERIALIZER_WITNESS'):
+        case['index'].assert_integrity()
+    with pytest.raises(AssertionError, match='FULL_SERIALIZER_WITNESS'):
+        case['index'].identity

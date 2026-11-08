@@ -339,3 +339,123 @@ def test_inference_failure_restores_all_modes_and_clears_context(case, ready, mo
     monkeypatch.setattr(ready, '_collate', stop)
     with pytest.raises(ValueError, match='synthetic collation'): ready.predict_windows((case['entries'][0].window,))
     assert tuple(m.training for m in ready.native.modules()) == modes and ready.native._call is None
+
+
+def test_hotpath_has_no_full_index_serializer_but_explicit_boundaries_do(case, ready, monkeypatch):
+    full_calls = []
+    def full_payload(self):
+        full_calls.append(self)
+        raise AssertionError('explicit full cache serialization probe')
+    monkeypatch.setattr(context.ResearchGraphContextIndex, '_payload', full_payload)
+    ready._integrity()
+    batch = ready.collate_training(case['entries'][:1])
+    monkeypatch.setattr(model.AKTAdapter, 'step', lambda *args: {'FIXTURE_STUB_NOT_NATIVE_UPDATE': True})
+    assert ready.step(batch, fake_adam(ready))['FIXTURE_STUB_NOT_NATIVE_UPDATE']
+    assert full_calls == []
+    with pytest.raises(AssertionError, match='explicit full cache'):
+        ready.audit_context_boundary()
+    with pytest.raises(AssertionError, match='explicit full cache'):
+        _ = ready.identity
+    with pytest.raises(AssertionError, match='explicit full cache'):
+        ready.set_context_index(case['prediction_index'])
+    assert len(full_calls) == 3
+
+
+def test_unselected_nested_drift_is_lazy_but_selected_and_full_boundary_reject(case, ready):
+    selected = case['entries'][0].window
+    other = next(e.window for e in case['entries'] if e.window.window_id != selected.window_id)
+    record = next(w for w in ready.index.windows if w.window_id == other.window_id)
+    parent = record.contexts[1].audit.parents[0]
+    original = parent.mean_observed_correctness
+    try:
+        object.__setattr__(parent, 'mean_observed_correctness', .25)
+        # The documented lazy contract does not scan unselected evidence.
+        ready._integrity()
+        ready._collate((selected,))
+        with pytest.raises(ValueError, match='selected evidence drift'):
+            ready._collate((other,))
+        with pytest.raises(ValueError, match='payload drift'):
+            ready.audit_context_boundary()
+    finally:
+        object.__setattr__(parent, 'mean_observed_correctness', original)
+    ready.audit_context_boundary()
+
+
+def test_selected_context_drift_stops_before_primitive(case, ready, monkeypatch):
+    batch = ready.collate_training(case['entries'][:1])
+    parent = ready._ticket.context[0][1].audit.parents[0]
+    original = parent.support
+    monkeypatch.setattr(model.AKTAdapter, 'step', lambda *args: pytest.fail('no primitive after evidence drift'))
+    try:
+        object.__setattr__(parent, 'support', original+1)
+        with pytest.raises(ValueError, match='selected evidence drift'):
+            ready.step(batch, fake_adam(ready))
+        assert ready.native._call is None and ready._ticket is None
+    finally:
+        object.__setattr__(parent, 'support', original)
+
+
+def test_ticket_evidence_clone_mismatch_stops_with_canonical_index_unchanged(case, ready, monkeypatch):
+    batch = ready.collate_training(case['entries'][:1])
+    ticket = ready._ticket
+    item = ticket.context[0][1]
+    parent = replace(item.audit.parents[0], mean_observed_correctness=.25)
+    altered = replace(item, audit=replace(item.audit, parents=(parent,)))
+    row = (*ticket.context[0][:1], altered, *ticket.context[0][2:])
+    ready._ticket = replace(ticket, context=(row,))
+    monkeypatch.setattr(model.AKTAdapter, 'step', lambda *args: pytest.fail('no primitive for foreign evidence'))
+    with pytest.raises(ValueError, match='training ticket evidence drift'):
+        ready.step(batch, fake_adam(ready))
+    assert ready.native._call is None
+    ready.audit_context_boundary()  # Only ticket clone changed, not the index.
+
+
+def test_native_bound_evidence_drift_stops_before_backbone(case, ready):
+    batch, evidence = ready._collate((case['entries'][0].window,))
+    ready.native.bind(batch, evidence, enabled=True, expected_evidence_sha256=model._evidence_sha(evidence))
+    parent = evidence[0][1].audit.parents[0]
+    original = parent.support
+    try:
+        object.__setattr__(parent, 'support', original+1)
+        with pytest.raises(ValueError, match='native bound evidence drift'):
+            ready.native(batch.q_data, batch.qa_data, batch.loss_targets)
+        assert ready.native._call is None
+    finally:
+        object.__setattr__(parent, 'support', original)
+
+
+def test_lookup_to_native_bind_drift_rejects_expected_digest(case, ready):
+    batch, evidence = ready._collate((case['entries'][0].window,))
+    expected = model._evidence_sha(evidence)
+    parent = evidence[0][1].audit.parents[0]
+    original = parent.mean_observed_correctness
+    try:
+        object.__setattr__(parent, 'mean_observed_correctness', .25)
+        with pytest.raises(ValueError, match='expected native evidence drift'):
+            ready.native.bind(batch, evidence, enabled=True, expected_evidence_sha256=expected)
+        assert ready.native._call is None
+    finally:
+        object.__setattr__(parent, 'mean_observed_correctness', original)
+
+
+def test_post_primitive_evidence_drift_has_no_false_success_and_poisoned_adapter(case, ready, monkeypatch):
+    batch = ready.collate_training(case['entries'][:1])
+    parent = ready._ticket.context[0][1].audit.parents[0]
+    original = parent.support
+    calls = []
+    def primitive(*args):
+        calls.append('STUB_BODY_NO_NATIVE_OR_OPTIMIZER')
+        object.__setattr__(parent, 'support', original+1)
+        return {'stepped': False}
+    monkeypatch.setattr(model.AKTAdapter, 'step', primitive)
+    try:
+        with pytest.raises(ValueError, match='selected evidence drift'):
+            ready.step(batch, fake_adam(ready))
+        assert calls == ['STUB_BODY_NO_NATIVE_OR_OPTIMIZER'] and ready._failed
+        assert ready.native._call is None
+        with pytest.raises(ValueError, match='failed adapter'):
+            ready.predict_windows((case['entries'][0].window,))
+    finally:
+        object.__setattr__(parent, 'support', original)
+        # Fixture reset only: stub executed no model/optimizer body or update.
+        ready._failed = False

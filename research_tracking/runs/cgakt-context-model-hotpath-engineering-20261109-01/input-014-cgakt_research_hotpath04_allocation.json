@@ -1,0 +1,207 @@
+{
+  "kind": "PROPOSED_CGAKT_HOTPATH25_CORE_CHECK_NOT_MAIN_TRAINING_AUTHORITY",
+  "expected_cases": 25,
+  "expected_test_names": [
+    "test_native_eight_forwards_five_logical_backwards_no_optimizer",
+    "test_ticket_exact_batch_and_one_use_with_public_primitive",
+    "test_ticket_and_owned_optimizer_reject_before_primitive[foreign_batch]",
+    "test_ticket_and_owned_optimizer_reject_before_primitive[changed_targets]",
+    "test_ticket_and_owned_optimizer_reject_before_primitive[changed_qa]",
+    "test_ticket_and_owned_optimizer_reject_before_primitive[missing_parameter]",
+    "test_ticket_and_owned_optimizer_reject_before_primitive[wrong_lr]",
+    "test_pending_ticket_blocks_prediction_and_phase_switch",
+    "test_prediction_phase_cannot_collate_training",
+    "test_changed_window_rejected_by_context_before_forward",
+    "test_native_ticket_rejects_tensor_replacement_and_is_consumed",
+    "test_source_drift_rejects_before_forward",
+    "test_duplicate_windows_reject_before_native",
+    "test_no_retained_phase_or_other_role_truth",
+    "test_public_native_recipe_rebinding_rejected_before_forward[variant-A0]",
+    "test_public_native_recipe_rebinding_rejected_before_forward[condition_sha256-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb]",
+    "test_native_enabled_is_exact_boolean_not_truthy_fallback",
+    "test_inference_failure_restores_all_modes_and_clears_context",
+    "test_hotpath_has_no_full_index_serializer_but_explicit_boundaries_do",
+    "test_unselected_nested_drift_is_lazy_but_selected_and_full_boundary_reject",
+    "test_selected_context_drift_stops_before_primitive",
+    "test_ticket_evidence_clone_mismatch_stops_with_canonical_index_unchanged",
+    "test_native_bound_evidence_drift_stops_before_backbone",
+    "test_lookup_to_native_bind_drift_rejects_expected_digest",
+    "test_post_primitive_evidence_drift_has_no_false_success_and_poisoned_adapter"
+  ],
+  "expected_native_counts": {
+    "backbone_constructors": 1,
+    "wrapper_constructors": 1,
+    "gate_constructors": 1,
+    "forwards": 8,
+    "logical_backwards": 5,
+    "adam_constructors": 0,
+    "adam_steps": 0
+  },
+  "outer_seconds": 90,
+  "owned_seconds": 87,
+  "cleanup_reserve_seconds": 3,
+  "finalization_reserve_seconds": 3,
+  "child_timer_seconds": 80,
+  "min_available_ram_bytes": 2147483648,
+  "max_observed_peak_rss_bytes": 1073741824,
+  "poll_seconds": 0.1,
+  "max_log_bytes": 2097152,
+  "max_junit_bytes": 1048576,
+  "max_case_journal_bytes": 1048576,
+  "native_windows_metadata": "actual platform.uname; bounded literal cmd /c ver only; cached before tests, no fake platform",
+  "local_git_provenance": {
+    "executable": "C:\\Program Files\\Git\\cmd\\git.exe",
+    "sha256": "4ab2b391de7fb5eb3afb34b5bd19ee7f71d0450bf7e4c207b201a0392e3825ae",
+    "expected_commands": 10,
+    "source_root": "artifacts/akt/dependencies/upstream",
+    "source_commit": "01b7e8d7d7c862cabc9467108e3e7f2555653a88",
+    "scope": "Single genuine build_native only; actual original load_upstream and verify_upstream, no cached module. Read-only env disables optional index writes/fsmonitor.",
+    "process_config": {
+      "GIT_CONFIG_NOSYSTEM": "1",
+      "GIT_CONFIG_GLOBAL": "nul",
+      "GIT_CONFIG_COUNT": "3",
+      "GIT_CONFIG_KEY_0": "core.fsmonitor",
+      "GIT_CONFIG_VALUE_0": "false",
+      "GIT_CONFIG_KEY_1": "safe.directory",
+      "GIT_CONFIG_VALUE_1": "D:/Dev/KLTN/artifacts/akt/dependencies/upstream",
+      "GIT_CONFIG_KEY_2": "core.autocrlf",
+      "GIT_CONFIG_VALUE_2": "true",
+      "GIT_OPTIONAL_LOCKS": "0",
+      "GIT_TERMINAL_PROMPT": "0"
+    },
+    "normalization_evidence": {
+      "path": "artifacts/akt/local-tests/akt-research-runner-20261108-01/upstream_git_eol_preflight01.json",
+      "sha256": "a0307845fbd04ff1b7e52dea821ed9159462005876c4facfdd18be62c40ca6fd",
+      "scope_vi": "ROOT actualread-onlyconfig/hashprobe; installedsystemcore.autocrlf=true, khôngsourceedit/nofiltersbypass."
+    }
+  },
+  "expected_upstream_cuda_availability_queries": 1,
+  "fixture_geometry": {
+    "research_d_model": 256,
+    "heads": 8,
+    "blocks": 1,
+    "d_ff": 1024,
+    "final_fc": 512,
+    "dropout": 0.05,
+    "context": 100,
+    "target_block": 100,
+    "max_length": 200,
+    "max_batch": 2,
+    "max_fixture_tokens": 6,
+    "n_items": 3
+  },
+  "source_pins": {
+    "docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md": "13a81ad6a5173e1f215e3df01f3917fcbc1cce128c87c93985b57af76faa353a",
+    "requirements-akt.lock.txt": "3e721fdb49543ad0888cf02a863826ebc6144c0d1dd670f2490ebcc0d69b8c0a",
+    "scripts/research/windows_owned_worker.py": "0dc8723170467e9ae73c4e233a357b9d584c66a8c183c478bdcff358fb0a95a1",
+    "src/knowledge_tracing/__init__.py": "b84a9a4118d8b3476daae25a7981c97909524ace7ef93860bba7e6ec9e5bccb8",
+    "src/knowledge_tracing/shared_kt.py": "06922d5a6bfd6c806fd1abb61232f58a9ccd63826e30cefaf87ce3d3b36dffa8",
+    "src/knowledge_tracing/simulator_bridge.py": "b29105acd8de84b060ca27573bb7f7cf8e85599a4596e50e4a21ab63c82329d2",
+    "src/knowledge_tracing/simulator_data.py": "79e28c1a8fc9b3bd5f3283868d7aba1a5bbc7c76764725a8b01098b2ae33cd9f",
+    "src/knowledge_tracing/simulator_research_data.py": "51eb7275a6a4a6b26b763a21a8fe6dc15b0973fc19b3c5557175eaa298db7e53",
+    "src/knowledge_tracing/edge_confidence_artifact.py": "ecc313c5a52c3fbb56e06e84bbd1c0808191b956a35bad1ffced200728e01746",
+    "src/knowledge_tracing/graph_context.py": "3db94ec43271d336898f61f81f12aeb569c6de52219eeed535af709711c97264",
+    "src/knowledge_tracing/graph_augmentation.py": "105aa918f1dc5d8fcfae22c9d8e7d2e13c1832b71d8b6a7ce8deed67d443ff08",
+    "src/knowledge_tracing/akt/__init__.py": "03a3e9c1a2030b62b050c846fccb4349066ff247864484683f4acf8f5b725986",
+    "src/knowledge_tracing/akt/config.py": "beb2f8830c9d411fa1c00f0acf81ffe0c5200d6c09045d949b9cebade30dc85f",
+    "src/knowledge_tracing/akt/types.py": "312e57e4fa507f12b449841969b3a9c2b35c592909178b3040102b254aa20304",
+    "src/knowledge_tracing/akt/tensors.py": "688fb915f8aa4958f47ee541e9ed92be577c0e14bc9c29e1d969be94863a4867",
+    "src/knowledge_tracing/akt/encoding.py": "4b8288b9e50fd0763f9ee15db39775a8d3b7b42bb72540a644cbf8a177d351f8",
+    "src/knowledge_tracing/akt/windows.py": "e8d00ea0f8b9d07bdc979575109c1f1fc22498d55410bff05a12559bebdb2068",
+    "src/knowledge_tracing/akt/provenance.py": "493d82af749baefcacec9ece0a7abe3297e64398eb4cd93c1d639ca41752cb59",
+    "src/knowledge_tracing/akt/upstream.py": "c31715c7659470b6d2e839512f2f9ac1f9b83023a9ba1dbfb6db12d4dd687515",
+    "src/knowledge_tracing/akt/model.py": "e40b068bc305d0157a03f4baea3cd8e06c5777611c492f02fb65f792760e9e9f",
+    "src/knowledge_tracing/akt/research_simulator_data.py": "9596c2dc5ae86cdf89e5f68c15224a6794b6056093dabee6b26502dfabdf092b",
+    "src/knowledge_tracing/akt/research_graph_condition.py": "6678f04c3c0b3655aa797edd3e491877d17ac3f0fa12f7dfc9971f637d875cf0",
+    "src/knowledge_tracing/akt/research_graph_context.py": "8bfe0dca095d1de6c898fd849be6c5d1ee7033dffc13c20b24c7857de92bb029",
+    "src/knowledge_tracing/akt/research_graph_model.py": "77e365e4ffc6861f34a9ae05cbca947f057be967389f74f75bf5caacc7ee2397",
+    "tests/akt/test_research_graph_model.py": "579359ff7b8ac64a75f9a343200724091d0d5b78af9a87e3d33ad023f1742ffc",
+    "artifacts/akt/dependencies/upstream/akt.py": "be2788c20cac602e86ef3a51e5294b37dd7b200f818be4e173dbd69069a3ec6d",
+    "artifacts/akt/dependencies/upstream/README.md": "df8eea9919dcdb343f3a841540af18e2039b8b0c33af449ca9c752d11f56ee8b",
+    "artifacts/akt/dependencies/upstream/LICENSE": "891133edce0d8693f5b916d4257ce70b71a02aa110cb02cc5d47326544ea4522",
+    "tests/akt/test_research_graph_context.py": "d54b188ce56fa913551ce54c33209151a1b9456fac0031c541930370471299a8"
+  },
+  "absent_source_paths": [
+    "tests/__init__.py",
+    "tests/akt/__init__.py"
+  ],
+  "research_fit_authorized": false,
+  "actual_executions": 0,
+  "scope_vi": "25tinyfixture/8Architecture.forward/5logicalautograd.backward/0optimizer. Explicitfullboundarybaoactualwholeinference,0full-indexserializertronghotregions. 1GiBRSS/2GiBfreeresourcecapnhư03; khôngactualcorpus/lifecycle/maintrainingreadiness.",
+  "prior_attempts": [
+    {
+      "status": "REJECTED_18_SETUP_ERRORS_0_BODIES_0_NATIVE",
+      "reason_vi": "Fixture28items thiếu84referenceitems; validator giữ nguyên. Raw01 không sửa.",
+      "result_path": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cgakt-research-model01/result.json",
+      "result_sha256": "5a6348140326dadca4a361bc1d6570e9c9c192f8a1be7fa50d018549c21f2bd3",
+      "outer_final_sha256": "f527810dfaa20b2a2a60c5635142ed53ab709c5c06207a83d23d33e793c0aea2",
+      "counts": {
+        "tests": 18,
+        "failures": 0,
+        "errors": 18,
+        "skipped": 0
+      },
+      "native_started": {
+        "backbone_constructors": 0,
+        "wrapper_constructors": 0,
+        "gate_constructors": 0,
+        "forwards": 0,
+        "logical_backwards": 0,
+        "adam_constructors": 0,
+        "adam_steps": 0
+      },
+      "stored_outer_elapsed_seconds": 4.091543436050415,
+      "scope_vi": "Giữ budgets/18cases/8forwards/5logicalbackwards/0optimizer; lần01 không chạy native, lần02 chỉ sửa bank fixture."
+    },
+    {
+      "status": "REJECTED_18_SETUP_ERRORS_NO_BACKBONE_FORWARD_BACKWARD_OR_OPTIMIZER",
+      "reason_vi": "Git isolatedenv tắt systemcore.autocrlf=true; verify_upstream source-content-mismatch, rawsourcekhôngđổi.",
+      "counts": {
+        "tests": 18,
+        "failures": 0,
+        "errors": 18,
+        "skipped": 0
+      },
+      "native_started": {
+        "backbone_constructors": 0,
+        "wrapper_constructors": 1,
+        "gate_constructors": 0,
+        "forwards": 0,
+        "logical_backwards": 0,
+        "adam_constructors": 0,
+        "adam_steps": 0
+      },
+      "native_body_returned": {
+        "backbone_constructors": 0,
+        "wrapper_constructors": 0,
+        "gate_constructors": 0,
+        "forwards": 0,
+        "logical_backwards": 0,
+        "adam_constructors": 0,
+        "adam_steps": 0
+      },
+      "result_path": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cgakt-research-model02/result.json",
+      "result_sha256": "112c41c6d626166a3a9fa05dfa27e57180853ef4ce75ad50f0e01dd49488a38d",
+      "outer_final_sha256": "76c485e3c63f6c202af13c97bba76a16fdd7ca22d866c5495af32a88f1e45740",
+      "stored_outer_elapsed_seconds": 5.1900269985198975
+    }
+  ],
+  "previous_core_bundle": {
+    "path": "research_tracking/runs/cgakt-research-core-engineering-20261109-01/manifest.json",
+    "sha256": "eab6ea304cd2b85797c2571650abf2506a3bc11f65faa107e3f8e7136d5b59be",
+    "outputs": 74,
+    "scope_vi": "Baselinecore18PASS/8forwards/5logicalbackwards/0optimizer; khôngmaintraining/throughputapproval."
+  },
+  "hotpath_observer": {
+    "hot_regions": [
+      "collate",
+      "step",
+      "native",
+      "inference"
+    ],
+    "expected_full_serializer_attempts_in_hot_regions": 0,
+    "full_audit_before_actual_inference": 1,
+    "full_audit_after_actual_inference": 1,
+    "scope_vi": "Fullauditsattach/explicitboundaries; selected/ticket/nativeevidence checksởhotpath. O(W)lookupgiữnguyên,khôngthroughputbenchmark."
+  }
+}

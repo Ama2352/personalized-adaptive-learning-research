@@ -1,5 +1,7 @@
 # Chỉ mục bằng chứng
 
+**CG-AKT context hotpath:** [báo cáo](reports/cgakt_hotpath_integrity_20261109.md) / [bundle41](runs/cgakt-context-model-hotpath-engineering-20261109-01/README.md),135pure+25native scopes riêng;8Architectureforward/5logicalbackward/0Adam,0fullserializer ở hotregions vàfullwholeinferenceboundary. Chưa costbenchmark/maintraining; old52/74 giữ nguyên.
+
 **RQ1 native state:** [báo cáo cơ chế](reports/rq1_native_mastery_reference_diagnostic_20261109.md) / [bundle92](runs/rq1-prediction-mastery-trace-20261109-01/README.md),18closed traces/all2160parity;3428uncertainty-condition differences masked bybothknowledge-below,90knowledge-condition/mastery differences. Đơn vị concept–time, không temporaltransitions. **Core CG-AKT:** [18CPUcases](reports/cgakt_research_core_20261109.md) / [bundle74](runs/cgakt-research-core-engineering-20261109-01/README.md);8forward/5backward/0optimizer, chưa model fitted.
 
 **Context graph nghiên cứu:** [109ca condition/context](reports/cgakt_research_context_readiness_20261109.md), [bundle52](runs/cgakt-research-context-engineering-20261109-01/README.md). **Observer overhead:** [fixture benchmark](reports/mastery_observer_cost_microbenchmark_20261109.md), [bundle24](runs/mastery-observer-cost-engineering-20261109-01/README.md); không native runtime forecast hoặc scientificN.
@@ -19,7 +21,7 @@
 
 ## Mốc09/11 — báo cáo hiện hành và hồ sơ kiểm tra local
 
-**Điểm đọc hiện hành:** [tóm tắt09/11](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md) và [HTML minh họa](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html), bổ sung cơ chế controller sau bản nền `ab471ca`. Mười SVG và sáu bảng đã kiểm desktop/mobile; không chồng chữ hoặc tràn khung. Đã đóng browser ngay sau QA; không mở máy chủ preview.
+**Điểm đọc hiện hành:** [tóm tắt09/11](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md) và [HTML minh họa](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html), bổ sung cơ chế controller sau bản nền `ab471ca`. Mười SVG và bảy bảng (bổ sung chặng5 về hai điều kiện xét thành thạo, commit6fa9d58) đã kiểm desktop/mobile; không chồng chữ hoặc tràn khung. Đã đóng browser ngay sau QA; không mở máy chủ preview.
 
 **Hồ sơ vận hành:** [collection01–05](reports/gate_collection_trials_20261109.md) và [bundle đã đóng](runs/gate-collection-engineering-20261109-01/README.md),127outputs có kiểm toàn vẹn. Năm lượt đều rejected, chưa collection toàn bộ hoặc full Gate PASS. Nguồn154files đối chiếu raw Git commit `2c337d4`, không nhân bản lại; giữ raw failures, namespace snapshots, guards và cleanup. Đây không phải kết quả mô hình hoặc bằng chứng RQ mới.
 

@@ -86,6 +86,11 @@ def _batch_sha(batch):
     return identity_hash(rows)
 
 
+def _evidence_sha(evidence):
+    _need(type(evidence) is tuple and all(type(row) is tuple for row in evidence), 'immutable evidence rows required')
+    return identity_hash(tuple(tuple(None if item is None else asdict(item) for item in row) for row in evidence))
+
+
 def _features(audit):
     parents = audit.parents
     support = sum(p.support for p in parents if p.support > 0)
@@ -101,6 +106,7 @@ class _Call:
     batch: AKTBatch
     payload_sha256: str
     evidence: tuple
+    evidence_sha256: str
     enabled: bool
 
 
@@ -131,7 +137,7 @@ class ResearchGraphNative(nn.Module):
         self._call = None
         self._parameter_ids = tuple(id(p) for p in self.parameters())
 
-    def bind(self, batch, evidence, *, enabled):
+    def bind(self, batch, evidence, *, enabled, expected_evidence_sha256=None):
         _need(self._call is None and type(enabled) is bool, 'one outstanding native context only')
         _need((self.variant, self.condition_sha256) == self._recipe_identity, 'native variant/condition drift')
         _need(len(evidence) == batch.q_data.shape[0], 'context/batch row mismatch')
@@ -141,7 +147,10 @@ class ResearchGraphNative(nn.Module):
                 if item is not None:
                     _need(bool(batch.target_mask[row, local]) and bool(batch.valid_mask[row, local]), 'context outside target mask')
                     _need(item.local_position == local and item.source_row == int(batch.source_rows[row, local]), 'context target identity mismatch')
-        self._call = _Call(batch, _batch_sha(batch), evidence, enabled)
+        digest = _evidence_sha(evidence)
+        _need(expected_evidence_sha256 is None or digest == expected_evidence_sha256,
+              'expected native evidence drift')
+        self._call = _Call(batch, _batch_sha(batch), evidence, digest, enabled)
 
     def clear_context(self):
         self._call = None
@@ -157,6 +166,7 @@ class ResearchGraphNative(nn.Module):
         _need(q_data is call.batch.q_data and qa_data is call.batch.qa_data and target is call.batch.loss_targets,
               'foreign tensor identity for context ticket')
         _need(_batch_sha(call.batch) == call.payload_sha256, 'batch changed after binding')
+        _need(_evidence_sha(call.evidence) == call.evidence_sha256, 'native bound evidence drift')
         _need(tuple(id(p) for p in self.parameters()) == self._parameter_ids, 'registered parameter identity changed')
         _need(all(p.device.type == 'cpu' and p.dtype == torch.float32 for p in self.parameters()), 'CPU FP32 parameters required')
         active = []
@@ -206,6 +216,8 @@ class _TrainingTicket:
     batch_sha256: str
     context: tuple
     index_sha256: str
+    window_ids: tuple[str, ...]
+    evidence_sha256: str
 
 
 class ResearchGraphAKTAdapter:
@@ -237,22 +249,24 @@ class ResearchGraphAKTAdapter:
         self.set_context_index(index)
         self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
         self._parameters = tuple(self.native.parameters())
-        self._integrity()
+        self._integrity(full=True)  # Constructor/attach boundary, not per batch.
 
     @property
     def identity(self):
-        self._integrity()
+        self._integrity(full=True)
         return identity_hash(dict(recipe=RECIPE, condition=self._condition_sha,
             encoding=self._encoding_sha, config=self._config_sha, sources=self._sources))
 
-    def _integrity(self):
+    def _integrity(self, *, full=False):
         _need(not self._failed, 'failed adapter cannot be reused')
         _need(self.condition.identity == self._condition_sha and self.research_encoding.identity == self._encoding_sha,
               'condition/encoding changed')
         _need(_config_sha(self.config) == self._config_sha and source_inventory() == self._sources,
               'model config/source drift')
-        self.index.assert_integrity()
-        _need(self.index.identity == self._index_sha, 'context index changed')
+        self.index.check_access_header(self._context_seal)
+        _need(self.index.content_sha256 == self._index_sha == self._context_seal.root_sha256, 'context index changed')
+        if full:
+            self.index.assert_integrity()
         if hasattr(self, 'native'):
             _need(self.native.variant == self.condition.variant and self.native.condition_sha256 == self._condition_sha,
                   'native variant/condition drift')
@@ -262,20 +276,31 @@ class ResearchGraphAKTAdapter:
     def set_context_index(self, index):
         _need(self._ticket is None, 'consume training ticket before changing phase')
         _need(type(index) is contexts.ResearchGraphContextIndex, 'typed graph context index required')
-        index.assert_integrity()
+        seal = index.seal_for_access()
         _need(index.condition_sha256 == self._condition_sha and index.encoding_sha256 == self._encoding_sha,
               'context condition/encoding mismatch')
         _need(index.context == self.config.context and index.target_block == self.config.target_block,
               'context/native geometry mismatch')
         _need(index.vocabulary_sha256 == identity_hash(self.encoding.vocabulary.values), 'context vocabulary mismatch')
-        self.index, self._index_sha = index, index.identity
+        self.index, self._index_sha, self._context_seal = index, seal.root_sha256, seal
+
+    def audit_context_boundary(self):
+        """Audit toàn cache trước/sau epoch hoặc prediction pass do caller quản.
+
+        Hot path kiểm selected records; unselected nested drift có thể chỉ bị
+        phát hiện ở boundary. Fail sau updates là partial, không có rollback.
+        Method này không tự cấp trainer/checkpoint/execution authority.
+        """
+        self._integrity(full=True)
+        return dict(index_sha256=self._index_sha, condition_sha256=self._condition_sha,
+                    encoding_sha256=self._encoding_sha)
 
     def _collate(self, windows, targets=None):
         _need(1 <= len(windows) <= self.config.batch_size and all(type(w) is WindowInputs for w in windows),
               'bounded typed windows required')
         _need(len({w.window_id for w in windows}) == len(windows), 'duplicate window IDs')
         _need(all(1 <= len(w.inputs.item_ids) <= self.config.max_length for w in windows), 'window length cap')
-        evidence = self.index.for_windows(tuple(windows))
+        evidence = self.index.for_windows(tuple(windows), access_seal=self._context_seal)
         batch = collate_windows(windows, n_items=len(self.encoding.vocabulary.values), device='cpu', targets=targets)
         return batch, evidence
 
@@ -285,7 +310,8 @@ class ResearchGraphAKTAdapter:
         _need(self.index.neural_binding.phase_scope in ('select_train80', 'refit_union90'), 'prediction phase cannot train')
         _need(all(type(e) is TrainingWindow for e in entries), 'typed TrainingWindow required')
         batch, evidence = self._collate(tuple(e.window for e in entries), [e.targets for e in entries])
-        self._ticket = _TrainingTicket(batch, _batch_sha(batch), evidence, self._index_sha)
+        self._ticket = _TrainingTicket(batch, _batch_sha(batch), evidence, self._index_sha,
+            tuple(e.window.window_id for e in entries), _evidence_sha(evidence))
         return batch
 
     def step(self, batch: AKTBatch, optimizer: torch.optim.Optimizer) -> dict:
@@ -293,6 +319,8 @@ class ResearchGraphAKTAdapter:
         ticket, self._ticket = self._ticket, None
         _need(ticket is not None and batch is ticket.batch and ticket.batch_sha256 == _batch_sha(batch)
               and ticket.index_sha256 == self._index_sha, 'fresh exact unchanged training ticket required')
+        self.index.check_selected_records(ticket.window_ids, access_seal=self._context_seal)
+        _need(_evidence_sha(ticket.context) == ticket.evidence_sha256, 'training ticket evidence drift')
         _need(type(optimizer) is torch.optim.Adam, 'explicit existing research Adam required')
         actual = tuple(p for group in optimizer.param_groups for p in group['params'])
         _need(len(actual) == len(self._parameters) and len({id(p) for p in actual}) == len(actual)
@@ -305,11 +333,13 @@ class ResearchGraphAKTAdapter:
         _need(self.native.training, 'training mode required before optimizer step')
         self._optimizer = optimizer
         try:
-            self.native.bind(batch, ticket.context, enabled=True)
+            self.native.bind(batch, ticket.context, enabled=True, expected_evidence_sha256=ticket.evidence_sha256)
             # Exact AKTBatch and .native ownership preserve the public primitive.
             with torch.device('cpu'):
                 result = AKTAdapter.step(self, batch, optimizer)
             self._integrity()
+            self.index.check_selected_records(ticket.window_ids, access_seal=self._context_seal)
+            _need(_evidence_sha(ticket.context) == ticket.evidence_sha256, 'training ticket evidence drift after primitive')
             return result
         except BaseException:
             self._failed = True
@@ -318,6 +348,11 @@ class ResearchGraphAKTAdapter:
             self.native.clear_context()
 
     def predict_windows(self, windows: Sequence[WindowInputs]) -> list[np.ndarray]:
+        """Selected-record checks; caller bao toàn pass bằng boundary audit.
+
+        Không full-audit tại mỗi call vì runner có thể gọi theo từng batch.
+        Không coi một batch thành nghiệm thu toàn phase/corpus.
+        """
         self._integrity()
         _need(self._ticket is None, 'prediction cannot consume/skip pending training ticket')
         modes = tuple((module, module.training) for module in self.native.modules())
@@ -328,8 +363,13 @@ class ResearchGraphAKTAdapter:
                 for start in range(0, len(windows), self.config.batch_size):
                     group = tuple(windows[start:start+self.config.batch_size])
                     batch, evidence = self._collate(group)
-                    self.native.bind(batch, evidence, enabled=True)
+                    window_ids = tuple(w.window_id for w in group)
+                    digest = _evidence_sha(evidence)
+                    self.index.check_selected_records(window_ids, access_seal=self._context_seal)
+                    self.native.bind(batch, evidence, enabled=True, expected_evidence_sha256=digest)
                     _, probabilities, _ = self.native(batch.q_data, batch.qa_data, batch.loss_targets)
+                    self.index.check_selected_records(window_ids, access_seal=self._context_seal)
+                    _need(_evidence_sha(evidence) == digest, 'prediction evidence drift after forward')
                     values = probabilities.reshape(batch.q_data.shape).cpu().numpy().astype(np.float64)
                     _need(np.isfinite(values).all() and ((values >= 0) & (values <= 1)).all(), 'invalid graph probabilities')
                     output.extend(values[row, :len(w.inputs.item_ids)].copy() for row, w in enumerate(group))

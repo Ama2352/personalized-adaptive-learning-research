@@ -126,6 +126,21 @@ def _window_payload(window, max_tokens):
 
 
 @dataclass(frozen=True, init=False)
+class ContextAccessSeal:
+    """Process-local cache access; không checkpoint/capability/fit authority."""
+    root_sha256: str
+    header_sha256: str
+    record_sha256: tuple[tuple[str, str], ...]
+    index_object_id: int
+    windows_object_id: int
+    unsupported_object_id: int
+    manifest_object_id: int
+
+    def __init__(self, *args, **kwargs):
+        raise TypeError('use index.seal_for_access after full audit')
+
+
+@dataclass(frozen=True, init=False)
 class ResearchGraphContextIndex:
     condition_sha256: str
     phase_sha256: str
@@ -152,21 +167,74 @@ class ResearchGraphContextIndex:
         _need(self.content_sha256 == identity_hash(self._payload()), 'context index payload drift')
         _need(self.sources_sha256 == source_inventory(), 'context index source drift')
 
+    def _access_header(self):
+        # Không contexts/observed rows hoặc full unsupported ledger ở hot path.
+        return dict(condition=self.condition_sha256, phase=self.phase_sha256,
+            encoding=self.encoding_sha256, vocabulary=self.vocabulary_sha256,
+            neural_binding=asdict(self.neural_binding), sources=self.sources_sha256,
+            context=self.context, target_block=self.target_block, full_targets=self.full_targets,
+            limits=asdict(self.limits), role=self.role, windows=len(self.windows),
+            unsupported=len(self.unsupported_targets))
+
+    def seal_for_access(self):
+        self.assert_integrity()
+        manifest = tuple((w.window_id, identity_hash(asdict(w))) for w in self.windows)
+        seal = object.__new__(ContextAccessSeal)
+        values = dict(root_sha256=self.content_sha256, header_sha256=identity_hash(self._access_header()),
+            record_sha256=manifest, index_object_id=id(self), windows_object_id=id(self.windows),
+            unsupported_object_id=id(self.unsupported_targets), manifest_object_id=id(manifest))
+        for name, value in values.items():
+            object.__setattr__(seal, name, value)
+        # Bind manifest và header chỉ khi full payload vẫn nguyên tại boundary.
+        self.assert_integrity()
+        self.check_access_header(seal)
+        return seal
+
+    def check_access_header(self, seal):
+        _need(type(seal) is ContextAccessSeal and id(self) == seal.index_object_id,
+              'foreign context access seal')
+        _need(id(self.windows) == seal.windows_object_id
+              and id(self.unsupported_targets) == seal.unsupported_object_id
+              and id(seal.record_sha256) == seal.manifest_object_id,
+              'context/manifest tuple replacement')
+        _need(self.content_sha256 == seal.root_sha256
+              and identity_hash(self._access_header()) == seal.header_sha256,
+              'context header/root drift')
+        _need(self.sources_sha256 == source_inventory(), 'context index source drift')
+
+    def check_selected_records(self, window_ids, *, access_seal):
+        self.check_access_header(access_seal)
+        _need(type(window_ids) is tuple and 0 < len(window_ids) <= self.limits.max_windows
+              and all(type(i) is str for i in window_ids)
+              and len(set(window_ids)) == len(window_ids), 'bounded unique selected window IDs')
+        lookup = {record.window_id: record for record in self.windows}
+        manifest = dict(access_seal.record_sha256)
+        for name in window_ids:
+            _need(name in lookup and name in manifest, 'foreign selected record')
+            _need(identity_hash(asdict(lookup[name])) == manifest[name], 'selected evidence drift')
+
     @property
     def identity(self):
         self.assert_integrity()
         return self.content_sha256
 
-    def for_windows(self, windows):
+    def for_windows(self, windows, *, access_seal=None):
         """Trả context theo từng vị trí; non-target=None, không dựng lại quá khứ."""
-        self.assert_integrity()
+        if access_seal is None:
+            self.assert_integrity()
+        else:
+            self.check_access_header(access_seal)
         _need(type(windows) is tuple and 0 < len(windows) <= self.limits.max_windows, 'bounded immutable window request')
         lookup = {record.window_id: record for record in self.windows}
+        manifest = None if access_seal is None else dict(access_seal.record_sha256)
         result, seen = [], set()
         for window in windows:
             payload = _window_payload(window, self.limits.max_window_tokens)
             _need(window.window_id in lookup and window.window_id not in seen, 'foreign/duplicate window identity')
             record = lookup[window.window_id]
+            if manifest is not None:
+                _need(window.window_id in manifest and identity_hash(asdict(record)) == manifest[window.window_id],
+                      'selected evidence drift')
             _need(identity_hash(payload) == record.inputs_sha256, 'window/query/prior/geometry payload drift')
             seen.add(window.window_id); result.append(record.contexts)
         return tuple(result)
