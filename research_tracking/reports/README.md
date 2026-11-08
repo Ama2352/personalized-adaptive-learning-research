@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**Bổ sung kỹ thuật sau gói GVHD08/11:** [metric sau calibration](akt_calibrated_reporting_readiness_20261108.md) có36purePASS và một lần kiểm evaluator pandas/sklearn thật trên5hàng tự dựng;0model/solver/realdata. Số AUC/Brier fixture không là kết quả RQ. Full Gate vẫn cần tách process trước khi chạy; không lấy batch này thay actual training/CUDA.
+
 **Đọc báo cáo tiến độ GVHD:** chuyển sang [gói theo ngày08/11 — đợt01](../supervisor_reports/2026-11-08/01_tien_do/README.md), có báo cáo chính, notebook, bảng file/bằng chứng và tài liệu đọc kèm. Bản kỹ thuật đã tới revision6 (`8b6487c`); các đoạn revision4/chưa sinh corpus bên dưới là snapshot cũ, không mô tả trạng thái hiện tại. Corpus thực đã nghiệm thu tại `1990d4c`; controlled history tại `8f95fd6`, controlled ability tại `8b6487c`.
 
 **Báo cáo hiện hành revision4 (`e502848`):** [GVHD](BAO_CAO_TIEN_DO_GVHD_20261108.md),32source inputs/25links đã kiểm. Bổ sung [full–empty edge contrast](rq1_fixed_edge_set_contrast_20261108.md) và [history bins](rq1_history_stratified_edge_contrast_20261108.md): kết quả gộp cải thiện nhỏ nhưng PG bất lợi; history/time còn confounding, không causal learning benefit hoặc RQ completion. Notebook bên dưới vẫn snapshot C01–C14, chưa chứa hai phân tích mới.

@@ -1,0 +1,59 @@
+{
+  "status": "PASS_SYNTHETIC_ACTUAL_EVALUATOR_NOT_MODEL_RESULT",
+  "manufactured_rows": 5,
+  "supported_rows": 4,
+  "unsupported_rows": 1,
+  "reporting": {
+    "reporting_evaluator": "knowledge_tracing.gam_kt.evaluation._metrics; canonical sklearn log_loss clip",
+    "evaluation_scope": "in_sample_calibration_partition_not_external_quality",
+    "population_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "population_scheme": "full-query-keys-and-observable-shard-bindings-v1",
+    "target_identity_sha256": "a520dfa592e929b150689b7f1626f9c93324e2b5ea89996f52c341cb623d4484",
+    "full_targets": 5,
+    "supported_targets": 4,
+    "unsupported_targets": 1,
+    "unsupported_counts": {
+      "oov_item": 1
+    },
+    "supported_metrics": {
+      "positive_count": 2,
+      "negative_count": 2,
+      "auc": 1.0,
+      "log_loss": 0.11157177565710497,
+      "brier": 0.019999999999999993,
+      "ece": 0.09999999999999999,
+      "accuracy": 1.0,
+      "prevalence": 0.5
+    },
+    "full_metrics": null
+  },
+  "source_before_after": {
+    "src/knowledge_tracing/akt/research_runner.py": "dce052064d438d4cd98f91e1ddbbc4dbd325f5994b5978e716190249719e64c0",
+    "src/knowledge_tracing/gam_kt/evaluation.py": "c39b6ca9c87dc92f9e3a6dc7636f5249c7c33f69549284bdcf844c4958acaa65"
+  },
+  "before_memory": {
+    "pid": 20936,
+    "process_rss_bytes": 22847488,
+    "process_peak_rss_bytes": 22847488,
+    "system_available_ram_bytes": 1595138048,
+    "system_total_ram_bytes": 16794759168
+  },
+  "after_import": {
+    "pid": 20936,
+    "process_rss_bytes": 157679616,
+    "process_peak_rss_bytes": 157679616,
+    "system_available_ram_bytes": 1221918720,
+    "system_total_ram_bytes": 16794759168
+  },
+  "final_memory": {
+    "pid": 20936,
+    "process_rss_bytes": 158949376,
+    "process_peak_rss_bytes": 158949376,
+    "system_available_ram_bytes": 1219297280,
+    "system_total_ram_bytes": 16794759168
+  },
+  "model_calls": 0,
+  "solver_fits": 0,
+  "real_data_reads": 0,
+  "scope_vi": "Chạy evaluator pandas/sklearn thật và helper mới trên số liệu tự dựng. AUC/Brier không phải kết quả AKT/CG-AKT hoặc evidence trả lời RQ."
+}

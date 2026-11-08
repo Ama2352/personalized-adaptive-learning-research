@@ -436,6 +436,50 @@ def _exports(run, prefix, summary, rows, truth):
     return psha,tsha
 
 
+def _calibrated_reporting_metrics(tools, raw_summary, raw_rows, calibrated_rows, truth):
+    """Cùng full population/nhãn; canonical evaluator, không dùng Tfit loss làm reportLL."""
+    keys=('learner_id','item_id','timestamp','source_row','global_rank','history_sha256',
+          'history_hash_scheme','origin_role','phase_scope','phase_sha256','encoding_sha256')
+    def index(rows):
+        result={}
+        for row in rows:
+            _require(all(name in row for name in keys),'reporting row missing target identity')
+            _require(row['phase_scope']=='calibration_predict' and row['origin_role']=='calibration',
+                     'calibrated reporting requires calibration-only target role')
+            key=tuple(row[name] for name in keys)
+            _require(key not in result,'duplicate reporting target identity')
+            result[key]=row
+        return result
+    raw_index=index(raw_rows); calibrated_index=index(calibrated_rows); truth_index=index(truth)
+    _require(raw_index and raw_index.keys()==calibrated_index.keys()==truth_index.keys()
+             and len(raw_index)==raw_summary['full_targets'],'calibrated reporting full population mismatch')
+    probabilities=[];labels=[];unsupported={}
+    for key,raw in raw_index.items():
+        calibrated=calibrated_index[key];target=truth_index[key]
+        _require(set(calibrated)==set(raw)|{'calibrated_probability'}
+                 and {name:calibrated[name] for name in raw}==raw,'calibration changed original prediction row')
+        _require(type(target['correct']) is int and target['correct'] in (0,1),'binary reporting label required')
+        p=calibrated['calibrated_probability']
+        if raw['probability'] is None:
+            _require(p is None and raw['support_reason']!='supported','unsupported target must remain null')
+            reason=raw['support_reason'];unsupported[reason]=unsupported.get(reason,0)+1
+        else:
+            _require(type(raw['probability']) in (int,float) and not isinstance(raw['probability'],bool)
+                     and math.isfinite(raw['probability']) and 0<=raw['probability']<=1
+                     and raw['support_reason']=='supported'
+                     and type(p) in (int,float) and not isinstance(p,bool) and math.isfinite(p) and 0<=p<=1,
+                     'invalid supported raw/calibrated reporting probability')
+            probabilities.append(p);labels.append(target['correct'])
+    _require(len(probabilities)==raw_summary['supported_targets'],'calibrated reporting support population changed')
+    metrics=tools._metrics(tools.pd.DataFrame(dict(correct=labels,prediction=probabilities)))
+    return dict(reporting_evaluator=METRICS,evaluation_scope='in_sample_calibration_partition_not_external_quality',
+        population_sha256=raw_summary['population_sha256'],population_scheme=raw_summary['population_scheme'],
+        target_identity_sha256=identity_hash(list(raw_index)),full_targets=len(raw_index),
+        supported_targets=len(probabilities),unsupported_targets=len(raw_index)-len(probabilities),
+        unsupported_counts=unsupported,supported_metrics=metrics,
+        full_metrics=metrics if len(probabilities)==len(raw_index) else None)
+
+
 def _execute(run, tools, data, train, selection, encoding80, corpus):
     config = run.config
     _require(not tools.torch.cuda.is_available() and not tools.torch.cuda.is_initialized(), 'CPU research requires CUDA hidden/unavailable')
@@ -523,7 +567,7 @@ def _execute_cpu(run, tools, data, train, selection, encoding80, corpus):
     run.transition('predictions_complete',checkpoint_sha256=final['checkpoint_sha256'],predictions_sha256=psha,
         population_sha256=summary['population_sha256'],full_targets=summary['full_targets'],supported_targets=summary['supported_targets'])
     from ..response_calibration import (PredictionBinding,CalibrationPartition,CalibrationTarget,fit_temperature,
-        calibrate_probability,reference_bank_v1,reference_identity)
+        calibrate_probability,reference_bank_v1,reference_identity,CLIP,RECIPE)
     assignments = run.plan.split_plan.assignments()
     excluded = tuple(a.learner_id for a in assignments if a.role in ('train','selection'))
     learners = tuple(a.learner_id for a in assignments if a.role == 'calibration')
@@ -541,10 +585,14 @@ def _execute_cpu(run, tools, data, train, selection, encoding80, corpus):
     _require(calibrator.status == 'fitted_response_temperature', 'unsupported temperature; calibrated lifecycle cannot complete')
     calibrated = [dict(p,calibrated_probability=None if p['probability'] is None else
         calibrate_probability(p['probability'],calibration=calibrator,binding=binding)) for p in rows]
+    reporting=_calibrated_reporting_metrics(tools,summary,rows,calibrated,truth)
     calibrated_sha = _write_csv(run.output/'calibration/calibrated.csv',calibrated,run.budget.max_prediction_bytes)
     esha = run.json('calibration/export.json',dict(binding=asdict(binding),partition=asdict(partition),
         raw_predictions_sha256=psha,targets_sha256=tsha,calibrated_predictions_sha256=calibrated_sha,
-        calibrator_sha256=csha,coverage=summary,calibration_quality='in-sample response fit, not external/latent mastery calibration'))
+        calibrator_sha256=csha,coverage=summary,calibrated_reporting=reporting,
+        temperature_fit_objective=dict(recipe=RECIPE,logit_clip=CLIP,raw_log_loss=calibrator.raw_log_loss,
+            calibrated_log_loss=calibrator.calibrated_log_loss,scope='Tfit optimization objective; not canonical reportingLL'),
+        calibration_quality='in-sample response fit, not external/latent mastery calibration'))
     run.transition('finish',csha,esha)
     return dict(selected_epoch=freeze.selected_epoch,freeze_sha256=freeze.identity,refit_checkpoint=final,
                 calibrator_sha256=csha,calibration_export_sha256=esha)

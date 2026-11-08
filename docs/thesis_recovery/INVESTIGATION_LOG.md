@@ -507,3 +507,10 @@ Gói GVHD mới:17cặp nguồn/bản sao SHA kiểm,158links kiểm trước b�
 Root ONE actualpytest dispatch accepted101PASS after2controller failures beforepytest (platformAPI missing, -S hidvenvsitepackages); sourcebefore/after6pins unchanged. Native/solver/model0, noheavyimports/actualPopenattempt. 3.6554365controllercum/30, conservativetoolbound4.2683491/30; explicitnarrowWinAPItestfixture, cooperativeTimer nothardquota. NewNaN/Infunsupported serializationfix covered, selectedepoch owncheckpoint/nullnonbest andphaseprivacy fixed. Bundle44outputs closed. Canonicalpostcalibration reportingmetrics stillmissing, noactualfit/actualconfidences/noRQcompletion. DatedGVHDsnapshot2e63cd9 unchanged; tracking4indexes refreshed separately.
 
 Codecommit a935008 giữ6testedsource pins exactGit. RawGit archivecheck phát hiện2ignoredlogs thiếu trong commit; force-add đúngexecution.log+input-22__pytest.log ở221d518, không sửa nội dung. Verify221d51844/44outputs+manifest PASS; integritycounter2741→2785, không N/tiến độ. Repo không còn WIP saubatch; mainnext canonicalcalibratedmetrics+freshnativeexecutionprofile,0researchfits/Modal.
+
+
+### 08/11 — Calibrated canonical metrics và Gate collection conflict
+
+Runner riêng raw/calcanonical/Tfit objective, join11identitykeys/support/nulls.36purePASS/1.1420376s+conservativeprep2s/20; newcontrollerprepare exactreplace thất bại vì CRCRLF được giữ,0test trước correctednewcontroller. Actual pandas/sklearn evaluator5manufacturedrows trongownedJob12.881743s/25,cleanup0/handlesclosed,0models/solver/realdata. Callerfulltotal postreceipt chưa persist; không gánendtoend25. Peak158949376B,finalavailable1219297280B, khácsamplemetadata3.52GB; không đủ bằng chứngtrainingRAM. Bundle28outputs closed, chưa rawGitverify.
+
+StaticAST67modules:20topimportTorch,13notinTorchassertions ở6modules, plus developmentworker đòi noNumPy/Pandas/Torch; no conftest. ExistingmonolithicGate incompatible, chưa executedfailure. Agent được giao3processpartition exactcoverage/global600 không hạassertions. Method24nativeDesign c2cb... đãreview, haiworker/outer đangprepare chưafit.0Modal/Holdout/fullCV; GVHDdatedsnapshot immutable.

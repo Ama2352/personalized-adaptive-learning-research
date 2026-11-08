@@ -307,6 +307,64 @@ def test_native_objective_uses_same_float32_endpoints_without_reporting_clip():
     assert calls==[([0.,1.],[0,1],dict(reduction='mean'))]
 
 
+@pytest.fixture
+def reporting_case():
+    raw=[];truth=[];calibrated=[];calls=[]
+    for i,(p,y) in enumerate(((.625,0),(.375,1),(None,0))):
+        key=dict(learner_id='cal-u',item_id=f'i{i}',timestamp=i+1,source_row=i+1,global_rank=i,
+            history_sha256=SHA,history_hash_scheme='observable-prefix-chain-v1',origin_role='calibration',
+            phase_scope='calibration_predict',phase_sha256=SHA,encoding_sha256=SHA)
+        row=dict(**key,probability=p,support_reason='supported' if p is not None else 'oov_item')
+        raw.append(row);truth.append(dict(**key,correct=y))
+        calibrated.append(dict(row,calibrated_probability=(0.,1.,None)[i]))
+    summary=dict(full_targets=3,supported_targets=2,unsupported_targets=1,population_sha256=SHA,
+        population_scheme=runner.POPULATION_SCHEME,native_bce_mean=.6,objective=runner.OBJECTIVE,
+        supported_metrics={'raw_sentinel_not_calibrated':True},full_metrics=None)
+    def metrics(frame):
+        calls.append(frame);return {'canonical_sentinel':True}
+    tools=NS(pd=NS(DataFrame=lambda frame:frame),_metrics=metrics)
+    return NS(raw=raw,truth=truth,calibrated=calibrated,summary=summary,tools=tools,calls=calls)
+
+
+def test_calibrated_reporting_identity_join_preserves_raw_nulls_and_evaluator(reporting_case):
+    case=reporting_case
+    before=json.dumps((case.raw,case.truth,case.calibrated,case.summary),sort_keys=True)
+    result=runner._calibrated_reporting_metrics(case.tools,case.summary,case.raw,
+        list(reversed(case.calibrated)),[case.truth[2],case.truth[0],case.truth[1]])
+    assert case.calls==[dict(correct=[0,1],prediction=[0.,1.])]  # No extra clip or positional-label join.
+    assert result['supported_metrics']=={'canonical_sentinel':True} and result['full_metrics'] is None
+    assert (result['full_targets'],result['supported_targets'],result['unsupported_targets'])==(3,2,1)
+    assert result['unsupported_counts']=={'oov_item':1}
+    assert result['population_sha256']==case.summary['population_sha256']
+    assert result['population_scheme']==runner.POPULATION_SCHEME and result['reporting_evaluator']==runner.METRICS
+    assert result['evaluation_scope']=='in_sample_calibration_partition_not_external_quality'
+    assert json.dumps((case.raw,case.truth,case.calibrated,case.summary),sort_keys=True)==before
+
+
+@pytest.mark.parametrize('problem',['missing_truth','extra_truth','duplicate_truth','changed_history',
+    'changed_raw_probability','null_to_probability','supported_to_null','nonfinite','missing_identity',
+    'wrong_supported_count','bool_label','noncalibration_role'])
+def test_calibrated_reporting_rejects_population_support_or_truth_drift(reporting_case,problem):
+    case=reporting_case
+    if problem=='missing_truth':case.truth.pop()
+    elif problem=='extra_truth':case.truth.append(dict(case.truth[0],source_row=4,global_rank=3))
+    elif problem=='duplicate_truth':case.truth.append(dict(case.truth[0]))
+    elif problem=='changed_history':case.truth[0]['history_sha256']='b'*64
+    elif problem=='changed_raw_probability':case.calibrated[0]['probability']=.7
+    elif problem=='null_to_probability':case.calibrated[2]['calibrated_probability']=.5
+    elif problem=='supported_to_null':case.calibrated[0]['calibrated_probability']=None
+    elif problem=='nonfinite':case.calibrated[0]['calibrated_probability']=float('nan')
+    elif problem=='missing_identity':del case.truth[0]['global_rank']
+    elif problem=='wrong_supported_count':case.summary['supported_targets']=3
+    elif problem=='bool_label':case.truth[0]['correct']=True
+    elif problem=='noncalibration_role':
+        for rows in (case.raw,case.calibrated,case.truth):
+            for row in rows:row.update(origin_role='selection',phase_scope='raw_selection10')
+    with pytest.raises(ValueError):
+        runner._calibrated_reporting_metrics(case.tools,case.summary,case.raw,case.calibrated,case.truth)
+    assert case.calls==[]  # Reject before canonical evaluator on a different population.
+
+
 def test_prediction_joins_truth_after_forward_and_keeps_full_oov_population(runtime,monkeypatch):
     predicted=[False]
     queries=[ItemQuery('i0',1,1),ItemQuery('i1',2,2),ItemQuery('oov',3,3)]
@@ -412,11 +470,14 @@ def test_orchestration_stubs_freeze_before_fresh_refit_and_calibration_never_sel
         calls.append(('predict',p.scope))
         role='selection' if p.scope=='raw_selection10' else 'calibration'
         learner=plan.split_plan.assignments(role)[0].learner_id
-        rows=[dict(learner_id=learner,source_row=i+1,item_id=bank.item_ids[0],history_sha256=SHA,
-                   probability=v,support_reason='supported') for i,v in enumerate((.625,.375))]
+        keys=[dict(learner_id=learner,source_row=i+1,item_id=bank.item_ids[0],timestamp=i+1,global_rank=i,
+            history_sha256=SHA,history_hash_scheme='observable-prefix-chain-v1',origin_role=role,
+            phase_scope=p.scope,phase_sha256=SHA,encoding_sha256=enc.identity) for i in range(2)]
+        rows=[dict(key,probability=v,support_reason='supported') for key,v in zip(keys,(.625,.375))]
         labels=(0,1) if role=='selection' else calibration_labels
-        summary=dict(full_targets=2,supported_targets=2,population_sha256=SHA,native_bce_mean=.6,objective=runner.OBJECTIVE)
-        return summary,rows,[dict(correct=y) for y in labels]
+        summary=dict(full_targets=2,supported_targets=2,population_sha256=SHA,population_scheme=runner.POPULATION_SCHEME,
+                     native_bce_mean=.6,objective=runner.OBJECTIVE,supported_metrics={'raw_sentinel':True})
+        return summary,rows,[dict(key,correct=y) for key,y in zip(keys,labels)]
     monkeypatch.setattr(runner,'_predict',predict)
     def save(run,tools,path,model,opt,identity,epoch):
         calls.append(('save',path.parent.name));return dict(path=path.relative_to(run.output).as_posix(),
@@ -429,7 +490,11 @@ def test_orchestration_stubs_freeze_before_fresh_refit_and_calibration_never_sel
         assert p.scope=='refit_union90';calls.append(('probe',p.scope))
         return dict(scope='BOUNDED_FIRST_NATIVE_WINDOWS_NOT_FULL_REFIT',windows=1,targets=2,population_sha256=SHA)
     monkeypatch.setattr(runner,'_reload_probe',probe)
-    result=runner._execute_cpu(runtime,NS(EarlyStopping=Stopper),data,train,selection,encoding,corpus)
+    canonical_calls=[]
+    def canonical_metrics(frame):
+        canonical_calls.append(frame);return {'canonical_calibrated_sentinel':True}
+    tools=NS(EarlyStopping=Stopper,pd=NS(DataFrame=lambda frame:frame),_metrics=canonical_metrics)
+    result=runner._execute_cpu(runtime,tools,data,train,selection,encoding,corpus)
     assert result['selected_epoch']==1 and observed==[(1,.6)]
     assert [call for call in calls if call[0]=='stub_train']==[
         ('stub_train','select_train80',('train',)),('stub_train','refit_union90',('train','selection'))]
@@ -442,4 +507,12 @@ def test_orchestration_stubs_freeze_before_fresh_refit_and_calibration_never_sel
     assert runtime.head.phase=='complete' and runtime.head.completed_steps==2  # Stub events, no Adam execution.
     assert (runtime.output/'selection/freeze.json').is_file()
     assert (runtime.output/'calibration/calibrator.json').is_file()
+    exported=json.loads((runtime.output/'calibration/export.json').read_text())
+    assert exported['coverage']['supported_metrics']=={'raw_sentinel':True}
+    assert exported['coverage']['objective']==runner.OBJECTIVE
+    assert exported['calibrated_reporting']['supported_metrics']=={'canonical_calibrated_sentinel':True}
+    assert exported['calibrated_reporting']['supported_targets']==2
+    assert exported['temperature_fit_objective']['logit_clip']==1e-6
+    assert exported['temperature_fit_objective']['scope']=='Tfit optimization objective; not canonical reportingLL'
+    assert len(canonical_calls)==1 and canonical_calls[0]['correct']==list(calibration_labels)
     assert not (runtime.output/'COMPLETE.json').exists()  # Actual outer acceptance/publication not stubbed as success.
