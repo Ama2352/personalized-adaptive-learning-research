@@ -1,5 +1,9 @@
 # Sổ quyết định và vấn đề mở
 
+## D35 — CG-AKT tối thiểu đã chọn cho implementation09/11
+
+Theo quyền user giao lựa chọn an toàn/tiết kiệm, ROOT chọn [Recipe26](26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md): D1 centered-parentmean, alpha0, gate4 zero-init; graph/confidence train80 giữ qua neural refit90. Unsupported declared edge dùng0 kèm flag/reason; learned-DAG admission tách riêng. Giữ tất cả models/RQs; không GVHD sign-off, không training/spending authority. Main selected-only/external-freeze ordering theo D34 vẫn bắt buộc; draft25 nguyên byte giữ vai trò thiết kế trước adoption.
+
 ## Quyết định nhóm08/11 — S04-A/S05-Plan B development đã adopt
 
 Chỉ thị user hiện hành, root chuyển tiếp: **“Phương pháp nào an toàn và tiết kiệm tiền thì chọn, ko chờ chốt”.** Theo quyền này, nhóm/root chọn [ProtocolV1](21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md) và [source/authority map](21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.sources.json). Không tiếp tục chờ advisor cho routine method engineering; không gán lựa chọn nhóm thành phê duyệt GVHD hoặc bỏ required deliverables. Các đoạn S04/S05 “cần chốt/chưa adopt” và “mọi đề xuất chưa được phê duyệt” bên dưới là snapshot trước mốc mới này.

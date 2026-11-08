@@ -640,3 +640,9 @@ ROOT đã kiểm sole-writer window và raw Git154 nguồn `d658d77`, giữ trư
 ### 09/11 — SAKT strict-counter delta hoàn thiện
 
 Bundle43outputs manifestf885cf43... đã đóng và commit `bc70f53`;47rawGit blobs gồm43outputs,manifest,source/test/report đã đối chiếu nguyên byte. Lỗi dry metadata sorting được giữ với original inventory; không testfailure, không chạy lại33. Current33PASS không biến31revision cũ thành64independent tests. SAKT vẫn chưa research baseline fitted; ưu tiên tiếp theo là nối selected-only và refit sau system freeze, không thêm tính năng resume không cần thiết.
+
+### 09/11 — quyết định triển khai CG-AKT và trace RQ1
+
+ROOT đối chiếu draft25/Protocol21/lifecycle22/hạch toán23 và independent source memo b4a2b7bc..., chọn Recipe26 theo quyền user đã giao: D1+alpha0/gate4 và train80 graph/confidence freeze qua neuralrefit90. Không đổi RQs/baselines hoặc cấp training/GPU; giữ draft25 nguyên byte. Làm rõ selector upper0.975/2000cluster draws/seed42 trước kết quả, giữ rowweighted LL.
+
+Trace RQ1 source01:12purePASS0.9320891s; native01reject1.6197814s tại local Windows platform.gethostname trong pandas import, trước policy/update. Đây là lỗi setup có thể tránh bằng kinh nghiệm worker Windows trước, không kết luận nghiên cứu. Đang preserve và chuẩn bị02 metadata bootstrap thật/guard đóng pha, không nới network guard hay reset tổng60s.

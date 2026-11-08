@@ -17,6 +17,7 @@
 | Colab GPU trong VS Code | [Notebook một file](../notebooks/akt_colab_synthetic.ipynb), [hướng dẫn](akt-colab-synthetic-runbook.md) | Nhúng kitv11, không upload nguồn; kiểm local/mock, chưa actual GPU |
 | Modal, credentials local và ngân sách30USD/tháng | [Hướng dẫn kết nối](akt-modal-setup.md), [costplan](thesis_recovery/07_GPU_TRAINING_AND_COST_PLAN.md) | [Local SDK proof](../research_tracking/runs/cpu-modal-client-20261107-01/) — chưa auth/GPU/cloudspend |
 | Đề cương/RQ, kế hoạch và phần còn thiếu | [Truy vết yêu cầu](thesis_recovery/02_RESEARCH_TRACEABILITY.md), [experiment matrix](thesis_recovery/05_EXPERIMENT_MATRIX.md), [backlog](thesis_recovery/TASKS.json) | Đây là quản lý/thiết kế nghiên cứu; không dùng làm bằng chứng một thí nghiệm đã thành công |
+| CG-AKT: thiết kế hiện hành để triển khai | [Recipe26 đã chọn](thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md), giữ [draft25](thesis_recovery/25_MINIMAL_GRAPH_AKT_RESEARCH_RECIPE_DRAFT.md) để đối chiếu | Quyết định nhóm về per-edge confidence/gate; chưa model fitted hoặc quyền chi GPU |
 
 Baseline prediction, pilot chẩn đoán và kiểm thử phần mềm là ba loại bằng chứng khác nhau. Các tests AKT hoặc fixture train168targets không chứng minh CG-AKT cải thiện học tập. Các phân tích Junyi order chưa chứng minh lợi ích nhân quả của graph. Chưa có báo cáo kết quả đầy đủ trả lời cả ba RQ hoặc bản luận văn hoàn chỉnh trong những đường dẫn này.
 
