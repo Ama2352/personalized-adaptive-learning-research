@@ -1,0 +1,69 @@
+{
+  "status": "OFFLINE_PREPARED_NOT_DISPATCHED",
+  "phase": "CPU_RECONNECT_READONLY_DISCOVERY",
+  "attempt_id": "cpu-reconnect-20261108-03",
+  "source_sha256": "51c4b98053ba4eaac42b8c8be51ac29645c0b5fdcdf243b19d07c760a8a9db5f",
+  "profile_sha256": "0944dc50b1840c35d6085e5faa888b3d3370849e59077ea68e9a2397009b8228",
+  "historical_baseline_sha256": "b0032f9d556d0ca3655d4bafa6d010d30feca05e1d4d6c02ac8148757d8c4ec9",
+  "input_sha256_before": {
+    "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/t4-discovery01/discovery02.py": "51c4b98053ba4eaac42b8c8be51ac29645c0b5fdcdf243b19d07c760a8a9db5f",
+    "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/t4-discovery01/discovery_profile01.json": "0944dc50b1840c35d6085e5faa888b3d3370849e59077ea68e9a2397009b8228",
+    "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/t4-discovery01/actual-cpu-discovery02-result.json": "b0032f9d556d0ca3655d4bafa6d010d30feca05e1d4d6c02ac8148757d8c4ec9",
+    "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/t4-discovery01/actual-cpu-discovery02-acceptance.json": "23dd0ad71d150060668c6d1214ff7ca38a21e94b9988c6cfae0bdc7e0bf0fa10",
+    "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/t4-discovery01/prepare_request02.py": "94b5b874d5780076ed1c7c0e20c65233f43aee6838cac06025a42ea5f8cfab2e",
+    "artifacts/akt/colab/reconnect-cpu-discovery-20261108-02.json": "5703ce0471785f276e96c90c28b8d60cadb1671e5095cf7d616beb7f5fbf798c"
+  },
+  "input_sha256_after": {
+    "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/t4-discovery01/discovery02.py": "51c4b98053ba4eaac42b8c8be51ac29645c0b5fdcdf243b19d07c760a8a9db5f",
+    "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/t4-discovery01/discovery_profile01.json": "0944dc50b1840c35d6085e5faa888b3d3370849e59077ea68e9a2397009b8228",
+    "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/t4-discovery01/actual-cpu-discovery02-result.json": "b0032f9d556d0ca3655d4bafa6d010d30feca05e1d4d6c02ac8148757d8c4ec9",
+    "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/t4-discovery01/actual-cpu-discovery02-acceptance.json": "23dd0ad71d150060668c6d1214ff7ca38a21e94b9988c6cfae0bdc7e0bf0fa10",
+    "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01/t4-discovery01/prepare_request02.py": "94b5b874d5780076ed1c7c0e20c65233f43aee6838cac06025a42ea5f8cfab2e",
+    "artifacts/akt/colab/reconnect-cpu-discovery-20261108-02.json": "5703ce0471785f276e96c90c28b8d60cadb1671e5095cf7d616beb7f5fbf798c"
+  },
+  "cell_sha256": "79ab550cce93a6f9fae6130237dc7b3dc0a05365dcd9de8655aa13714937e54a",
+  "request_sha256": "865c1b51c4e0b2fae5ddf3cb69a058db26d6dd931c427b38f4a7f55e8c6d133f",
+  "request_bytes": 43777,
+  "command": [
+    "/usr/bin/python3",
+    "-I",
+    "-S",
+    "-B",
+    "/content/KLTN_GPU10_DISCOVERY_20261108_01/cpu-reconnect-20261108-03-inputs/discovery02.py",
+    "--profile",
+    "/content/KLTN_GPU10_DISCOVERY_20261108_01/cpu-reconnect-20261108-03-inputs/profile.json",
+    "--profile-sha256",
+    "0944dc50b1840c35d6085e5faa888b3d3370849e59077ea68e9a2397009b8228",
+    "--expected-source-sha256",
+    "51c4b98053ba4eaac42b8c8be51ac29645c0b5fdcdf243b19d07c760a8a9db5f",
+    "--attempt-id",
+    "cpu-reconnect-20261108-03",
+    "--approval-reference",
+    "USER_MCP_KEEP_CPU_RECONNECT_READONLY_NO_INSTALL_MODEL_DEVICE_20261108"
+  ],
+  "entire_launcher_cap_seconds": 30,
+  "launcher_work_deadline_seconds": 28,
+  "cleanup_reap_grace_seconds": 2,
+  "suggested_MCP_timeout_seconds": 40,
+  "reply_bytes_cap": 48000,
+  "result_path": "/content/KLTN_GPU10_DISCOVERY_20261108_01/cpu-reconnect-20261108-03/result.json",
+  "launcher_result_path": "/content/KLTN_GPU10_DISCOVERY_20261108_01/cpu-reconnect-20261108-03-inputs/launcher-result.json",
+  "project_writes": false,
+  "venv_writes": false,
+  "local_remote_or_stage_processes": 0,
+  "model_imports": 0,
+  "installs": 0,
+  "device_queries": 0,
+  "preconditions": [
+    "CPU/noTPU/noNVIDIAdeviceentry",
+    "ROOT/venv exist; exact cfg0b and old165profile hashes",
+    "new exclusive attempt/input paths; no old IDs rerun",
+    "Both actual launcher/native-target cleanup true before accepting warm metadata"
+  ],
+  "limits": [
+    "No normal startup/site-hook execution/pip/Torch import; no full installed-byte attestation.",
+    "Native source02 retains its own28s deadline and separate targetPG; timeout/unknown nativecleanup is STOP, not accepted.",
+    "Final small receipt publication follows measured post-hash verdict; root must check actual RPC elapsed/cleanup before next stage.",
+    "Old165profile only; later sourcekit03 materialization and fresh LinuxGate require separate provenance/authorization."
+  ]
+}

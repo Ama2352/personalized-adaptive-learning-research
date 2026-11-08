@@ -1,5 +1,13 @@
 # Agent chạy notebook qua Colab MCP — 07/11/2026
 
+## Cập nhật08/11 — reconnect CPU đã kiểm, source mới chưa upload
+
+User xác nhận MCP và giữ CPU. Probe stdlib đầu xác nhận project/target Python cũ còn tồn tại, Python3.13.18 và cfg hash `0b853774…033366`, không có `/dev/nvidia0`; chưa import Torch hoặc gọi device API. Lượt readonly tiếp theo dùng nguyên discovery source `51c4b980…157e54a` và profile `0944dc50…09b8228` với attempt mới, không chạy lại ID cũ.
+
+[Bundle reconnect CPU](../research_tracking/runs/akt-cpu-reconnect-20261108-01/README.md), [manifest](../research_tracking/runs/akt-cpu-reconnect-20261108-01/manifest.json):165source hashes khớp baseline,44distribution metadata/RECORD và9origin records (gồm pip) không đổi; native0,175275s, launcher0,343111s≤30s, cả hai cleanup accepted. Prefix `/usr` dưới `-I -S` không được giả thành normal venv prefix. Đây chỉ metadata/source audit; còn thiếu fresh startup/full installed-byte/origin audit và normal CPU import trên source mới.
+
+Kit graph lifecycle mới `sourcekit-graph-lifecycle-20261108-01.zip` đã kiểm local178files/124Gatepaths/SHA `c934e86f…0cffad`, nhưng **chưa upload/materialize**. Không dùng warm audit của source cũ hoặc Gate24 làm chứng nhận current source/CUDA. Không cài lại venv, training, GPU hoặc dùng Modal credits trong reconnect này. Live bridge cần poll handle trên continuation; việc runtime còn tồn tại không chứng minh connection còn live vô thời hạn. Các kết quả07/11 bên dưới là historical snapshots theo source riêng.
+
 ## Trạng thái đã xác nhận
 
 Đã cài Colab MCP chính thức trong `.venv` của KLTN, pin Google commit `b9ab3899e0f1fa493390b1fd6d54aa2e464ecdf1`, package1.0.1/FastMCP2.14.5/MCP1.30.0. Thêm88packages bằng wheels có SHA;57package cũ giữ nguyên phiên bản, `pip check` đạt. Không cài Python global, không đổi lock AKT hoặc kiến trúc/protocol nghiên cứu.
