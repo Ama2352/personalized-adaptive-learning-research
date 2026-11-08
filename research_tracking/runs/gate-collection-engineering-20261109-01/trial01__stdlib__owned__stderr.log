@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\gate_collection_worker01.py", line 372, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\gate_collection_worker01.py", line 95, in main
+    need(shim.ppid() == owner['parent_owner']['pid']
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+         and owner['parent_owner']['create_time'] <= shim.create_time() <= owner['worker']['create_time']
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+         and os.path.normcase(shim.exe()) == os.path.normcase(str(ROOT/'.venv/Scripts/python.exe')), 'owned shim ancestry')
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\gate_collection_worker01.py", line 24, in need
+    raise ValueError(message)
+ValueError: owned shim ancestry
