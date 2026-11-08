@@ -1,0 +1,3 @@
+# RQ1: reproduction cùng pilot, thêm query/item observability — 08/11/2026
+
+12spytests PASS; control/observed exact3.240legacy rows+18comparisons mỗi pass,9state/RNG fingerprints khớp,3.240query/fullpreview captures. 1.080logical keys/cùng3seed families, không newindependentN. Fulltuplediff22=conceptdiff22, additional same-concept itemdiff0; sameP/fulltuplediff2/116. Không backfillhistorical metadata, preview không served, không causal/calibration/RQcompletion. Control querysidecar rỗng là chủ đích; control chỉ giữ legacy projection. SHA/copy/historical8preservation trước-sau; archive không rerun model/tests.
