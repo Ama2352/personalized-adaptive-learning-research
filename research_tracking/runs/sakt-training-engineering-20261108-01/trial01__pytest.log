@@ -1,0 +1,56 @@
+........................................................................ [ 51%]
+..................................F................................      [100%]
+================================== FAILURES ===================================
+__ test_explicit_cpu_construction_even_with_meta_default_and_no_cuda_seeding __
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A4E7E69750>
+
+    def test_explicit_cpu_construction_even_with_meta_default_and_no_cuda_seeding(monkeypatch):
+        d = data(); cfg = model_config(d)
+        monkeypatch.setattr(torch.cuda, 'manual_seed_all', lambda *a, **k: pytest.fail('no CUDA RNG mutation'))
+        with torch.device('meta'):
+>           result = train_synthetic_sakt(d, model_config=cfg, training_config=train_config())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\sakt\test_training.py:223: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\sakt\training.py:235: in train_synthetic_sakt
+    optimizer.step()
+.venv\Lib\site-packages\torch\optim\optimizer.py:485: in wrapper
+    out = func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^
+tests\sakt\test_training.py:33: in counted
+    return original(optimizer, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\torch\optim\optimizer.py:79: in _use_grad
+    ret = func(self, *args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\torch\optim\adam.py:246: in step
+    adam(
+.venv\Lib\site-packages\torch\optim\optimizer.py:147: in maybe_fallback
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\torch\optim\adam.py:933: in adam
+    func(
+.venv\Lib\site-packages\torch\optim\adam.py:509: in _single_tensor_adam
+    step = _get_value(step_t)
+           ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\torch\optim\optimizer.py:94: in _get_value
+    return x.item() if isinstance(x, torch.Tensor) else x
+           ^^^^^^^^
+.venv\Lib\site-packages\torch\utils\_device.py:104: in __torch_function__
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = tensor(..., device='meta', size=())
+
+    @register_meta(aten._local_scalar_dense)
+    def meta_local_scalar_dense(self: Tensor):
+>       raise RuntimeError("Tensor.item() cannot be called on meta tensors")
+E       RuntimeError: Tensor.item() cannot be called on meta tensors
+
+.venv\Lib\site-packages\torch\_meta_registrations.py:7088: RuntimeError
+=========================== short test summary info ===========================
+FAILED tests/sakt/test_training.py::test_explicit_cpu_construction_even_with_meta_default_and_no_cuda_seeding
+1 failed, 138 passed in 18.11s

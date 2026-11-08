@@ -1,0 +1,97 @@
+{
+  "checkpoint_sha256": "9ba53b3fbc2dc87ae439eec521e824436b32e9b0fe0928048d281345fdc06b0e",
+  "complete": true,
+  "completed_epoch": 1,
+  "fitted_research_model": false,
+  "identity": {
+    "data_identity": {
+      "content_sha256": "46fda2c1eb8fed06adf3cd5b33c857d3cd6462725db5d30135e6bb61bcb65ac9",
+      "domain": "synthetic-checkpoint-not-research",
+      "input_identity": {
+        "synthetic_origin": "caller_declared_in_memory; no raw dataset loader",
+        "target_block": 1,
+        "train_events_sha256": "f132cd71c32ca8f3e55093e348fa7ae2e2bb7d8339ca1aadee38415779e6cff1",
+        "train_learners": [
+          "train"
+        ],
+        "train_source_rows": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "validation_events_sha256": "ad221b26cc70baa7fbd01e22ee4b7e33f7256251fc1e02277391a505f6d23dfc",
+        "validation_learners": [
+          "validation"
+        ],
+        "validation_source_rows": [
+          101,
+          102,
+          103,
+          104
+        ]
+      },
+      "recipe": {
+        "context": 2,
+        "first_target_policy": "query_only",
+        "padding_side": "right",
+        "position_policy": "window_relative_interaction_rank",
+        "window_policy": "sliding_last_context"
+      },
+      "role": "synthetic_trained_engineering_only",
+      "vocabulary": [
+        "A",
+        "B"
+      ],
+      "vocabulary_sha256": "b64e3448a83a5b86466465080361c1a7e1157a27ddccd4b68069cb18caffb74a"
+    },
+    "model_config": {
+      "d_model": 8,
+      "dropout": 0.0,
+      "head_dim": 4,
+      "layer_norm_eps": 1e-05,
+      "max_length": 3,
+      "num_heads": 2,
+      "num_items": 2
+    },
+    "role": "synthetic_trained_engineering_only",
+    "schema_version": 1,
+    "source_sha256": {
+      "src/knowledge_tracing/akt/encoding.py": "4b8288b9e50fd0763f9ee15db39775a8d3b7b42bb72540a644cbf8a177d351f8",
+      "src/knowledge_tracing/akt/types.py": "312e57e4fa507f12b449841969b3a9c2b35c592909178b3040102b254aa20304",
+      "src/knowledge_tracing/akt/windows.py": "e8d00ea0f8b9d07bdc979575109c1f1fc22498d55410bff05a12559bebdb2068",
+      "src/knowledge_tracing/sakt/config.py": "3e18b3ac018440599a1de10b8da4a82c8641160c3aaa79ea30dc0cd15e98ce8f",
+      "src/knowledge_tracing/sakt/model.py": "f3979c4daada1e0c7a5adc890938073e53d4064476207f44af81478dd33683dd",
+      "src/knowledge_tracing/sakt/tensors.py": "133ff25ef91f242505acf5fe9b48ae44fd9f3366f35ce45a1733e1f558c15b63",
+      "src/knowledge_tracing/sakt/training.py": "6a05c6c20a910c0d8cf50a1def4fbdfb6e72f709ff0b5462adbc2538aa58b826",
+      "src/knowledge_tracing/sakt/training_checkpoint.py": "4f9ca08164748b47f43271924059377b1800c170771460e00a48a3fadfe60249",
+      "src/knowledge_tracing/sakt/training_data.py": "ed69caec2dcb5165b91b16952495ab05b2c8afab334f866ba1d03504a2c32cdb",
+      "src/knowledge_tracing/shared_kt.py": "06922d5a6bfd6c806fd1abb61232f58a9ccd63826e30cefaf87ce3d3b36dffa8"
+    },
+    "training_config": {
+      "batch_size": 4,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "device": "cpu",
+      "epochs": 1,
+      "eps": 1e-08,
+      "lr": 0.01,
+      "max_grad_norm": 1.0,
+      "max_seconds": 30.0,
+      "max_steps": 2,
+      "max_targets": 64,
+      "objective": "mean_bce_on_eligible_targets",
+      "optimizer": "adam",
+      "precision": "float32",
+      "shuffle_seed": 42,
+      "weight_decay": 0.0
+    }
+  },
+  "model_state_sha256": "a755f276dbf854d278313d2a036c7eee29c4d31ee75032c2ecea927eb68e145a",
+  "optimized_targets": 4,
+  "optimizer_steps": 1,
+  "resume_supported": false,
+  "selection_policy": "last_completed_requested_epoch; no best-epoch selection"
+}

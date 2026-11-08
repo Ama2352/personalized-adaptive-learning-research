@@ -1,0 +1,40 @@
+{
+  "source_versions": {
+    "pretest": "static review only",
+    "trial01": {
+      "tests": 139,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "junit_seconds": 18.081
+    },
+    "trial02": {
+      "tests": 139,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "junit_seconds": 17.301
+    }
+  },
+  "budget": {
+    "optimizer_step_calls_charged": 18,
+    "limit": 32,
+    "suite_seconds_total": 39.98082769999746,
+    "suite_seconds_limit": 120,
+    "attempts": [
+      "parallel-sakt-training-20261108-01",
+      "parallel-sakt-training-20261108-02"
+    ],
+    "note_vi": "Charge cả failed Adam.step call trong01, không gọi là committed updates."
+  },
+  "all_final_source_hashes_match_trial02": true,
+  "existing_core_adapter_shared_native_sources_unchanged": true,
+  "new_source_test_files": [
+    "src/knowledge_tracing/sakt/training_data.py",
+    "src/knowledge_tracing/sakt/training.py",
+    "src/knowledge_tracing/sakt/training_checkpoint.py",
+    "tests/sakt/test_training.py",
+    "tests/sakt/test_training_checkpoint.py"
+  ],
+  "new_model_test_execution": false
+}
