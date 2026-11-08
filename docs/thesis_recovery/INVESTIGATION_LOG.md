@@ -361,3 +361,7 @@ Startupfacts CPU trướcT4: no-sitefacts01 rejectnonregular origin, không exec
 ### 08/11 — GKT06 đã commit, ba nhánh tiếp tục song song
 
 GKT06 đã đóng95outputs/manifest95cf82b4927abb35fff02dbffbf7416c14ac8bc83398dcb30e24a0a5b554c20a, commitf204f69/raw95Gitblobsverified; không copy2checkpointbinaries. Tổng1483verifiedoutputblobs không là scientific N hoặc phần trăm hoàn thành. Coldbootstrap code chỉchuẩnbị/testmock, warmhiddenaudit sửareserve10s đểcleanup/posthash nằmtrong90s; CPUguards/CHILDgiữ. RQ1 posthocsource-key explanation dùngexistingBscores, ghi exploratory riêng, chưacanonical/causalclaim. Hiệnmax4activeagents gồmroot+3subs; giữtốiđa nhánh vàđổi task khi xong, không tăngconcurrency vượttoollimit.
+
+### 08/11 — Chỉ mục GKT06 theo commit đã kiểm
+
+Thêm GKT06 phụ thuộc GKT05/DATA02,95outputs rawGitverified f204f69; old90tasks/81registryrecords giữ nguyên, DAG và linkedartifacts tồn tại. Actual2epochs là engineering fixture, không finalresearchfit; không đổi phươngpháp hoặc dùng Holdout/Modal.
