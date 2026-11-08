@@ -2790,6 +2790,89 @@
       "optimizer_body_returns": 2,
       "selection_expected_targets": 4,
       "selection_scored_targets": 2
+    },
+    {
+      "id": "RQDIAG05",
+      "research_objective": "Chẩn đoán current-source closed loop và local concept ranking từ pilot đã lưu",
+      "rq": [
+        "RQ1 diagnostic only"
+      ],
+      "workstream": "closed_loop_diagnosis",
+      "priority": "P1",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "RQDIAG04"
+      ],
+      "required_inputs": "Pinned current runner function/notebook/bank +stored27trajectories; original whole-runner a585 unavailable",
+      "files_components": "research_tracking/reports/rq1_closed_loop_reconstruction_20261108.md;research_tracking/runs/rq1-closed-loop-reconstruction-20261108-02",
+      "implementation_objective": "Giữ exact legacy projection, thêm M/R/C/B/native ranking logs và common-prefix descriptive/post-hoc explanation",
+      "acceptance_criteria": "3240events/pass exactlegacy+27state/9uniformpairs; parentraw+3240rankingkeys+18prefixcomparisons verified; accepted125outputs và failedarchive116outputs rawGitverified. New independentN0/0optimizer; cumulative304.082403s<=430 including original120s failure.",
+      "verification_steps": "Đọc immutable manifests/raw logs/parent reviews và git-evidence-verification-850f5ab.json; không rerun models",
+      "required_artifacts": [
+        "research_tracking/runs/rq1-closed-loop-reconstruction-20261108-02/manifest.json",
+        "research_tracking/reports/rq1_closed_loop_reconstruction_20261108.md"
+      ],
+      "estimated_effort": "Đã đóng08/11; không suy thời lượng nghiên cứu từ reconstruction",
+      "compute_cost_category": "LocalCPU samepilot,0optimizer",
+      "authorization_requirements": "User bounded engineering/reproduction approval; không statistical sample expansion hoặc scientific adoption.",
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "blockers": [],
+      "completion_commit": "850f5ab",
+      "verified_bundle_outputs": 125,
+      "manifest_sha256": "c8bd8f387e5101fca641098257dd5a99d67d2f838cefc3b53b7d9d55248bcb16",
+      "new_independent_N": 0,
+      "controller_seconds": 304.08240270000533,
+      "cap_seconds": 430,
+      "source_sha256": {
+        "research_tracking/reports/rq1_closed_loop_reconstruction_20261108.md": "5d86a7636dfb03faa8bdc4c364f0cefb673091c38ffc6634281bfa9ba167aab0"
+      },
+      "scientific_adoption_pending": "Source-local/exploratory concept choice; không causal/edge-only/learningbenefit hoặc finalRQ1. Served-itemP được tính sau select; S04/S05 còn mở.",
+      "verified_test_groups": {
+        "original_spies": 17,
+        "fast_spies": 10,
+        "descriptive_fixtures": 12,
+        "posthoc_fixtures": 5
+      },
+      "retained_failed_archive_outputs": 116
+    },
+    {
+      "id": "GRAPH03",
+      "research_objective": "A2/A3 per-edge confidence và caller-owned trainablegate, matched effective history",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "model_engineering",
+      "priority": "P0",
+      "owner": "Codex",
+      "execution_owner": "Codex",
+      "dependencies": [
+        "GRAPH02"
+      ],
+      "required_inputs": "Observable toyshards/trainencoding/staticgraph/explicitEdgeConfidence+provenance/gatefeaturerecipe",
+      "files_components": "src/knowledge_tracing/akt/graph_prototype.py;tests/akt/test_graph_prototype.py",
+      "implementation_objective": "Mở rộng native-backed prototype, không thay upstream hoặc nhân đôi trainer; native exactbypass khioff/mass0",
+      "acceptance_criteria": "43targeted CPU PASS/0fail/error/skip,0optimizer; exact outputs/count/loss/backbonegradients bypass, A2uniform=A1, finite jointgradients và no current/future leakage; cumulative39.650895s<=120 qua3lượt giữ failures.",
+      "verification_steps": "Đọc3rawreceipts/JUnit/peerreview/manifest37outputs và rawGit verification4a256a4; không rerunjobđãxong",
+      "required_artifacts": [
+        "research_tracking/reports/akt_graph_confidence_gate_readiness_20261108.md",
+        "research_tracking/runs/akt-graph-confidence-gate-engineering-20261108-01/manifest.json"
+      ],
+      "estimated_effort": "Đã kiểm08/11, engineering-only",
+      "compute_cost_category": "LocalCPU synthetic forward/backward only",
+      "authorization_requirements": "User autonomous engineering; không trainresearch/fullCV/Holdout/Modal hoặc adoption gate/confidence recipe",
+      "blockers": [],
+      "status": "COMPLETED_ENGINEERING_ONLY",
+      "evidence_refs": [
+        "research_tracking/reports/akt_graph_confidence_gate_readiness_20261108.md",
+        "research_tracking/runs/akt-graph-confidence-gate-engineering-20261108-01/README.md"
+      ],
+      "verified_targeted_tests": 43,
+      "scientific_adoption_pending": "Graph-aware training/checkpoint/export chưa tích hợp; confidence/gate chưafit/calibrated; S04/S05/context100/fullcorpus và freshGate/CUDA còn mở.",
+      "completion_commit": "4a256a4",
+      "verified_bundle_outputs": 37,
+      "manifest_sha256": "76d75fa826c98b318e0712cb32020f9d41b3795f19b9316771cf24bc6251ed37",
+      "optimizer_steps": 0
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

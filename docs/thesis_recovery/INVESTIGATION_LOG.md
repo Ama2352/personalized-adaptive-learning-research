@@ -369,3 +369,17 @@ Thêm GKT06 phụ thuộc GKT05/DATA02,95outputs rawGitverified f204f69; old90ta
 ### 08/11 — Parent xác minh giải thích ranking RQ1
 
 Parent đọc source selector và analyzerposthoc, kiểm độc lập3240nativekeymin/27trajectories/18first-prefixcomparisons từ raw metadata.8full+2emptyfirstbreaks cùngmembership/tiecontext nhưngBscores khác dẫn tớiCID khác;1fullmembershipdiff và7emptynegative giữ riêng. P served-item nằm sau select trongloop, không là causalparent củasame-stepselection. FullS28 không cần đểreplaylocalBkey, nhưngcalibration/globalmastery/choosequestion vẫnthiếu. Đây làposthocsourceexplanation/current-source reconstruction, không causalmediation/edgebenefit/newN; canonicalreport đangchờparentclosure. Không newmodel/RNG/optimizer/Modal/Holdout.
+
+
+### 08/11 — RQDIAG05 đóng và kiểm raw Git (`850f5ab`)
+
+Accepted archive02:125outputs/manifest c8bd8f38…8bcb16; giữ failed archive01:116outputs do Git `-z` thiếu `--stdin`, không sửa bundle cũ. Root kiểm241raw Git blobs. Source-local ranking3.240keys và18prefixcomparisons đã được review, không causal/edge-only/learning benefit. Actual prior native timeout120s và total304.082403≤430 vẫn giữ. Backlog thêmRQDIAG05,registry thêm2records; không lấy số artifact làm completion% hoặcN.
+
+Parent đang triển khai A2/A3 engineering-only nên current-source Gate24 stale; historical Gate24/CPUdummy giữ nguyên. Targetedattempt01 lỗi Git ownership,attempt02 có41PASS+2fixtureFAIL(train-shard mutation),attempt03 sửa test chỉ dùng selection perturbation đạt43PASS. Không nới trainhash/native equality, không optimizer, total39.650895≤120. Chưa commit source mới hoặc gọi fullgatePASS.
+
+
+### 08/11 — A2/A3 CPU và C14 đã commit, Modal chưa ready
+
+`4a256a4`:43targetedCPUtestsPASS/0optimizer,3rawattempts giữ nguyên,39.650895≤120s;37outputs rawGitverified. Không thay upstream/native geometry; explicitconfidence/gate recipe/zero-mass nativebypass. CurrentfullGateSTALE sau sourcechange; không relabel actualLinuxGate24 cũ. `4edf1f8`:14claims/104pointers/28inputs/24links; parent kiểm originalC01–13/input21/first9arithmetic và MarkdownngoàiC14 byte-identical. Parent initialassertion đã nhầm wholearithmeticlist phảiunchanged trong khiC14 thêm2rows; correction kiểmfirst9và2rowsmới,không sửa kết quả nguồn.
+
+TổngrawGitoutputs1761 chỉ là auditcount,khôngcompletion%/N. Graph03 vàRQDIAG05đãindex;nextgraphlifecycle contract ởprep, coldinstaller mớiplan11inputs/44wheelconstraints, tấtcả chưaactualGPU/install. Modalaccesshistorical/user30freecredits; chưa đoCUDAthroughput/currentmainrecovery/Volume hoặc authorizationpaid.

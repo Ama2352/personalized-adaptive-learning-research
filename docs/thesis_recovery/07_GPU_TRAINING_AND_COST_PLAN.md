@@ -1,5 +1,15 @@
 # GPU, artifact và ngân sách
 
+## Trạng thái mới nhất08/11 — chưa cho phép paid/full training
+
+- Linux CPU mainworker đã chạy thật2optimizer updates/48train targets/8validation predictions và checkpoint reload exact; Gate24 đạt771PASS trên source kit lúc đó. [Bằng chứng đã đóng](../../research_tracking/reports/akt_linux_worker_readiness_20261108.md). Đây không CUDA/Modal proof.
+- A2/A3 confidence/gate mới đã commit `4a256a4`,43targetedCPUtestsPASS/0optimizer; [source và giới hạn](../../research_tracking/reports/akt_graph_confidence_gate_readiness_20261108.md). **Gate24 cũ không chứng nhận current source sau thay đổi này**; không dùng test số ít để cho full training.
+- Tiny T4 lifecycle/recovery v12 bên dưới vẫn là lịch sử hợp lệ cho kit cũ; actual current CUDA mainworker, durable Modal Volume và representative throughput chưa được kiểm. Warm/cold GPU-host preparation mới chỉ có source/mocks/static review, không phải đã tạo GPU runtime hoặc cài trên GPU host.
+- Còn phải freeze kit/source/lock và kiểm gate mới; kiểm actual CUDA + recovery/artifact return; đo targets/s và overhead; dự toán toàn experiment matrix theo protocol S04/S05; kiểm persistent storage/account guardrails và xin duyệt **một run cụ thể có trần chi phí**. Graph-aware train/export lifecycle cho A2/A3 vẫn chưa nối, không gọi prototype là CG-AKT đã train.
+- **Modal chưa được sử dụng trong batch này.** Giữ user-reported30USDfreecredits, trả thêm0USD; auth thiết lập trước không là quyền chi tiền hoặc bằng chứng số dư hiện tại. Các giá/scenarios dưới là snapshot planning có ngày nguồn, không số giờ training đã đo. Không đưa ra runtime/cost chính xác trước benchmark.
+
+Trạng thái phục hồi authoritative: [INVESTIGATION_STATE](INVESTIGATION_STATE.json), trường `modal_training_readiness_20261108`; backlog hiện93tasks là toàn bộ lịch sử/phần việc, không93tasks còn lại.
+
 Ngày tra cứu bảng giá official Modal: 06/11/2026; các giá/scenarios dưới đây là planning snapshot, chưa là authorization. Cập nhật07/11: đã có actual Colab/T4 CPU portability và bounded CUDA lifecycle/controlled recovery nhận về local, không còn chỉ CPU synthetic. Main Linux runtime-origin/image contract, Modal Volume durability, full training và research acceptance vẫn chưa đạt từ các kiểm nhỏ này. Runtime Windows `artifacts/akt/preflight/runtime-v2.json` với torch2.7.1+cpu/CUDA false là snapshot môi trường khác, không phủ định kết quả Colab.
 
 ## Bằng chứng actual Colab và ngân sách hiện hành — 07/11
