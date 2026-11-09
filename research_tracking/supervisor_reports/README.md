@@ -1,6 +1,6 @@
 # Báo cáo tiến độ theo ngày
 
-Đợt09/11 hiện đã có chặng6 về phản hồi quan sát trong simulator. Phân tích đủ14.400lượt cũ cho thấy58/60cặp giữ toàn bộ đáp án và59/60cặp giữ toàn bộ chuỗi bài khi đổi mức phạt thiếu kiến thức nền với cùng cấu hình mô hình. Hai file báo cáo đã bổ sung phát hiện này cùng giới hạn của phân tích trên10khối dùng lại. HTML hiện có10SVG và8bảng, các hình và bảng được giữ nguyên byte trong lần thêm văn bản này. Hồ sơ đối chiếu nằm trong [bằng chứng cập nhật](../../docs/thesis_recovery/evidence/supervisor_rq2_cache_update_20261109.json).
+Đợt09/11 hiện đã có chặng7 về mức tự tin của dự báo theo từng hồ sơ. Trên cùng14.400lượt cũ, sai lệch trái chiều có thể bù trừ khi gộp và đảo thứ hạng mô tả của cấu hình. Hai file đã nối phát hiện này vào diễn tiến nghiên cứu và giữ rõ phần độ đúng mastery còn thiếu. HTML có10SVG và9bảng, đã kiểm1365/390px và đóng trình duyệt sau QA. Hồ sơ ở [bằng chứng cập nhật](../../docs/thesis_recovery/evidence/supervisor_response_reliability_update_20261109.json).
 
 Khi có phát hiện hoặc điều chỉnh kết luận đáng kể, cập nhật đồng thời bản tóm tắt và HTML của đợt hiện hành. Viết tiếp từ câu hỏi đã dẫn đến phép kiểm, trình bày kết quả và phần còn thiếu, rồi đối chiếu nguồn đã nghiệm thu. Các đoạn mốc bên dưới giữ bối cảnh của những lần xuất bản trước.
 

@@ -36,6 +36,10 @@ Paper 1 cho thấy tính liên tục của lộ trình chịu ảnh hưởng c�
 
 Phát hiện này phân biệt **kiến thức thật thay đổi trong simulator** với **phản hồi mà mô hình nhận được**. Mức học liên tục có thể thay đổi dù người học vẫn trả lời giống nhau trên cùng bài. Bởi vậy, chỉ thấy chuỗi bài gần như giữ nguyên chưa đủ để kết luận cơ chế thiếu nền tảng không ảnh hưởng học tập. Nhóm đã nối từng quỹ đạo với các kết quả cuối cũ và giữ cả trường hợp bất lợi; chưa tách được tác động riêng của năng lực chung hoặc chứng minh lợi ích của đồ thị trên người học thật. Đây là phân tích bổ sung trên dữ liệu đã xem, không phải thí nghiệm xác nhận mới.
 
+**Từ lịch sử quan sát ấy, nhóm kiểm tiếp mức tự tin của dự báo theo từng hồ sơ.** Trên cùng 14.400 lượt đã lưu, mô hình GAM tắt hai cơ chế dùng thông tin cha dự báo trung bình khoảng 55% cho hồ sơ PG, trong khi tỷ lệ đúng quan sát gần 75% và xác suất từ simulator gần 77%. Với hồ sơ PY, ba giá trị tương ứng khoảng 47%, 30% và 31%. Những sai lệch trái chiều có thể bù trừ khi gộp các hồ sơ vào cùng khoảng dự báo. Đã kiểm và lưu đủ các khoảng xác suất cho bốn điều kiện của pilot.
+
+Phân tích mới cho thấy **chỉ số phù hợp xác suất tính gộp có thể che sai lệch lớn ở từng hồ sơ và đảo thứ hạng mô tả giữa cấu hình**. Đây là một lời giải thích cụ thể cần kiểm trong RQ1, bổ sung cho các bảng dự báo tổng hợp của Paper 2. Các cấu hình có thể phục vụ những bài và lịch sử khác nhau, nên kết quả hiện tại chưa xác định cấu hình nào hiệu chỉnh tốt hơn trên cùng tình huống. Bước tiếp theo là đối chiếu trực tiếp quyết định thành thạo với trạng thái thật đã lưu, rồi kiểm một biện pháp hiệu chỉnh trên dữ liệu tách riêng.
+
 ## Còn phải chứng minh
 
 - **RQ1:** đánh giá độ đúng của quyết định thành thạo, hiệu chỉnh xác suất và vai trò chính sách; nối chẩn đoán nội bộ đã có với kết quả học tập.
