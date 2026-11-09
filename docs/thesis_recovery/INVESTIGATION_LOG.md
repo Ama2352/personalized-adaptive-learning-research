@@ -1054,3 +1054,7 @@ Root chọn family ba estimands trước phép tính bổ sung nhưng sau khi đ
 ## 10/11 — tránh lặp fit và sửa trạng thái backlog
 
 Public AKT resume accepted66,637s và raw84exports byteexact. Corpus60 windowpreflight accepted2,546s, không modelcall. GKT producer3files đã áp dụng, SAKTclosure2files sửa sau fail trướcconstructor. Cold62 đạt35SAKT+27GKT, không scientificimports. Đối chiếu các nhãn PLANNED/NOT_STARTED cũ với source và actualartifacts, giữ mục tiêu/acceptance chưađạt. Method24 có artifact đúngmain60 nên ưu tiên currentbinding/no-refit. F041panel accepted5,087s, independent cachedreview0,388s, toàn3360TN và thiếupositiveclass. Hai kiểm năng lực còn lại chọn theo block/fields trong plan, không đoánID hoặc chọn kết quả.
+
+## 10/11 — panel đủ miền và SAKT CPU selected
+
+F001/F081 đã đạt native parity và kiểm cache độc lập, cùng F041 tạo3histories/1block. Query-only bỏ ngoài215TP/5FP. πsuppression0/220 chỉ trong cửa sổ quan sát. E13 giữ70408byte prefix, kiểm81pointers/17pins/8links. Chặng17 desktop/mobile đã xem, 17bảng/11SVG nguyên và preview riêng đã tắt. SAKT fit05 accepted85.178s,6epochs/best1, 36updates4032targetexposures và84selectionexports. Wrapperreject trước đó được giữ riêng. Main fits/CUDA/throughput/fault recovery chưa hoàn tất, chiModal0USD.

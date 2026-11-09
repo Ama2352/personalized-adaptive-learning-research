@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 10/11 — quan sát đủ miền và vòng đời CPU SAKT
+
+[Phân tích ba lịch sử](rq1_fixed_time_ability_native_panels_20261110.md) đã kiểm cả28khái niệm tại120thời điểm. 215 công nhận đúng và5 công nhận nhầm nằm ngoài câu đang hỏi, trên một block. E13 và báo cáo Chặng17 đã cập nhật, desktop/mobile đạt,11SVG giữ nguyên. SAKT đã qua selected CPU engineering6epochs/best1/reload/84exports. Đây chưa là fitted baseline trên corpus chính hoặc bằng chứng hoàn tất RQ3.
+
 ## 10/11 — Gate hiện hành và demo đã qua kiểm thực tế
 
 [Gate183/1913](../runs/akt-current-gate183-20261110-01/README.md) đã đạt toàn bộ1913ca vàpublicindex riêng, globalpointer cũ giữ nguyên. [Demo fresh120](../runs/demo-fresh120-viewer-20261110-01/README.md) đạt113HTTPtests vàJS/desktop/mobile. [E11](../runs/thesis-rq2-e11-writing-20261110-01/README.md) đã nối fresh120 vào bảnthảo, prefix59562bytes nguyên vàreviewđộclậpđạt. Actualpubliccontrol AKT đãE7/best4, parentpause5/resume đang chuẩn bị. RecipeSAKT30 chốt trướcfit; producer mới chưanghiệmthu. Các mốc này chưađóngRQ3/CUDA hoặcquyềnchiModal.
