@@ -1,0 +1,233 @@
+"""ROOT-only dry inventory/closure cho nguồn177 và collection10/Gate04."""
+from pathlib import Path
+import argparse
+from collections import Counter
+import hashlib
+import json
+import sys
+import xml.etree.ElementTree as ET
+
+ROOT = Path(__file__).resolve().parents[4]
+PREP = Path(__file__).resolve().parent
+RUN_ID = 'akt-windows-gate-current177-20261109-01'
+OLD = ROOT/'research_tracking/runs/akt-windows-gate-readiness-20261109-01/manifest.json'
+OLD_SHA = 'f53291c057515f1159e1d520065e3d46744307511c428383cab8494ea5160d26'
+COLLECTION = PREP/'gate-collection10-outer/final.json'
+COLLECTION_SHA = 'f7a79a34809d777854724e0fac5f637379fec42c1bfed1adadf64315fb2157fa'
+GATE = PREP/'win-current-gate-20261109-04-outer/result.json'
+
+
+def need(ok, reason):
+    if not ok: raise ValueError(reason)
+
+
+def safe(path):
+    need(path.is_absolute() and path.is_relative_to(ROOT) and '..' not in path.parts,'absolute fixed ROOT path')
+    cursor = ROOT
+    for part in (None,*path.relative_to(ROOT).parts):
+        if part is not None: cursor /= part
+        need(not cursor.is_symlink() and not cursor.is_junction(),'physical evidence path')
+    need(path.is_file(),'existing regular evidence')
+    return path
+
+
+def digest(raw): return hashlib.sha256(raw).hexdigest()
+
+
+def sha(path):
+    with safe(path).open('rb') as stream:
+        return hashlib.file_digest(stream,'sha256').hexdigest()
+
+
+def write(path, value):
+    with path.open('x',encoding='utf-8',newline='\n') as stream:
+        json.dump(value,stream,ensure_ascii=False,indent=2,allow_nan=False); stream.write('\n')
+
+
+def collect(report, report_sha, gate_sha):
+    payloads = {}
+    def read(path):
+        safe(path)
+        if path not in payloads:
+            need(path.suffix in ('.py','.json','.xml','.log','.md','.bytes'),'text evidence only')
+            need(path.suffix != '.bytes' or path.name in ('pointer-before.bytes','pointer-after.bytes'),'pointer bytes only')
+            need(path.stat().st_size <= 32*1024**2,'per-file32MiB cap')
+            payloads[path] = path.read_bytes()
+            need(sum(map(len,payloads.values())) <= 64*1024**2,'total64MiB cap')
+        return payloads[path]
+    def load(path): return json.loads(read(path))
+    def tree(folder):
+        need(folder.is_dir() and not folder.is_symlink() and not folder.is_junction(),'required actual evidence directory')
+        for path in sorted(folder.rglob('*')):
+            if path.is_file() and 'runtime-temp' not in path.relative_to(folder).parts:
+                read(path)
+    need(digest(read(report)) == report_sha,'ROOT-reviewed report bytes')
+    need(sha(OLD) == OLD_SHA,'historical Gate154 manifest reference')
+    names = ('prepare_current_freeze04.py','prepare_current_freeze05.py',
+        'gate_source_snapshot04.json','gate_source_snapshot05.json','CURRENT_GATE_DERIVATIVE04.md','CURRENT_GATE_DERIVATIVE05.md',
+        'root_gate_freeze04_metadata_diagnostic01.json','root_gate_freeze05_relative_path_failure01.json',
+        'ROOT_CURRENT_COLLECTION_REVIEW04.md','ROOT_CURRENT_COLLECTION_REVIEW05.md','ROOT_CURRENT_FULL_GATE_REVIEW04.md',
+        'gate_collection_worker10.py','run_gate_collection10.py','gate_collection05_packet.ROOT.json',
+        'windows_current_gate_worker02.py','windows_current_gate_outer02.py','prepare_windows_current_gate_packet03.py',
+        'windows_current_gate_packet04.ROOT.json','pywin32_namespace_record01.json')
+    for name in names: read(PREP/name)
+    read(Path(__file__))
+    tree(PREP/'gate-collection10'); tree(PREP/'gate-collection10-outer')
+    inputs = load(PREP/'gate_collection05_packet.ROOT.json')
+    final = load(COLLECTION)
+    need(digest(read(COLLECTION)) == COLLECTION_SHA,'actual accepted collection identity')
+    need(final['status'] == 'ACCEPTED_COLLECTION_ONLY_NOT_GATE_PASS' and final['gate_pass'] is False
+         and final['errors'] == [] and final['environment_restored'] is True
+         and final['source_before'] == final['source_after'] and final['collected_count'] == 1726
+         and final['module_count'] == 81 and 0 < final['elapsed_seconds'] < 60,'actual collection scope/resources')
+    need(digest(read(PREP/'gate_collection05_packet.ROOT.json')) == final['packet_sha256'],'actual finalized metadata packet')
+    need(len(inputs['gate_build_hashes']) == 177 and len(inputs['test_module_sha256']) == 81
+         and final['source_before']['gate_build_hashes'] == inputs['gate_build_hashes'],'exact source177/module81')
+    joined, groups = [], []
+    for expected, stage in zip(inputs['module_groups'],final['stages']):
+        path = ROOT/stage['child_result_relative']
+        child = load(path)
+        owned = stage['owned_receipt']
+        need(digest(read(path)) == stage['child_result_sha256'],'raw collection child hash')
+        need(owned['accepted'] is True and owned['returncode'] == 0 and owned['cleanup_accepted'] is True
+             and owned['job_active_after_cleanup'] == 0 and owned['popen_handle_closed'] is True
+             and owned['actual_worker_in_job_before_GO'] is True,'actual collection Job0')
+        need(child['status'] == 'COLLECTED_ONLY_PENDING_OUTER' and child['pytest_exit_code'] == 0
+             and child['modules'] == expected['modules'] and stage['group'] == expected['name']
+             and child['source_before'] == child['source_after'] == inputs['gate_build_hashes']
+             and child['support_document_before'] == child['support_document_after'] == inputs['support_document_sha256']
+             and child['failures'] == child['forbidden_attempts'] == child['collection_reports'] == []
+             and not any(child['zero_body_counters'].values()) and child['temporary_environment_and_cache_restored'] is True,
+             'actual collection source/purity/support/temp boundaries')
+        need(child['resources']['observed_minimum_available_ram_bytes'] >= 1024**3
+             and all(v['observed_peak_bytes'] <= 3*1024**3 for v in child['resources']['workers'].values()),'collection resource observations')
+        joined.extend(child['nodeids'])
+        groups.append(dict(group=stage['group'],collected=child['collected_count'],child_sha256=stage['child_result_sha256']))
+    need([g['collected'] for g in groups] == [19,271,1436] and len(groups) == 3
+         and joined == final['nodeids'] and len(joined) == len(set(joined)) == 1726,'exact actual collected identity union')
+    diagnostic = load(PREP/'root_gate_freeze04_metadata_diagnostic01.json')
+    relative = load(PREP/'root_gate_freeze05_relative_path_failure01.json')
+    need(diagnostic['build_equal'] is True and diagnostic['groups_equal'] is False
+         and type(diagnostic['prior_failure']) is dict,'ordering preparation failure and normalized tool capture retained')
+    need(relative['exit_code'] == 1 and relative['packet_created'] is False
+         and relative['collection_started'] is False and relative['canonical_groups_check_passed'] is True,'relative command failure scope')
+    source_map = inputs['gate_build_hashes']
+    external = [dict(path=OLD.relative_to(ROOT).as_posix(),sha256=OLD_SHA,copy=False)]
+    external += [dict(path=name,sha256=value,copy=False) for name,value in source_map.items()]
+    external += [dict(path=name,sha256=value,copy=False) for name,value in inputs['support_document_sha256'].items()]
+    external.append(dict(path=inputs['lock_file'],sha256=inputs['lock_sha256'],copy=False))
+    external += [dict(path='artifacts/akt/dependencies/upstream/'+name,sha256=value,copy=False)
+                 for name,value in inputs['upstream_file_sha256'].items()]
+    namespace = load(PREP/'pywin32_namespace_record01.json')
+    external += [dict(path=name,sha256=value,copy=False) for name,value in namespace['file_sha256'].items()]
+    full = dict(status='PENDING_ROOT_TERMINAL_RECEIPT_AND_REVIEW')
+    if gate_sha:
+        gate = load(GATE)
+        need(digest(read(GATE)) == gate_sha,'ROOT external actual Gate04 terminal receipt pin')
+        need(gate['status'] in ('ACCEPTED_WINDOWS_CPU_SOFTWARE_GATE_ONLY','REJECTED_WINDOWS_CPU_GATE'),'terminal Gate status')
+        for folder in ('win-current-gate-20261109-04-outer','win-current-gate-20261109-04-child'): tree(PREP/folder)
+        packet = load(PREP/'windows_current_gate_packet04.ROOT.json')
+        need(packet['collection_result']['sha256'] == COLLECTION_SHA
+             and gate['external_collection_packet_sha256'] == digest(read(PREP/'windows_current_gate_packet04.ROOT.json')),
+             'actual Gate bound to exact accepted collection')
+        for name, expected in gate['outputs'].items():
+            need(digest(read(ROOT/name)) == expected['sha256'],'actual native output binding')
+        runtime = ROOT/packet['runtime_report']['path']
+        need(digest(read(runtime)) == packet['runtime_report']['sha256'],'actual runtime report identity')
+        if gate['run_accepted'] is True:
+            need(gate['errors'] == [] and gate['publication_requested'] is False and gate['pointer_changed'] is False
+                 and gate['owned_receipt']['cleanup_accepted'] is True
+                 and gate['owned_receipt']['job_active_after_cleanup'] == 0
+                 and gate['owned_receipt']['actual_worker_in_job_before_GO'] is True
+                 and gate['worker_result']['temporary_environment_and_cache_restored'] is True
+                 and 0 < gate['elapsed_seconds'] < 630,'accepted Gate resource/publication boundaries')
+            native = load(ROOT/'artifacts/akt/preflight/gate2-evidence-win-current-gate-20261109-04.json')
+            need(native['status'] == 'PASS' and native['build_hashes'] == source_map
+                 and native['test_module_sha256'] == inputs['test_module_sha256']
+                 and native['test_result'] == dict(passed=1726,failed=0,errors=0,skipped=0)
+                 and native['timeout_seconds'] == 580 and 0 < native['elapsed_seconds'] <= 580,'native full Gate identity')
+            for name in ('stdlib','no-torch','remaining','merged'):
+                suffix = '' if name == 'merged' else '-'+name
+                raw = read(ROOT/f'artifacts/akt/preflight/gate2-tests-win-current-gate-20261109-04{suffix}.xml')
+                xml = ET.fromstring(raw)
+                cases = [(v.get('classname'),v.get('name')) for v in xml.iter('testcase')]
+                expected = [(v['classname'],v['name']) for v in packet['expected_JUnit_ids'][name]]
+                need(len(cases) == len(set(cases)) and Counter(cases) == Counter(expected)
+                     and not any(list(xml.iter(tag)) for tag in ('failure','error','skipped')),'actual group/merged exact JUnit IDs')
+        full = dict(status=gate['status'],run_accepted=gate['run_accepted'],outer_seconds=gate['elapsed_seconds'],
+            actual_result_sha256=gate_sha,publication_requested=gate['publication_requested'],errors=gate['errors'])
+    for item in external: need(sha(ROOT/item['path']) == item['sha256'],'external source/dependency/reference drift')
+    summary = dict(kind='WINDOWS_CURRENT177_SOFTWARE_GATE_EVIDENCE',
+        source_files=177,test_modules=81,collected_cases=1726,collection_groups=groups,
+        collection_seconds=final['elapsed_seconds'],collection_result_sha256=COLLECTION_SHA,
+        metadata04_ordering_failure=True,metadata05_relative_command_failure=True,
+        metadata04_failure_capture='NORMALIZED_PRIOR_FAILURE_FIELD_IN_ACTUAL_DIAGNOSTIC',
+        full_gate=full,external_references=external)
+    return payloads, summary
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument('--dry-run',action='store_true'); mode.add_argument('--close',action='store_true')
+    parser.add_argument('--report',type=Path,required=True); parser.add_argument('--report-sha256',required=True)
+    parser.add_argument('--gate-result-sha256')
+    parser.add_argument('--inventory',type=Path,required=True); parser.add_argument('--inventory-sha256')
+    args = parser.parse_args()
+    need(Path(sys.prefix).resolve() == ROOT/'.venv','repository .venv')
+    need(args.report in (PREP/'akt_windows_gate_current_20261109.candidate.md',
+                         ROOT/'research_tracking/reports/akt_windows_gate_current_20261109.md'),'designated report only')
+    payloads, summary = collect(args.report,args.report_sha256,args.gate_result_sha256)
+    entries = [dict(source=path.relative_to(ROOT).as_posix(),bytes=len(raw),sha256_before_copy=digest(raw))
+               for path,raw in sorted(payloads.items())]
+    inventory = dict(run_id=RUN_ID,inputs=entries,input_occurrences=len(entries),
+        unique_copies=len({v['sha256_before_copy'] for v in entries}),summary=summary)
+    need(args.inventory.parent == PREP and not args.inventory.is_symlink() and not args.inventory.is_junction(),'inventory within prep')
+    if args.dry_run:
+        write(args.inventory,inventory)
+        print(json.dumps(dict(status='DRY_ONLY',inventory_sha256=sha(args.inventory),inputs=len(entries),unique_copies=inventory['unique_copies']))); return
+    need(args.gate_result_sha256 and summary['full_gate']['status'] != 'PENDING_ROOT_TERMINAL_RECEIPT_AND_REVIEW',
+         'ROOT actual terminal review required before closure')
+    need(args.inventory_sha256 and sha(args.inventory) == args.inventory_sha256
+         and json.loads(args.inventory.read_bytes()) == inventory,'exact ROOT-reviewed dry inventory')
+    need(not (ROOT/'research_tracking/runs'/RUN_ID).exists(),'exclusive bundle')
+    for item in entries: need(sha(ROOT/item['source']) == item['sha256_before_copy'],'before-copy input hashes')
+    sys.path.insert(0,str(ROOT/'src'))
+    from knowledge_tracing.evidence import record_evidence_run,verify_evidence_bundle
+    note = '''# Gate Windows nguồn177 ngày09/11/2026
+
+validated_summary.json phân biệt metadata failures, actual collection và terminal Gate.
+Collection10 có1726nodeIDs,19/271/1436 trong ba fresh groups, zero test bodies theo guards.
+Các failures metadata04/câu lệnh relative05 được giữ nguyên phạm vi preparation.
+Raw streams/receipts/source snapshots được copy byte-exact và đối chiếu SHA trước/sau.
+Nguồn177, supportdocs5, namespace15 và old Gate154 được ghi bằng references/hash.
+Full Gate dùng actual terminal receipt và exact JUnit population khi có.
+Kết quả synthetic software cần đọc với scope/resources/Jobcleanup từng phase.
+Benchmark nghiên cứu, full corpus fit và CUDA cần bằng chứng của các stage riêng.
+'''
+    sources = sorted(set(payloads) | {ROOT/item['path'] for item in summary['external_references']})
+    with record_evidence_run(ROOT,RUN_ID,metadata=dict(kind=summary['kind']),sources=sources,note=note) as out:
+        copies = {}
+        for item in entries:
+            raw = payloads[ROOT/item['source']]
+            value = item['sha256_before_copy']
+            if value not in copies:
+                target = out/f'input-{len(copies):03d}__{Path(item["source"]).name}'
+                with target.open('xb') as stream: stream.write(raw)
+                copies[value] = target
+            target = copies[value]
+            need(target.read_bytes() == raw and sha(ROOT/item['source']) == value,'copy byte equality and source posthash')
+            item.update(copy=target.name,sha256_after_copy=sha(target),source_sha256_after_copy=value)
+        write(out/'copy_inventory.json',entries)
+        write(out/'validated_summary.json',summary)
+    directory = ROOT/'research_tracking/runs'/RUN_ID
+    verified = verify_evidence_bundle(directory)
+    for item in entries: need(sha(ROOT/item['source']) == item['sha256_before_copy'],'final source hashes')
+    force = PREP/'current_windows_gate177_force_paths01.txt'
+    with force.open('x',encoding='utf-8',newline='\n') as stream:
+        stream.write('\n'.join(path.relative_to(ROOT).as_posix() for path in sorted(directory.iterdir()))+'\n')
+    print(json.dumps(dict(status='CLOSED_BY_ROOT_METADATA_EXECUTION',verification=verified,
+        manifest_sha256=sha(directory/'manifest.json'),files_including_manifest=len(list(directory.iterdir())),force_paths=str(force))))
+
+
+if __name__ == '__main__': main()

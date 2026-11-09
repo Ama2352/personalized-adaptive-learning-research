@@ -95,6 +95,8 @@ def combine_junit(groups, output):
     seen = set()
     for group in groups:
         tree = ET.parse(group['junit_path']).getroot()
+        if _junit_result(tree) != group['test_result']:
+            raise ValueError('Gate2 JUnit cases do not match actual shard count')
         cases = list(tree.iter('testcase'))
         if len(cases) != group['test_result']['passed']:
             raise ValueError('Gate2 JUnit cases do not match actual shard count')
@@ -115,13 +117,43 @@ def combine_junit(groups, output):
     return result
 
 
+def _junit_result(tree):
+    """Đếm physical items. Pytest9 có thể cộng passed call reports vào @tests."""
+    if tree.tag == 'testsuite':
+        suites = [tree]
+    elif tree.tag == 'testsuites' and len(tree) and all(child.tag == 'testsuite' for child in tree):
+        suites = list(tree)
+    else:
+        raise ValueError('Gate2 malformed JUnit suite structure')
+    rejection = 'Gate2 requires a nonempty suite without failures/errors/skips'
+    if any(list(tree.iter(tag)) for tag in ('failure', 'error', 'skipped')):
+        raise ValueError(rejection)
+    identities = set()
+    for suite in suites:
+        cases = list(suite.findall('testcase'))
+        if (list(suite.iter('testsuite')) != [suite]
+                or len(list(suite.iter('testcase'))) != len(cases)
+                or any(child.tag not in ('properties', 'testcase', 'system-out', 'system-err') for child in suite)):
+            raise ValueError('Gate2 malformed JUnit testcase nesting')
+        values = {key: suite.get(key, '') for key in ('tests', 'failures', 'errors', 'skipped')}
+        if any(re.fullmatch(r'0|[1-9][0-9]*', value) is None for value in values.values()):
+            raise ValueError(rejection + ' and requires integer count attributes')
+        counts = {key: int(value) for key, value in values.items()}
+        if (not cases or counts['tests'] < len(cases)
+                or any(counts[key] for key in ('failures', 'errors', 'skipped'))):
+            raise ValueError(rejection)
+        for case in cases:
+            key = (case.get('classname'), case.get('name'))
+            if not all(type(value) is str and value.strip() for value in key) or key in identities:
+                raise ValueError('Gate2 duplicate or invalid testcase identity')
+            if any(child.tag not in ('properties', 'system-out', 'system-err') for child in case):
+                raise ValueError('Gate2 malformed JUnit testcase children')
+            identities.add(key)
+    return {'passed': len(identities), 'failed': 0, 'errors': 0, 'skipped': 0}
+
+
 def test_result(xml_path):
-    suites = list(ET.parse(xml_path).getroot().iter('testsuite'))
-    counts = {key: sum(int(suite.attrib.get(key, '0')) for suite in suites)
-              for key in ('tests', 'failures', 'errors', 'skipped')}
-    if counts['tests'] <= 0 or any(counts[key] for key in ('failures', 'errors', 'skipped')):
-        raise ValueError('Gate2 requires a nonempty suite without failures/errors/skips')
-    return {'passed': counts['tests'], 'failed': 0, 'errors': 0, 'skipped': 0}
+    return _junit_result(ET.parse(xml_path).getroot())
 
 
 def validate_timeout(seconds):

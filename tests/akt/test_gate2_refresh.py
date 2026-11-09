@@ -36,8 +36,100 @@ def test_gate2_refresh_rejects_incomplete_suite(tmp_path, attribute):
 def test_gate2_refresh_accepts_complete_suite(tmp_path):
     parse = runpy.run_path(str(Path('scripts/akt/refresh_gate2.py')))['test_result']
     path = tmp_path / 'junit.xml'
-    path.write_text('<testsuites><testsuite tests="3" failures="0" skipped="0" errors="0"/></testsuites>', encoding='utf-8')
+    path.write_text('<testsuites><testsuite tests="3" failures="0" skipped="0" errors="0">'
+                    '<testcase classname="fixture" name="a"/><testcase classname="fixture" name="b"/>'
+                    '<testcase classname="fixture" name="c"/></testsuite></testsuites>', encoding='utf-8')
     assert parse(path) == {'passed': 3, 'failed': 0, 'errors': 0, 'skipped': 0}
+
+
+def test_gate2_junit_counts_items_and_preserves_passed_call_surplus(tmp_path):
+    import xml.etree.ElementTree as ET
+    module = runpy.run_path(str(Path('scripts/akt/refresh_gate2.py')))
+    groups = []
+    before = {}
+    for index, reported in enumerate((1, 1, 4)):
+        path = tmp_path / f'group-{index}.xml'
+        path.write_text(f'<testsuites><testsuite tests="{reported}" failures="0" errors="0" skipped="0">'
+                        f'<testcase classname="group{index}" name="test_item"/>'
+                        '</testsuite></testsuites>', encoding='utf-8')
+        before[path] = path.read_bytes()
+        actual = module['test_result'](path)
+        assert actual == {'passed': 1, 'failed': 0, 'errors': 0, 'skipped': 0}
+        groups.append({'junit_path': str(path), 'test_result': actual})
+    output = tmp_path / 'merged.xml'
+    assert module['combine_junit'](groups, output) == {'passed': 3, 'failed': 0, 'errors': 0, 'skipped': 0}
+    merged = ET.fromstring(output.read_bytes())
+    assert [suite.get('tests') for suite in merged] == ['1', '1', '4']
+    assert len(list(merged.iter('testcase'))) == 3
+    assert all(path.read_bytes() == raw for path, raw in before.items())
+
+
+@pytest.mark.parametrize('field,value', [
+    ('tests', '-1'), ('tests', '1.5'), ('tests', 'NaN'), ('tests', 'True'),
+    ('tests', ' 2'), ('failures', '-1'), ('errors', '0.0'), ('skipped', '')],
+    ids=['negative-tests', 'fraction-tests', 'nonfinite-tests', 'boolean-tests',
+         'space-tests', 'negative-failures', 'fraction-errors', 'missing-skipped'])
+def test_gate2_junit_rejects_malformed_count_attributes(tmp_path, field, value):
+    module = runpy.run_path(str(Path('scripts/akt/refresh_gate2.py')))
+    attributes = dict(tests='2', failures='0', errors='0', skipped='0')
+    attributes[field] = value
+    rendered = ' '.join(f'{key}="{item}"' for key, item in attributes.items())
+    path = tmp_path / 'malformed.xml'
+    path.write_text(f'<testsuite {rendered}><testcase classname="fixture" name="one"/></testsuite>', encoding='utf-8')
+    with pytest.raises(ValueError):
+        module['test_result'](path)
+
+
+@pytest.mark.parametrize('tag', ['failure', 'error', 'skipped'])
+def test_gate2_junit_rejects_hidden_subtest_outcome_despite_zero_attributes(tmp_path, tag):
+    module = runpy.run_path(str(Path('scripts/akt/refresh_gate2.py')))
+    path = tmp_path / 'hidden.xml'
+    path.write_text('<testsuite tests="4" failures="0" errors="0" skipped="0">'
+                    f'<testcase classname="fixture" name="parent"><{tag} message="subtest outcome"/>'
+                    '</testcase></testsuite>', encoding='utf-8')
+    with pytest.raises(ValueError, match='without failures/errors/skips'):
+        module['test_result'](path)
+
+
+@pytest.mark.parametrize('body', [
+    '<testsuite tests="2" failures="0" errors="0" skipped="0"/>',
+    '<testsuites/>',
+    '<other><testsuite tests="1" failures="0" errors="0" skipped="0"/></other>',
+    '<testsuites><wrapper><testsuite tests="1" failures="0" errors="0" skipped="0"/></wrapper></testsuites>',
+    '<testsuite tests="2" failures="0" errors="0" skipped="0"><testsuite tests="1" failures="0" errors="0" skipped="0"><testcase classname="f" name="a"/></testsuite></testsuite>',
+    '<testsuite tests="2" failures="0" errors="0" skipped="0"><testcase classname="f" name="a"><testcase classname="f" name="b"/></testcase></testsuite>',
+    '<testsuite tests="1" failures="0" errors="0" skipped="0"><testcase classname="f" name="a"/><testcase classname="f" name="b"/></testsuite>'],
+    ids=['positive-attribute-empty', 'empty-root', 'foreign-root', 'wrapped-suite',
+         'nested-suite', 'nested-case', 'underreported-items'])
+def test_gate2_junit_rejects_empty_nested_or_underreported_cases(tmp_path, body):
+    module = runpy.run_path(str(Path('scripts/akt/refresh_gate2.py')))
+    path = tmp_path / 'structure.xml'
+    path.write_text(body, encoding='utf-8')
+    with pytest.raises(ValueError):
+        module['test_result'](path)
+
+
+@pytest.mark.parametrize('second', ['<testcase classname="f" name="a"/>', '<testcase classname="f"/>'],
+    ids=['duplicate', 'missing-name'])
+def test_gate2_junit_rejects_duplicate_or_missing_item_identity(tmp_path, second):
+    module = runpy.run_path(str(Path('scripts/akt/refresh_gate2.py')))
+    path = tmp_path / 'identity.xml'
+    path.write_text('<testsuite tests="3" failures="0" errors="0" skipped="0">'
+                    '<testcase classname="f" name="a"/>'+second+'</testsuite>', encoding='utf-8')
+    with pytest.raises(ValueError, match='duplicate or invalid testcase'):
+        module['test_result'](path)
+
+
+def test_gate2_junit_merge_rejects_stale_report_count_before_output(tmp_path):
+    module = runpy.run_path(str(Path('scripts/akt/refresh_gate2.py')))
+    path = tmp_path / 'one.xml'
+    path.write_text('<testsuite tests="4" failures="0" errors="0" skipped="0">'
+                    '<testcase classname="f" name="a"/></testsuite>', encoding='utf-8')
+    output = tmp_path / 'aggregate.xml'
+    groups = [{'junit_path': str(path), 'test_result': dict(passed=4, failed=0, errors=0, skipped=0)}]
+    with pytest.raises(ValueError, match='actual shard count'):
+        module['combine_junit'](groups, output)
+    assert not output.exists()
 
 
 def _publisher(tmp_path, monkeypatch, *, elapsed):
