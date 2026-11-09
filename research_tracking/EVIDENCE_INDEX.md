@@ -1,4 +1,7 @@
 # Chỉ mục bằng chứng
+## 10/11 — checkpoint GKT đã qua kiểm thực thi
+
+[Bundle checkpoint28](runs/gkt-research-checkpoint-20261110-01/README.md) giữ nguồn, logs và control/restored epoch khớp model, BN, Adam, RNG cùng counters. 28 ca đều đạt, source/runtime ổn định và Job0. Phạm vi là complete-epoch cùng process và budget origin. Research producer, adaptor và fitted baseline còn thiếu. Hai file báo cáo hiện hành10/11 đã cập nhật mốc này.
 
 ## Cập nhật10/11 — đối chứng đủ120ca và nghiệm thu CPU
 

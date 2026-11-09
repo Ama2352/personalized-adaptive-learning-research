@@ -18,7 +18,7 @@ Paper 1 được kế thừa theo bản PDF phát triển dùng để nộp, là
 
 **Mốc mới cho RQ2.** Đã mở rộng đối chứng sang đồ thị học từ dữ liệu. Cả 18 cặp đổi chuỗi bài. Ở nhóm năng lực cao có cơ chế thiếu tiên quyết bất hoạt, đổi nguồn đồ thị vẫn làm kết quả học khác nhau, còn bật mức phạt giữ nguyên lịch sử và trạng thái cuối. Điều này tách được một chênh lệch ngoài cơ chế phạt thiếu nền tảng; khả năng khái quát và thứ hạng đồ thị còn phải kiểm tiếp.
 
-Chuẩn bị AKT đã đạt 299 kiểm hợp đồng và 18 kiểm checkpoint thật trên CPU theo nguồn hiện hành. GKT đã đạt 11 kiểm mô hình và 8 kiểm trainer trên dữ liệu dựng sẵn. Các mốc này chưa là so sánh mô hình đã huấn luyện, chưa kiểm public producer resume hoặc CUDA.
+Chuẩn bị AKT đã đạt 299 kiểm hợp đồng và 18 kiểm checkpoint thật trên CPU theo nguồn hiện hành. GKT đã đạt 11 kiểm mô hình và 8 kiểm trainer trên dữ liệu dựng sẵn. Phần lưu và nạp trạng thái cuối vòng huấn luyện cũng đã qua 28 kiểm trên CPU, vòng học kế tiếp khớp đối chứng trong phạm vi đã kiểm. Các mốc này chưa là so sánh mô hình đã huấn luyện, chưa kiểm public producer resume hoặc CUDA.
 
 **Mốc cập nhật ngày 10/11, phép đối chứng nguồn đồ thị đã hoàn tất 120 ca trên mười khối mô phỏng mới. Kết quả cho thấy phần thay đổi do bật cơ chế phạt còn đổi dấu giữa các khối ở mức khởi tạo thấp và trung bình. Đối chứng năng lực cao tiếp tục tách được tác động ngoài riêng cơ chế phạt. Đây là bằng chứng chẩn đoán mới, chưa là kết luận mô hình nào tốt hơn một cách ổn định.**
 
