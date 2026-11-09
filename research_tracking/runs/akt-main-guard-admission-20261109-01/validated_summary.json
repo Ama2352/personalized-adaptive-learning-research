@@ -1,0 +1,66 @@
+{
+  "kind": "ACTUAL_MAIN_A0_GUARD_ADMISSION_ONLY",
+  "operations": [
+    {
+      "operation": "main-guard-package01",
+      "status": "ACCEPTED_METADATA_PACKAGE_ONLY",
+      "outer_seconds": 6.07987040001899,
+      "worker_seconds": 5.339073000010103,
+      "git_commands": 10,
+      "resources": {
+        "samples": 44,
+        "peak_rss_bytes": 77668352,
+        "min_available_ram_bytes": 4365664256
+      }
+    },
+    {
+      "operation": "main-guard-package01-materialize",
+      "status": "ACCEPTED_METADATA_PACKAGE_ONLY",
+      "outer_seconds": 5.724637400009669,
+      "worker_seconds": 5.031332899990957,
+      "git_commands": 10,
+      "resources": {
+        "samples": 42,
+        "peak_rss_bytes": 77377536,
+        "min_available_ram_bytes": 4146929664
+      }
+    },
+    {
+      "operation": "main-selected-actual-guard01",
+      "status": "ACCEPTED_ACTUAL_MAIN_GUARD_ONLY",
+      "outer_seconds": 10.923278299975209,
+      "worker_seconds": 9.169897899962962,
+      "git_commands": 20,
+      "resources": {
+        "samples": 60,
+        "peak_rss_bytes": 82972672,
+        "min_available_ram_bytes": 4372598784
+      }
+    }
+  ],
+  "roles": {
+    "train": {
+      "learners": 48,
+      "targets": 10080,
+      "reference_complete": true
+    },
+    "selection": {
+      "learners": 6,
+      "targets": 1260,
+      "reference_complete": true
+    },
+    "calibration": {
+      "learners": 6,
+      "targets": 1260,
+      "reference_complete": true
+    }
+  },
+  "source_pins": 186,
+  "native_sources": 177,
+  "actual_guard_admitted": true,
+  "actual_selected_fit": false,
+  "model_calls": 0,
+  "optimizer_calls": 0,
+  "teacher_calls": 0,
+  "limits_vi": "Admission envelope1step/1target/1trainingsecond, chưa selected fit/refit/calibration/CUDA."
+}

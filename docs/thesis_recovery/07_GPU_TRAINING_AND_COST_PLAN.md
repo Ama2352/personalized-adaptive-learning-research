@@ -1,5 +1,15 @@
 # GPU, artifact và ngân sách
 
+## Trạng thái hiện hành09/11 — CPU admission đã đạt, CUDA còn thiếu
+
+Nguồn177 và81module hiện hành đã qua1.748ca kiểm Windows CPU, không failure/error/skip. Runtime schema2 được đo mới trong .venv, explicit index dẫn đúng Gate05 và globalpointer lịch sử giữ nguyên. [Gate đã đóng](../../research_tracking/reports/akt_windows_gate_accepted_20261109.md), [runtime và index](../../research_tracking/reports/akt_windows_runtime_gate_index_20261109.md).
+
+Main A0 guard đã được thực hiện qua public factory trên corpus mô phỏng đã lưu, dùng cấu hình frozen20epochs và resource envelope chỉ dành cho guard. Outer ghi10,9232783giây,20Git provenance commands thật, source/data trước=sau, lỗi rỗng và Job0. Không gọi mô hình, optimizer hoặc teacher. Trước đó prepare và materialize cũng đã đạt. Hồ sơ raw ở `artifacts/akt/local-tests/akt-research-runner-20261108-01/main-selected-actual-guard01/`, gói bằng chứng đang được đóng riêng. Đây là admission proof, chưa có selected-fit hoặc prediction export từ public producer.
+
+Chuỗi chốt tiếp theo gồm corpus engineering10×84 được sinh bằng collector thật, một vòng selected lifecycle hoàn chỉnh trên CPU, port và kiểm Linux/CUDA, checkpoint recovery trên GPU, rồi benchmark targets/s và chi phí. Config đầy đủ của nghiên cứu giữ nguyên. Vòng dữ liệu nhỏ chỉ phục vụ kiểm tích hợp trước nghiên cứu, không được đưa vào bảng so sánh mô hình như kết quả fitted chính thức.
+
+Kit cũ đã có tiny T4 lifecycle/recovery được lưu bên dưới. Các kết quả đó giữ giá trị cho đúng phiên bản và dữ liệu synthetic đã chạy. Pipeline nghiên cứu mới có adapter, context và checkpoint CPU riêng nên cần nghiệm thu CUDA tương ứng trước đề nghị chạy Modal. Chưa dùng credit Modal trong các lượt hiện hành, chưa có throughput đại diện để ước lượng chi phí full matrix. Số dư30USD vẫn là thông tin người dùng cung cấp, chưa readback tài khoản trong lượt này.
+
 ## Trạng thái mới nhất08/11 — chưa cho phép paid/full training
 
 - Linux CPU mainworker đã chạy thật2optimizer updates/48train targets/8validation predictions và checkpoint reload exact; Gate24 đạt771PASS trên source kit lúc đó. [Bằng chứng đã đóng](../../research_tracking/reports/akt_linux_worker_readiness_20261108.md). Đây không CUDA/Modal proof.
