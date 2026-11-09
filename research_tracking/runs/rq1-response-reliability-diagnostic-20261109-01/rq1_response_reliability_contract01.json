@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "status": "SOURCE_PREPARED_ROOT_REVIEW_REQUIRED_NOT_EXECUTED",
+  "scope": "CPU09_ACTUAL_ITEM_RESPONSE_RELIABILITY_SECONDARY_DIAGNOSTIC",
+  "analysis_source_sha256": "baf5e6a73e3fca66d04f9d8199e9c4174565f2a19d82c9ce2e8eeaef955545a0",
+  "tests": {
+    "path": "artifacts/akt/local-tests/akt-research-runner-20261108-01/test_rq1_response_reliability01.py",
+    "sha256": "b537350b68952e6fcce42c51ee718baedc41bcc7749af23d5a839c3cec90c41f",
+    "unittest_methods_static_expected": 7,
+    "fixture_scope": "Handmade probability/answer/oracle dictionaries and grouped buckets only, no caches/RNG/models",
+    "execution_status": "NOT_EXECUTED"
+  },
+  "cache_parser_sha256": "8590381c85fe1e58df4a305c8bf4a33ebd9900d0fa8ffb1f1a93868fb56f1311",
+  "cache_contract_sha256": "23c182f6f03d4f31e694920bd11b6cd697cc1a66a16b5b31d4c46150c9e24fa4",
+  "accepted_cache_outer_sha256": "ad5170d4cd312b126b78f4fc96b01a4f1809962a7cee820010e2ab86a44d757c",
+  "reporting_source_pins": {
+    "src/knowledge_tracing/gam_kt/evaluation.py": "c39b6ca9c87dc92f9e3a6dc7636f5249c7c33f69549284bdcf844c4958acaa65",
+    "src/knowledge_tracing/bkt_baseline/metrics.py": "359502d7e7a4ee822841dbf603206d84ec5a5d2f85a4cd012e5ec7fd5495158b"
+  },
+  "bin_rule": "15 equal-width bins: min(int(float64_p*15),14); [k/15,(k+1)/15), last includes1",
+  "groups": {
+    "worlds": 120,
+    "persona_arms": 12,
+    "arms": 4,
+    "total_groups": 136,
+    "bins_per_group": 15,
+    "total_bins": 2040,
+    "source_rows": 14400,
+    "repeated_group_row_uses": 43200,
+    "seed_clusters_reused": 10,
+    "new_independent_seed_families": 0
+  },
+  "metrics": {
+    "empirical_signed_gap": "mean(P)-mean(Y)",
+    "oracle_signed_gap": "mean(P)-mean(p_true)",
+    "realized_response_residual": "mean(p_true)-mean(Y)",
+    "signed_identity": "empirical_signed_gap == oracle_signed_gap + realized_response_residual, arithmetic tolerance1e-12",
+    "ordinary_ece15": "sum_bin(n_bin/N*abs(empirical_signed_gap))",
+    "oracle_response_ece15": "sum_bin(n_bin/N*abs(oracle_signed_gap))",
+    "absolute_ece_additive": false,
+    "empty_bin": "rows0 and all means/gaps null",
+    "empty_group": "all bins rows0 and both ECE null"
+  },
+  "limits": {
+    "whole_seconds": 60,
+    "owned_seconds": 57,
+    "worker_seconds": 54,
+    "cleanup_reserve_seconds": 3,
+    "max_rss_bytes": 1073741824,
+    "min_available_ram_bytes": 2147483648,
+    "compressed_bytes": 1048576,
+    "uncompressed_bytes": 8388608,
+    "line_bytes": 8192,
+    "trace_rows": 14400,
+    "output_file_bytes": 2097152,
+    "output_directory_bytes": 4194304
+  },
+  "output_name": "rq1-response-reliability-attempt01",
+  "expected_complete_files": [
+    "reservation.json",
+    "reliability.json",
+    "result.json",
+    "output-manifest.json"
+  ],
+  "interpretation_vi": "Response correctness của actual served item/history trong từng CPU09 arm. p_true chỉ dùng evaluator. Mỗi arm có population khác sau closed-loop divergence. Toàn bộ seeds/profile/arms/bins/zeroes và signs được giữ. Không scalarECEadditivity, không mastery truth/thresholdpolicy, temperaturefit, LL/Brier reimplementation, causalmediation, CI/pvalue hoặc generalization.",
+  "execution_vi": "Root review nguồn/caps trước pure/native. Main thực hiện genuine worker_gate trước argparse; shared parser chỉ gọi các validation/reader functions, không gọi main cũ. Root owned controller phải đo familyRSS/free2GiB thật, kiểm scope/source/inputSHA/Job0 và wholepostpublication. Chưa dispatch."
+}
