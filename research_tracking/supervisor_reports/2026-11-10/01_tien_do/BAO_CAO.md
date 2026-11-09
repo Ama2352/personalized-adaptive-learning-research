@@ -26,9 +26,11 @@ Chuẩn bị AKT đã đạt 299 kiểm hợp đồng và 18 kiểm checkpoint t
 
 **Phát hiện mới về cách đo thành thạo.** Trên ba lịch sử cùng một khối, quan sát toàn bộ 28 khái niệm cho thấy nhật ký chỉ gồm câu đang giao bỏ ngoài 215 công nhận đúng và 5 công nhận nhầm ở những khái niệm khác tại cùng thời điểm. Đã kiểm độc lập trạng thái dựng lại ở mọi bước. Các con số là lần đo lặp, chưa là bằng chứng khái quát qua nhiều người học.
 
-SAKT đã hoàn tất một vòng đời kiểm kỹ thuật CPU trên corpus nhỏ gồm 8 người học huấn luyện, 1 người học chọn vòng và 1 người học dành riêng cho hiệu chỉnh. Lượt kiểm chạy 6 vòng học, chọn checkpoint vòng 1, nạp lại checkpoint và xuất đủ 84 dự báo của tập chọn vòng. Tập hiệu chỉnh chưa được dùng để tối ưu hoặc đánh giá mô hình. Đây là bằng chứng pipeline hoạt động trên corpus kiểm kỹ thuật, chưa là kết quả so sánh SAKT trong thí nghiệm chính.
+### Chuẩn bị mô hình cho thí nghiệm tiếp theo
 
-Đường chạy AKT có đồ thị cố định cũng đã hoàn tất kiểm kỹ thuật trên cùng corpus nhỏ. Nhóm giữ cùng dữ liệu và cấu hình học với AKT không đồ thị, kiểm khởi tạo backbone trùng nhau, rồi chạy đủ quy trình huấn luyện, chọn checkpoint, nạp lại và xuất 84 dự báo. Kết quả này xác nhận thêm một đường so sánh đã hoạt động bằng mô hình thật. GKT được kiểm tiếp bằng cấu hình riêng đã cố định. Lượt kiểm hoàn tất 11 vòng học, chọn vòng 6, nạp lại checkpoint và xuất đủ 84 dự báo. Thí nghiệm chính trên corpus nghiên cứu, confidence/gate, huấn luyện lại, hiệu chỉnh xác suất và đánh giá học tập vòng kín vẫn còn phải thực hiện.
+SAKT đã hoàn tất một vòng đời kiểm kỹ thuật CPU trên bộ dữ liệu mô phỏng nhỏ gồm 8 người học huấn luyện, 1 người học chọn vòng và 1 người học dành riêng cho hiệu chỉnh. Lượt kiểm chạy 6 vòng học, chọn checkpoint vòng 1, nạp lại checkpoint và xuất đủ 84 dự báo của tập chọn vòng. Tập hiệu chỉnh chưa được dùng để tối ưu hoặc đánh giá mô hình. Đây là bằng chứng pipeline hoạt động trên bộ dữ liệu kiểm kỹ thuật, chưa là kết quả so sánh SAKT trong thí nghiệm chính.
+
+Đường chạy AKT có đồ thị cố định cũng đã hoàn tất kiểm kỹ thuật trên cùng bộ dữ liệu mô phỏng nhỏ. Nhóm giữ cùng dữ liệu và cấu hình học với AKT không đồ thị, kiểm phần AKT gốc có cùng trạng thái khởi tạo, rồi chạy đủ quy trình huấn luyện, chọn checkpoint, nạp lại và xuất 84 dự báo. Kết quả này xác nhận thêm một đường so sánh đã hoạt động bằng mô hình thật. GKT được kiểm tiếp bằng cấu hình riêng đã cố định. Lượt kiểm hoàn tất 11 vòng học, chọn vòng 6, nạp lại checkpoint và xuất đủ 84 dự báo. Thí nghiệm chính, độ tin cậy cạnh và cơ chế điều tiết ảnh hưởng đồ thị, huấn luyện lại, hiệu chỉnh xác suất và đánh giá học tập vòng kín vẫn còn phải thực hiện.
 
 ## Quá trình đã thực hiện
 
