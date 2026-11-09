@@ -1,5 +1,11 @@
 # Chẩn đoán hai công trình
 
+## Quyết định hiện hành09/11 về Paper1
+
+Theo xác nhận trực tiếp của tác giả ngày09/11, notebook Paper1 là bản tiền kỳ. PDF phản ánh phiên bản đã phát triển để nộp và là chuẩn thiết kế, kết quả kế thừa cho KLTN. Phần phát triển simulator tiếp theo bám đặc tả PDF và được version riêng. Các chẩn đoán đã chạy trên notebook giữ phạm vi bản tiền kỳ. Không chờ tìm source cuối để tiếp tục KLTN. Tái dựng theo PDF cần kiểm các quy tắc mô tả, còn tái lập đúng từng số lịch sử chỉ được ghi khi có bằng chứng chạy tương ứng.
+
+Các nhận định phía dưới được giữ theo thời điểm audit trước xác nhận này.
+
 ## Đối chiếu comparator08/11 — không quy lỗi phương pháp khi chưa có bằng chứng
 
 `compare_decision_traces` hiện được gọi trong fixed-stream ở `scripts/research/run_cpu_diagnostics.py:138` và legacy reconciliation ở `scripts/research/analyze_rq1_transitions.py:191`; closed-loop pilot không gọi comparator này. Fixed-stream chọn cùng query/label/time theo loop; observability reconstruction sau đó đối chiếu actual shared queries. Không có evidence hiện tại rằng published paired metrics đã ghép khác target, hoặc output `threshold_local_calibration` đã được dùng làm mastery calibration. Không rerun hay sửa historical metrics chỉ vì dataclass không tự chứng thực mọi điều kiện của caller.

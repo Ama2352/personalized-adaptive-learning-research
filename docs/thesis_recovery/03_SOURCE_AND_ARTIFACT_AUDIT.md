@@ -1,5 +1,11 @@
 # Kiểm toán mã nguồn và artifact
 
+## Phạm vi nguồn Paper1 đã được tác giả làm rõ09/11
+
+Theo xác nhận trực tiếp của tác giả ngày09/11, notebook Paper1 là bản tiền kỳ. PDF phản ánh phiên bản đã phát triển để nộp và là chuẩn thiết kế, kết quả kế thừa cho KLTN. Phần phát triển simulator tiếp theo bám đặc tả PDF và được version riêng. Các chẩn đoán đã chạy trên notebook giữ phạm vi bản tiền kỳ. Không chờ tìm source cuối để tiếp tục KLTN. Tái dựng theo PDF cần kiểm các quy tắc mô tả, còn tái lập đúng từng số lịch sử chỉ được ghi khi có bằng chứng chạy tương ứng.
+
+Các nhận định phía dưới được giữ theo thời điểm audit trước xác nhận này.
+
 Mốc kiểm toán 06/11/2026, HEAD `30d63c6`. Trạng thái VERIFIED ở đây chỉ áp dụng phạm vi evidence ghi kèm. Source inspection khác runtime reproduction. Đã inventory SHA-256 trong `evidence/source_inventory.json`, không di chuyển artifact. Dataset và Holdout rows không được mở trong phiên. Source notebook được trích thành text có đánh số CELL, chưa execute. Git có nhiều nguồn untracked, cần snapshot để tái lập.
 
 Gọi P2 là `paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/`.

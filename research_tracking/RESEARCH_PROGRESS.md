@@ -1,5 +1,10 @@
 # Tiến độ nghiên cứu
 
+## Chuẩn Paper1 đã được tác giả xác nhận09/11
+
+Theo xác nhận tác giả09/11, PDF Paper1 là chuẩn thiết kế và kết quả kế thừa cho KLTN. Notebook là bản tiền kỳ. Phát triển tiếp bám PDF, với phiên bản mô phỏng và kiểm đặc tả riêng theo D37.
+
+
 ## Mốc hiện hành09/11 — reliability và Gate177 đã đóng
 
 [RQ1 reliability](reports/rq1_response_reliability_diagnostic_20261109.md) đã đóng58outputs, giữ120world/14.400lượt cũ và10seedclusters. Sai lệch trái chiều theo hồ sơ có thể bù trừ khi gộp. Đã cập nhật cả [tóm tắt](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md) và [HTML](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html),10SVG/9bảng, QA1365/390 và browser đã đóng.
@@ -12,7 +17,7 @@ Các tỷ lệ sau là **ước lượng quản lý theo deliverable**, sai số
 
 |RQ|Ước lượng|Bằng chứng hiện có|Chốt nghiệm thu còn thiếu|
 |---|---:|---|---|
-|RQ1 — nguyên nhân|~65%|[Bản thảo có nguồn](reports/THESIS_RQ1_MECHANISMS_DRAFT_20261109.md):30.240concept–snapshot predicates;1.080paired decisions;22criterion-change và22action-change chỉ trùng2lượt. Đã đối chiếu lại escape_all_nodes, không giả định candidatepool luôn subset readyset.|Calibration/độ đúng mastery và learning outcomes chưa được chứng minh bởi các footprint này; cần đóng đủ phạm vi RQ và đối chiếu Paper1exactrevision.|
+|RQ1 — nguyên nhân|~65%|[Bản thảo có nguồn](reports/THESIS_RQ1_MECHANISMS_DRAFT_20261109.md):30.240concept–snapshot predicates;1.080paired decisions;22criterion-change và22action-change chỉ trùng2lượt. Đã đối chiếu lại escape_all_nodes, không giả định candidatepool luôn subset readyset.|Calibration/độ đúng mastery và learning outcomes chưa được chứng minh bởi các footprint này; cần đóng đủ phạm vi RQ và tiếp tục chẩn đoán theo PDF Paper1 chuẩn.|
 |RQ2 — điều kiện|~50%|[Phân tích điều kiện](reports/rq2_conditions_evidence_20261108.md):simulator assumptions,10reusedseedblocks/3profiles và Junyi controls. [Phân tích mới](reports/rq2_cached_mechanism_diagnostic_20261109.md) đã đọc đủ14.400cached events:58/60mechanismpairs giữ toàn nhãn,59/60giữ toàn chuỗi bài; policy-switch60/60có bài khác.|Chưa tách sạch ability từ profile differences; cần controlled/noise/stability comparisons. Kết quả mới là exploratory trên10reusedseedclusters, không independentconfirmation hoặc causalmediation.|
 |RQ3 — phương pháp|~30%|[Core](reports/cgakt_research_core_20261109.md),[actual Adam](reports/cgakt_actual_adam_20261109.md),[fresh-process checkpoint](reports/cgakt_fresh_process_checkpoint_readiness_20261109.md):đã kiểm cập nhật tham số và khôi phục rồi chạy hết epoch tiếp theo trên syntheticCPU. [Producer](reports/cgakt_main_selected_producer_readiness_20261109.md) mới16mockPASS.|Actual public selected-fit success, toàn9candidates/hai môi trường, CUDA/training/comparisons/ablations và closed-loop outcomes chưa hoàn tất. Chưa chứng minh CG-AKT cải thiện.|
 

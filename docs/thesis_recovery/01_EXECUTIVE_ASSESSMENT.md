@@ -1,5 +1,10 @@
 # Đánh giá điều hành — phiên bản 1, 06/11/2026
 
+## Chuẩn Paper1 đã được tác giả xác nhận09/11
+
+Theo xác nhận tác giả09/11, PDF Paper1 là chuẩn thiết kế và kết quả kế thừa cho KLTN. Notebook là bản tiền kỳ. Phát triển tiếp bám PDF, với phiên bản mô phỏng và kiểm đặc tả riêng theo D37.
+
+
 Kết luận tổng thể **NOT READY cho thực nghiệm trả phí hoặc full CV**. Bộ kế hoạch cho phép bắt đầu engineering an toàn theo TASKS.json. Còn 53 ngày lịch đến 29/12, tính chênh lệch ngày, cần dành 15–29/12 cho tổng hợp, phản biện và bảo vệ.
 
 Đóng góp khoa học là chẩn đoán điểm đứt trong chuỗi dự báo → quyết định → hành động → kết quả, xác định điều kiện hiệu lực của graph, rồi kiểm tra confidence/gating trên AKT. Pipeline tuần tự BKT → GAM → AKT → Graph → CG đang đặt benchmark lớn trước các câu hỏi thiết kế quyết định toàn bộ nghiên cứu. Đề xuất ba nhánh song hành, Dương phụ trách chẩn đoán simulator/graph/thống kê, Sang phụ trách AKT lifecycle và CG, cả hai viết và chốt hợp đồng tích hợp ngay tuần đầu.

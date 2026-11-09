@@ -1,5 +1,11 @@
 # Sổ quyết định và vấn đề mở
 
+## D37 — PDF Paper1 là chuẩn theo xác nhận tác giả09/11
+
+Theo xác nhận trực tiếp của tác giả ngày09/11, notebook Paper1 là bản tiền kỳ. PDF phản ánh phiên bản đã phát triển để nộp và là chuẩn thiết kế, kết quả kế thừa cho KLTN. Phần phát triển simulator tiếp theo bám đặc tả PDF và được version riêng. Các chẩn đoán đã chạy trên notebook giữ phạm vi bản tiền kỳ. Không chờ tìm source cuối để tiếp tục KLTN. Tái dựng theo PDF cần kiểm các quy tắc mô tả, còn tái lập đúng từng số lịch sử chỉ được ghi khi có bằng chứng chạy tương ứng.
+
+Các nhận định phía dưới được giữ theo thời điểm audit trước xác nhận này.
+
 ## D36 — Ranh giới sử dụng calibration, không bắt buộc viết lại reader09/11
 
 ROOT đối chiếu Protocol22 mục2, dòng22–24: canonical reader được audit schema/nhãn binary cả ba Development roles trước allocation; không dùng calibration để tối ưu/chọn epoch/candidate/hyperparameters/winner. Plan27 ban đầu yêu cầu public scoped reader/no deserialization calibration quá chặt, không phải requirement đã chốt. Reuse reader + typed phase inputs/call ledgers; defer optional reader hardening, giảm critical path. Main selected-only→allcandidate rawfreeze→freshrefit→Tfit vẫn giữ; không Holdout/final/oracle, không reseed để có support/metric đẹp. Sửa kế hoạch theo evidence binding, không đổi methodology hoặc cấp cloud/fullCV authority.

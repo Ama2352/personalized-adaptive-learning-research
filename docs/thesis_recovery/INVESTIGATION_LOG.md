@@ -824,3 +824,8 @@ Ba actualoperations đã đóng53outputs/commit8e2ffc5,57rawGitfiles kiểm nguy
 ## Chốt turn09/11 — giữ ranh giới kết quả và kiểm kỹ thuật
 
 Native mastery05 timeout sau173giây worker, cleanup Job0. Profile ghi25constructors/2963query entries vàreturns, không complete14400parity hoặc accuracy truth. Đã dừng lane theo review05, không tăng cap hoặc sixthretry. Parallel corpus10×84 có9puremethods/21subtests đạt, source-only builder đã bàn giao, chưa tạo request/corpus. Main A0 guard53outputs đã commit8e2ffc5 và readiness/cost tracking34f3c61. Không active native jobs, browser/preview đã đóng, chưa dùng Modal trong batch.
+
+
+## Tác giả xác nhận chuẩn Paper1 ngày09/11
+
+Theo xác nhận trực tiếp của tác giả ngày09/11, notebook Paper1 là bản tiền kỳ. PDF phản ánh phiên bản đã phát triển để nộp và là chuẩn thiết kế, kết quả kế thừa cho KLTN. Phần phát triển simulator tiếp theo bám đặc tả PDF và được version riêng. Các chẩn đoán đã chạy trên notebook giữ phạm vi bản tiền kỳ. Không chờ tìm source cuối để tiếp tục KLTN. Tái dựng theo PDF cần kiểm các quy tắc mô tả, còn tái lập đúng từng số lịch sử chỉ được ghi khi có bằng chứng chạy tương ứng.
