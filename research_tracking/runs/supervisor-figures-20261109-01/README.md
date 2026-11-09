@@ -1,0 +1,3 @@
+# Lưu riêng11biểu đồ báo cáo GVHD
+
+Tách nguyên byte SVG từ HTML hiện hành trùng snapshot QA19. Tên file gồm thứ tự và tiêu đề. figure_index.json giữ title/desc/caption, nhãn chữ gốc, byte offsets và SHA; figure_index.md giúp tra cứu. Mười SVG đầu trùng nguyên byte với bản HTML trước chặng11. Không vẽ lại, không sửa số, không render PNG hoặc chạy browser/nghiên cứu. Đây là lưu phần trình bày của số liệu đã có, không thêm mẫu độc lập. Nguồn chung và liên kết chỉ chép đúng từ HTML; không tự suy diễn mapping mỗi biểu đồ sang dataset. HTML gốc, screenshot PNG và bundle QA lịch sử giữ nguyên. Closure xác nhận integrity lưu file.

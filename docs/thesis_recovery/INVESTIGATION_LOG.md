@@ -906,3 +906,8 @@ Masking44outputs đã closed/manifest9cbb7a…9a4b. Pure9 đạt, cached1080pair
 ## 09/11 — kiểm raw Git và bảo toàn artifact của đợt masking
 
 Commit4492501 giữ failure CPU09full02. Commitdc3287a đóng gói kết quả masking, báo cáo và bản thảo E7, đồng thời thêm ba raw logs mà Git ignore mặc định trong lượt stage trước. Đã kiểm trực tiếp117raw Git files với SHA của local/manifests, gồm106outputs+4manifests+7source/report files. Không sửa raw logs hoặc bundle đã đóng. Bộ đếm5861→5978 là số lượt file được đối chiếu, không researchN hoặc phần trăm hoàn thành. Artifact lớn còn local; chưa xác minh backup cloud. MainC8 vẫn tests pending, collection RAM-stop giữ đúng0IDs/0bodies, không auto retry. Native checkpoint04 cũ chỉ theo dõi workerRSS, chưa là familyRSS certificate. Packet05 cần nguồn Main ổn định và review monitor riêng trước dispatch.
+
+
+## 09/11 — lưu figure độc lập theo yêu cầu người dùng
+
+Đã tách11SVG nguyên byte từ HTML snapshot QA19, đóng20outputs với manifest9fff53c8…6594758. Giữ đủ title/desc/caption và source byte offsets/SHA; mười hình đầu trùng snapshot trước. Không vẽ lại hoặc tính số mới. Quy ước AGENTS và bản đồ repository yêu cầu lưu các figure tiếp theo cùng dữ liệu hoặc nguồn số và cách dựng, giữ nguyên ảnh gốc và các bundle đã đóng. Chưa tăng raw Git counter trước khi commit và kiểm blob.

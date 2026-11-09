@@ -302,3 +302,5 @@ Gate21 chỉ chạy `tests/akt tests/shared_kt`; các số139SAKT và38Graph-GAM
 - [RNG-owned episode Paper1](paper1_seeded_episode_readiness_20261109.md) đã kiểm85tests/13ca mới, wrapper2,4102863s. Engineering trên bank dựng tay, chưa domain pilot hoặc matrix.
 
 - [Fullcached CPU09 launcher dừng02](../runs/rq1-cpu09-native-mastery-20261109-02/report.md) là hồ sơ vận hành28outputs đã đóng, nguyên nhân chưa xác định. Chưa có kết quả nghiên cứu mới.
+
+- [Bộ figure chặng11](../runs/supervisor-figures-20261109-01/figure_index.md) là hồ sơ trình bày gồm11SVG và metadata, tách khỏi kết quả nghiên cứu. HTML và screenshot nguồn giữ nguyên.

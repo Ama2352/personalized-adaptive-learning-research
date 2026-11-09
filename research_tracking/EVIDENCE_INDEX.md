@@ -374,3 +374,5 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 - [Fullcached CPU09 launcher failure02](runs/rq1-cpu09-native-mastery-20261109-02/report.md),28outputs đã đóng. Shim C000013A trước cleanup, actual worker exitcode và nguyên nhân chưa rõ.57source/input SHA giữ nguyên, không có parity/truth result.
 
 - [Kiểm raw Git gói masking và lịch sử failure](../docs/thesis_recovery/evidence/masking_package_raw_git_20261109.json) đối chiếu117files trên dc3287a. Có106outputs/4manifests của bốn bundle và7file nguồn/báo cáo; không quy thành số thí nghiệm hoặc tiến độ RQ. Các artifact lớn vẫn giữ local, cloud backup chưa được xác minh.
+
+- [Figure báo cáo chặng11](runs/supervisor-figures-20261109-01/figure_index.md) gồm11SVG độc lập,20outputs đã đóng. Tách nguyên byte từ HTML đã QA; mười hình cũ giữ nguyên. Có title/desc/caption, nhãn và vị trí trong nguồn, không thêm mẫu nghiên cứu hoặc tự gán dataset cho từng hình.

@@ -139,3 +139,7 @@ Profile có phiên bản nằm trong [quyết định28](thesis_recovery/28_CUDA
 ### Bổ sung RNG-owned Paper1 ngày09/11
 
 [Seeded episode](../src/knowledge_tracing/paper1_pdf/seeded_episode.py) tái dùng supplied core, có85tests/13ca mới. [Báo cáo](../research_tracking/reports/paper1_seeded_episode_readiness_20261109.md) và [bundle](../research_tracking/runs/paper1-seeded-episode-engineering-20261109-01/) giữ raw và provenance. Chưa chạy matrix nghiên cứu.
+
+## Figure phục vụ luận văn
+
+[Mục lục11SVG độc lập](../research_tracking/runs/supervisor-figures-20261109-01/figure_index.md) giữ hình nguyên byte từ bản HTML đã QA, kèm chú thích và nguồn xuất. Đây là bộ hình của snapshot chặng11. Các figure mới hoặc sửa tiếp tục lưu phiên bản theo run, cùng dữ liệu hoặc tham chiếu số liệu và cách dựng. Ảnh chụp gốc giữ trong bundle QA, không render hoặc copy lại vào mọi bộ hình.
