@@ -859,3 +859,8 @@ Một allocation60giây đã dừng sau khoảng3,3976giây. Năm inline checks 
 ## 09/11 — bản thảo RQ1 nối thêm E5 và E6
 
 Đã công bố candidate03 sau independent static review. Thêm response-mixture reliability trên fixed stream và chứng minh zero re-entry có điều kiện, giữ nội dung E4. Root kiểm29nguồn,12liên kết và8ô số E5. Snapshot hai bản cũ trước sửa, đóng12outputs tại thesis-rq1-e5-e6-writing-20261109-01. Đây là phần viết từ bằng chứng đã có, chưa tăng mẫu hay hoàn tất RQ.
+
+
+## 09/11 — episode Paper1 supplied đã kiểm
+
+Cài profile US/UW/FW từ z cấp sẵn và nối continuity controller/world. Root cùng reviewer đọc nguồn, chạy một lượt72tests/0lỗi trong2,6754029giây, gồm18ca mới. Source8trước=sau. Đã đóng13outputs, manifestac3b8de1a45f36e75ed7015ff18b36debba26377a5561a9cdeb98fabd849267f. Hai báo cáo tiến độ cập nhật phần cài đặt Paper1, mườiSVG giữ nguyên. Chưa RNG-owned sampling hoặc matrix nghiên cứu.
