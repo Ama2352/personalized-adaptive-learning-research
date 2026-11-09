@@ -1,5 +1,8 @@
 # Chỉ mục bằng chứng
 
+[Corpus tích hợp10×84](reports/akt_main_engineering_corpus10x84_20261109.md) đã sinh/đọc lại đủ840lượt, 52outputs bằng chứng đã đóng và54rawGitfiles đã kiểm. Corpus17files được commit riêng718f90e. Selected lifecycle đang chuẩn bị, chưa model fit hoặc CUDA.
+
+
 [Actual Main A0 guard](reports/akt_main_guard_admission_20261109.md) đã đóng53outputs, commit8e2ffc5. Ba operations10/10/20Git, Job0 và0NN. Chưa selected fit/CUDA. Raw57files đã kiểm.
 
 

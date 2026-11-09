@@ -1,5 +1,8 @@
 # Mục lục báo cáo và phân tích KLTN
 
+[Corpus tích hợp10×84](akt_main_engineering_corpus10x84_20261109.md) đã sinh/đọc lại đủ840lượt, 52outputs bằng chứng đã đóng và54rawGitfiles đã kiểm. Corpus17files được commit riêng718f90e. Selected lifecycle đang chuẩn bị, chưa model fit hoặc CUDA.
+
+
 [Actual Main A0 guard](akt_main_guard_admission_20261109.md) đạt, bundle53outputs và raw57Gitfiles đã kiểm. Chuẩn bị10×84 integration và đo chi phí revalidation trước GPU. Chưa selected fit/CUDA.
 
 
