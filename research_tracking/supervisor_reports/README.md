@@ -1,5 +1,9 @@
 # Báo cáo tiến độ theo ngày
 
+## Cập nhật10/11 — đối chứng đủ120ca và nghiệm thu CPU
+
+[Báo cáo hiện hành10/11](2026-11-10/01_tien_do/BAO_CAO_NGHIEN_CUU.html) có Chặng15 và bảng fresh10blocks, giữ đợt09/11. [Recovery](../runs/rq2-fresh-graph-recovery-20261110-01/README.md) đã đủprimary120/14400, physical121/14430 gồm replay30. K1000 có6dương/4âm, K1150 có8dương/2âm, K1300zero10 là đối chứngbất hoạt. [AKT native18](../runs/akt-cpu-checkpoint-current-20261110-01/README.md) và [GKT model11/trainer8](../runs/gkt-research-model-trainer-20261110-01/README.md) đều0FES/Job0. Publicproducerresume/CGAKTresearchfit/CUDA và suy luận thống kê vẫn còn riêng. Không chiModal.
+
 ## Mốc09/11 — Paper1 có proof điều kiện; MainC8 đã áp dụng, kiểm còn pending
 
 [Proof Paper1](../reports/paper1_concept_local_invariance_20261109.md) và [bundle17](../runs/paper1-concept-local-invariance-20261109-01/README.md). Khi cùng bank/init/local tape và update concept-local, nếu cả hai DAG branches hoàn thành thì local stopping counts, terminal states và tổng feedback giống nhau; order/re-entry có thể khác. Actual91tests/0FES gồm6fixture mới kiểm cả wrongY/finiteH/cap/no-cap. 13episodes/464feedback là trần tĩnh, không measuredledger hoặc sample nghiên cứu.

@@ -1022,3 +1022,10 @@ Lượt capture mới tắt smooth scrolling trong browser, Root đã đọc hai
 [Bundle viết E10](../../research_tracking/runs/thesis-rq1-e10-writing-20261110-01/README.md) giữ before/after, source map và prefix52432bytes nguyên.120lượt hỏi trên22khái niệm của một lịch sử được làm rõ trong technicalreport và hai fileGVHD. Không thêmN/modelcall. Fullselectedreplay RQDIAG23 giữ chưa hoàn tất nhưng xuốngP2 vì mở rộng cùng mẫu policy-chọn chưa giải quyết selectionconditioning. Ưu tiên review estimand/panel và actualRQ2recovery khiRAMđủ. Không áp dụng phương pháp mới.
 
 Review E10 scopedPASS đã áp dụng hai làm rõ, nêu seed/worldλ0 và giới hạn phần graphcomparison còn thiếu trong witness này. Giữ E9contrast và prefix52432bytes. WRITE07 hoàn tất, không thêmN hoặcmodelcall.
+
+
+## 10/11 — native và replication đã tiến qua actualexecution
+
+RAM5GiB ổn định cho phép chạy tuần tự nativeAKT18 đạt25,9s, RQ2recovery59 đạt30,9s và GKTmodel11/trainer8 đạt18,1s/34,4s. Tất cảsource/runtime vàownedcleanup đạt. Đã đóng ba bundles kỹ thuật. Fresh120 có independentdescriptive review, báo cáo10/11 đã xuất bản với11SVG/14tables, finalspacingQA còn chờ. Không cộngtestNN vàoNnghiên cứu, khônghuman causal/inference hoặcfullRQcompletion. User yêu cầu tiếp tục5h từ17:07UTC, trạng tháighiđủđểcontinuation.
+
+Finalfresh120QA đã đạtdesktop1280/mobile390, table335/document375. Giữ11SVG/14tables, hai report10/11 có đoạn tiến độ mới và wordingcheckpointcurrent. Screenshots01/02 và source typography đãđóng, WRITE08hoàn tất. Hai previewservers và tab riêng đãđóng. Không tăngN hoặcmodelcalls.

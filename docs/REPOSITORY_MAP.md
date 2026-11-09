@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## Cập nhật10/11 — đối chứng đủ120ca và nghiệm thu CPU
+
+[Báo cáo hiện hành10/11](../research_tracking/supervisor_reports/2026-11-10/01_tien_do/BAO_CAO_NGHIEN_CUU.html) có Chặng15 và bảng fresh10blocks, giữ đợt09/11. [Recovery](../research_tracking/runs/rq2-fresh-graph-recovery-20261110-01/README.md) đã đủprimary120/14400, physical121/14430 gồm replay30. K1000 có6dương/4âm, K1150 có8dương/2âm, K1300zero10 là đối chứngbất hoạt. [AKT native18](../research_tracking/runs/akt-cpu-checkpoint-current-20261110-01/README.md) và [GKT model11/trainer8](../research_tracking/runs/gkt-research-model-trainer-20261110-01/README.md) đều0FES/Job0. Publicproducerresume/CGAKTresearchfit/CUDA và suy luận thống kê vẫn còn riêng. Không chiModal.
+
 ## 10/11 — E10 nối chẩn đoán thành thạo vào bản thảo
 
 [Bundle viết E10](../research_tracking/runs/thesis-rq1-e10-writing-20261110-01/README.md) giữ before/after, source map và prefix52432bytes nguyên.120lượt hỏi trên22khái niệm của một lịch sử được làm rõ trong technicalreport và hai fileGVHD. Không thêmN/modelcall. Fullselectedreplay RQDIAG23 giữ chưa hoàn tất nhưng xuốngP2 vì mở rộng cùng mẫu policy-chọn chưa giải quyết selectionconditioning. Ưu tiên review estimand/panel và actualRQ2recovery khiRAMđủ. Không áp dụng phương pháp mới.
