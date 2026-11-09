@@ -10,7 +10,7 @@
 
 Paper 1 được kế thừa theo bản PDF phát triển dùng để nộp, là nguồn chuẩn về thiết kế và kết quả, còn notebook trong repository là bản tiền kỳ. Theo PDF, tính liên tục của lộ trình chịu ảnh hưởng của cách chọn bài, trong khi đồ thị mở rộng chưa cải thiện ổn định mức thành thạo. Paper 2 quan sát cải thiện dự báo nhỏ ở một số nhóm mô phỏng nhưng chưa phát hiện lợi ích rõ ở kết quả học tập chính. Khóa luận đi tiếp từ khoảng trống này: vì sao đồ thị chưa giúp ổn định, khi nào nó có ích và liệu CG-AKT sử dụng độ tin cậy cạnh có cải thiện được không?
 
-**Đã có bằng chứng chẩn đoán mới cho RQ1–RQ2, gồm phép đo trực tiếp hai điều kiện xét thành thạo; RQ3 đã có dữ liệu, bước ước lượng cạnh và lõi CG-AKT được kiểm tính toán. Chưa RQ nào hoàn tất; chưa có kết quả CG-AKT đã huấn luyện để kết luận mô hình này tốt hơn.**
+**Đã có bằng chứng chẩn đoán mới cho RQ1–RQ2, gồm phép đo trực tiếp hai điều kiện xét thành thạo; RQ3 đã có dữ liệu, bước ước lượng cạnh, lõi CG-AKT được kiểm tính toán và quy trình chọn checkpoint AKT không đồ thị chạy thành công trên corpus nhỏ. Chưa RQ nào hoàn tất; chưa có kết quả CG-AKT đã huấn luyện để kết luận mô hình này tốt hơn.**
 
 ## Quá trình đã thực hiện
 
@@ -40,10 +40,14 @@ Phát hiện này phân biệt **kiến thức thật thay đổi trong simulato
 
 Phân tích mới cho thấy **chỉ số phù hợp xác suất tính gộp có thể che sai lệch lớn ở từng hồ sơ và đảo thứ hạng mô tả giữa cấu hình**. Đây là một lời giải thích cụ thể cần kiểm trong RQ1, bổ sung cho các bảng dự báo tổng hợp của Paper 2. Các cấu hình có thể phục vụ những bài và lịch sử khác nhau, nên kết quả hiện tại chưa xác định cấu hình nào hiệu chỉnh tốt hơn trên cùng tình huống. Bước tiếp theo là đối chiếu trực tiếp quyết định thành thạo với trạng thái thật đã lưu, rồi kiểm một biện pháp hiệu chỉnh trên dữ liệu tách riêng.
 
+**Mốc tích hợp mới nhất, AKT đã đi qua quy trình chọn checkpoint thực tế.** Nhóm đã chạy thành công quy trình AKT không đồ thị trên corpus kiểm tích hợp riêng gồm 10 người học ×84 lượt. Tám người dùng để huấn luyện, một người chọn số vòng học và một người được giữ riêng cho hiệu chỉnh. Lượt kiểm hoàn tất 7 vòng học với 14 bước cập nhật, chọn checkpoint ở vòng 4, nạp lại vào mô hình mới và xuất đủ 84 dự báo trên người học chọn vòng. Kết quả sau nạp lại khớp checkpoint đã chọn. Toàn bộ lượt kiểm chạy trên CPU local, chưa dùng credit Modal.
+
+Mốc này xác nhận đường đi dữ liệu → huấn luyện → chọn checkpoint → nạp lại → xuất dự báo của AKT không đồ thị trên corpus nhỏ. Huấn luyện lại, hiệu chỉnh xác suất, khôi phục toàn bộ quy trình, kiểm Linux/CUDA và các so sánh CG-AKT trên corpus nghiên cứu còn phải thực hiện. Bộ kiểm chỉ có một người học chọn vòng, nên chưa cung cấp bằng chứng so sánh chất lượng mô hình cho RQ3.
+
 ## Còn phải chứng minh
 
 - **RQ1:** đánh giá độ đúng của quyết định thành thạo, hiệu chỉnh xác suất và vai trò chính sách; nối chẩn đoán nội bộ đã có với kết quả học tập.
 - **RQ2:** kiểm khả năng khái quát qua đồ thị nhiễu, nhóm khái niệm và người học mới, với đối chứng đúng quần thể.
-- **RQ3:** hoàn thiện workflow huấn luyện/checkpoint từ lõi đã kiểm; so sánh không đồ thị / đồ thị cố định / confidence / gate cùng các baseline bắt buộc, rồi đánh giá chọn bài và kết quả học vòng kín.
+- **RQ3:** mở rộng từ quy trình chọn checkpoint AKT đã kiểm sang Linux/CUDA và corpus nghiên cứu, hoàn thiện huấn luyện lại và hiệu chỉnh; so sánh không đồ thị / đồ thị cố định / confidence / gate cùng các baseline bắt buộc, rồi đánh giá chọn bài và kết quả học vòng kín.
 
 Các mô hình và demo trong đề cương vẫn được giữ. Kết quả không cải thiện hoặc cổng chọn tắt đồ thị vẫn được báo cáo nếu bằng chứng hỗ trợ; chưa có kết luận ưu thế của CG-AKT hoặc hiệu quả giáo dục trên người học thật.
