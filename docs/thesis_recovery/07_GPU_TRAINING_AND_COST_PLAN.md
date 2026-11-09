@@ -192,3 +192,13 @@ Public AKT control E7/best4 và intentional parentE5/latest5→childE6–7 đã 
 Method24 train-only artifact đã có trên chính corpus60 cần được kiểm lại binding và tái sử dụng trước khi cân nhắc fit lại. Minimum conceptcoverage47–48learners chưa thay thế pairwise support đã ghi của estimator. Không lấy artifact48trainlearners gắn vào engineering8trainlearners. Main graph input limits và chi phí hash/read artifact phải dự toán riêng từ dữ liệu thực, không giữ8MiB từ A0graph-off.
 
 Credit Modal của các lượt trong đợt này vẫn0USD. Khoản30USD còn lại là thông tin người dùng cung cấp, cần đối chiếu trước lượt trả phí. Chưa có quyền launchGPU. Giữ Colabfree trước Modal theo thứ tự đã chọn.
+
+## 10/11 — đã nghiệm thu tái dùng đồ thị, còn thiếu đường chạy chính
+
+[Binder Main60](../../research_tracking/runs/main60-graph-condition-binding-20261110-01/README.md) đã kiểm hai loader và sáu cấu hình A1–A3 expert/learned trên đúng TRAIN48. Không chạy lại 2.352 lượt khớp Method24. Giới hạn input cho loader được kiểm ở 160 MiB mỗi lần gọi, hai lần có trần tổng 320 MiB. Đây là trần cho phép đọc, chưa là phép đo toàn bộ I/O khi training. Artifact lớn giữ tại vị trí gốc, bundle chỉ tham chiếu.
+
+[SAKT selected CPU](../../research_tracking/runs/sakt-selected-engineering-20261110-01/README.md) đã đạt sáu epoch, chọn vòng1, nạp lại và xuất84dự báo trên corpus kiểm kỹ thuật. Tổng hai lượt thực sự train có72updates/8.064target exposures, gồm lượt producer hoàn tất nhưng wrapper bị từ chối. Chưa dùng tốc độ CPU này để dự báo chi phí GPU hoặc tiến độ Main60.
+
+Đường selected-only hiện hành đã có bằng chứng CPU. External freeze từ đủ chín candidate, fresh refit90, hiệu chỉnh10 và fitted online bridge vẫn cần hoàn thiện riêng. Chưa được dùng lifecycle A0 tự chọn cục bộ để bỏ qua thứ tự main trong accounting23. CPU/GPU của SAKT, GKT và AKT có phạm vi kiểm khác nhau. Chưa có bằng chứng cả chín điều kiện dùng được cùng launcher CUDA.
+
+[Notebook CPU nguồn/dữ liệu](../../notebooks/akt_colab_main_data_preflight.ipynb) đã có gói nhỏ và kiểm Windows tại vị trí mới. Lượt Colab/Linux thực tế còn chờ runtime. Bước này không kiểm Torch, Git provenance, checkpoint, CUDA hoặc Modal Volume. Các khoản chi và quyền chạy cloud giữ nguyên.
