@@ -324,3 +324,45 @@ Cần tiếp tục kiểm các graph conditions và worlds độc lập theo thi
 - **E9d** dùng đủ18trajectory joins trong independent verification, source chronology và raw-output hashes. Source map ghi phép cộng18question-ID counts cho1.409/2.160, không tạo thêm phép chạy hoặc metric population mới.
 
 Pilot E9 đã đóng bằng chứng trong [bundle learned19](../runs/rq2-learned-graph-ability-20261109-01/README.md). Manifest và SHA của sources được ghi trong source map. Root đã đối chiếu 18 nguồn cùng 66 giá trị theo đường dẫn JSON và hai phép cộng từ dữ liệu đã lưu trước xuất bản. Các mục 1–11 cùng toàn bộ nguồn E1–E8 được giữ nguyên.
+
+
+## 13. Bổ sung E10 về trạng thái thành thạo tại các câu được chọn
+
+### Vì sao cần đối chiếu quyết định với trạng thái mô phỏng
+
+Paper2 đã đặt dự báo đáp án vào một hệ thống chọn bài. Để giải thích vì sao thay đổi dự báo có thể chưa dẫn đến thay đổi kết quả học, cần biết quyết định thành thạo có phản ánh trạng thái mà simulator đang mô phỏng hay không. Câu hỏi này bổ sung cho việc đo sai số dự báo. Dự báo đáp án và trạng thái thành thạo là hai đại lượng phục vụ hai bước khác nhau của cùng hệ thống.
+
+Nhóm đối chiếu lại một lịch sử PG đã lưu, gồm120 lượt hỏi trước khi cập nhật bằng đáp án hiện tại. Lịch sử dùng seed21000, cơ chế phạt do thiếu tiên quyết trong world được tắt, tương ứng λ=0. Hai đường tín hiệu và điều chỉnh theo cha trong bộ ước lượng được tắt, điều chỉnh cục bộ cũng tắt. Bộ chọn bài vẫn dùng đồ thị tiên quyết. Vì vậy, cấu hình này chỉ tắt các đường đã nêu của bộ ước lượng. Các bản ghi được ghép theo đúng câu hỏi, khái niệm, thời điểm và giá trị dự báo với trạng thái thật đã lưu của simulator. Đây là phân tích dữ liệu cũ, không thêm người học hoặc lượt tương tác mới. [E10a]
+
+### Kết quả đối chiếu và lý do cần đọc cùng cách lấy mẫu
+
+Quy tắc Paper2 xét cả điểm kiến thức ước lượng đạt1250 và chỉ số bất định không vượt0,55. Phép đối chiếu dùng trạng thái latent của simulator tại cùng ngưỡng1250. Trong120 lượt hỏi được quan sát, khái niệm đang hỏi luôn đạt tiêu chí latent, trong khi điểm kiến thức ước lượng luôn dưới ngưỡng. Kết quả gồm120 quan sát trên22 khái niệm riêng biệt của một lịch sử. [E10a]
+
+| Quyết định tại khái niệm được hỏi | Latent chưa đạt | Latent đã đạt |
+|---|---:|---:|
+| Mô hình chưa công nhận thành thạo | 0 | 120 |
+| Mô hình công nhận thành thạo | 0 | 0 |
+
+Điểm kiến thức ước lượng chưa đạt ở cả120 lượt nên điều kiện bất định chưa có cơ hội chặn thêm một trường hợp đã vượt ngưỡng điểm. Quan sát này chưa đo được vai trò tăng thêm của điều kiện bất định khi điểm kiến thức đã đạt. Nó cũng chưa đo ảnh hưởng của bất định đối với dự báo, cập nhật trạng thái hoặc cách xếp hạng ứng viên.
+
+Bảng chỉ gồm những câu do hệ thống quyết định giao. Trong source Paper2, bộ chọn ưu tiên các khái niệm được đánh giá chưa thành thạo và ưu tiên điểm thành thạo thấp trong nhóm ứng viên. Do đó, quần thể được quan sát đã chịu ảnh hưởng của mô hình và chính sách. Bộ chọn còn có nhánh ôn tập cùng nhánh xử lý khi mọi khái niệm đã thành thạo, nên việc toàn bộ120 điểm ước lượng dưới ngưỡng vẫn là kết quả riêng của lịch sử này. Bảng chưa đánh giá trạng thái của toàn bộ28 khái niệm tại cùng những thời điểm. [E10b]
+
+### Năng lực ban đầu giới hạn điều có thể kết luận về học tập
+
+Kiểm lần xuất hiện đầu cho thấy cả22 khái niệm đã được phục vụ đều đạt tiêu chí latent ngay từ lần thực hành đầu tiên, trong khi điểm ước lượng khởi tạo bằng1200. Phân tích phương trình của phiên bản này cho thấy mức tăng latent không âm và forgetting kéo về mức nền ban đầu. Với các khái niệm có mức nền đã vượt ngưỡng, trạng thái tiếp tục nằm trên ngưỡng. Phát hiện về lần xuất hiện đầu là kiểm cơ chế hậu nghiệm trên lịch sử đã chọn. [E10c]
+
+Vì vậy, lịch sử này chưa cung cấp một lần chuyển latent từ chưa đạt sang đạt tại các khái niệm đã được phục vụ. Khác biệt giữa quyết định và latent cần được đọc cùng khởi tạo năng lực cao và cách chọn câu. Sáu khái niệm chưa xuất hiện cần bằng chứng riêng. Không gán kết quả của22 khái niệm này cho mọi hồ sơ PG, mọi seed hoặc toàn bộ28 khái niệm.
+
+### Đóng góp chẩn đoán và phần thực nghiệm còn thiếu
+
+E10 chỉ ra rằng đánh giá quyết định thành thạo cần kiểm soát cách chọn quần thể. Phép đánh giá chỉ lấy các câu hệ thống đang giao dễ tập trung vào những trạng thái mà chính mô hình đang coi là chưa đạt. Điều này có thể che khuất khả năng đánh giá những khái niệm khác và làm khó việc tách tác dụng của từng điều kiện trong quyết định.
+
+Bước tiếp theo được đề xuất là đối chiếu một tập khái niệm và thời điểm định trước, độc lập với câu được chọn, đồng thời giữ cả trạng thái ước lượng và latent tương ứng. Thiết kế đó cần được chốt trong hợp đồng thực nghiệm trước khi dùng làm đánh giá chính. Trong phép đối chiếu quyết định thành thạo với latent này, so sánh giữa các đồ thị, hiệu chỉnh xác suất, trạng thái khởi đầu thấp hơn và đánh giá kết quả học trên nhiều người học vẫn còn thiếu. Các đối chứng nguồn đồ thị ở E9 có phạm vi riêng. Một lịch sử với120 thời điểm tương quan chưa hoàn tất RQ1 hoặc RQ2 và chưa chứng minh lợi ích của graph.
+
+### Nguồn bổ sung E10
+
+- **E10a** dùng [summary của witness](../runs/rq1-observer03-cached-truth-20261109-01/cached02_child__summary.json), [120 bản ghi đã ghép](../runs/rq1-observer03-cached-truth-20261109-01/cached02_child__joined120.json) và [kiểm độc lập](../runs/rq1-observer03-cached-truth-20261109-01/observer03_truth120_independent_crosscheck01.json).
+- **E10b** dùng [review source và cách diễn giải mẫu](../runs/rq1-observer03-cached-truth-20261109-01/OBSERVER03_CACHED120_SELECTION_INTERPRETATION_REVIEW01.md), cùng [báo cáo chuyên đề](rq1_on_policy_mastery_witness_20261109.md).
+- **E10c** dùng first_visit_analysis trong kiểm độc lập và phương trình source được truy vết trong review. Phép kiểm đã đọc đủ14.400 hàng cache và CRC trước khi lấy120 hàng. Không cộng120 lượt hỏi vào số mẫu độc lập.
+
+Các mục trước E10 giữ nguyên byte. [Bundle viết E10](../runs/thesis-rq1-e10-writing-20261110-01/README.md) giữ before/after, kiểm các số liệu đã trích và nguồn bằng chứng. Việc viết không thực hiện thêm model/world call hoặc thay thiết kế thực nghiệm.

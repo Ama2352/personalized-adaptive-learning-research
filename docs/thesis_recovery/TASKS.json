@@ -5034,7 +5034,7 @@
         "RQ1"
       ],
       "workstream": "research_diagnosis",
-      "priority": "P0",
+      "priority": "P2",
       "owner": "Codex",
       "dependencies": [
         "RQDIAG20",
@@ -5064,7 +5064,8 @@
       "automatic_retry": false,
       "evidence_bundle_closed": true,
       "scientific_result_accepted": false,
-      "current_attempt_evidence": "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq1-cpu09-targeted-full-native02-outer/final.json"
+      "current_attempt_evidence": "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq1-cpu09-targeted-full-native02-outer/final.json",
+      "scheduling_decision_20261110": "Chưa chạy lại full14400selectedreadouts trước khi đóng estimand/quần thể cho chẩn đoán mastery. Witness120 đã cho thấy selectionconditioning, mở rộng cùng kiểu mẫu riêng lẻ chưa giải quyết vấn đề đó. Giữ requirement và failure lịch sử, không xóa hoặc gán completed."
     },
     {
       "id": "GRAPH27",
@@ -5651,10 +5652,10 @@
       "authorization_requirements": "Root đã review contract và từng boundedpure/cached operation theo quyền local củauser.",
       "status": "COMPLETED_FINITE_CACHED_WITNESS_NOT_GLOBAL_ACCURACY_OR_RQ_COMPLETE",
       "blockers": [
-        "Xuất bản canonical/humanreports còn ởWRITE06. FullRQDIAG23 chưa hoàn tất, panel độc lậpselector mới là đề xuất."
+        "Phạm vi witness đã hoàn tất. Global panel và full replay là các task riêng, không suy RQ complete."
       ],
       "completion_evidence": {
-        "status": "ACCEPTED_CACHED120_BUNDLE67_CLOSED_PUBLICATION_PENDING",
+        "status": "ACCEPTED_FINITE_WITNESS_PUBLICATION_AND_QA_COMPLETE",
         "bundle": "research_tracking/runs/rq1-observer03-cached-truth-20261109-01",
         "manifest_sha256": "592cc8560fd23fca313166b56fa0149b8f38f09b758c75b4e21805abd7f79b4f",
         "outputs": 67,
@@ -5686,7 +5687,7 @@
         "peak_worker_rss_bytes": 51486720,
         "report_draft": "artifacts/akt/local-tests/akt-research-runner-20261108-01/RQ1_OBSERVER03_TRUTH_WITNESS_REPORT_DRAFT01.md",
         "report_draft_sha256": "9e7dbde127deaabbccbb8f5e6fe7daa24214d3fc9276356abd86c9ebc7ff109d",
-        "canonical_and_two_human_reports_updated": false
+        "canonical_and_two_human_reports_updated": true
       }
     },
     {
@@ -5717,6 +5718,37 @@
       "compute_cost_category": "local_CPU_no_cloud",
       "authorization_requirements": "User đã yêu cầu cập nhật report khi có kết quả đáng kể, giữfigures/commit.",
       "status": "COMPLETED",
+      "blockers": []
+    },
+    {
+      "id": "WRITE07",
+      "rq": [
+        "RQ1",
+        "RQ2"
+      ],
+      "workstream": "thesis_writing",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RQDIAG30",
+        "WRITE06"
+      ],
+      "research_objective": "Đưa chẩn đoán on-policy mastery và initialization vào bản thảo luận văn.",
+      "required_inputs": "Witness120 đã đóng và crosscheck độc lập, source interpretation review.",
+      "files_components": [
+        "research_tracking/reports/THESIS_RQ1_MECHANISMS_DRAFT_20261109.md"
+      ],
+      "implementation_objective": "Nối E10 sau E9, giữ prefix52432bytes; làm rõ120lượt/22khái niệm trong báo cáo hiện hành.",
+      "acceptance_criteria": "Các số120/22/1/0 có nguồn JSON, prefix cũ nguyên byte, giới hạn selector/initialability/uncertainty rõ. Không RQ completion.",
+      "verification_steps": "Đối chiếu summary/crosscheck, SHA before/after và source review, independent prose review trước commit.",
+      "required_artifacts": [
+        "research_tracking/runs/thesis-rq1-e10-writing-20261110-01",
+        "research_tracking/runs/thesis-rq1-e10-review-20261110-01"
+      ],
+      "estimated_work": "Effort chưa đo riêng, không model/world calls.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "User giao viết luận văn và lưu bằng chứng, không đổi phương pháp.",
+      "status": "COMPLETED_WRITING_FROM_CLOSED_EVIDENCE",
       "blockers": []
     }
   ],

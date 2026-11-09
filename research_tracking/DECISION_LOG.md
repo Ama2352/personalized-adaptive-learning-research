@@ -30,3 +30,8 @@ User chấp thuận pilot factorial10seed/profile×120steps và Junyi32inner-tra
 Root chọn recipe29 theo quyền triển khai người dùng đã giao. GKT static-expert dùng domain28, hidden/embedding32, MLP hai lớp ELU với dropout0,5 và batch normalization. Batch4, whole-prefix210 và normalization theo timestep là các lựa chọn triển khai của khóa luận, được công bố trước fit. Chưa xác minh tương đương code tác giả. Thiết kế C0 được giữ như phương án engineering đã cân nhắc. [Đặc tả và nguồn sơ cấp](../docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md)
 
 Model, trainer, checkpoint, admitted producer và adapter là các bước riêng. Data bridge đã đạt20tests, còn model candidate mới ở bước review source. Quyết định này chốt công thức để triển khai, chưa là bằng chứng baseline fitted hoặc quyền chạy research training. Giữ nguyên RQ, model bắt buộc, protocol21, nhánh AKT và ngân sách cloud. Các phép kiểm native cần allocation riêng.
+
+
+## DEC-PRIORITY-20261110 — giảm chạy lại chẩn đoán chưa đúng quần thể
+
+Root hạ ưu tiên RQDIAG23fullreplay sangP2 từ witness120 và review selection. Giữ nguyên task, failure và protocol chưa hoàn tất. Mở rộng14400readouts của các câu policy chọn riêng lẻ chưa cho globalmasteryaccuracy. Đây là thay thứ tự công việc trong quyền engineering, không đổi split/model/estimand đã duyệt, không bỏ baseline hoặc tự áp dụng panel mới. Nguồn là witness120, Chặng14 và E10. ActualRQ2replication/GKT/AKT acceptance vẫn cần resource guard trước dispatch.

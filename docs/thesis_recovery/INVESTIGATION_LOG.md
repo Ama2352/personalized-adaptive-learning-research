@@ -1015,3 +1015,10 @@ Collection05 timeout và cleanup Job0 được giữ. Sau khi tắt preview, col
 ## 09/11 — Chặng14 đã nghiệm thu desktop và mobile
 
 Lượt capture mới tắt smooth scrolling trong browser, Root đã đọc hai ảnh viewport390. Bảng không đè số, không tràn ngang. WRITE06 đã đóng. [Ảnh và QA](../../research_tracking/runs/supervisor-witness-mobile-qa-20261109-02/README.md) giữ nguyên bản và nguồnHTML tham chiếu. Preview/tab riêng đã đóng, không tăng mẫu nghiên cứu.
+
+
+## 10/11 — E10 nối chẩn đoán thành thạo vào bản thảo
+
+[Bundle viết E10](../../research_tracking/runs/thesis-rq1-e10-writing-20261110-01/README.md) giữ before/after, source map và prefix52432bytes nguyên.120lượt hỏi trên22khái niệm của một lịch sử được làm rõ trong technicalreport và hai fileGVHD. Không thêmN/modelcall. Fullselectedreplay RQDIAG23 giữ chưa hoàn tất nhưng xuốngP2 vì mở rộng cùng mẫu policy-chọn chưa giải quyết selectionconditioning. Ưu tiên review estimand/panel và actualRQ2recovery khiRAMđủ. Không áp dụng phương pháp mới.
+
+Review E10 scopedPASS đã áp dụng hai làm rõ, nêu seed/worldλ0 và giới hạn phần graphcomparison còn thiếu trong witness này. Giữ E9contrast và prefix52432bytes. WRITE07 hoàn tất, không thêmN hoặcmodelcall.

@@ -4,9 +4,9 @@ Ngày 09/11/2026. Phân tích mô tả trên một lịch sử dùng lại, khô
 
 Paper2 dùng dự báo đáp án để cập nhật trạng thái kiến thức, rồi dựa vào trạng thái đó để quyết định khái niệm nào đã thành thạo. Sau các phép kiểm đường đi, nhóm quay lại câu hỏi nền của RQ1. Quyết định thành thạo có phản ánh trạng thái thật trong simulator tại các câu đang được giao hay không?
 
-Nhóm dùng lại nhật ký đã kiểm của một lịch sử thuộc hồ sơ năng lực cao PG, gồm 120 lượt hỏi trước khi cập nhật bằng đáp án hiện tại. Hai đường đưa tín hiệu và điều chỉnh theo cha vào bộ ước lượng được tắt, điều chỉnh cục bộ được tắt. Bộ chọn bài vẫn giữ đồ thị tiên quyết. Các bản ghi được ghép chính xác theo câu hỏi, khái niệm, dự báo và lịch thời gian với trạng thái thật đã lưu của simulator.
+Nhóm dùng lại nhật ký đã kiểm của một lịch sử thuộc hồ sơ năng lực cao PG, gồm 120 lượt hỏi trước khi cập nhật bằng đáp án hiện tại. Hai đường đưa tín hiệu và điều chỉnh theo cha vào bộ ước lượng được tắt, điều chỉnh cục bộ được tắt. Bộ chọn bài vẫn giữ đồ thị tiên quyết. Cơ chế phạt do thiếu tiên quyết trong thế giới mô phỏng được tắt. Các bản ghi được ghép chính xác theo câu hỏi, khái niệm, dự báo và lịch thời gian với trạng thái thật đã lưu của simulator.
 
-Theo quy tắc Paper2, mô hình công nhận thành thạo khi điểm kiến thức ước lượng đạt 1250 và điều kiện về bất định cùng đạt. Phép đối chiếu dùng tiêu chí latent của simulator tại cùng ngưỡng 1250. Cả 120 khái niệm đang được hỏi đều đạt tiêu chí latent, trong khi điểm ước lượng ở những thời điểm đó đều dưới ngưỡng. Số lượt có điểm ước lượng đạt để xét vai trò chặn bổ sung của điều kiện bất định bằng 0.
+Theo quy tắc Paper2, mô hình công nhận thành thạo khi điểm kiến thức ước lượng đạt 1250 và điều kiện về bất định cùng đạt. Phép đối chiếu dùng tiêu chí latent của simulator tại cùng ngưỡng 1250. Trong cả 120 lượt hỏi trên 22 khái niệm riêng biệt, khái niệm đang hỏi đều đạt tiêu chí latent, trong khi điểm ước lượng ở những thời điểm đó đều dưới ngưỡng. Số lượt có điểm ước lượng đạt để xét vai trò chặn bổ sung của điều kiện bất định bằng 0.
 
 | Đánh giá của mô hình tại câu được hỏi | Simulator chưa đạt ngưỡng | Simulator đạt ngưỡng |
 |---|---:|---:|
