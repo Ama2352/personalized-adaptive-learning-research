@@ -143,3 +143,7 @@ Profile có phiên bản nằm trong [quyết định28](thesis_recovery/28_CUDA
 ## Figure phục vụ luận văn
 
 [Mục lục11SVG độc lập](../research_tracking/runs/supervisor-figures-20261109-01/figure_index.md) giữ hình nguyên byte từ bản HTML đã QA, kèm chú thích và nguồn xuất. Đây là bộ hình của snapshot chặng11. Các figure mới hoặc sửa tiếp tục lưu phiên bản theo run, cùng dữ liệu hoặc tham chiếu số liệu và cách dựng. Ảnh chụp gốc giữ trong bundle QA, không render hoặc copy lại vào mọi bộ hình.
+
+### Prospective domain28 đã kiểm tích hợp
+
+[Báo cáo](../research_tracking/reports/paper1_seeded_domain_smoke_readiness_20261109.md) và [bundle28](../research_tracking/runs/paper1-seeded-domain-smoke-engineering-20261109-01/README.md) giữ actual hai episode US/seed42. Output gốc ở experiments/simulator/results theo [vai trò](../experiments/simulator/README.md). Đã có344feedback,172mỗi nhánh, không matrix nghiên cứu hoặc suy ưu thế graph.

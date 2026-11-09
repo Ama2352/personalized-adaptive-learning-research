@@ -911,3 +911,8 @@ Commit4492501 giữ failure CPU09full02. Commitdc3287a đóng gói kết quả m
 ## 09/11 — lưu figure độc lập theo yêu cầu người dùng
 
 Đã tách11SVG nguyên byte từ HTML snapshot QA19, đóng20outputs với manifest9fff53c8…6594758. Giữ đủ title/desc/caption và source byte offsets/SHA; mười hình đầu trùng snapshot trước. Không vẽ lại hoặc tính số mới. Quy ước AGENTS và bản đồ repository yêu cầu lưu các figure tiếp theo cùng dữ liệu hoặc nguồn số và cách dựng, giữ nguyên ảnh gốc và các bundle đã đóng. Chưa tăng raw Git counter trước khi commit và kiểm blob.
+
+
+## 09/11 — hai episode Paper1 trên miền28 đã được nghiệm thu
+
+Một prepare14.028events, hai continuity episodes B1/GA,344feedback tổng/172mỗi nhánh, select346. B1switch2/reentry0, GAswitch4/reentry2, cùng terminal latent identity và28estimated mastered. Actualwhole1,1570007s/35,33pins trước=sau, family peak72.155.136B, min free2.028.568.576B và Job0. Bundle28manifesta12e409b…da85131 giữ đủ10scientificoutputs/raw. Có README cho experiments/simulator. Hai báo cáo người đọc cập nhật prose, kiểm tĩnh anchors và giữ11SVG nguyên byte, chưa render prose mới. C8metadata01–04 vẫn0testbodies,05NO_GO RAM trước ownedlaunch. Fresh owned pycache prefix05 chỉ mới chuẩn bị, chưa chạy child. Tiếp theo kiểm chứng điều kiện concept-local invariance và finite-horizon/cap boundaries bằng bounded stdlib fixtures.

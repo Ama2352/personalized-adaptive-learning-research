@@ -304,3 +304,5 @@ Gate21 chỉ chạy `tests/akt tests/shared_kt`; các số139SAKT và38Graph-GAM
 - [Fullcached CPU09 launcher dừng02](../runs/rq1-cpu09-native-mastery-20261109-02/report.md) là hồ sơ vận hành28outputs đã đóng, nguyên nhân chưa xác định. Chưa có kết quả nghiên cứu mới.
 
 - [Bộ figure chặng11](../runs/supervisor-figures-20261109-01/figure_index.md) là hồ sơ trình bày gồm11SVG và metadata, tách khỏi kết quả nghiên cứu. HTML và screenshot nguồn giữ nguyên.
+
+- [Kiểm tích hợp domain28 Paper1](paper1_seeded_domain_smoke_readiness_20261109.md) là engineering witness một cặp US/seed42, đã đóng28outputs. Không là tái lập số lịch sử hoặc benchmark graph.

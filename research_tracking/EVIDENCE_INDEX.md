@@ -376,3 +376,5 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 - [Kiểm raw Git gói masking và lịch sử failure](../docs/thesis_recovery/evidence/masking_package_raw_git_20261109.json) đối chiếu117files trên dc3287a. Có106outputs/4manifests của bốn bundle và7file nguồn/báo cáo; không quy thành số thí nghiệm hoặc tiến độ RQ. Các artifact lớn vẫn giữ local, cloud backup chưa được xác minh.
 
 - [Figure báo cáo chặng11](runs/supervisor-figures-20261109-01/figure_index.md) gồm11SVG độc lập,20outputs đã đóng. Tách nguyên byte từ HTML đã QA; mười hình cũ giữ nguyên. Có title/desc/caption, nhãn và vị trí trong nguồn, không thêm mẫu nghiên cứu hoặc tự gán dataset cho từng hình.
+
+- [Paper1 domain28](reports/paper1_seeded_domain_smoke_readiness_20261109.md), [bundle28](runs/paper1-seeded-domain-smoke-engineering-20261109-01/README.md). Actual một profile/tape, hai continuity episodes B1/GA,172feedback mỗi nhánh, re-entry0/2. 33pins giữ nguyên, family peak72.155.136B/Job0; chưa matrix hoặc hiệu quả học tập.
