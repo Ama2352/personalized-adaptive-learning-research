@@ -834,3 +834,8 @@ Theo xác nhận trực tiếp của tác giả ngày09/11, notebook Paper1 là 
 ## 09/11 — đóng gói lượt selected-only A0 nhỏ đã đạt
 
 Root kiểm dry94copies+9generated, sau đó đóng và verify103outputs. Manifest2c58d088d54cfd5332f01c80aa3ddfae265970b026daef5d89267d2c4d161164. Actual7epochs/best4/14Adam/84export, giữ lỗi prelaunch và derivative. Không chạy lại training khi đóng gói. Báo cáo HTML và Markdown đã cập nhật ở commitbf29d55. Linux/CUDA và so sánh các mô hình còn thiếu.
+
+
+## 09/11 — raw reference-mixture cached đã đạt
+
+Root chạy pure01 gồm7PASS/1FAIL do known-answer float ULP, giữ source trước sửa. Test-only tolerance sửa đúng một assertion, wire admission giữ exact. Pure02 đạt8ca. Actual cached outer đạt1,5012412giây, toolwall2,0847346giây dưới10giây, helper8/cleanup2 vàJob0. Đủ2160arm/1080queryY/18CRC. Independent Decimal50digits kiểm32views/480bins/64strata trong0,0607666giây. Bundle42outputs đã đóng, manifest1d85675a7d9d5b5215298ea21bdddd457473f6145263dc4b5ff24560480348ac. Báo cáo người đọc thêm Chặng9 và giải thích đối tượng response-mixture. Không thêm mẫu, masterytruth hoặc fit mới.

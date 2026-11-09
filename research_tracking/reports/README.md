@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**RQ1 — điểm tổng hợp ba câu tham chiếu trên dòng dữ liệu chung.** [Kết quả và nguồn](rq1_reference_mixture_reliability_20261109.md), [bundle42outputs](../runs/rq1-reference-mixture-reliability-20261109-01/README.md). Giữ2160arm rows/1080query–Y/3seed blocks, kiểm Decimal đủ32views/480bins/64strata. Sai lệch khác chiều giữa hồ sơ còn tồn tại, chưa kết luận native mastery truth.
+
 **Paper1 PDF — primitives riêng.** [26kiểm kỹ thuật](paper1_pdf_primitives_readiness_20261109.md), [bundle25outputs](../runs/paper1-pdf-primitives-engineering-20261109-01/README.md). Tách world/Elo/controller, giữ nguồn lịch sử. Chưa là thí nghiệm đầy đủ hoặc kết quả RQ mới.
 
 **AKT A0 — selected-only đã thực chạy ngày09/11.** [Hồ sơ lượt CPU nhỏ](akt_main_tiny_a0_selected_engineering_20261109.md), [bundle103outputs](../runs/akt-main-tiny-a0-selected-engineering-20261109-01/README.md). Hoàn tất7epochs, chọn best4,14Adam/4.704targets, fresh reload và84raw exports. Giữ failure prelaunch01. Corpus kiểm tích hợp10×84, chưa so sánh nghiên cứu hoặc kiểm CUDA.

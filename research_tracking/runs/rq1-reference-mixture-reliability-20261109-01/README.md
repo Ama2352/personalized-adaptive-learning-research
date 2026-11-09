@@ -1,0 +1,3 @@
+# RQ1 — Reliability của raw reference-mixture response
+
+Đọc lại2160arm rows/1080query-response của9fixed trajectories,3seedfamilies cũ. Mỗi arm dùng một y cho một mean3forecast, không ba reference labels. Giữ32views/480bins/64strata; pooled/profile/seed khác nhau. Pure01 7PASS/1known-answer roundingFAIL và pure02 8PASS được giữ riêng. ROOTcachedouter accepted/Job0, independent Decimalcheck đủmọi cells. Không chạy policy, oracle, teacher, fit hoặc thêm N. Không masterytruth/calibrator/causalbenefit. Các gzip cũ tham chiếu SHA, không copy lại. Manifest xác nhận closure thực tế. Báo cáo tại ../../reports/rq1_reference_mixture_reliability_20261109.md.

@@ -1,0 +1,91 @@
+{
+  "kind": "PROSPECTIVE_POSTHOC_CACHED_REFERENCE_MIXTURE_RESPONSE_DIAGNOSTIC",
+  "status": "SOURCE_ONLY_AWAITING_ROOT_REVIEW_AND_EXECUTION",
+  "source_sha256": "52ee0f409ad6752a3413e18565e31b95908dec57574739a8f76fe5aa01121b43",
+  "test_source_sha256": "59c1aec7ccf34611433ad3f2cea1bcc3d08e2782656d3f9689b707b44f9f110c",
+  "native_outer_sha256": "81cf9dd9df724338d6c8d57e01be16b5d2120d27b9730c186b5eb539803e4594",
+  "closed_trace_manifest_sha256": "a45099f30ab6d4e239275fae6e40cf174b2dcac615fcb55a6e2b9d79f0c35ae3",
+  "closed_fixed_stream_manifest_sha256": "906d1698482b78708cf16ce9453a8ed866e7dc0ef47cf0b8dca81c2d89b7b044",
+  "bins": 15,
+  "threshold": 0.5637150147511514,
+  "question_vi": "Forecast trung bình ba reference trước đáp án khớp tần suất đúng đã ghi tới đâu, trong từng profile/seed/trajectory và hai graph-package arms của cùng fixed history? Đây là target response-mixture theo logger, không phải truth của native mastery.",
+  "source_proof_before_implementation": {
+    "historical_runner": {
+      "path": "research_tracking/runs/rq1-fixed-edge-set-contrast-20261108-01/historical_runner.py",
+      "sha256": "402dca905694d850f126e41f3b5dcc91b327e986ae2cfbb240dda739eed8dd45",
+      "lines": "62-73,74-99",
+      "finding_vi": "RNG(seed) lấy uniform cho environment trước vòng lặp. qid=items[int(rng.integers(len(items)))] lấy từ danh sách cố định, không gọi selector, không nhận estimator hoặc latent state. Environment tạo một y cho query này rồi từng policy predict/record trước update(y). Query và outcome được dùng chung giữa arms. Các RNG streams tái dùng theo seed nên các profile/arm/event không là observations độc lập."
+    },
+    "reference_loader": {
+      "path": "research_tracking/runs/rq1-fixed-edge-set-contrast-20261108-01/source__paper2_reference.py",
+      "sha256": "a12edc72a00ad980799ec50ff26f0cb68f2529e3699e8a57e4f11295693c2cd1",
+      "lines": "53-78",
+      "finding_vi": "questions_by_concept dùng toàn bộ CSV theo concept, sort difficulty/question_id, không lọc bằng state. Metadata đã đọc cho thấy 84 rows,84uniqueqid,28concepts. Analyzer sẽ assert đủ ba reference1050/1200/1350 cho mỗi concept. Do đó logging uniform84item cho conditional D|concept là uniform3 theo thiết kế, không yêu cầu finite realized counts cân bằng."
+    },
+    "frozen_state_capture": {
+      "path": "research_tracking/runs/rq1-prediction-mastery-trace-20261109-01/prediction_mastery_trace_worker03.py",
+      "sha256": "fc067d67ebc9018722aa66367fc186fe4a10e0f0b112475372f8024d4d74d631",
+      "lines": "73-104,370-398",
+      "finding_vi": "capture không nhận y, currentP được dùng lại cho reference hiện tại, hai reference còn lại predict trên clone cùng fingerprint. Original/clone fingerprint không đổi sau readouts. Mean3 theo thứ tự references cố định là function của arm-specific past state/concept/timestamp, không dùng current label. Main run đã admit2160legacy/currentP/S28/M/R/fullpreview và18initial/finalfingerprints. Cache analysis không gọi lại các hàm này."
+    },
+    "target_equation": "mu(H,C,t)=(p_teacher(H,C,1050,t)+p_teacher(H,C,1200,t)+p_teacher(H,C,1350,t))/3; source-design E[Y|H,C,t]=mu(H,C,t) under uniform item logging. The raw estimator forecast is q_arm(H,C,t)=mean_j raw_predict_arm(reference_j). No teacher probability is read or computed here.",
+    "conditioning_vi": "H là toàn bộ pre-current history và các state liên quan, C là concept được logger chọn. Kỳ vọng mixture là lập luận từ source sampling, không phải chứng minh finite PRNG draws độc lập, empirical uniformity hoặc correctness của simulator. Phép ghép dùng cùng history/query/y giữa full/empty nhưng state của hai estimator có thể khác."
+  },
+  "population": {
+    "seeds": [20000, 20001, 20002],
+    "profiles": ["PG", "PY", "PYH"],
+    "variants": ["graph_package", "empty_graph_package"],
+    "events_per_trajectory": 120,
+    "paired_trajectories": 9,
+    "arm_trajectories": 18,
+    "unique_query_responses": 1080,
+    "arm_rows": 2160,
+    "response_use": "Mỗi arm-row dùng một y cho một mean3 forecast. Cùng1080y tái dùng để đánh giá hai arms; không biến y thành3labels và không coi2160rows hay3seedfamilies là independent new N.",
+    "partition": "16groups=pooled1+profiles3+seeds3+trajectories9, ×2variants=32views; mỗi view đủ15bins và2threshold strata kể cả rỗng/null. Tất cả signs/cells được giữ, không bin search/subsetting theo kết quả.",
+    "new_independent_N": 0
+  },
+  "admission": [
+    "Pinned committed manifests trước parsing; outer accepted native03, ownedaccepted/cleanup/Job0, run source before=after; original2160legacy/18endpoint admissions và frozen validation.",
+    "18complete gzip streams vàCRC,120events mỗi trajectory; exact2160arm keys/1080fullquery/time/y pairs, no intersection/drop/duplicate; C13 current-label pairing và before-update capture.",
+    "Exact raw-reference qids/difficulties của queriedconcept; currentqid có trong3refs, current-reference P bằng cachedcurrentP; mean3 và fixedcriterion exact; originalbank84uniqueitems/28concepts×3.",
+    "Native03 initial/final fingerprints là inherited accepted admission. Cached analysis tự kiểm query/P/fullpreview/legacy binding; không tuyên bố chạy lại nativeS/M/ready hoặc lấy thêm state.",
+    "SHA toàn bộ selected inputs/source trước và sau đọc, bounded gzip/read/output/deadline, clean exit cùng ROOTownedcleanup. Pending result.json sau time breach không được coi accepted."
+  ],
+  "metrics": {
+    "frozen_reporting_source_path": "artifacts/akt/local-tests/akt-research-runner-20261108-01/analyze_rq1_response_reliability01.py",
+    "frozen_reporting_source_sha256": "baf5e6a73e3fca66d04f9d8199e9c4174565f2a19d82c9ce2e8eeaef955545a0",
+    "bin_formula": "min(int(q*15),14); [i/15,(i+1)/15), final right inclusive",
+    "means": "math.fsum values / n; empty means/gaps=null",
+    "signed_gap": "mean_prediction - mean_correct",
+    "ece": "sum_bin(n_bin/n_view * abs(signed_gap_bin)); plug-in empirical response reliability only",
+    "threshold_strata": "q<tau versus q>=tau; counts,meanq,meanY,signedgap. No mastery FPR/FNR/accuracy.",
+    "logging_coverage": "Actual difficulty counts1050/1200/1350 per view, no reweighting/balancing/stratum deletion."
+  },
+  "limits_vi": [
+    "Không là latent masterytruth, pi calibration, calibrated V1/Tfit, hoặc evidence calibrated predictor đã fitted.",
+    "Binning/threshold strata mô tả raw response-mixture forecast. Concept/profile/time/history hỗn hợp và hữu hạn có thể ảnh hưởng pooled ECE; không bootstrap/CI/pvalue/generalization.",
+    "Không so ECE mixture với item-conditional P như cùng target; không thay các existing current-item response reliability results.",
+    "Full/empty là graph-information conditional package, tác động qua update pathways; không individual-edge quality/causal mediation/teaching benefit. Preview không là served action.",
+    "Native05 lane vẫn STOP sau5attempts. Không dùng partial outputs, không infer masterytruth, không replay/thêm teacher/RNG/optimizer calls."
+  ],
+  "outputs": ["summary.json", "joined_rows.jsonl", "validation.json", "result.json"],
+  "resource": {
+    "root_outer_whole_seconds": 10,
+    "owned_cleanup_reserve_seconds": 2,
+    "worker_seconds_including_gate_and_final_checks": 7,
+    "input_compressed_and_metadata_bytes": 12582912,
+    "single_input_bytes": 4194304,
+    "total_decompressed_bytes": 41943040,
+    "single_jsonl_line_bytes": 65536,
+    "output_total_payload_bytes": 4194304,
+    "native_model_teacher_optimizer_calls": 0,
+    "policy": "ROOTowned launcher only, exclusive output, no retry on cap. CPU stdlib; no imports Torch/NumPy/pandas/knowledge_tracing; audit denies network/Popen/oracle/corpus/Holdout. Không hardkill hoặc peakRAM guarantee từ cooperative worker checks."
+  },
+  "fixtures": {
+    "unittest_methods": 8,
+    "scope": "Manufactured data only; boundary bins/tau/empty/cancellation/weightedECE/invalidwire/mean3 join/singleY/duplicate+tampers/bank mixture/full32groups. Không đọc cache/model/source bằng testhelpers.",
+    "execution": "ROOT reviews source rồi chọn owned pure8 capture riêng. Agent chưa chạy/import/compile/test."
+  },
+  "proposed_child_cli": ".venv/Scripts/python.exe -B artifacts/akt/local-tests/akt-research-runner-20261108-01/analyze_rq1_reference_mixture01.py --source-sha256 <source_sha256> --contract-sha256 <actual_contract_sha256> --outer-sha256 81cf9dd9df724338d6c8d57e01be16b5d2120d27b9730c186b5eb539803e4594 --output-name reference-mixture-cached-attempt01",
+  "report": "Chưa tạo report/findings. Chỉ sau actual ROOTaccepted outputs và independent source/numeric review mới viết kết quả."
+}

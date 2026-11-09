@@ -46,6 +46,12 @@ Mốc này xác nhận đường đi dữ liệu → huấn luyện → chọn c
 
 Song song, nhóm đã cài các quy tắc world, ước lượng Elo và bộ chọn bài trong một phiên bản mô phỏng riêng theo PDF Paper 1. Có 26 kiểm thử nhỏ đã đạt cho các quy tắc này. Còn phải nối dữ liệu đầu vào, hồ sơ người học, cơ chế ngẫu nhiên và các chính sách so sánh trước khi chạy thí nghiệm đầy đủ. Kết quả hiện tại là kiểm phần mềm, chưa bổ sung kết luận về hiệu quả đồ thị.
 
+**Kiểm tiếp điểm tổng hợp trên cùng lịch sử.** Ở các chặng trước, nhóm đã đọc xác suất trung bình của ba câu tham chiếu để theo dõi một tiêu chí gắn với quyết định. Trước khi dùng điểm này để đánh giá thành thạo, cần biết nó có phù hợp với đáp án hay không. Nhóm kiểm lại trên 1.080 tình huống cũ, nơi câu hỏi được lấy ngẫu nhiên đều từ bộ câu cố định và hai cấu hình nhận cùng lịch sử, câu hỏi, đáp án. Mỗi khái niệm có ba câu tham chiếu, nên trung bình ba dự báo có thể được đánh giá như dự báo cho một câu lấy ngẫu nhiên trong nhóm đó.
+
+Điểm tổng hợp vẫn thấp hơn tỷ lệ đúng ở PG và cao hơn ở PY/PYH. Để kiểm độ phù hợp của xác suất, nhóm gom dự báo vào 15 khoảng cố định, so dự báo trung bình với tỷ lệ đúng trong từng khoảng và tổng hợp độ lệch theo số lượt. Độ lệch tính gộp khoảng 4,3 điểm phần trăm, trong khi ở PG khoảng 26 điểm phần trăm. Như vậy, hiện tượng gộp nhóm che sai lệch còn xuất hiện ở điểm đọc từ ba câu tham chiếu, trên phép so đã giữ chung dòng dữ liệu. Nhận đủ cạnh làm sai lệch nhỏ hơn ở PY/PYH nhưng lớn hơn ở PG; chưa có một chiều cải thiện ổn định.
+
+Phép kiểm dùng lại ba khối ngẫu nhiên với chín lịch sử hồ sơ, không thêm người học hoặc mẫu độc lập. Mỗi đáp án được dùng một lần cho mỗi cấu hình. Kết quả mới đánh giá sự phù hợp với đáp án của điểm tổng hợp; độ đúng của đánh giá thành thạo so với trạng thái thật và tác động lên học tập còn phải kiểm riêng.
+
 ## Còn phải chứng minh
 
 - **RQ1:** đánh giá độ đúng của quyết định thành thạo, hiệu chỉnh xác suất và vai trò chính sách; nối chẩn đoán nội bộ đã có với kết quả học tập.

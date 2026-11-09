@@ -1,5 +1,12 @@
 # Ma trận claim–evidence
 
+## Bổ sung09/11 — raw reference-mixture trên cùng logged stream
+
+CLM-RQ1-REFMIX-20261109. Sai lệch khác chiều theo PG/PY/PYH còn xuất hiện khi kiểm raw mean của ba câu tham chiếu trên cùng lịch sử, câu hỏi và đáp án. ECE15 pooled full/empty0,043185/0,042526, PG0,263534/0,261267, PY0,131945/0,137415 vàPYH0,069198/0,075091. Mỗi arm dùng một Y cho một mean3forecast dưới source-design logger uniform84items. [Báo cáo](reports/rq1_reference_mixture_reliability_20261109.md), [manifest42outputs](runs/rq1-reference-mixture-reliability-20261109-01/manifest.json).
+
+Phạm vi gồm1080query–Y từ9paired trajectories/3seedfamilies cũ,2160arm rows và0newindependentN. Decimal50digits đã kiểm mọi480bins/64strata. Chỉ response-mixture reliability hậu nghiệm, chưa masterytruth/calibrator hoặc causal learning benefit.
+
+
 ## Nhận định được cập nhật08/11 — tách diagnostic, corpus và trình bày
 
 Các câu “chưa có result” trong snapshot cũ phía sau phải đọc theo thời điểm ghi; bảng mới này bổ sung kết quả hữu hạn, **không đóng RQ1/RQ2/RQ3 hoặc thay C01–C14**. [Báo cáo GVHD theo ngày](supervisor_reports/2026-11-08/01_tien_do/BAO_CAO.md) là bản đọc; số liệu gốc vẫn ở các bundles.

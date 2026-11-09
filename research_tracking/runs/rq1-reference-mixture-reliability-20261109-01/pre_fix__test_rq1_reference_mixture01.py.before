@@ -1,0 +1,132 @@
+"""Tám manufactured stdlib fixtures. Không đọc cache, model hoặc oracle."""
+import copy
+import hashlib
+import json
+import math
+import unittest
+
+import analyze_rq1_reference_mixture01 as analysis
+
+
+def sample():
+    query = dict(concept='c', question='q1', difficulty=1050., timestamp_iso='2026-01-01T06:00:00+00:00', timestamp_ns=1)
+    preview = dict(concept='z', question='z1', difficulty=1200.)
+    legacy = dict(variant='graph_package', learner_id='20000-PG', event_id='0', correct=1,
+                  probability=.2, action='z', ready=['z'], mastered=[], mastery={'c': .4})
+    digest = hashlib.sha256(analysis.canonical(legacy)).hexdigest()
+    refs = [dict(question='q1', difficulty=1050., probability=.2),
+            dict(question='q2', difficulty=1200., probability=.6),
+            dict(question='q3', difficulty=1350., probability=.9)]
+    mean = sum(r['probability'] for r in refs) / 3
+    native = dict(seed=20000, profile='PG', event_id='0', variant='graph_package', query=query,
+                  probability=.2, legacy_row_sha256=digest, full_preview=preview,
+                  phase='PRE_CURRENT_UPDATE_NO_LABEL_IN_CAPTURE', frozen_state_sha256='a' * 64,
+                  raw_references=refs, raw_reference_mean=mean, raw_reference_criterion=mean >= analysis.TAU)
+    side = dict(query=query, probability=.2, correct=1, preview=preview, legacy_row_sha256=digest,
+                update_pairing_verified=True, query_capture_phase='before_delegate_predict',
+                preview_is_served=False, preview_capture_phase='after_native_preview_select')
+    bank = {'c': {'q1': 1050., 'q2': 1200., 'q3': 1350.}}
+    return native, legacy, side, bank
+
+
+class ReferenceMixtureTests(unittest.TestCase):
+    def test_bin_endpoints_threshold_and_no_reference_label_expansion(self):
+        rows = [dict(prediction=p, y=y) for p, y in ((0., 0), (1., 1), (1 / 15, 1), (analysis.TAU, 0))]
+        result = analysis.reliability(rows)
+        self.assertEqual(result['rows'], 4)
+        self.assertEqual(sum(b['rows'] for b in result['bins']), 4)
+        self.assertEqual(result['bins'][0]['rows'], 1)
+        self.assertEqual(result['bins'][1]['rows'], 1)
+        self.assertEqual(result['bins'][14]['rows'], 1)
+        self.assertEqual([r['rows'] for r in result['threshold_strata']], [2, 2])
+        self.assertTrue(result['bins'][14]['right_inclusive'])
+
+    def test_empty_cells_are_retained_with_null_means(self):
+        result = analysis.reliability([])
+        self.assertEqual(len(result['bins']), 15)
+        self.assertEqual(len(result['threshold_strata']), 2)
+        self.assertIsNone(result['ordinary_ece15'])
+        self.assertTrue(all(b['rows'] == 0 and b['mean_prediction'] is None
+                            and b['empirical_signed_gap'] is None for b in result['bins']))
+
+    def test_signed_gap_and_response_weighting_known_answer(self):
+        # Hai bin có dấu ngược nhau. Signed gap tổng bằng 0 không làm ECE bằng 0.
+        result = analysis.reliability([dict(prediction=.25, y=0), dict(prediction=.75, y=1)])
+        self.assertAlmostEqual(result['ordinary_ece15'], .25, delta=1e-15)
+        self.assertAlmostEqual(sum(b['rows'] * b['empirical_signed_gap']
+                                   for b in result['bins'] if b['rows']), 0., delta=1e-15)
+        weighted = analysis.reliability([dict(prediction=.25, y=0)] * 3 + [dict(prediction=.75, y=0)])
+        self.assertAlmostEqual(weighted['ordinary_ece15'], .375, delta=1e-15)
+
+    def test_invalid_probability_and_label_rejected(self):
+        for p in (True, float('nan'), float('inf'), -.01, 1.01):
+            with self.subTest(prediction=repr(p)), self.assertRaises(ValueError):
+                analysis.reliability([dict(prediction=p, y=0)])
+        for y in (True, .5, 1., 2):
+            with self.subTest(label=repr(y)), self.assertRaises(ValueError):
+                analysis.reliability([dict(prediction=.5, y=y)])
+
+    def test_exact_join_one_response_mean_and_input_immutability(self):
+        native, legacy, side, bank = sample()
+        before = analysis.canonical([native, legacy, side, bank])
+        row = analysis.joined_row(native, legacy, side, bank)
+        self.assertEqual(row['y'], 1)
+        self.assertEqual(row['prediction'], (.2 + .6 + .9) / 3)
+        self.assertEqual(set(row), {'seed', 'profile', 'event_id', 'variant', 'query', 'prediction', 'y',
+                                    'raw_reference_criterion', 'current_item_probability'})
+        self.assertEqual(analysis.canonical([native, legacy, side, bank]), before)
+        self.assertEqual(analysis.reliability([row])['rows'], 1)
+
+    def test_join_tampering_duplicate_and_wire_controls(self):
+        mutations = [
+            lambda n, l, s, b: n['query'].update(question='q2'),
+            lambda n, l, s, b: s.update(correct=0),
+            lambda n, l, s, b: n.update(probability=.3),
+            lambda n, l, s, b: n.update(raw_reference_mean=.5),
+            lambda n, l, s, b: n.update(phase='AFTER_UPDATE'),
+            lambda n, l, s, b: n['raw_references'][1].update(question='q1'),
+            lambda n, l, s, b: s.update(update_pairing_verified=False),
+            lambda n, l, s, b: n.update(raw_reference_criterion=1),
+        ]
+        for index, mutate in enumerate(mutations):
+            with self.subTest(mutation=index), self.assertRaises(ValueError):
+                args = copy.deepcopy(sample())
+                mutate(*args)
+                analysis.joined_row(*args)
+        with self.assertRaises(ValueError):
+            analysis.unique_index([sample()[1]] * 2)
+        with self.assertRaises(ValueError):
+            analysis.decode('{"x":0,"x":1}')
+        with self.assertRaises(ValueError):
+            analysis.decode('{"x":NaN}')
+
+    def test_manufactured_bank_complete_and_wrong_mixture_rejected(self):
+        lines = ['question_id,concept_id,elo_difficulty']
+        lines += [f'c{c}q{q},c{c},{d}' for c in range(28) for q, d in enumerate((1050, 1200, 1350))]
+        raw = ('\n'.join(lines) + '\n').encode()
+        bank = analysis.bank_mapping(raw)
+        self.assertEqual(len(bank), 28)
+        self.assertEqual(sum(map(len, bank.values())), 84)
+        for mutant in (raw.replace(b'1350', b'1400', 1), raw + b'c0q0,c0,1050\n',
+                       ('\n'.join(lines[:-1]) + '\n').encode()):
+            with self.subTest(size=len(mutant)), self.assertRaises(ValueError):
+                analysis.bank_mapping(mutant)
+
+    def test_all_fixed_groups_variants_and_zero_bins_without_new_population(self):
+        rows = [dict(seed=seed, profile=profile, event_id=str(t), variant=variant,
+                     prediction=.5, y=t % 2, query={'difficulty': (1050., 1200., 1350.)[t % 3]})
+                for variant in analysis.VARIANTS for seed in analysis.SEEDS
+                for profile in analysis.PROFILES for t in range(120)]
+        result = analysis.summarize(rows)
+        self.assertEqual(len(rows), 2160)
+        self.assertEqual(len(result), 32)
+        self.assertEqual(sum(len(r['bins']) for r in result), 480)
+        self.assertEqual(sum(r['rows'] for r in result if r['level'] == 'pooled'), 2160)
+        self.assertEqual(sum(b['rows'] == 0 for r in result for b in r['bins']), 32 * 14)
+        self.assertTrue(all(r['ordinary_ece15'] == 0. for r in result))
+        with self.assertRaises(ValueError):
+            analysis.summarize(rows[:-1])
+
+
+if __name__ == '__main__':
+    unittest.main()
