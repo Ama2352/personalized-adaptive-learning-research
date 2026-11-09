@@ -372,3 +372,5 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 - [Seeded episode Paper1](reports/paper1_seeded_episode_readiness_20261109.md), [bundle15outputs](runs/paper1-seeded-episode-engineering-20261109-01/README.md). 85tests/0FES,13ca mới và10source hashes không đổi. Keyed RNG prospective, chưa kết quả so sánh graph.
 
 - [Fullcached CPU09 launcher failure02](runs/rq1-cpu09-native-mastery-20261109-02/report.md),28outputs đã đóng. Shim C000013A trước cleanup, actual worker exitcode và nguyên nhân chưa rõ.57source/input SHA giữ nguyên, không có parity/truth result.
+
+- [Kiểm raw Git gói masking và lịch sử failure](../docs/thesis_recovery/evidence/masking_package_raw_git_20261109.json) đối chiếu117files trên dc3287a. Có106outputs/4manifests của bốn bundle và7file nguồn/báo cáo; không quy thành số thí nghiệm hoặc tiến độ RQ. Các artifact lớn vẫn giữ local, cloud backup chưa được xác minh.
