@@ -135,3 +135,7 @@ Mở [tóm tắt GVHD](../research_tracking/supervisor_reports/2026-11-09/01_tie
 ## Chuẩn bị CUDA cho core nghiên cứu
 
 Profile có phiên bản nằm trong [quyết định28](thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md). Source tiếp tục ở `src/knowledge_tracing/akt/`, bằng chứng metadata/CPU của batchA dùng [report](../research_tracking/reports/cgakt_cuda_core_cpu_readiness_20261109.md) và bundle theo run. Checkpoint CUDA schema2, Main wiring và các lượt kiểm trên GPU thực tế được theo dõi riêng trong kế hoạch GPU.
+
+### Bổ sung RNG-owned Paper1 ngày09/11
+
+[Seeded episode](../src/knowledge_tracing/paper1_pdf/seeded_episode.py) tái dùng supplied core, có85tests/13ca mới. [Báo cáo](../research_tracking/reports/paper1_seeded_episode_readiness_20261109.md) và [bundle](../research_tracking/runs/paper1-seeded-episode-engineering-20261109-01/) giữ raw và provenance. Chưa chạy matrix nghiên cứu.

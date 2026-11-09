@@ -358,3 +358,5 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 ## 09/11 — giữ hồ sơ fullcached CPU09 dừng RAM
 
 - [Hồ sơ30outputs](runs/rq1-cpu09-native-mastery-20261109-01/README.md), [diễn giải](runs/rq1-cpu09-native-mastery-20261109-01/report.md). Native REJECTED sau9,8giây do RAM khả dụng dưới2GiB, Job0 và50source/input SHA còn nguyên. Không readouts/parity/truth hoặc kết quả mastery mới. Actual calls UNKNOWN sau termination, không suy bằng0 hoặc số reservation. Archive completed chỉ xác nhận giữ hồ sơ.
+
+- [Seeded episode Paper1](reports/paper1_seeded_episode_readiness_20261109.md), [bundle15outputs](runs/paper1-seeded-episode-engineering-20261109-01/README.md). 85tests/0FES,13ca mới và10source hashes không đổi. Keyed RNG prospective, chưa kết quả so sánh graph.

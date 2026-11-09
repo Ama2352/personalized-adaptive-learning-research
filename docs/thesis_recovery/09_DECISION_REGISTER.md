@@ -1,5 +1,13 @@
 # Sổ quyết định và vấn đề mở
 
+## D41 — allocation riêng cho phép đọc lại GAM nhẹ
+
+Root chọn một allocation mới có phiên bản sau khi fullcached01 dừng ở RAM floor. Lượt01 đã được giữ trong bundle30outputs, commit00726b8, cùng verdict REJECTED. Peak family quan sát171565056bytes ở pha đã chạy và RAM thấp nhất2104508416bytes là bằng chứng vận hành. Chưa đo peak của toàn bộ replay, serialization và truth join.
+
+Phép đọc lại GAM02 dùng trần cả process family512MiB và giữ RAM hệ thống khả dụng ít nhất1536MiB, với monitor và owned cleanup. Trần thời gian giữ300/270/285giây, cleanup reserve5giây. Đây là allocation bảo vệ do Root chọn cho workload có14400rows cố định, một policy sống mỗi stream và output có quota. Mức mới vẫn có thể dừng nếu peak các pha sau vượt giới hạn.
+
+Mọi câu hỏi, prediction bits, thời gian nguồn,19trường readout, freeze trước truth,136groups và source checks giữ nguyên. Cần version riêng cho worker, controller, contract và output directory trước một lần chạy được review. Giữ raw failures và dừng để review nếu bị từ chối. Floor của fixture AKT checkpoint04 và các run cũ giữ trong hợp đồng riêng. Quyết định không cấp quyền dùng GPU, fullCV hoặc Holdout.
+
 ## D40 — chọn execution recipe CUDA có phiên bản
 
 Root chọn [profile28](28_CUDA_EXECUTION_PROFILE_V1.md) để triển khai local theo quyền engineering user đã giao. CUDA dùng một device0, FP32 và Adam foreach/fused=False, deterministic nghiêm ngặt, TF32 tắt và CPU initialization trước chuyển device. Geometry, loss, learning rate, dữ liệu và stopping giữ theo recipe26. CPU API mặc định giữ hợp đồng hiện hành. Các lựa chọn backend này được bind vào identity mới và phải kiểm trên GPU thực tế. BatchA đã qua13metadata/26CPUtests, còn checkpoint/Main CUDA và ladder máy đích. Đây là quyết định triển khai của Root, chưa là kết quả hoặc quyền chi credit.

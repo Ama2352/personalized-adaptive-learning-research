@@ -5054,16 +5054,17 @@
       "estimated_effort": "Elapsed thực ghi trong receipts, effort chưa đo riêng.",
       "compute_cost_category": "local_CPU_no_cloud",
       "authorization_requirements": "Engineering local được user giao. Fullcachedreplay cần Root đóng scope300s trước dispatch. Không fullCV/Holdout/Modal.",
-      "status": "REJECTED_RESOURCE_RAM_GUARD_FULL_RESULT_UNAVAILABLE",
+      "status": "REJECTED_FULL02_UNEXPECTED_LAUNCHER_EXIT_MASTERY_TRUTH_PENDING",
       "blockers": [
-        "RAM trống giảm dưới2GiB. Cần allocation mới, source review và biên tài nguyên trước mọi lượt tiếp."
+        "Full02 launcher C000013A, nguyên nhân chưa rõ. Giữ nguồn/output, chưa có parity/truth."
       ],
       "completion_evidence": "research_tracking/runs/rq1-cpu09-native-mastery-20261109-01/report.md",
       "supersedes_execution_route_for": "RQDIAG16",
       "actual_counts": "UNKNOWN_AFTER_HARD_TERMINATION",
       "automatic_retry": false,
       "evidence_bundle_closed": true,
-      "scientific_result_accepted": false
+      "scientific_result_accepted": false,
+      "current_attempt_evidence": "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq1-cpu09-targeted-full-native02-outer/final.json"
     },
     {
       "id": "GRAPH27",
@@ -5102,6 +5103,42 @@
         "RAM phải còn ít nhất2GiB trong native regression. Peak fixture lịch sử634617856B."
       ],
       "completion_evidence": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cuda-checkpoint-metadata-tests01/result.json"
+    },
+    {
+      "id": "RQDIAG24",
+      "research_objective": "Nối private keyed RNG vào supplied continuity episode theo phiên bản PDF.",
+      "rq": [
+        "RQ1",
+        "RQ2"
+      ],
+      "workstream": "research_diagnosis",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RQDIAG22"
+      ],
+      "required_inputs": "Supplied core, canonical PDF và keyed RNG recipe đã review.",
+      "files_components": [
+        "src/knowledge_tracing/paper1_pdf/seeded_episode.py",
+        "tests/paper1_pdf/test_seeded_episode.py"
+      ],
+      "implementation_objective": "Private event streams và frozen profile/tape, reuse supplied core một lần, runtime provenance tường minh.",
+      "acceptance_criteria": "85tests/0FES gồm13ca mới,10source hashes ổn định, giữ riêng oracle/observable; chưa lấy engineering làm graph benefit.",
+      "verification_steps": "Root và reviewer đọc nguồn, chạy một bounded stdlib suite30s, lưu raw/counts và bundle15outputs.",
+      "required_artifacts": [
+        "source2",
+        "stdout/stderr",
+        "result85",
+        "before/after source inventories",
+        "bundle15",
+        "technical report"
+      ],
+      "estimated_effort": "Wrapper actual2,4102863s, effort source chưa đo riêng.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "User giao local engineering. Pilot miền28concept và research matrix cần scope riêng trước dispatch.",
+      "status": "VERIFIED85_TESTS_BUNDLE15_CLOSED",
+      "blockers": [],
+      "completion_evidence": "research_tracking/reports/paper1_seeded_episode_readiness_20261109.md"
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

@@ -886,3 +886,9 @@ Checkpoint BatchB có38metadata cases đã đạt trong2,447784giây. Harness h�
 ## 09/11 — đóng và kiểm bundle fullcached RAM stop
 
 Root đọc archiver/report, prepare vàcheck exactdry, sau đó đóng30outputs. Manifestb2587dd66d7ea0c8927036c5044fb2e2c45bbc2840892e1ea44bcc8e8635bdd5 đã kiểm toàn vẹn. Native verdict REJECTED được giữ, không chạy lại cache/model khi đóng. Raw files trongexperiments vàprep vẫn còn nguyên. Chỉ mục/backlog trỏ sangbundle, báo cáo GVHD giữ kết luận trước vì không có phát hiện khoa học mới.
+
+## 09/11 — seeded Paper1 đã kiểm và fullcached02 dừng đột ngột
+
+Root cùng reviewer đọc hai source RNG, chạy85tests/0FES trong2,4102863giây. Đóng15outputs, manifest9599d6fb8c28963d1dd1952949c8424f511f6f10537ece2dbff4f6f067b11781. Hai báo cáo người đọc cập nhật tiến độ phần mềm,10SVG giữ nguyên, QA tĩnh.
+
+Fullcached02 theoD41 kết thúc sau3,1203712giây, launcher returncodeC000013A trước cleanup, monitor không ghi vi phạm RAM hoặc hành động terminate. Actual worker exitcode chưa lưu. Chỉ cópure/native_metadata, chưa reservation/readout/truth. Root hậu kiểm57source/input không đổi, Job0 vàenv/monitor đã đóng. Giữraw, chưa retry hoặc gán nguyên nhân cho người dùng/console.
