@@ -79,7 +79,53 @@ class AKTConfig:
     recovery: RecoveryOptions | None = None
 
 
-def validate_config(config: AKTConfig) -> None:
+@dataclass(frozen=True)
+class ResearchCUDAExecutionProfile:
+    """Recipe28 metadata only; the caller must configure the actual CUDA process."""
+    max_vram_bytes: int
+    recipe_id: str = 'cgakt-cuda-fp32-v1'
+    device: str = 'cuda:0'
+    initialization: str = 'cpu-default-generator-42-then-device'
+    dtype: str = 'float32'
+    seed: int = 42
+    foreach: bool = False
+    fused: bool = False
+    capturable: bool = False
+    differentiable: bool = False
+    amsgrad: bool = False
+    maximize: bool = False
+    decoupled_weight_decay: bool = False
+    clip_foreach: str = 'native-default-None'
+    deterministic_algorithms: bool = True
+    deterministic_warn_only: bool = False
+    matmul_allow_tf32: bool = False
+    cudnn_allow_tf32: bool = False
+    matmul_precision: str = 'highest'
+    cudnn_benchmark: bool = False
+    cublas_workspace_config: str = ':4096:8'
+
+    def __post_init__(self):
+        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= 2*1024**3:
+            raise ValueError('explicit CUDA allocator budget64MiB..2GiB required')
+        fixed = dict(recipe_id='cgakt-cuda-fp32-v1',device='cuda:0',
+            initialization='cpu-default-generator-42-then-device',dtype='float32',seed=42,
+            foreach=False,fused=False,capturable=False,differentiable=False,amsgrad=False,
+            maximize=False,decoupled_weight_decay=False,clip_foreach='native-default-None',
+            deterministic_algorithms=True,deterministic_warn_only=False,matmul_allow_tf32=False,
+            cudnn_allow_tf32=False,matmul_precision='highest',cudnn_benchmark=False,
+            cublas_workspace_config=':4096:8')
+        if any(type(getattr(self,name)) is not type(value) or getattr(self,name) != value
+               for name,value in fixed.items()):
+            raise ValueError('CUDA execution must match the adopted recipe28')
+
+
+def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionProfile | None = None) -> None:
+    if cuda_profile is not None:
+        if type(cuda_profile) is not ResearchCUDAExecutionProfile:
+            raise ValueError('exact typed CUDA research profile required')
+        cuda_profile.__post_init__()
+        if config.phase != 'simulator-research' or config.device != 'cuda':
+            raise ValueError('CUDA research profile requires explicit simulator-research CUDA config')
     if config.recovery is not None:
         from .recovery import validate_options
         validate_options(config)
@@ -159,7 +205,7 @@ def validate_config(config: AKTConfig) -> None:
             raise ValueError('pilot cap or architecture exceeded')
     if config.phase == 'simulator-research':
         # New scope only; no dataclass/default/hash change for historical phases.
-        frozen = {'device': 'cpu', 'seed': 42, 'context': 100, 'target_block': 100, 'max_length': 200,
+        frozen = {'device': 'cpu' if cuda_profile is None else 'cuda', 'seed': 42, 'context': 100, 'target_block': 100, 'max_length': 200,
                   'd_model': 256, 'heads': 8, 'blocks': 1, 'd_ff': 1024, 'final_fc': 512,
                   'dropout': 0.05, 'kq_same': 1, 'separate_qa': False, 'n_pid': 0, 'graph': False,
                   'batch_size': 4, 'lr': 1e-4, 'betas': (0.9, 0.999), 'eps': 1e-8,

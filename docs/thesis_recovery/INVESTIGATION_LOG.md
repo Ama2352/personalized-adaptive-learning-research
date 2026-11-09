@@ -864,3 +864,8 @@ Một allocation60giây đã dừng sau khoảng3,3976giây. Năm inline checks 
 ## 09/11 — episode Paper1 supplied đã kiểm
 
 Cài profile US/UW/FW từ z cấp sẵn và nối continuity controller/world. Root cùng reviewer đọc nguồn, chạy một lượt72tests/0lỗi trong2,6754029giây, gồm18ca mới. Source8trước=sau. Đã đóng13outputs, manifestac3b8de1a45f36e75ed7015ff18b36debba26377a5561a9cdeb98fabd849267f. Hai báo cáo tiến độ cập nhật phần cài đặt Paper1, mườiSVG giữ nguyên. Chưa RNG-owned sampling hoặc matrix nghiên cứu.
+
+
+## 09/11 — core CUDA batchA đã kiểm CPU
+
+Root chọn execution profile28 và cùng reviewer đọc bốn source/test. Lượt13metadata đạt0,4977573giây. NativeCPU04 đạt26cases/8forward/5backward/0Adam, outer27,7877699giây/90, peak280629248B và minfree1850941440B trên allocation1536MiBfloor riêng đã có rationale. Source31trước=sau, genuineGit/EOL/loader, Job0 và restoration đạt. Bundle36outputs đã đóng, manifest401638d85bfe8f98495a1b45b7944c9a08da2d6650177c5170ea2611be177868. Tiếp theoCPschema2/Main/actualCUDA.

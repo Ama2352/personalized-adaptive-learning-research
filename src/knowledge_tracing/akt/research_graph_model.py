@@ -11,6 +11,8 @@ from collections.abc import Sequence
 from dataclasses import asdict, dataclass
 import hashlib
 import json
+import math
+import os
 from pathlib import Path
 
 import numpy as np
@@ -19,7 +21,8 @@ from torch import nn
 from torch.nn import functional as F
 
 from knowledge_tracing.simulator_bridge import identity_hash
-from .config import AKTConfig, validate_config
+from .config import AKTConfig, ResearchCUDAExecutionProfile, validate_config
+from .device_budget import cuda_budget_snapshot
 from .model import AKTAdapter
 from . import research_graph_condition as conditions
 from . import research_graph_context as contexts
@@ -36,6 +39,7 @@ SOURCE_PATHS = tuple(sorted((
     'src/knowledge_tracing/akt/research_graph_condition.py',
     'src/knowledge_tracing/akt/research_simulator_data.py',
     'src/knowledge_tracing/akt/model.py', 'src/knowledge_tracing/akt/config.py',
+    'src/knowledge_tracing/akt/device_budget.py',
     'src/knowledge_tracing/akt/tensors.py', 'src/knowledge_tracing/akt/types.py',
     'src/knowledge_tracing/akt/upstream.py', 'src/knowledge_tracing/akt/provenance.py',
     'artifacts/akt/dependencies/upstream/akt.py',
@@ -75,15 +79,51 @@ def _config_sha(config):
     return identity_hash(json.loads(json.dumps(asdict(config), default=str, allow_nan=False)))
 
 
-def _batch_sha(batch):
+def _batch_sha(batch, *, device):
     _need(type(batch) is AKTBatch, 'exact AKTBatch required')
     rows = {}
     for name in ('q_data', 'qa_data', 'loss_targets', 'valid_mask', 'target_mask'):
         value = getattr(batch, name)
-        _need(type(value) is torch.Tensor and value.device.type == 'cpu', 'plain CPU batch tensors required')
-        rows[name] = _array_sha(value.detach().contiguous().numpy())
+        _need(type(value) is torch.Tensor and value.device == device, 'plain batch tensors on the explicit execution device required')
+        rows[name] = _array_sha(value.detach().cpu().contiguous().numpy())
     rows['source_rows'] = _array_sha(batch.source_rows)
     return identity_hash(rows)
+
+
+def _cuda_profile_sha(profile):
+    if profile is None:
+        return None
+    _need(type(profile) is ResearchCUDAExecutionProfile, 'exact CUDA profile required')
+    profile.__post_init__()
+    return identity_hash(asdict(profile))
+
+
+def _cuda_execution_check(profile, *, synchronize=False):
+    """Validate caller setup, never configure flags/fraction or reset peaks."""
+    _need(profile is not None, 'explicit CUDA execution profile required')
+    _cuda_profile_sha(profile)
+    _need(torch.get_default_dtype() == torch.float32, 'CUDA execution requires FP32 default dtype')
+    _need(os.environ.get('CUBLAS_WORKSPACE_CONFIG') == profile.cublas_workspace_config,
+          'caller must configure the CUDA workspace before initialization')
+    _need(torch.are_deterministic_algorithms_enabled() is True
+          and torch.is_deterministic_algorithms_warn_only_enabled() is False
+          and torch.backends.cuda.matmul.allow_tf32 is False
+          and torch.backends.cudnn.allow_tf32 is False
+          and torch.backends.cudnn.benchmark is False
+          and torch.get_float32_matmul_precision() == 'highest', 'actual CUDA backend flags differ from recipe28')
+    _need(torch.cuda.is_available() is True, 'CUDA cannot fall back to CPU')
+    count, current = torch.cuda.device_count(), torch.cuda.current_device()
+    _need(type(count) is int and count == 1 and type(current) is int and current == 0,
+          'exactly one actual CUDA device0 required')
+    total = torch.cuda.get_device_properties(0).total_memory
+    fraction = torch.cuda.get_per_process_memory_fraction(0)
+    _need(type(total) is int and total >= profile.max_vram_bytes
+          and type(fraction) in (int, float) and math.isfinite(fraction)
+          and abs(fraction - profile.max_vram_bytes/total) <= 1e-12,
+          'caller CUDA allocator fraction differs from the explicit budget')
+    if synchronize:
+        torch.cuda.synchronize(0)
+    return cuda_budget_snapshot(torch.cuda, max_vram_bytes=profile.max_vram_bytes)
 
 
 def _evidence_sha(evidence):
@@ -116,8 +156,14 @@ class ResearchGraphNative(nn.Module):
     Context được tiêu thụ trước forward, cả khi lỗi; không global/thread-local
     context, hook hay monkeypatch thuật toán upstream.
     """
-    def __init__(self, *, config, n_items, condition):
+    def __init__(self, *, config, n_items, condition, cuda_profile=None):
         super().__init__()
+        validate_config(config, cuda_profile=cuda_profile)
+        self.cuda_profile = cuda_profile
+        self._cuda_profile_sha = _cuda_profile_sha(cuda_profile)
+        self._device = torch.device('cpu' if cuda_profile is None else cuda_profile.device)
+        if cuda_profile is not None:
+            _cuda_execution_check(cuda_profile)
         self.variant = condition.variant
         self.condition_sha256 = condition.identity
         self._recipe_identity = (self.variant, self.condition_sha256)
@@ -134,12 +180,18 @@ class ResearchGraphNative(nn.Module):
                     nn.init.zeros_(self.gate.weight); nn.init.zeros_(self.gate.bias)
             else:
                 self.gate = None
+        if cuda_profile is not None:
+            self.to(self._device)
+            _need(all(p.device == self._device and p.dtype == torch.float32 for p in self.parameters()),
+                  'CUDA wrapper placement must finish before parameter ownership is cached')
+            _cuda_execution_check(cuda_profile, synchronize=True)
         self._call = None
         self._parameter_ids = tuple(id(p) for p in self.parameters())
 
     def bind(self, batch, evidence, *, enabled, expected_evidence_sha256=None):
         _need(self._call is None and type(enabled) is bool, 'one outstanding native context only')
         _need((self.variant, self.condition_sha256) == self._recipe_identity, 'native variant/condition drift')
+        _need(_cuda_profile_sha(self.cuda_profile) == self._cuda_profile_sha, 'native CUDA execution profile drift')
         _need(len(evidence) == batch.q_data.shape[0], 'context/batch row mismatch')
         _need(all(len(row) <= batch.q_data.shape[1] for row in evidence), 'context/batch length mismatch')
         for row, items in enumerate(evidence):
@@ -150,14 +202,18 @@ class ResearchGraphNative(nn.Module):
         digest = _evidence_sha(evidence)
         _need(expected_evidence_sha256 is None or digest == expected_evidence_sha256,
               'expected native evidence drift')
-        self._call = _Call(batch, _batch_sha(batch), evidence, digest, enabled)
+        self._call = _Call(batch, _batch_sha(batch, device=self._device), evidence, digest, enabled)
 
     def clear_context(self):
         self._call = None
 
     def forward(self, q_data, qa_data, target):
+        # Noncapturable/nonfused Adam scalar state must retain CPU ambient allocation.
         with torch.device('cpu'):
-            return self._forward(q_data, qa_data, target)
+            result = self._forward(q_data, qa_data, target)
+        if self.cuda_profile is not None:
+            _cuda_execution_check(self.cuda_profile, synchronize=True)
+        return result
 
     def _forward(self, q_data, qa_data, target):
         call, self._call = self._call, None
@@ -165,10 +221,14 @@ class ResearchGraphNative(nn.Module):
         _need((self.variant, self.condition_sha256) == self._recipe_identity, 'native variant/condition drift')
         _need(q_data is call.batch.q_data and qa_data is call.batch.qa_data and target is call.batch.loss_targets,
               'foreign tensor identity for context ticket')
-        _need(_batch_sha(call.batch) == call.payload_sha256, 'batch changed after binding')
+        _need(_cuda_profile_sha(self.cuda_profile) == self._cuda_profile_sha, 'native CUDA execution profile drift')
+        if self.cuda_profile is not None:
+            _cuda_execution_check(self.cuda_profile)
+        _need(_batch_sha(call.batch, device=self._device) == call.payload_sha256, 'batch changed after binding')
         _need(_evidence_sha(call.evidence) == call.evidence_sha256, 'native bound evidence drift')
         _need(tuple(id(p) for p in self.parameters()) == self._parameter_ids, 'registered parameter identity changed')
-        _need(all(p.device.type == 'cpu' and p.dtype == torch.float32 for p in self.parameters()), 'CPU FP32 parameters required')
+        _need(all(p.device == self._device and p.dtype == torch.float32 for p in self.parameters()),
+              'FP32 parameters on the explicit execution device required')
         active = []
         if call.enabled and self.variant != 'A0':
             for row, items in enumerate(call.evidence):
@@ -228,14 +288,18 @@ class ResearchGraphAKTAdapter:
     role khác trong model.
     """
     def __init__(self, *, config: AKTConfig, encoding: data.ResearchAKTEncoding,
-                 index: contexts.ResearchGraphContextIndex, condition: conditions.ResearchGraphCondition):
+                 index: contexts.ResearchGraphContextIndex, condition: conditions.ResearchGraphCondition,
+                 cuda_profile: ResearchCUDAExecutionProfile | None = None):
         _need(type(config) is AKTConfig and config.phase == 'simulator-research', 'explicit research config required')
-        validate_config(config)
+        validate_config(config, cuda_profile=cuda_profile)
         _need(config.source_root == ROOT / 'artifacts/akt/dependencies/upstream'
               and torch.get_default_dtype() == torch.float32, 'pinned native root and FP32 construction required')
         _need(type(encoding) is data.ResearchAKTEncoding and type(condition) is conditions.ResearchGraphCondition,
               'typed research encoding/condition required')
         self.config = config
+        self.cuda_profile = cuda_profile
+        self._cuda_profile_sha = _cuda_profile_sha(cuda_profile)
+        self._device = torch.device('cpu' if cuda_profile is None else cuda_profile.device)
         self.research_encoding = encoding
         self.encoding = encoding.exercise_encoding()
         self.condition = condition
@@ -247,15 +311,19 @@ class ResearchGraphAKTAdapter:
         self._optimizer = None
         self._failed = False
         self.set_context_index(index)
-        self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition)
+        self.native = ResearchGraphNative(config=config, n_items=len(self.encoding.vocabulary.values), condition=condition,
+                                          cuda_profile=cuda_profile)
         self._parameters = tuple(self.native.parameters())
         self._integrity(full=True)  # Constructor/attach boundary, not per batch.
 
     @property
     def identity(self):
         self._integrity(full=True)
-        return identity_hash(dict(recipe=RECIPE, condition=self._condition_sha,
-            encoding=self._encoding_sha, config=self._config_sha, sources=self._sources))
+        payload = dict(recipe=RECIPE, condition=self._condition_sha,
+            encoding=self._encoding_sha, config=self._config_sha, sources=self._sources)
+        if self.cuda_profile is not None:
+            payload['cuda_execution_profile'] = asdict(self.cuda_profile)
+        return identity_hash(payload)
 
     def _integrity(self, *, full=False):
         _need(not self._failed, 'failed adapter cannot be reused')
@@ -263,11 +331,14 @@ class ResearchGraphAKTAdapter:
               'condition/encoding changed')
         _need(_config_sha(self.config) == self._config_sha and source_inventory() == self._sources,
               'model config/source drift')
+        _need(_cuda_profile_sha(self.cuda_profile) == self._cuda_profile_sha, 'adapter CUDA execution profile drift')
         self.index.check_access_header(self._context_seal)
         _need(self.index.content_sha256 == self._index_sha == self._context_seal.root_sha256, 'context index changed')
         if full:
             self.index.assert_integrity()
         if hasattr(self, 'native'):
+            _need(self.native.cuda_profile is self.cuda_profile and self.native._device == self._device,
+                  'native/adapter execution profile mismatch')
             _need(self.native.variant == self.condition.variant and self.native.condition_sha256 == self._condition_sha,
                   'native variant/condition drift')
             _need(tuple(id(p) for p in self.native.parameters()) == tuple(id(p) for p in self._parameters),
@@ -301,7 +372,7 @@ class ResearchGraphAKTAdapter:
         _need(len({w.window_id for w in windows}) == len(windows), 'duplicate window IDs')
         _need(all(1 <= len(w.inputs.item_ids) <= self.config.max_length for w in windows), 'window length cap')
         evidence = self.index.for_windows(tuple(windows), access_seal=self._context_seal)
-        batch = collate_windows(windows, n_items=len(self.encoding.vocabulary.values), device='cpu', targets=targets)
+        batch = collate_windows(windows, n_items=len(self.encoding.vocabulary.values), device=self._device, targets=targets)
         return batch, evidence
 
     def collate_training(self, entries: Sequence[TrainingWindow]) -> AKTBatch:
@@ -310,14 +381,14 @@ class ResearchGraphAKTAdapter:
         _need(self.index.neural_binding.phase_scope in ('select_train80', 'refit_union90'), 'prediction phase cannot train')
         _need(all(type(e) is TrainingWindow for e in entries), 'typed TrainingWindow required')
         batch, evidence = self._collate(tuple(e.window for e in entries), [e.targets for e in entries])
-        self._ticket = _TrainingTicket(batch, _batch_sha(batch), evidence, self._index_sha,
+        self._ticket = _TrainingTicket(batch, _batch_sha(batch, device=self._device), evidence, self._index_sha,
             tuple(e.window.window_id for e in entries), _evidence_sha(evidence))
         return batch
 
     def step(self, batch: AKTBatch, optimizer: torch.optim.Optimizer) -> dict:
         self._integrity()
         ticket, self._ticket = self._ticket, None
-        _need(ticket is not None and batch is ticket.batch and ticket.batch_sha256 == _batch_sha(batch)
+        _need(ticket is not None and batch is ticket.batch and ticket.batch_sha256 == _batch_sha(batch, device=self._device)
               and ticket.index_sha256 == self._index_sha, 'fresh exact unchanged training ticket required')
         self.index.check_selected_records(ticket.window_ids, access_seal=self._context_seal)
         _need(_evidence_sha(ticket.context) == ticket.evidence_sha256, 'training ticket evidence drift')
@@ -330,6 +401,8 @@ class ResearchGraphAKTAdapter:
             _need(all(group[k] == getattr(self.config, k) for k in ('lr', 'betas', 'eps', 'weight_decay')), 'optimizer/config mismatch')
             _need(all(group.get(k, False) is False for k in ('maximize', 'capturable', 'differentiable', 'amsgrad', 'decoupled_weight_decay'))
                   and all(group.get(k) in (None, False) for k in ('foreach', 'fused')), 'unsupported Adam behavior')
+            if self.cuda_profile is not None:
+                _need(group.get('foreach') is False and group.get('fused') is False, 'CUDA Adam requires explicit foreach=False/fused=False')
         _need(self.native.training, 'training mode required before optimizer step')
         self._optimizer = optimizer
         try:
@@ -337,6 +410,8 @@ class ResearchGraphAKTAdapter:
             # Exact AKTBatch and .native ownership preserve the public primitive.
             with torch.device('cpu'):
                 result = AKTAdapter.step(self, batch, optimizer)
+            if self.cuda_profile is not None:
+                _cuda_execution_check(self.cuda_profile, synchronize=True)
             self._integrity()
             self.index.check_selected_records(ticket.window_ids, access_seal=self._context_seal)
             _need(_evidence_sha(ticket.context) == ticket.evidence_sha256, 'training ticket evidence drift after primitive')
@@ -359,7 +434,8 @@ class ResearchGraphAKTAdapter:
         output = []
         try:
             self.native.eval()
-            with torch.random.fork_rng(devices=[]), torch.inference_mode():
+            devices = [] if self.cuda_profile is None else [0]
+            with torch.random.fork_rng(devices=devices), torch.inference_mode():
                 for start in range(0, len(windows), self.config.batch_size):
                     group = tuple(windows[start:start+self.config.batch_size])
                     batch, evidence = self._collate(group)
@@ -374,6 +450,8 @@ class ResearchGraphAKTAdapter:
                     _need(np.isfinite(values).all() and ((values >= 0) & (values <= 1)).all(), 'invalid graph probabilities')
                     output.extend(values[row, :len(w.inputs.item_ids)].copy() for row, w in enumerate(group))
             self._integrity()
+            if self.cuda_profile is not None:
+                _cuda_execution_check(self.cuda_profile, synchronize=True)
             return output
         finally:
             self.native.clear_context()

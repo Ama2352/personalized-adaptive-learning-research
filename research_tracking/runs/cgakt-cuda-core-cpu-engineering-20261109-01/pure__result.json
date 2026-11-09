@@ -1,0 +1,23 @@
+{
+  "status": "ACCEPTED_13_PURE_CUDA_PROFILE_TESTS",
+  "tests": 13,
+  "command": [
+    "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+    "-B",
+    "-c",
+    "import sys, unittest; suite=unittest.TestLoader().discover('tests/akt', pattern='test_research_cuda_profile.py'); result=unittest.TextTestRunner(verbosity=2).run(suite); cold=not any(name in sys.modules for name in ('torch','numpy','pandas')); print({'scientific_modules_absent':cold,'physical_tests':result.testsRun}); raise SystemExit(0 if result.wasSuccessful() and result.testsRun==13 and cold else 1)"
+  ],
+  "returncode": 0,
+  "timeout": false,
+  "elapsed_seconds": 0.497757300036028,
+  "cap_seconds": 10,
+  "source_before": {
+    "src/knowledge_tracing/akt/config.py": "472b1b08d5270a1f2f07b214d5bf2658443265400828f6d66d1a802c1f92083d",
+    "tests/akt/test_research_cuda_profile.py": "65de544c73cbe56431e7c6fcc457c19021b323209ac32913a363f8dfcdf31c57"
+  },
+  "source_after": {
+    "src/knowledge_tracing/akt/config.py": "472b1b08d5270a1f2f07b214d5bf2658443265400828f6d66d1a802c1f92083d",
+    "tests/akt/test_research_cuda_profile.py": "65de544c73cbe56431e7c6fcc457c19021b323209ac32913a363f8dfcdf31c57"
+  },
+  "scope_vi": "Metadata/config trên CPU host. Chưa kiểm actual CUDA hoặc mô hình."
+}

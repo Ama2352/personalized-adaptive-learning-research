@@ -1,5 +1,9 @@
 # Sổ quyết định và vấn đề mở
 
+## D40 — chọn execution recipe CUDA có phiên bản
+
+Root chọn [profile28](28_CUDA_EXECUTION_PROFILE_V1.md) để triển khai local theo quyền engineering user đã giao. CUDA dùng một device0, FP32 và Adam foreach/fused=False, deterministic nghiêm ngặt, TF32 tắt và CPU initialization trước chuyển device. Geometry, loss, learning rate, dữ liệu và stopping giữ theo recipe26. CPU API mặc định giữ hợp đồng hiện hành. Các lựa chọn backend này được bind vào identity mới và phải kiểm trên GPU thực tế. BatchA đã qua13metadata/26CPUtests, còn checkpoint/Main CUDA và ladder máy đích. Đây là quyết định triển khai của Root, chưa là kết quả hoặc quyền chi credit.
+
 ## D38 — provenance Linux CPU dùng profile thực của Gate writer
 
 Root duyệt engineering batch bốn file theo plan02 ngày09/11. Gate writer ghi execution_profile sáu trường từ process thật và gắn hash writer trong build hiện hành. Main Linux kiểm report đã bind SHA sau public reader. Nhánh Windows và public authorization giữ compatibility. Đã loại phương án thêm external Gate-controller receipt riêng vì writer hiện có cung cấp đúng thông tin cần thiết. Source mới phải kiểm regression và refresh Gate trước native research dispatch. Đây là đổi hợp đồng vận hành, không đổi model hoặc phép đánh giá khoa học.

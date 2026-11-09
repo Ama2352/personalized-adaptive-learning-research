@@ -4631,7 +4631,8 @@
       "blockers": [
         "Full replay chưa hoàn tất trong173giây worker. Dừng lane, đóng raw và thiết kế đo observer overhead riêng."
       ],
-      "verification_evidence": "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq1-cpu09-mastery-pure01/result.json"
+      "verification_evidence": "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq1-cpu09-mastery-pure01/result.json",
+      "replacement_execution_task": "RQDIAG23"
     },
     {
       "id": "GRAPH21",
@@ -4901,7 +4902,7 @@
       "priority": "P0",
       "owner": "Codex",
       "dependencies": [
-        "RQDIAG16"
+        "CPU09"
       ],
       "required_inputs": "Source đã pin, review Root và bounded allocation riêng.",
       "files_components": [
@@ -4916,11 +4917,10 @@
       "estimated_effort": "Chưa đo riêng.",
       "compute_cost_category": "local_CPU_no_cloud",
       "authorization_requirements": "Local engineering đã được yêu cầu, Root duyệt từng bounded operation. Không fullCV/Holdout/cloud hoặc đổi phương pháp khoa học.",
-      "status": "PILOT01_REJECTED_BEFORE_ESTIMATOR_FAILURE_ARCHIVED",
-      "blockers": [
-        "Chưa biết file bị read guard từ chối đầu tiên. Self-contract read entitlement còn thiếu ở postcheck."
-      ],
-      "completion_evidence": "research_tracking/runs/rq1-cpu09-targeted-observer-attempt-20261109-01/report.md"
+      "status": "VERIFIED_ONE_HISTORY_OFF_ON_PARITY_ARCHIVE_PENDING",
+      "blockers": [],
+      "completion_evidence": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cpu09-targeted-observer-native03-outer/final.json",
+      "diagnostic_context_task": "RQDIAG16"
     },
     {
       "id": "RQDIAG21",
@@ -4955,6 +4955,109 @@
       "status": "VERIFIED_CONDITIONAL_PROOF_AND_FOUR_FIXTURES",
       "blockers": [],
       "completion_evidence": "research_tracking/reports/paper1_reentry_mechanism_20261109.md"
+    },
+    {
+      "id": "RQDIAG22",
+      "research_objective": "Kiểm profile và continuity episode supplied theo PDF Paper1.",
+      "rq": [
+        "RQ1",
+        "RQ2"
+      ],
+      "workstream": "research_diagnosis",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RQDIAG17",
+        "RQDIAG19"
+      ],
+      "required_inputs": "Nguồn đã pin, hợp đồng đã review và actual acceptance đúng phạm vi.",
+      "files_components": [
+        "src/knowledge_tracing/paper1_pdf/episode.py",
+        "tests/paper1_pdf/test_episode.py"
+      ],
+      "implementation_objective": "Kiểm profile và continuity episode supplied theo PDF Paper1.",
+      "acceptance_criteria": "Source và resource contracts đúng, kết quả đủ population, raw evidence và limitations được lưu.",
+      "verification_steps": "Root review và bounded local tests hoặc dispatch đã được chốt riêng.",
+      "required_artifacts": [
+        "source pins",
+        "actual logs",
+        "result contract",
+        "report"
+      ],
+      "estimated_effort": "Elapsed thực ghi trong receipts, effort chưa đo riêng.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Engineering local được user giao. Fullcachedreplay cần Root đóng scope300s trước dispatch. Không fullCV/Holdout/Modal.",
+      "status": "VERIFIED_72_REGRESSIONS_18_NEW_EPISODE_CASES",
+      "blockers": [],
+      "completion_evidence": "research_tracking/reports/paper1_supplied_episode_readiness_20261109.md"
+    },
+    {
+      "id": "GRAPH26",
+      "research_objective": "Thêm execution profile và core device CUDA, giữ CPU legacy.",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "GRAPH24"
+      ],
+      "required_inputs": "Nguồn đã pin, hợp đồng đã review và actual acceptance đúng phạm vi.",
+      "files_components": [
+        "src/knowledge_tracing/akt/config.py",
+        "src/knowledge_tracing/akt/research_graph_model.py",
+        "tests/akt/test_research_cuda_profile.py",
+        "tests/akt/test_research_graph_model.py"
+      ],
+      "implementation_objective": "Thêm execution profile và core device CUDA, giữ CPU legacy.",
+      "acceptance_criteria": "Source và resource contracts đúng, kết quả đủ population, raw evidence và limitations được lưu.",
+      "verification_steps": "Root review và bounded local tests hoặc dispatch đã được chốt riêng.",
+      "required_artifacts": [
+        "source pins",
+        "actual logs",
+        "result contract",
+        "report"
+      ],
+      "estimated_effort": "Elapsed thực ghi trong receipts, effort chưa đo riêng.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Engineering local được user giao. Fullcachedreplay cần Root đóng scope300s trước dispatch. Không fullCV/Holdout/Modal.",
+      "status": "VERIFIED_13_METADATA_26_CPU_CASES_ACTUAL_CUDA_PENDING",
+      "blockers": [],
+      "completion_evidence": "research_tracking/reports/cgakt_cuda_core_cpu_readiness_20261109.md",
+      "dependency_note_vi": "CUDA core có thể triển khai/kiểm CPU song song với actual Linux provenance. Main CUDA về sau vẫn cần cả hai."
+    },
+    {
+      "id": "RQDIAG23",
+      "research_objective": "Phát lại đủ cache CPU09 để đối chiếu native mastery với theta thật đã lưu.",
+      "rq": [
+        "RQ1"
+      ],
+      "workstream": "research_diagnosis",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RQDIAG20",
+        "CPU09"
+      ],
+      "required_inputs": "Nguồn đã pin, hợp đồng đã review và actual acceptance đúng phạm vi.",
+      "files_components": [],
+      "implementation_objective": "Phát lại đủ cache CPU09 để đối chiếu native mastery với theta thật đã lưu.",
+      "acceptance_criteria": "Source và resource contracts đúng, kết quả đủ population, raw evidence và limitations được lưu.",
+      "verification_steps": "Root review và bounded local tests hoặc dispatch đã được chốt riêng.",
+      "required_artifacts": [
+        "source pins",
+        "actual logs",
+        "result contract",
+        "report"
+      ],
+      "estimated_effort": "Elapsed thực ghi trong receipts, effort chưa đo riêng.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Engineering local được user giao. Fullcachedreplay cần Root đóng scope300s trước dispatch. Không fullCV/Holdout/Modal.",
+      "status": "SOURCE_PREPARATION_NO_FULL_DISPATCH",
+      "blockers": [],
+      "completion_evidence": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cpu09-targeted-observer-native03-outer/final.json",
+      "supersedes_execution_route_for": "RQDIAG16"
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

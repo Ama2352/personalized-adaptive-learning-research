@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**Core CUDA, kiểm metadata và tương thích CPU đã đạt.** [Kết quả batchA](cgakt_cuda_core_cpu_readiness_20261109.md), [gói36outputs](../runs/cgakt-cuda-core-cpu-engineering-20261109-01/README.md). Có13kiểm metadata và26kiểm CPU, quan sát8forward/5backward/0Adam. Actual CUDA, checkpoint schema2 và Main GPU là bước tiếp theo.
+
 **Paper1, đã nối một lượt mô phỏng nhận draws cấp sẵn.** [Readiness](paper1_supplied_episode_readiness_20261109.md), [gói bằng chứng](../runs/paper1-supplied-episode-engineering-20261109-01/README.md). Toàn bộ72kiểm đạt, gồm18ca mới về profile, chronology, oracle separation và điểm dừng. Còn RNG-owned runner, các chính sách so sánh và ma trận nghiên cứu.
 
 **Bản thảo RQ1 đã bổ sung hai phần bằng chứng.** [Chương kết quả](THESIS_RQ1_MECHANISMS_DRAFT_20261109.md) hiện nối reliability trên cùng dòng dữ liệu với chứng minh điều kiện zero re-entry. [Gói phiên bản](../runs/thesis-rq1-e5-e6-writing-20261109-01/README.md) giữ bản trước sửa, 29 nguồn và proof kiểm 12 liên kết. Đây là tiến độ viết từ kết quả đã có.

@@ -123,6 +123,14 @@ def equal_gradients(a, b):
             assert torch.equal(a[name], b[name]), name
 
 
+def test_cpu_adapter_identity_keeps_legacy_payload_shape(case):
+    adapter = case['adapter']
+    assert adapter.cuda_profile is None and adapter._cuda_profile_sha is None
+    expected = dict(recipe=model.RECIPE,condition=adapter._condition_sha,encoding=adapter._encoding_sha,
+                    config=adapter._config_sha,sources=adapter._sources)
+    assert adapter.identity == identity_hash(expected)
+
+
 def copy_batch(batch, *, qa=None, targets=None):
     return AKTBatch(batch.q_data.clone(), batch.qa_data.clone() if qa is None else qa,
         batch.loss_targets.clone() if targets is None else targets,

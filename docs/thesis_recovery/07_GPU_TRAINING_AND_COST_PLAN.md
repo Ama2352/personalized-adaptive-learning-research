@@ -1,5 +1,9 @@
 # GPU, artifact và ngân sách
 
+## Bổ sung09/11 — core có execution profile CUDA
+
+BatchA đã bổ sung typed profile theo [quyết định28](28_CUDA_EXECUTION_PROFILE_V1.md), explicit device và các boundary kiểm tài nguyên/đồng bộ. Local đạt13kiểm metadata và26kiểm mô hình trênCPU, gồm8forward/5backward/0Adam. ActualGPU chưa được dùng để nghiệm thu batch này. Checkpoint CUDA schema2 và Main wiring đang là hai phần cần nối tiếp trước ladder máy đích. [Bằng chứng36outputs](../../research_tracking/reports/cgakt_cuda_core_cpu_readiness_20261109.md). Gate05 vẫn thuộc phiên bản source cũ.
+
 ## Trạng thái hiện hành09/11 — source Linux đã kiểm metadata, cần Gate mới
 
 Bốn file Main/Gate và test tương ứng vừa bổ sung profile Linux CPU. Hai module kiểm tra đã đạt 154 ca trên Windows. Gói bằng chứng giữ cả lượt đầu 140 đạt/14 lỗi fixture và lượt sau 154 đạt. Các profile Linux được dựng trong test, còn source proof, runtime và Gate Linux thực tế cần kiểm trên máy đích. Gate05 đã đạt ở phiên bản trước. Bốn file mới làm binding của Gate05 cũ hết hiệu lực với source hiện tại, nên cần refresh software Gate trước lượt Main tiếp theo. [Kết quả và phạm vi 154 ca](../../research_tracking/reports/akt_linux_main_metadata_readiness_20261109.md).
