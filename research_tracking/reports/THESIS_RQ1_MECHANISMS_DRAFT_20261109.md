@@ -12,7 +12,7 @@ Một mô hình có thể thay đổi xác suất dự đoán nhưng vẫn giữ
 
 ## 2. Thiết kế đối chiếu và đơn vị quan sát
 
-Phân tích dùng lại chín chuỗi tương tác, tạo bởi ba khối seed và ba hồ sơ PG, PY, PYH; mỗi chuỗi có 120 thời điểm. Tại mỗi thời điểm, hai nhánh full và empty nhận cùng câu hỏi và đáp án đã lưu. Cả hai nhánh giữ graph package hoạt động và dùng cùng đồ thị cho controller; điều thay đổi là tập cạnh đưa vào bộ ước lượng trạng thái. Empty vì thế là đối chứng cạnh rỗng trong package, không được đổi tên thành mô hình hoàn toàn graph-free. [E1]
+Phân tích dùng lại chín chuỗi tương tác, tạo bởi ba khối seed và ba hồ sơ PG, PY, PYH; mỗi chuỗi có 120 thời điểm. Đây là các mã hồ sơ được giữ nguyên từ nguồn, không được tự xem là ba mức năng lực chung. Tại mỗi thời điểm, hai nhánh full và empty nhận cùng câu hỏi và đáp án đã lưu. Cả hai nhánh giữ graph package hoạt động và dùng cùng đồ thị cho controller; điều thay đổi là tập cạnh đưa vào bộ ước lượng trạng thái. Empty vì thế là đối chứng cạnh rỗng trong package, không được đổi tên thành mô hình hoàn toàn graph-free. [E1]
 
 Có 1.080 cặp thời điểm full–empty. Mỗi cặp cho phép đối chiếu trạng thái của 28 khái niệm, tương ứng 30.240 cặp khái niệm–thời điểm. Đây là các quan sát lặp theo thời gian; không phải 30.240 khái niệm khác nhau hoặc người học độc lập. Ba khối seed và các hồ sơ cũ được tái sử dụng, nên phần này không báo thêm cỡ mẫu độc lập, p-value hay khoảng tin cậy.
 
@@ -38,7 +38,7 @@ Ngược lại, 90 cặp có bất đồng M không phải 90 lần người h�
 
 ## 4. Phát hiện thứ hai: tập ứng viên thay đổi chưa đủ làm đổi khái niệm thắng
 
-Sau phân loại thành thạo, controller tính tập khái niệm được phép chọn R. Nguồn còn áp dụng các điều kiện tránh lặp/thoát bế tắc để được C, rồi lọc theo số lượt đã luyện để được B. Cuối cùng controller chọn khái niệm theo score native và các khóa phân xử của nguồn. Chỉ quan sát R sẽ bỏ qua những bước lọc và xếp hạng này. [E2]
+Sau phân loại thành thạo, controller tính tập sẵn sàng ban đầu R theo quy tắc tiên quyết. Nguồn tiếp tục xử lý tránh lặp/thoát bế tắc để được C, rồi lọc theo số lượt đã luyện để được B. Riêng nhánh `escape_all_nodes` có thể thay tập ứng viên bằng toàn bộ khái niệm; vì vậy C không được giả định luôn là tập con của R, và R không phải ràng buộc cứng cho mọi lựa chọn trong mọi tình huống. Cuối cùng controller chọn khái niệm theo score native và các khóa phân xử của nguồn. Chỉ quan sát R sẽ bỏ qua những phép biến đổi tập và xếp hạng này. [E2]
 
 Các số đếm đã tái dựng cho thấy:
 
@@ -54,7 +54,7 @@ Với bốn trường hợp bị lọc khỏi B, nguồn xác định được p
 
 ## 5. Phát hiện thứ ba: hai tổng bằng nhau có thể nói về những snapshot khác nhau
 
-Chẩn đoán trạng thái còn đo một tiêu chí tham chiếu của khái niệm đang được hỏi: lấy trung bình xác suất raw trên ba câu có độ khó đã định nghĩa trong ngân hàng tham chiếu V1, rồi đối chiếu ngưỡng tham chiếu. Đây chưa phải xác suất đã qua temperature calibration và cũng không thay đổi controller native.
+Chẩn đoán trạng thái còn đo một tiêu chí tham chiếu của khái niệm đang được hỏi. Vì xác suất trả lời phụ thuộc độ khó câu hỏi, dùng cùng bộ ba câu giúp đối chiếu các cấu hình trên cùng mốc tham chiếu. Phép đo lấy trung bình xác suất raw trên ba độ khó 1.050, 1.200 và 1.350 Elo, rồi đối chiếu ngưỡng V1 là 0,5637150147511514. Đây chưa phải xác suất đã qua temperature calibration và cũng không thay đổi controller native. “Thay đổi” trong bảng dưới là bất đồng của hai cờ phân loại full–empty tại cùng snapshot; không có nghĩa chỉ một thay đổi số bất kỳ của xác suất.
 
 Tiêu chí này khác nhau ở 22 cặp full–empty. Khái niệm được preview đề xuất cũng khác nhau ở 22 cặp. Phép ghép một-một theo seed, hồ sơ, thời điểm và query cho thấy hai tập chỉ trùng hai cặp. [E3]
 
