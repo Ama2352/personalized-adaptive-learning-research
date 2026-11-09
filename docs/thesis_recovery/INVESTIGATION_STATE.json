@@ -5711,13 +5711,24 @@
     "available_minimum_bytes": 1608359936,
     "prefix_verification": "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq2_fresh02_prefix_verification01.json",
     "prefix_verification_sha256": "9551e0b85ca48cb5fe05236b6ee8bc75e0c471fc2e17d48c5f751a23ff845f95",
-    "continuation_status": "DESIGN_REVIEW_PENDING_NO_RETRY_OR_NEW_DRAWS",
+    "continuation_status": "ROOT_PROPOSAL02_REVIEWED_SOURCE_PREPARATION_ONLY_NO_DISPATCH",
     "scientific_primary_conclusion": "Chưa đủ population120ca, chưa Q60/K30 hoặc kết luận chính từ phần đã chạy.",
     "failure_bundle": "research_tracking/runs/rq2-fresh-graph-source-attempt02-20261109-01",
     "failure_manifest_sha256": "9f618023c4b771db6f5dcec59e13ab3ad1d825e47c6501ec3ceeca5e6ad518f0",
     "failure_bundle_outputs": 39,
     "report": "research_tracking/reports/rq2_fresh_replication_readiness_20261109.md",
-    "continuation_review_correction": "Child worker160 cộng parent53,9729 vượt original210; đề xuất mới phải giảm child155. Physical replay thêm30 interactions/+1world cần recovery amendment riêng, không gọi là trong cap logical cũ."
+    "continuation_review_correction": "Child worker160 cộng parent53,9729 vượt original210; đề xuất mới phải giảm child155. Physical replay thêm30 interactions/+1world cần recovery amendment riêng, không gọi là trong cap logical cũ.",
+    "continuation_proposal02": "artifacts/akt/local-tests/akt-research-runner-20261108-01/RQ2_FRESH120_CONTINUATION_PROPOSAL02.md",
+    "continuation_proposal02_sha256": "21b01ced2194c91bbf2ca95f5eba3e040aeb9f199422ea9d10bdb2f81c2645c9",
+    "recovery_physical_amendment": {
+      "world_constructors": 121,
+      "interactions": 14430,
+      "extra_replayed_interactions": 30,
+      "logical_worlds": 120,
+      "logical_interactions": 14400
+    },
+    "cumulative_worker_seconds_upper": 208.9729359149933,
+    "cumulative_outer_seconds_upper": 236.02164770005038
   },
   "gkt_trainer_preparation_20261109": {
     "contract": "artifacts/akt/local-tests/akt-research-runner-20261108-01/GKT_RESEARCH_TRAINER_CONTRACT01.md",
@@ -5762,5 +5773,72 @@
     "uncertainty_percentage_points": 10,
     "basis": "Ước lượng quản lý theo deliverable đã nghiệm thu, chưa RQ complete. Không cộng fresh120 partial hoặc source-only native preparation.",
     "report": "research_tracking/RESEARCH_PROGRESS.md"
+  },
+  "resource_and_priority_optimization_20261109": {
+    "source": "User yêu cầu tối ưu khối lượng công việc, đẩy nhanh hoàn thiện và tiết kiệm tài nguyên.",
+    "active_deliverables": [
+      "Hoàn tất fresh120 qua continuation giữ61ca, dùng7080newcalls thay vì chạy lại14400calls.",
+      "Đóng source fixes GKT và GRAPH29 đã mở; native tests theo dependency, không mở thêm model/framework song song.",
+      "Nghiệm thu AKT checkpoint và actual selected lifecycle để tiến tới bounded CUDA readiness."
+    ],
+    "sequence": [
+      "Bây giờ chỉ hoàn tất ba candidate/harness đang chuẩn bị, review và giữ handoff ngắn.",
+      "Khi RAM>=3GiB và packet đạt, chạy đúng một continuation RQ2, kiểm rồi cập nhật hai báo cáo người đọc nếu có phát hiện mới.",
+      "Khi RAM>=4GiB, chạy tuần tự các native packages đã review, kiểm actual free RAM trước mỗi lượt.",
+      "Chỉ chạy lại suite hoặc fold bị ảnh hưởng; full Gate sau khi source batch liên quan đã ổn định và trước execution cần Gate."
+    ],
+    "parallelism": "Subagents chỉ source/review độc lập; một lượt model/test dùng nhiều RAM tại một thời điểm.",
+    "documentation": "Một bundle cho mỗi batch đã nghiệm thu, gom cập nhật indices/state và commit; báo cáo GVHD theo thay đổi nghiên cứu đáng kể.",
+    "deferred": [
+      "Mở thêm ma trận thí nghiệm",
+      "Framework phục hồi tổng quát",
+      "Micro-optimization chưa có số đo",
+      "FullCV hoặc paid runs chưa duyệt"
+    ],
+    "memory_floors_preserved": true,
+    "existing_data_and_artifacts_preserved": true,
+    "raw_commit_readback": "artifacts/akt/local-tests/akt-research-runner-20261108-01/engineering_progress_commit01_readback.json",
+    "verified_commit": "9164530f7627d6dc7cf347a7a31d2ed1c91024be",
+    "commit_paths": 66,
+    "raw_byte_pinned_paths": 58,
+    "text_line_end_normalized_paths": 8,
+    "current_cloud_spend_USD": 0
+  },
+  "bounded_source_handoffs_20261109": {
+    "root_AST_receipt": "artifacts/akt/local-tests/akt-research-runner-20261108-01/gkt8_graph29_candidate02_root_AST01.json",
+    "AST_compiled_files": 8,
+    "actual_tests_or_model_calls": 0,
+    "GKT_trainer8": {
+      "status": "SOURCE_FROZEN_AST_ONLY_ROOT_FULL_REVIEW_AND_MODEL11_REQUIRED",
+      "handoff": "artifacts/akt/local-tests/akt-research-runner-20261108-01/GKT_RESEARCH_TRAINER8_SOURCE_HANDOFF01.md",
+      "handoff_sha256": "824dbf7f8466ed280fdc8154d26b1657d2de724c3abd46acbf1fcc9f4195171e",
+      "packet_sha256": "5936331beefdb51c8676f99c0d4a0780d12acbfa219972b7f003cc1bcf649350",
+      "admission_ram_GiB": 4,
+      "whole_seconds": 90,
+      "worker_seconds": 80,
+      "actual_model11_prerequisite": true
+    },
+    "GRAPH29_candidate02": {
+      "status": "SIX_FILES_FROZEN_AST_ONLY_NOT_CANONICAL_OR_NATIVE",
+      "handoff": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cgakt-selected-resume-candidate02/HANDOFF02.md",
+      "handoff_sha256": "2392540ccf496e6951bfe948342780a02a6f05eea1d3cbd6b203d297aa560e8c",
+      "new_physical_cases_from_static_source": 42,
+      "fixes": [
+        "Bind đúng owned launch, worker token, request và source trước khi seal parent cleanup.",
+        "Retained quota duy nhất bằng spec cap, giữ cumulative usage của parent.",
+        "Pause epoch khớp marker và policy."
+      ],
+      "full_Root_review_and_actual_tests_pending": true,
+      "phase2_crash_CUDA_readiness": false
+    },
+    "RQ2_recovery03": {
+      "status": "SOURCE_PREPARATION_AFTER_ROOT_PROPOSAL02_REVIEW_NO_DISPATCH",
+      "admission_ram_GiB": 3,
+      "whole_seconds": 180,
+      "worker_seconds": 155,
+      "expected_child_worlds": 59,
+      "expected_child_interactions": 7080,
+      "new_random_draws": 0
+    }
   }
 }

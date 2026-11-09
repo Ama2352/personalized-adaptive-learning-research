@@ -979,3 +979,10 @@ Root đã đọc E9 và kiểm18source/66directpointers/hai sums, giữ43.799byt
 Probe Windows Job đạt sáu samples, xác nhận có một owned member ngoài cây con của worker. Bundle15 đã đóng, chỉ là kiểm bộ đo. Fresh120 nguồn02 dừng do RAM sau 61 ca hoàn tất và30 tương tác F062, thực7350adaptive updates. Root và verifier độc lập đối chiếu72file/61pins, giữ seed/U và failure. Bundle39 đã đóng, chưa nghiệm thu120ca. Phương án recovery cần sửa cumulative worker cap và công khai30replayed interactions trước khi code/run.
 
 GKT trainer02 bị phát hiện bỏ sót KeyboardInterrupt/SystemExit trong poison progress. Candidate03 đã review, áp dụng và kiểm AST cùng8test functions, chưa chạy test/mô hình thật. Model11/trainer8 và AKT checkpointnative16 vẫn cần actual4GiB trước launch. GRAPH29 candidate01 có hai lỗi source-level về ghép nhầm owned receipt và retained quota; đã yêu cầu sửa derivative riêng trước canonical apply. Không chi cloud/Holdout, giữ nguyên11figures và các kết quả khoa học đã nghiệm thu. Ước lượng quản lý hiện70/55/30 cho RQ1/2/3, sai số±10điểm và chưa RQ complete.
+
+
+## 09/11 — rút ngắn hàng đợi theo yêu cầu tối ưu tài nguyên
+
+Commit9164530 đã đọc lại66paths,58bằng chứng ghim raw byte khớp và8text paths chỉ chuẩn hóa xuống dòng. Giữ4fileGKT ngoài commit chờ native. Tập trung hoàn tất RQ2 bằng continuation giữ61ca, giảm new calls từ14400xuống7080. Proposal02 sửa childworker155s, cumulative208,9729/210s và outer236,0216/240s. Physical121worlds/14430calls có amendment riêng cho30replayed interactions. Source preparation được review, chưa dispatch.
+
+Chỉ hoàn tất các candidate/harness hiện có rồi kiểm tuần tự theo RAM. Hoãn mở rộng ma trận, framework và micro-optimization chưa đo. Gom documentation theo batch, full Gate sau source freeze cần thiết. Không giảm memory floors hoặc bỏ negative controls để tăng tốc.
