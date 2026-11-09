@@ -1010,3 +1010,8 @@ Một technicalreport và Chặng14 trong cả BAO_CAO.md/HTML đã xuất bản
 ## 09/11 — AKT current cold299 đã đạt
 
 Collection05 timeout và cleanup Job0 được giữ. Sau khi tắt preview, collection06 đạt299IDs/0body, tests06 đạt299bodies/0FES trong67,76s, peak59.211.776B/minfree2.556.534.784B. Source/runtime trước–sau khớp và ownedJob0. [Bundle kiểm](../../research_tracking/runs/akt-resume-metadata-and-report-qa-20261109-01/README.md) giữ rawlogs, failures và hai screenshot gốc. Chặng14 desktop đã xem, mobile cówidth390/document375/table335 nhưng capture lệch và mấtbrowserhandle, chưa đóng WRITE06. Hai previewservers đã terminal, tab riêng không còn. GKTguard second moment âm đã áp dụng và AST, chưa native. Currentcold299 không cấp native/CUDA/GPUfit authorization.
+
+
+## 09/11 — Chặng14 đã nghiệm thu desktop và mobile
+
+Lượt capture mới tắt smooth scrolling trong browser, Root đã đọc hai ảnh viewport390. Bảng không đè số, không tràn ngang. WRITE06 đã đóng. [Ảnh và QA](../../research_tracking/runs/supervisor-witness-mobile-qa-20261109-02/README.md) giữ nguyên bản và nguồnHTML tham chiếu. Preview/tab riêng đã đóng, không tăng mẫu nghiên cứu.

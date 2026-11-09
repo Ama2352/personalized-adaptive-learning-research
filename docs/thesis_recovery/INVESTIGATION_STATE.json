@@ -85,7 +85,7 @@
     "Chưa đo GPU throughput/cost theo matrix nghiên cứu, chưa có exact paid-run authorization. Tổng chi cloud của lượt này bằng0USD.",
     "Phân tích cuối, demo dùng checkpoint fitted và bản luận văn hoàn chỉnh còn việc. Chưa có bằng chứng hoàn tất toàn bộ RQ1–RQ3."
   ],
-  "next_recommended_investigation": "Review native08 sau cold299; RAM>=4GiB trước native18. RQ2recovery cần3GiB. Hoàn tất mobilecapture WRITE06. Giữ goal và CUDA gate chưa hoàn tất.",
+  "next_recommended_investigation": "Review native08 rồi kiểm RAM>=4GiB trước native18. RQ2recovery cần3GiB. GKTtrainer04 harness2pins/counters cần refresh trước native. CUDA/actualproducerparity còn thiếu.",
   "resume_instructions": "Đọc current_readiness_summary/current_software_gate/autonomous_engineering_loop trước các snapshots cũ; đọc actual raw bundle/commit và poll handle trước remote. Không rerun completed worker/Gate để lấy artifact; mọi paid GPU/fullCV/Holdout cần authorization riêng.",
   "resolved_questions": {
     "Q09": "Map đủ28nodes,36unique IDs,8extra metadata IDs,0duplicates, planning_validation.json",
@@ -5926,10 +5926,10 @@
     "report_draft_sha256": "9e7dbde127deaabbccbb8f5e6fe7daa24214d3fc9276356abd86c9ebc7ff109d",
     "canonical_and_two_human_reports_updated": true,
     "publication": {
-      "status": "PUBLISHED_CONTENT_STATIC_QA_VISUAL_PENDING",
+      "status": "PUBLISHED_CONTENT_STATIC_DESKTOP_MOBILE_QA",
       "report": "research_tracking/reports/rq1_on_policy_mastery_witness_20261109.md",
       "bundle": "research_tracking/runs/supervisor-truth-witness-publication-20261109-01",
-      "visual_QA": false,
+      "visual_QA": true,
       "inline_SVG_preserved": 11
     }
   },
@@ -5972,10 +5972,11 @@
     "Modal_spend": 0
   },
   "WRITE06_visual_progress_20261109": {
-    "desktop": "ACCEPTED_SECTION_SCREENSHOT",
-    "mobile": "WIDTH_MEASURED_CAPTURE_INCOMPLETE_BROWSER_HANDLE_LOST",
-    "owned_preview_servers": "TERMINAL",
-    "complete": false
+    "status": "COMPLETED_SECTION_DESKTOP_AND_MOBILE_QA",
+    "desktop_bundle": "research_tracking/runs/akt-resume-metadata-and-report-qa-20261109-01",
+    "mobile_bundle": "research_tracking/runs/supervisor-witness-mobile-qa-20261109-02",
+    "complete": true,
+    "browser_and_server_cleanup": true
   },
   "GKT_optimizer_preflight_20261109": {
     "status": "GUARD_APPLIED_AST_ONLY",
