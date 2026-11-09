@@ -1,5 +1,25 @@
 # Tiến độ nghiên cứu
 
+## Trạng thái hiện hành09/11 — sau các gói đã commit
+
+Các tỷ lệ sau là **ước lượng quản lý theo deliverable**, sai số khoảng±10điểm phần trăm; không là phép đo khoa học, tỷ lệ testPASS hoặc tỷ lệ toàn bộ luận văn. Chưa RQ nào hoàn tất. Không cộng lại test executions/cached targets thành mẫu độc lập.
+
+|RQ|Ước lượng|Bằng chứng hiện có|Chốt nghiệm thu còn thiếu|
+|---|---:|---|---|
+|RQ1 — nguyên nhân|~65%|[Bản thảo có nguồn](reports/THESIS_RQ1_MECHANISMS_DRAFT_20261109.md):30.240concept–snapshot predicates;1.080paired decisions;22criterion-change và22action-change chỉ trùng2lượt. Đã đối chiếu lại escape_all_nodes, không giả định candidatepool luôn subset readyset.|Calibration/độ đúng mastery và learning outcomes chưa được chứng minh bởi các footprint này; cần đóng đủ phạm vi RQ và đối chiếu Paper1exactrevision.|
+|RQ2 — điều kiện|~50%|[Phân tích điều kiện đã có](reports/rq2_conditions_evidence_20261108.md):simulator assumptions,10reusedseedblocks/3profiles, ability-mechanism contrasts và Junyi order/support controls.|Chưa tách sạch ability từ profile differences; cần controlled/noise/stability comparisons. Phân tích phụ14.400cached events mới chỉ chuẩn bị, chưa có kết quả được nhận.|
+|RQ3 — phương pháp|~30%|[Core](reports/cgakt_research_core_20261109.md),[actual Adam](reports/cgakt_actual_adam_20261109.md),[fresh-process checkpoint](reports/cgakt_fresh_process_checkpoint_readiness_20261109.md):đã kiểm cập nhật tham số và khôi phục rồi chạy hết epoch tiếp theo trên syntheticCPU. [Producer](reports/cgakt_main_selected_producer_readiness_20261109.md) mới16mockPASS.|Actual public selected-fit success, toàn9candidates/hai môi trường, CUDA/training/comparisons/ablations và closed-loop outcomes chưa hoàn tất. Chưa chứng minh CG-AKT cải thiện.|
+
+Các phần hoàn thiện được commit riêng: dependency inventory8PASS (`387b5bc`), producer16mockPASS (`1f17f15`), sửa diễn giải RQ1 sau review (`48b1a7a`), rà soát GPU (`65f3449`). Kiểm thử RQ2parser16methods vừa đạt, nhưng chưa đóng gói/commit và chưa đọc trace nghiên cứu trong lượt đó; không nâng thành kết quả RQ2. SoftwareGate177nguồn/81modules chưa chạy; bước freeze metadata dừng trước collection vì thứ tự sắp xếp tên file PowerShell/Python khác nhau, hồ sơ lỗi giữ trong vùng chuẩn bị.
+
+**GPU/chi phí:** [kế hoạch hiện hành](../docs/thesis_recovery/07_GPU_TRAINING_AND_COST_PLAN.md) ghi các chốtCPU của CG-AKT còn phải port. Không có GPUtraining chạy nền hoặc Modalcredits được dùng trong đợt này. Browser kiểm thử đã đóng, không previewserver đang chạy do agent mở.
+
+**Việc đang làm:** nghiệm thu secondaryanalysis cacheRQ2 và chuẩn bị actualguard/lifecycle AKT theo thứ tự phụ thuộc. Đã có3agents song song cho các việc nguồn độc lập. Không dùng synthetic engineering để kết luận research efficacy; không dùng oldGate cho nguồn mới, không Holdout/fullCV.
+
+## Nhật ký các mốc trước — giữ nguyên theo lịch sử
+
+Các đoạn bên dưới mô tả trạng thái tại thời điểm ghi; những câu “chưa checkpoint”, “chưa actualAdam” hoặc “core đang review” đã được thay bởi trạng thái hiện hành ở trên. Chúng được giữ để truy vết, không phải readiness hiện tại.
+
 **Mốc kỹ thuật09/11:** [CG-AKT cập nhật Adam thật](reports/cgakt_actual_adam_20261109.md) đã1casePASS ở02,3forward/backward/clip/Adamsteps,18targetvisits/12distinctfixtureeventIDs. All30methodrestorationchecksaccepted;48outputs giữ cả01rejected3updates vàpure5. KhôngfullEpoch/researchfit/hiệuquảmôhình. Kernelchọnmôhìnhthuầnthốngkê mới8fixturesPASS, chưa realall9admission/freeze. Checkpointmodulemới đangreview, browserđóng/noModal.
 
 **Kỹ thuật CG-AKT09/11 mới nhất:** [Hotpath đã nghiệm thu](reports/cgakt_hotpath_integrity_20261109.md), commit `f8b90fb`,135pure+25nativePASS thuộc hai scope;0full-cache serializer trong batchhotregions, vẫn explicitwholepassaudits. Bundle41outputs và4nguồn/report đã kiểm47rawGitblobs. Chưa actualAdam, checkpoint/refit, corpusfit, CUDA hoặc throughput. [Plan27](../docs/thesis_recovery/27_MAIN_CANDIDATE_LIFECYCLE_PLAN.md) chỉ rõ các ranh giới selected-only/externalfreeze/refit còn thiếu; không dùng A0pilot lặp nhiều lần làm mainmatrix. Browser đã đóng, không previewserver, không chiModal.
