@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**AKT A0 — selected-only đã thực chạy ngày09/11.** [Hồ sơ lượt CPU nhỏ](akt_main_tiny_a0_selected_engineering_20261109.md), [bundle103outputs](../runs/akt-main-tiny-a0-selected-engineering-20261109-01/README.md). Hoàn tất7epochs, chọn best4,14Adam/4.704targets, fresh reload và84raw exports. Giữ failure prelaunch01. Corpus kiểm tích hợp10×84, chưa so sánh nghiên cứu hoặc kiểm CUDA.
+
 [Corpus tích hợp10×84](akt_main_engineering_corpus10x84_20261109.md) đã sinh/đọc lại đủ840lượt, 52outputs bằng chứng đã đóng và54rawGitfiles đã kiểm. Corpus17files được commit riêng718f90e. Selected lifecycle đang chuẩn bị, chưa model fit hoặc CUDA.
 
 

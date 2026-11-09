@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\run_main_tiny_selected_a0_01.py", line 132, in <module>
+    main(parser.parse_args())
+    ~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\run_main_tiny_selected_a0_01.py", line 62, in main
+    need(psutil.virtual_memory().available>=2*1024**3 and psutil.disk_usage(R).free>=2*1024**3,
+                                                          ~~~~~~~~~~~~~~~~~^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\psutil\__init__.py", line 2081, in disk_usage
+    return _psplatform.disk_usage(path)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\psutil\_pswindows.py", line 242, in disk_usage
+    total, used, free = cext.disk_usage(path)
+                        ~~~~~~~~~~~~~~~^^^^^^
+TypeError: argument 1 must be str, not WindowsPath

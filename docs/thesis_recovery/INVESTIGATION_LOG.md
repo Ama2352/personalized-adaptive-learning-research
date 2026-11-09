@@ -829,3 +829,8 @@ Native mastery05 timeout sau173giây worker, cleanup Job0. Profile ghi25construc
 ## Tác giả xác nhận chuẩn Paper1 ngày09/11
 
 Theo xác nhận trực tiếp của tác giả ngày09/11, notebook Paper1 là bản tiền kỳ. PDF phản ánh phiên bản đã phát triển để nộp và là chuẩn thiết kế, kết quả kế thừa cho KLTN. Phần phát triển simulator tiếp theo bám đặc tả PDF và được version riêng. Các chẩn đoán đã chạy trên notebook giữ phạm vi bản tiền kỳ. Không chờ tìm source cuối để tiếp tục KLTN. Tái dựng theo PDF cần kiểm các quy tắc mô tả, còn tái lập đúng từng số lịch sử chỉ được ghi khi có bằng chứng chạy tương ứng.
+
+
+## 09/11 — đóng gói lượt selected-only A0 nhỏ đã đạt
+
+Root kiểm dry94copies+9generated, sau đó đóng và verify103outputs. Manifest2c58d088d54cfd5332f01c80aa3ddfae265970b026daef5d89267d2c4d161164. Actual7epochs/best4/14Adam/84export, giữ lỗi prelaunch và derivative. Không chạy lại training khi đóng gói. Báo cáo HTML và Markdown đã cập nhật ở commitbf29d55. Linux/CUDA và so sánh các mô hình còn thiếu.
