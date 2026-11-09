@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\worker_rq1_cpu09_native_mastery04.py", line 354, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\worker_rq1_cpu09_native_mastery04.py", line 295, in main
+    result = replay.replay_then_evaluate(buckets, seeds=grid['seeds'], profiles=grid['profiles'], steps=120,
+        questions=questions, policy_factory=factory,
+        timestamp_factory=lambda hours: start + pd.Timedelta(hours=hours), guard=guard,
+        verify_after=verify_before_truth)
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\replay_rq1_cpu09_native_mastery01.py", line 192, in replay_then_evaluate
+    readouts, parity = matched_replay(observable, seeds=seeds, profiles=profiles, steps=steps, questions=questions,
+                       ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        policy_factory=policy_factory, timestamp_factory=timestamp_factory, guard=guard)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\replay_rq1_cpu09_native_mastery01.py", line 121, in matched_replay
+    guard()
+    ~~~~~^^
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\worker_rq1_cpu09_native_mastery04.py", line 181, in guard
+    check()
+    ~~~~~^^
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\worker_rq1_cpu09_native_mastery04.py", line 137, in check
+    need(math.isfinite(elapsed()) and elapsed() < limits['worker_seconds'], 'worker elapsed allocation')
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\worker_rq1_cpu09_native_mastery04.py", line 24, in need
+    raise ValueError(message)
+ValueError: worker elapsed allocation

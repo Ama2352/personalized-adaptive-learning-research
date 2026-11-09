@@ -1,0 +1,46 @@
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\worker_rq1_cpu09_native_mastery01.py", line 302, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\worker_rq1_cpu09_native_mastery01.py", line 184, in main
+    import pandas as pd
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\pandas\__init__.py", line 56, in <module>
+    import pandas.core.config_init  # pyright: ignore[reportUnusedImport] # noqa: F401
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\pandas\core\config_init.py", line 31, in <module>
+    from pandas.errors import Pandas4Warning
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\pandas\errors\__init__.py", line 12, in <module>
+    from pandas._libs.tslibs import (
+    ...<3 lines>...
+    )
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\pandas\_libs\__init__.py", line 18, in <module>
+    from pandas._libs.interval import Interval
+  File "pandas/_libs/interval.pyx", line 1, in init pandas._libs.interval
+  File "pandas/_libs/hashtable.pyx", line 1, in init pandas._libs.hashtable
+  File "pandas/_libs/missing.pyx", line 1, in init pandas._libs.missing
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\pandas\_libs\tslibs\__init__.py", line 41, in <module>
+    from pandas._libs.tslibs.conversion import localize_pydatetime
+  File "pandas/_libs/tslibs/conversion.pyx", line 1, in init pandas._libs.tslibs.conversion
+  File "pandas/_libs/tslibs/offsets.pyx", line 1, in init pandas._libs.tslibs.offsets
+  File "pandas/_libs/tslibs/timestamps.pyx", line 1, in init pandas._libs.tslibs.timestamps
+  File "pandas/_libs/tslibs/timedeltas.pyx", line 1, in init pandas._libs.tslibs.timedeltas
+  File "pandas/_libs/tslibs/timezones.pyx", line 43, in init pandas._libs.tslibs.timezones
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\dateutil\tz\tz.py", line 1019, in __call__
+    rv = self.nocache(name=name)
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\dateutil\tz\tz.py", line 1133, in nocache
+    with _tzdata_impl._load_tzdata(candidate) as f:
+         ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\dateutil\_tzdata_impl.py", line 120, in _load_tzdata
+    return _open_binary(package_name, resource_name)
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\dateutil\_tzdata_impl.py", line 76, in _open_binary
+    importlib.resources.files(package).joinpath(resource).open("rb")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py", line 537, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\worker_rq1_cpu09_native_mastery01.py", line 176, in audit
+    deny('read outside pinned inputs/runtime code')
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\worker_rq1_cpu09_native_mastery01.py", line 156, in deny
+    raise RuntimeError(message)
+RuntimeError: read outside pinned inputs/runtime code

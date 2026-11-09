@@ -1,0 +1,183 @@
+{
+  "status": "REJECTED_KEEP_CPU09_MASTERY_REPLAY",
+  "errors": [
+    {
+      "type": "ValueError",
+      "message": "actual owned terminal/cleanup Job0",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\akt-research-runner-20261108-01\\run_rq1_cpu09_mastery_native05.py\", line 387, in main\n    need(receipt['accepted'] is True and receipt['cleanup_accepted'] is True and receipt['returncode'] == 0\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n         and receipt['job_active_after_cleanup'] == 0 and receipt['popen_handle_closed'] is True\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n         and receipt['errors'] == [], 'actual owned terminal/cleanup Job0')\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\akt-research-runner-20261108-01\\run_rq1_cpu09_mastery_native05.py\", line 25, in need\n    raise ValueError(message)\nValueError: actual owned terminal/cleanup Job0\n"
+    }
+  ],
+  "elapsed_seconds": 174.09440210001776,
+  "whole_cap_seconds": 180,
+  "owned_receipt": {
+    "status": "REJECTED_OWNED_PROCESS_LAUNCH",
+    "GO_released": true,
+    "command": [
+      "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+      "-B",
+      "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\akt-research-runner-20261108-01\\worker_rq1_cpu09_native_mastery04.py",
+      "--source-sha256",
+      "f2622ab4e203c407f7aceb7dc6bf3cb94566fe623378fa46e4dd33d7c08640bd",
+      "--contract-sha256",
+      "29762438ed07e125bb07f40f26417e627c2e3779328cace25830485ba91f2cd6"
+    ],
+    "parent": {
+      "pid": 15604,
+      "created_filetime_100ns": "134386670200830482",
+      "create_time": 1794193420.083048,
+      "image": "C:\\Users\\AmaDev\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+    },
+    "approval_reference": "ROOT_RQ1_CPU09_MASTERY_NATIVE_REVIEW05",
+    "job_name": "KLTN_OWNED_b269ca81c37be164eef1c6f0ea31dc1cf71a70f60c2d92a76fd9e85ac2133900",
+    "helper_sha256": "0dc8723170467e9ae73c4e233a357b9d584c66a8c183c478bdcff358fb0a95a1",
+    "worker_sha256": "f2622ab4e203c407f7aceb7dc6bf3cb94566fe623378fa46e4dd33d7c08640bd",
+    "actual_worker": {
+      "pid": 13996,
+      "created_filetime_100ns": "134386670207854353",
+      "create_time": 1794193420.7854352,
+      "image": "C:\\Users\\AmaDev\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+    },
+    "popen": {
+      "pid": 48056,
+      "created_filetime_100ns": "134386670207674225",
+      "create_time": 1794193420.7674224,
+      "image": "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe"
+    },
+    "preGO_owned_tokens": [
+      {
+        "pid": 48056,
+        "created_filetime_100ns": "134386670207674225",
+        "create_time": 1794193420.7674224,
+        "image": "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 13996,
+        "created_filetime_100ns": "134386670207854353",
+        "create_time": 1794193420.7854352,
+        "image": "C:\\Users\\AmaDev\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+      },
+      {
+        "pid": 46360,
+        "created_filetime_100ns": "134386670208017686",
+        "create_time": 1794193420.8017685,
+        "image": "C:\\Windows\\System32\\conhost.exe"
+      }
+    ],
+    "actual_worker_in_job_before_GO": true,
+    "job_active_after_cleanup": 0,
+    "popen_handle_closed": true,
+    "cleanup_errors": [],
+    "cleanup_accepted": true,
+    "observed_owned_tokens": [
+      {
+        "pid": 48056,
+        "created_filetime_100ns": "134386670207674225",
+        "create_time": 1794193420.7674224,
+        "image": "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 13996,
+        "created_filetime_100ns": "134386670207854353",
+        "create_time": 1794193420.7854352,
+        "image": "C:\\Users\\AmaDev\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+      },
+      {
+        "pid": 46360,
+        "created_filetime_100ns": "134386670208017686",
+        "create_time": 1794193420.8017685,
+        "image": "C:\\Windows\\System32\\conhost.exe"
+      }
+    ],
+    "output_sha256": {
+      "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr.log": "472da0e313edab303cfae485b957c7137c444f3b3327fcbbfbaaaf61bff626e0"
+    },
+    "accepted": false,
+    "errors": [
+      {
+        "stage": "launch_or_run",
+        "type": "TimeoutError",
+        "message": "active deadline preserves cleanup reserve"
+      }
+    ],
+    "elapsed_seconds": 173.69187784194946,
+    "max_seconds": 176.62545239995234,
+    "cleanup_reserve_seconds": 3,
+    "returncode": 1,
+    "automatic_retry": false,
+    "elapsed_scope": "call through cleanup/posthash; caller must check final total after persisting/reading its outputs"
+  },
+  "resources": {
+    "samples": 1594,
+    "child_family_samples": 1592,
+    "sampling_interval_seconds": 0.1,
+    "sample_limit": 4000,
+    "observed_family_peak_rss_bytes": 170905600,
+    "observed_minimum_available_ram_bytes": 3357061120,
+    "errors": [],
+    "monitor_stopped": true,
+    "terminated_owned_job": false,
+    "scope": "Observed parent+live descendants, sum lifetime peak where exposed; cooperative sampling"
+  },
+  "artifacts": {},
+  "validation": null,
+  "source_inputs_before": {
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/replay_rq1_cpu09_native_mastery01.py": "337677c160f56da0d1454785cb18cbe5eae6ac9019db76a6b59a9eb187e0ebad",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/test_rq1_cpu09_native_mastery01.py": "8b97ef21a0e3f53d9f367d8c8c22078e01dc8ef9503bc8ef07437d8732cacf1d",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/analyze_rq2_cached_mechanism01.py": "8590381c85fe1e58df4a305c8bf4a33ebd9900d0fa8ffb1f1a93868fb56f1311",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq2_cache_mechanism_contract01.json": "23c182f6f03d4f31e694920bd11b6cd697cc1a66a16b5b31d4c46150c9e24fa4",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq2-cached-mechanism-native02-outer/final.json": "ad5170d4cd312b126b78f4fc96b01a4f1809962a7cee820010e2ab86a44d757c",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/prediction_mastery_trace_worker03.py": "fc067d67ebc9018722aa66367fc186fe4a10e0f0b112475372f8024d4d74d631",
+    "src/knowledge_tracing/paper2_reference.py": "a12edc72a00ad980799ec50ff26f0cb68f2529e3699e8a57e4f11295693c2cd1",
+    "src/knowledge_tracing/gam_kt/simulator_pathways.py": "33ad34140f7b08eb22f86e6cc3caf7b0e7c98f09e4fd74945a6f7e9718b07560",
+    "src/knowledge_tracing/akt/resources.py": "8c1e5970efb6aa9966a8f583e11172632426f3318d396c3e28d24b5d16b9c5ba",
+    "src/knowledge_tracing/__init__.py": "b84a9a4118d8b3476daae25a7981c97909524ace7ef93860bba7e6ec9e5bccb8",
+    "src/knowledge_tracing/akt/__init__.py": "03a3e9c1a2030b62b050c846fccb4349066ff247864484683f4acf8f5b725986",
+    "src/knowledge_tracing/gam_kt/__init__.py": "ce054ddb34933abbe8e156e2471fa3c504cf8e914ee82dd1a6aadcc0c22781c6",
+    "scripts/research/windows_owned_worker.py": "0dc8723170467e9ae73c4e233a357b9d584c66a8c183c478bdcff358fb0a95a1",
+    ".venv/Lib/site-packages/dateutil/_tzdata_impl.py": "1780a3ec3e20a304478ba0f4eb8f5852d96707ed729f338e9951140a8cc6c3a7",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/worker_rq1_cpu09_native_mastery03.py": "3650769e8db477f1aa5b54b8012c6299ada4c3cea160893c86b6cd8aff0d55af",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/test_rq1_cpu09_source_adapter01.py": "285079bec10b1a719aef568fa7ebba22f6be225a89177d34b21d59006ea915bf",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq1_cpu09_native_mastery_contract01.json": "6e867619eb5ae4203e3e3294f72274eead04295d1635ded6bb7b7f6e8a3045cc",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/check_rq1_cpu09_mastery_pure01.py": "5cb28b073b9d885b8df64f96c19b661e3833c4dea9359ce859f37fa0146bf6e1",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq1_cpu09_mastery_pure01_packet.json": "57524f3f1be8006d7ae0a9172b81d34127e01b3c2e45edcd7299075999ccde4e",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq1_cpu09_native_mastery_contract03.json": "d5b663693720e01af63c26d0307b1f5433d2eef51d656336cd864679f00d9b3e",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/check_rq1_cpu09_source_adapter_pure01.py": "72fb60298d4500291692bc9727772aa131ffcfd9320297ac768b72bd333ec728",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq1_cpu09_source_adapter_pure01_packet.json": "da267102be01ecadd4de51f05c40143fd3901accb742e7fc575e952ad315c64e",
+    ".venv/Lib/site-packages/psutil/__init__.py": "7b6a0675824eb1fa2ff0cb1eb36e358dc454703e51dfa4e9a0e6ccd26a159f0c",
+    ".venv/Lib/site-packages/psutil/_common.py": "6fc6bf5f86491ba962521374472570238929003cebea8e9b6c55224084b52bb0",
+    ".venv/Lib/site-packages/psutil/_pswindows.py": "0bbd52dcb214735be4168d11a2ae192d5bc7265c8cf72c611179476479687f54",
+    ".venv/Lib/site-packages/psutil/_psutil_windows.pyd": "0035450801bd7d938e9e146c5ec28e619cb5a5f4a18cdc53ac7e9734c7f94f78",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/worker_rq1_cpu09_native_mastery04.py": "f2622ab4e203c407f7aceb7dc6bf3cb94566fe623378fa46e4dd33d7c08640bd",
+    "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq1_cpu09_native_mastery_contract04.json": "29762438ed07e125bb07f40f26417e627c2e3779328cace25830485ba91f2cd6",
+    "research_tracking/runs/cpu-factorial-20261107-01/manifest.json": "371985977d32ddd1f3b95c3bab9858d20e4e463b2284b057f1b94db78c5f5cee",
+    "research_tracking/runs/cpu-factorial-20261107-01/outcomes.json": "e758ae6aa08fc3da0c855e4476f9b71a6c7a9156a65a38073d68ee3475e4f234",
+    "research_tracking/runs/cpu-factorial-20261107-01/contrasts.json": "3434777a92aca5e44032d281a36a8d95aa7b390ac909c2dc24832c553b125327",
+    "research_tracking/runs/cpu-factorial-20261107-01/summary.json": "3deaabd76c93176b1f45dc1a5c3527865525962c97c8f74f436816b2e846f57c",
+    "research_tracking/runs/cpu-factorial-20261107-01/source_provenance.json": "8b296d89d869e90696be04592a5dc627e617af6c39055a863b9eb88b6cd5560d",
+    "research_tracking/runs/cpu-factorial-20261107-01/traces.jsonl.gz": "2a136fbf627cfa59170deec54c10ae562c2f8214eb00970ce41b96c43d065dcc",
+    "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/data/simulator_inputs/nodes.csv": "6db464d1fd3df5d4215d51c9f90dc0f7e24f252517252784c80bdb5fa6291650",
+    "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/data/simulator_inputs/edges.csv": "ecd910d8df52f8790997391de657ea0f9e8357446212c168b73e500d0facc2fb",
+    "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/data/simulator_inputs/question_bank.csv": "fb5924ac0d19049ef1a5be23352592e30dfa3a4bde3e3fa07f10979fe0887e4d",
+    "research_tracking/reports/CPU09_CPU10_PROTOCOL_DRAFT.md": "cc6d44da33d0a6cba2c09738e7bcbbe085f1064b2b0ca7e73cca50cd70b02678",
+    "research_tracking/reports/cpu_pilots_20261107.md": "f3678872f82d2830d6bc7e95d10b78f1004ad0f9d26998fd584e43235d8d0dcd",
+    "research_tracking/reports/rq2_conditions_evidence_20261108.md": "eee69a64331c8d6aa198ca9f3f42cdd98d2ef1c9978f1b898768d3c7b5d47cce",
+    "research_tracking/reports/factorial_pilot_uncertainty_20261107.md": "ad202ed3eb28a597e4e6c8003a9358fde5e45a7058ec44c909d70dabbae842bb",
+    "research_tracking/reports/cpu_pilot_followup_20261107.json": "adc68ed68d5d20721cbb4d2098ff150d209cc982463d872832530b635cc80fca",
+    "research_tracking/reports/rq2_controlled_ability_prerequisite_protocol_DRAFT_20261108.md": "5b8b9be0ee847ae5c8457024da63df7f4096fa744def8c2a330292ce39000b24",
+    "research_tracking/reports/rq2_controlled_ability_prerequisite_protocol_DRAFT_20261108.sources.json": "4540b0d83c66cbd976caa4dc229e87ed517422cacaa960577eabff0623820986",
+    "scripts/research/run_approved_cpu_pilots.py": "55e8e3c74c8daa92d572c809353da5546fa435b55e18b8ab30fdcf46e8413e8e",
+    "src/knowledge_tracing/gam_kt/simulator_mechanisms.py": "0cbfaf1b4735c188e04ed822197121118dcb65849b582af7413e157fd8d847fa",
+    "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/source/adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb": "353f487a3d6ed3826f2546d03c0aa2ad2279cf5c4b7fe8e375f4cafb0408280f",
+    "paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20/data/simulator_inputs/concept_to_chapter_map.csv": "aa99cffb251ce6757258d2e87fe707455bc74b6b3917ead1acf48c5e96ee0a17",
+    ".venv/Lib/site-packages/tzdata/zoneinfo/UTC": "fddce1e648a1732ac29afd9a16151b2973cdf082e7ec0c690f7e42be6b598b93",
+    ".venv/Lib/site-packages/tzdata/zoneinfo/Etc/UTC": "fddce1e648a1732ac29afd9a16151b2973cdf082e7ec0c690f7e42be6b598b93"
+  },
+  "source_inputs_after": {},
+  "packet_sha256": "4f336a1c90ed882add2b5c93de96a43da9f8d9ef48e4642cb2f49e600f5180c8",
+  "controller_sha256": "a8ea7c8c6f74e4bbe94dad5ebbadf88fe1c0233091bfe95655e9d12bc6abb0df",
+  "oracle_access_scope": "RAW_ORACLE_SCHEMA_NUMERIC_VALIDATION_PRE_PARITY; NO_ORACLE_TO_ESTIMATOR; CLASSIFICATION_ONLY_AFTER_ALL_PARITY",
+  "actual_adapter_canary_sha256": "ff7089d8112df51e6b577779839443e5a4fcbe95a85896e8793ad211ec01b517",
+  "actual_pure_receipt_sha256": "05542d273613da117ede00d2c90421735183fb5af41dc6421f902c52d6ca38ee",
+  "automatic_retry": false
+}

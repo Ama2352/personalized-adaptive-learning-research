@@ -1,0 +1,66 @@
+{
+  "status": "REJECTED_KEEP_ATTEMPT",
+  "phase": "native_import_and_source_loader",
+  "error": "RuntimeError('read outside pinned inputs/runtime code')",
+  "traceback": "Traceback (most recent call last):\n  File \"D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\akt-research-runner-20261108-01\\worker_rq1_cpu09_native_mastery02.py\", line 185, in main\n    from knowledge_tracing.paper2_reference import load_reference\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1331, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 935, in _load_unlocked\n  File \"<frozen importlib._bootstrap_external>\", line 1022, in exec_module\n  File \"<frozen importlib._bootstrap_external>\", line 1118, in get_code\n  File \"<frozen importlib._bootstrap_external>\", line 1217, in get_data\n  File \"D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\akt-research-runner-20261108-01\\worker_rq1_cpu09_native_mastery02.py\", line 176, in audit\n    deny('read outside pinned inputs/runtime code', str(resolved))\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: read outside pinned inputs/runtime code\n",
+  "elapsed_seconds": 2.4770413999794982,
+  "native_started": {},
+  "native_returned": {},
+  "native_profile_return_scope": "PROFILE_RETURN_EVENTS_NOT_PROOF_OF_SUCCESSFUL_BODY_ON_FAILURE",
+  "truth_accepted": false,
+  "memory_samples": [
+    {
+      "phase": "source_preflight",
+      "elapsed_seconds": 0.384901599958539,
+      "pid": 40584,
+      "process_rss_bytes": 25657344,
+      "process_peak_rss_bytes": 25657344,
+      "system_available_ram_bytes": 4341071872,
+      "system_total_ram_bytes": 16794759168
+    }
+  ],
+  "denials": [
+    {
+      "message": "read outside pinned inputs/runtime code",
+      "phase": "native_import_and_source_loader",
+      "path": "D:\\Dev\\KLTN\\src\\knowledge_tracing\\__pycache__\\paper2_reference.cpython-313.pyc"
+    },
+    {
+      "message": "read outside pinned inputs/runtime code",
+      "phase": "native_import_and_source_loader",
+      "path": "D:\\Dev\\KLTN\\<unknown>"
+    }
+  ],
+  "native_metadata": {
+    "public_apis": [
+      "platform.uname",
+      "platform.processor"
+    ],
+    "phase": "REAL_WINDOWS_METADATA_BEFORE_IMPORT_AUDIT",
+    "helper_calls": 1,
+    "local_gethostname_calls": 1,
+    "commands": [
+      {
+        "executable": "C:\\WINDOWS\\system32\\cmd.exe",
+        "command": "C:\\WINDOWS\\system32\\cmd.exe /c \"ver\""
+      }
+    ],
+    "outside_phase_popen_attempts": 0,
+    "outside_phase_socket_attempts": 0,
+    "blocked_bootstrap_attempts": 0,
+    "phase_closed": true,
+    "allowed_executable": "C:\\WINDOWS\\System32\\cmd.exe",
+    "hostname_persisted": false,
+    "fields": {
+      "system": "Windows",
+      "release": "11",
+      "version": "10.0.26200",
+      "machine": "AMD64"
+    },
+    "uname_cache_identity_reused": true,
+    "processor_repeat_equal": true,
+    "processor_present": true,
+    "processor_sha256": "32c78066318eda6c5027a46995c44ad3896343a4680dc23d605c7bf91abdcddd",
+    "seconds": 0.18775139999343082
+  }
+}
