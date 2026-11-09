@@ -128,4 +128,4 @@ Mở [tóm tắt GVHD](../research_tracking/supervisor_reports/2026-11-09/01_tie
 
 ## Mô phỏng theo PDF Paper1
 
-`src/knowledge_tracing/paper1_pdf/` giữ các quy tắc world/Elo/controller phiên bản riêng theo PDF chuẩn. `tests/paper1_pdf/` kiểm bằng fixture dựng tay. Source Paper1 lịch sử giữ nguyên. [Phạm vi đã kiểm và phần còn thiếu](../research_tracking/reports/paper1_pdf_primitives_readiness_20261109.md).
+`src/knowledge_tracing/paper1_pdf/` giữ các quy tắc world/Elo/controller phiên bản riêng theo PDF chuẩn. `tests/paper1_pdf/` kiểm bằng fixture dựng tay. `domain.py` đọc bộ CSV ứng viên đã pin, giữ metadata đầu vào và tách chapter keys ngoài domain. Source Paper1 lịch sử giữ nguyên. [Phạm vi đã kiểm và phần còn thiếu](../research_tracking/reports/paper1_pdf_primitives_readiness_20261109.md).

@@ -1,5 +1,14 @@
 # Sổ quyết định và vấn đề mở
 
+## D38 — provenance Linux CPU dùng profile thực của Gate writer
+
+Root duyệt engineering batch bốn file theo plan02 ngày09/11. Gate writer ghi execution_profile sáu trường từ process thật và gắn hash writer trong build hiện hành. Main Linux kiểm report đã bind SHA sau public reader. Nhánh Windows và public authorization giữ compatibility. Đã loại phương án thêm external Gate-controller receipt riêng vì writer hiện có cung cấp đúng thông tin cần thiết. Source mới phải kiểm regression và refresh Gate trước native research dispatch. Đây là đổi hợp đồng vận hành, không đổi model hoặc phép đánh giá khoa học.
+
+## D39 — pilot chi phí observer dùng loader đã kiểm và tách vai dữ liệu
+
+Root sửa ràng buộc do chính Root đặt trong proposal chưa thực chạy. Pilot một history dùng lại reader strict đã có để kiểm cache, có thể parse trường simulator truth trong validation của loader. Chỉ observable projection được chuyển cho policy, đáp án hiện tại chỉ dùng sau predict/capture. Pilot không tính truth accuracy hoặc dùng oracle làm feature. Không xây parser JSON riêng chỉ để tránh parse trường đã lưu. Source-only contract mới phải ghi rõ revision này trước dispatch. Vẫn giữ hai policy mới,240updates, whole60giây và nhánh native05 dừng. Không mở full replay, Holdout, training hoặc cloud.
+
+
 ## D37 — PDF Paper1 là chuẩn theo xác nhận tác giả09/11
 
 Theo xác nhận trực tiếp của tác giả ngày09/11, notebook Paper1 là bản tiền kỳ. PDF phản ánh phiên bản đã phát triển để nộp và là chuẩn thiết kế, kết quả kế thừa cho KLTN. Phần phát triển simulator tiếp theo bám đặc tả PDF và được version riêng. Các chẩn đoán đã chạy trên notebook giữ phạm vi bản tiền kỳ. Không chờ tìm source cuối để tiếp tục KLTN. Tái dựng theo PDF cần kiểm các quy tắc mô tả, còn tái lập đúng từng số lịch sử chỉ được ghi khi có bằng chứng chạy tương ứng.

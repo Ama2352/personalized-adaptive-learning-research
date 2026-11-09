@@ -13,3 +13,10 @@ Lượt01 lỗi import do bộ chạy thiếu đường src trong child environm
 Các kiểm này dùng domain dựng tay. Hàm kiểm shape28concept/84item/25–31edges và3intra+3cross additions chưa chứng nhận bytes của domain thực. Các CSV Paper2 được khai báo như input ứng viên có provenance, chưa được gọi là exact historical input của PDF.
 
 Còn phải nối input thật được version rõ, profile/RNG, B0, unlock policy và runner có budget trước các đối chứng RQ1–RQ2 theo PDF. Chưa chạy matrix450runs hoặc tái lập số liệu lịch sử. Chưa kết luận mới về hiệu quả đồ thị từ các kiểm kỹ thuật này.
+
+
+## Cập nhật sau kiểm primitives, nạp bộ input ứng viên
+
+Bộ nạp riêng tại `src/knowledge_tracing/paper1_pdf/domain.py` đã qua24fixtures trong1,5103692giây dưới cap30giây. Một lượt đọc5CSV thật đã pin hoàn tất0,1828113giây dưới cap5giây. Đã xác nhận28nodes/84items/B1=25/GA=31, subset và3intra+3cross additions. Chapter map gốc có8keys ngoài domain, được giữ rõ trong metadata, active mapping chỉ dùng28concepts. Các CSV gốc không thay đổi. [Bundle13outputs](../runs/paper1-pdf-domain-engineering-20261109-01/README.md), [receipt nạp thật](../runs/paper1-pdf-domain-engineering-20261109-01/actual_domain_load.json).
+
+Identity của input ứng viên là96e83ad02e21cdd52617cc9c07c1068d2ecfc5dd4983d11a81d8f02326b65f91. Mỗi graph có traversal topo lexicographic riêng, đây là lựa chọn triển khai mới được ghi rõ. Chưa chọn B0 topology, profile/RNG, unlock policy hoặc chạy matrix. Nạp bộ input ứng viên không chứng nhận exact historical PDF input identity. Câu còn phải nối input ở mục trước mô tả trạng thái trước cập nhật này.

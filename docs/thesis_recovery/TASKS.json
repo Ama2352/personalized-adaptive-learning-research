@@ -4823,6 +4823,97 @@
       "status": "VERIFIED_CACHED_REFERENCE_MIXTURE_NOT_RQ_COMPLETE",
       "blockers": [],
       "completion_evidence": "research_tracking/reports/rq1_reference_mixture_reliability_20261109.md"
+    },
+    {
+      "id": "RQDIAG19",
+      "research_objective": "Nạp input ứng viên được version rõ cho simulator theo PDF Paper1.",
+      "rq": [
+        "RQ1",
+        "RQ2"
+      ],
+      "workstream": "engineering",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RQDIAG17"
+      ],
+      "required_inputs": "5CSV Paper2 với pins prospective đã review, primitives PDF.",
+      "files_components": [
+        "src/knowledge_tracing/paper1_pdf/domain.py",
+        "tests/paper1_pdf/test_domain.py"
+      ],
+      "implementation_objective": "Strict5pins/preparse/postread, active28/84/25–31 và8extras, topology riêng từng graph.",
+      "acceptance_criteria": "24synthetic tests đạt, actualreadonly load đạt với inputs trước=sau, đóng bundle.",
+      "verification_steps": "24PASS1.510s, actual0.183s, bundle13outputs verified.",
+      "required_artifacts": [
+        "Source, rawtestlogs, actualdomain metadata và inventory."
+      ],
+      "estimated_effort": "Engineering effort chưa đo riêng, elapsed ghi trong receipt.",
+      "compute_cost_category": "local_CPU_metadata_only",
+      "authorization_requirements": "Local implementation và readonly inputs đã được yêu cầu. Không learner simulation/training/Holdout/cloud.",
+      "status": "VERIFIED_PROSPECTIVE_DOMAIN_METADATA_NOT_FULL_SIMULATOR",
+      "blockers": [],
+      "completion_evidence": "research_tracking/reports/paper1_pdf_primitives_readiness_20261109.md"
+    },
+    {
+      "id": "GRAPH25",
+      "research_objective": "Thêm provenance Linux CPU vào Main và execution profile cho Gate writer hiện có.",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "GRAPH23",
+        "GRAPH24"
+      ],
+      "required_inputs": "Source đã pin, review Root và bounded allocation riêng.",
+      "files_components": [
+        "src/knowledge_tracing/akt/research_main_execution.py",
+        "scripts/akt/refresh_gate2.py",
+        "tests/akt/test_research_main_execution.py",
+        "tests/akt/test_gate2_refresh.py"
+      ],
+      "implementation_objective": "Thêm provenance Linux CPU vào Main và execution profile cho Gate writer hiện có.",
+      "acceptance_criteria": "Focused regressions đạt, Windows contract giữ đúng, Linux thiếu actual runtime/source/Gate phải từ chối. Native Gate mới cần refresh sau source freeze.",
+      "verification_steps": "Root review source, chạy checks có capture theo đúng scope, đóng bằng chứng trước commit.",
+      "required_artifacts": [
+        "Source pins, rawlogs, actual receipts và ghi chú giới hạn."
+      ],
+      "estimated_effort": "Chưa đo riêng.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Local engineering đã được yêu cầu, Root duyệt từng bounded operation. Không fullCV/Holdout/cloud hoặc đổi phương pháp khoa học.",
+      "status": "SOURCE_FROZEN_FOCUSED_REGRESSION_PENDING",
+      "blockers": []
+    },
+    {
+      "id": "RQDIAG20",
+      "research_objective": "Đo parity và chi phí targeted observer trên đúng một history cũ, tách khỏi lane native05 đã dừng.",
+      "rq": [
+        "RQ1"
+      ],
+      "workstream": "engineering",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RQDIAG16"
+      ],
+      "required_inputs": "Source đã pin, review Root và bounded allocation riêng.",
+      "files_components": [
+        "artifacts/akt/local-tests/akt-research-runner-20261108-01/RQ1_CPU09_OBSERVER_COST_PROPOSAL01.md"
+      ],
+      "implementation_objective": "Đo parity và chi phí targeted observer trên đúng một history cũ, tách khỏi lane native05 đã dừng.",
+      "acceptance_criteria": "Hai policy mới/240updates, exact120P/readouts/fingerprints, whole60/worker53/owned57cleanup3 và memcaps. Reader có thể validate storedtruth, policy chỉ nhận observable projection theo D39. Không fullreplay/truthaccuracy.",
+      "verification_steps": "Root review source, chạy checks có capture theo đúng scope, đóng bằng chứng trước commit.",
+      "required_artifacts": [
+        "Source pins, rawlogs, actual receipts và ghi chú giới hạn."
+      ],
+      "estimated_effort": "Chưa đo riêng.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Local engineering đã được yêu cầu, Root duyệt từng bounded operation. Không fullCV/Holdout/cloud hoặc đổi phương pháp khoa học.",
+      "status": "SOURCE_PREPARATION_D39_NO_EXECUTION",
+      "blockers": []
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",
