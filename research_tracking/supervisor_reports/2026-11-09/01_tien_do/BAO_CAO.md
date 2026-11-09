@@ -12,7 +12,9 @@ Paper 1 được kế thừa theo bản PDF phát triển dùng để nộp, là
 
 **Đã có bằng chứng chẩn đoán mới cho RQ1–RQ2, gồm phép đo trực tiếp hai điều kiện xét thành thạo; RQ3 đã có dữ liệu, bước ước lượng cạnh, lõi CG-AKT được kiểm tính toán và quy trình chọn checkpoint AKT không đồ thị chạy thành công trên corpus nhỏ. Chưa RQ nào hoàn tất; chưa có kết quả CG-AKT đã huấn luyện để kết luận mô hình này tốt hơn.**
 
-**Mốc RQ1 mới nhất.** Đã giải thích đủ 30 thời điểm nhãn thành thạo khác nhau nhưng tập sẵn sàng ban đầu giống nhau, với phần trùng nhau giữa các điều kiện được kiểm riêng.
+**Mốc chẩn đoán thành thạo trước đó.** Đã giải thích đủ 30 thời điểm nhãn thành thạo khác nhau nhưng tập sẵn sàng ban đầu giống nhau, với phần trùng nhau giữa các điều kiện được kiểm riêng.
+
+**Đã giải thích vì sao hai đường đi khác nhau cùng dừng ở 172 lượt trong ví dụ Paper 1. Khi giữ cùng trạng thái ban đầu và cùng số ngẫu nhiên ở từng lần luyện của mỗi khái niệm, nếu cả hai nhánh đều hoàn tất, tổng lượt và trạng thái cuối bằng nhau dù thứ tự chương có thể khác. Sáu tình huống dựng tay đã kiểm cả điều kiện này và giới hạn khi dừng sớm hoặc chạm trần trạng thái.**
 
 ## Quá trình đã thực hiện
 
@@ -59,6 +61,18 @@ Phép kiểm dùng lại ba khối ngẫu nhiên với chín lịch sử hồ s�
 **Giải thích bước từ thành thạo đến tập sẵn sàng ban đầu.** Trên cùng 1.080 thời điểm, hai cấu hình Graph-GAM-KT nhận 31 và 0 cạnh có 90 thời điểm khác nhãn thành thạo ở một khái niệm. Tập sẵn sàng ban đầu R khác nhau ở 60 thời điểm và giống nhau ở 30 thời điểm. R là đầu vào cho các bước lọc và mở rộng ứng viên tiếp theo của bộ chọn bài. Trong cả 90 thời điểm, chính khái niệm mang nhãn khác nhau đều còn bị điều kiện tiên quyết chặn khỏi R.
 
 Đã giải thích đủ 30 thời điểm có cùng R. Có 18 trường hợp ở khái niệm không có con trực tiếp trong đồ thị của bộ điều khiển, còn 12 trường hợp có khái niệm con đã mang nhãn thành thạo ở cả hai cấu hình. Trong 12 trường hợp sau có 4 trường hợp đồng thời đủ 6 lần luyện ở tiên quyết, nên cần ghi rõ phần trùng nhau khi giải thích. Tất cả 30 trường hợp thuộc hồ sơ PG. Kết quả đã được tính lại trực tiếp từ 18 trace gốc của cùng chín lịch sử. Phần đánh giá độ đúng của nhãn so với kiến thức thật và tác động lên học tập vẫn cần làm tiếp.
+
+## Chặng 12. Vì sao hai đường đi khác nhau cùng dừng ở 172 lượt?
+
+Paper1 tách vai trò của đồ thị và chính sách trong đường đi học. Paper2 còn cho thấy cần phân biệt dự báo, quyết định và kết quả học. Sau ví dụ hai đồ thị cùng dừng ở 172 tương tác nhưng quay lại chương khác nhau, nhóm đặt câu hỏi số lượt bằng nhau có phản ánh hiệu quả tương đương, hay đến từ quy tắc mô phỏng.
+
+Nhóm kiểm lại quy tắc trạng thái của từng khái niệm trong phiên bản Paper1 đang triển khai. Hai nhánh giữ cùng trạng thái ban đầu, bộ câu, quy tắc chọn độ khó và dòng số ngẫu nhiên theo số lần luyện riêng của mỗi khái niệm. Trạng thái chỉ cập nhật ở khái niệm được chọn, không quên theo thời gian hoặc nhận tác động học từ khái niệm khác. Bởi vậy, lần luyện thứ n của một khái niệm có cùng câu hỏi, dự báo, đáp án và cập nhật ở hai nhánh, dù lần luyện đó xuất hiện ở những vị trí khác nhau trên toàn đường đi.
+
+Từ đó có một kết luận có điều kiện. Nếu cả hai lượt đều hoàn tất mọi khái niệm theo ngưỡng của bộ ước lượng, mỗi khái niệm cần cùng số lần luyện để chạm ngưỡng lần đầu. Tổng số tương tác và trạng thái cuối vì vậy bằng nhau, trong khi thứ tự chương và số lần quay lại vẫn có thể khác. Điều này giải thích sự bằng nhau ở 172 trong ví dụ đã chạy dưới các giả thiết được giữ cố định, chưa chứng minh hai đồ thị đem lại kết quả học tương đương ở mọi điều kiện. Các tình huống dựng tay đã kiểm cả đáp án sai, đổi độ khó câu hỏi và mức cập nhật thay đổi theo số lần luyện.
+
+Điều kiện hoàn tất không thể bị bỏ qua. Khi dừng vì hết ngân sách trước lúc hoàn tất, hai đường đi có thể dành số lượt khác nhau cho từng khái niệm. Những đoạn luyện chung của từng khái niệm vẫn giống nhau, nhưng trạng thái cuối của cả bộ khái niệm có thể khác. Một trường hợp nhỏ còn cho thấy vai trò của trần trạng thái 1500. Nếu chỉ có một lượt phản hồi, luyện khái niệm đang ở 1498 làm trạng thái thật tăng 2, còn luyện khái niệm đang ở 1200 làm nó tăng 12. Với cùng số lượt mà mọi cập nhật đều tăng đủ 12, tổng mức tăng bằng 12 nhân số phản hồi, ngay cả khi đáp án và phân bổ lượt luyện khác nhau.
+
+Phần bổ sung làm rõ chỉ tiêu nào có thể đã bị quy tắc của mô phỏng ràng buộc. Nó không biến toàn bộ hai lịch sử thành giống nhau, không xếp hạng đồ thị và không xác nhận lợi ích trên người học thật. Còn phải đối chiếu phân bổ dưới ngân sách hữu hạn, các chính sách so sánh và những cơ chế học khác trước khi kết luận về hiệu quả học.
 
 ## Còn phải chứng minh
 
