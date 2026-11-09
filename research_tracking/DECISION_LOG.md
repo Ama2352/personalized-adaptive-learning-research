@@ -24,3 +24,10 @@ User chấp thuận pilot factorial10seed/profile×120steps và Junyi32inner-tra
 ## D-GPU06-LOCAL — Không dùng probe PASS để nới runtime/main-worker guards
 
 Đã sửa interpreter/schema2 để hỗ trợ Linux đúng cách và kiểm actualParquetworker trên CPU, không đổi CPUphase/hypers/splits hoặc cho inheritedColabvenv thành runtime chính thức. Gate16fail do deepfixturepath được giữ riêng, Gate17PASS513 sau controlledcontrast vàfixture-onlyfix. SAKTcheckpointloader dùng một boundedpayload đãhash; giữ regressionfail/pass trongrunriêng. Các xác nhận chỉ là software contracts. Tiếp GPU07 bằng immutable worker-context và explicit dispatch/caps; không monkeypatch production globals, không tựapprove budget/fullCV hoặc bỏbaseline. Xem20_LINUX_CUDA_WORKER_CONTRACT.md và các báo cáo mới.
+
+## D42 — recipe GKT nghiên cứu BN-D5 được chốt trước fit
+
+Root chọn recipe29 theo quyền triển khai người dùng đã giao. GKT static-expert dùng domain28, hidden/embedding32, MLP hai lớp ELU với dropout0,5 và batch normalization. Batch4, whole-prefix210 và normalization theo timestep là các lựa chọn triển khai của khóa luận, được công bố trước fit. Chưa xác minh tương đương code tác giả. Thiết kế C0 được giữ như phương án engineering đã cân nhắc. [Đặc tả và nguồn sơ cấp](../docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md)
+
+Model, trainer, checkpoint, admitted producer và adapter là các bước riêng. Data bridge đã đạt20tests, còn model candidate mới ở bước review source. Quyết định này chốt công thức để triển khai, chưa là bằng chứng baseline fitted hoặc quyền chạy research training. Giữ nguyên RQ, model bắt buộc, protocol21, nhánh AKT và ngân sách cloud. Các phép kiểm native cần allocation riêng.
+

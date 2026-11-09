@@ -1,5 +1,11 @@
 # Sổ quyết định và vấn đề mở
 
+## D42 — recipe GKT nghiên cứu BN-D5 được chốt trước fit
+
+Root chọn recipe29 theo quyền triển khai người dùng đã giao. GKT static-expert dùng domain28, hidden/embedding32, MLP hai lớp ELU với dropout0,5 và batch normalization. Batch4, whole-prefix210 và normalization theo timestep là các lựa chọn triển khai của khóa luận, được công bố trước fit. Chưa xác minh tương đương code tác giả. Thiết kế C0 được giữ như phương án engineering đã cân nhắc. [Đặc tả và nguồn sơ cấp](29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md)
+
+Model, trainer, checkpoint, admitted producer và adapter là các bước riêng. Data bridge đã đạt20tests, còn model candidate mới ở bước review source. Quyết định này chốt công thức để triển khai, chưa là bằng chứng baseline fitted hoặc quyền chạy research training. Giữ nguyên RQ, model bắt buộc, protocol21, nhánh AKT và ngân sách cloud. Các phép kiểm native cần allocation riêng.
+
 ## D41 — allocation riêng cho phép đọc lại GAM nhẹ
 
 Root chọn một allocation mới có phiên bản sau khi fullcached01 dừng ở RAM floor. Lượt01 đã được giữ trong bundle30outputs, commit00726b8, cùng verdict REJECTED. Peak family quan sát171565056bytes ở pha đã chạy và RAM thấp nhất2104508416bytes là bằng chứng vận hành. Chưa đo peak của toàn bộ replay, serialization và truth join.
