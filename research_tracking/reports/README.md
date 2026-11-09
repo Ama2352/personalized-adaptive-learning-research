@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 10/11 — hồ sơ CPU SAKT và tái dùng đồ thị đã đóng
+
+[SAKT selected CPU](../runs/sakt-selected-engineering-20261110-01/README.md) có full84exports sau6epochs/best1. Giữ failure và72physicalupdates của cả hai lượt đã train. [Main60 sáu cấu hình](../runs/main60-graph-condition-binding-20261110-01/README.md) tái dùng Method24 đã fit, không thêm solver hoặc NN. [Notebook CPU](../../notebooks/README.md) có gói nguồn/dữ liệu đã kiểm trên Windows, chưa chạy Colab/Linux. Main neural matrix, refit/calibration và CUDA còn chờ.
+
 ## 10/11 — quan sát đủ miền và vòng đời CPU SAKT
 
 [Phân tích ba lịch sử](rq1_fixed_time_ability_native_panels_20261110.md) đã kiểm cả28khái niệm tại120thời điểm. 215 công nhận đúng và5 công nhận nhầm nằm ngoài câu đang hỏi, trên một block. E13 và báo cáo Chặng17 đã cập nhật, desktop/mobile đạt,11SVG giữ nguyên. SAKT đã qua selected CPU engineering6epochs/best1/reload/84exports. Đây chưa là fitted baseline trên corpus chính hoặc bằng chứng hoàn tất RQ3.

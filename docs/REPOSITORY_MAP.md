@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 10/11 — hồ sơ CPU SAKT và tái dùng đồ thị đã đóng
+
+[SAKT selected CPU](../research_tracking/runs/sakt-selected-engineering-20261110-01/README.md) có full84exports sau6epochs/best1. Giữ failure và72physicalupdates của cả hai lượt đã train. [Main60 sáu cấu hình](../research_tracking/runs/main60-graph-condition-binding-20261110-01/README.md) tái dùng Method24 đã fit, không thêm solver hoặc NN. [Notebook CPU](../notebooks/README.md) có gói nguồn/dữ liệu đã kiểm trên Windows, chưa chạy Colab/Linux. Main neural matrix, refit/calibration và CUDA còn chờ.
+
 ## 10/11 — Gate hiện hành và demo đã qua kiểm thực tế
 
 [Gate183/1913](../research_tracking/runs/akt-current-gate183-20261110-01/README.md) đã đạt toàn bộ1913ca vàpublicindex riêng, globalpointer cũ giữ nguyên. [Demo fresh120](../research_tracking/runs/demo-fresh120-viewer-20261110-01/README.md) đạt113HTTPtests vàJS/desktop/mobile. [E11](../research_tracking/runs/thesis-rq2-e11-writing-20261110-01/README.md) đã nối fresh120 vào bảnthảo, prefix59562bytes nguyên vàreviewđộclậpđạt. Actualpubliccontrol AKT đãE7/best4, parentpause5/resume đang chuẩn bị. RecipeSAKT30 chốt trướcfit; producer mới chưanghiệmthu. Các mốc này chưađóngRQ3/CUDA hoặcquyềnchiModal.

@@ -1058,3 +1058,5 @@ Public AKT resume accepted66,637s và raw84exports byteexact. Corpus60 windowpre
 ## 10/11 — panel đủ miền và SAKT CPU selected
 
 F001/F081 đã đạt native parity và kiểm cache độc lập, cùng F041 tạo3histories/1block. Query-only bỏ ngoài215TP/5FP. πsuppression0/220 chỉ trong cửa sổ quan sát. E13 giữ70408byte prefix, kiểm81pointers/17pins/8links. Chặng17 desktop/mobile đã xem, 17bảng/11SVG nguyên và preview riêng đã tắt. SAKT fit05 accepted85.178s,6epochs/best1, 36updates4032targetexposures và84selectionexports. Wrapperreject trước đó được giữ riêng. Main fits/CUDA/throughput/fault recovery chưa hoàn tất, chiModal0USD.
+
+Đóng main60-graph-condition-binding40outputs và SAKT selected207outputs. Hai checkpoint chỉ tham chiếuSHA, giữ tất cả failure và so sánh cache E1–6/full84bytes. Gói ColabCPU26outputs đã đóng, generator tái tạo notebook4codecells, ZIP283source/data members được kiểm CRC/SHA. Actual proof mới chỉ Windows relocated public reader, chưa Linux/CUDA/Git/runtime hoặc training. Không chiModal.
