@@ -1,4 +1,8 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
+
+## 10/11 — Gate hiện hành và demo đã qua kiểm thực tế
+
+[Gate183/1913](../research_tracking/runs/akt-current-gate183-20261110-01/README.md) đã đạt toàn bộ1913ca vàpublicindex riêng, globalpointer cũ giữ nguyên. [Demo fresh120](../research_tracking/runs/demo-fresh120-viewer-20261110-01/README.md) đạt113HTTPtests vàJS/desktop/mobile. [E11](../research_tracking/runs/thesis-rq2-e11-writing-20261110-01/README.md) đã nối fresh120 vào bảnthảo, prefix59562bytes nguyên vàreviewđộclậpđạt. Actualpubliccontrol AKT đãE7/best4, parentpause5/resume đang chuẩn bị. RecipeSAKT30 chốt trướcfit; producer mới chưanghiệmthu. Các mốc này chưađóngRQ3/CUDA hoặcquyềnchiModal.
 ## 10/11 — checkpoint GKT đã qua kiểm thực thi
 
 [Bundle checkpoint28](../research_tracking/runs/gkt-research-checkpoint-20261110-01/README.md) giữ nguồn, logs và control/restored epoch khớp model, BN, Adam, RNG cùng counters. 28 ca đều đạt, source/runtime ổn định và Job0. Phạm vi là complete-epoch cùng process và budget origin. Research producer, adaptor và fitted baseline còn thiếu. Hai file báo cáo hiện hành10/11 đã cập nhật mốc này.

@@ -1,5 +1,19 @@
 # Tiến độ nghiên cứu
 
+## Mốc nghiệm thu hiện hành ngày 10/11
+
+Bảng này cập nhật bằng chứng đã có. Các ước lượng phần trăm ngày09/11 bên dưới được giữ như lịch sử quản lý.
+
+| Phần việc | Đã nghiệm thu | Điều kiện còn thiếu |
+|---|---|---|
+| RQ1 | Đối chiếu120 lượt hỏi/22 khái niệm của một lịch sử và chẩn đoán selection/khởi tạo, bản thảoE10 | Panel độc lập cách chọn bài, calibration gần ngưỡng và liên hệ outcome |
+| RQ2 | Fresh120ca thuộc10block,60Q/30K, cả60cặp đổi hành động, giữ negativecontrol dự kiến | CI/kiểm định theo block, graph noise/history/quality và khả năng khái quát |
+| RQ3 | CurrentAKT Gate1913, checkpoint18, publiccontrolE7/best4, GKTmodel11/trainer8/checkpoint28 | Actualpublicpause/resume, CUDA, các producer/adaptor/fits và so sánh đầy đủ |
+| Demo | Viewer đọc kết quả fresh120,113HTTPtests vàJavaScript/desktop/mobile | Luồng fittedmodels và chọn bài cho người học mới |
+| Bản thảo | Đã nốiE11 từ nguồn đã đóng, review độc lập, prefix cũ nguyên byte | Tích hợp các chương, kết quả neural và kiểm cuối luận văn |
+
+[Bản đọc GVHD ngày10/11](supervisor_reports/2026-11-10/01_tien_do/BAO_CAO_NGHIEN_CUU.html) giữ diễn tiến nghiên cứu và giới hạn. Logs/model outputs giữ ở các bundle và native run paths tương ứng. Quỹ Modal đã dùng0USD.
+
 ## Ước lượng cập nhật sau kết quả learned19 ngày 09/11
 
 Đây là ước lượng quản lý theo phần việc và bằng chứng đã nghiệm thu, sai số khoảng ±10 điểm phần trăm. Các mức cũ bên dưới giữ diễn tiến lịch sử. Chưa RQ nào hoàn tất. Lượt fresh120 dở dang và các kiểm phần mềm chưa chạy chưa được cộng vào mức nghiệm thu.

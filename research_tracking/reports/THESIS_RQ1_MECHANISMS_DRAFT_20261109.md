@@ -366,3 +366,47 @@ Bước tiếp theo được đề xuất là đối chiếu một tập khái n
 - **E10c** dùng first_visit_analysis trong kiểm độc lập và phương trình source được truy vết trong review. Phép kiểm đã đọc đủ14.400 hàng cache và CRC trước khi lấy120 hàng. Không cộng120 lượt hỏi vào số mẫu độc lập.
 
 Các mục trước E10 giữ nguyên byte. [Bundle viết E10](../runs/thesis-rq1-e10-writing-20261110-01/README.md) giữ before/after, kiểm các số liệu đã trích và nguồn bằng chứng. Việc viết không thực hiện thêm model/world call hoặc thay thiết kế thực nghiệm.
+
+
+## 14. Bổ sung E11 về tái kiểm nguồn đồ thị trên mười khối mô phỏng mới
+
+### Từ dấu hiệu ở ba khối đến một phép kiểm mới
+
+E9 đã cho thấy đồ thị trong bộ ước lượng có thể đổi đường đi ngay cả khi cơ chế phạt thiếu tiên quyết của world không hoạt động. Ba khối cũ vẫn còn ít, dùng lại trạng thái đã lưu và có giới hạn về chứng minh trạng thái khởi đầu. Vì vậy, bước tiếp theo giữ cùng câu hỏi nhưng dùng mười khối khởi tạo mới đã định trước, đồng thời lưu trạng thái ban đầu thực tế của từng ca. Không chọn lại seed theo dấu của kết quả. [E11a]
+
+Thiết kế gồm các block21010–21019. Mỗi block có ba mức khởi tạo1000,1150,1300, hai nguồn đồ thị trong bộ ước lượng và hai mức cơ chế phạt0/0,55. Đồ thị của môi trường và bộ chọn bài cùng giữ expert31. Chỉ đồ thị trong bộ ước lượng thay giữa expert31 và một learned31 đã có từ TRAIN. Hai đường tín hiệu và điều chỉnh theo cha cùng bật, điều chỉnh cục bộ tắt. Đây là mười block dùng một learned artifact cố định, chưa có mười đồ thị học độc lập. [E11a]
+
+### Đại lượng được đối chiếu trả lời câu hỏi nào
+
+Gọi Y là trung bình trên28 khái niệm của latent cuối trừ mức nền ban đầu. Trước hết lấy Y của expert trừ Y của learned tại cùng block, mức khởi tạo và mức cơ chế, được chênh lệch Q. Sau đó lấy Q khi bật cơ chế trừ Q khi tắt, được K. Phép trừ thứ hai giúp nhận diện sự tương tác giữa đổi nguồn đồ thị và cơ chế phạt trong chính simulator đang kiểm. Nó chưa tách riêng mọi mediator của đường đi. [E11b]
+
+Không dùng nhóm năng lực cao làm một nhóm người học đối chứng giả định có parallel trends. Các mức khởi tạo là can thiệp được dựng trong mô phỏng. Các trạng thái và chuỗi uniform được ghép trong từng block. Diễn giải chính dựa vào các can thiệp đã kiểm soát và phương trình simulator. Thiết kế chưa cung cấp tác động nhân quả của prerequisite instruction trên người học thật.
+
+| Mức khởi tạo | K trung bình | K nhỏ nhất đến lớn nhất | Block dương / âm / bằng0 |
+|---|---:|---|---|
+|1000|+0,004496|−0,069250 đến+0,095294|6 /4 /0|
+|1150|+0,024530|−0,004716 đến+0,079790|8 /2 /0|
+|1300|0|0 đến0|0 /0 /10|
+
+Các giá trị dùng thang điểm latent Elo của world. Ở hai mức thấp hơn, K đổi dấu giữa các block. Trung bình dương cần được đọc cùng các trường hợp âm. Đây là thống kê mô tả, chưa có CI hoặc kiểm định xác lập ưu thế ổn định. Đơn vị độc lập được dự kiến là block, không phải120 world hoặc14.400 lần trả lời. [E11b]
+
+### Đối chứng bất hoạt và thay đổi đường đi
+
+Ở mức1300, K bằng0 ở cả mười block, phù hợp với20 cặp high-control đã khớp semantic trace và endpoint giữa hai mức cơ chế. Zero này là hành vi được dự kiến từ điều kiện bất hoạt của penalty. Nó chưa phải mười bằng chứng độc lập rằng mọi tác dụng của graph đều biến mất khi năng lực cao. Chênh lệch Q ở mức1300 vẫn khác0 tại cả20 điều kiện, có cả dấu dương lẫn âm. Như vậy, tác động của đổi nguồn đồ thị còn đi qua các đường ngoài riêng penalty. Phép kiểm hiện tại chưa phân rã signal, parent adaptation và challenge thành các tác động riêng. [E11c]
+
+Cả60 cặp expert–learned có ít nhất một câu hỏi khác nhau, tổng cộng4936/7200 vị trí ordinal khác question ID. Nhãn trước lần phân kỳ đầu khớp trong từng cặp. Sau phân kỳ, cùng ordinal chưa bảo đảm cùng câu và cùng history. Vì vậy, các vị trí đó chưa là shared-target population để đối chiếu Log Loss của hai model. Thay đổi hành động đã được quan sát, còn chất lượng dự báo trên cùng dòng cần một phép kiểm riêng. [E11c]
+
+### Điều được củng cố và điều cần giữ mở
+
+Mười block mới duy trì chẩn đoán rằng khác biệt giữa đồ thị có thể tồn tại khi đường penalty bất hoạt. Dấu hiệu theo mức khởi tạo cũng cần kiểm lại. Chẳng hạn, K ở mức1150 có tám block dương và hai âm, còn cả ba block cũ của E9 đều âm. Sự khác nhau về dấu chưa là một kết luận đảo chiều có ý nghĩa thống kê. Hai tập block có population và bằng chứng initial state khác nhau, nên chưa pooling thành một mẫu13block. [E11d]
+
+E11 bổ sung đối chứng có trạng thái khởi đầu được lưu thực và khả năng lặp lại trên các block mới. RQ1 vẫn cần đo chuỗi dự báo, hiệu chỉnh, quyết định và hành động trên quần thể phù hợp. RQ2 vẫn còn graph noise/quality conditions cùng thống kê theo block. RQ3 tiếp tục cần các biến thể neural đã huấn luyện, so sánh công bằng và closed-loop outcomes. Các kết quả mô tả hiện tại chưa hoàn tất một RQ.
+
+### Nguồn bổ sung E11
+
+- **E11a** dùng [acceptance recovery](../runs/rq2-fresh-graph-recovery-20261110-01/acceptance.json), public plan và initial-state hashes. Logical120/14.400 được tách khỏi physical121/14.430 có30lượt replay, giữ parent failure.
+- **E11b** dùng [thống kê mô tả đã lưu](../runs/rq2-fresh-graph-source-analysis-20261110-01/descriptive_statistics.json), đủ60 Q và30 K đã kiểm số học. Công thức Y nằm trong source worker được đóng cùng recovery bundle.
+- **E11c** dùng20highcontrols,60trajectory pairs và [review độc lập](../runs/rq2-fresh-graph-source-analysis-20261110-01/independent_review.md), có exact pointers để kiểm lại từng giá trị.
+- **E11d** đối chiếu nguồn E9 đã nghiệm thu với [báo cáo fresh120](rq2_fresh_graph_source_replication_20261110.md). Việc viết E11 không thực hiện thêm tương tác hoặc tăng cỡ mẫu của bất kỳ phép kiểm nào.
+
+[Bundle viết E11](../runs/thesis-rq2-e11-writing-20261110-01/README.md) giữ before/after và source map. Toàn bộ phần trước E11 được bảo toàn byte.

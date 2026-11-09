@@ -1,0 +1,3 @@
+# Gate nguồn hiện hành183 và public index riêng
+
+Ba nhóm freshprocess đã chạy đủ1913physicalcases,0failure/error/skip. 135subtests của nhómremaining được ghi riêng. FullGate405,48s trongcap630, genuinepreflight/source/lock/upstream/physicalJUnit và ownedJob0 đều đạt. Index riêng được publicreader kiểm lại, publisher3,69s và globalpointer giữ nguyên. Collection12 giữ1913IDs/0bodies, không cộng thànhtestPASS. Metadata06 thất bại vì lớpđiềuphối còn ghim177/81, chưa dispatchnative; giữpacket vànote. Derivative chỉ cập nhật exactpopulation183/85 cùng ownrefs, dùnglạicollectionaccepted, giữguards/caps. Đây là softwareGate CPU cho tests/akt vàtests/shared_kt. ChưaCUDA, publicproducerresume, researchfit, fullCV hoặc quyền chiModal. Chưa đóngRQ hoặctoànluậnvăn.

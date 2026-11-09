@@ -1034,3 +1034,15 @@ Finalfresh120QA đã đạtdesktop1280/mobile390, table335/document375. Giữ11S
 ## 10/11 — checkpointGKT28 đã đạt
 
 Actual28/0FES trong12,38s, peakworker311156736B/Jobfamily322756608B/minfree5023895552B. Root đối chiếu E2control/restored model/BN/Adam/ownedRNG/counters exact. Bundle giữnguồn/cases/logs và sourceapply inventory. Chưa producer hoặcfreshOSresume. Hai fileGVHD10/11 đã cập nhật mốc kỹ thuật này, Chặng15/table/11SVG không đổi.
+
+
+## 10/11 — fullGate1913 và index riêng đã đạt
+
+Actual fullGate405,48s/1913cases0FES, remaining135subtests ghi riêng. Current183sources/85modules và3freshgroups đúngcollection. Publisher3,69s/publicreader đạtindexdd8bd24f, globalpointer nguyên. Đã giữmetadata06failureguard177/81 vàminimalderivative183/85, không recollect. Root source hiệnđủsoftwareGate, next actualpublicproducercontrol/pause/resume vẫnriêng. Hai báo cáo10/11 cập nhậtmốcnày, khôngchỉGPUTask14/Junyi CV hoặcchiModal.
+
+
+## 10/11 — DEMO03 viewer đã qua HTTP và UI
+
+Source6files, pure39/fullHTTP113 làsubsetrelation. Root kiểmactualJS3controls, highQ−.111290/K0 vàmediumQ.698315/K.079790, ảnh1280/390 khôngoverflow. Tab/server đãđóng. Bundle giữbefore/source/logs/screenshots. KhôngnewN/modelcalls, T21vẫnpendingfittedrecommendation.
+
+E11 đã được peer scopedPASS, không cần sửa luận điểm. RecipeSAKT30 đượcRootchốttrướcfit và ghi decisionregister. Demo/Gate/E11 chỉmụcđãđồngbộ. ActualcontrolE7/best4 cho phépchọnpause5 đểkiểm latest5 khácbest4; parent/childchưarun, giữ globalbudget540/300 vàchargedparent180/child≤360.

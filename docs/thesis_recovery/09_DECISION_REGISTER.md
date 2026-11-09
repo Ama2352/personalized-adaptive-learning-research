@@ -131,3 +131,8 @@ D24 — Chỉ thị user07/11: ưu tiên GPUColab cho kiểm thử trước khi 
 ## D34 — Phân biệt lifecycle pilot A0 và main system selection
 
 FirstA0 research-mode lifecycle là pilot đơn-candidate nhằm kiểm artifact/refit/calibration contract; không được gọi là main matrix winner. Main matrix phải đóng raw-selection predictions của các candidate đã freeze trước system-selector decision và trước mọi main refit/calibration. Không xem kết quả calibration/refit rồi đổi candidate winner. Đây là clarification thứ tự thực thi Protocol21, không thay metrics/requiredmodels/folds hoặc cấp paid/fullCV/Holdout authority. Backend graph-disabled A3 vẫn không phải independentA0 systemfallback.
+
+
+## Quyết định kỹ thuật ngày10/11 — cấu hình SAKT đầu tiên
+
+ROOT chọn recipe30 trước fit trong quyền triển khai người dùng giao. d_model200/5heads/head_dim40 giữ tổng projection width200, context100+query101, dropout0,2, Adam0,001, batch128terminaltargets, seed42, tối đa50epochs/patience5/min_delta0,0001. Đây là cấu hình đầu tiên, các khác biệt với paper/source tác giả được ghi tại recipe30. Không chọn giữa nhiều cấu hình bằng kết quả, không đổi mô hình đãfit hoặc cấp execution/fullCV/GPUauthority. Thẩm định khoa học cuối vẫn còn trong nghiệm thu luận văn.
