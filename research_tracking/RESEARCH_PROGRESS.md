@@ -290,3 +290,7 @@ Completed CPU engineering: train-only collector≤2×12fixture, source-environme
 ## COLAB01 — current software gate và recovery,07/11
 
 Gate2-14 **407passed,0fail/error/skip169.05s**, thay401current sau sửa CPU-normalization CUDA RNG state. Probe production train_epoch chạy CPU3processes5vs2+3updates/17targets: model/Adam/RNG/sampler/predictions exact, khôngskip/duplicate.19notebookguardcases giả lập đạt,kitv11 137files cóSHA/CRC/sourceparity. Xem [báo cáo](reports/colab_recovery_readiness_20261107.md), bundles cpu-colab-recovery-20261107-01 và cpu-colab-recovery-gate-20261107-01. Không actualColab/CUDA/Modal compute hoặc credits; chưa hard-kill/Volume durability/Gate4/RQefficacy. RQ1/2 vẫnPARTIAL,RQ3model/evaluation chưahoàn tất.
+
+## 10/11 — bất định theo mười block RQ2
+
+[Phân tích thăm dò](reports/rq2_fresh_block_uncertainty_20261110.md) giữ đúng mười block, ba so sánh và10.000 shared draws. KhoảngK1150 phía dương, nhưng khoảng hiệuK1150−K1000 chứa0 nên chưa tách rõ khác biệt giữa hai mức khởi tạo. [Bundle](runs/rq2-fresh-block-uncertainty-20261110-01/README.md) giữ CSV và kiểm Decimal độc lập. Phân tích hậu nghiệm, mức bao phủ xấp xỉ và một learned graph cố định. Hai báo cáo đã có Chặng16,11SVG cũ nguyên byte, bảng15 đạt desktop/mobile. Không thêm world/modelcall hoặc chi Modal.

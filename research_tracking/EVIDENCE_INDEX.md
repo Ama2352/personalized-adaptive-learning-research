@@ -455,3 +455,7 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 - [Figure báo cáo chặng11](runs/supervisor-figures-20261109-01/figure_index.md) gồm11SVG độc lập,20outputs đã đóng. Tách nguyên byte từ HTML đã QA; mười hình cũ giữ nguyên. Có title/desc/caption, nhãn và vị trí trong nguồn, không thêm mẫu nghiên cứu hoặc tự gán dataset cho từng hình.
 
 - [Paper1 domain28](reports/paper1_seeded_domain_smoke_readiness_20261109.md), [bundle28](runs/paper1-seeded-domain-smoke-engineering-20261109-01/README.md). Actual một profile/tape, hai continuity episodes B1/GA,172feedback mỗi nhánh, re-entry0/2. 33pins giữ nguyên, family peak72.155.136B/Job0; chưa matrix hoặc hiệu quả học tập.
+
+## 10/11 — bất định theo mười block RQ2
+
+[Phân tích thăm dò](reports/rq2_fresh_block_uncertainty_20261110.md) giữ đúng mười block, ba so sánh và10.000 shared draws. KhoảngK1150 phía dương, nhưng khoảng hiệuK1150−K1000 chứa0 nên chưa tách rõ khác biệt giữa hai mức khởi tạo. [Bundle](runs/rq2-fresh-block-uncertainty-20261110-01/README.md) giữ CSV và kiểm Decimal độc lập. Phân tích hậu nghiệm, mức bao phủ xấp xỉ và một learned graph cố định. Hai báo cáo đã có Chặng16,11SVG cũ nguyên byte, bảng15 đạt desktop/mobile. Không thêm world/modelcall hoặc chi Modal.

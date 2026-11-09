@@ -18,9 +18,11 @@ Paper 1 được kế thừa theo bản PDF phát triển dùng để nộp, là
 
 **Mốc mới cho RQ2.** Đã mở rộng đối chứng sang đồ thị học từ dữ liệu. Cả 18 cặp đổi chuỗi bài. Ở nhóm năng lực cao có cơ chế thiếu tiên quyết bất hoạt, đổi nguồn đồ thị vẫn làm kết quả học khác nhau, còn bật mức phạt giữ nguyên lịch sử và trạng thái cuối. Điều này tách được một chênh lệch ngoài cơ chế phạt thiếu nền tảng; khả năng khái quát và thứ hạng đồ thị còn phải kiểm tiếp.
 
-Chuẩn bị AKT đã đạt 299 kiểm hợp đồng và 18 kiểm checkpoint thật trên CPU theo nguồn hiện hành. Bộ nghiệm thu tích hợp hiện hành đã đạt 1.913 ca, bao gồm nhiều kiểm đã chạy riêng trước đó. Mốc này kiểm sự phối hợp của các thành phần trước khi dùng tài nguyên huấn luyện lớn. GKT đã đạt 11 kiểm mô hình và 8 kiểm trainer trên dữ liệu dựng sẵn. Phần lưu và nạp trạng thái cuối vòng huấn luyện cũng đã qua 28 kiểm trên CPU, vòng học kế tiếp khớp đối chứng trong phạm vi đã kiểm. Các mốc này chưa là so sánh mô hình đã huấn luyện, chưa kiểm public producer resume hoặc CUDA. Phần xem lại minh chứng trong demo đã cho đổi khối mô phỏng, mức khởi tạo và cơ chế phạt để đọc số liệu tương ứng. Các mô hình đã huấn luyện và luồng chọn bài cho người học mới vẫn còn cần được nối.
+Chuẩn bị AKT đã đạt 299 kiểm hợp đồng và 18 kiểm checkpoint thật trên CPU theo nguồn hiện hành. Bộ nghiệm thu tích hợp hiện hành đã đạt 1.913 ca, bao gồm nhiều kiểm đã chạy riêng trước đó. Mốc này kiểm sự phối hợp của các thành phần trước khi dùng tài nguyên huấn luyện lớn. GKT đã đạt 11 kiểm mô hình và 8 kiểm trainer trên dữ liệu dựng sẵn. Phần lưu và nạp trạng thái cuối vòng huấn luyện cũng đã qua 28 kiểm trên CPU, vòng học kế tiếp khớp đối chứng trong phạm vi đã kiểm. Đã kiểm thêm dừng chủ động AKT sau epoch 5 rồi chạy tiếp đến epoch 7 qua pipeline thật. Checkpoint tốt nhất ở epoch 4 được giữ riêng với trạng thái mới nhất ở epoch 5. Cả lịch sử huấn luyện và 84 dự báo xuất cuối khớp lượt chạy liền mạch. Các mốc này kiểm độ tin cậy của quy trình trên CPU, còn phục hồi khi lỗi bất ngờ, CUDA và so sánh nghiên cứu vẫn cần thực hiện. Phần xem lại minh chứng trong demo đã cho đổi khối mô phỏng, mức khởi tạo và cơ chế phạt để đọc số liệu tương ứng. Các mô hình đã huấn luyện và luồng chọn bài cho người học mới vẫn còn cần được nối.
 
 **Mốc cập nhật ngày 10/11, phép đối chứng nguồn đồ thị đã hoàn tất 120 ca trên mười khối mô phỏng mới. Kết quả cho thấy phần thay đổi do bật cơ chế phạt còn đổi dấu giữa các khối ở mức khởi tạo thấp và trung bình. Đối chứng năng lực cao tiếp tục tách được tác động ngoài riêng cơ chế phạt. Đây là bằng chứng chẩn đoán mới, chưa là kết luận mô hình nào tốt hơn một cách ổn định.**
+
+**Cập nhật phân tích bất định.** Đã kiểm ba so sánh trên cùng mười khối. Khoảng thăm dò ở mức 1150 nằm phía dương, nhưng chênh lệch tác động giữa mức 1150 và 1000 vẫn chưa phân biệt rõ với 0. Kết quả bổ sung sau khi xem dữ liệu được giữ ở mức thăm dò.
 
 ## Quá trình đã thực hiện
 
@@ -143,13 +145,32 @@ Mỗi khối có ba mức khởi tạo 1000, 1150, 1300, hai nguồn đồ thị
 | 1150 | +0.024530 | -0.004716 đến +0.079790 | 8 / 2 / 0 |
 | 1300 | +0.000000 | +0.000000 đến +0.000000 | 0 / 0 / 10 |
 
-Ở mức 1000 và 1150, phần thay đổi có cả dấu dương lẫn âm giữa các khối. Trung bình dương vẫn cần được đọc cùng những trường hợp âm và độ phân tán. Đây là thống kê mô tả trên mười khối, chưa có kiểm định hoặc khoảng tin cậy để kết luận ưu thế ổn định.
+Ở mức 1000 và 1150, phần thay đổi có cả dấu dương lẫn âm giữa các khối. Trung bình dương vẫn cần được đọc cùng những trường hợp âm và độ phân tán. Chặng này ghi thống kê mô tả trên mười khối. Phần tiếp theo bổ sung khoảng thăm dò theo khối và các giới hạn của cách diễn giải.
 
 Ở mức 1300, phần thay đổi bằng 0 trong cả mười khối. Đây là đối chứng bất hoạt đã được dự kiến từ điều kiện của simulator. Đồng thời, chênh lệch trực tiếp giữa hai đồ thị vẫn khác 0 và có cả hai dấu. Vì vậy, khác biệt do đổi nguồn đồ thị còn có thể đi qua các đường khác ngoài riêng cơ chế phạt thiếu tiên quyết. Kết quả chưa tách riêng vai trò của tín hiệu đồ thị, điều chỉnh theo cha và mức thử thách của câu được chọn.
 
 Cả 60 cặp so sánh đổi chuỗi câu hỏi, với 4936/7200 vị trí khác câu. Sau khi đường đi phân kỳ, cùng số thứ tự không bảo đảm cùng câu và cùng lịch sử, nên chưa dùng những vị trí này để so sai số dự báo trên cùng targets.
 
 Phép kiểm mới củng cố chẩn đoán cần tách nguồn đồ thị, năng lực khởi tạo và cơ chế môi trường. Nó cũng cho thấy dấu hiệu ở ba khối cũ chưa đủ để khái quát. Phần còn thiếu là thống kê theo đơn vị khối, khảo sát thêm chất lượng đồ thị và các so sánh chính của mô hình mới. Chưa RQ nào hoàn tất.
+
+
+## Tiếp theo, kiểm độ bất định của xu hướng giữa các khối mô phỏng
+
+Sau khi hoàn tất mười khối mới, câu hỏi tiếp theo là trung bình dương có còn đủ rõ khi xét sự biến động giữa các khối hay không. Nhóm dùng lại đúng dữ liệu của Chặng 15, lấy mẫu lại toàn bộ khối để giữ các điều kiện so sánh đi cùng nhau. Có 10.000 lần lấy mẫu lại, nhưng số khối độc lập vẫn là mười và không có lượt mô phỏng mới.
+
+Ba so sánh được xét cùng nhau gồm phần thay đổi khi bật cơ chế phạt ở mức khởi tạo 1000, ở mức 1150, và hiệu của hai phần thay đổi trong cùng khối. So sánh thứ ba là bước cần thiết để hỏi tác động có khác giữa hai mức khởi tạo hay không. Việc một khoảng chứa 0 còn khoảng kia không chứa 0 tự nó chưa trả lời được câu hỏi này.
+
+| So sánh | Trung bình | Khoảng thăm dò đã điều chỉnh |
+|---|---:|---|
+| Mức khởi tạo 1000 | +0.004496 | -0.024649 đến +0.035327 |
+| Mức khởi tạo 1150 | +0.024530 | +0.005767 đến +0.047248 |
+| Chênh lệch 1150 trừ 1000 trong cùng khối | +0.020034 | -0.021413 đến +0.058529 |
+
+Ở mức 1000, khoảng thăm dò còn chứa cả giá trị âm và dương. Ở mức 1150, khoảng nằm phía dương trong phép phân tích này. Tuy nhiên, khoảng của chênh lệch giữa hai mức vẫn chứa 0. Vì vậy dữ liệu hiện có chưa phân biệt rõ tác động giữa hai mức khởi tạo, dù các trung bình khác nhau.
+
+Phân tích được bổ sung sau khi đã xem kết quả nên giữ nhãn thăm dò. Các khoảng đã điều chỉnh cho ba so sánh, với mức danh nghĩa 98,33% cho từng khoảng và mức đồng thời danh nghĩa 95%. Đây là xấp xỉ bootstrap trên mười khối, không bảo đảm mức bao phủ chính xác. Lấy mẫu lại nhiều lần không khắc phục được số khối còn ít.
+
+Đã lượng hóa thêm độ bất định và kiểm độc lập các phép tính. Phạm vi vẫn là một đồ thị học được cố định và các giả định của simulator. Đối chứng 1300 bằng 0 theo cơ chế tiếp tục được giữ riêng, không dùng làm bằng chứng thống kê về năng lực. Còn phải khảo sát đồ thị nhiễu, độ ổn định qua các nguồn đồ thị khác và các so sánh CG-AKT đã huấn luyện.
 
 ## Còn phải chứng minh
 

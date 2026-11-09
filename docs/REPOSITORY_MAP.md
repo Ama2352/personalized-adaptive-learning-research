@@ -220,3 +220,7 @@ Profile có phiên bản nằm trong [quyết định28](thesis_recovery/28_CUDA
 ### Prospective domain28 đã kiểm tích hợp
 
 [Báo cáo](../research_tracking/reports/paper1_seeded_domain_smoke_readiness_20261109.md) và [bundle28](../research_tracking/runs/paper1-seeded-domain-smoke-engineering-20261109-01/README.md) giữ actual hai episode US/seed42. Output gốc ở experiments/simulator/results theo [vai trò](../experiments/simulator/README.md). Đã có344feedback,172mỗi nhánh, không matrix nghiên cứu hoặc suy ưu thế graph.
+
+## 10/11 — bất định theo mười block RQ2
+
+[Phân tích thăm dò](../research_tracking/reports/rq2_fresh_block_uncertainty_20261110.md) giữ đúng mười block, ba so sánh và10.000 shared draws. KhoảngK1150 phía dương, nhưng khoảng hiệuK1150−K1000 chứa0 nên chưa tách rõ khác biệt giữa hai mức khởi tạo. [Bundle](../research_tracking/runs/rq2-fresh-block-uncertainty-20261110-01/README.md) giữ CSV và kiểm Decimal độc lập. Phân tích hậu nghiệm, mức bao phủ xấp xỉ và một learned graph cố định. Hai báo cáo đã có Chặng16,11SVG cũ nguyên byte, bảng15 đạt desktop/mobile. Không thêm world/modelcall hoặc chi Modal.

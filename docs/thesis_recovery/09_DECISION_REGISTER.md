@@ -136,3 +136,7 @@ FirstA0 research-mode lifecycle là pilot đơn-candidate nhằm kiểm artifact
 ## Quyết định kỹ thuật ngày10/11 — cấu hình SAKT đầu tiên
 
 ROOT chọn recipe30 trước fit trong quyền triển khai người dùng giao. d_model200/5heads/head_dim40 giữ tổng projection width200, context100+query101, dropout0,2, Adam0,001, batch128terminaltargets, seed42, tối đa50epochs/patience5/min_delta0,0001. Đây là cấu hình đầu tiên, các khác biệt với paper/source tác giả được ghi tại recipe30. Không chọn giữa nhiều cấu hình bằng kết quả, không đổi mô hình đãfit hoặc cấp execution/fullCV/GPUauthority. Thẩm định khoa học cuối vẫn còn trong nghiệm thu luận văn.
+
+## 10/11 — bất định thăm dò và CPU resume
+
+Root chọn ba estimands hậu nghiệm theo block, không thay family confirmatory của protocol21. Ba interval điều chỉnh98,33% là bootstrap xấp xỉ trên10block. Chênh lệch hai mức khởi tạo chưa tách rõ0. Nguồn và quyết định trước phép tính nằm trong bundle RQ2 uncertainty. AKT intentional complete-epoch public resume đã khớp control7epochs/raw84 trênCPU. Unexpected fault và CUDA còn là gate riêng, chưa cho chạy trả phí. GKT giữ objective response-pooled binary64LL theo recipe29, SAKT giữ nativeFP32BCE theo recipe30. Khác stopping objective được ghi rõ, cùng information boundaries và rawexport evaluator.

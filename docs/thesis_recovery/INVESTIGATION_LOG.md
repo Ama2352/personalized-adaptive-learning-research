@@ -1046,3 +1046,7 @@ Actual fullGate405,48s/1913cases0FES, remaining135subtests ghi riêng. Current18
 Source6files, pure39/fullHTTP113 làsubsetrelation. Root kiểmactualJS3controls, highQ−.111290/K0 vàmediumQ.698315/K.079790, ảnh1280/390 khôngoverflow. Tab/server đãđóng. Bundle giữbefore/source/logs/screenshots. KhôngnewN/modelcalls, T21vẫnpendingfittedrecommendation.
 
 E11 đã được peer scopedPASS, không cần sửa luận điểm. RecipeSAKT30 đượcRootchốttrướcfit và ghi decisionregister. Demo/Gate/E11 chỉmụcđãđồngbộ. ActualcontrolE7/best4 cho phépchọnpause5 đểkiểm latest5 khácbest4; parent/childchưarun, giữ globalbudget540/300 vàchargedparent180/child≤360.
+
+## 10/11 — nối mô tả RQ2 với bất định thăm dò
+
+Root chọn family ba estimands trước phép tính bổ sung nhưng sau khi đã thấy kết quả, giữ nhãn posthoc. Shared paired-block bootstrap10000/seed42, không thêm mẫu độc lập. Actual watchdog và kiểm độc lập Decimal60 đạt, khác biệt lớn nhất khoảng1,13e-16. Khoảng hiệu giữa mức1150 và1000 còn chứa0. Không gọi riêng intervalK1150 là bằng chứng tương tác năng lực. Hai báo cáo nối Chặng16 và QA desktop/mobile, tab/server đã đóng. SAKTmetadata34 đã commit, positive dry02 đạt. AKTparent02 đã seal sau Job0, child đang kiểm.

@@ -379,3 +379,7 @@ Gate21 chỉ chạy `tests/akt tests/shared_kt`; các số139SAKT và38Graph-GAM
 - [Bộ figure chặng11](../runs/supervisor-figures-20261109-01/figure_index.md) là hồ sơ trình bày gồm11SVG và metadata, tách khỏi kết quả nghiên cứu. HTML và screenshot nguồn giữ nguyên.
 
 - [Kiểm tích hợp domain28 Paper1](paper1_seeded_domain_smoke_readiness_20261109.md) là engineering witness một cặp US/seed42, đã đóng28outputs. Không là tái lập số lịch sử hoặc benchmark graph.
+
+## 10/11 — bất định theo mười block RQ2
+
+[Phân tích thăm dò](rq2_fresh_block_uncertainty_20261110.md) giữ đúng mười block, ba so sánh và10.000 shared draws. KhoảngK1150 phía dương, nhưng khoảng hiệuK1150−K1000 chứa0 nên chưa tách rõ khác biệt giữa hai mức khởi tạo. [Bundle](../runs/rq2-fresh-block-uncertainty-20261110-01/README.md) giữ CSV và kiểm Decimal độc lập. Phân tích hậu nghiệm, mức bao phủ xấp xỉ và một learned graph cố định. Hai báo cáo đã có Chặng16,11SVG cũ nguyên byte, bảng15 đạt desktop/mobile. Không thêm world/modelcall hoặc chi Modal.

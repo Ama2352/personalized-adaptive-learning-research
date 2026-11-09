@@ -1,0 +1,82 @@
+{
+  "status": "POSTHOC_EXPLORATORY_NOT_RQ_COMPLETE",
+  "independent_unit": "paired_seed_block",
+  "blocks": [
+    21010,
+    21011,
+    21012,
+    21013,
+    21014,
+    21015,
+    21016,
+    21017,
+    21018,
+    21019
+  ],
+  "replicates": 10000,
+  "seed": 42,
+  "family_estimands": [
+    "K1000",
+    "K1150",
+    "K1150_minus_K1000"
+  ],
+  "family_nominal_coverage": 0.95,
+  "per_interval_nominal_coverage": 0.9833333333333333,
+  "lower_quantile": 0.008333333333333333,
+  "upper_quantile": 0.9916666666666667,
+  "quantile_algorithm": "linear-type7-v1",
+  "draw_algorithm": "private-CPython-MT19937-randrange10-v1",
+  "draw_sha256_encoding_10_unsigned_bytes_per_replicate": "74371bfe655b10b760462cff05a8917ed2852181a96902d63a24989a42802792",
+  "aggregation": "binary64-per-block-K_then-fsum-over10-blocks",
+  "estimates": [
+    {
+      "estimand": "K1000",
+      "blocks": 10,
+      "mean": 0.004495940959900757,
+      "observed_min": -0.0692500385952588,
+      "observed_max": 0.0952944544395593,
+      "signs": {
+        "positive": 6,
+        "negative": 4,
+        "zero": 0
+      },
+      "percentile_lower": -0.02464856701056708,
+      "percentile_upper": 0.03532695669803796
+    },
+    {
+      "estimand": "K1150",
+      "blocks": 10,
+      "mean": 0.024529647556337686,
+      "observed_min": -0.004716493812258804,
+      "observed_max": 0.07978984413502488,
+      "signs": {
+        "positive": 8,
+        "negative": 2,
+        "zero": 0
+      },
+      "percentile_lower": 0.005767224410341098,
+      "percentile_upper": 0.04724786305573587
+    },
+    {
+      "estimand": "K1150_minus_K1000",
+      "blocks": 10,
+      "mean": 0.02003370659643693,
+      "observed_min": -0.09030739308263103,
+      "observed_max": 0.10633382590213447,
+      "signs": {
+        "positive": 6,
+        "negative": 4,
+        "zero": 0
+      },
+      "percentile_lower": -0.021413109431402642,
+      "percentile_upper": 0.058528689525238126
+    }
+  ],
+  "structural_K1300_tested": false,
+  "limits_vi": [
+    "Kết quả đã được xem trước, đây là phân tích thăm dò sau kết quả.",
+    "10block cho bootstrap rời rạc và độ chính xác hữu hạn, coverage danh nghĩa chỉ xấp xỉ.",
+    "Điều kiện vào một learned graph, expert world/controller và source world cố định.",
+    "Không pooling E9, không p-value, causal humans hoặc graph-quality ranking."
+  ]
+}
