@@ -39,6 +39,30 @@ CLOSED_LIMITS = [
     "Sau khi histories diverge, không ghép ΔP/loss theo ordinal timestep. Ba seed families cũ, new independent N = 0.",
     "Empty chỉ là empty estimator; controller G và environment G chung. Package khác không đồng nghĩa edge-only effect.",
 ]
+FRESH_RUN = "rq2-fresh-graph-recovery-20261110-01"
+FRESH_MANIFEST_SHA = "deff815a7360ab9d0ffcaf06e986ff2fc14ed07aa0ab8366880ade34445df11e"
+FRESH_PREFIX = "experiments/simulator/results/rq2-fresh-graph-source-robustness-20261109-03/"
+FRESH_KIND = "recovered_fresh_simulation_replication_no_inference"
+FRESH_OUTER_SHA = "3cdd399ec6a94a17e0178dec76b416b87ed406ddef701a0d1cb420e2486c90d8"
+FRESH_PINS = (
+    ("acceptance.json", "56068d889137658244b4595c0289b78da15a995fe84d2a62f97579aca6f0b7b3"),
+    (FRESH_PREFIX+"summary.json", "73538ef1c229dd5b9a17af781fc13bdb810efd58fe1196bd70d8d95d31d74a7d"),
+    (FRESH_PREFIX+"outcomes.json", "35f6603726f21d717e1da8e75ada8369584fcdcbbacbf3d170981e027dd662fa"),
+    (FRESH_PREFIX+"graph_source_contrasts.json", "645b395c81eedea3d42a7ebfb6521e1be0c14aeafa70eb3412468100f22de330"),
+    (FRESH_PREFIX+"conditional_lambda_contrasts.json", "f48f5ec7f6683d8285288a5bffa05e46be2365d244aa83990c6797b43a721a38"),
+    (FRESH_PREFIX+"high_controls.json", "026adf45ff9022cd5928b237e90c371daffff62b6bb287ae881ddf468987668c"),
+    (FRESH_PREFIX+"admission.json", "9693f81685367cc3c12c4a23be757b8b64f56c68098ac3f65cd6994272a36868"),
+)
+FRESH_BLOCKS = tuple(range(21010, 21020))
+FRESH_ABILITIES = (1000, 1150, 1300)
+FRESH_LIMITS = [
+    "Mười paired seed blocks và120 worlds dùng lại, không120 người học độc lập. Viewer không sinh thêm dữ liệu.",
+    "Chỉ đổi graph của estimator expert31/learned31. Graph môi trường và controller giữ expert31, S=P bật, L tắt.",
+    "Một learned graph cố định. Confidence không được dùng làm trọng số GAM, chưa là demo cổng CG-AKT fitted.",
+    "Y là mean net latent theta trên28 khái niệm sau120 bước, đơn vị Elo. Đây là trạng thái simulator.",
+    "K1300 bằng0 là đối chứng bất hoạt dự kiến theo source, không chứng minh graph vô ích hoặc quy luật năng lực nói chung.",
+    "Các cặp có thể đi theo câu hỏi và lịch sử khác nhau. Q/K là mô tả finite worlds, chưa CI, p-value hoặc lợi ích trên người học thật.",
+]
 
 
 class EvidenceError(ValueError):
@@ -129,6 +153,116 @@ class EvidenceStore:
         self.rq2 = rq2["factorial"]
         self.limits = rq1["limits_vi"] + rq2["limits_vi"]
         self._load_closed_loop()
+        self._load_fresh_source()
+
+    def _load_fresh_source(self):
+        """Schema riêng của recovery bundle, không nới loader completed cũ."""
+        folder = ROOT / "research_tracking/runs" / FRESH_RUN
+        raw = bounded_read(folder / "manifest.json", 64*1024)
+        if hashlib.sha256(raw).hexdigest() != FRESH_MANIFEST_SHA:
+            raise EvidenceError("SHA manifest fresh120 không khớp")
+        manifest = parse_json(raw)
+        if set(manifest) != {"kind", "input_inventory", "outputs_sha256"} or manifest["kind"] != FRESH_KIND:
+            raise EvidenceError("Schema manifest fresh120 không khớp")
+        payloads = {}
+        for name, pin in FRESH_PINS:
+            raw = bounded_read(folder / name, 64*1024)
+            if manifest["outputs_sha256"].get(name) != pin or hashlib.sha256(raw).hexdigest() != pin:
+                raise EvidenceError("SHA output fresh120 không khớp")
+            payloads[Path(name).name] = parse_json(raw)
+            self.provenance.append({"run": FRESH_RUN, "file": name, "sha256": pin,
+                                    "manifest_sha256": FRESH_MANIFEST_SHA})
+        acceptance, summary = payloads["acceptance.json"], payloads["summary.json"]
+        outer = "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq2-fresh-graph-recovery03-outer/final.json"
+        if (set(acceptance) != {"kind", "summary", "outer_sha256", "elapsed_seconds", "source_input_stable",
+                "primary_blocks", "no_human_causal_claim", "raw_output_sha256"}
+                or acceptance["kind"] != FRESH_KIND or acceptance["summary"] != summary
+                or acceptance["source_input_stable"] is not True or acceptance["primary_blocks"] != 10
+                or acceptance["no_human_causal_claim"] is not True
+                or acceptance["outer_sha256"] != FRESH_OUTER_SHA
+                or manifest["input_inventory"][outer]["sha256"] != FRESH_OUTER_SHA
+                or summary["primary_worlds"] != 120 or summary["primary_responses"] != 14400
+                or summary["components"] != 60 or summary["contrasts"] != 30
+                or summary["one_fixed_learned_graph"] is not True):
+            raise EvidenceError("Nghiệm thu fresh120 không khớp")
+        for name, pin in FRESH_PINS[1:]:
+            if acceptance["raw_output_sha256"].get(Path(name).name) != pin:
+                raise EvidenceError("Fresh120 acceptance/output binding không khớp")
+        admission = payloads["admission.json"]
+        if (admission["confidence_used_as_GAM_weight"] is not False or len(admission["learned_graph"]) != 31
+                or admission["learned_exported_graph_sha256"] != "b7a76280175dba1e6119426b341172b9a1537c94a59655f5fc5537f7a3f2829c"):
+            raise EvidenceError("Nguồn learned graph fresh120 không khớp")
+        self.fresh_q, self.fresh_k = self._index_fresh(payloads)
+        self.fresh_sources = [row for row in self.provenance if row["run"] == FRESH_RUN]
+        self.documents["fresh_sources"] = (json.dumps({"run": FRESH_RUN,
+            "manifest_sha256": FRESH_MANIFEST_SHA, "sources": self.fresh_sources,
+            "limits_vi": FRESH_LIMITS, "outer_sha256": FRESH_OUTER_SHA},
+            ensure_ascii=False, allow_nan=False).encode("utf-8"), "application/json")
+
+    @staticmethod
+    def _index_fresh(payloads):
+        expected = {(b, a, strength) for b in FRESH_BLOCKS for a in FRESH_ABILITIES for strength in (0., .55)}
+        outcomes, q_index, k_index, bases, uniforms = {}, {}, {}, {}, {}
+        expected_pairs = {(b, a) for b in FRESH_BLOCKS for a in FRESH_ABILITIES}
+        def key(row):
+            if (type(row["block"]) is not int or type(row["ability"]) is not int
+                    or type(row["mechanism_strength"]) not in (int, float)):
+                raise EvidenceError("Fresh120 condition types không khớp")
+            result = (row["block"], row["ability"], row["mechanism_strength"])
+            if result not in expected:
+                raise EvidenceError("Fresh120 condition ngoài inventory")
+            return result
+        def numeric(*values):
+            if any(type(v) not in (int, float) or not math.isfinite(v) for v in values):
+                raise EvidenceError("Fresh120 numeric phải hữu hạn")
+        for row in payloads["outcomes.json"]:
+            if set(row) != {"block", "ability", "graph_source", "mechanism_strength", "outcome", "latent_identity", "uniform_identity"}:
+                raise EvidenceError("Fresh120 outcome schema không khớp")
+            condition = key(row)
+            if row["graph_source"] not in ("expert", "learned") or (*condition, row["graph_source"]) in outcomes:
+                raise EvidenceError("Fresh120 outcome trùng hoặc sai graph")
+            numeric(row["outcome"])
+            for field in ("latent_identity", "uniform_identity"):
+                value = row[field]
+                if type(value) is not str or len(value) != 64 or any(c not in "0123456789abcdef" for c in value):
+                    raise EvidenceError("Fresh120 coupled identity không khớp")
+            if (bases.setdefault(condition[:2], row["latent_identity"]) != row["latent_identity"]
+                    or uniforms.setdefault(condition[0], row["uniform_identity"]) != row["uniform_identity"]):
+                raise EvidenceError("Fresh120 base/U phải giữ trong coupled block")
+            outcomes[(*condition, row["graph_source"])] = row
+        if set(outcomes) != {(*c, g) for c in expected for g in ("expert", "learned")}:
+            raise EvidenceError("Fresh120 phải đủ120outcomes")
+        for row in payloads["graph_source_contrasts.json"]:
+            if set(row) != {"block", "ability", "mechanism_strength", "expert", "learned", "expert_minus_learned"}:
+                raise EvidenceError("Fresh120 Q schema không khớp")
+            condition = key(row)
+            left, right = (outcomes[(*condition, g)] for g in ("expert", "learned"))
+            numeric(row["expert"], row["learned"], row["expert_minus_learned"])
+            if (condition in q_index or left["latent_identity"] != right["latent_identity"]
+                    or left["uniform_identity"] != right["uniform_identity"]
+                    or row["expert"] != left["outcome"] or row["learned"] != right["outcome"]
+                    or row["expert_minus_learned"] != row["expert"]-row["learned"]):
+                raise EvidenceError("Fresh120 Q/coupling mismatch")
+            q_index[condition] = row
+        if set(q_index) != expected:
+            raise EvidenceError("Fresh120 phải đủ60Q")
+        for row in payloads["conditional_lambda_contrasts.json"]:
+            if set(row) != {"block", "ability", "lambda_difference"} or type(row["block"]) is not int or type(row["ability"]) is not int:
+                raise EvidenceError("Fresh120 K schema không khớp")
+            condition = (row["block"], row["ability"])
+            numeric(row["lambda_difference"])
+            if (condition in k_index or condition not in expected_pairs
+                    or row["lambda_difference"] != q_index[(*condition, .55)]["expert_minus_learned"]-q_index[(*condition, 0.)]["expert_minus_learned"]
+                    or row["ability"] == 1300 and row["lambda_difference"] != 0.):
+                raise EvidenceError("Fresh120 K/arithmetic mismatch")
+            k_index[condition] = row
+        if set(k_index) != expected_pairs:
+            raise EvidenceError("Fresh120 phải đủ30K")
+        controls = payloads["high_controls.json"]
+        if (len(controls) != 20 or {(r["block"], r["graph"]) for r in controls} != {(b, g) for b in FRESH_BLOCKS for g in ("full", "learned")}
+                or any(r["observable_rows"] != 120 or r["oracle_rows"] != 120 or r["endpoint_exact"] is not True for r in controls)):
+            raise EvidenceError("Fresh120 high controls không khớp")
+        return q_index, k_index
 
     def _load_closed_loop(self):
         folder = ROOT / "research_tracking/runs" / CLOSED_RUN
@@ -369,15 +503,27 @@ class EvidenceStore:
         return indexed
 
     def catalog(self):
+        graph_status = "Core graph có kiểm kỹ thuật CPU. Chưa có artifact nghiên cứu được phục vụ trong demo."
         return {
             "profiles": PROFILES, "seeds": SEEDS, "variants": VARIANTS, "steps": STEPS,
             "status": "Demo một phần E11 • chỉ đọc artifact synthetic đã lưu",
             "replay_model": "GAM-KT / Paper2 diagnostic; không phải replay AKT",
             "models": [
-                {"name": "AKT", "status": "Chỉ có kiểm kỹ thuật synthetic CPU/CUDA có giới hạn; chưa kết quả fit nghiên cứu đầy đủ."},
-                {"name": "CG-AKT", "status": "Prototype tách biệt; chưa fitted trong demo."},
-                {"name": "SAKT", "status": "Chưa xác minh trong phạm vi demo này."},
+                {"id": "A0", "name": "AKT · không graph", "replay_available": False,
+                 "status": "Đã có fit engineering CPU nhỏ qua public entry. Chưa là mô hình nghiên cứu chính hoặc replay ở demo. CUDA lifecycle còn thiếu."},
+                *[{"id": f"{variant}_{source}", "name": f"{label} · {graph}", "replay_available": False,
+                   "status": graph_status}
+                  for variant, label in (("A1", "Graph-AKT"), ("A2", "Confidence-AKT"), ("A3", "CG-AKT có gate"))
+                  for source, graph in (("EXPERT", "graph chuyên gia"), ("LEARNED", "graph học từ TRAIN"))],
+                {"id": "SAKT", "name": "SAKT", "replay_available": False,
+                 "status": "Core/trainer/persistence đã có kiểm kỹ thuật. Main producer và export nghiên cứu còn thiếu."},
+                {"id": "GKT", "name": "GKT", "replay_available": False,
+                 "status": "Data/core/trainer/checkpoint đã có kiểm kỹ thuật. Producer, export và adapter nghiên cứu còn thiếu."},
             ],
+            "replay_models": [{"name": "GAM-KT / Graph-GAM-KT", "replay_available": True,
+                               "status": "Hai chế độ replay bên trên đọc trace simulator đã lưu, không tính dự báo mới."}],
+            "reference_models": [{"name": "BKT", "replay_available": False,
+                                  "status": "Tham chiếu lịch sử Junyi, ngoài replay hiện có. Không dùng làm mô hình simulator đã fit."}],
             "graph_confidence_gate": {"available": False, "reason": "Không có artifact edge confidence/gate cho replay; không suy diễn giá trị."},
             "rq1": self.rq1, "rq2_synthetic": self.rq2,
             "limits_vi": self.limits, "sources": self.provenance,
@@ -386,7 +532,26 @@ class EvidenceStore:
             "closed_loop": {"posthoc":True,"new_independent_N":0,"reviewed_summary":self.closed_review,
                 "limits_vi":CLOSED_LIMITS,"source_links":[{"label":"Báo cáo source snapshot","url":"/evidence/closed-loop/report"},
                                                          {"label":"Nguồn, SHA và phạm vi review","url":"/evidence/closed-loop/sources"}]},
+            "fresh_source": {"blocks": FRESH_BLOCKS, "abilities": FRESH_ABILITIES, "mechanisms": ("0", "0.55"),
+                "paired_blocks": 10, "worlds": 120, "model_family": "Graph-GAM-KT · S=P bật, L tắt",
+                "limits_vi": FRESH_LIMITS, "sources_url": "/evidence/fresh-source/sources"},
         }
+
+    def fresh_source_snapshot(self, block: int, ability: int, strength: str):
+        if (type(block) is not int or block not in FRESH_BLOCKS or type(ability) is not int
+                or ability not in FRESH_ABILITIES or type(strength) is not str or strength not in ("0", "0.55")):
+            raise EvidenceError("Fresh120 block/ability/lambda phải thuộc allowlist")
+        q = self.fresh_q[(block, ability, float(strength))]
+        return {"block": block, "ability": ability, "mechanism_strength": float(strength),
+            "expert_outcome": q["expert"], "learned_outcome": q["learned"], "Q_expert_minus_learned": q["expert_minus_learned"],
+            "Q_lambda0": self.fresh_q[(block, ability, 0.)]["expert_minus_learned"],
+            "Q_lambda055": self.fresh_q[(block, ability, .55)]["expert_minus_learned"],
+            "K_lambda_difference": self.fresh_k[(block, ability)]["lambda_difference"],
+            "outcome_unit": "Mean net latent theta/Elo trên28 khái niệm sau120 bước",
+            "high_control_expected_inactive": ability == 1300, "paired_blocks": 10, "worlds": 120,
+            "one_fixed_learned_graph": True, "confidence_used_as_GAM_weight": False,
+            "viewer_model_calls": 0, "viewer_added_independent_N": 0,
+            "limits_vi": FRESH_LIMITS, "sources_url": "/evidence/fresh-source/sources"}
 
     def closed_loop_snapshot(self, profile: str, seed: int, variant: str, step: int):
         if (profile not in PROFILES or type(seed) is not int or seed not in SEEDS or variant not in VARIANTS

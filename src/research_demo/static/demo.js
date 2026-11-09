@@ -2,6 +2,7 @@
 const $ = id => document.getElementById(id);
 const labels = {graph_free:"Graph-free",graph_package:"Graph package đầy đủ",empty_graph_package:"Graph package rỗng (negative control)"};
 let currentRequest = 0;
+let freshRequest = 0;
 const node = (tag, text, className) => { const n=document.createElement(tag); if(text!==undefined)n.textContent=String(text); if(className)n.className=className; return n; };
 async function get(url){const r=await fetch(url,{cache:"no-store"});if(!r.ok)throw new Error("Không đọc được dữ liệu đã kiểm: HTTP "+r.status);return r.json();}
 function fail(e){$("error").hidden=false;$("error").textContent=e.message;}
@@ -54,6 +55,16 @@ async function loadSnapshot(){const request=++currentRequest;const closed=$("mod
  }
  renderConcepts(s,closed);renderRoute(closed?s.route_served:s.route_preview,s.step);
 }
+async function loadFresh(){
+ const request=++freshRequest;
+ const query=new URLSearchParams({block:$("fresh-block").value,ability:$("fresh-ability").value,lambda:$("fresh-lambda").value});
+ const s=await get("/api/rq2-source-contrast?"+query);
+ if(request!==freshRequest)return;
+ $("fresh-values").replaceChildren();
+ for(const [label,value] of [["Tăng theta trung bình · graph chuyên gia",s.expert_outcome],["Tăng theta trung bình · graph học",s.learned_outcome],["Q · chuyên gia trừ graph học",s.Q_expert_minus_learned],["Q khi λ = 0",s.Q_lambda0],["Q khi λ = 0,55",s.Q_lambda055],["K · chênh lệch giữa hai Q",s.K_lambda_difference]])tableRow("fresh-values",[label,value.toFixed(6)]);
+ $("fresh-caption").textContent="Block "+s.block+", năng lực nền "+s.ability+", λ = "+s.mechanism_strength+". Đơn vị là tăng theta trung bình trên 28 khái niệm sau 120 bước mô phỏng. Số hiển thị làm tròn sáu chữ số thập phân.";
+ $("fresh-negative").textContent=s.high_control_expected_inactive?"Ở mức 1300, cơ chế thiếu tiên quyết bất hoạt theo nguồn. K = 0 là đối chứng âm dự kiến. Q vẫn có thể khác 0, nên không quy mọi khác biệt graph cho cơ chế này.":"Đọc cả Q và K theo từng block. Mười block ghép cặp chưa đủ để khẳng định thứ tự graph hoặc ảnh hưởng năng lực ngoài mô phỏng này.";
+}
 async function init(){const c=await get("/api/catalog");option("mode",c.modes.map(m=>m.id),id=>c.modes.find(m=>m.id===id).label);option("profile",c.profiles);option("seed",c.seeds);option("variant",c.variants,v=>labels[v]||v);$("step").max=String(c.steps-1);$("step").disabled=false;$("coverage").textContent=c.profiles.length+" profile × "+c.seeds.length+" seed × "+c.variants.length+" variant × "+c.steps+" bước. Đổi lựa chọn không tạo simulation hoặc prediction mới.";
  const summary=c.closed_loop.reviewed_summary;$("closed-takeaway").textContent="POST-HOC / 9 seed-profile comparisons mỗi candidate: full có "+summary.full_same_membership_score_choices+" B-score/CID choices khi membership giữ và "+summary.full_membership_change+" membership change; empty có "+summary.empty_same_membership_score_choices+" score choices và "+summary.empty_negative_cases+" không tuple break. Không 9 independent seeds, new independent N = 0.";
  for(const id of ["mode","profile","seed","variant"])$(id).addEventListener("change",()=>loadSnapshot().catch(fail));$("step").addEventListener("input",()=>loadSnapshot().catch(fail));$("previous").addEventListener("click",()=>stepTo(Math.max(0,Number($("step").value)-1)));$("next").addEventListener("click",()=>stepTo(Math.min(c.steps-1,Number($("step").value)+1)));
@@ -62,6 +73,9 @@ async function init(){const c=await get("/api/catalog");option("mode",c.modes.ma
  $("rq1-takeaway").textContent="Graph package đầy đủ: "+keep.count+"/"+keep.conditional_denominator+" snapshot có P đổi nhưng concept preview giữ. Empty graph package: "+empty.changed_probability_events+" P đổi, "+empty.changed_mastery_events_any_concept+" mastery / "+empty.changed_ready_events+" ready / "+empty.changed_action_preview_events+" preview đổi. Package không đồng nghĩa riêng các cạnh.";
  for(const r of c.rq2_synthetic.profiles)tableRow("rq2",[r.profile,r.seed_blocks,r.mean_lambda_edge_interaction.toFixed(6),r.mechanism_exposed_events+" / "+r.mechanism_event_denominator]);
  const contrast=c.rq2_synthetic.paired_profile_contrasts.find(r=>r.contrast==="I(PYH)-I(PY)");if(contrast)$("rq2-takeaway").textContent="PYH − PY: mean "+contrast.mean.toFixed(6)+" Elo; "+contrast.signs.positive+" seed dương / "+contrast.signs.negative+" seed âm. Leave-one-seed-out mean ["+contrast.loo_min.toFixed(6)+", "+contrast.loo_max.toFixed(6)+"]. Thứ tự chưa ổn định; đây là sensitivity mô tả, không CI.";
- for(const m of c.models)$("models").append(node("dt",m.name),node("dd",m.status));for(const s of c.sources){const li=node("li");li.append(node("strong",s.run+" / "+s.file),node("div","Output SHA-256: "+s.sha256),node("div","Manifest SHA-256: "+s.manifest_sha256));$("sources").append(li);}for(const limit of [...c.limits_vi,...c.closed_loop.limits_vi])$("limits").append(node("li",limit));await loadSnapshot();
+ for(const [id,models] of [["models",c.models],["replay-models",c.replay_models],["reference-models",c.reference_models]])for(const m of models)$(id).append(node("dt",m.name),node("dd",m.status));
+ option("fresh-block",c.fresh_source.blocks);option("fresh-ability",c.fresh_source.abilities);option("fresh-lambda",c.fresh_source.mechanisms);
+ for(const id of ["fresh-block","fresh-ability","fresh-lambda"])$(id).addEventListener("change",()=>loadFresh().catch(fail));
+ for(const s of c.sources){const li=node("li");li.append(node("strong",s.run+" / "+s.file),node("div","Output SHA-256: "+s.sha256),node("div","Manifest SHA-256: "+s.manifest_sha256));$("sources").append(li);}for(const limit of [...c.limits_vi,...c.closed_loop.limits_vi,...c.fresh_source.limits_vi])$("limits").append(node("li",limit));await Promise.all([loadSnapshot(),loadFresh()]);
 }
 init().catch(fail);

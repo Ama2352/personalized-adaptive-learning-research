@@ -10,7 +10,8 @@ from .evidence import EvidenceError, EvidenceStore
 
 STATIC = Path(__file__).with_name("static")
 ROUTES = {"/": ("index.html", "text/html"), "/assets/demo.css": ("demo.css", "text/css"), "/assets/demo.js": ("demo.js", "text/javascript")}
-DOCUMENT_ROUTES = {"/evidence/closed-loop/report":"report", "/evidence/closed-loop/sources":"sources"}
+DOCUMENT_ROUTES = {"/evidence/closed-loop/report":"report", "/evidence/closed-loop/sources":"sources",
+                   "/evidence/fresh-source/sources":"fresh_sources"}
 
 
 def make_server(port=8765, *, store=None, host="127.0.0.1"):
@@ -73,6 +74,17 @@ def make_server(port=8765, *, store=None, host="127.0.0.1"):
                 return self.respond(200, data, mime)
             if url.path == "/api/catalog" and not url.query:
                 return self.respond(200, evidence.catalog())
+            if url.path == "/api/rq2-source-contrast":
+                try:
+                    q = parse_qs(url.query, keep_blank_values=True, strict_parsing=True, max_num_fields=3)
+                    if set(q) != {"block", "ability", "lambda"} or any(len(v) != 1 for v in q.values()):
+                        raise ValueError("query")
+                    block, ability = int(q["block"][0]), int(q["ability"][0])
+                    if str(block) != q["block"][0] or str(ability) != q["ability"][0]:
+                        raise ValueError("canonical integer")
+                    return self.respond(200, evidence.fresh_source_snapshot(block, ability, q["lambda"][0]))
+                except (ValueError, KeyError):
+                    return self.respond(400, {"error": "Block/năng lực/lambda phải thuộc allowlist fresh120"})
             if url.path in {"/api/replay", "/api/closed-loop"}:
                 try:
                     q = parse_qs(url.query, keep_blank_values=True, strict_parsing=True, max_num_fields=4)

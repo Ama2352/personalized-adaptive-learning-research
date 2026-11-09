@@ -75,7 +75,11 @@ def test_curated_catalog_synthetic_only_and_missing_confidence(store):
     assert {r["profile"]:r["seed_blocks"] for r in catalog["rq2_synthetic"]["profiles"]} == {"PG":10,"PY":10,"PYH":10}
     assert "junyi" not in catalog and "junyi" not in catalog["rq2_synthetic"]
     assert not {"learners", "raw", "test_predictions"} & catalog.keys()
-    assert len(catalog["models"]) == 3
+    assert [r["id"] for r in catalog["models"]] == ["A0", "A1_EXPERT", "A1_LEARNED", "A2_EXPERT", "A2_LEARNED", "A3_EXPERT", "A3_LEARNED", "SAKT", "GKT"]
+    assert all(r["replay_available"] is False for r in catalog["models"])
+    assert catalog["replay_models"][0]["replay_available"] is True
+    assert catalog["reference_models"][0]["name"] == "BKT"
+    assert catalog["reference_models"][0]["replay_available"] is False
     assert "không phải replay AKT" in catalog["replay_model"]
 
 
@@ -330,4 +334,137 @@ def test_closed_ui_context_and_cached_document_contract(store):
     assert "không điền visits/chapter giả" in js and "không paired" in store.closed_loop_snapshot("PG",20000,"graph_package",61)["semantics"]
     assert "Post-hoc" in html and "new independent N = 0" in html and "B-score không là calibrated" in html
     assert "innerHTML" not in js and "eval(" not in js
-    assert set(store.documents)=={"report","sources"}
+    assert set(store.documents)=={"report","sources","fresh_sources"}
+
+
+@pytest.fixture(scope="module")
+def fresh_payloads():
+    folder = evidence.ROOT / "research_tracking/runs" / evidence.FRESH_RUN
+    return {evidence.Path(name).name: json.loads((folder/name).read_bytes())
+            for name, _ in evidence.FRESH_PINS}
+
+
+def test_fresh_all_conditions_exact_projection_and_high_control(store, fresh_payloads):
+    expected_q, expected_k = EvidenceStore._index_fresh(fresh_payloads)
+    assert len(expected_q) == 60 and len(expected_k) == 30
+    for (block, ability, strength), raw in expected_q.items():
+        view = store.fresh_source_snapshot(block, ability, "0" if strength == 0 else "0.55")
+        assert view["expert_outcome"] == raw["expert"]
+        assert view["learned_outcome"] == raw["learned"]
+        assert view["Q_expert_minus_learned"] == raw["expert_minus_learned"]
+        assert view["K_lambda_difference"] == expected_k[(block, ability)]["lambda_difference"]
+        assert view["high_control_expected_inactive"] is (ability == 1300)
+        assert view["viewer_model_calls"] == view["viewer_added_independent_N"] == 0
+        assert not {"latent_identity", "uniform_identity", "oracle", "checkpoint"} & view.keys()
+    high = [r for (b, a, s), r in expected_q.items() if a == 1300]
+    assert all(r["expert_minus_learned"] != 0 for r in high)
+    assert any(r["expert_minus_learned"] > 0 for r in high)
+    assert any(r["expert_minus_learned"] < 0 for r in high)
+
+
+@pytest.mark.parametrize("condition", [(True,1000,"0"),(21010,True,"0"),(21009,1000,"0"),
+    (21010,999,"0"),(21010,1000,.55),(21010,1000,"0.550")])
+def test_fresh_fixed_condition_allowlist(store, condition):
+    with pytest.raises(EvidenceError):
+        store.fresh_source_snapshot(*condition)
+
+
+@pytest.mark.parametrize("kind", ["missing", "duplicate", "base", "uniform", "q", "k", "control", "nan"])
+def test_fresh_population_coupling_and_arithmetic_rejected(fresh_payloads, kind):
+    data = copy.deepcopy(fresh_payloads)
+    if kind == "missing": data["outcomes.json"].pop()
+    if kind == "duplicate": data["outcomes.json"][-1] = data["outcomes.json"][0]
+    if kind in ("base", "uniform"):
+        data["outcomes.json"][0]["latent_identity" if kind == "base" else "uniform_identity"] = "0"*64
+    if kind == "q": data["graph_source_contrasts.json"][0]["expert_minus_learned"] += 1
+    if kind == "k": data["conditional_lambda_contrasts.json"][0]["lambda_difference"] += 1
+    if kind == "control": data["high_controls.json"][0]["endpoint_exact"] = False
+    if kind == "nan": data["outcomes.json"][0]["outcome"] = float("nan")
+    with pytest.raises(EvidenceError): EvidenceStore._index_fresh(data)
+
+
+@pytest.mark.parametrize("filename", ["manifest.json", "acceptance.json", evidence.FRESH_PREFIX+"outcomes.json"])
+def test_fresh_tamper_stops_before_listening(monkeypatch, filename):
+    from src.research_demo import server
+    original = evidence.bounded_read
+    target = evidence.ROOT/"research_tracking/runs"/evidence.FRESH_RUN/filename
+    def read(path, limit):
+        raw = original(path, limit)
+        return raw+b" " if path == target else raw
+    def forbidden_listener(*args, **kwargs):
+        raise AssertionError("Không được mở listener khi nguồn hỏng")
+    monkeypatch.setattr(evidence, "bounded_read", read)
+    monkeypatch.setattr(server, "ThreadingHTTPServer", forbidden_listener)
+    with pytest.raises(EvidenceError, match="SHA"):
+        server.make_server(0)
+
+
+def test_fresh_ui_pinned_sources_and_reused_styles(store):
+    from src.research_demo.server import STATIC, DOCUMENT_ROUTES
+    html = (STATIC/"index.html").read_text(encoding="utf-8")
+    js = (STATIC/"demo.js").read_text(encoding="utf-8")
+    assert all(f'id="{name}"' in html for name in ("fresh-block", "fresh-ability", "fresh-lambda", "fresh-values"))
+    assert "freshRequest" in js and "/api/rq2-source-contrast?" in js
+    assert "innerHTML" not in js and "eval(" not in js
+    assert "đối chứng âm dự kiến" in js and "Confidence không được" in html
+    document = json.loads(store.documents["fresh_sources"][0])
+    assert DOCUMENT_ROUTES["/evidence/fresh-source/sources"] == "fresh_sources"
+    assert len(document["sources"]) == 7
+    assert document["manifest_sha256"] == evidence.FRESH_MANIFEST_SHA
+    assert len(store.provenance) == 16 and len({r["run"] for r in store.provenance}) == 5
+
+
+@pytest.fixture
+def unbound_handler(store, monkeypatch):
+    """Chạy routing thật trên handler chưa bind, không tạo socket/server."""
+    from email.message import Message
+    from types import SimpleNamespace
+    from src.research_demo import server
+    def unbound(address, handler):
+        return SimpleNamespace(handler=handler, address=address)
+    monkeypatch.setattr(server, "ThreadingHTTPServer", unbound)
+    facade = server.make_server(8765, store=store)
+    handler = object.__new__(facade.handler)
+    handler.server = SimpleNamespace(server_address=facade.address)
+    handler.headers = Message()
+    handler.headers["Host"] = "127.0.0.1:8765"
+    return handler
+
+
+def test_fresh_fixed_endpoint_without_socket(unbound_handler, store):
+    replies = []
+    unbound_handler.respond = lambda *args: replies.append(args)
+    for block in evidence.FRESH_BLOCKS:
+        for ability in evidence.FRESH_ABILITIES:
+            for strength in ("0", "0.55"):
+                unbound_handler.path = f"/api/rq2-source-contrast?block={block}&ability={ability}&lambda={strength}"
+                unbound_handler.do_GET()
+                assert replies[-1] == (200, store.fresh_source_snapshot(block, ability, strength))
+    unbound_handler.path = "/evidence/fresh-source/sources"
+    unbound_handler.do_GET()
+    assert replies[-1] == (200, *store.documents["fresh_sources"])
+
+
+@pytest.mark.parametrize("query", ["", "block=21010&ability=1000", "block=21010&ability=1000&lambda=0&path=x",
+    "block=21010&block=21011&lambda=0", "block=021010&ability=1000&lambda=0",
+    "block=21010&ability=1000&lambda=0.550", "block=21010&ability=1000&lambda=nan",
+    "block=21009&ability=1000&lambda=0", "block=21010&ability=999&lambda=0"])
+def test_fresh_query_route_rejects_without_socket(unbound_handler, query):
+    replies = []
+    unbound_handler.respond = lambda *args: replies.append(args)
+    unbound_handler.path = "/api/rq2-source-contrast?"+query
+    unbound_handler.do_GET()
+    assert replies[-1][0] == 400
+
+
+def test_fresh_endpoint_retains_host_and_origin_guard(unbound_handler):
+    replies = []
+    unbound_handler.respond = lambda *args: replies.append(args)
+    unbound_handler.path = "/api/rq2-source-contrast?block=21010&ability=1000&lambda=0"
+    unbound_handler.headers["Origin"] = "https://foreign.invalid"
+    unbound_handler.do_GET()
+    assert replies[-1][0] == 403
+    del unbound_handler.headers["Origin"]
+    unbound_handler.headers["Host"] = "foreign.invalid"
+    unbound_handler.do_GET()
+    assert replies[-1][0] == 403
