@@ -1,0 +1,3 @@
+# Root duyệt retry vận hành A1 lần03
+
+Hai probe thực tế đã đạt, mỗi probe quan sát4 image-query Win31 sau exact-handle exit. IsProcessInJob vẫntrue. Không xác nhận nguyên nhân Win5 gốc. Chín canaries0FES đã kiểm guard03 chỉ bỏ qua exacthandle có Wait0/exitcode, live/unknown/PID/ctime mismatch failclosed. Action Kernel.token giữ nguyên. Request03 materialized theo67d10..., SHA e1a400751567546ee2898edc5e7d012c22f943120da7218f143b9bad43bb1a5f, same scientific config/auth/corpus/spec. Oldattempt01 Job0/native output absent và source publicrunner tạooutputtrướcNN chứng minh0NN. Cho phép một retry vận hành mới, giữmọicaps600/580/560/540/300,4GiBadmit,2GiBworker/Job/free; giữ thời gian/failure gốc riêng. Không main research/CUDA/Modal/refit/calibration.

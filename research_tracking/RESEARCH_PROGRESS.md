@@ -8,7 +8,7 @@ Bảng này cập nhật bằng chứng đã có. Các ước lượng phần tr
 |---|---|---|
 | RQ1 | Đối chiếu đủ28khái niệm×120bước trên3lịch sử/1block, E13, 215TP/5FP ngoài câu hỏi | Mở rộng nhiều block độc lập, calibration gần ngưỡng và liên hệ outcome |
 | RQ2 | Fresh120ca thuộc10block,60Q/30K, cả60cặp đổi hành động, giữ negativecontrol dự kiến | Đã có khoảng bootstrap hậu nghiệm n10. Còn graph noise/history/quality và khả năng khái quát |
-| RQ3 | CurrentAKT Gate1913, publicCPUresume parity, SAKT selectedCPU6epochs/best1, GKTmodel/trainer/checkpoint | Fault recovery, CUDA, GKT producer positive, các main fits/adaptor và so sánh đầy đủ |
+| RQ3 | CurrentAKT Gate1913, publicCPUresume parity, SAKT selectedCPU6epochs/best1, GKT selectedCPU11epochs/best6, A1 expertCPU7epochs/best4 | Fault recovery, CUDA, các main fits/adaptor và so sánh đầy đủ |
 | Demo | Viewer đọc kết quả fresh120,113HTTPtests vàJavaScript/desktop/mobile | Luồng fittedmodels và chọn bài cho người học mới |
 | Bản thảo | Đã nốiE13 từ nguồn đã đóng, kiểm81pointers mới, prefix E1–E12 nguyên byte | Tích hợp các chương, kết quả neural và kiểm cuối luận văn |
 

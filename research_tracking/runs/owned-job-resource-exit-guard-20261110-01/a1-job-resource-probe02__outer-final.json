@@ -1,0 +1,233 @@
+{
+  "status": "ACCEPTED_OWNED_RESOURCE_IDENTITY_PROBE_NO_MODELS",
+  "error": null,
+  "owned_receipt": {
+    "status": "ACCEPTED_OWNED_PROCESS_LAUNCH_NOT_SCIENTIFIC_ACCEPTANCE",
+    "GO_released": true,
+    "command": [
+      "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+      "-B",
+      "D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\akt-research-runner-20261108-01\\check_a1_job_resource_probe02.py",
+      "--packet-sha256",
+      "eefd409d48e7669ae6312be0a74b142bb8bd08cafc489d2e29b564f523aedfda"
+    ],
+    "parent": {
+      "pid": 7372,
+      "created_filetime_100ns": "134387331934326708",
+      "create_time": 1794259593.4326708,
+      "image": "C:\\Users\\AmaDev\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+    },
+    "approval_reference": "ROOT_A1_RESOURCE_IDENTITY_PROBE02",
+    "job_name": "KLTN_OWNED_3caea8ea4113ebcab8c5adba1801a8935e0c111573498240eec3307add7b4911",
+    "helper_sha256": "0dc8723170467e9ae73c4e233a357b9d584c66a8c183c478bdcff358fb0a95a1",
+    "worker_sha256": "28f5156b26ef5cfcbe06c3935044b8603690c1571a77dc2e3a165d2b3c4b9d87",
+    "actual_worker": {
+      "pid": 15128,
+      "created_filetime_100ns": "134387331939800856",
+      "create_time": 1794259593.9800856,
+      "image": "C:\\Users\\AmaDev\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+    },
+    "popen": {
+      "pid": 8916,
+      "created_filetime_100ns": "134387331939581226",
+      "create_time": 1794259593.9581225,
+      "image": "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe"
+    },
+    "preGO_owned_tokens": [
+      {
+        "pid": 8916,
+        "created_filetime_100ns": "134387331939581226",
+        "create_time": 1794259593.9581225,
+        "image": "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 15128,
+        "created_filetime_100ns": "134387331939800856",
+        "create_time": 1794259593.9800856,
+        "image": "C:\\Users\\AmaDev\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+      },
+      {
+        "pid": 22180,
+        "created_filetime_100ns": "134387331940026644",
+        "create_time": 1794259594.0026643,
+        "image": "C:\\Windows\\System32\\conhost.exe"
+      }
+    ],
+    "actual_worker_in_job_before_GO": true,
+    "worker_returncode_before_cleanup": 0,
+    "active_process_samples": [
+      3,
+      3,
+      3,
+      3,
+      5,
+      5,
+      5,
+      4,
+      3
+    ],
+    "job_active_before_cleanup": 1,
+    "job_active_after_cleanup": 0,
+    "popen_handle_closed": true,
+    "cleanup_errors": [],
+    "cleanup_accepted": true,
+    "observed_owned_tokens": [
+      {
+        "pid": 8916,
+        "created_filetime_100ns": "134387331939581226",
+        "create_time": 1794259593.9581225,
+        "image": "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 15128,
+        "created_filetime_100ns": "134387331939800856",
+        "create_time": 1794259593.9800856,
+        "image": "C:\\Users\\AmaDev\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+      },
+      {
+        "pid": 22180,
+        "created_filetime_100ns": "134387331940026644",
+        "create_time": 1794259594.0026643,
+        "image": "C:\\Windows\\System32\\conhost.exe"
+      }
+    ],
+    "output_sha256": {
+      "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "accepted": true,
+    "errors": [],
+    "elapsed_seconds": 0.9662587642669678,
+    "max_seconds": 26.65662640001392,
+    "cleanup_reserve_seconds": 3,
+    "returncode": 0,
+    "automatic_retry": false,
+    "elapsed_scope": "call through cleanup/posthash; caller must check final total after persisting/reading its outputs"
+  },
+  "worker_result": {
+    "status": "RESOURCE_IDENTITY_PROBE_PENDING_OUTER",
+    "error": null,
+    "cleanup_errors": [],
+    "proof": {
+      "pure_canaries": {
+        "passed": 5
+      },
+      "git_children": [
+        {
+          "pid": 28288,
+          "creation": {
+            "pid": 28288,
+            "created_filetime_100ns": "134387331945875032",
+            "create_time": 1794259594.5875032
+          },
+          "old_after_exit_error": {
+            "type": "PermissionError",
+            "message": "[WinError 31] A device attached to the system is not functioning.",
+            "winerror": 31,
+            "traceback": "Traceback (most recent call last):\n  File \"D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\akt-research-runner-20261108-01\\check_a1_job_resource_probe02.py\", line 164, in main\n    try:api.token(handle)\n        ~~~~~~~~~^^^^^^^^\n  File \"D:\\Dev\\KLTN\\scripts\\research\\windows_owned_worker.py\", line 121, in token\n    self.check(self.k.QueryFullProcessImageNameW(handle, 0, buffer, ctypes.byref(size)))\n    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Dev\\KLTN\\scripts\\research\\windows_owned_worker.py\", line 112, in check\n    raise ctypes.WinError(ctypes.get_last_error())\nPermissionError: [WinError 31] A device attached to the system is not functioning.\n",
+            "exit_already_proven": true
+          },
+          "resource_identity_after_exit_exact": true,
+          "WaitForSingleObject": 0,
+          "GetExitCodeProcess": 0
+        },
+        {
+          "pid": 33736,
+          "creation": {
+            "pid": 33736,
+            "created_filetime_100ns": "134387331946618263",
+            "create_time": 1794259594.6618264
+          },
+          "old_after_exit_error": {
+            "type": "PermissionError",
+            "message": "[WinError 31] A device attached to the system is not functioning.",
+            "winerror": 31,
+            "traceback": "Traceback (most recent call last):\n  File \"D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\akt-research-runner-20261108-01\\check_a1_job_resource_probe02.py\", line 164, in main\n    try:api.token(handle)\n        ~~~~~~~~~^^^^^^^^\n  File \"D:\\Dev\\KLTN\\scripts\\research\\windows_owned_worker.py\", line 121, in token\n    self.check(self.k.QueryFullProcessImageNameW(handle, 0, buffer, ctypes.byref(size)))\n    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Dev\\KLTN\\scripts\\research\\windows_owned_worker.py\", line 112, in check\n    raise ctypes.WinError(ctypes.get_last_error())\nPermissionError: [WinError 31] A device attached to the system is not functioning.\n",
+            "exit_already_proven": true
+          },
+          "resource_identity_after_exit_exact": true,
+          "WaitForSingleObject": 0,
+          "GetExitCodeProcess": 0
+        },
+        {
+          "pid": 44620,
+          "creation": {
+            "pid": 44620,
+            "created_filetime_100ns": "134387331947241776",
+            "create_time": 1794259594.7241776
+          },
+          "old_after_exit_error": {
+            "type": "PermissionError",
+            "message": "[WinError 31] A device attached to the system is not functioning.",
+            "winerror": 31,
+            "traceback": "Traceback (most recent call last):\n  File \"D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\akt-research-runner-20261108-01\\check_a1_job_resource_probe02.py\", line 164, in main\n    try:api.token(handle)\n        ~~~~~~~~~^^^^^^^^\n  File \"D:\\Dev\\KLTN\\scripts\\research\\windows_owned_worker.py\", line 121, in token\n    self.check(self.k.QueryFullProcessImageNameW(handle, 0, buffer, ctypes.byref(size)))\n    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Dev\\KLTN\\scripts\\research\\windows_owned_worker.py\", line 112, in check\n    raise ctypes.WinError(ctypes.get_last_error())\nPermissionError: [WinError 31] A device attached to the system is not functioning.\n",
+            "exit_already_proven": true
+          },
+          "resource_identity_after_exit_exact": true,
+          "WaitForSingleObject": 0,
+          "GetExitCodeProcess": 0
+        },
+        {
+          "pid": 9100,
+          "creation": {
+            "pid": 9100,
+            "created_filetime_100ns": "134387331947927275",
+            "create_time": 1794259594.7927275
+          },
+          "old_after_exit_error": {
+            "type": "PermissionError",
+            "message": "[WinError 31] A device attached to the system is not functioning.",
+            "winerror": 31,
+            "traceback": "Traceback (most recent call last):\n  File \"D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\akt-research-runner-20261108-01\\check_a1_job_resource_probe02.py\", line 164, in main\n    try:api.token(handle)\n        ~~~~~~~~~^^^^^^^^\n  File \"D:\\Dev\\KLTN\\scripts\\research\\windows_owned_worker.py\", line 121, in token\n    self.check(self.k.QueryFullProcessImageNameW(handle, 0, buffer, ctypes.byref(size)))\n    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Dev\\KLTN\\scripts\\research\\windows_owned_worker.py\", line 112, in check\n    raise ctypes.WinError(ctypes.get_last_error())\nPermissionError: [WinError 31] A device attached to the system is not functioning.\n",
+            "exit_already_proven": true
+          },
+          "resource_identity_after_exit_exact": true,
+          "WaitForSingleObject": 0,
+          "GetExitCodeProcess": 0
+        }
+      ],
+      "git_calls": 4,
+      "new_resource_identity_post_exit_matches": 4,
+      "old_token_after_exit_errors": 4,
+      "old_WinError5_reproduced": false,
+      "old_failure_cause_scope": "actual held-handle observations; no attribution of the original missing traceback beyond this evidence"
+    },
+    "source_before": {
+      "artifacts/akt/local-tests/akt-research-runner-20261108-01/check_a1_expert_engineering02.py": "3748d4f13510ed6caa4cf86823ffc8bbec28bbfbec4b86b0c7ac15d5a0546bfc",
+      "scripts/research/windows_owned_worker.py": "0dc8723170467e9ae73c4e233a357b9d584c66a8c183c478bdcff358fb0a95a1",
+      "artifacts/akt/local-tests/akt-research-runner-20261108-01/check_a1_expert_engineering01.py": "ceadc912a3660098722e1e896bf6648851b502b0f722c0c82355aca7f38da861",
+      "artifacts/akt/local-tests/akt-research-runner-20261108-01/a1-expert-engineering01/resource-failure.json": "a98d3bbe0467f80cafc3a37a41c67c191e7ac69e4832c8bd8123960d47266328",
+      "src/knowledge_tracing/akt/research_selected_runner.py": "b2b045d4673ff6cbc8e4e4ade8e5599806e52e501f5c8612e894ff636c2f7a46",
+      "artifacts/akt/local-tests/akt-research-runner-20261108-01/check_a1_job_resource_probe02.py": "28f5156b26ef5cfcbe06c3935044b8603690c1571a77dc2e3a165d2b3c4b9d87",
+      "artifacts/akt/local-tests/akt-research-runner-20261108-01/run_a1_job_resource_probe02.py": "a78472a9bb272b7b4f0e5f349c6fb531e01cf56d702b66d848bbaf249f7252d7"
+    },
+    "source_after": {
+      "artifacts/akt/local-tests/akt-research-runner-20261108-01/check_a1_expert_engineering02.py": "3748d4f13510ed6caa4cf86823ffc8bbec28bbfbec4b86b0c7ac15d5a0546bfc",
+      "scripts/research/windows_owned_worker.py": "0dc8723170467e9ae73c4e233a357b9d584c66a8c183c478bdcff358fb0a95a1",
+      "artifacts/akt/local-tests/akt-research-runner-20261108-01/check_a1_expert_engineering01.py": "ceadc912a3660098722e1e896bf6648851b502b0f722c0c82355aca7f38da861",
+      "artifacts/akt/local-tests/akt-research-runner-20261108-01/a1-expert-engineering01/resource-failure.json": "a98d3bbe0467f80cafc3a37a41c67c191e7ac69e4832c8bd8123960d47266328",
+      "src/knowledge_tracing/akt/research_selected_runner.py": "b2b045d4673ff6cbc8e4e4ade8e5599806e52e501f5c8612e894ff636c2f7a46",
+      "artifacts/akt/local-tests/akt-research-runner-20261108-01/check_a1_job_resource_probe02.py": "28f5156b26ef5cfcbe06c3935044b8603690c1571a77dc2e3a165d2b3c4b9d87",
+      "artifacts/akt/local-tests/akt-research-runner-20261108-01/run_a1_job_resource_probe02.py": "a78472a9bb272b7b4f0e5f349c6fb531e01cf56d702b66d848bbaf249f7252d7"
+    },
+    "denied": [],
+    "resources": {
+      "samples": 9,
+      "peak_family_rss_bytes": 50778112,
+      "minimum_available_ram_bytes": 4692893696,
+      "maximum_job_processes": 4
+    },
+    "query_handle_closed": true,
+    "scientific_modules_absent": true,
+    "popen_handles_closed": 4,
+    "model_calls": 0,
+    "packet_sha256": "eefd409d48e7669ae6312be0a74b142bb8bd08cafc489d2e29b564f523aedfda",
+    "elapsed_seconds": 0.6982570000109263
+  },
+  "packet_sha256": "eefd409d48e7669ae6312be0a74b142bb8bd08cafc489d2e29b564f523aedfda",
+  "elapsed_seconds": 1.32761420001043,
+  "whole_cap_seconds": 30,
+  "original_failure_reproduced": false,
+  "native_A1_retry_authorized": false,
+  "automatic_retry": false
+}

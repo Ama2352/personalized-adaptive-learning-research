@@ -1,0 +1,5 @@
+# Root nghiệm thu đầu vào GKT selected engineering02
+
+Dry02 thực đạt3.08s/Job0, canonical metadata27 thuộc cold62 và ba primitive native11/8/28 có provenance đã kiểm. Materializer03 thực đạt1.082s, auth57e6d84ecec5dbf1b67d85478eba59dbfdc995dc7fb7b286b0e31d057105ca68, request6c5dd05ab0c326c350393d92a5f46d09845ddcbcf7cd76ba86aca55a083b3c6a. Precheck02 thực đạt0.379s/5s, receipt0fb259e79ffaddc0b4577813536eb474e2903d48ffd6875cbabfd2e300243563. Ba helper/sampling guard khớp A1guard03 có9canaries; live/unknown lỗi vẫn từ chối, không sửa Kernel.token hoặc recipe29.
+
+Cho phép một native positive CPU2threads trên cùng corpus8/1/1 (672/84/84), topology expert public28/31 bindTRAIN8. Giữ cap600/580/560/540/training300, worker+Job2GiB/free2GiB/admit4GiB, tối đa100Adam/33600optimizedtargets/51selectionpasses4284rows, 50epochs/patience5/min_delta0.0001, chọn theo binary64 response-pooledLL. Fresh best reload và full nullable export phải khớp journal/coverage/nguồn/runtime/Job0. Không main60/Junyi/refit/calibration/finalselector/CUDA/Modal, không tự retry. CLI thiếu--materialize trước đó bị argparse từ chối trước0writes/0model, giữ note riêng.
