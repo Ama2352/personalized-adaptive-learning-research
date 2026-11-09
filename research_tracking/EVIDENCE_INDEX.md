@@ -1,5 +1,9 @@
 # Chỉ mục bằng chứng
 
+## 09/11 — witness thành thạo trên một quỹ đạo đã được đối chiếu
+
+[Bundle67](runs/rq1-observer03-cached-truth-20261109-01/README.md) giữ120readouts dùng lại của một historyPG. Nativeθ chưa đạt1250 ở cả120câu được chọn, trong khi tiêu chí latent đều đạt.22concept được phục vụ đã latent-positive từ firstvisit. Mẫu bị điều kiện bởi selector ưu tiên unmastered, nên chưa là độ chính xác toàn bộ trạng thái. Giữ cả lỗi bộ đoRAM, sourcefix, probes và crosscheck độc lập. Báo cáo canonical và hai fileGVHD còn chờWRITE06 xuất bản.
+
 ## Cập nhật 09/11 — phép xác nhận RQ2 mới đang dở dang
 
 [Trạng thái phép kiểm mới](reports/rq2_fresh_replication_readiness_20261109.md) ghi nhận 61/120 ca hoàn tất và 30 tương tác của ca tiếp theo trước khi dừng do RAM trống hệ thống. [Bundle failure](runs/rq2-fresh-graph-source-attempt02-20261109-01/README.md) giữ 39 đầu ra nhỏ và tham chiếu 72 file gốc. Chưa nghiệm thu toàn bộ 120 ca hoặc bổ sung kết luận chính từ tập con này.

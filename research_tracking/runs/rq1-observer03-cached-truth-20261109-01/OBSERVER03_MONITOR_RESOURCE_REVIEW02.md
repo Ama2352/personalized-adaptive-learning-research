@@ -1,0 +1,11 @@
+# Observer03 controller02 — bổ sung review resource, giữ hồ sơ01
+
+09/11/2026. Scoped source PASS cho minimalfix, không thực thi/import/Python/test/cache/oracleaggregate bởi reviewer. Review61b8vàerratum3cc89805giữnguyên. Actualcached02 vẫn cần ROOT verdict riêng, không suyPASS từmetadata3calls.
+
+Driver02 SHA365c43600eff0de3023c80b659ff7077ba41814478bec9e5df319a810bb3acfc; packet02 SHA3427c69030e12a989b8df7071d9ba61fbb5b3982ddc35ff9ec32f98f25d6dc87. PowerShelltextcomparison xác nhận exactoldsource01 sau đúngphép dedent/hoistsetuptrướcmemory() vàđổiPACKETfilename, khôngcódelta khác trongworker/outer/audit/guard/join/outputs. Packetinputs/paths/grid/analyzer/tests/8IDs/resourcecaps/interpretation giữexact, chỉsourceentrypin vànamespace02/resourcefixmetadata đổi.
+
+HaiStructureclasses,POINTERtypes,twoWinDLLinstances vàfunctionargtypes/restypes chuyểnsetupmộtlần. memory()chỉtạotwoinstance riêng, gọicùngactualWindowsAPI vàtrảcùngdictavailable/highwater. Sourcehoistsetupởmoduledefinitions trướcworker_gate nhưng khôngqueryRSS/free hoặc đọcscientificinputs/model; STARTđượcchụptrướcsetupnênstartupcostvẫntínhtrongdeadline. Functionprototypes sharedkhôngbịgánlạimỗiguard, instancebuffers từngcall riêng. KhôngcacheRSS/freevalues, xóa_pointer_type_cache hoặcfakeguard.
+
+ROOTactualproof `observer03_monitor_type_cache02_result.json` ghi3realcalls, pointercache22→22→22→22 vàstableclass/pointer/DLL/functionidentities, elapsed.02651759999571368s/1s,0model/0scientificdatareads. Probe sourceđọcexact02modulevới__name__khác__main__, khônggọiworker/outerCLI. Keyset đượcso sauinitialsetupvàsaumỗicall, khôngchỉsosize. Điều này kiểmfixcơchếgiữtypes trướcđọccachelại, khôngdựđoántấtcảpeakRSS/timingcủa14400rows hoặcphânbổbytepeak01.
+
+Analyzer586c06.../test40e2... vẫngiữnativeMtheta1250+storedpi.55, queriedlatentcriterion/sourceclock/Pbits/querybank, fullcacheCRC/grid vàONonce/OFFintegrity. Resource256MiB/free512/admit1GiB, pure8/cached15 vàactualJobcleanup/postpublicationguards khôngnới. Pure02phảilàactualsame-sourcepacket3427... trước cached02, khônggrandfatherpure01PASS. Khôngphát hiệnblocker nguồn mới trongdiffnày.

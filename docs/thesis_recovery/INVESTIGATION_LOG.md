@@ -986,3 +986,17 @@ GKT trainer02 bị phát hiện bỏ sót KeyboardInterrupt/SystemExit trong poi
 Commit9164530 đã đọc lại66paths,58bằng chứng ghim raw byte khớp và8text paths chỉ chuẩn hóa xuống dòng. Giữ4fileGKT ngoài commit chờ native. Tập trung hoàn tất RQ2 bằng continuation giữ61ca, giảm new calls từ14400xuống7080. Proposal02 sửa childworker155s, cumulative208,9729/210s và outer236,0216/240s. Physical121worlds/14430calls có amendment riêng cho30replayed interactions. Source preparation được review, chưa dispatch.
 
 Chỉ hoàn tất các candidate/harness hiện có rồi kiểm tuần tự theo RAM. Hoãn mở rộng ma trận, framework và micro-optimization chưa đo. Gom documentation theo batch, full Gate sau source freeze cần thiết. Không giảm memory floors hoặc bỏ negative controls để tăng tốc.
+
+
+## 09/11 — GRAPH29 đã áp dụng, metadata dừng trước child và mở nhánh RQ1 cache hẹp
+
+Root áp dụng6file GRAPH29candidate02 sau independent review15a262 và AST. Old Main221/checkpoint38 đều có4dependency pins đã thay nên giữ historical, cần currentcold299. Collection02 NO_GO trướcownedlaunch doavailable1.286.844.416B dưới1.342.177.280B,0testbodies. Không có Job hoặc model mới. Harness03 dùng explicitattempt để giữ source qua các lần admission, không tự retry hoặc thay folder đã có. Root chờ thêm headroom2GiB từ biến động RAM quan sát được.
+
+Recovery03 source độc lập được review, preflight22source/119input và59keys đạt. Chỉ sửa hai đoạn metadata kế thừa vềgenerator, giữplanb2e4 trước sửa và newSHA59cf,0world. RQ1 không ghép fixed18 với CPU09 vì khácquần thể. Acceptedobserver03 riêng có120readouts có thể đối chiếu với latent1250, đã chốt contract0b776 trước đọc oracle counts. GKTnative và native18 giữ admission4GiB. Không chi cloud/Holdout hoặc nhận RQ hoàn tất.
+
+
+## 09/11 — witness120 đã đóng, publication đang chờ
+
+Pure8 đạt ở cả controller01/02. Cached01 dừng do worker256MiB; probe3calls xác nhận pointercache tăng2types/call. Roothoist cấu hìnhctypes, new3calls cachegiữ22, caps/analyzer/tests không đổi. Cached02accepted120 trong~1s/49MiB/Job0. Independentrawcheck đạt,22servedconcepts đã latentpositive firstvisit. Full120rows ở ônativeFalse/latentTrue, thetaOnlysame và số trường hợppi chặn thêm0. Source review chỉ ra sampleon-policy và basepositiveabsorbing, khôngglobal0accuracy/humantruth hoặcgraphcomparison. Bundle67manifest592cc856 đã đóng. WRITE06 phải cập nhật hai report ngay trước mở rộng nghiên cứu tiếp.
+
+Cold299collection03 đạt, tests03 đủ299bodies/298PASS1FAIL do mockJSONwriter chưa canonicalizePath. Đã sửa đúng mockhelper, giữ assertions vàproduction. Currentcold04collection NO_GO RAM trướcchild, giữwhole120 và cácfloors. Native07stale1testpin, chưachạy. Goal cóprogress thực nhưngchưacomplete, cloudspend0.
