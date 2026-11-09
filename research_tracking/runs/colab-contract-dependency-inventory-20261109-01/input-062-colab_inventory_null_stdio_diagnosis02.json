@@ -1,0 +1,38 @@
+{
+  "kind": "SOURCE_HYPOTHESIS_NOT_RETROSPECTIVE_RAW_PATH_FACT",
+  "actual01": {
+    "counts": null,
+    "junit_present": false,
+    "original_error": "RuntimeError: no source/fixture/runtime writes",
+    "forbidden": "write_outside_owned_outputs",
+    "metadata": null,
+    "actual_blocked_raw_path": "UNKNOWN_NOT_RECORDED",
+    "zip_writer_attempts": 0,
+    "scientific_modules": []
+  },
+  "installed_stdlib_source": [
+    {
+      "path": "C:/Users/AmaDev/AppData/Local/Programs/Python/Python313/Lib/platform.py",
+      "sha256": "e398f1c9a6581395534242c9d256997ba8921602bb50f21d63ea5999cd800482"
+    },
+    {
+      "path": "C:/Users/AmaDev/AppData/Local/Programs/Python/Python313/Lib/subprocess.py",
+      "sha256": "970207fdd712c92f7dc14d1623d2574f7e0910ceb0b5c37652a7a0850f35a396"
+    },
+    {
+      "path": "C:/Users/AmaDev/AppData/Local/Programs/Python/Python313/Lib/ntpath.py",
+      "sha256": "bf855f4f38c067b5083e29bcdc5a96d841ef4ab1fbcefb93e12f121fb43d5959"
+    }
+  ],
+  "anchors": [
+    "platform.py:287-289 _syscmd_ver passes stdin/stderr subprocess.DEVNULL",
+    "subprocess.py:1148-1150 _get_devnull calls os.open(os.devnull, os.O_RDWR)",
+    "ntpath.py:18 devnull=nul"
+  ],
+  "correction_vi": "02 admits only rawexactos.devnull os.open sink in boundedmetadata phase, modeNone/RW flags and optionalnoninherit bits only. Filesystemsourcewrites stillforbidden. PersistactualallowedNUL andblockedwrite rawpath/mode/flags/phase; no fabricated01path.",
+  "pure_canary_source": "check_colab_null_sink_guard02.py",
+  "pure_canary_cases": 4,
+  "pure_canary_cap_seconds": 5,
+  "pure_canary_executed": false,
+  "new02_executed": false
+}

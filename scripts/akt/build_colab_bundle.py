@@ -8,6 +8,13 @@ import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[2]
+RESEARCH_CONTRACT_FILES = (
+    'docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md',
+    'docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md',
+    'docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md',
+    'docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md',
+    'docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json',
+)
 
 
 def bundle_contents():
@@ -19,6 +26,9 @@ def bundle_contents():
     paths += sorted((ROOT / 'scripts/research').glob('*.py'))
     paths += [ROOT / 'experiments/akt/configs' / name for name in ('smoke.json', 'pilot.json', 'fold0.json')]
     paths += [ROOT/'requirements-akt.in', ROOT/'requirements-akt.lock.txt']
+    # Fixed public contract dependencies read by graph/stage/driver source;
+    # no docs glob, runtime credentials, authorization or execution grant.
+    paths += [ROOT/name for name in RESEARCH_CONTRACT_FILES]
     paper = ROOT / 'paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20'
     paths += [ROOT/'paper1/AdaptiveEngineSimulation_Enhanced.ipynb']
     paths += [paper/'source'/name for name in ('adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1.ipynb',
