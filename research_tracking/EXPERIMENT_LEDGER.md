@@ -1,5 +1,11 @@
 # Sổ cái thí nghiệm
 
+## Mốc09/11 — learned graph trong đối chứng năng lực đã có kết quả
+
+[Phân tích nguồn đồ thị](reports/rq2_learned_graph_source_ability_results_20261109.md) / [bundle32](runs/rq2-learned-graph-ability-20261109-01/README.md). Đã nghiệm thu19worlds,2280adaptive updates,18Q/9K và exact sentinel trước18ca mới. Cả18cặp đổi chuỗi bài,1409/2160vị trí khác câu hỏi. Khi cơ chế thiếu tiên quyết bất hoạt ở mức1300, K bằng0 nhưng Q khác0 và đổi dấu theo block. Kết quả tách thêm đường tác động ngoài cơ chế phạt. Ba block dùng lại/newN0 và initial-source reconstruction là giới hạn bắt buộc, chưa hoàn tất RQ.
+
+[Bản GVHD Chặng13](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html) đã cập nhật hai file. [Hồ sơ QA27](runs/supervisor-learned-graph-update-20261109-01/README.md) giữ before/after, screenshot gốc và lỗi preview.11SVG cũ nguyên byte, bảng mới có nhóm mobile. Root đã xem desktop và component bảng mobile, đo full-document sizing, đóng tab/server do agent mở. Kiểm trình bày không tăng mẫu nghiên cứu.
+
 ## Mốc09/11 — AKT metadata hiện hành221 và38 đã đạt
 
 [MainC221](reports/akt_main_cuda_metadata_readiness_20261109.md) và [checkpointB38](reports/akt_cuda_checkpoint_metadata_readiness_20261109.md) đã có actual JUnit0FES, nguồn/runtime trước–sau ổn định và owned cleanup. Hai bundle giữ78 và47outputs, gồm cả failure trước đó. Đây là kiểm hợp đồng phần mềm với opaque fixtures, chưa là chạy mô hình hoặc CUDA. Mốc này thay trạng thái MainC chưa đạt ở các bản ghi lịch sử dưới đây. Native CPU theo nguồn hiện hành cần RAM4GiB trước launch, current Gate vẫn stale, full producer resume còn thiếu.

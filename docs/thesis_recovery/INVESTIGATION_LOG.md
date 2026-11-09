@@ -957,3 +957,8 @@ Lượt14 có220PASS/1FAIL do readguard thiếu exact lock. Lượt15 ghim thêm
 ##09/11 — Checkpoint metadata38 hiện hành và closure B+C
 
 M02 bị chặn đọc pyproject trước collection, countsNULL. Sau review đúng readonly input, M03 đạt38physical0FES/163resource samples/20source11runtime/Job0, terminal exit0. Root đã đóng bundle47 và tham chiếu MainC78 riêng. Hai source groups B2+C8 cần commit coherent vì runner gọi checkpoint API mới. Native06 chưa chạy do RAM chưa đạt4GiB, current Gate/CUDA vẫn pending. Recipe GKT29 được ghi D42 trước fit, candidate02 sửa prevalidation sequence còn chờ native.
+
+
+##09/11 — learned19 kiểm nguồn đồ thị và Chặng13
+
+Root chạy đúng allocation19worlds/60s, terminal0 trong33,8794518s. Independent verifier kiểm18Q/9K exact và1409/2160action differences. Bundle32 đã đóng, raw32files giữ ở output scientific, Method24 lớn chỉ reference. Không tăngN độc lập hoặc claim ranking. Hai báo cáo người đọc cập nhật,11SVG nguyên byte, QA27 đóng và mọi owned preview đã dừng. GKT source AST bắt SyntaxError keywordin trước apply, giữ failure và test03 sửa dictliteral. Model02/test03 hiện áp dụng AST-only, native11 chưa chạy.

@@ -16,6 +16,8 @@ Paper 1 được kế thừa theo bản PDF phát triển dùng để nộp, là
 
 **Đã giải thích vì sao hai đường đi khác nhau cùng dừng ở 172 lượt trong ví dụ Paper 1. Khi giữ cùng trạng thái ban đầu và cùng số ngẫu nhiên ở từng lần luyện của mỗi khái niệm, nếu cả hai nhánh đều hoàn tất, tổng lượt và trạng thái cuối bằng nhau dù thứ tự chương có thể khác. Sáu tình huống dựng tay đã kiểm cả điều kiện này và giới hạn khi dừng sớm hoặc chạm trần trạng thái.**
 
+**Mốc mới cho RQ2.** Đã mở rộng đối chứng sang đồ thị học từ dữ liệu. Cả 18 cặp đổi chuỗi bài. Ở nhóm năng lực cao có cơ chế thiếu tiên quyết bất hoạt, đổi nguồn đồ thị vẫn làm kết quả học khác nhau, còn bật mức phạt giữ nguyên lịch sử và trạng thái cuối. Điều này tách được một chênh lệch ngoài cơ chế phạt thiếu nền tảng; khả năng khái quát và thứ hạng đồ thị còn phải kiểm tiếp.
+
 ## Quá trình đã thực hiện
 
 **Trước hết, nhóm kiểm lại nền thí nghiệm.** Đã dựng phản ví dụ quay lại chương trên notebook tiền kỳ của Paper 1 và chỉ dùng kết quả để mô tả quy tắc của bản tiền kỳ đó. Thiết kế và kết quả kế thừa lấy theo PDF chuẩn. Các mô phỏng mới tiếp nối Paper 1 cần bám PDF, ghi rõ phiên bản và tiêu chí đối chiếu hành vi. Cần kiểm chứng riêng trước khi gọi là tái lập chính xác thí nghiệm gốc. Đã làm rõ khi tiến bộ ròng sau 14 ngày chỉ tỷ lệ với tiến bộ cuối lịch; điều này không chứng minh hai kết quả chính của Paper 2 dư thừa. Trên Junyi, đã lượng hóa trường hợp tỷ lệ khớp thứ tự tăng dù số trường hợp phù hợp giảm, do mẫu số thay đổi. Những kiểm tra này giúp tránh coi giả định mô phỏng hoặc thứ tự luyện là bằng chứng đồ thị dạy tốt.
@@ -73,6 +75,30 @@ Từ đó có một kết luận có điều kiện. Nếu cả hai lượt đ�
 Điều kiện hoàn tất không thể bị bỏ qua. Khi dừng vì hết ngân sách trước lúc hoàn tất, hai đường đi có thể dành số lượt khác nhau cho từng khái niệm. Những đoạn luyện chung của từng khái niệm vẫn giống nhau, nhưng trạng thái cuối của cả bộ khái niệm có thể khác. Một trường hợp nhỏ còn cho thấy vai trò của trần trạng thái 1500. Nếu chỉ có một lượt phản hồi, luyện khái niệm đang ở 1498 làm trạng thái thật tăng 2, còn luyện khái niệm đang ở 1200 làm nó tăng 12. Với cùng số lượt mà mọi cập nhật đều tăng đủ 12, tổng mức tăng bằng 12 nhân số phản hồi, ngay cả khi đáp án và phân bổ lượt luyện khác nhau.
 
 Phần bổ sung làm rõ chỉ tiêu nào có thể đã bị quy tắc của mô phỏng ràng buộc. Nó không biến toàn bộ hai lịch sử thành giống nhau, không xếp hạng đồ thị và không xác nhận lợi ích trên người học thật. Còn phải đối chiếu phân bổ dưới ngân sách hữu hạn, các chính sách so sánh và những cơ chế học khác trước khi kết luận về hiệu quả học.
+
+## Chặng 13. Đổi nguồn đồ thị khi cơ chế thiếu nền tảng bất hoạt
+
+Các chặng trước đã cho thấy kết quả học có thể chịu ảnh hưởng của cơ chế mô phỏng và cách mô hình sử dụng thông tin cha. Từ đây, nhóm đặt câu hỏi tiếp theo cho RQ2. Khi thay đồ thị chuyên gia bằng đồ thị được ước lượng từ dữ liệu, chênh lệch học tập có thực sự đi qua cơ chế thiếu kiến thức nền, hay còn xuất hiện qua những đường khác của hệ thống?
+
+Nhóm dùng đồ thị 31 cạnh đã ước lượng từ phần huấn luyện, chỉ thay đầu vào đồ thị của mô hình GAM. Đồ thị mô tả thế giới và đồ thị của bộ điều khiển giữ nguyên theo chuyên gia. Các cơ chế dùng tín hiệu cha và điều chỉnh theo cha được giữ bật, điều chỉnh cục bộ giữ tắt. Mỗi cặp giữ cùng trạng thái kiến thức thật ban đầu, lịch thời gian và dòng số ngẫu nhiên. Lượt mở rộng có 18 ca mới, tương ứng ba khối ngẫu nhiên, ba mức năng lực và hai mức phạt thiếu nền tảng. Trước đó, một ca đối chứng cũ được chạy lại và khớp đủ 120 lượt cùng trạng thái cuối.
+
+Để đánh giá học thêm được bao nhiêu, nhóm đo mức tăng ròng của kiến thức ẩn trung bình trên 28 khái niệm ở cuối lịch 41 ngày, trên thang Elo của simulator. Đây là đầu ra học tập của thế giới mô phỏng. Các thước đo dự báo đáp án như Log Loss vẫn có vai trò riêng ở bước đánh giá mô hình ước lượng.
+
+Kết quả cho thấy cả 18 cặp chuyên gia–đồ thị học đều có chuỗi câu hỏi khác nhau. Tổng cộng 1.409 trong 2.160 vị trí thứ tự dùng câu hỏi khác, trong đó nhóm năng lực 1300 có 600 trong 720 vị trí. Sau khi đường đi phân kỳ, cùng vị trí thứ tự có thể là hai bài khác nhau, nên cần đọc chênh lệch học tập trong bối cảnh hai lộ trình đã khác.
+
+Ở nhóm năng lực 1300, mô phỏng xác nhận thiếu hụt tiên quyết bằng 0 trong toàn bộ các lượt mới. Với từng đồ thị, bật mức phạt từ 0 lên 0,55 giữ nguyên cả lịch sử và trạng thái cuối. Tuy vậy, khi đổi nguồn đồ thị, mức tăng kiến thức vẫn khác. Chênh lệch giữa hai đồ thị ở ba khối lần lượt là −0,197266, +0,181461 và +0,076440 Elo, và giữ nguyên khi bật mức phạt. Như vậy, chênh lệch tổng thể còn có thể xuất hiện qua đường ước lượng và chọn bài khi cơ chế phạt thiếu nền tảng đang bất hoạt.
+
+Nhóm lấy mức tăng của cấu hình chuyên gia trừ cấu hình đồ thị học, rồi kiểm chênh lệch đó thay đổi bao nhiêu khi bật mức phạt. Bảng dưới giữ đầy đủ ba khối. Ở mức năng lực 1150, cả ba thay đổi đều âm. Ở mức 1000, dấu thay đổi trái chiều giữa các khối. Ở mức 1300, cả ba bằng 0 theo đối chứng bất hoạt đã kiểm. Các mức năng lực này là can thiệp vào trạng thái ban đầu trong mô phỏng.
+
+| Khối | Chuyên gia − đồ thị học ở năng lực 1300 | Thay đổi khi bật phạt, năng lực 1000 | Thay đổi khi bật phạt, năng lực 1150 | Thay đổi khi bật phạt, năng lực 1300 |
+| --- | --- | --- | --- | --- |
+| 1 | -0.197266 | -0.017810 | -0.035150 | +0.000000 |
+| 2 | +0.181461 | -0.016087 | -0.038274 | +0.000000 |
+| 3 | +0.076440 | +0.029300 | -0.036009 | +0.000000 |
+
+Giá trị âm ở cột chênh lệch nghĩa là cấu hình đồ thị học có mức tăng lớn hơn. Ba cột cuối là chênh lệch tại mức phạt 0,55 trừ chênh lệch tại mức phạt 0. Các giá trị chỉ mô tả những trường hợp đã khảo sát.
+
+Phần mở rộng đã tách thêm được nguồn đồ thị của bộ ước lượng khỏi đồ thị thế giới và bộ điều khiển, đồng thời xác định một chênh lệch vẫn tồn tại khi cơ chế thiếu tiên quyết bất hoạt. Ba khối được dùng lại từ chẩn đoán trước, nên chưa tăng số khối độc lập. Điều kiện cũ được tái dựng từ nguồn và kiểm khớp qua một ca đối chứng đầy đủ. Khả năng khái quát sang người học mới, mức nhiễu khác và chất lượng đồ thị tiên quyết còn cần đánh giá tiếp. Kết quả hiện tại chưa xác lập thứ hạng chung giữa đồ thị chuyên gia và đồ thị học.
 
 ## Còn phải chứng minh
 
