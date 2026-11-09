@@ -32,6 +32,10 @@ Paper 1 cho thấy tính liên tục của lộ trình chịu ảnh hưởng c�
 
 **Lõi CG-AKT đầu tiên cũng đã được kiểm bằng tính toán và gradient thật trên CPU.** Có confidence theo cạnh, gate điều chỉnh ảnh hưởng và đường tắt graph; dữ liệu kiểm được dựng sẵn. Chưa huấn luyện trên corpus nghiên cứu, chưa chứng minh các biến thể hoặc hệ thống chọn bài tốt hơn. Phần lưu và nạp lại trạng thái huấn luyện đã được kiểm qua hai tiến trình độc lập trên CPU. Chạy lại trọn vòng dữ liệu kế tiếp cho cùng thứ tự mẫu và cùng trạng thái mô hình. Đây là kiểm khả năng khôi phục ở cuối một vòng huấn luyện trên dữ liệu dựng sẵn; workflow huấn luyện trên corpus nghiên cứu, lựa chọn mô hình, đánh giá vòng kín và CUDA vẫn còn phải hoàn thiện.
 
+**Tiếp đó, nhóm kiểm tra vì sao thay cơ chế học trong mô phỏng chưa chắc làm đổi lịch sử bài làm.** Nhóm đọc lại đủ 14.400 lượt của pilot cũ, gồm 10 khối ngẫu nhiên ×3 hồ sơ ×4 điều kiện. Khi giữ cùng cấu hình mô hình và bật/tắt mức phạt thiếu kiến thức nền, 58/60 cặp giữ nguyên toàn bộ đáp án quan sát và 59/60 cặp giữ nguyên chuỗi bài. Khi đổi hai cơ chế dùng thông tin cha của GAM, cả 60/60 cặp có chuỗi bài khác. Mỗi cặp so hai quỹ đạo dùng chung điều kiện ban đầu; các cặp lặp bên trong 10 khối, không phải 60 người học độc lập.
+
+Phát hiện này phân biệt **kiến thức thật thay đổi trong simulator** với **phản hồi mà mô hình nhận được**. Mức học liên tục có thể thay đổi dù người học vẫn trả lời giống nhau trên cùng bài. Bởi vậy, chỉ thấy chuỗi bài gần như giữ nguyên chưa đủ để kết luận cơ chế thiếu nền tảng không ảnh hưởng học tập. Nhóm đã nối từng quỹ đạo với các kết quả cuối cũ và giữ cả trường hợp bất lợi; chưa tách được tác động riêng của năng lực chung hoặc chứng minh lợi ích của đồ thị trên người học thật. Đây là phân tích bổ sung trên dữ liệu đã xem, không phải thí nghiệm xác nhận mới.
+
 ## Còn phải chứng minh
 
 - **RQ1:** đánh giá độ đúng của quyết định thành thạo, hiệu chỉnh xác suất và vai trò chính sách; nối chẩn đoán nội bộ đã có với kết quả học tập.
