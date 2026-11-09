@@ -892,3 +892,12 @@ Root đọc archiver/report, prepare vàcheck exactdry, sau đó đóng30outputs
 Root cùng reviewer đọc hai source RNG, chạy85tests/0FES trong2,4102863giây. Đóng15outputs, manifest9599d6fb8c28963d1dd1952949c8424f511f6f10537ece2dbff4f6f067b11781. Hai báo cáo người đọc cập nhật tiến độ phần mềm,10SVG giữ nguyên, QA tĩnh.
 
 Fullcached02 theoD41 kết thúc sau3,1203712giây, launcher returncodeC000013A trước cleanup, monitor không ghi vi phạm RAM hoặc hành động terminate. Actual worker exitcode chưa lưu. Chỉ cópure/native_metadata, chưa reservation/readout/truth. Root hậu kiểm57source/input không đổi, Job0 vàenv/monitor đã đóng. Giữraw, chưa retry hoặc gán nguyên nhân cho người dùng/console.
+
+## 09/11 — đóng failure02 và kiểm rawGit seeded batch
+
+Failure02 đã đóng28outputs, manifest549e8ac8dff485b192f4a6bb44e729b7271e882cbde440888c69b955cf80e38c. Root kiểm22rawGitfiles của commit3ae1753 gồm source RNG, bundle và hai báo cáo. Không đổi verdict native hoặc chạy lại model. MainCUDA có8candidate syntax checks đạt, chưa áp dụng production.
+
+
+## 09/11 — RQDIAG25 đóng gói, điều kiện readiness chồng lấp và MainC8 đã áp dụng
+
+Masking44outputs đã closed/manifest9cbb7a…9a4b. Pure9 đạt, cached1080pairs/2160arms/30240conceptpairs và independentraw02 đủ18CRC. Mdiff90/Rdiff60/sameR30, trong30events có18nochild,8childMastered_noexposure,4childMastered_ANDexposure. Flags12/4/giao4, không exposure-only cause. Giữ verifier01 kỳ vọng phân hoạch sai, không dựng raw subprocess log. Controller chung31edges, estimator31/0; initialR không served/universalpermission.0newN/model/oracle, không RQcomplete. QA19 là bằng chứng trình bày riêng, actualmanaged1280/390 và ảnh đã xem, localChromecrashpad/Job0 giữ nguyên. MainC8 thực tế đã áp dụng8file theo receipt và Root review, tests pending; không còn chỉ pendingapply. Collect01 dừng RAM trước metadata/pytest,0IDs/bodies,Job0; không auto02. E7 đã published và đóng15outputs,80refs/18pointers/28517prefixbytes giữ nguyên. Gate hiện hành STALE; nativecheckpoint04 chưa dispatch và actualCUDA chưa đạt. Snapshot các trường trạng thái cũ giữ trongtracking_before_rqdiag25_20261109. Không tăng raw-Git counter trước kiểm saucommit.

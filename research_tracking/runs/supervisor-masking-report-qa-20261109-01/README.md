@@ -1,0 +1,3 @@
+# Báo cáo GVHD — chặng11 và QA giao diện
+
+Snapshot hai file người đọc, mười biểu đồ cũ giữ nguyên và biểu đồ chặng11 mới. Giữ JSON desktop1280/mobile390 cùng ảnh desktop mà ROOT đã xem trực tiếp. BBox được đo trước hai chỉnh khoảng trắng cuối ở title/footnote, ảnh sau chỉnh đã được xem. Tab kiểm riêng đã đóng, không mở preview server. Lượt Chrome local trước đó lỗi crashpad, có stdout/stderr/result và receipt Job0 riêng. Không có screenshot từ lượt lỗi và không chạy lại browser khi đóng gói. Đây là bằng chứng trình bày, số nghiên cứu tham chiếu bundle rq1-mastery-ready-masking-20261109-01, không thêm mẫu hoặc kết luận nghiên cứu. Các file báo cáo hiện hành vẫn ở supervisor_reports.

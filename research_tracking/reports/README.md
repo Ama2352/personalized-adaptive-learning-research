@@ -1,5 +1,15 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## Mốc hiện hành09/11 — RQDIAG25 đã đóng, MainC8 đã áp dụng, Gate STALE
+
+[RQ1 masking](rq1_mastery_ready_masking_20261109.md) / [bundle44](../runs/rq1-mastery-ready-masking-20261109-01/README.md) / [manifest](../runs/rq1-mastery-ready-masking-20261109-01/manifest.json). Pure9 đạt; cached giữ1.080paired snapshots/2.160arms từ9lịch sử cũ, newN0. M-set khác90, initial R khác60, giữ R30. Trong30events có18no-direct-child, 8child-mastered chưaexposure và4child-mastered VÀexposure. Hai flags không loại trừ nhau (12child-mastered/4exposure/giao4), không4exposure-only causes. Estimator full31/empty0edges nhưng controller chung31edges. R là initial readiness trước C/B/escape, không universal permission/served action; không mastery truth, calibration, causal mediation hoặc RQcompletion. Raw recount02 kiểm18CRC/30.240predicate pairs.
+
+[QA báo cáo](../runs/supervisor-masking-report-qa-20261109-01/README.md), 19outputs trình bày tách khỏi bằng chứng khoa học44. Chặng11/11SVG/11bảng, managed desktop1280/mobile390 và ảnh đã quan sát; giữ localChrome crashpad failure/Job0. Không rerun browser hoặc phát sinh researchN khi cập nhật tracking.
+
+[E7 đã xuất bản](../runs/thesis-rq1-e7-writing-20261109-01/README.md), bundle15 đã đóng. 80source refs/18numeric pointers,28517bytes phần trước giữ nguyên. Không RQcompletion hoặc kết quả model mới.
+
+MainC8 đã áp dụng8file được review, đang chờ tests metadata; không còn candidate pending apply. Collect01 dừng RAM trước metadata/pytest,0IDs/0bodies,Job0, không tự retry02. Gate177/1.748PASS là snapshot lịch sử, current Gate STALE sau thay nguồn. Chưa actual CUDA/Main9 comparison hoặc fitted research efficacy. Mốc này cập nhật hiện trạng, các đoạn cũ bên dưới giữ nguyên theo thời điểm ghi. Chưa tăng raw-Git counter cho hai bundle mới, ROOT kiểm sau commit.
+
 **CPU09 observer đã qua kiểm một lịch sử.** [Readiness và giới hạn](../runs/rq1-cpu09-observer-readiness-20261109-01/CPU09_OBSERVER_READINESS_REPORT01.md), [gói32outputs](../runs/rq1-cpu09-observer-readiness-20261109-01/README.md). Hai policy mới giữ đủ120query/P/readouts và endpoint fingerprints,240updates hoàn tất. Giữ cả failure UTC02 và RAM refusal. Phép đối chiếu mastery truth đủ14400events đang được chuẩn bị riêng.
 
 **Core CUDA, kiểm metadata và tương thích CPU đã đạt.** [Kết quả batchA](cgakt_cuda_core_cpu_readiness_20261109.md), [gói36outputs](../runs/cgakt-cuda-core-cpu-engineering-20261109-01/README.md). Có13kiểm metadata và26kiểm CPU, quan sát8forward/5backward/0Adam. Actual CUDA, checkpoint schema2 và Main GPU là bước tiếp theo.
@@ -290,3 +300,5 @@ Gate21 chỉ chạy `tests/akt tests/shared_kt`; các số139SAKT và38Graph-GAM
 - [Fullcached CPU09 dừng RAM](../runs/rq1-cpu09-native-mastery-20261109-01/report.md) là hồ sơ vận hành thất bại,30outputs đã đóng. Chưa có native mastery/truth result. Không dùng archive completed làm nhãn thí nghiệm đạt.
 
 - [RNG-owned episode Paper1](paper1_seeded_episode_readiness_20261109.md) đã kiểm85tests/13ca mới, wrapper2,4102863s. Engineering trên bank dựng tay, chưa domain pilot hoặc matrix.
+
+- [Fullcached CPU09 launcher dừng02](../runs/rq1-cpu09-native-mastery-20261109-02/report.md) là hồ sơ vận hành28outputs đã đóng, nguyên nhân chưa xác định. Chưa có kết quả nghiên cứu mới.

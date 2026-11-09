@@ -178,3 +178,48 @@ Phép kiểm trên cùng dòng dữ liệu ở mục 7 thu hẹp giới hạn v�
 - **E6:** [chứng minh cơ chế chương và phản ví dụ](paper1_reentry_mechanism_20261109.md); [bốn tình huống đã kiểm](../runs/paper1-reentry-mechanism-20261109-01/README.md).
 
 Các nguồn trên gồm chẩn đoán phát triển từ implementation kế thừa và phân tích cấu trúc theo PDF, không thay thế PDF của hai paper hoặc đề cương đã duyệt. Bản thảo giữ riêng bằng chứng quan sát, giải thích cơ học theo nguồn và các kết luận thực nghiệm chưa có.
+
+## 10. Bổ sung E7 về nơi bất đồng thành thạo được giữ lại trước bước chọn bài
+
+### Vì sao cần kiểm riêng bước dựng tập sẵn sàng?
+
+Mục4 đã ghi nhận30 snapshot mà hai cấu hình có tập thành thạo khác nhau nhưng vẫn giữ cùng tập sẵn sàng R, cùng các tập ứng viên sau đó và cùng khái niệm thắng. Để giải thích rõ hơn quan sát này, nghiên cứu kiểm từng điều kiện cấu thành R. Đây là phân tích tiếp trên cùng chín lịch sử, không tạo một thí nghiệm mô phỏng hoặc dòng phản hồi mới. [E7]
+
+Đối chiếu giữ1.080 cặp thời điểm của ba seed20000–20002 và ba hồ sơ PG/PY/PYH, mỗi lịch sử120 bước. Mỗi cặp có trạng thái pre-update của28 khái niệm, tương ứng30.240 cặp khái niệm–thời điểm. Hai cấu hình Graph-GAM-KT nhận lần lượt31 và0 cạnh ở bộ ước lượng, đồng thời giữ cùng controller với31 cạnh. Empty vẫn nằm trong cùng graph package. Phép so này không thay bằng đối chứng graph-free hoặc thí nghiệm tách riêng từng pathway.
+
+R là tập sẵn sàng ban đầu trước các bước lọc, cân bằng và mở rộng ứng viên C/B đã mô tả ở mục4. Nhánh escape của nguồn có thể đưa khái niệm ngoài R vào ứng viên tiếp theo. Vì vậy, bị loại khỏi R chưa có nghĩa bị cấm ở mọi bước chọn sau hoặc chưa từng được phục vụ.
+
+### Tách điều kiện của chính khái niệm và điều kiện của tiên quyết
+
+Tại cùng snapshot, nguồn đưa khái niệm c vào frontier khi c chưa được đánh dấu thành thạo và mọi tiên quyết của c đều đã thành thạo hoặc được luyện ít nhất6 lần. Gọi I(c) là điều kiện chưa thành thạo, E(p) là điều kiện tiên quyết p đã thành thạo hoặc đủ6 lần luyện, A(c) là phép AND của mọi E(p), thì frontier F(c)=I(c) AND A(c). Với khái niệm không có parent, A bằng true. Phân tích vẫn giữ riêng fallback của nguồn khi frontier rỗng. Trong toàn bộ cohort được đối chiếu, cả hai nhánh đều đang ở nhánh frontier. [E7]
+
+Có90 thời điểm mà hai cấu hình bất đồng native M tại đúng một khái niệm. R khác nhau ở60 thời điểm và giống nhau ở30 thời điểm. Đây là90 so sánh giữa cấu hình tại cùng thời điểm, không phải90 lần một người học vượt ngưỡng theo thời gian.
+
+Trong cả90 so sánh, A của chính khái niệm mang nhãn khác nhau đều false ở cả hai cấu hình. Bất đồng I của nó vì vậy đi cùng F=false ở cả hai. Đường còn lại cần kiểm là các khái niệm nhận nó làm tiên quyết. Cùng một parent có thể tác động vào nhiều child tại cùng snapshot, nên148 parent→child opportunities có bất đồng parent M được giữ như một đơn vị riêng. Không quy chúng thành148 thời điểm hoặc cộng trực tiếp với90 so sánh M-set.
+
+### Phân loại đủ30 thời điểm có cùng R
+
+Tính lại trực tiếp từ18 trace trạng thái gốc cho phân loại sau. Cả30 thời điểm thuộc hồ sơ PG. Đây là các trạng thái lặp lại trong chín lịch sử đã có, không phải30 người học mới. [E7]
+
+| Điều kiện tại snapshot có M khác nhau nhưng R giống nhau | Số thời điểm |
+|---|---:|
+| Khái niệm mang nhãn khác nhau không có child trực tiếp trong controller graph | 18 |
+| Child liên quan đã thành thạo ở cả hai cấu hình, parent chưa đủ6 lần luyện | 8 |
+| Child liên quan đã thành thạo ở cả hai cấu hình, đồng thời parent đủ6 lần luyện | 4 |
+| Tổng | 30 |
+
+Ở18 thời điểm đầu, khác biệt không có child trực tiếp để đi tiếp qua điều kiện tiên quyết. Chính khái niệm đó đã bị A=false giữ ngoài R. Ở12 thời điểm còn lại, child liên quan có I=false vì đã thành thạo ở cả hai cấu hình, nên nó cũng nằm ngoài R ở bước này.
+
+Trong12 thời điểm có child đã thành thạo,4 thời điểm còn đồng thời thỏa ngoại lệ đủ6 lần luyện ở parent. Khi đó E của parent bằng true ở cả hai cấu hình dù M của parent khác nhau. Hai điều kiện cùng hiện diện. Phân loại ghi8 và4 để bộc lộ phần chồng lấp, không quy4 thời điểm cho exposure như một nguyên nhân độc lập duy nhất.
+
+Kết quả bổ sung định vị được hai bước của phép dựng R trong những snapshot này. Bất đồng ở chính khái niệm chưa làm nó đủ tiên quyết để vào frontier, còn đường qua child bị giới hạn bởi topology hoặc điều kiện của child. Đó là lời giải thích Boolean theo implementation và trạng thái đã lưu. Nó không phải phép can thiệp thay từng điều kiện trong khi giữ mọi điều kiện khác cố định, cũng không phải ước lượng trung gian nhân quả.
+
+### Phạm vi kết luận của E7
+
+Đã kiểm đầy đủ SHA và CRC của18 trace,2.160 snapshot hai nhánh, cùng query/P/preview/legacy identity và trạng thái28 khái niệm. Lịch sử visits, recent và chapter chỉ được dựng từ logged-query prefix. Các R/C/B/CID và khóa chọn của nguồn được đối chiếu trước khi nghiệm thu thống kê. Mười sáu nhóm pooled/hồ sơ/seed/quỹ đạo và toàn bộ ô0 được giữ trong outputs. Bản đếm lại độc lập xác nhận phân loại30 thời điểm và phần giao4 thời điểm. [E7]
+
+Phần mới giải thích bước dựng R trước quyết định thử. Nó không tự chứng minh preview hoặc bài thực phục vụ giữ nguyên vì riêng các điều kiện trên. Phân tích không đánh giá native M có đúng với trạng thái kiến thức thật, không coi pi_task là xác suất thành thạo đã hiệu chuẩn và không kết luận đồ thị cải thiện hay không cải thiện học tập. Không thêm seed độc lập, CI hoặc p-value. Các profile và lịch sử cũ tiếp tục được giữ đúng phạm vi của chúng.
+
+### Nguồn bổ sung E7
+
+**E7** dùng summary, event flags và validation của phép cached mastery–readiness đã nghiệm thu, cùng bản tính lại độc lập từ18 native traces. Source map đi kèm ghi40 input SHA của phép tính lại, nguồn analyzer/controller và các JSON pointers của từng số đếm. Bằng chứng E7 đã được đóng trong [bundle masking](../runs/rq1-mastery-ready-masking-20261109-01/README.md). Có thể đối chiếu [báo cáo chuyên đề](rq1_mastery_ready_masking_20261109.md) và [bản đếm lại độc lập](../runs/rq1-mastery-ready-masking-20261109-01/masking_independent_native_recount02.json). Manifest hoàn tất và SHA của các file này được ghi trong source map. Các mục1–9 và toàn bộ nguồn E1–E6 phía trên giữ nguyên byte so với bản canonical trước khi nối E7.

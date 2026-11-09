@@ -1,5 +1,15 @@
 # Sổ cái thí nghiệm
 
+## Mốc hiện hành09/11 — RQDIAG25 đã đóng, MainC8 đã áp dụng, Gate STALE
+
+[RQ1 masking](reports/rq1_mastery_ready_masking_20261109.md) / [bundle44](runs/rq1-mastery-ready-masking-20261109-01/README.md) / [manifest](runs/rq1-mastery-ready-masking-20261109-01/manifest.json). Pure9 đạt; cached giữ1.080paired snapshots/2.160arms từ9lịch sử cũ, newN0. M-set khác90, initial R khác60, giữ R30. Trong30events có18no-direct-child, 8child-mastered chưaexposure và4child-mastered VÀexposure. Hai flags không loại trừ nhau (12child-mastered/4exposure/giao4), không4exposure-only causes. Estimator full31/empty0edges nhưng controller chung31edges. R là initial readiness trước C/B/escape, không universal permission/served action; không mastery truth, calibration, causal mediation hoặc RQcompletion. Raw recount02 kiểm18CRC/30.240predicate pairs.
+
+[QA báo cáo](runs/supervisor-masking-report-qa-20261109-01/README.md), 19outputs trình bày tách khỏi bằng chứng khoa học44. Chặng11/11SVG/11bảng, managed desktop1280/mobile390 và ảnh đã quan sát; giữ localChrome crashpad failure/Job0. Không rerun browser hoặc phát sinh researchN khi cập nhật tracking.
+
+[E7 đã xuất bản](runs/thesis-rq1-e7-writing-20261109-01/README.md), bundle15 đã đóng. 80source refs/18numeric pointers,28517bytes phần trước giữ nguyên. Không RQcompletion hoặc kết quả model mới.
+
+MainC8 đã áp dụng8file được review, đang chờ tests metadata; không còn candidate pending apply. Collect01 dừng RAM trước metadata/pytest,0IDs/0bodies,Job0, không tự retry02. Gate177/1.748PASS là snapshot lịch sử, current Gate STALE sau thay nguồn. Chưa actual CUDA/Main9 comparison hoặc fitted research efficacy. Mốc này cập nhật hiện trạng, các đoạn cũ bên dưới giữ nguyên theo thời điểm ghi. Chưa tăng raw-Git counter cho hai bundle mới, ROOT kiểm sau commit.
+
 ## Mốc đã nghiệm thu08/11 — history, ability, corpus và gói GVHD theo ngày
 
 **Điểm đọc hiện hành theo yêu cầu người dùng:** chỉ [BAO_CAO.md](supervisor_reports/2026-11-08/01_tien_do/BAO_CAO.md) và [KET_QUA_NGHIEN_CUU.ipynb](supervisor_reports/2026-11-08/01_tien_do/KET_QUA_NGHIEN_CUU.ipynb), cùng thư mục08/11/đợt01. Báo cáo tóm tắt thành quả/phần còn thiếu; notebook trình bày thiết kế, đối chứng, quá trình kiểm chứng và kết quả chẩn đoán đã có. Bản hiện hành đã kiểm local:27cells/16code cells/6SVG/73sources/58pointers; SHA `d7a7cbd61b242bf1434a19fbb0e24b28ec466bd317c41f90a31204bef53ae506`. Không phát sinh thí nghiệm/mẫu mới.
@@ -177,3 +187,5 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 - **AKT bootstrap Log Loss consistency08/11:**13fixturePASS7,78717s/45,0model/solver/corpus. [Bundle](runs/akt-metric-consistency-engineering-20261108-01/README.md). Thayepsilon reportingkhớpcanonical, khôngrerunhistoricalbenchmark hoặc RQcompletion.
 
 - **CPU09 fullcached native mastery,09/11**, [bundle](runs/rq1-cpu09-native-mastery-20261109-01/README.md). Lượt allocation300s dừng sớm9,8049276s sau finalwrite vì freeRAM2104508416B dưới floor2147483648B. Native REJECTED, cleanup đạt, không retry. Đóng30outputs cùng nguồn và raw logs, chưa có kết quả nghiên cứu mới.
+
+- **CPU09 fullcached02,09/11**, [bundle28outputs](runs/rq1-cpu09-native-mastery-20261109-02/README.md). REJECTED sau3,1203712s, resource monitor sạch vàJob0. Giữ11raw files cùng source/postcheck; chưa retry hoặc kết luận mastery/graph.

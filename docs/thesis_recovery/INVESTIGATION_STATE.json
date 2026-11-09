@@ -83,7 +83,7 @@
     "Chưa đo throughput/cost GPU cho matrix nghiên cứu và chưa có exact run authorization.",
     "Chưa hoàn tất corpus nghiên cứu, baseline comparisons, refit/calibration và closed-loop evidence cuối."
   ],
-  "next_recommended_investigation": "Đóng failure RAM fullcached01 và raw Git observer33. Kiểm CPU checkpoint04 khi còn đủ RAM cho floor2GiB và fixturepeak lịch sử634617856B. BatchC chỉ chuẩn bị candidate ngoài production để giữ pins04. Paper1 RNG-owned runner tiếp tục độc lập. Không tự chạy lại fullcached01 hoặc chi Modal.",
+  "next_recommended_investigation": "Review RAM stop MainCcollect01 trước allocation mới, không tự chạy02; MainC8 đã áp dụng nhưng tests còn pending. Gate hiện hành STALE, cần refresh đúng nguồn trước admission nghiên cứu. Native-M/truth CPU09 vẫn pending, không tự retry hai full attempts đã dừng. Chưa actual CUDA hoặc quyền chi Modal.",
   "resume_instructions": "Đọc current_readiness_summary/current_software_gate/autonomous_engineering_loop trước các snapshots cũ; đọc actual raw bundle/commit và poll handle trước remote. Không rerun completed worker/Gate để lấy artifact; mọi paid GPU/fullCV/Holdout cần authorization riêng.",
   "resolved_questions": {
     "Q09": "Map đủ28nodes,36unique IDs,8extra metadata IDs,0duplicates, planning_validation.json",
@@ -361,7 +361,7 @@
     "gpu_executed": false
   },
   "current_software_gate": {
-    "status": "CURRENT_WINDOWS_CPU_GATE177_ACCEPTED_EXPLICIT_INDEX",
+    "status": "HISTORICAL_WINDOWS_CPU_GATE177_STALE_AFTER_SOURCE_CHANGES",
     "source_files": 177,
     "test_modules": 81,
     "passed_cases": 1748,
@@ -377,12 +377,12 @@
     "bundle_manifest_sha256": "003784431a4080b7a18d5220da279e008b35226b6750e81fca7de9dbdb36b20d",
     "source_commit": "e1a0d82",
     "evidence_commit": "02d8494",
-    "worktree_gate_current": true,
+    "worktree_gate_current": false,
     "default_pointer_promoted": false,
     "explicit_index": "artifacts/akt/preflight/gate2-main177-win-current-gate-20261109-05.json",
     "explicit_index_sha256": "e8162f6efce3ca0a443f6c40f69308b06b610e95d5a02504ba146e92b6f87366",
     "historical_default_pointer_sha256": "9e768aadcf084482a2eeb9be814fc399100dd1a507eaa89afbbae87100365cd6",
-    "scope_vi": "Nguồn177 hiện hành đã đạt. Dùng explicit index mới cho admission, globalpointer lịch sử154 giữ nguyên. Không cấp quyền training/CUDA."
+    "scope_vi": "Snapshot177/1748PASS vẫn là lịch sử đã nghiệm thu. Linux/CUDA/MainC8 và nguồn mới làm current Gate STALE; chưa refresh nguồn hiện hành, không cấp fit/CUDA grant."
   },
   "previous_software_gate": {
     "status": "REJECTED_RESOURCE_BOUND",
@@ -796,7 +796,7 @@
   },
   "current_readiness_summary": {
     "overall_thesis": "NOT_READY_FOR_FINAL_RESEARCH",
-    "RQ1": "PARTIAL_CONTROLLER_AND_NATIVE_GATES_DIAGNOSED_RESPONSE_PROFILE_BIAS_QUANTIFIED_MASTERY_TRUTH_PENDING",
+    "RQ1": "PARTIAL_NATIVE_GATES_INITIAL_READINESS_MASKING_AND_RESPONSE_RELIABILITY_DIAGNOSED_MASTERY_TRUTH_PENDING",
     "RQ2": "PARTIAL_CONTROLLED_HISTORY_ABILITY_AND_ORDER_MEASUREMENT_AUDITS_NOT_FINAL",
     "RQ3": "TINY_SELECTED_A0_LIFECYCLE_AND_CUDA_CORE_CPU_COMPATIBILITY_VERIFIED_NO_RESEARCH_FITTED_COMPARISON",
     "AKT_CUDA": "HISTORICAL_KITV12_SYNTHETIC_ONLY_NEW_WORKER_NOT_VALIDATED",
@@ -804,12 +804,12 @@
     "SAKT": "DATA_EPOCH_PREDICTION_AND_EPOCH_BOUNDARY_ADAM_PERSISTENCE_VERIFIED_NOT_PROFILE_OR_FITTED_BASELINE",
     "GKT": "TWO_EPOCH_TOY_TRAIN_SELECTION_EXPORT_VERIFIED_NOT_RESEARCH_FITTED",
     "Modal": "NO_COMPUTE_SPEND_NO_AUTOMATIC_ALLOCATION",
-    "primary_next_task": "Đóng failure RAM fullcached01 và raw Git observer33. Kiểm CPU checkpoint04 khi còn đủ RAM cho floor2GiB và fixturepeak lịch sử634617856B. BatchC chỉ chuẩn bị candidate ngoài production để giữ pins04. Paper1 RNG-owned runner tiếp tục độc lập. Không tự chạy lại fullcached01 hoặc chi Modal.",
+    "primary_next_task": "Review RAM stop MainCcollect01 trước allocation mới, không tự chạy02; MainC8 đã áp dụng nhưng tests còn pending. Gate hiện hành STALE, cần refresh đúng nguồn trước admission nghiên cứu. Native-M/truth CPU09 vẫn pending, không tự retry hai full attempts đã dừng. Chưa actual CUDA hoặc quyền chi Modal.",
     "methodology_pending": [
       "Final proposal-required comparison allocation and bounded run budgets; no fullCV/Holdout/cloud authority."
     ],
     "supersedes": "S04-A/S05-B đã groupadopt tại21 theouserdelegation, không tiếp tục coi engineeringđangchờS04/S05. HistoricalGate/kit vẫn không chứng minh currentfullGate/CUDA.",
-    "SOFTWARE_GATE": "HISTORICAL_1748_CPU_ACCEPTANCE_STALE_AFTER_LINUX_AND_CUDA_SOURCE_CHANGES"
+    "SOFTWARE_GATE": "STALE_AFTER_LINUX_CUDA_MAIN_AND_NEW_SOURCE_CHANGES"
   },
   "software_gate_before_linux_batch": {
     "status": "PASS",
@@ -913,7 +913,7 @@
       "out_of_pocket_limit_usd": 0,
       "new_spending_authorized": false
     },
-    "latest_verified_commit": "00726b8",
+    "latest_verified_commit": "3ae1753",
     "commit_evidence": "docs/thesis_recovery/evidence/rq2_junit_fix_raw_git_20261109.json",
     "closed_science_outputs": 39,
     "current_main": "Bản sửa JUnit đạt99targeted; Gate04vẫnREJECTED. Chuẩn bị freshGate05 trên nguồn mới trước actualA0guard.",
@@ -923,8 +923,7 @@
       "rq12_evidence_synthesis": "FreshGate05 sourcepreparation, không thực thi"
     },
     "next": [
-      "Genuine10×84 collector và complete public A0 lifecycle theo allocation riêng, đo cả revalidation overhead trước CUDA/Modal.",
-      "RQ1 native mastery replay đang khắc phục giới hạn cadence monitor, chưa có kết quả accuracy được chấp nhận."
+      "Review RAM stop MainCcollect01 trước allocation mới, không tự chạy02; MainC8 đã áp dụng nhưng tests còn pending. Gate hiện hành STALE, cần refresh đúng nguồn trước admission nghiên cứu. Native-M/truth CPU09 vẫn pending, không tự retry hai full attempts đã dừng. Chưa actual CUDA hoặc quyền chi Modal."
     ],
     "pending_external": [
       "Exact Paper1 PDF/source revision; quyền xuất bộ source cụ thể lên Colab chưa xác nhận; từng paid/fullCV/Holdout run cần quyền riêng."
@@ -976,7 +975,7 @@
       "cgakt_context_api_cost": "c77e88a",
       "cgakt_actual_adam": "5e1eb40"
     },
-    "verified_new_output_blobs": 5839,
+    "verified_new_output_blobs": 5861,
     "colab_connection": {
       "status": "OLD_SESSION_EXPIRED_NOT_REQUIRED_FOR_CURRENT_LOCAL_WORK",
       "session_id": 17125,
@@ -1005,7 +1004,7 @@
       "rq_complete": false,
       "scope_vi": "Bất đồng snapshot giữa cấu hình, không temporal crossing/accuracy/causal learning benefit."
     },
-    "new_blocker": "Current CPU Gate/runtime/index đã đủ cho guard. Actual public selected-fit, toàn9variants/hai môi trường và CUDA còn thiếu.",
+    "new_blocker": "MainC8 đã áp dụng, chưa tests metadata/native/CUDA acceptance. Current Gate STALE; main9/hai môi trường và research efficacy vẫn pending.",
     "source_kit": {
       "status": "MATERIALIZED_AND_SHA_REVERIFIED_REMOTE_SOURCE_ONLY",
       "directory": "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01",
@@ -2332,7 +2331,7 @@
       "browser_closed_after_qa": true
     }
   },
-  "current_next_step_20261109": "Genuine10×84 collector và complete public A0 lifecycle theo allocation riêng, đo cả revalidation overhead trước CUDA/Modal.",
+  "current_next_step_20261109": "Review RAM stop MainCcollect01 trước allocation mới, không tự chạy02; MainC8 đã áp dụng nhưng tests còn pending. Gate hiện hành STALE, cần refresh đúng nguồn trước admission nghiên cứu. Native-M/truth CPU09 vẫn pending, không tự retry hai full attempts đã dừng. Chưa actual CUDA hoặc quyền chi Modal.",
   "graph_window_handoff_preparation_20261109": {
     "status": "PREP_ONLY_NOT_EXECUTED_OR_ADOPTED",
     "packet": "artifacts/akt/local-tests/akt-research-runner-20261108-01/graph_window_handoff01_expectation.json",
@@ -3700,12 +3699,12 @@
     "raw_git_proof": "docs/thesis_recovery/evidence/cpu09_observer_readiness_raw_git_20261109.json"
   },
   "current_focus_20261109": {
-    "rq1": "Fullcached02 kết thúc launcher đột ngột, chưa có readouts. Tiếp tục cached M→R diagnostic độc lập.",
+    "rq1": "RQDIAG25 cached masking đã đóng44outputs, overlap12/4/giao4; full CPU09 mastery truth vẫn pending, không retry tự động.",
     "rq2": "Seeded wrapper đã kiểm85tests. Chuẩn bị một engineering domain packet, chưa matrix.",
-    "rq3": "CoreA đã kiểm. CheckpointB38metadata đạt, native04 chờ đủRAM. MainC chuẩn bị candidate không sửa production.",
+    "rq3": "MainC8 APPLIED8_REVIEWED_CANDIDATES_TESTS_PENDING; collect01 RAM stop trước pytest,0IDs/bodies, không auto02. Gate STALE, chưa actual CUDA.",
     "financial": "Modal0USD cho các lượt hiện hành,30USDfreecredit ceiling vẫn giữ.",
-    "human_reports": "Hai file người đọc cập nhật seeded progress, giữ10SVG. Chưa có kết luận khoa học mới từ fullcached.",
-    "artifacts": "Observer32outputs vàmanifest đã đối chiếu33rawGitfiles. Failure vàkết quả cũ giữ nguyên."
+    "human_reports": "Chặng11/11SVG/11bảng đã có QA19 riêng, manageddesktop1280/mobile390 và ảnh quan sát; không researchN mới.",
+    "artifacts": "Masking44 và presentationQA19 đã đóng/verifymanifest; raw-Git counter chờ ROOT sau commit."
   },
   "cuda_core_batch_a_20261109": {
     "status": "VERIFIED_13_METADATA_AND_26_CPU_MODEL_CASES_ACTUAL_CUDA_PENDING",
@@ -3797,11 +3796,47 @@
     "actual_cuda": false
   },
   "cuda_main_batch_c_20261109": {
-    "status": "ROOT_REVIEWED_SPEC_CANDIDATE_PREPARATION_OUTSIDE_PRODUCTION",
+    "status": "APPLIED8_REVIEWED_CANDIDATES_TESTS_PENDING",
     "spec": "artifacts/akt/local-tests/akt-research-runner-20261108-01/CUDA_MAIN_INTEGRATION_BATCHC_PLAN01.md",
     "spec_sha256": "060a93185265d2c1b2e6be009888c1365e6f22f266ca9e1a67696118e915ff42",
-    "production_files_changed": false,
-    "tests_executed": false
+    "production_files_changed": true,
+    "tests_executed": false,
+    "candidate_directory": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cuda-main-batchc-candidate01",
+    "candidate_inventory_sha256": "bc8a3af1d7661f32b387ccf9df2e12be53d7b46d765973c6e7514d46d160f8e0",
+    "syntax_proof": "artifacts/akt/local-tests/akt-research-runner-20261108-01/batchc_syntax_check01.json",
+    "application_receipt": "artifacts/akt/local-tests/akt-research-runner-20261108-01/batchc-canonical-apply01.json",
+    "application_receipt_sha256": "8f608a5d66b8afa2dda730aac690b36e41a017fe8e6b59c21026c4c52dc5a3b7",
+    "root_review": "artifacts/akt/local-tests/akt-research-runner-20261108-01/APPLY_BATCHC_ROOT_REVIEW01.md",
+    "root_review_sha256": "de15ae53aac04e8498c5aa28884245c0bc65439ea1fb5b4c8ef3794e81ef8a3d",
+    "applied_sources": {
+      "src/knowledge_tracing/akt/authorization.py": "f35dc9f14a9edf7d1cacf82085db67a11e2c1ca540fe9121a60a14d2f0785027",
+      "src/knowledge_tracing/akt/research_execution.py": "df39d898f80efbe0cb43f5ff6d8f0bb64e2302a3353ba8023b3ed88cf9242001",
+      "src/knowledge_tracing/akt/research_main_execution.py": "0b3b671acf0601b3e84be9439187cf4a7f15bd0e6bd36470a576697bd2147ddb",
+      "src/knowledge_tracing/akt/research_selected_runner.py": "b9a9876a536964920e64ffac354c467ec8da9776e52b7a88b51d81e0b963848c",
+      "tests/akt/test_research_execution.py": "53827d176cf372181486622ef45b4d1d9f89ef9f67ece0644c965dcec77fb453",
+      "tests/akt/test_research_main_execution.py": "3a02dc6a873d5a57970992b96b964fc7957a194c6b0445f7ebc33923a1dcb215",
+      "tests/akt/test_research_selected_runner.py": "699a33e1ac4a7dc05cb6673940e0eb70f33b7e6a7619103fac28cf411e74a3b4",
+      "tests/akt/test_runtime.py": "780bc3d45b0b36b162a33fd095713c74e7599e601b2ab700b7162a3d241460f1"
+    },
+    "native_checkpoint04_packet_stale_never_dispatched": true,
+    "actual_CUDA_verified": false,
+    "metadata_collection01": {
+      "status": "REJECTED_RAM_BEFORE_METADATA_PYTEST",
+      "result": "artifacts/akt/local-tests/akt-research-runner-20261108-01/batchc-metadata-collection01-owned/final.json",
+      "result_sha256": "8d7d7f6465ff63c8d2ff8a4509242fdf6770b8ab6dad2f657240b0450996f93c",
+      "collection_ids": 0,
+      "test_bodies": 0,
+      "worker_seconds": 0.5437661,
+      "root_terminal_seconds": 1.0049725,
+      "source_hashes_unchanged": 33,
+      "runtime_hashes_unchanged": 8,
+      "observed_free_bytes": 1583316992,
+      "floor_bytes": 1610612736,
+      "worker_peak_rss_bytes": 26374144,
+      "Job_active_after_cleanup": 0,
+      "automatic_retry": false,
+      "observation_origin": "ROOT actual receipts and terminal message"
+    }
   },
   "previous_goal_turn_audit_20261109": {
     "classification": "PROGRESS",
@@ -3825,7 +3860,10 @@
     "recipe": "paper1-pdf-keyed-private-random-v1",
     "actual_domain_pilot": false,
     "research_matrix": false,
-    "report": "research_tracking/reports/paper1_seeded_episode_readiness_20261109.md"
+    "report": "research_tracking/reports/paper1_seeded_episode_readiness_20261109.md",
+    "commit": "3ae1753",
+    "raw_git_files": 22,
+    "raw_git_proof": "docs/thesis_recovery/evidence/paper1_seeded_raw_git_20261109.json"
   },
   "cpu09_targeted_full02_20261109": {
     "status": "REJECTED_UNEXPECTED_LAUNCHER_EXIT_CAUSE_UNKNOWN_NO_RETRY",
@@ -3841,6 +3879,356 @@
     "job_active_after_cleanup": 0,
     "resource_monitor_errors": [],
     "postcheck": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cpu09_full02_terminal_postcheck01.json",
-    "automatic_retry": false
+    "automatic_retry": false,
+    "bundle": "research_tracking/runs/rq1-cpu09-native-mastery-20261109-02",
+    "archive_status": "CLOSED28_FAILURE_OUTPUTS_NATIVE_VERDICT_PRESERVED",
+    "outputs": 28,
+    "manifest_sha256": "549e8ac8dff485b192f4a6bb44e729b7271e882cbde440888c69b955cf80e38c"
+  },
+  "tracking_before_rqdiag25_20261109": {
+    "current_focus_20261109": {
+      "rq1": "Fullcached02 kết thúc launcher đột ngột, chưa có readouts. Tiếp tục cached M→R diagnostic độc lập.",
+      "rq2": "Seeded wrapper đã kiểm85tests. Chuẩn bị một engineering domain packet, chưa matrix.",
+      "rq3": "CoreA đã kiểm. CheckpointB38metadata đạt, native04 chờ đủRAM. MainC chuẩn bị candidate không sửa production.",
+      "financial": "Modal0USD cho các lượt hiện hành,30USDfreecredit ceiling vẫn giữ.",
+      "human_reports": "Hai file người đọc cập nhật seeded progress, giữ10SVG. Chưa có kết luận khoa học mới từ fullcached.",
+      "artifacts": "Observer32outputs vàmanifest đã đối chiếu33rawGitfiles. Failure vàkết quả cũ giữ nguyên."
+    },
+    "current_next_step_20261109": "Genuine10×84 collector và complete public A0 lifecycle theo allocation riêng, đo cả revalidation overhead trước CUDA/Modal.",
+    "next_recommended_investigation": "Đóng failure RAM fullcached01 và raw Git observer33. Kiểm CPU checkpoint04 khi còn đủ RAM cho floor2GiB và fixturepeak lịch sử634617856B. BatchC chỉ chuẩn bị candidate ngoài production để giữ pins04. Paper1 RNG-owned runner tiếp tục độc lập. Không tự chạy lại fullcached01 hoặc chi Modal.",
+    "current_readiness_summary": {
+      "overall_thesis": "NOT_READY_FOR_FINAL_RESEARCH",
+      "RQ1": "PARTIAL_CONTROLLER_AND_NATIVE_GATES_DIAGNOSED_RESPONSE_PROFILE_BIAS_QUANTIFIED_MASTERY_TRUTH_PENDING",
+      "RQ2": "PARTIAL_CONTROLLED_HISTORY_ABILITY_AND_ORDER_MEASUREMENT_AUDITS_NOT_FINAL",
+      "RQ3": "TINY_SELECTED_A0_LIFECYCLE_AND_CUDA_CORE_CPU_COMPATIBILITY_VERIFIED_NO_RESEARCH_FITTED_COMPARISON",
+      "AKT_CUDA": "HISTORICAL_KITV12_SYNTHETIC_ONLY_NEW_WORKER_NOT_VALIDATED",
+      "AKT_MAIN_LINUX_GPU_WORKER": "LINUX_CPU_DUMMY_WORKER_VERIFIED_AND_DURABLE_CUDA_PENDING",
+      "SAKT": "DATA_EPOCH_PREDICTION_AND_EPOCH_BOUNDARY_ADAM_PERSISTENCE_VERIFIED_NOT_PROFILE_OR_FITTED_BASELINE",
+      "GKT": "TWO_EPOCH_TOY_TRAIN_SELECTION_EXPORT_VERIFIED_NOT_RESEARCH_FITTED",
+      "Modal": "NO_COMPUTE_SPEND_NO_AUTOMATIC_ALLOCATION",
+      "primary_next_task": "Đóng failure RAM fullcached01 và raw Git observer33. Kiểm CPU checkpoint04 khi còn đủ RAM cho floor2GiB và fixturepeak lịch sử634617856B. BatchC chỉ chuẩn bị candidate ngoài production để giữ pins04. Paper1 RNG-owned runner tiếp tục độc lập. Không tự chạy lại fullcached01 hoặc chi Modal.",
+      "methodology_pending": [
+        "Final proposal-required comparison allocation and bounded run budgets; no fullCV/Holdout/cloud authority."
+      ],
+      "supersedes": "S04-A/S05-B đã groupadopt tại21 theouserdelegation, không tiếp tục coi engineeringđangchờS04/S05. HistoricalGate/kit vẫn không chứng minh currentfullGate/CUDA.",
+      "SOFTWARE_GATE": "HISTORICAL_1748_CPU_ACCEPTANCE_STALE_AFTER_LINUX_AND_CUDA_SOURCE_CHANGES"
+    },
+    "current_software_gate": {
+      "status": "CURRENT_WINDOWS_CPU_GATE177_ACCEPTED_EXPLICIT_INDEX",
+      "source_files": 177,
+      "test_modules": 81,
+      "passed_cases": 1748,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "result": "artifacts/akt/local-tests/akt-research-runner-20261108-01/win-current-gate-20261109-05-outer/result.json",
+      "result_sha256": "9e61948b93e5f52de248cf076cd6225dc5253f48db949dd40c2a706f4e23d69e",
+      "source_snapshot": "artifacts/akt/local-tests/akt-research-runner-20261108-01/gate_source_snapshot06.json",
+      "source_freeze_sha256": "c88fcc9387a1bd64114126d333651d84e92c9c30e4c8871dc6d99cd7f86600c1",
+      "bundle": "research_tracking/runs/akt-windows-gate-accepted177-20261109-01",
+      "bundle_outputs": 60,
+      "bundle_manifest_sha256": "003784431a4080b7a18d5220da279e008b35226b6750e81fca7de9dbdb36b20d",
+      "source_commit": "e1a0d82",
+      "evidence_commit": "02d8494",
+      "worktree_gate_current": true,
+      "default_pointer_promoted": false,
+      "explicit_index": "artifacts/akt/preflight/gate2-main177-win-current-gate-20261109-05.json",
+      "explicit_index_sha256": "e8162f6efce3ca0a443f6c40f69308b06b610e95d5a02504ba146e92b6f87366",
+      "historical_default_pointer_sha256": "9e768aadcf084482a2eeb9be814fc399100dd1a507eaa89afbbae87100365cd6",
+      "scope_vi": "Nguồn177 hiện hành đã đạt. Dùng explicit index mới cho admission, globalpointer lịch sử154 giữ nguyên. Không cấp quyền training/CUDA."
+    },
+    "cuda_main_batch_c_20261109": {
+      "status": "CANDIDATE_EIGHT_FILES_SYNTAX_VERIFIED_NOT_APPLIED_PENDING_INDEPENDENT_REVIEW",
+      "spec": "artifacts/akt/local-tests/akt-research-runner-20261108-01/CUDA_MAIN_INTEGRATION_BATCHC_PLAN01.md",
+      "spec_sha256": "060a93185265d2c1b2e6be009888c1365e6f22f266ca9e1a67696118e915ff42",
+      "production_files_changed": false,
+      "tests_executed": false,
+      "candidate_directory": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cuda-main-batchc-candidate01",
+      "candidate_inventory_sha256": "bc8a3af1d7661f32b387ccf9df2e12be53d7b46d765973c6e7514d46d160f8e0",
+      "syntax_proof": "artifacts/akt/local-tests/akt-research-runner-20261108-01/batchc_syntax_check01.json"
+    },
+    "autonomous_engineering_loop": {
+      "status": "ACTIVE",
+      "authorization": "User explicitly requests sustained engineering and parallel subagents, 2026-11-08; earlier instructions authorize verified incremental commits.",
+      "goal": "Hoàn thiện KLTN theo đề cương và RQ1–RQ3; không đồng nhất hoàn thiện code với hoàn tất nghiên cứu.",
+      "execution": "Chỉ .venv local; phân tích artifact pilot đã lưu và synthetic checks; không dùng Holdout, full CV, real-data benchmark rerun hoặc cloud credits.",
+      "modal": {
+        "free_credit_user_reported_usd": 30,
+        "out_of_pocket_limit_usd": 0,
+        "new_spending_authorized": false
+      },
+      "latest_verified_commit": "3ae1753",
+      "commit_evidence": "docs/thesis_recovery/evidence/rq2_junit_fix_raw_git_20261109.json",
+      "closed_science_outputs": 39,
+      "current_main": "Bản sửa JUnit đạt99targeted; Gate04vẫnREJECTED. Chuẩn bị freshGate05 trên nguồn mới trước actualA0guard.",
+      "parallel": {
+        "graph_gate_prototype": "RQ2secondaryđã đóng68outputs/5be277c; không model/world mới",
+        "platform_fixture_compat": "JUnitfix99/failedGate04đã đóng90outputs/e1a0d82",
+        "rq12_evidence_synthesis": "FreshGate05 sourcepreparation, không thực thi"
+      },
+      "next": [
+        "Genuine10×84 collector và complete public A0 lifecycle theo allocation riêng, đo cả revalidation overhead trước CUDA/Modal.",
+        "RQ1 native mastery replay đang khắc phục giới hạn cadence monitor, chưa có kết quả accuracy được chấp nhận."
+      ],
+      "pending_external": [
+        "Exact Paper1 PDF/source revision; quyền xuất bộ source cụ thể lên Colab chưa xác nhận; từng paid/fullCV/Holdout run cần quyền riêng."
+      ],
+      "recovery": "Đọc state, INVESTIGATION_LOG và TASKS trước khi tiếp tục; không chạy lại job/bundle đóng; kiểm tra tiến trình đang chạy và SHA source.",
+      "limits": "Hoạt động trong phiên agent còn được cấp thực thi; không cam kết chạy khi máy hoặc ứng dụng tắt; không tự lập lịch hay gửi báo cáo ra ngoài.",
+      "closed_engineering_bundles": [
+        "gkt-core-engineering-20261108-01",
+        "gpu08-environment-proposal-20261108-01",
+        "cpu-worker-context-20261108-01",
+        "demo-readonly-engineering-20261108-01",
+        "gkt-training-engineering-20261108-01",
+        "akt-linux-worker-readiness-20261108-01",
+        "gkt-checkpoint-engineering-20261108-01",
+        "gkt-inference-adapter-engineering-20261108-01",
+        "akt-t4-discovery-engineering-20261108-01",
+        "gkt-epoch-pipeline-engineering-20261108-01",
+        "cgakt-research-context-engineering-20261109-01",
+        "mastery-observer-cost-engineering-20261109-01",
+        "cgakt-research-core-engineering-20261109-01",
+        "cgakt-context-model-hotpath-engineering-20261109-01",
+        "cgakt-context-api-cost-benchmark-20261109-01",
+        "cgakt-actual-adam-engineering-20261109-01"
+      ],
+      "verified_component_commits": {
+        "science_rq12": "e4a44e9",
+        "gkt_kernel": "661a44b",
+        "gpu08_metadata": "dc2b802",
+        "akt_context": "fbb0ed2",
+        "readonly_demo": "4d2cdf5",
+        "sakt_trainer": "9952bc7",
+        "akt_simulator_engineering": "000ea22",
+        "rq1_score_vector": "5eede59",
+        "graph_gam_variants": "96004e2",
+        "gate2_elapsed_guard": "4af8f85",
+        "graph_akt_prototype": "6377265",
+        "linux_dependency_resolution": "370a7f6",
+        "linux_gate_tooling": "7b07d61",
+        "linux_isolated_cpu_audit": "4f48749",
+        "gkt_recurrent_candidate": "6035262",
+        "thesis_rq12_results_draft": "d30dafe",
+        "rq1_query_observability": "7dd8338",
+        "graph_fallback_test_contract": "dd80006",
+        "cgakt_context": "6b95740",
+        "cgakt_core": "1ec4b87",
+        "rq1_native_mastery": "fe798c4",
+        "observer_benchmark": "c3e3c87",
+        "cgakt_hotpath": "f8b90fb",
+        "cgakt_context_api_cost": "c77e88a",
+        "cgakt_actual_adam": "5e1eb40"
+      },
+      "verified_new_output_blobs": 5861,
+      "colab_connection": {
+        "status": "OLD_SESSION_EXPIRED_NOT_REQUIRED_FOR_CURRENT_LOCAL_WORK",
+        "session_id": 17125,
+        "private_session_directory": "artifacts/akt/private/colab-bridge/session-4a53e75b0ab5418eabe581c547cb47a1",
+        "local_port": 60425,
+        "TTL_seconds_initial": 7200,
+        "live_handle_must_be_polled_on_resume": true,
+        "runtime_mode": "CPU per userconfirmation; /dev/nvidia0 absent, noCUDAAPIquery",
+        "report": "artifacts/akt/colab/reconnect-cpu-discovery-20261108-02.json",
+        "report_sha256": "5703ce0471785f276e96c90c28b8d60cadb1671e5095cf7d616beb7f5fbf798c",
+        "root_exists": true,
+        "target_python_exists": true,
+        "cfg_sha256": "0b85377496947675cd146fc9bcdab419ca9ab7eb4ce40d9a05df459330043366",
+        "new_graph_source_present": false,
+        "scope": "No targetinterpreter/sitehooks/Torch/pip/install/train/GPU; warmbaseline package/source identity pendingnextreadonlyaudit"
+      },
+      "latest_rq1_evidence": {
+        "run_id": "rq1-prediction-mastery-trace-20261109-01",
+        "outputs": 92,
+        "commit": "fe798c4",
+        "raw_git_outputs_verified": 92,
+        "paired_concept_snapshots": 30240,
+        "uncertainty_predicate_only_disagreements": 3428,
+        "mastery_disagreements": 90,
+        "new_independent_samples": 0,
+        "rq_complete": false,
+        "scope_vi": "Bất đồng snapshot giữa cấu hình, không temporal crossing/accuracy/causal learning benefit."
+      },
+      "new_blocker": "Current CPU Gate/runtime/index đã đủ cho guard. Actual public selected-fit, toàn9variants/hai môi trường và CUDA còn thiếu.",
+      "source_kit": {
+        "status": "MATERIALIZED_AND_SHA_REVERIFIED_REMOTE_SOURCE_ONLY",
+        "directory": "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01",
+        "archive_sha256": "b6707cfd0139898a22dd04db9095d01622c1df9b7061f05f8579ecb4ab30d233",
+        "archive_bytes": 980252,
+        "payload_files": 161,
+        "gate_source_paths": 120,
+        "extractor_sha256": "1c4d703b369cfbbb57d78c5cec97f5fd1546a7c62aaa5660932f17b2038a100c",
+        "prepared_chunk_requests": "artifacts/akt/colab/requests/gpu09-add-source-chunk-00.json through03",
+        "upstream_git_included": false,
+        "remote_materialized": true,
+        "runtime_recovery_rule": "Sau kết nối, probe ROOT/venv/installed versions; không cài lại hoặc dùng Windows Gate nếu runtime mất.",
+        "local_behavior_tests": {
+          "passed": 15,
+          "first_trial_errors": 2,
+          "reason": "Windowsfixturepath268/264→207 only; helper and archive unchanged",
+          "elapsed_cumulative_seconds": 23.7973683,
+          "budget_seconds": 30,
+          "no_model_steps": true
+        }
+      },
+      "verified_output_count_scope": "Số output Git blobs được kiểm, không số mẫu độc lập/thí nghiệm khoa học/tỷ lệ hoàn thành KLTN.",
+      "closed_loop_observability_attempt01": {
+        "status": "REJECTED_CUMULATIVE_RESOURCE_BOUND",
+        "output": "artifacts/akt/local-tests/rq1-observability-preparation-20261108-01/closed-loop-model-attempt01",
+        "cumulative_seconds": 120.029706,
+        "cap_seconds": 120,
+        "parity_accepted": false,
+        "new_independent_N": 0,
+        "original_historical_source_recovered": false,
+        "source_role": "CURRENT_SOURCE_DIAGNOSTIC_RECONSTRUCTION_NOT_EXACT_HISTORICAL_SOURCE",
+        "failure_receipt_sha256": "4d83b23434c20f9196783ffdd39efc661b4385951381fba1b54723866d8d5481",
+        "frozen7_sha256": "f80d45b7ee7649bc5ca249e46991da7d27f9fa839f4141746fb8131918bc4770",
+        "diagnosis": "Control3240rows CRC complete nhưng no persisted27aggregate/finalstate proof; observedgzip partial/buffered, không researchmetrics.",
+        "next": "Fast dispatcher revision giữ mọiobservable; pure spy/operationalbenchmark≤10s; new source/CLI parent review trước maxONE model attempt. Proposed new protective CPUrevisioncap300, prior spent ledger retained, total across revisions≤430s; not runtimeforecast."
+      },
+      "closed_loop_observability_fast_revision": {
+        "status": "PARENT_RAW_AND_POSTHOC_RANKING_VERIFIED_REPORT_CLOSURE_PENDING",
+        "artifact_directory": "artifacts/akt/local-tests/rq1-observability-preparation-20261108-01/closed-loop-fast-model-attempt01",
+        "parent_review_sha256": "c8eceb6e5cb05feefa3f6bc1271a811d94f10aeda9247c1a186dbf0ac46c842e",
+        "parity_sha256": "29062b82d94f01f22760fa387f6783f7c24e64a02ad84b2762d075b670ba8053",
+        "revision_controller_seconds": 183.8694935000094,
+        "revision_cap_seconds": 300,
+        "overall_seconds": 304.08240270000533,
+        "overall_cap_seconds": 430,
+        "legacy_rows_each_pass": 3240,
+        "aggregate_rows_each_pass": 27,
+        "observed_rows": 3240,
+        "mastery_decisions_per_event": 28,
+        "final_state_pairs": 27,
+        "uniform_pairs": 9,
+        "source_bindings": 45,
+        "optimizer_steps": 0,
+        "new_independent_N": 0,
+        "original_a585_whole_source_recovered": false,
+        "prior_failed_attempt_retained": true,
+        "next": "Phân tích mô tả R→candidates→balanced→served cho mọi trajectory và common-observed-prefix; không paired predictive metrics sau history divergence/CI/causal claim.",
+        "parent_ranking_review": "artifacts/akt/local-tests/rq1-observability-preparation-20261108-01/parent-ranking-review.json",
+        "parent_ranking_review_sha256": "ddbc77152d09c41c10d8bc4dbba86697e9d9bbe46a4f7dfd9ef61db62b1ec8a4",
+        "rank_keys_verified": 3240,
+        "comparisons_verified": 18,
+        "full_same_membership_score_choices": 8,
+        "full_membership_change": 1,
+        "empty_same_membership_score_choices": 2,
+        "empty_negative_cases": 7,
+        "interpretation": "Source-local CID explanation only; post-hoc, no causal/edge-only/learning-benefit claim. Served-item P follows select; fullS28 not needed to replay native B ranking."
+      },
+      "latest_rq1_closed_bundle": {
+        "commit": "850f5ab",
+        "accepted_bundle": "research_tracking/runs/rq1-closed-loop-reconstruction-20261108-02",
+        "accepted_outputs": 125,
+        "retained_failed_archive_outputs": 116,
+        "manifest_sha256": "c8bd8f387e5101fca641098257dd5a99d67d2f838cefc3b53b7d9d55248bcb16",
+        "raw_git_output_blobs_verified": 241,
+        "scope": "Current-source reconstruction/exploratory local concept ranking; newN0, no causal/isolated edge/learning benefit claim"
+      },
+      "latest_graph_confidence_gate": {
+        "commit": "4a256a4",
+        "status": "COMPLETED_ENGINEERING_ONLY",
+        "targeted_tests": 43,
+        "optimizer_steps": 0,
+        "bundle": "research_tracking/runs/akt-graph-confidence-gate-engineering-20261108-01",
+        "bundle_outputs": 37,
+        "manifest_sha256": "76d75fa826c98b318e0712cb32020f9d41b3795f19b9316771cf24bc6251ed37",
+        "cumulative_seconds": 39.65089500002796,
+        "cap_seconds": 120,
+        "scope": "Graph-aware training/checkpoint/export chưa tích hợp; confidence/gate chưafit/calibrated; S04/S05/context100/fullcorpus và freshGate/CUDA còn mở."
+      },
+      "integrity_counter_update_20261108": {
+        "before": 2551,
+        "added": {
+          "8f95fd6_history": 45,
+          "509c955_worker": 27,
+          "1990d4c_corpus_bundle": 48,
+          "8b6487c_ability": 70
+        },
+        "after": 2741,
+        "note_vi": "Số output blobs kiểm byte-integrity, không nghiên cứu N/tiến độ.17canonical corpus files kiểm riêng."
+      },
+      "web_test_policy_vi": "Mở trang chỉ trong lượt kiểm giao diện; đóng trong finally sau khi lưu QA, tắt máy chủ preview do agent tạo nếu có; không để tab kiểm thử treo.",
+      "closed_response_gate_runtime_batch_20261109": {
+        "outputs": 161,
+        "raw_git_files": 167,
+        "evidence": "docs/thesis_recovery/evidence/response_gate_runtime_raw_git_20261109.json",
+        "bundles": [
+          "rq1-response-reliability-diagnostic-20261109-01",
+          "akt-windows-gate-accepted177-20261109-01",
+          "akt-windows-runtime-gate-index-20261109-01"
+        ],
+        "no_new_scientific_seed": true
+      }
+    }
+  },
+  "rq1_mastery_ready_masking_20261109": {
+    "status": "ACCEPTED_CACHED_DIAGNOSTIC_BUNDLE44_CLOSED",
+    "report": "research_tracking/reports/rq1_mastery_ready_masking_20261109.md",
+    "report_sha256": "ab9ee901c703d9c319d80d97534253219c065d2be62b89f489a7a701d195539d",
+    "bundle": "research_tracking/runs/rq1-mastery-ready-masking-20261109-01",
+    "manifest_sha256": "9cbb7a276b750bf079f544ba69a4d0cf1ea28b89140707957630630a20aa9a4b",
+    "paired_events": 1080,
+    "arm_states": 2160,
+    "concept_pairs": 30240,
+    "reused_histories": 9,
+    "reused_seed_families": 3,
+    "M_set_different_events": 90,
+    "initial_R_different_events": 60,
+    "M_different_R_same_events": 30,
+    "paired_concept_IAF_cells": {
+      "000": 30026,
+      "001": 0,
+      "010": 44,
+      "011": 80,
+      "100": 90,
+      "101": 0,
+      "110": 0,
+      "111": 0
+    },
+    "same_R_conditions": {
+      "no_direct_child": 18,
+      "child_mastered_without_exposure": 8,
+      "child_mastered_and_exposure": 4
+    },
+    "nonexclusive_flags": {
+      "child_mastered": 12,
+      "exposure": 4,
+      "overlap": 4
+    },
+    "changed_parent_opportunities": 148,
+    "estimator_edges_full": 31,
+    "estimator_edges_empty": 0,
+    "shared_controller_edges": 31,
+    "pure_cases": 9,
+    "raw_recount02": true,
+    "verifier01_expectation_failure_preserved": true,
+    "new_independent_N": 0,
+    "scope_vi": "Initial R trước C/B/escape, không universal permission/served action hoặc unique causal attribution; mastery truth/calibration/learning benefit vẫn chưa đạt."
+  },
+  "supervisor_masking_presentation_qa_20261109": {
+    "bundle": "research_tracking/runs/supervisor-masking-report-qa-20261109-01",
+    "manifest_sha256": "160533c2e620add0a5aafb2bedb20ca5398d528008368b353185a0e22ee4b449",
+    "outputs": 19,
+    "stages": 11,
+    "SVG": 11,
+    "tables": 11,
+    "observed_desktop_width": 1280,
+    "observed_mobile_width": 390,
+    "local_chrome_failure_preserved": true,
+    "browser_rerun_in_tracking": false,
+    "new_independent_N": 0
+  },
+  "rq1_thesis_E7_publication_20261109": {
+    "status": "PUBLISHED_E7_PAIR_BUNDLE15_CLOSED_NOT_FINAL_RQ",
+    "receipt": "artifacts/akt/local-tests/akt-research-runner-20261108-01/thesis-rq1-e7-publication01/publication.json",
+    "receipt_sha256": "424841ac89fd66bbbf6d2723e617fc86ff0e3d0d0ff1f00f68fb378178da2aca",
+    "bundle": "research_tracking/runs/thesis-rq1-e7-writing-20261109-01",
+    "manifest_sha256": "6bd3be67d1adfce2e091009e182f15773450545a8cdc57a7e1b675b12de27067",
+    "source_references": 80,
+    "numeric_pointers": 18,
+    "prior_markdown_prefix_bytes_preserved": 28517,
+    "new_independent_N": 0
   }
 }

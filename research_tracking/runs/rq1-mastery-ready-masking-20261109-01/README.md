@@ -1,0 +1,3 @@
+# RQ1 — mastery và initial readiness
+
+Cached full/empty1080pairs/2160arms/30240concept snapshots, không replay/fit/oracle/newN. Giữ16groups, mọi zero cells,148changed-parent opportunities và source-reconstructed R/C/B admission. 30M-different/R-same có18no-child,8child-mastered khôngexposure,4child-mastered VÀexposure. Hai flags chồng lấp, không4nguyênnhân exposure-only hoặc causal mediation. Pure9 và actualcached accepted/Job0 giữraw; independentraw02 cùng expectationfailure01 giữđúngprovenance. Không có raw subprocess log riêng của failure01. Gzip cũ chỉreferenceSHA. Manifest xác nhận closure gói, không thêm researchN hoặc masterytruth. Bản diễn giải tại [report_snapshot.md](report_snapshot.md).

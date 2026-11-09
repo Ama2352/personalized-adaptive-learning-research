@@ -4,7 +4,7 @@
 
 ## Khi viết báo cáo, mở gì trước?
 
-**Để xem tiến độ với GVHD:** mở [báo cáo theo ngày](../research_tracking/supervisor_reports/README.md). Bản hiện hành09/11 giữ đúng một bản tóm tắt và một HTML độc lập với mười biểu đồ; đi từ ngữ cảnh hai paper qua tiến độ và diễn tiến nghiên cứu đến phần chưa chứng minh. Bản08/11 và notebook trước chuyển đổi được bảo toàn trong lịch sử. `research_tracking/reports/` tiếp tục giữ phân tích chuyên sâu; `runs/` giữ bằng chứng gốc.
+**Để xem tiến độ với GVHD:** mở [báo cáo theo ngày](../research_tracking/supervisor_reports/README.md). Bản hiện hành09/11 giữ đúng một bản tóm tắt và một HTML độc lập với mười một biểu đồ; đi từ ngữ cảnh hai paper qua tiến độ và diễn tiến nghiên cứu đến phần chưa chứng minh. Bản08/11 và notebook trước chuyển đổi được bảo toàn trong lịch sử. `research_tracking/reports/` tiếp tục giữ phân tích chuyên sâu; `runs/` giữ bằng chứng gốc.
 
 | Cần viết/kiểm tra | Đọc bản diễn giải | Đối chiếu bằng chứng gốc |
 |---|---|---|
@@ -119,7 +119,7 @@ Các mục count/inventory phía trên là snapshots có ngày, không tự cậ
 
 ## Báo cáo GVHD hiện hành09/11
 
-Mở [tóm tắt GVHD](../research_tracking/supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md) và [báo cáo minh họa](../research_tracking/supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html). Báo cáo đi từ ngữ cảnh hai paper qua tiến độ và mười chặng đến phần còn phải chứng minh. Hai chặng mới nhất kiểm điểm tổng hợp trên cùng dòng dữ liệu và giải thích điều kiện không quay lại chương. Mỗi ngày giữ đúng hai file đọc, còn log và hồ sơ kiểm chứng dùng các chỉ mục bằng chứng. [RQ1 transitions](../research_tracking/reports/rq1_transition_evidence_20261108.md), [RQ1 cross-ready](../research_tracking/reports/rq1_cross_ready_membership_20261109.md) và [RQ2 conditions](../research_tracking/reports/rq2_conditions_evidence_20261108.md) có scripts tái tính và bundles theo run.
+Mở [tóm tắt GVHD](../research_tracking/supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md) và [báo cáo minh họa](../research_tracking/supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html). Báo cáo đi từ ngữ cảnh hai paper qua tiến độ và mười một chặng đến phần còn phải chứng minh. Chặng mới nhất giải thích30thời điểm khác nhãn thành thạo mà giữ tập sẵn sàng ban đầu, giữ rõ các điều kiện chồng lấp. Các chặng trước kiểm điểm tổng hợp trên cùng dòng dữ liệu và điều kiện không quay lại chương. Mỗi ngày giữ đúng hai file đọc, còn log và hồ sơ kiểm chứng dùng các chỉ mục bằng chứng. [RQ1 transitions](../research_tracking/reports/rq1_transition_evidence_20261108.md), [RQ1 cross-ready](../research_tracking/reports/rq1_cross_ready_membership_20261109.md) và [RQ2 conditions](../research_tracking/reports/rq2_conditions_evidence_20261108.md) có scripts tái tính và bundles theo run.
 
 ## Điểm vào engineering08/11
 
@@ -130,7 +130,7 @@ Mở [tóm tắt GVHD](../research_tracking/supervisor_reports/2026-11-09/01_tie
 
 `src/knowledge_tracing/paper1_pdf/` giữ các quy tắc world/Elo/controller phiên bản riêng theo PDF chuẩn. `tests/paper1_pdf/` kiểm bằng fixture dựng tay. `domain.py` đọc bộ CSV ứng viên đã pin, giữ metadata đầu vào và tách chapter keys ngoài domain. Source Paper1 lịch sử giữ nguyên. [Phạm vi đã kiểm và phần còn thiếu](../research_tracking/reports/paper1_pdf_primitives_readiness_20261109.md).
 
-`episode.py` nối profile US/UW/FW với controller/world và tape cấp sẵn, có trace observable/oracle riêng và horizon tối đa500. Bộ kiểm Paper1 hiện đạt72ca, gồm18episode cases. [Readiness](../research_tracking/reports/paper1_supplied_episode_readiness_20261109.md). RNG-owned runner và các policy so sánh còn ở bước tiếp theo.
+`episode.py` nối profile US/UW/FW với controller/world và tape cấp sẵn, có trace observable/oracle riêng và horizon tối đa500. Mốc supplied core đạt72ca, gồm18episode cases. [Readiness lịch sử](../research_tracking/reports/paper1_supplied_episode_readiness_20261109.md). Bộ kiểm hiện hành sau seeded runner đạt85ca, còn matrix policy nghiên cứu chưa chạy.
 
 ## Chuẩn bị CUDA cho core nghiên cứu
 

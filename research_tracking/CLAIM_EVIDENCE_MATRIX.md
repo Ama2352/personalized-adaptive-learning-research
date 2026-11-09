@@ -1,5 +1,15 @@
 # Ma trận claim–evidence
 
+## Mốc hiện hành09/11 — RQDIAG25 đã đóng, MainC8 đã áp dụng, Gate STALE
+
+CLM-RQ1-INITIAL-READY-MASKING-20261109. [RQ1 masking](reports/rq1_mastery_ready_masking_20261109.md) / [bundle44](runs/rq1-mastery-ready-masking-20261109-01/README.md) / [manifest](runs/rq1-mastery-ready-masking-20261109-01/manifest.json). Pure9 đạt; cached giữ1.080paired snapshots/2.160arms từ9lịch sử cũ, newN0. M-set khác90, initial R khác60, giữ R30. Trong30events có18no-direct-child, 8child-mastered chưaexposure và4child-mastered VÀexposure. Hai flags không loại trừ nhau (12child-mastered/4exposure/giao4), không4exposure-only causes. Estimator full31/empty0edges nhưng controller chung31edges. R là initial readiness trước C/B/escape, không universal permission/served action; không mastery truth, calibration, causal mediation hoặc RQcompletion. Raw recount02 kiểm18CRC/30.240predicate pairs.
+
+[QA báo cáo](runs/supervisor-masking-report-qa-20261109-01/README.md), 19outputs trình bày tách khỏi bằng chứng khoa học44. Chặng11/11SVG/11bảng, managed desktop1280/mobile390 và ảnh đã quan sát; giữ localChrome crashpad failure/Job0. Không rerun browser hoặc phát sinh researchN khi cập nhật tracking.
+
+[E7 đã xuất bản](runs/thesis-rq1-e7-writing-20261109-01/README.md), bundle15 đã đóng. 80source refs/18numeric pointers,28517bytes phần trước giữ nguyên. Không RQcompletion hoặc kết quả model mới.
+
+MainC8 đã áp dụng8file được review, đang chờ tests metadata; không còn candidate pending apply. Collect01 dừng RAM trước metadata/pytest,0IDs/0bodies,Job0, không tự retry02. Gate177/1.748PASS là snapshot lịch sử, current Gate STALE sau thay nguồn. Chưa actual CUDA/Main9 comparison hoặc fitted research efficacy. Mốc này cập nhật hiện trạng, các đoạn cũ bên dưới giữ nguyên theo thời điểm ghi. Chưa tăng raw-Git counter cho hai bundle mới, ROOT kiểm sau commit.
+
 ## Bổ sung09/11 — điều kiện đủ của zero re-entry
 
 CLM-RQ1-REENTRY-20261109. Với DAG chỉ có cạnh nội chương, ready loại node đã đạt ngưỡng, update chỉ node được chọn và continuity giữ chương còn ready, tập đạt ngưỡng hấp thụ và mỗi chương xuất hiện tối đa một khối liên tiếp. Chứng minh áp dụng dưới giả thiết không forgetting/reset hoặc đổi graph. Phản ví dụ dựng tay có một cạnh B→A cho A→B→A dù chapter quotient không chu trình. Bốn test đã đạt trong0,2165947giây. [Chứng minh và giới hạn](reports/paper1_reentry_mechanism_20261109.md), [output kiểm](runs/paper1-reentry-mechanism-20261109-01/result.json). Còn phải đo tác động học tập và tần suất trong thí nghiệm theo PDF.

@@ -1,0 +1,11 @@
+## Giải thích nơi thay đổi thành thạo bị giữ lại
+
+Các bước trước cho thấy hai cấu hình có thể dự báo khác nhau mà vẫn đề xuất cùng bài. Để đi tiếp từ quan sát này, nhóm kiểm riêng bước chuyển từ đánh giá thành thạo sang tập sẵn sàng ban đầu, ký hiệu R. Đây là đầu vào cho các bước lọc và mở rộng ứng viên tiếp theo của bộ chọn bài. Phép so dùng cùng 1.080 thời điểm trên dòng bài cố định, với trạng thái của 28 khái niệm được lưu trước mỗi lần cập nhật. Hai cấu hình Graph-GAM-KT nhận lần lượt 31 cạnh và tập cạnh rỗng, cùng dùng bộ điều khiển với đồ thị 31 cạnh.
+
+Có 90 thời điểm mà hai cấu hình đánh dấu thành thạo khác nhau ở một khái niệm. Trong số đó, tập R khác nhau ở 60 thời điểm và giống nhau ở 30 thời điểm. Trong cả 90 thời điểm, khái niệm mang nhãn khác nhau vẫn chưa qua điều kiện tiên quyết ở cả hai cấu hình. Vì vậy, chính khái niệm đó đều nằm ngoài R. Nhóm tiếp tục kiểm các khái niệm nhận nó làm tiên quyết để tìm đường truyền còn lại.
+
+Đã phân loại đủ 30 thời điểm có cùng R. Có 18 thời điểm liên quan khái niệm không có khái niệm con trực tiếp trong đồ thị của bộ điều khiển. Ở 12 thời điểm còn lại, khái niệm con đã được đánh dấu thành thạo trong cả hai cấu hình, nên được loại khỏi R ở bước này. Trong 12 thời điểm này, có 4 thời điểm đồng thời thỏa ngoại lệ đã luyện đủ 6 lần ở khái niệm tiên quyết. Bốn thời điểm có hai điều kiện cùng hiện diện, nên dữ liệu không cho phép quy riêng việc R giống nhau cho ngoại lệ số lần luyện.
+
+Phát hiện bổ sung đã xác định hai vị trí giữ khác biệt trạng thái ở bước dựng R trong các tình huống này. Chính khái niệm mang nhãn khác nhau còn bị điều kiện tiên quyết chặn khỏi R, rồi ảnh hưởng tới khái niệm sau bị giới hạn bởi cấu trúc đồ thị hoặc điều kiện đã thành thạo. Vì vậy, kiểm tra điểm dự báo riêng lẻ còn thiếu phần điều khiển quyết định. Các quy tắc cùng hiện diện cũng cần được đọc riêng trước khi giải thích nguyên nhân.
+
+Phép đối chiếu đã kiểm đủ 18 trace và được tính lại trực tiếp từ trạng thái gốc. Ba lần khởi tạo ngẫu nhiên, mỗi lần có ba hồ sơ, vẫn là cùng chín lịch sử đã dùng trước đó. Cả 30 thời điểm có cùng R trên xuất hiện ở hồ sơ PG. Phần này giải thích bước dựng R trước quyết định thử trên dòng bài cố định. Đánh giá nhãn thành thạo có đúng với kiến thức thật và thay đổi quyết định có giúp học tốt hơn còn là các bước tiếp theo.

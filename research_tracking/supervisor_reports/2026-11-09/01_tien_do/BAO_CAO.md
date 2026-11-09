@@ -12,6 +12,8 @@ Paper 1 được kế thừa theo bản PDF phát triển dùng để nộp, là
 
 **Đã có bằng chứng chẩn đoán mới cho RQ1–RQ2, gồm phép đo trực tiếp hai điều kiện xét thành thạo; RQ3 đã có dữ liệu, bước ước lượng cạnh, lõi CG-AKT được kiểm tính toán và quy trình chọn checkpoint AKT không đồ thị chạy thành công trên corpus nhỏ. Chưa RQ nào hoàn tất; chưa có kết quả CG-AKT đã huấn luyện để kết luận mô hình này tốt hơn.**
 
+**Mốc RQ1 mới nhất.** Đã giải thích đủ 30 thời điểm nhãn thành thạo khác nhau nhưng tập sẵn sàng ban đầu giống nhau, với phần trùng nhau giữa các điều kiện được kiểm riêng.
+
 ## Quá trình đã thực hiện
 
 **Trước hết, nhóm kiểm lại nền thí nghiệm.** Đã dựng phản ví dụ quay lại chương trên notebook tiền kỳ của Paper 1 và chỉ dùng kết quả để mô tả quy tắc của bản tiền kỳ đó. Thiết kế và kết quả kế thừa lấy theo PDF chuẩn. Các mô phỏng mới tiếp nối Paper 1 cần bám PDF, ghi rõ phiên bản và tiêu chí đối chiếu hành vi. Cần kiểm chứng riêng trước khi gọi là tái lập chính xác thí nghiệm gốc. Đã làm rõ khi tiến bộ ròng sau 14 ngày chỉ tỷ lệ với tiến bộ cuối lịch; điều này không chứng minh hai kết quả chính của Paper 2 dư thừa. Trên Junyi, đã lượng hóa trường hợp tỷ lệ khớp thứ tự tăng dù số trường hợp phù hợp giảm, do mẫu số thay đổi. Những kiểm tra này giúp tránh coi giả định mô phỏng hoặc thứ tự luyện là bằng chứng đồ thị dạy tốt.
@@ -53,6 +55,10 @@ Song song, nhóm đã nối hồ sơ người học, world, ước lượng Elo 
 Phép kiểm dùng lại ba khối ngẫu nhiên với chín lịch sử hồ sơ, không thêm người học hoặc mẫu độc lập. Mỗi đáp án được dùng một lần cho mỗi cấu hình. Kết quả mới đánh giá sự phù hợp với đáp án của điểm tổng hợp; độ đúng của đánh giá thành thạo so với trạng thái thật và tác động lên học tập còn phải kiểm riêng.
 
 **Bổ sung lời giải thích cho kết quả không quay lại chương trong Paper 1.** Từ quy tắc ready và giữ chương, nhóm đã chứng minh một điều kiện đủ. Khi đồ thị chỉ có cạnh nội chương, khái niệm đã đạt ngưỡng được giữ nguyên và chương còn khái niệm chưa đạt luôn có bài được phép học. Bộ chọn vì vậy chỉ rời chương sau khi hoàn tất chương đó. Dưới những giả thiết này, không quay lại chương là hệ quả của quy tắc. Nhóm đã kiểm bốn tình huống nhỏ, gồm cả đáp án sai. Với cạnh liên chương, một phản ví dụ cho chuỗi A → B → A dù bộ chọn vẫn giữ đúng quy tắc. Phần bổ sung xác định ranh giới của cơ chế; hiệu quả học tập còn cần đối chiếu trạng thái kiến thức thật và kết quả cuối.
+
+**Giải thích bước từ thành thạo đến tập sẵn sàng ban đầu.** Trên cùng 1.080 thời điểm, hai cấu hình Graph-GAM-KT nhận 31 và 0 cạnh có 90 thời điểm khác nhãn thành thạo ở một khái niệm. Tập sẵn sàng ban đầu R khác nhau ở 60 thời điểm và giống nhau ở 30 thời điểm. R là đầu vào cho các bước lọc và mở rộng ứng viên tiếp theo của bộ chọn bài. Trong cả 90 thời điểm, chính khái niệm mang nhãn khác nhau đều còn bị điều kiện tiên quyết chặn khỏi R.
+
+Đã giải thích đủ 30 thời điểm có cùng R. Có 18 trường hợp ở khái niệm không có con trực tiếp trong đồ thị của bộ điều khiển, còn 12 trường hợp có khái niệm con đã mang nhãn thành thạo ở cả hai cấu hình. Trong 12 trường hợp sau có 4 trường hợp đồng thời đủ 6 lần luyện ở tiên quyết, nên cần ghi rõ phần trùng nhau khi giải thích. Tất cả 30 trường hợp thuộc hồ sơ PG. Kết quả đã được tính lại trực tiếp từ 18 trace gốc của cùng chín lịch sử. Phần đánh giá độ đúng của nhãn so với kiến thức thật và tác động lên học tập vẫn cần làm tiếp.
 
 ## Còn phải chứng minh
 
