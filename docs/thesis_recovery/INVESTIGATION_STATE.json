@@ -85,13 +85,7 @@
     "Chưa đo GPU throughput/cost theo matrix nghiên cứu, chưa có exact paid-run authorization. Tổng chi cloud của lượt này bằng0USD.",
     "Phân tích cuối, demo dùng checkpoint fitted và bản luận văn hoàn chỉnh còn việc. Chưa có bằng chứng hoàn tất toàn bộ RQ1–RQ3."
   ],
-  "next_recommended_investigation": [
-    "WRITE06 đã xuất bản report kỹ thuật và Chặng14 ở cả hai fileGVHD. Cần visual/responsive QA khiRAMcho phép, đóng ownedpreview và lưu bằng chứng. Giữ11SVG và phạm vi một lịch sửon-policy.",
-    "Sau visualQA, kiểm RAM trước cold299 attempt05 bằng sourceharness04. Giữ failure03 và NO_GO04, không nhận current299PASS khi chưa đủ.",
-    "Cold299: source04 đã fix1mockwriter. Collect04 NO_GO trướcchild. SauRAM ổn định chạyharness04--attempt05, currentcollection rồi tests. Native07cần refresh1testpin+currentcoldref sauPASS.",
-    "RecoveryRQ2 source/plan59cf đã review, giữ61parentca; chưa59childcalls. Chỉ dispatch khiactualRAM>=3GiB vàRootnoteallocation đầyđủ.",
-    "GKTmodel11/trainer8 và checkpointnative18 giữ admission4GiB. Khôngcloud/Holdout/fullCV; báo cáo tỷ lệ70/55/30 chưa tăng chỉ từ witness này."
-  ],
+  "next_recommended_investigation": "Review native08 sau cold299; RAM>=4GiB trước native18. RQ2recovery cần3GiB. Hoàn tất mobilecapture WRITE06. Giữ goal và CUDA gate chưa hoàn tất.",
   "resume_instructions": "Đọc current_readiness_summary/current_software_gate/autonomous_engineering_loop trước các snapshots cũ; đọc actual raw bundle/commit và poll handle trước remote. Không rerun completed worker/Gate để lấy artifact; mọi paid GPU/fullCV/Holdout cần authorization riêng.",
   "resolved_questions": {
     "Q09": "Map đủ28nodes,36unique IDs,8extra metadata IDs,0duplicates, planning_validation.json",
@@ -5846,14 +5840,7 @@
       "new_random_draws": 0
     }
   },
-  "goal_turn_previous_classification_20261109": {
-    "classification": "PROGRESS",
-    "evidence": [
-      "Commit def298a giữ bundle67 và rawGit68 đã kiểm",
-      "Xuất bản một report kỹ thuật và Chặng14 trong hai fileGVHD, staticQA đạt"
-    ],
-    "goal_complete": false
-  },
+  "goal_turn_previous_classification_20261109": "PROGRESS_ACTUAL_COLD299_PASS_AND_GKT_GUARD",
   "GRAPH29_actual_progress_20261109": {
     "canonical_status": "SIX_FILES_APPLIED_AST_ONLY_CURRENT_TESTS_PENDING",
     "apply_receipt": "artifacts/akt/local-tests/akt-research-runner-20261108-01/graph29_candidate02_root_apply01.json",
@@ -5965,5 +5952,34 @@
     "unique_fixture_tests": 8,
     "actual_fixture_test_executions": 16,
     "bundle": "research_tracking/runs/rq1-observer03-cached-truth-20261109-01"
+  },
+  "GRAPH29_cold299_20261109": {
+    "status": "ACTUAL_299_PASS_CURRENT_SOURCE_NATIVE_PENDING",
+    "receipt_sha256": "9d29efe4f37f10d6674918be83c24cbd8e0c92477949804f4e0e3683768b96a8",
+    "tests": 299,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "elapsed_seconds": 67.74475670000538,
+    "resources": {
+      "samples": 1504,
+      "observed_peak_rss_bytes": 59211776,
+      "observed_minimum_available_ram_bytes": 2556534784
+    },
+    "bundle": "research_tracking/runs/akt-resume-metadata-and-report-qa-20261109-01",
+    "native": false,
+    "CUDA": false,
+    "Modal_spend": 0
+  },
+  "WRITE06_visual_progress_20261109": {
+    "desktop": "ACCEPTED_SECTION_SCREENSHOT",
+    "mobile": "WIDTH_MEASURED_CAPTURE_INCOMPLETE_BROWSER_HANDLE_LOST",
+    "owned_preview_servers": "TERMINAL",
+    "complete": false
+  },
+  "GKT_optimizer_preflight_20261109": {
+    "status": "GUARD_APPLIED_AST_ONLY",
+    "detail": "Từ chối exp_avg_sq âm trước compute; trainer8 harness cần cập nhật2pins và API counts.",
+    "trainer_sha256": "305fccf1038f41751a1137444cb2be469baf6f15090e27dc1595334ce3cb19cc"
   }
 }

@@ -361,3 +361,59 @@ def test_linux_gate_rejects_build_and_runtime_mismatch(tmp_path,monkeypatch):
     c.runtime['runtime']['platform_id']='linux'
     c.builds.pop(main.GATE_WRITER)
     with pytest.raises(ValueError,match='current build'):check_linux_gate_fixture(c)
+
+
+def test_pause_auth_is_a_separate_closed_decision_and_cannot_use_fresh_auth(tmp_path,monkeypatch):
+    from knowledge_tracing.akt import research_selected_resume as resume
+    c=make_case(tmp_path,monkeypatch);identity={'manufactured_metadata_only':True}
+    policy=resume.SelectedPausePolicy(2,c.spec.stage.context.allocation_sha256,5.,2,3,c.spec.max_output_bytes)
+    monkeypatch.setattr(main,'_metadata',lambda *a:identity)
+    value=auth_value(c,identity);path,pin=put_auth(c,value)
+    with pytest.raises(ValueError,match='closed main authorization'):
+        main._auth(c.spec,c.evidence,path,pin,control=(policy,None))
+    value.update(decision='AUTHORIZE_BOUNDED_MAIN_SELECTED_INTENTIONAL_PAUSE',
+                 resume=resume.control_binding(c.spec,(policy,None)))
+    path,pin=put_auth(c,value)
+    got,_=main._auth(c.spec,c.evidence,path,pin,control=(policy,None))
+    assert got['resume']['mode']=='pause' and not isinstance(got,main.MainSelectedExecution)
+    with pytest.raises(ValueError,match='closed main authorization'):
+        main._auth(c.spec,c.evidence,path,pin)
+
+
+@pytest.mark.parametrize('change',('request','extra','decision'))
+def test_resume_auth_wrong_request_extra_field_or_fresh_decision_stops_before_metadata(tmp_path,monkeypatch,change):
+    from knowledge_tracing.akt import research_selected_resume as resume
+    c=make_case(tmp_path,monkeypatch)
+    request=resume.SelectedResumeRequest('experiments/akt/results/parent',H,'artifacts/akt/local-tests/parent/final.json',
+        H,H,H,H,c.spec.stage.context.allocation_sha256,2,2,3,c.spec.max_output_bytes)
+    value=auth_value(c,{})
+    value.update(decision='AUTHORIZE_BOUNDED_MAIN_SELECTED_COMPLETE_EPOCH_RESUME',
+                 resume=resume.control_binding(c.spec,(None,request)))
+    if change=='request':value['resume']['request']['terminal_sha256']='b'*64
+    elif change=='extra':value['resume']['verified']=True
+    else:value['decision']='AUTHORIZE_BOUNDED_MAIN_SELECTED_ONLY'
+    path,pin=put_auth(c,value)
+    monkeypatch.setattr(main,'_metadata',lambda *a:pytest.fail('bad resume binding cannot reach current metadata'))
+    with pytest.raises(ValueError):main._auth(c.spec,c.evidence,path,pin,control=(None,request))
+
+
+def test_resume_public_factory_rejects_boolean_request_before_resource_or_data(tmp_path,monkeypatch):
+    c=make_case(tmp_path,monkeypatch)
+    monkeypatch.setattr(main,'_resource',lambda *a,**k:pytest.fail('typed request must be checked first'))
+    with pytest.raises(ValueError,match='concrete resume request'):
+        main.require_main_selected_resume_authorization(c.spec,c.evidence,resume_request=True,
+            authorization_file='missing',expected_authorization_sha256=H)
+
+
+def test_resume_auth_exact_metadata_still_returns_no_execution_object(tmp_path,monkeypatch):
+    from knowledge_tracing.akt import research_selected_resume as resume
+    c=make_case(tmp_path,monkeypatch);identity={'metadata_fixture_not_permission':True}
+    request=resume.SelectedResumeRequest('experiments/akt/results/parent',H,'artifacts/akt/local-tests/parent/final.json',
+        H,H,H,H,c.spec.stage.context.allocation_sha256,2,2,3,c.spec.max_output_bytes)
+    value=auth_value(c,identity)
+    value.update(decision='AUTHORIZE_BOUNDED_MAIN_SELECTED_COMPLETE_EPOCH_RESUME',
+                 resume=resume.control_binding(c.spec,(None,request)))
+    path,pin=put_auth(c,value);monkeypatch.setattr(main,'_metadata',lambda *a:identity)
+    got,matched=main._auth(c.spec,c.evidence,path,pin,control=(None,request))
+    assert got['resume']['request_sha256']==request.identity and matched==identity
+    assert not isinstance(got,main.MainSelectedExecution)

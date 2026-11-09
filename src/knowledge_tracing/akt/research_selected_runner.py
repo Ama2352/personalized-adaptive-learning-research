@@ -1,7 +1,8 @@
 """Actual conditional selected-only A0-A3 producer; no CLI or automatic execution.
 
 Entry constructs the real disk guard itself. Metadata stages never authorize fit.
-Old A0 lifecycle remains unchanged. No refit, system winner, calibration or resume.
+Old A0 lifecycle remains unchanged. Intentional complete-epoch CPU pause only;
+unexpected-crash recovery/refit/system winner/calibration remain unavailable.
 """
 from dataclasses import asdict
 from collections import Counter
@@ -11,7 +12,7 @@ import random
 import time
 
 from .research_main_execution import (MainSelectedExecutionSpec,require_main_selected_authorization,
-                                     canonical,need)
+    require_main_selected_pause_authorization,require_main_selected_resume_authorization,canonical,need)
 from .research_main_stage import prepare_main_selected_stage
 from . import research_runner as primitive
 from ..research_admission import SelectedCandidateClaim,ArtifactClaim,TERMINAL_KIND
@@ -41,17 +42,27 @@ class _Run:
         self.batch_targets=None;self.constructors=0;self.optimizer_constructors=0
         self.output_bytes=0;self.events=[]
         self.cuda_check=None;self.cuda_resources=None
+        self.parent=None if getattr(execution,'_parent_json',None) is None else json.loads(execution._parent_json)
+        self.parent_wall=0.;self.parent_constructors=0
+        if self.parent is not None:
+            parent=self.parent;accounting=parent['accounting']
+            self.training_spent=parent['terminal']['charged_training_seconds']
+            self.parent_wall=parent['terminal']['charged_wall_seconds'];self.parent_constructors=parent['terminal']['constructors']['model']
+            self.reserved_steps=self.returned_steps=self.completed_steps=accounting['steps']['complete']
+            self.reserved_targets=self.returned_targets=self.completed_targets=accounting['targets']['complete']
+            self.output_bytes=parent['retained_bytes']
 
     def clocks(self):
         training=self.training_spent
         if self.training_started is not None:
             training+=max(time.perf_counter()-self.training_started[0],time.time()-self.training_started[1])
-        return dict(wall_seconds=max(time.perf_counter()-self.execution.started[0],time.time()-self.execution.started[1]),
+        return dict(wall_seconds=self.parent_wall+max(time.perf_counter()-self.execution.started[0],time.time()-self.execution.started[1]),
                     training_seconds=training)
 
     def guard(self):
         from .research_main_execution import _resource
-        _resource(self.spec,self.execution.started,self.clocks()['training_seconds'])
+        if self.parent is None:_resource(self.spec,self.execution.started,self.clocks()['training_seconds'])
+        else:_resource(self.spec,self.execution.started,self.clocks()['training_seconds'],wall_offset=self.parent_wall)
         need(self.output_bytes<=self.spec.max_output_bytes,'cumulative selected output bytes cap')
 
     def boundary(self):
@@ -102,6 +113,8 @@ class _Run:
 
 def _construct(run,tools,encoding,index,condition):
     run.boundary();need(run.constructors<2 and run.optimizer_constructors<2,'one fresh fit plus one fresh best reload only')
+    if getattr(run,'parent',None) is not None:
+        need(run.parent_constructors+run.constructors+1<=3,'three physical lineage constructors maximum')
     random.seed(run.config.seed);tools.np.random.seed(run.config.seed)
     tools.torch.random.default_generator.manual_seed(run.config.seed)
     profile=run.spec.cuda_profile
@@ -207,7 +220,7 @@ def _claim(run,summary,rows,reference,best_epoch,completed_epochs,initial_model,
         refit_started=False,calibration_used_for_selection=False)
 
 
-def run_main_selected_candidate(spec,evidence,*,authorization_file,expected_authorization_sha256):
+def _run_selected(spec,evidence,*,authorization_file,expected_authorization_sha256,pause_policy=None,resume_request=None):
     """Spec is an input, never permission; actual factory runs ONCE inside entry.
 
     No caller-provided guard/callback/corpus/model factory or arbitrary token.
@@ -215,15 +228,27 @@ def run_main_selected_candidate(spec,evidence,*,authorization_file,expected_auth
     """
     need(type(spec) is MainSelectedExecutionSpec,'main metadata/callable/NOAUTH stage cannot execute')
     # The factory rejects wrong environment/family before source/data/model work.
-    actual=require_main_selected_authorization(spec,evidence,authorization_file=authorization_file,
-        expected_authorization_sha256=expected_authorization_sha256)
+    if resume_request is not None:
+        actual=require_main_selected_resume_authorization(spec,evidence,resume_request=resume_request,pause_policy=pause_policy,
+            authorization_file=authorization_file,expected_authorization_sha256=expected_authorization_sha256)
+    elif pause_policy is not None:
+        actual=require_main_selected_pause_authorization(spec,evidence,pause_policy=pause_policy,
+            authorization_file=authorization_file,expected_authorization_sha256=expected_authorization_sha256)
+    else:
+        actual=require_main_selected_authorization(spec,evidence,authorization_file=authorization_file,
+            expected_authorization_sha256=expected_authorization_sha256)
     run=_Run(actual);run.boundary();run.output.mkdir()
     for name in ('fit80','selection','checkpoints'):(run.output/name).mkdir()
     tools=torch=None;old_dtype=old_threads=None;tracker=restored=None;threads_restored=False
     try:
-        run.json('invocation.json',dict(scope='MAIN_SELECTED_ONLY_NO_REFIT',spec=spec.metadata(),identity=json.loads(actual.identity_json),
+        invocation=dict(scope='MAIN_SELECTED_ONLY_NO_REFIT',spec=spec.metadata(),identity=json.loads(actual.identity_json),
             authorization_sha256=actual.authorization_sha256,required_matrix_candidates=9,
-            cpu_threads=spec.cpu_threads,initialization_seed=run.config.seed,resume_supported=False))
+            cpu_threads=spec.cpu_threads,initialization_seed=run.config.seed,resume_supported=False)
+        if pause_policy is not None or resume_request is not None:
+            invocation.update(intentional_complete_epoch_pause=True,unexpected_crash_resume_supported=False,
+                authorization_file=actual.authorization_file,
+                resume_parent_terminal_sha256=None if resume_request is None else resume_request.terminal_sha256)
+        run.json('invocation.json',invocation)
         data=primitive._data();corpus=actual._corpus
         train=primitive._phase(data,corpus,'select_train80');selection=primitive._phase(data,corpus,'raw_selection10')
         encoding=data.fit_research_encoding(train);run.guard()
@@ -245,16 +270,43 @@ def run_main_selected_candidate(spec,evidence,*,authorization_file,expected_auth
             context=run.config.context,target_block=run.config.target_block)
         run.boundary()
         run.stage=run.stage.begin_selected_fit();run.event('selected_fit_started')
+        from . import research_selected_resume as resume
+        if run.parent is not None:
+            stopper=resume.replay_stopper(run.parent['history'],run.config,run.parent['state']['stopper'])
+            need(stopper.best_epoch==run.parent['state']['best_epoch'],'replayed stopper/best checkpoint epoch binding')
+            history=list(run.parent['history']);next_epoch=run.parent['state']['next_epoch']
+            parent_state=run.parent['state']
+            profile=_profile(run,tools,parent_state['initial_backbone_sha256'])
+            identity=tools.cp.graph_checkpoint_identity(config=run.config,encoding=encoding,condition=condition,index=train_index,
+                profile=profile,cuda_profile=None)
+            need(identity==parent_state['checkpoint_identity'] and asdict(profile)==parent_state['checkpoint_profile'],
+                'current checkpoint/data/profile identity before allocation')
+            latest=resume.reference(parent_state['latest'],run.config.project_root)
+            inspected=tools.cp.inspect_graph_epoch_state(latest.directory,expected_identity=identity,
+                expected_complete_sha256=latest.complete_sha256,limits=checkpoint_limits)
         adapter,optimizer=_construct(run,tools,encoding,train_index,condition)
         initial_backbone=tools.cp._state_sha(adapter.native.backbone.state_dict(),cuda_profile=spec.cuda_profile)
         initial_model=tools.cp._state_sha(adapter.native.state_dict(),cuda_profile=spec.cuda_profile)
-        tracker=tools.cp.GraphAdamParticipation(adapter,optimizer,event_sink=run.optimizer_event)
-        profile=_profile(run,tools,initial_backbone)
-        identity=tools.cp.graph_checkpoint_identity(config=run.config,encoding=encoding,condition=condition,index=train_index,
-            profile=profile,cuda_profile=spec.cuda_profile)
-        stopper=tools.EarlyStopping(run.config.patience,run.config.min_delta);history=[];best=None
+        if run.parent is None:
+            tracker=tools.cp.GraphAdamParticipation(adapter,optimizer,event_sink=run.optimizer_event)
+            profile=_profile(run,tools,initial_backbone)
+            identity=tools.cp.graph_checkpoint_identity(config=run.config,encoding=encoding,condition=condition,index=train_index,
+                profile=profile,cuda_profile=spec.cuda_profile)
+            stopper=tools.EarlyStopping(run.config.patience,run.config.min_delta);history=[];best=None;next_epoch=1
+        else:
+            need(initial_backbone==parent_state['initial_backbone_sha256'] and initial_model==parent_state['initial_model_sha256'],
+                'independent identical original model before restore')
+            def resume_event(event):
+                if event['kind']=='verified_epoch_state_restored':
+                    need(event['optimizer_body_returned']==run.returned_steps,'restored cumulative prefix')
+                    run.event('latest_reload',checkpoint_event=event)
+                else:run.optimizer_event(event)
+            tracker=tools.cp.restore_graph_epoch_state(inspected,fresh_adapter=adapter,fresh_owned_optimizer=optimizer,
+                expected_identity=identity,profile=profile,limits=checkpoint_limits,event_sink=resume_event)
+            best=resume.reference(parent_state['best'],run.config.project_root)
         run.json('fit80/encoding.json',asdict(encoding))
-        for epoch in range(1,run.config.max_epochs+1):
+        for epoch in range(next_epoch,run.config.max_epochs+1):
+            if run.parent is not None:resume.inspect_parent(spec,resume_request)
             run.boundary();stats,receipt=_epoch(run,tools,data,adapter,optimizer,tracker,train,encoding,train_index,epoch)
             need(run.stage.epoch_validation_inputs()[0]=='raw_selection10','per-epoch raw validation while fit state')
             summary,rows,truth=_predict(run,tools,data,adapter,selection,encoding,selection_index)
@@ -268,9 +320,16 @@ def run_main_selected_candidate(spec,evidence,*,authorization_file,expected_auth
                 raw_prediction_semantic_sha256=identity_hash(rows),checkpoint=None if reference is None else asdict(reference),
                 selected_epoch=stopper.best_epoch,epoch_objective=primitive.OBJECTIVE)
             history.append(record);run.json(f'fit80/epoch-{epoch}.json',record)
+            if pause_policy is not None and epoch==pause_policy.after_epoch and not stop and epoch<run.config.max_epochs:
+                latest=reference if reference is not None else _save(run,tools,adapter,optimizer,tracker,receipt,profile,identity,epoch,checkpoint_limits)
+                if not best.directory.is_relative_to(run.output):best=resume.copy_best(asdict(best),run,tools,identity,checkpoint_limits)
+                return resume.publish_pause(run,pause_policy,history,latest,best,initial_model,initial_backbone,profile,identity,stopper)
             if stop:break
         need(best is not None and stopper.best_epoch is not None,'no complete selected checkpoint')
         run.json('fit80/epochs.json',history);tracker.close();tracker=None
+        if run.parent is not None:
+            resume.inspect_parent(spec,resume_request)
+            if not best.directory.is_relative_to(run.output):best=resume.copy_best(asdict(best),run,tools,identity,checkpoint_limits)
         # Fresh containers for verified best reload, never a continuation/refit.
         fresh,fresh_optimizer=_construct(run,tools,encoding,train_index,condition)
         need(tools.cp._state_sha(fresh.native.backbone.state_dict(),cuda_profile=spec.cuda_profile)==initial_backbone,'independent same initial backbone')
@@ -306,6 +365,12 @@ def run_main_selected_candidate(spec,evidence,*,authorization_file,expected_auth
             fresh_best_reload=True,system_selection_performed=False,external_freeze_authority=False,refit_started=False,calibration_used_for_selection=False)
         if spec.cuda_profile is not None:
             evidence_record.update(cuda_execution_profile=asdict(spec.cuda_profile),cuda_resources=run.cuda_resources)
+        if run.parent is not None:
+            evidence_record['intentional_resume_lineage']=dict(parent_terminal_sha256=resume_request.terminal_sha256,
+                original_allocation_sha256=resume_request.original_allocation_sha256,attempt=2,
+                parent_complete_epoch=run.parent['state']['epoch'],parent_steps=run.parent['accounting']['steps']['complete'],
+                child_reserved_steps=run.reserved_steps-run.parent['accounting']['steps']['complete'],
+                cumulative_model_constructors=run.parent_constructors+run.constructors,crash_recovery_supported=False)
         run.json('selected-terminal.json',evidence_record)
         claim=_claim(run,summary,rows,best,stopper.best_epoch,len(history),initial_model,initial_backbone,encoding,selection,run.output/'selected-terminal.json')
         run.stage=run.stage.finish_selected(claim);run.json('selected-claim.json',asdict(claim))
@@ -336,3 +401,15 @@ def run_main_selected_candidate(spec,evidence,*,authorization_file,expected_auth
                 active=sys.exception()
                 if active is not None:active.add_note('thread cleanup failure:'+str(cleanup_error))
                 raise
+
+
+def run_main_selected_candidate(spec,evidence,*,authorization_file,expected_authorization_sha256,pause_policy=None):
+    return _run_selected(spec,evidence,authorization_file=authorization_file,
+        expected_authorization_sha256=expected_authorization_sha256,pause_policy=pause_policy)
+
+
+def run_main_selected_resume(spec,evidence,*,resume_request,authorization_file,expected_authorization_sha256,pause_policy=None):
+    from .research_selected_resume import SelectedResumeRequest
+    need(type(resume_request) is SelectedResumeRequest,'concrete resume request, not supplied execution grant')
+    return _run_selected(spec,evidence,authorization_file=authorization_file,expected_authorization_sha256=expected_authorization_sha256,
+        pause_policy=pause_policy,resume_request=resume_request)

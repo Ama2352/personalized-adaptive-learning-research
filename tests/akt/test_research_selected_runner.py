@@ -204,3 +204,41 @@ def test_terminal_reasons_come_from_rows_not_assumed_oov_rescue():
     rows=[{'probability':None,'support_reason':'unseen_history'}]
     with pytest.raises(ValueError,match='coverage'):
         runner._claim(run,summary,rows,None,1,1,H,H,None,None,None)
+
+
+def test_resumed_run_adopts_cumulative_prefix_and_retained_bytes_without_reset(tmp_path,monkeypatch):
+    import json
+    c=make_case(tmp_path,monkeypatch)
+    parent=dict(terminal=dict(charged_wall_seconds=5.,charged_training_seconds=1.5,constructors=dict(model=1,adam=1)),
+        accounting=dict(steps=dict(complete=4),targets=dict(complete=48)),retained_bytes=100)
+    actual=N(spec=c.spec,_corpus=N(bank='BANK_METADATA',plan='PLAN_METADATA'),
+        _parent_json=json.dumps(parent),started=(10.,20.))
+    monkeypatch.setattr(runner.time,'perf_counter',lambda:12.)
+    monkeypatch.setattr(runner.time,'time',lambda:23.)
+    run=runner._Run(actual)
+    assert run.clocks()==dict(wall_seconds=8.,training_seconds=1.5)
+    assert (run.reserved_steps,run.returned_steps,run.completed_steps)==(4,4,4)
+    assert (run.reserved_targets,run.returned_targets,run.completed_targets)==(48,48,48)
+    assert run.output_bytes==100 and run.parent_constructors==1 and run.constructors==0
+    run.batch_targets=24
+    run.output.mkdir(parents=True)
+    monkeypatch.setattr(run,'guard',lambda:None)
+    run.optimizer_event(dict(kind='optimizer_started',started=5,body_returned=4))
+    run.optimizer_event(dict(kind='optimizer_body_returned',started=5,body_returned=5))
+    assert (run.reserved_steps,run.returned_steps,run.completed_steps)==(5,5,4)
+    assert run.reserved_targets==run.returned_targets==72 and run.completed_targets==48
+
+
+def test_resume_lineage_constructor_cap_rejects_before_seeding_or_allocating():
+    run=N(boundary=lambda:None,constructors=1,optimizer_constructors=1,parent={'manufactured':True},parent_constructors=2)
+    with pytest.raises(ValueError,match='physical lineage constructors'):
+        runner._construct(run,N(),object(),object(),object())
+    assert (run.constructors,run.optimizer_constructors)==(1,1)
+
+
+def test_resume_public_entry_cannot_accept_caller_verified_boolean(tmp_path,monkeypatch):
+    c=make_case(tmp_path,monkeypatch)
+    monkeypatch.setattr(runner,'_tools',lambda:pytest.fail('no imported model for untyped request'))
+    with pytest.raises(ValueError,match='concrete resume request'):
+        runner.run_main_selected_resume(c.spec,c.evidence,resume_request=True,
+            authorization_file='missing',expected_authorization_sha256=H)

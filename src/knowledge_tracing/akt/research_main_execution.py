@@ -346,9 +346,11 @@ class MainSelectedExecutionSpec:
         return canonical(value)
 
 
-def _resource(spec,started,training_seconds=0.):
+def _resource(spec,started,training_seconds=0.,*,wall_offset=0.):
     from .resources import memory_snapshot
-    b=spec.research.budget;elapsed=max(time.perf_counter()-started[0],time.time()-started[1])
+    b=spec.research.budget
+    need(type(wall_offset) in (int,float) and math.isfinite(wall_offset) and wall_offset>=0,'finite charged parent wall')
+    elapsed=wall_offset+max(time.perf_counter()-started[0],time.time()-started[1])
     need(type(training_seconds) in (int,float) and math.isfinite(training_seconds) and 0<=training_seconds<=b.max_training_seconds,
          'cumulative selected training time cap')
     need(math.isfinite(elapsed) and 0<=elapsed<=b.max_wall_seconds,'cumulative selected wall cap')
@@ -384,15 +386,23 @@ def _metadata(spec,evidence):
     return canonical(result)
 
 
-def _auth(spec,evidence,path,pin):
+def _auth(spec,evidence,path,pin,*,control=None):
     root=spec.research.native_config.project_root;old._sha(pin)
     authpath=old._path(root,path)
     need(authpath.is_relative_to(root/'experiments/akt/authorizations') or authpath.is_relative_to(root/'artifacts/akt'),'main authorization path')
     value,digest,_=old._read_json(authpath,spec.research.budget.max_input_bytes)
     fields={'schema_version','scope','decision','run_id','config_sha256','execution_spec_sha256','stage_spec_sha256',
             'identity','caps','requested_phases','approval_reference'}
+    decision='AUTHORIZE_BOUNDED_MAIN_SELECTED_ONLY'
+    binding=None
+    if control is not None:
+        from .research_selected_resume import control_binding
+        binding=control_binding(spec,control);fields=fields|{'resume'}
+        decision=('AUTHORIZE_BOUNDED_MAIN_SELECTED_INTENTIONAL_PAUSE' if control[1] is None
+                  else 'AUTHORIZE_BOUNDED_MAIN_SELECTED_COMPLETE_EPOCH_RESUME')
     need(digest==pin and set(value)==fields and type(value['schema_version']) is int and value['schema_version']==1
-         and value['scope']==SCOPE and value['decision']=='AUTHORIZE_BOUNDED_MAIN_SELECTED_ONLY','actual closed main authorization required; old pilot is not main permission')
+         and value['scope']==SCOPE and value['decision']==decision,'actual closed main authorization required; old pilot is not main permission')
+    if binding is not None:need(old._same_json(value['resume'],binding),'actual resume request/policy authorization binding')
     c=spec.research.native_config
     need(c.execution_enabled is True and value['run_id']==c.run_id and value['config_sha256']==old.native_auth.config_hash(c)
          and value['execution_spec_sha256']==spec.identity and value['stage_spec_sha256']==spec.stage.identity
@@ -469,28 +479,61 @@ class MainSelectedExecution:
     _corpus: object=field(repr=False,compare=False)
     _condition: object=field(repr=False,compare=False)
     _graph_files: tuple=field(repr=False)
+    _control: object=field(repr=False,compare=False)
+    _parent_json: str|None=field(repr=False,compare=False)
 
     def __init__(self,*args,**kwargs):raise TypeError('use require_main_selected_authorization with actual closed files')
 
     def revalidate(self,training_seconds=0.):
-        elapsed=_resource(self.spec,self.started,training_seconds)
-        _,identity=_auth(self.spec,self.evidence,self.authorization_file,self.authorization_sha256)
+        parent=None if self._parent_json is None else json.loads(self._parent_json)
+        offset=0. if parent is None else parent['terminal']['charged_wall_seconds']
+        if parent is not None:
+            training_seconds=max(training_seconds,parent['terminal']['charged_training_seconds'])
+            from .research_selected_resume import check_parent_refs
+            check_parent_refs(self.spec,self._control[1],parent)
+        elapsed=(_resource(self.spec,self.started,training_seconds) if parent is None
+                 else _resource(self.spec,self.started,training_seconds,wall_offset=offset))
+        if self._control is None:
+            _,identity=_auth(self.spec,self.evidence,self.authorization_file,self.authorization_sha256)
+        else:
+            _,identity=_auth(self.spec,self.evidence,self.authorization_file,self.authorization_sha256,control=self._control)
         need(old._same_json(identity,json.loads(self.identity_json)),'main bound identity changed')
         self._corpus.assert_integrity();self._condition.assert_integrity()
         root=self.spec.research.native_config.project_root
         for name,pin in self._graph_files:
             need(old._hash_file(old._path(root,name),cap=self.spec.max_graph_input_bytes)[0]==pin,'actual graph input drift')
-        _resource(self.spec,self.started,training_seconds)
+        if parent is None:_resource(self.spec,self.started,training_seconds)
+        else:_resource(self.spec,self.started,training_seconds,wall_offset=offset)
         return identity
 
 
-def require_main_selected_authorization(spec,evidence,*,authorization_file,expected_authorization_sha256):
+def _require_selected(spec,evidence,*,authorization_file,expected_authorization_sha256,control=None):
     need(type(spec) is MainSelectedExecutionSpec and type(evidence) is old.ResearchRuntimeEvidence,'concrete main execution guard types required')
     spec.__post_init__();started=(time.perf_counter(),time.time());_resource(spec,started)
-    _,identity=_auth(spec,evidence,authorization_file,expected_authorization_sha256)
+    parent=None;offset=training=0.
+    if control is None:
+        _,identity=_auth(spec,evidence,authorization_file,expected_authorization_sha256)
+    else:
+        need(sys.platform=='win32' and type(spec.git_profile) is MainGitProfile,'Windows CPU intentional resume V1 only')
+        from .research_selected_resume import control_binding,inspect_parent
+        control_binding(spec,control)
+        if control[1] is not None:
+            from .research_selected_resume import finite
+            request=control[1]
+            preliminary,preliminary_pin,_=old._read_json(old._path(spec.research.native_config.project_root,request.terminal_file),spec.research.budget.max_input_bytes)
+            need(preliminary_pin==request.terminal_sha256,'parent terminal SHA before current admission')
+            offset=preliminary['charged_wall_seconds'];training=preliminary['charged_training_seconds']
+            finite(offset);finite(training);_resource(spec,started,training,wall_offset=offset)
+        _,identity=_auth(spec,evidence,authorization_file,expected_authorization_sha256,control=control)
+        if control[1] is not None:
+            parent=inspect_parent(spec,control[1]);offset=parent['terminal']['charged_wall_seconds']
+            training=parent['terminal']['charged_training_seconds']
+            if control[0] is not None:need(control[0].after_epoch>=parent['state']['next_epoch'],'pause follows restored prefix')
+        _resource(spec,started,training,wall_offset=offset)
     output=spec.research.native_config.output_dir
     need(not output.exists(),'fresh main output only, no retry/resume/pilot promotion')
-    _resource(spec,started)
+    if parent is None:_resource(spec,started)
+    else:_resource(spec,started,training,wall_offset=offset)
     corpus=read_public_research_corpus(spec.research.corpus_id,expected_corpus_sha256=spec.research.expected_corpus_sha256,
         expected_done_sha256=identity['corpus']['done_sha256'],limits=spec.read_limits)
     corpus.assert_integrity()
@@ -503,11 +546,31 @@ def require_main_selected_authorization(spec,evidence,*,authorization_file,expec
         value=corpus.role_data(role)
         need(len(value.trajectories)==getattr(b,role+'_learners') and value.audit['audit']['targets']==getattr(b,role+'_targets')
              and value.reference_complete,'actual frozen role counts/reference coverage')
-    _resource(spec,started)
+    if parent is None:_resource(spec,started)
+    else:_resource(spec,started,training,wall_offset=offset)
     condition,files=_actual_condition(spec,corpus,identity)
     result=object.__new__(MainSelectedExecution)
     for n,v in dict(spec=spec,evidence=evidence,authorization_file=authorization_file,authorization_sha256=expected_authorization_sha256,
                     identity_json=json.dumps(identity,sort_keys=True,separators=(',',':'),allow_nan=False),started=started,
-                    _corpus=corpus,_condition=condition,_graph_files=files).items():object.__setattr__(result,n,v)
+                    _corpus=corpus,_condition=condition,_graph_files=files,_control=control,
+                    _parent_json=None if parent is None else json.dumps(parent,sort_keys=True,separators=(',',':'),allow_nan=False)).items():object.__setattr__(result,n,v)
     result.revalidate()
     return result
+
+
+def require_main_selected_authorization(spec,evidence,*,authorization_file,expected_authorization_sha256):
+    return _require_selected(spec,evidence,authorization_file=authorization_file,expected_authorization_sha256=expected_authorization_sha256)
+
+
+def require_main_selected_pause_authorization(spec,evidence,*,pause_policy,authorization_file,expected_authorization_sha256):
+    from .research_selected_resume import SelectedPausePolicy
+    need(type(pause_policy) is SelectedPausePolicy,'concrete intentional pause policy')
+    return _require_selected(spec,evidence,authorization_file=authorization_file,expected_authorization_sha256=expected_authorization_sha256,
+        control=(pause_policy,None))
+
+
+def require_main_selected_resume_authorization(spec,evidence,*,resume_request,pause_policy=None,authorization_file,expected_authorization_sha256):
+    from .research_selected_resume import SelectedResumeRequest
+    need(type(resume_request) is SelectedResumeRequest,'concrete resume request')
+    return _require_selected(spec,evidence,authorization_file=authorization_file,expected_authorization_sha256=expected_authorization_sha256,
+        control=(pause_policy,resume_request))

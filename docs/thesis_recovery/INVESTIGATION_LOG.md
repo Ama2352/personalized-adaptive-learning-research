@@ -1005,3 +1005,8 @@ Cold299collection03 đạt, tests03 đủ299bodies/298PASS1FAIL do mockJSONwrite
 ## 09/11 — xuất bản witness120 vào báo cáo
 
 Một technicalreport và Chặng14 trong cả BAO_CAO.md/HTML đã xuất bản từ bundle67. Đã đối chiếu số liệu, uniqueIDs và cấu trúcHTML, giữ11SVG nguyên văn. Publicationbundle giữ before/after và staticQA. Visual/responsiveQA còn thiếu, WRITE06 chưa đóng hoàn toàn. Không tăngN hoặcmodelcalls. Các sourceAKT/GKT chưa được commit do native/currenttest cònpending.
+
+
+## 09/11 — AKT current cold299 đã đạt
+
+Collection05 timeout và cleanup Job0 được giữ. Sau khi tắt preview, collection06 đạt299IDs/0body, tests06 đạt299bodies/0FES trong67,76s, peak59.211.776B/minfree2.556.534.784B. Source/runtime trước–sau khớp và ownedJob0. [Bundle kiểm](../../research_tracking/runs/akt-resume-metadata-and-report-qa-20261109-01/README.md) giữ rawlogs, failures và hai screenshot gốc. Chặng14 desktop đã xem, mobile cówidth390/document375/table335 nhưng capture lệch và mấtbrowserhandle, chưa đóng WRITE06. Hai previewservers đã terminal, tab riêng không còn. GKTguard second moment âm đã áp dụng và AST, chưa native. Currentcold299 không cấp native/CUDA/GPUfit authorization.

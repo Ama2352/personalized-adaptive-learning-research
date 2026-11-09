@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 09/11 — AKT current cold299 đã đạt
+
+Collection05 timeout và cleanup Job0 được giữ. Sau khi tắt preview, collection06 đạt299IDs/0body, tests06 đạt299bodies/0FES trong67,76s, peak59.211.776B/minfree2.556.534.784B. Source/runtime trước–sau khớp và ownedJob0. [Bundle kiểm](../runs/akt-resume-metadata-and-report-qa-20261109-01/README.md) giữ rawlogs, failures và hai screenshot gốc. Chặng14 desktop đã xem, mobile cówidth390/document375/table335 nhưng capture lệch và mấtbrowserhandle, chưa đóng WRITE06. Hai previewservers đã terminal, tab riêng không còn. GKTguard second moment âm đã áp dụng và AST, chưa native. Currentcold299 không cấp native/CUDA/GPUfit authorization.
+
 ## 09/11 — đối chiếu thành thạo và quần thể do selector chọn
 
 [Phân tích đã xuất bản](rq1_on_policy_mastery_witness_20261109.md) dùng120readouts của một lịch sử.22concept được phục vụ đã đạt tiêu chí latent từfirstvisit. Cả120thetaước lượng dưới ngưỡng trên các câu policy chọn, nên cần đọc cùng selectionconditioning và initialization. Chặng14 đã cập nhật trong hai fileGVHD,11SVG nguyên byte. StaticQA đạt, visualQA còn chờ.
