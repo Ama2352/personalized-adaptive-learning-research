@@ -29,6 +29,7 @@ PHASES = ('select_train80', 'raw_selection10')
 OBJECTIVE = 'native_torch_bce_float32_exported_supported_mean_v1'
 _SEAL = object()
 SOURCE_NAMES = (
+    'src/knowledge_tracing/__init__.py', 'src/knowledge_tracing/akt/__init__.py',
     'src/knowledge_tracing/sakt/__init__.py', 'src/knowledge_tracing/sakt/config.py',
     'src/knowledge_tracing/sakt/model.py', 'src/knowledge_tracing/sakt/tensors.py',
     'src/knowledge_tracing/sakt/training.py', 'src/knowledge_tracing/sakt/training_data.py',
@@ -38,7 +39,8 @@ SOURCE_NAMES = (
     'src/knowledge_tracing/akt/research_execution.py', 'src/knowledge_tracing/akt/authorization.py',
     'src/knowledge_tracing/akt/filesystem.py', 'src/knowledge_tracing/akt/resources.py',
     'src/knowledge_tracing/simulator_corpus_reader.py', 'src/knowledge_tracing/research_admission.py',
-    'src/knowledge_tracing/research_selection.py', 'src/knowledge_tracing/gam_kt/evaluation.py',
+    'src/knowledge_tracing/research_selection.py', 'src/knowledge_tracing/gam_kt/__init__.py',
+    'src/knowledge_tracing/gam_kt/evaluation.py',
     'docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md',
     'docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md',
     'docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md', RECIPE_PATH,

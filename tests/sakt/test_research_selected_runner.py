@@ -83,6 +83,16 @@ def test_sources_reject_protected_extra_path(modules):
         replace(spec, expected_sources=tuple(sorted((*spec.expected_sources, ('dataset/secret.py', H)))))
 
 
+def test_package_initializers_are_mandatory_source_bindings(modules):
+    execution, _ = modules
+    spec = declared_spec(execution)
+    for name in ('src/knowledge_tracing/__init__.py', 'src/knowledge_tracing/akt/__init__.py',
+                 'src/knowledge_tracing/sakt/__init__.py', 'src/knowledge_tracing/gam_kt/__init__.py'):
+        assert name in execution.SOURCE_NAMES
+        with pytest.raises(ValueError, match='all SAKT/shared method sources required'):
+            replace(spec, expected_sources=tuple(row for row in spec.expected_sources if row[0] != name))
+
+
 @pytest.mark.parametrize('kind', ['a0_scope', 'noauth_stage', 'extra_phase', 'schema_bool',
                                  'different_caps', 'caps_bool', 'extra_approved', 'wrong_spec'])
 def test_real_entry_rejects_bad_closed_auth_before_reader_and_lazy_nn(modules, tmp_path, monkeypatch, kind):

@@ -1,0 +1,46 @@
+--- research_execution.py.before
+
++++ research_execution.py.candidate
+
+@@ -29,6 +29,7 @@
+
+ OBJECTIVE = 'native_torch_bce_float32_exported_supported_mean_v1'
+ _SEAL = object()
+ SOURCE_NAMES = (
++    'src/knowledge_tracing/__init__.py', 'src/knowledge_tracing/akt/__init__.py',
+     'src/knowledge_tracing/sakt/__init__.py', 'src/knowledge_tracing/sakt/config.py',
+     'src/knowledge_tracing/sakt/model.py', 'src/knowledge_tracing/sakt/tensors.py',
+     'src/knowledge_tracing/sakt/training.py', 'src/knowledge_tracing/sakt/training_data.py',
+@@ -38,7 +39,8 @@
+
+     'src/knowledge_tracing/akt/research_execution.py', 'src/knowledge_tracing/akt/authorization.py',
+     'src/knowledge_tracing/akt/filesystem.py', 'src/knowledge_tracing/akt/resources.py',
+     'src/knowledge_tracing/simulator_corpus_reader.py', 'src/knowledge_tracing/research_admission.py',
+-    'src/knowledge_tracing/research_selection.py', 'src/knowledge_tracing/gam_kt/evaluation.py',
++    'src/knowledge_tracing/research_selection.py', 'src/knowledge_tracing/gam_kt/__init__.py',
++    'src/knowledge_tracing/gam_kt/evaluation.py',
+     'docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md',
+     'docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md',
+     'docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md', RECIPE_PATH,
+--- test_research_selected_runner.py.before
+
++++ test_research_selected_runner.py.candidate
+
+@@ -81,6 +81,16 @@
+
+     spec = declared_spec(execution)
+     with pytest.raises(ValueError, match='source files'):
+         replace(spec, expected_sources=tuple(sorted((*spec.expected_sources, ('dataset/secret.py', H)))))
++
++
++def test_package_initializers_are_mandatory_source_bindings(modules):
++    execution, _ = modules
++    spec = declared_spec(execution)
++    for name in ('src/knowledge_tracing/__init__.py', 'src/knowledge_tracing/akt/__init__.py',
++                 'src/knowledge_tracing/sakt/__init__.py', 'src/knowledge_tracing/gam_kt/__init__.py'):
++        assert name in execution.SOURCE_NAMES
++        with pytest.raises(ValueError, match='all SAKT/shared method sources required'):
++            replace(spec, expected_sources=tuple(row for row in spec.expected_sources if row[0] != name))
+ 
+ 
+ @pytest.mark.parametrize('kind', ['a0_scope', 'noauth_stage', 'extra_phase', 'schema_bool',
