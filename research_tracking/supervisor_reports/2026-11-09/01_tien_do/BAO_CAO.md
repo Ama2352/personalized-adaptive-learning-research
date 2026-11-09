@@ -44,6 +44,8 @@ Phân tích mới cho thấy **chỉ số phù hợp xác suất tính gộp có
 
 Mốc này xác nhận đường đi dữ liệu → huấn luyện → chọn checkpoint → nạp lại → xuất dự báo của AKT không đồ thị trên corpus nhỏ. Huấn luyện lại, hiệu chỉnh xác suất, khôi phục toàn bộ quy trình, kiểm Linux/CUDA và các so sánh CG-AKT trên corpus nghiên cứu còn phải thực hiện. Bộ kiểm chỉ có một người học chọn vòng, nên chưa cung cấp bằng chứng so sánh chất lượng mô hình cho RQ3.
 
+Song song, nhóm đã cài các quy tắc world, ước lượng Elo và bộ chọn bài trong một phiên bản mô phỏng riêng theo PDF Paper 1. Có 26 kiểm thử nhỏ đã đạt cho các quy tắc này. Còn phải nối dữ liệu đầu vào, hồ sơ người học, cơ chế ngẫu nhiên và các chính sách so sánh trước khi chạy thí nghiệm đầy đủ. Kết quả hiện tại là kiểm phần mềm, chưa bổ sung kết luận về hiệu quả đồ thị.
+
 ## Còn phải chứng minh
 
 - **RQ1:** đánh giá độ đúng của quyết định thành thạo, hiệu chỉnh xác suất và vai trò chính sách; nối chẩn đoán nội bộ đã có với kết quả học tập.

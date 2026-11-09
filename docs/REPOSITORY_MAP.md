@@ -124,3 +124,8 @@ Mở [tóm tắt GVHD](../research_tracking/supervisor_reports/2026-11-09/01_tie
 ## Điểm vào engineering08/11
 
 [Context CPU acceptance](../research_tracking/reports/akt_worker_context_readiness_20261108.md), [GKT partial kernel](../research_tracking/reports/gkt_core_readiness_20261108.md), [demo read-only](../research_tracking/reports/demo_readiness_20261108.md) và [bản thảo phương pháp](../research_tracking/reports/THESIS_METHODS_RQ12_DRAFT_20261108.md) dùng cấu trúc hiện hành. Source demo ở src/research_demo, không thêm top-level app/results folder. Bundles mới giữ raw logs/source/receipts; checkpoint/prediction lớn của CPU toy run giữ experiments/akt/results/ctx0801, scratch/dependency metadata ở artifacts/akt. Không dọn hoặc di chuyển protected/historical paths.
+
+
+## Mô phỏng theo PDF Paper1
+
+`src/knowledge_tracing/paper1_pdf/` giữ các quy tắc world/Elo/controller phiên bản riêng theo PDF chuẩn. `tests/paper1_pdf/` kiểm bằng fixture dựng tay. Source Paper1 lịch sử giữ nguyên. [Phạm vi đã kiểm và phần còn thiếu](../research_tracking/reports/paper1_pdf_primitives_readiness_20261109.md).
