@@ -286,3 +286,5 @@ Gate21 chỉ chạy `tests/akt tests/shared_kt`; các số139SAKT và38Graph-GAM
 
 - [RQ2: deficit và phân kỳ quỹ đạo](rq2_cached_mechanism_diagnostic_20261109.md):đọc14.400cached events/120worlds, chỉ1/60mechanismpairs đổi bài và2/60đổi nhãn; policy-switch60/60đổi bài. Exploratory10reusedseeds, không causal/confirmatory; bundle68/5be277c.
 - [Gate177 và sửa JUnit](akt_windows_gate_current_20261109.md):Gate04REJECTEDdù1726physicalIDs0FES; giữrawattrs/65consolepassedsubtests, targetedfix99PASS. Bundle90/e1a0d82, chưa currentGate.
+
+- [Fullcached CPU09 dừng RAM](../runs/rq1-cpu09-native-mastery-20261109-01/report.md) là hồ sơ vận hành thất bại,30outputs đã đóng. Chưa có native mastery/truth result. Không dùng archive completed làm nhãn thí nghiệm đạt.

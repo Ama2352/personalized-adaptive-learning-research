@@ -175,3 +175,5 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 - **RQ1 cached readiness exposure,08/11:** ROOT một lượt2,9229504s/10,3240R/orderexact,0model/simulator. [Bundle28outputs](runs/rq1-ready-set-exposure-20261108-01/README.md).500roots/699strict-nonroot/2041exposure; không3.240người học độc lập, không paired effect sau histories phânkỳ hoặc RQcompletion.
 
 - **AKT bootstrap Log Loss consistency08/11:**13fixturePASS7,78717s/45,0model/solver/corpus. [Bundle](runs/akt-metric-consistency-engineering-20261108-01/README.md). Thayepsilon reportingkhớpcanonical, khôngrerunhistoricalbenchmark hoặc RQcompletion.
+
+- **CPU09 fullcached native mastery,09/11**, [bundle](runs/rq1-cpu09-native-mastery-20261109-01/README.md). Lượt allocation300s dừng sớm9,8049276s sau finalwrite vì freeRAM2104508416B dưới floor2147483648B. Native REJECTED, cleanup đạt, không retry. Đóng30outputs cùng nguồn và raw logs, chưa có kết quả nghiên cứu mới.

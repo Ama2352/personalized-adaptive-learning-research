@@ -874,3 +874,15 @@ Root chọn execution profile28 và cùng reviewer đọc bốn source/test. Lư
 ## 09/11 — observer một lịch sử đã nghiệm thu và đóng
 
 Revision02 xác định đúng UTC111bytes bị read guard từ chối, còn source-before/after bằng nhau. Giữ RAM refusal trước đó. Revision03 chỉ cấp entitlement đúng UTC đã pin, đạt hai policy/240updates,120readouts và endpoint states exact. Outer11,4506305giây trước final receipt, Job0, source38trước=sau. Đã đóng32outputs tại rq1-cpu09-observer-readiness-20261109-01, manifestde9c9b9b938765ec95229a22d4df5c3f6cbbd1a5ab13ef1c21c5079ea134dfa4. Chưa đối chiếu nativeM với world truth đủ14400events. Backlog chỉnh dependency để CUDAcore đi song song Linux provenance và route replay mới kế thừa cache/observer đã đạt.
+
+## 09/11 — kiểm bản lưu Git và giữ lượt dừng do RAM
+
+Root đối chiếu đúng32outputs vàmanifest của observer đã commit, đủ33rawGitfiles khớp bytes local. Proof nằm tại `evidence/cpu09_observer_readiness_raw_git_20261109.json`. Đây là kiểm toàn vẹn bằng chứng, không thêm kết quả nghiên cứu.
+
+Sau hai lượt đọc nguồn độc lập, Root chạy fullcached01 theo allocation300giây, một workload CPU. Monitor dừng owned Job sau khoảng9,8giây khi RAM khả dụng giảm còn2104508416bytes, dưới floor2147483648bytes. Peak family quan sát171565056bytes. Job0, environment vàmonitor đã đóng sạch. Chỉ có ba file worker nhỏ, chưa có readouts/parity/truth. Không suy số constructor/update thực tế từ việc thiếu terminalreceipt, chỉ giữ upperbounds đã reserve. Root kiểm50nguồn vàinput sau dừng đều còn nguyên. Không tự động retry hoặc hạ RAM guard.
+
+Checkpoint BatchB có38metadata cases đã đạt trong2,447784giây. Harness hồi quyCPU04 giữ16cases/4Adam vàfloor2GiB, đã sửa giữ nguyên helperreceipt cả khi helper từ chối trướcmkdir, chưa dispatch. MainCUDA chỉ chuẩn bị candidate ngoài production để giữ sourcepins04. Paper1 RNG-owned runner được điều tra độc lập. Backlog158IDs đã kiểm DAG, Gate cũ được ghi rõ stale sau thay nguồn. Chưa có quyền chi Modal mới.
+
+## 09/11 — đóng và kiểm bundle fullcached RAM stop
+
+Root đọc archiver/report, prepare vàcheck exactdry, sau đó đóng30outputs. Manifestb2587dd66d7ea0c8927036c5044fb2e2c45bbc2840892e1ea44bcc8e8635bdd5 đã kiểm toàn vẹn. Native verdict REJECTED được giữ, không chạy lại cache/model khi đóng. Raw files trongexperiments vàprep vẫn còn nguyên. Chỉ mục/backlog trỏ sangbundle, báo cáo GVHD giữ kết luận trước vì không có phát hiện khoa học mới.

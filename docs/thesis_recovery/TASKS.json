@@ -5021,7 +5021,7 @@
       ],
       "estimated_effort": "Elapsed thực ghi trong receipts, effort chưa đo riêng.",
       "compute_cost_category": "local_CPU_no_cloud",
-      "authorization_requirements": "Engineering local được user giao. Fullcachedreplay cần Root đóng scope300s trước dispatch. Không fullCV/Holdout/Modal.",
+      "authorization_requirements": "User giao engineering local. ActualCUDA cần ladder/run allocation và approval riêng, không chi Modal/fullCV/Holdout.",
       "status": "VERIFIED_13_METADATA_26_CPU_CASES_ACTUAL_CUDA_PENDING",
       "blockers": [],
       "completion_evidence": "research_tracking/reports/cgakt_cuda_core_cpu_readiness_20261109.md",
@@ -5040,10 +5040,10 @@
         "RQDIAG20",
         "CPU09"
       ],
-      "required_inputs": "Nguồn đã pin, hợp đồng đã review và actual acceptance đúng phạm vi.",
+      "required_inputs": "CPU09 cache immutable, observer03 accepted, contract50bindings đã kiểm, RAM đủ và Root allocation mới.",
       "files_components": [],
       "implementation_objective": "Phát lại đủ cache CPU09 để đối chiếu native mastery với theta thật đã lưu.",
-      "acceptance_criteria": "Source và resource contracts đúng, kết quả đủ population, raw evidence và limitations được lưu.",
+      "acceptance_criteria": "Đủ120histories/14400readouts exact query/P parity, freeze trước truth,136groups kiểm độc lập; Job0/source/RAM/time đạt.",
       "verification_steps": "Root review và bounded local tests hoặc dispatch đã được chốt riêng.",
       "required_artifacts": [
         "source pins",
@@ -5054,10 +5054,54 @@
       "estimated_effort": "Elapsed thực ghi trong receipts, effort chưa đo riêng.",
       "compute_cost_category": "local_CPU_no_cloud",
       "authorization_requirements": "Engineering local được user giao. Fullcachedreplay cần Root đóng scope300s trước dispatch. Không fullCV/Holdout/Modal.",
-      "status": "SOURCE_PREPARATION_NO_FULL_DISPATCH",
-      "blockers": [],
-      "completion_evidence": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cpu09-targeted-observer-native03-outer/final.json",
-      "supersedes_execution_route_for": "RQDIAG16"
+      "status": "REJECTED_RESOURCE_RAM_GUARD_FULL_RESULT_UNAVAILABLE",
+      "blockers": [
+        "RAM trống giảm dưới2GiB. Cần allocation mới, source review và biên tài nguyên trước mọi lượt tiếp."
+      ],
+      "completion_evidence": "research_tracking/runs/rq1-cpu09-native-mastery-20261109-01/report.md",
+      "supersedes_execution_route_for": "RQDIAG16",
+      "actual_counts": "UNKNOWN_AFTER_HARD_TERMINATION",
+      "automatic_retry": false,
+      "evidence_bundle_closed": true,
+      "scientific_result_accepted": false
+    },
+    {
+      "id": "GRAPH27",
+      "research_objective": "Lưu và khôi phục checkpoint CUDA schema2, giữ CPU schema1.",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "GRAPH26"
+      ],
+      "required_inputs": "CoreA, checkpoint sourcee17/test171, actual38metadata receipt, frozen native04 allocationa74f.",
+      "files_components": [
+        "src/knowledge_tracing/akt/research_graph_checkpoint.py",
+        "tests/akt/test_research_graph_cuda_checkpoint.py",
+        "tests/akt/test_research_graph_checkpoint.py"
+      ],
+      "implementation_objective": "Giữ Adam scalar step CPU, moment device đúng, snapshot CPU, CPU+CUDA RNG và restore cuối; không đổi thuật toán.",
+      "acceptance_criteria": "38metadata PASS và16CPU native regression đủ96targets/4Adam/7save/8load; source/runtime unchanged, Job0. ActualCUDA roundtrip cần nghiệm thu riêng.",
+      "verification_steps": "Root đọc source/diff. Chỉ dispatch04 khi đủ biên RAM trên2GiBfloor, một workload và120s tổng. Sau đó CUDA ladder riêng.",
+      "required_artifacts": [
+        "metadata38JUnit/logs",
+        "native16JUnit/logs",
+        "checkpoint/parity proof",
+        "source/runtime pins",
+        "failure snapshots",
+        "bundle/report"
+      ],
+      "estimated_effort": "38metadata actual2,447784s, native04 chưa đo. Source implementation đã làm.",
+      "compute_cost_category": "local_CPU_no_cloud_then_separately_approved_CUDA",
+      "authorization_requirements": "Local engineering user đã giao. Không tự chi GPU hoặc bỏ RAM/runtime/source guard.",
+      "status": "IMPLEMENTED_38_METADATA_PASS_NATIVE_CPU_AND_ACTUAL_CUDA_PENDING",
+      "blockers": [
+        "RAM phải còn ít nhất2GiB trong native regression. Peak fixture lịch sử634617856B."
+      ],
+      "completion_evidence": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cuda-checkpoint-metadata-tests01/result.json"
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

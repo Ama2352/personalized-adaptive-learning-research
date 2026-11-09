@@ -1,0 +1,3 @@
+# Full cached CPU09 native mastery — hồ sơ dừng RAM
+
+Native verdict REJECTED được giữ trong scope.json. Archive completed chỉ xác nhận lưu hồ sơ. Năm kiểm helper đã qua; actual constructors/updates UNKNOWN sau termination, giới hạn bởi reservation120/14400. Không có readouts/parity/truth mới. Source/review/ba inner receipts và outer/owned logs được copy trước/sau SHA. ROOT kiểm độc lập50source/input SHA sau termination, không thay scientific admission. Old5failurelane không mở lại, không replay/fit/model trongclosure. Report tại [report.md](report.md). Descriptiveoldpilot, no newN/CI/causalbenefit.

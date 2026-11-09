@@ -354,3 +354,7 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 - [RQDIAG14](reports/rq2_cached_mechanism_diagnostic_20261109.md),[manifest](runs/rq2-cached-mechanism-diagnostic-20261109-01/manifest.json):68outputs/5be277c. MechanismquerydivergencePG0/20,PY1/20,PYH0/20; policyquerydivergence20/20mỗiprofile. Không newseed/model/world; không time-DiD hoặc causal ability.
 - [SoftwareGate](reports/akt_windows_gate_current_20261109.md),[manifest](runs/akt-windows-gate-current177-20261109-01/manifest.json):90outputs/e1a0d82. Gate04terminalREJECTED,99targetedfixturesacceptedriêng; không pointerpublication.
 - RawGit164blobs verified,158outputs mới; counter4882→5040 không đếm mẫu nghiên cứu.
+
+## 09/11 — giữ hồ sơ fullcached CPU09 dừng RAM
+
+- [Hồ sơ30outputs](runs/rq1-cpu09-native-mastery-20261109-01/README.md), [diễn giải](runs/rq1-cpu09-native-mastery-20261109-01/report.md). Native REJECTED sau9,8giây do RAM khả dụng dưới2GiB, Job0 và50source/input SHA còn nguyên. Không readouts/parity/truth hoặc kết quả mastery mới. Actual calls UNKNOWN sau termination, không suy bằng0 hoặc số reservation. Archive completed chỉ xác nhận giữ hồ sơ.
