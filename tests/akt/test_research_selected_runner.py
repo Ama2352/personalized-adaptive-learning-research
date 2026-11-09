@@ -1,12 +1,13 @@
 """Mocked selected-only orchestration; no actual guard/Gate/NN/corpus certificate."""
-from contextlib import nullcontext
-from dataclasses import replace
+from contextlib import contextmanager,nullcontext
+from dataclasses import asdict,replace
 from types import SimpleNamespace as N
 import random
 import pytest
 
 from knowledge_tracing.akt import research_selected_runner as runner
 from knowledge_tracing.akt.research_main_stage import prepare_main_selected_stage
+from knowledge_tracing.akt.config import ResearchCUDAExecutionProfile
 from test_research_main_execution import make_case,H
 
 
@@ -106,19 +107,95 @@ def test_checkpoint_delegation_and_prewrite_quota_no_fake_state(tmp_path):
 
 def test_fresh_container_limit_and_counters_never_reset_on_reload():
     calls=[];before=random.getstate()
-    run=N(config=N(seed=42,lr=1e-4,betas=(.9,.999),eps=1e-8,weight_decay=0.),constructors=0,optimizer_constructors=0,
+    run=N(spec=N(cuda_profile=None),config=N(seed=42,lr=1e-4,betas=(.9,.999),eps=1e-8,weight_decay=0.),constructors=0,optimizer_constructors=0,
         reserved_steps=7,returned_steps=7,completed_steps=7,boundary=lambda:None)
+    adapter_calls=[];adam_calls=[]
+    def adapter(**kwargs):
+        adapter_calls.append(kwargs);return N(native=N(parameters=lambda:()))
+    def adam(*args,**kwargs):
+        adam_calls.append(kwargs);return object()
     tools=N(np=N(random=N(seed=lambda seed:calls.append('numpy_seed'))),
         torch=N(random=N(default_generator=N(manual_seed=lambda seed:calls.append('torch_seed'))),
-            device=lambda device:nullcontext(),optim=N(Adam=lambda *a,**k:object())),
-        graph_adapter=lambda **k:N(native=N(parameters=lambda:())))
+            device=lambda device:nullcontext(),optim=N(Adam=adam)),
+        graph_adapter=adapter)
     try:
         first,_=runner._construct(run,tools,object(),object(),object())
         second,_=runner._construct(run,tools,object(),object(),object())
         assert first is not second and (run.constructors,run.optimizer_constructors)==(2,2)
         assert (run.reserved_steps,run.returned_steps,run.completed_steps)==(7,7,7)
+        assert all(set(row)=={'config','encoding','index','condition'} for row in adapter_calls)
+        assert all(set(row)=={'lr','betas','eps','weight_decay'} for row in adam_calls)
         with pytest.raises(ValueError):runner._construct(run,tools,object(),object(),object())
     finally:random.setstate(before)
+
+
+def test_cuda_construct_forwards_profile_keeps_cpu_ambient_and_exact_adam_backend():
+    profile=ResearchCUDAExecutionProfile(128*1024**2)
+    calls=[];ambient=[False];before=random.getstate();parameters=[]
+    @contextmanager
+    def cpu(device):
+        assert device=='cpu';ambient[0]=True;calls.append('cpu_enter')
+        try:yield
+        finally:ambient[0]=False;calls.append('cpu_exit')
+    def adapter(**kwargs):
+        assert ambient[0] and kwargs['cuda_profile'] is profile
+        calls.append('adapter');owned=(object(),);parameters.append(owned)
+        return N(native=N(parameters=lambda:owned))
+    def adam(owned,**kwargs):
+        assert ambient[0] and owned is parameters[-1]
+        assert kwargs==dict(lr=1e-4,betas=(.9,.999),eps=1e-8,weight_decay=0.,
+            foreach=False,fused=False,capturable=False,differentiable=False,
+            amsgrad=False,maximize=False,decoupled_weight_decay=False)
+        calls.append('adam');return object()
+    def seed(kind,value):
+        assert value==42;calls.append(kind)
+    run=N(spec=N(cuda_profile=profile),config=N(seed=42,lr=1e-4,betas=(.9,.999),eps=1e-8,weight_decay=0.),
+        constructors=0,optimizer_constructors=0,reserved_steps=7,returned_steps=7,completed_steps=7,
+        boundary=lambda:calls.append('boundary'))
+    tools=N(np=N(random=N(seed=lambda value:seed('numpy_seed',value))),
+        torch=N(random=N(default_generator=N(manual_seed=lambda value:seed('cpu_seed',value))),
+            cuda=N(manual_seed=lambda value:seed('cuda_seed',value)),device=cpu,optim=N(Adam=adam)),
+        graph_adapter=adapter)
+    try:
+        runner._construct(run,tools,object(),object(),object())
+        runner._construct(run,tools,object(),object(),object())
+        assert calls==['boundary','numpy_seed','cpu_seed','cuda_seed','cpu_enter','adapter','adam','cpu_exit','boundary']*2
+        assert parameters[0] is not parameters[1]
+        assert (run.constructors,run.optimizer_constructors)==(2,2)
+        assert (run.reserved_steps,run.returned_steps,run.completed_steps)==(7,7,7)
+        with pytest.raises(ValueError):runner._construct(run,tools,object(),object(),object())
+    finally:random.setstate(before)
+
+
+def test_cuda_boundary_keeps_continuous_high_water_and_propagates_failure():
+    calls=[];samples=iter((dict(memory_allocated=3,max_memory_allocated=5),
+                         dict(memory_allocated=2,max_memory_allocated=8)))
+    run=N(guard=lambda:calls.append('guard'),
+        execution=N(revalidate=lambda seconds:calls.append(('revalidate',seconds))),
+        clocks=lambda:dict(training_seconds=1.),cuda_check=lambda:next(samples),cuda_resources=None)
+    runner._Run.boundary(run);runner._Run.boundary(run)
+    assert run.cuda_resources==dict(samples=2,peak_bytes=dict(memory_allocated=3,max_memory_allocated=8))
+    assert calls==['guard',('revalidate',1.),'guard']*2
+    def failed():raise MemoryError('manufactured CUDA boundary rejection')
+    run.cuda_check=failed
+    with pytest.raises(MemoryError):runner._Run.boundary(run)
+    assert run.cuda_resources['samples']==2 and calls[-1]==('revalidate',1.)
+
+
+def test_checkpoint_profile_fingerprint_keeps_cpu_wire_and_binds_cuda_backend():
+    from knowledge_tracing.akt.research_main_execution import CUDA_RECIPE_SHA256
+    context=N(protocol21_sha256=H,recipe26_sha256='b'*64,allocation_sha256='c'*64)
+    run=N(spec=N(cuda_profile=None,cpu_threads=2,stage=N(context=context)),
+        execution=N(evidence=N(runtime_report_sha256='d'*64,lock_sha256='e'*64)))
+    tools=N(cp=N(GraphCheckpointProfile=lambda *args:args))
+    cpu=runner._profile(run,tools,H)
+    assert len(cpu)==8 and cpu[3]==runner.identity_hash(dict(lock='e'*64,cpu_threads=2))
+    run.spec.cuda_profile=ResearchCUDAExecutionProfile(128*1024**2)
+    cuda=runner._profile(run,tools,H)
+    assert cuda[:3]==cpu[:3] and cuda[4:]==cpu[4:]
+    assert cuda[3]==runner.identity_hash(dict(lock='e'*64,cpu_threads=2,
+        cuda_execution_profile=asdict(run.spec.cuda_profile),cuda_recipe_sha256=CUDA_RECIPE_SHA256))
+    assert cuda[3]!=cpu[3]
 
 
 def test_terminal_reasons_come_from_rows_not_assumed_oov_rescue():

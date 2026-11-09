@@ -948,3 +948,12 @@ Root đối chiếu đủ142raw files của domain28/proof17/UI28/MainC65 với 
 ##09/11 — đối chiếu blockers sau GKT/E8
 
 MainC đã port nhưng chưa đủ221metadataPASS. GKT data20đã đạt, model research28 còn thiếu. Giữ danh sách blockers cũ trong state cùng lý do thay. Lượt này có tiến bộ thực và goal tiếp tục ACTIVE. RQ2 learned31×ability×prerequisite đang chuẩn bị19worlds/0fits, có giới hạn old initial policy hash chưa được log. Chưa chạy extension. Xem evidence/engineering_gkt_e8_turn_20261109.json.
+
+##09/11 — MainC đạt đủ221metadata cases
+
+Lượt14 có220PASS/1FAIL do readguard thiếu exact lock. Lượt15 ghim thêm đúng requirements lock đã đọc, đạt221JUnit/protocol/bodies0FES,37source/11runtime ổn định,env/sys/Path.open restored,Job0. Profile14 worker128MiB/floor1GiB/admission1280MiB đã review trước chạy. Metadata body không neural forward/backward hoặc CUDA; sourceB/native16/Gate/resume chưa nghiệm thu. MainC78bundle đã đóng, không chi Modal/Holdout/fullCV.
+
+
+##09/11 — Checkpoint metadata38 hiện hành và closure B+C
+
+M02 bị chặn đọc pyproject trước collection, countsNULL. Sau review đúng readonly input, M03 đạt38physical0FES/163resource samples/20source11runtime/Job0, terminal exit0. Root đã đóng bundle47 và tham chiếu MainC78 riêng. Hai source groups B2+C8 cần commit coherent vì runner gọi checkpoint API mới. Native06 chưa chạy do RAM chưa đạt4GiB, current Gate/CUDA vẫn pending. Recipe GKT29 được ghi D42 trước fit, candidate02 sửa prevalidation sequence còn chờ native.

@@ -1,5 +1,11 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## Mốc09/11 — AKT metadata hiện hành221 và38 đã đạt
+
+[MainC221](../research_tracking/reports/akt_main_cuda_metadata_readiness_20261109.md) và [checkpointB38](../research_tracking/reports/akt_cuda_checkpoint_metadata_readiness_20261109.md) đã có actual JUnit0FES, nguồn/runtime trước–sau ổn định và owned cleanup. Hai bundle giữ78 và47outputs, gồm cả failure trước đó. Đây là kiểm hợp đồng phần mềm với opaque fixtures, chưa là chạy mô hình hoặc CUDA. Mốc này thay trạng thái MainC chưa đạt ở các bản ghi lịch sử dưới đây. Native CPU theo nguồn hiện hành cần RAM4GiB trước launch, current Gate vẫn stale, full producer resume còn thiếu.
+
+[Recipe GKT29](thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md) được chốt trước fit theo D42, giữ batch normalization và dropout cùng các khác biệt batch4/full-prefix được công bố. Data bridge đã kiểm20ca, model candidate đang review source và chưa native. Required baselines tiếp tục giữ đủ theo đề cương.
+
 ## Mốc09/11 — GKT data bridge20ca, E8 đã xuất bản, MainC11–13 chưa có test PASS
 
 [GKT data bridge](../research_tracking/reports/gkt_research_data_readiness_20261109.md) / [bundle58](../research_tracking/runs/gkt-research-data-engineering-20261109-01/README.md). Canonical data/lazy initializer đã áp dụng, normal import20/0FES (17data+3package); giữ01fixtureERROR và02PASS riêng. Chưa research28 model/trainer/checkpoint/export/adaptor hoặc fitted baseline. GKT08 và SAKT07 là việc chưa bắt đầu, cần ROOT review finite recipe/actual guarded producer, giữ old toy caps và đủ9model conditions.

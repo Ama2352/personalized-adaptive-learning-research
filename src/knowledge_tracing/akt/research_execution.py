@@ -4,7 +4,7 @@ Corpus v1 dùng paths cố định, observable bytes chỉ stream-hash, oracle/k
 Receipts là consistency binding hợp tác; không phải chữ ký hoặc capability không
 thể giả. Future research entry phải consume guard trước lazy model import.
 """
-from dataclasses import asdict, dataclass
+from dataclasses import InitVar, asdict, dataclass, field
 import hashlib
 import json
 import math
@@ -14,7 +14,7 @@ import re
 import time
 
 from . import authorization as native_auth
-from .config import AKTConfig, PROJECT_ROOT, validate_config
+from .config import AKTConfig, PROJECT_ROOT, ResearchCUDAExecutionProfile, validate_config
 from ..simulator_bridge import identity_hash
 from ..simulator_research_data import ResearchSplitPlan, ResearchProvenance
 
@@ -149,14 +149,18 @@ class SimulatorResearchSpec:
     expected_corpus_sha256: str
     expected_protocol_sha256: str
     budget: ResearchResourceBudget
+    cuda_profile: InitVar[ResearchCUDAExecutionProfile | None] = field(default=None, kw_only=True)
 
-    def __post_init__(self):
+    def __post_init__(self, cuda_profile=None):
         _require(type(self.native_config) is AKTConfig and type(self.budget) is ResearchResourceBudget, 'typed config/budget required')
         _require(type(self.corpus_id) is str and re.fullmatch('[A-Za-z0-9][A-Za-z0-9_-]{0,79}', self.corpus_id), 'corpus ID required')
         _sha(self.expected_corpus_sha256); _sha(self.expected_protocol_sha256)
-        validate_config(self.native_config)
+        if cuda_profile is None:
+            validate_config(self.native_config)
+        else:
+            validate_config(self.native_config, cuda_profile=cuda_profile)
         c, b = self.native_config, self.budget
-        _require(c.phase == 'simulator-research' and c.project_root == PROJECT_ROOT, 'explicit simulator-research CPU scope required')
+        _require(c.phase == 'simulator-research' and c.project_root == PROJECT_ROOT, 'explicit simulator-research scope required')
         expected = dict(max_train_users=b.train_learners+b.selection_learners,
             max_val_users=max(b.selection_learners,b.calibration_learners),
             max_targets_per_side=b.train_targets+b.selection_targets,

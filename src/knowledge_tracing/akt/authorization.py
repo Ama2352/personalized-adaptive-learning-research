@@ -12,7 +12,7 @@ from pathlib import Path
 import sys
 from typing import Callable
 
-from .config import AKTConfig, PROJECT_ROOT, validate_config
+from .config import AKTConfig, PROJECT_ROOT, ResearchCUDAExecutionProfile, validate_config
 from .provenance import sha256_file, verify_upstream
 
 
@@ -176,9 +176,13 @@ def require_gate2_evidence(config: AKTConfig, *, project_root: Path = PROJECT_RO
 
 
 def preflight(config: AKTConfig, *, project_root: Path = PROJECT_ROOT,
-              runtime_report_path: Path = RUNTIME_REPORT, lock_file: Path = LOCK_FILE) -> dict:
+              runtime_report_path: Path = RUNTIME_REPORT, lock_file: Path = LOCK_FILE,
+              cuda_profile: ResearchCUDAExecutionProfile | None = None) -> dict:
     """Verify pinned source/runtime/lock; never opens learner assignments or interactions."""
-    validate_config(config)
+    if cuda_profile is None:
+        validate_config(config)
+    else:
+        validate_config(config, cuda_profile=cuda_profile)
     project_root = project_root.resolve()
     executable = validate_runtime_interpreter(project_root / '.venv', executable=sys.executable,
                                               prefix=sys.prefix, platform_id=sys.platform)

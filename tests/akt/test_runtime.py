@@ -12,6 +12,56 @@ import knowledge_tracing.akt.config as config_module
 from scripts.akt.check_runtime import inspect_runtime, validate_output_path, write_lock_from_report
 
 
+def cuda_research_preflight_fixture(tmp_path,monkeypatch):
+    """Synthetic runtime JSON only; no native framework or CUDA is executed."""
+    from dataclasses import replace
+    config,report,path,lock,_=isolated_runtime_fixture(tmp_path,monkeypatch,'linux')
+    config=replace(config,phase='simulator-research',device='cuda',run_id='cuda-metadata',
+        output_dir=tmp_path/'experiments/akt/results/cuda-metadata',
+        max_train_users=9,max_val_users=1,max_targets_per_side=27,max_total_targets=30,
+        max_steps=8,max_seconds=10.,max_wall_seconds=20.,max_rss_bytes=1024**3,
+        min_available_ram_bytes=1024**3)
+    report.update(device='cuda',cuda_available=True)
+    profile=config_module.ResearchCUDAExecutionProfile(128*1024**2)
+    return config,report,path,lock,profile
+
+
+def test_research_cuda_preflight_needs_explicit_profile_before_source(tmp_path,monkeypatch):
+    config,report,path,lock,_=cuda_research_preflight_fixture(tmp_path,monkeypatch)
+    path.write_text(json.dumps(report),encoding='utf-8')
+    monkeypatch.setattr(authorization_module,'verify_upstream',lambda *a:pytest.fail('missing profile must stop before source'))
+    with pytest.raises(ValueError):
+        authorization_module.preflight(config,project_root=config.project_root,runtime_report_path=path,lock_file=lock)
+
+
+def test_research_cuda_preflight_forwards_profile_and_keeps_heavy_imports_closed(tmp_path,monkeypatch):
+    import builtins
+    config,report,path,lock,profile=cuda_research_preflight_fixture(tmp_path,monkeypatch)
+    path.write_text(json.dumps(report),encoding='utf-8')
+    calls=[];validate=authorization_module.validate_config;original_import=builtins.__import__
+    def capture(actual,*,cuda_profile=None):
+        calls.append(cuda_profile);return validate(actual,cuda_profile=cuda_profile)
+    def no_heavy(name,*args,**kwargs):
+        if name.split('.')[0] in ('torch','numpy','pandas'):
+            raise AssertionError('public preflight does not import neural/data frameworks')
+        return original_import(name,*args,**kwargs)
+    monkeypatch.setattr(authorization_module,'validate_config',capture)
+    monkeypatch.setattr(builtins,'__import__',no_heavy)
+    result=authorization_module.preflight(config,project_root=config.project_root,
+        runtime_report_path=path,lock_file=lock,cuda_profile=profile)
+    assert calls==[profile] and result['status']=='ready'
+    assert result['runtime']['device']=='cuda' and result['runtime']['cuda_available'] is True
+
+
+@pytest.mark.parametrize('change',[{'device':'cpu'},{'cuda_available':False},{'runtime_schema_version':1}])
+def test_research_cuda_preflight_rejects_cpu_or_stale_report(tmp_path,monkeypatch,change):
+    config,report,path,lock,profile=cuda_research_preflight_fixture(tmp_path,monkeypatch)
+    report.update(change);path.write_text(json.dumps(report),encoding='utf-8')
+    with pytest.raises(ValueError,match='Gate 1'):
+        authorization_module.preflight(config,project_root=config.project_root,
+            runtime_report_path=path,lock_file=lock,cuda_profile=profile)
+
+
 def report_entry(url, sha='a' * 64):
     return {'metadata': {'name': 'Example', 'version': '1.2.3'},
             'download_info': {'url': url, 'archive_info': {'hashes': {'sha256': sha}}}}

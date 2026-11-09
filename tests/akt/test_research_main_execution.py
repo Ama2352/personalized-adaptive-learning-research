@@ -12,6 +12,99 @@ from knowledge_tracing.research_admission import MainSelectionContext,PROTOCOL21
 H='a'*64
 
 
+def cuda_case(tmp_path,monkeypatch):
+    """Manufactured typed spec only; never an actual CUDA permission."""
+    case=make_case(tmp_path,monkeypatch)
+    profile=cfg.ResearchCUDAExecutionProfile(128*1024**2)
+    old_spec=case.spec.research;config=replace(old_spec.native_config,device='cuda')
+    research=old.SimulatorResearchSpec(config,old_spec.corpus_id,old_spec.expected_corpus_sha256,
+        old_spec.expected_protocol_sha256,old_spec.budget,cuda_profile=profile)
+    stage=replace(case.spec.stage,config_sha256=old.native_auth.config_hash(config))
+    case.spec=replace(case.spec,research=research,stage=stage,cuda_profile=profile)
+    return case
+
+
+def test_cpu_main_spec_wire_omits_optional_profile_and_matches_legacy_hash(tmp_path,monkeypatch):
+    case=make_case(tmp_path,monkeypatch)
+    legacy=asdict(case.spec);legacy.pop('cuda_profile')
+    assert set(legacy)=={'research','stage','read_limits','graph_input','context_limits_json',
+        'checkpoint_limits_json','max_graph_input_bytes','max_output_bytes','cpu_threads','git_profile'}
+    assert case.spec.metadata()==main.canonical(legacy)
+    assert case.spec.identity==main.identity_hash(main.canonical(legacy))
+    assert 'cuda_profile' not in case.spec.metadata()['research']
+
+
+def test_cuda_main_spec_retains_profile_but_creates_no_execution(tmp_path,monkeypatch):
+    case=cuda_case(tmp_path,monkeypatch)
+    assert case.spec.metadata()['cuda_profile']==asdict(case.spec.cuda_profile)
+    assert 'cuda_profile' not in case.spec.metadata()['research']
+    assert case.spec.research.native_config.device=='cuda'
+    assert not isinstance(case.spec,main.MainSelectedExecution)
+    assert replace(case.spec,cuda_profile=replace(case.spec.cuda_profile,max_vram_bytes=256*1024**2)).identity!=case.spec.identity
+    with pytest.raises(ValueError):replace(case.spec,cuda_profile=None)
+    with pytest.raises(ValueError):replace(case.spec,cuda_profile=True)
+    cpu=make_case(tmp_path,monkeypatch)
+    with pytest.raises(ValueError):replace(cpu.spec,cuda_profile=case.spec.cuda_profile)
+
+
+def test_cuda_recipe_is_checked_before_native_or_corpus_work(tmp_path,monkeypatch):
+    case=cuda_case(tmp_path,monkeypatch)
+    monkeypatch.setattr(main,'DOCS',())
+    monkeypatch.setattr(old,'_hash_file',lambda *a,**k:('f'*64,0))
+    monkeypatch.setattr(main,'_main_native_evidence',lambda *a:pytest.fail('bad recipe must stop before runtime'))
+    monkeypatch.setattr(old,'_corpus',lambda *a:pytest.fail('bad recipe must stop before corpus'))
+    with pytest.raises(ValueError,match='recipe28'):main._metadata(case.spec,case.evidence)
+
+
+def test_cuda_metadata_binds_recipe_profile_and_current_sources_without_grant(tmp_path,monkeypatch):
+    case=cuda_case(tmp_path,monkeypatch);builds={'manufactured-source':H}
+    case.spec=replace(case.spec,stage=replace(case.spec.stage,sources_sha256=main.identity_hash(builds)))
+    monkeypatch.setattr(main,'DOCS',())
+    monkeypatch.setattr(old,'_hash_file',lambda *a,**k:(main.CUDA_RECIPE_SHA256,1))
+    monkeypatch.setattr(main,'_main_native_evidence',lambda *a:dict(build_hashes=builds))
+    monkeypatch.setattr(old,'_corpus',lambda *a:dict(domain_sha256=case.spec.stage.context.domain_sha256,
+        files_sha256={'bank.json':case.spec.stage.context.bank_sha256},
+        research_plan_sha256=case.spec.stage.context.split_sha256))
+    metadata=main._metadata(case.spec,case.evidence)
+    assert metadata['schema_version']==2 and metadata['cuda_execution_profile']==asdict(case.spec.cuda_profile)
+    assert metadata['cuda_recipe_sha256']==main.CUDA_RECIPE_SHA256
+    assert metadata['external_freeze_authority'] is metadata['refit_allowed'] is metadata['calibration_allowed'] is False
+    assert not isinstance(metadata,main.MainSelectedExecution)
+
+
+def test_cuda_auth_requires_exact_backend_caps_not_only_a_spec_hash(tmp_path,monkeypatch):
+    case=cuda_case(tmp_path,monkeypatch);identity={'manufactured_metadata_not_permission':True}
+    value=auth_value(case,identity)
+    value['caps']['cuda_execution_profile']=asdict(case.spec.cuda_profile)
+    monkeypatch.setattr(main,'_metadata',lambda *a:identity)
+    relative,pin=put_auth(case,value)
+    got,_=main._auth(case.spec,case.evidence,relative,pin)
+    assert got['caps']['cuda_execution_profile']==asdict(case.spec.cuda_profile)
+    assert not isinstance(got,main.MainSelectedExecution)
+    value['caps']['cuda_execution_profile']['foreach']=True
+    relative,pin=put_auth(case,value)
+    with pytest.raises(ValueError,match='caps'):main._auth(case.spec,case.evidence,relative,pin)
+    value['caps'].pop('cuda_execution_profile')
+    relative,pin=put_auth(case,value)
+    with pytest.raises(ValueError,match='caps'):main._auth(case.spec,case.evidence,relative,pin)
+
+
+def test_linux_cuda_source_proof_cannot_reuse_cpu_kind_mode_or_runtime(monkeypatch):
+    case=linux_metadata(monkeypatch)
+    case.config.device='cuda'
+    profile=replace(case.profile,mode='linux-cuda-lf-v1')
+    proof=case.proof|{'kind':'MAIN_LINUX_CUDA_SOURCE_PROVENANCE_V1','runtime_report_sha256':'d'*64}
+    evidence=SimpleNamespace(runtime_report_sha256='d'*64,lock_sha256=case.evidence.lock_sha256)
+    main._validate_linux_source_proof(profile,case.config,evidence,proof)
+    with pytest.raises(ValueError,match='profile'):
+        main._validate_linux_source_proof(case.profile,case.config,evidence,proof)
+    with pytest.raises(ValueError,match='proof'):
+        main._validate_linux_source_proof(profile,case.config,evidence,proof|{'kind':case.proof['kind']})
+    with pytest.raises(ValueError,match='runtime'):
+        main._validate_linux_source_proof(profile,case.config,evidence,
+            proof|{'runtime_report_sha256':case.proof['runtime_report_sha256']})
+
+
 def make_case(tmp_path,monkeypatch):
     root=tmp_path/'fixture-main';root.mkdir(exist_ok=True)
     monkeypatch.setattr(cfg,'PROJECT_ROOT',root);monkeypatch.setattr(old,'PROJECT_ROOT',root)
@@ -150,7 +243,7 @@ def test_git_extra_configuration_transport_or_wrong_safe_root_rejects_before_nat
 def linux_metadata(monkeypatch):
     """Declared POSIX metadata only, never a host/runtime/Gate execution proof."""
     root=PurePosixPath('/fixture/project')
-    config=SimpleNamespace(project_root=root,source_root=root/'artifacts/akt/dependencies/upstream',source_commit=cfg.SOURCE_COMMIT)
+    config=SimpleNamespace(project_root=root,source_root=root/'artifacts/akt/dependencies/upstream',source_commit=cfg.SOURCE_COMMIT,device='cpu')
     profile=main.MainLinuxGitProfile('linux-cpu-lf-v1','/fixture/git',H,config.source_root.as_posix(),
         'artifacts/akt/manufactured-source-proof.json',H,main.LINUX_UPSTREAM_FILES)
     process=SimpleNamespace(platform='linux',executable=str(root/'.venv/bin/python'),prefix=str(root/'.venv'))

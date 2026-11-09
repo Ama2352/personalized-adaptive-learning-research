@@ -1,10 +1,10 @@
-"""Main A0-A3 selected-only CPU guard; old A0 lifecycle permission is not reused.
+"""Main A0-A3 selected-only guard; old A0 lifecycle permission is not reused.
 
 No fit/CLI/auth-file creation. Only actual closed on-disk authorization plus
 current native runtime/Gate/source/public-corpus/graph inputs can produce the
 execution object. MainStage and SHA-shaped claims alone never grant execution.
 """
-from dataclasses import asdict,dataclass,field
+from dataclasses import asdict,dataclass,field,fields
 import hashlib
 import json
 import math
@@ -16,6 +16,7 @@ import sys
 import time
 
 from . import research_execution as old
+from .config import ResearchCUDAExecutionProfile
 from .research_main_stage import MainSelectedStageSpec,PROTOCOL22,ACCOUNTING23
 from ..research_admission import PROTOCOL21,RECIPE26,ALLOCATION
 from ..simulator_bridge import identity_hash
@@ -40,6 +41,8 @@ LINUX_UPSTREAM_FILES=(('LICENSE','50a2c2d2521182935c537a56220083c7a4194abdfbd459
     ('akt.py','ace9e4486ea6d8f8c52310a8ddf27212022136eda719c12d8204fab1bfcfdc67'))
 UPSTREAM_TREE='904863502337ef2eefd1769d14836b62e3c3804a'
 GATE_WRITER='scripts/akt/refresh_gate2.py'
+CUDA_RECIPE_PATH='docs/thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md'
+CUDA_RECIPE_SHA256='57940d5991f90c9c306c2ab442729766489513703153407fe26646b21d963dd0'
 
 
 def need(ok,message):
@@ -101,7 +104,7 @@ class MainLinuxGitProfile:
     upstream_files_sha256: tuple[tuple[str,str],...]
 
     def __post_init__(self):
-        need(self.mode=='linux-cpu-lf-v1','unsupported Linux Git profile')
+        need(self.mode in ('linux-cpu-lf-v1','linux-cuda-lf-v1'),'unsupported Linux Git profile')
         _linux_absolute(self.executable);_linux_absolute(self.source_root)
         old._sha(self.executable_sha256);old._sha(self.proof_sha256)
         need(type(self.proof_file) is str and '\\' not in self.proof_file and ':' not in self.proof_file,
@@ -144,10 +147,12 @@ def _validate_git_environment(profile,source_root,platform_name,environment):
 def _validate_linux_source_proof(profile,config,evidence,proof):
     """Proof metadata consistency only; actual file/Git/runtime checks are separate."""
     root=config.project_root
+    need(config.device in ('cpu','cuda') and profile.mode=='linux-'+config.device+'-lf-v1',
+         'Linux source profile must match the requested execution device')
     fields={'schema_version','kind','platform_id','project_root','python','python_prefix','source_root','git',
             'git_environment','source','source_before','source_after','runtime_report_sha256','lock_sha256'}
     need(set(proof)==fields and type(proof['schema_version']) is int and proof['schema_version']==1
-         and proof['kind']=='MAIN_LINUX_CPU_SOURCE_PROVENANCE_V1',
+         and proof['kind']=='MAIN_LINUX_'+config.device.upper()+'_SOURCE_PROVENANCE_V1',
          'actual closed Linux source provenance proof required')
     need(proof['platform_id']=='linux' and proof['project_root']==str(root) and proof['python']==sys.executable
          and proof['python_prefix']==sys.prefix and proof['source_root']==str(config.source_root),
@@ -236,11 +241,16 @@ def _main_native_evidence(spec,evidence):
     venv=root/'.venv'
     need(venv.is_dir() and not venv.is_symlink() and not getattr(venv,'is_junction',lambda:False)()
          and venv.resolve()==venv.absolute(),'physical same-root environment')
-    need(os.environ.get('CUDA_VISIBLE_DEVICES','') in ('','-1') and os.environ.get('NVIDIA_VISIBLE_DEVICES','') in ('','none','void'),'CPU main must hide CUDA')
-    runtime=old.native_auth.preflight(c,project_root=root,runtime_report_path=paths['runtime_report'],lock_file=lock)
+    if spec.cuda_profile is None:
+        need(os.environ.get('CUDA_VISIBLE_DEVICES','') in ('','-1') and os.environ.get('NVIDIA_VISIBLE_DEVICES','') in ('','none','void'),'CPU main must hide CUDA')
+    preflight_args=dict(project_root=root,runtime_report_path=paths['runtime_report'],lock_file=lock)
+    if spec.cuda_profile is not None:
+        preflight_args['cuda_profile']=spec.cuda_profile
+    runtime=old.native_auth.preflight(c,**preflight_args)
     gate=old.native_auth.require_gate2_evidence(c,project_root=root,gate2_report=paths['gate_pointer'],lock_file=lock)
-    need(runtime['runtime'].get('runtime_schema_version')==2 and runtime['runtime'].get('device')=='cpu'
-         and runtime['runtime'].get('cuda_available') is False,'actual schema2 CPU runtime')
+    need(runtime['runtime'].get('runtime_schema_version')==2 and runtime['runtime'].get('device')==c.device
+         and runtime['runtime'].get('cuda_available') is (spec.cuda_profile is not None),
+         'actual schema2 runtime must match the CPU/CUDA execution profile')
     need(runtime['runtime_report_sha256']==evidence.runtime_report_sha256 and runtime['lock_sha256']==evidence.lock_sha256
          and gate['pointer_sha256']==evidence.gate_pointer_sha256 and gate['report_sha256']==evidence.gate_report_sha256
          and gate['test_log_sha256']==evidence.gate_log_sha256,'genuine runtime/Gate/source/elapsed checks remain mandatory')
@@ -286,6 +296,7 @@ class MainSelectedExecutionSpec:
     max_output_bytes: int
     cpu_threads: int
     git_profile: MainGitProfile | MainLinuxGitProfile
+    cuda_profile: ResearchCUDAExecutionProfile | None = field(default=None,kw_only=True)
 
     def __post_init__(self):
         need(type(self.research) is old.SimulatorResearchSpec and type(self.stage) is MainSelectedStageSpec,'exact research/stage spec required')
@@ -298,7 +309,11 @@ class MainSelectedExecutionSpec:
         need(type(self.git_profile) in (MainGitProfile,MainLinuxGitProfile),'typed process-only Git profile required');self.git_profile.__post_init__()
         profile_platform='linux' if type(self.git_profile) is MainLinuxGitProfile else 'win32'
         _git_environment(self.git_profile,self.research.native_config.source_root,profile_platform)
-        old.SimulatorResearchSpec(**{n:getattr(self.research,n) for n in self.research.__dataclass_fields__})
+        old.SimulatorResearchSpec(**{f.name:getattr(self.research,f.name) for f in fields(self.research)},
+                                  cuda_profile=self.cuda_profile)
+        if self.cuda_profile is not None:
+            need(type(self.cuda_profile) is ResearchCUDAExecutionProfile,'exact main CUDA profile required')
+            self.cuda_profile.__post_init__()
         self.read_limits.__post_init__();self.graph_input.__post_init__()
         for name in ('max_graph_input_bytes','max_output_bytes'):old._positive(getattr(self,name))
         need(type(self.cpu_threads) is int and 1<=self.cpu_threads<=8,'explicit bounded CPU thread profile')
@@ -306,7 +321,10 @@ class MainSelectedExecutionSpec:
         c,b=self.research.native_config,self.research.budget
         need(c.source_root==c.project_root/'artifacts/akt/dependencies/upstream','main source root must be exact same-root upstream')
         need(old._path(c.project_root,'artifacts/akt/dependencies/upstream')==c.source_root,'physical root-bound upstream path')
-        need(c.device=='cpu' and self.research.expected_protocol_sha256==PROTOCOL21,'frozen Grade10 CPU protocol required')
+        need(c.device==('cpu' if self.cuda_profile is None else 'cuda')
+             and self.research.expected_protocol_sha256==PROTOCOL21,'frozen Grade10 device/profile/protocol required')
+        if type(self.git_profile) is MainLinuxGitProfile:
+            need(self.git_profile.mode=='linux-'+c.device+'-lf-v1','Linux Git profile/device mismatch')
         need(self.stage.config_sha256==old.native_auth.config_hash(c),'stage/native config binding')
         need(self.read_limits.max_total_bytes<=b.max_input_bytes and self.read_limits.max_wall_seconds<=b.max_wall_seconds
              and self.read_limits.max_events_per_learner<=b.max_events_per_learner
@@ -319,7 +337,13 @@ class MainSelectedExecutionSpec:
         need((self.graph_input.method24_reference_json is not None)==requires_scores,'actual Method24 evidence required exactly for confidence/learned topology')
 
     @property
-    def identity(self):return identity_hash(canonical(asdict(self)))
+    def identity(self):return identity_hash(self.metadata())
+
+    def metadata(self):
+        value=asdict(self)
+        if self.cuda_profile is None:
+            value.pop('cuda_profile')
+        return canonical(value)
 
 
 def _resource(spec,started,training_seconds=0.):
@@ -338,6 +362,9 @@ def _metadata(spec,evidence):
     need(type(spec) is MainSelectedExecutionSpec and type(evidence) is old.ResearchRuntimeEvidence,'exact main spec/runtime types required')
     spec.__post_init__();r=spec.research;root=r.native_config.project_root
     for name,pin in DOCS:need(old._hash_file(old._path(root,name),cap=r.budget.max_input_bytes)[0]==pin,'actual adopted document/allocation bytes')
+    if spec.cuda_profile is not None:
+        need(old._hash_file(old._path(root,CUDA_RECIPE_PATH),cap=r.budget.max_input_bytes)[0]==CUDA_RECIPE_SHA256,
+             'actual adopted CUDA recipe28 bytes required')
     native=_main_native_evidence(spec,evidence);corpus=old._corpus(r,native)
     sources=native['build_hashes']
     need(spec.stage.sources_sha256==identity_hash(sources) and spec.stage.runtime_sha256==evidence.runtime_report_sha256,
@@ -345,13 +372,16 @@ def _metadata(spec,evidence):
     context=spec.stage.context
     need(context.domain_sha256==corpus['domain_sha256'] and context.bank_sha256==corpus['files_sha256']['bank.json']
          and context.split_sha256==corpus['research_plan_sha256'],'actual domain/bank bytes/split identity')
-    return canonical(dict(schema_version=1,scope=SCOPE,spec_sha256=spec.identity,stage_spec_sha256=spec.stage.identity,
+    result=dict(schema_version=1,scope=SCOPE,spec_sha256=spec.identity,stage_spec_sha256=spec.stage.identity,
         config_sha256=old.native_auth.config_hash(r.native_config),native_evidence=native,corpus=corpus,
         input_domain='grade10_simulator',requested_phases=PHASES,graph_input=asdict(spec.graph_input),
         context_limits=decode(spec.context_limits_json),checkpoint_limits=decode(spec.checkpoint_limits_json),
         max_graph_input_bytes=spec.max_graph_input_bytes,max_output_bytes=spec.max_output_bytes,
         cpu_threads=spec.cpu_threads,git_profile=asdict(spec.git_profile),
-        matrix_candidate_count=9,external_freeze_authority=False,refit_allowed=False,calibration_allowed=False))
+        matrix_candidate_count=9,external_freeze_authority=False,refit_allowed=False,calibration_allowed=False)
+    if spec.cuda_profile is not None:
+        result.update(schema_version=2,cuda_execution_profile=asdict(spec.cuda_profile),cuda_recipe_sha256=CUDA_RECIPE_SHA256)
+    return canonical(result)
 
 
 def _auth(spec,evidence,path,pin):
@@ -373,6 +403,8 @@ def _auth(spec,evidence,path,pin):
               max_graph_input_bytes=spec.max_graph_input_bytes,max_output_bytes=spec.max_output_bytes)
     caps['cpu_threads']=spec.cpu_threads
     caps['git_profile']=asdict(spec.git_profile)
+    if spec.cuda_profile is not None:
+        caps['cuda_execution_profile']=asdict(spec.cuda_profile)
     need(old._same_json(value['caps'],caps),'actual main caps differ')
     identity=_metadata(spec,evidence)
     need(old._same_json(value['identity'],identity),'actual source/runtime/Gate/data/graph spec drift')

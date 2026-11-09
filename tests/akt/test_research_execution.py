@@ -17,6 +17,41 @@ from knowledge_tracing.akt import research_execution as guard
 from knowledge_tracing.simulator_bridge import identity_hash
 from knowledge_tracing.simulator_research_data import ResearchSplitPlan, ResearchProvenance
 
+
+def test_cpu_spec_stored_fields_and_identity_remain_legacy(files):
+    spec=files.spec
+    expected={'native_config','corpus_id','expected_corpus_sha256','expected_protocol_sha256','budget'}
+    assert set(asdict(spec))==set(vars(spec))==expected
+    assert spec.identity==identity_hash(guard._jsonable(asdict(spec)))
+
+
+def test_cuda_nested_spec_needs_exact_profile_and_does_not_retain_it(files):
+    f=files;config=replace(f.config,device='cuda')
+    args=(config,f.spec.corpus_id,f.spec.expected_corpus_sha256,f.spec.expected_protocol_sha256,f.budget)
+    for invalid in (None,True,{'max_vram_bytes':128*1024**2}):
+        with pytest.raises(ValueError):guard.SimulatorResearchSpec(*args,cuda_profile=invalid)
+    profile=cfg.ResearchCUDAExecutionProfile(128*1024**2)
+    spec=guard.SimulatorResearchSpec(*args,cuda_profile=profile)
+    assert 'cuda_profile' not in vars(spec) and 'cuda_profile' not in asdict(spec)
+    assert spec.native_config.device=='cuda'
+    with pytest.raises(ValueError):
+        guard.SimulatorResearchSpec(f.config,*args[1:],cuda_profile=profile)
+
+
+def test_legacy_research_entry_revalidates_cuda_without_profile_before_corpus(files,monkeypatch):
+    f=files
+    accepted=authorize(f)
+    relative,pin=accepted.authorization_file,accepted.authorization_sha256
+    profile=cfg.ResearchCUDAExecutionProfile(128*1024**2)
+    spec=guard.SimulatorResearchSpec(replace(f.config,device='cuda'),f.spec.corpus_id,
+        f.spec.expected_corpus_sha256,f.spec.expected_protocol_sha256,f.budget,cuda_profile=profile)
+    monkeypatch.setattr(guard,'_native_evidence',lambda *a:pytest.fail('legacy CUDA cannot reach runtime/corpus'))
+    for operation in (
+        lambda:guard.prepare_research_identity(spec,f.evidence),
+        lambda:guard.require_research_authorization(spec,f.evidence,authorization_file=relative,
+            expected_authorization_sha256=pin)):
+        with pytest.raises(ValueError):operation()
+
 REAL_ROOT=Path(__file__).resolve().parents[2]
 
 

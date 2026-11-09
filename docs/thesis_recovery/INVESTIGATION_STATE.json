@@ -77,7 +77,7 @@
     "S07"
   ],
   "critical_blockers": [
-    "MainC8 đã áp dụng nhưng chưa đạt đủ221metadata tests trong một lượt. Lượt08 có53harness failures;12/13tests NO_GO trước child vì RAM. Gate hiện hành STALE.",
+    "MainC metadata đã đạt221/221 trong lượt15. Native CPU checkpoint, CUDA roundtrip và current Gate vẫn chưa nghiệm thu.",
     "Checkpoint CPU sau BatchC, CUDA roundtrip/optimizer/RNG và complete-epoch producer resume chưa nghiệm thu. GRAPH29 hiện là feature gap có contract đề xuất.",
     "GKT data bridge20ca đã đạt, còn research28 model/trainer/checkpoint/export/adaptor. SAKT còn admitted selected-only producer/export.",
     "Chưa có full CPU09 mastery/truth14.400events. Các kết luận RQ1/RQ2 hiện có cần giữ đúng phạm vi source diagnosis/pilot.",
@@ -85,7 +85,7 @@
     "Chưa đo GPU throughput/cost theo matrix nghiên cứu, chưa có exact paid-run authorization. Tổng chi cloud của lượt này bằng0USD.",
     "Phân tích cuối, demo dùng checkpoint fitted và bản luận văn hoàn chỉnh còn việc. Chưa có bằng chứng hoàn tất toàn bộ RQ1–RQ3."
   ],
-  "next_recommended_investigation": "GKT data bridge đã áp dụng và normal-import20ca đạt; review numerical recipe để nối research28 core/trainer/checkpoint/export/adaptor. SAKT selected-only admitted producer/export còn thiếu. MainC collection12/13 cùng221IDs nhưng tests đều NO_GO trướcchild. ROOT review RAM/allocation và lỗi harness trước run mới; Gate STALE, native/CUDA và complete-epoch producer resume chưa nghiệm thu. Giữ128MiB profile chỉ cho metadata, không mở researchfit/GPU/fullCV/Holdout hoặc tựretry.",
+  "next_recommended_investigation": "Review current-source B38 metadata và native16 CPU checkpoint05; actual RAM≥4GiB trước native. Commit C8 cùng dependency B checkpoint khi metadata38 được đối chiếu. RQ2 learned31 pilot19/2280 còn Root source/resource review, GKT BN-D5 recipe đang chọn trước implementation. Gate STALE, chưa quyền Modal/fullCV/Holdout hoặc full researchfit.",
   "resume_instructions": "Đọc current_readiness_summary/current_software_gate/autonomous_engineering_loop trước các snapshots cũ; đọc actual raw bundle/commit và poll handle trước remote. Không rerun completed worker/Gate để lấy artifact; mọi paid GPU/fullCV/Holdout cần authorization riêng.",
   "resolved_questions": {
     "Q09": "Map đủ28nodes,36unique IDs,8extra metadata IDs,0duplicates, planning_validation.json",
@@ -806,7 +806,7 @@
     "SAKT": "DATA_EPOCH_PREDICTION_AND_EPOCH_BOUNDARY_ADAM_PERSISTENCE_VERIFIED_NOT_PROFILE_OR_FITTED_BASELINE",
     "GKT": "DATA_BRIDGE20_NORMAL_IMPORT_VERIFIED_RESEARCH_MODEL_FITTED_PENDING",
     "Modal": "NO_COMPUTE_SPEND_NO_AUTOMATIC_ALLOCATION",
-    "primary_next_task": "GKT data bridge đã áp dụng và normal-import20ca đạt; review numerical recipe để nối research28 core/trainer/checkpoint/export/adaptor. SAKT selected-only admitted producer/export còn thiếu. MainC collection12/13 cùng221IDs nhưng tests đều NO_GO trướcchild. ROOT review RAM/allocation và lỗi harness trước run mới; Gate STALE, native/CUDA và complete-epoch producer resume chưa nghiệm thu. Giữ128MiB profile chỉ cho metadata, không mở researchfit/GPU/fullCV/Holdout hoặc tựretry.",
+    "primary_next_task": "Review current-source B38 metadata và native16 CPU checkpoint05; actual RAM≥4GiB trước native. Commit C8 cùng dependency B checkpoint khi metadata38 được đối chiếu. RQ2 learned31 pilot19/2280 còn Root source/resource review, GKT BN-D5 recipe đang chọn trước implementation. Gate STALE, chưa quyền Modal/fullCV/Holdout hoặc full researchfit.",
     "methodology_pending": [
       "Final proposal-required comparison allocation and bounded run budgets; no fullCV/Holdout/cloud authority."
     ],
@@ -925,8 +925,7 @@
       "rq12_evidence_synthesis": "FreshGate05 sourcepreparation, không thực thi"
     },
     "next": [
-      "GKT data bridge đã áp dụng và normal-import20ca đạt; review numerical recipe để nối research28 core/trainer/checkpoint/export/adaptor. SAKT selected-only admitted producer/export còn thiếu. MainC collection12/13 cùng221IDs nhưng tests đều NO_GO trướcchild. ROOT review RAM/allocation và lỗi harness trước run mới; Gate STALE, native/CUDA và complete-epoch producer resume chưa nghiệm thu. Giữ128MiB profile chỉ cho metadata, không mở researchfit/GPU/fullCV/Holdout hoặc tựretry.",
-      "Review source extension RQ2 expert31-vs-learned31, dự kiến19worlds/2280interactions/0fits. Old36 không lưu policy initial SHA. Phải tách source-reconstructed initial state khỏi dữ liệu lịch sử đã log, kiểm sentinel full120semantic rows/endpoints và dừng nếu lệch. Chưa cấp execution từ ghi chú này."
+      "Review current-source B38 metadata và native16 CPU checkpoint05; actual RAM≥4GiB trước native. Commit C8 cùng dependency B checkpoint khi metadata38 được đối chiếu. RQ2 learned31 pilot19/2280 còn Root source/resource review, GKT BN-D5 recipe đang chọn trước implementation. Gate STALE, chưa quyền Modal/fullCV/Holdout hoặc full researchfit."
     ],
     "pending_external": [
       "Exact Paper1 PDF/source revision; quyền xuất bộ source cụ thể lên Colab chưa xác nhận; từng paid/fullCV/Holdout run cần quyền riêng."
@@ -1007,7 +1006,7 @@
       "rq_complete": false,
       "scope_vi": "Bất đồng snapshot giữa cấu hình, không temporal crossing/accuracy/causal learning benefit."
     },
-    "new_blocker": "Model research28/selected-only SAKT producer còn thiếu. MainC tests cần reviewed RAM admission; không tựretry/hạfloor.",
+    "new_blocker": "Native tests cần RAM thực. Metadata221 đã giải quyết; các producer/research matrix còn thiếu.",
     "source_kit": {
       "status": "MATERIALIZED_AND_SHA_REVERIFIED_REMOTE_SOURCE_ONLY",
       "directory": "artifacts/akt/colab/gpu09-cpu-worker-kit-20261108-01",
@@ -2334,7 +2333,7 @@
       "browser_closed_after_qa": true
     }
   },
-  "current_next_step_20261109": "GKT data bridge đã áp dụng và normal-import20ca đạt; review numerical recipe để nối research28 core/trainer/checkpoint/export/adaptor. SAKT selected-only admitted producer/export còn thiếu. MainC collection12/13 cùng221IDs nhưng tests đều NO_GO trướcchild. ROOT review RAM/allocation và lỗi harness trước run mới; Gate STALE, native/CUDA và complete-epoch producer resume chưa nghiệm thu. Giữ128MiB profile chỉ cho metadata, không mở researchfit/GPU/fullCV/Holdout hoặc tựretry.",
+  "current_next_step_20261109": "Review current-source B38 metadata và native16 CPU checkpoint05; actual RAM≥4GiB trước native. Commit C8 cùng dependency B checkpoint khi metadata38 được đối chiếu. RQ2 learned31 pilot19/2280 còn Root source/resource review, GKT BN-D5 recipe đang chọn trước implementation. Gate STALE, chưa quyền Modal/fullCV/Holdout hoặc full researchfit.",
   "graph_window_handoff_preparation_20261109": {
     "status": "PREP_ONLY_NOT_EXECUTED_OR_ADOPTED",
     "packet": "artifacts/akt/local-tests/akt-research-runner-20261108-01/graph_window_handoff01_expectation.json",
@@ -3704,10 +3703,10 @@
   "current_focus_20261109": {
     "rq1": "E8 đã xuất bản và writing18closed, conditional Paper1 localtrajectory/finiteH/cap. NewN0; CPU09 native mastery truth vẫn pending, không retry tự động.",
     "rq2": "Conditional localtrajectory proof +6fixtures actual91PASS closed17. FiniteH/cap boundaries; separate domain28 US42 witness closed28. Không RQ completion/empirical matrix. Learned31 ability×prerequisite extension đang chuẩn bị nguồn, chưa thực thi.",
-    "rq3": "GKTdata canonical20actual/58closed, chưa model28 fitted. SAKT07admittedproducer chưa bắt đầu. MainC12/13collection221 nhưngtestsNO_GO; Gate STALE/nativeCUDA/resume pending.",
+    "rq3": "MainC221metadata actualPASS/78closed. B38current/native16/currentGate/CUDA/resume còn thiếu. GKT28research và SAKT producer pending.",
     "financial": "Modal0USD cho các lượt hiện hành,30USDfreecredit ceiling vẫn giữ.",
     "human_reports": "Chặng12 đã published,11SVG/11tables; actualQA1280/390,own_tabclosed/no server/requests. Không researchN.",
-    "artifacts": "E8writing18/GKT58/MainC45closed tách mức bằng chứng. RawGit119ở47b466a và84GKT/E8 đã kiểm cho6141→6344/latest0c4ad897. MainC45 chưa cộngrawGit."
+    "artifacts": "MainC78giữfailed14/accepted15 và8appliedsnapshots. Historical bundles/11SVG giữ nguyên, mới chưa rawGit verify."
   },
   "cuda_core_batch_a_20261109": {
     "status": "VERIFIED_13_METADATA_AND_26_CPU_MODEL_CASES_ACTUAL_CUDA_PENDING",
@@ -3788,7 +3787,7 @@
     "raw_git_proof": "docs/thesis_recovery/evidence/cpu09_full_ram_stop_raw_git_20261109.json"
   },
   "cuda_checkpoint_batch_b_20261109": {
-    "status": "SOURCE_IMPLEMENTED_38_METADATA_PASS_CPU_NATIVE04_AND_ACTUAL_CUDA_PENDING",
+    "status": "CURRENT_METADATA_38_VERIFIED_NATIVE_CPU_CUDA_PENDING",
     "metadata_cases": 38,
     "metadata_seconds": 2.447784000018146,
     "metadata_receipt": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cuda-checkpoint-metadata-tests01/result.json",
@@ -3796,10 +3795,28 @@
     "native04_outer_sha256": "dc2a3710b5c8b5f61a187252d19c5c6dae4e296f1d182cbf1030552af9d21a9e",
     "native04_allocation_sha256": "a74f46513e1989f049c9e6e59f294b2dc82ea38ffda0b17127db70ee3c588241",
     "native04_dispatched": false,
-    "actual_cuda": false
+    "actual_cuda": false,
+    "current_metadata03": {
+      "status": "CURRENT_METADATA_38_VERIFIED_NATIVE_CPU_CUDA_PENDING",
+      "actual_run": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cuda-checkpoint-metadata-tests03-owned/final.json",
+      "actual_outer_sha256": "0ca581457e7b0268f295ab363c30926f4c02e01b20ea0d759ef92b012cbe96d6",
+      "report": "research_tracking/reports/akt_cuda_checkpoint_metadata_readiness_20261109.md",
+      "bundle": "research_tracking/runs/akt-cuda-checkpoint-metadata-engineering-20261109-01",
+      "manifest_sha256": "faa4c52a0221b3ed0bca2824af18976e9dddd71021c6a7fafb1a885d2361b471",
+      "outputs": 47,
+      "physical_tests": 38,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "source_bindings": 20,
+      "runtime_anchors": 11,
+      "native06_executed": false,
+      "native06_admission_available_bytes": 4294967296,
+      "cloud_spending_USD": 0
+    }
   },
   "cuda_main_batch_c_20261109": {
-    "status": "IN_PROGRESS_TEST_BODY_FAILURES_FROM_HARNESS_NATIVE_PENDING",
+    "status": "METADATA_VERIFIED_221_NATIVE_CPU_CUDA_PENDING",
     "spec": "artifacts/akt/local-tests/akt-research-runner-20261108-01/CUDA_MAIN_INTEGRATION_BATCHC_PLAN01.md",
     "spec_sha256": "060a93185265d2c1b2e6be009888c1365e6f22f266ca9e1a67696118e915ff42",
     "production_files_changed": true,
@@ -3950,7 +3967,28 @@
         "footprint_basis": "Actual08peak64675840/221bodies but53FAIL; not proof221PASS footprint.",
         "native_and_GPU_budgets_unchanged": true
       }
-    }
+    },
+    "accepted_tests": 221,
+    "accepted_run": "artifacts/akt/local-tests/akt-research-runner-20261108-01/batchc-metadata-tests15-owned/final.json",
+    "accepted_outer_sha256": "de4415589065d635396fd23e711a3891233af37534249ec22dc521b40c79b836",
+    "evidence_bundle": "research_tracking/runs/akt-main-cuda-metadata-engineering-20261109-01",
+    "manifest_sha256": "61f0c70915831d96118abe0125557d057cb017fb173322c819fa5ebd778d93df",
+    "outputs": 78,
+    "report": "research_tracking/reports/akt_main_cuda_metadata_readiness_20261109.md",
+    "source_pins": 37,
+    "runtime_pins": 11,
+    "profile": {
+      "worker_RSS_max_MiB": 128,
+      "minimum_free_MiB": 1024,
+      "prelaunch_minimum_free_MiB": 1280,
+      "kind": "METADATA_ONLY_V2_EXPLICIT_ROOT_ADOPTION"
+    },
+    "measured_resources": {
+      "samples": 1116,
+      "observed_peak_rss_bytes": 55996416,
+      "observed_minimum_available_ram_bytes": 1374326784
+    },
+    "prior14": "220PASS_1_READ_GUARD_LOCK_FAILURE_PRESERVED"
   },
   "previous_goal_turn_audit_20261109": {
     "classification": "PROGRESS",
@@ -5258,5 +5296,216 @@
     "status": "PROGRESS_GOAL_REMAINS_ACTIVE",
     "next_research": "Review source extension RQ2 expert31-vs-learned31, dự kiến19worlds/2280interactions/0fits. Old36 không lưu policy initial SHA. Phải tách source-reconstructed initial state khỏi dữ liệu lịch sử đã log, kiểm sentinel full120semantic rows/endpoints và dừng nếu lệch. Chưa cấp execution từ ghi chú này.",
     "summary": "docs/thesis_recovery/evidence/engineering_gkt_e8_turn_20261109.json"
+  },
+  "before_mainc_metadata_acceptance15_20261109": {
+    "critical_blockers": [
+      "MainC8 đã áp dụng nhưng chưa đạt đủ221metadata tests trong một lượt. Lượt08 có53harness failures;12/13tests NO_GO trước child vì RAM. Gate hiện hành STALE.",
+      "Checkpoint CPU sau BatchC, CUDA roundtrip/optimizer/RNG và complete-epoch producer resume chưa nghiệm thu. GRAPH29 hiện là feature gap có contract đề xuất.",
+      "GKT data bridge20ca đã đạt, còn research28 model/trainer/checkpoint/export/adaptor. SAKT còn admitted selected-only producer/export.",
+      "Chưa có full CPU09 mastery/truth14.400events. Các kết luận RQ1/RQ2 hiện có cần giữ đúng phạm vi source diagnosis/pilot.",
+      "Research corpus/fit/refit/calibration, so sánh models và closed-loop cuối chưa hoàn tất. Hai domain train riêng theo protocol21.",
+      "Chưa đo GPU throughput/cost theo matrix nghiên cứu, chưa có exact paid-run authorization. Tổng chi cloud của lượt này bằng0USD.",
+      "Phân tích cuối, demo dùng checkpoint fitted và bản luận văn hoàn chỉnh còn việc. Chưa có bằng chứng hoàn tất toàn bộ RQ1–RQ3."
+    ],
+    "current_next_step_20261109": "GKT data bridge đã áp dụng và normal-import20ca đạt; review numerical recipe để nối research28 core/trainer/checkpoint/export/adaptor. SAKT selected-only admitted producer/export còn thiếu. MainC collection12/13 cùng221IDs nhưng tests đều NO_GO trướcchild. ROOT review RAM/allocation và lỗi harness trước run mới; Gate STALE, native/CUDA và complete-epoch producer resume chưa nghiệm thu. Giữ128MiB profile chỉ cho metadata, không mở researchfit/GPU/fullCV/Holdout hoặc tựretry.",
+    "next_recommended_investigation": "GKT data bridge đã áp dụng và normal-import20ca đạt; review numerical recipe để nối research28 core/trainer/checkpoint/export/adaptor. SAKT selected-only admitted producer/export còn thiếu. MainC collection12/13 cùng221IDs nhưng tests đều NO_GO trướcchild. ROOT review RAM/allocation và lỗi harness trước run mới; Gate STALE, native/CUDA và complete-epoch producer resume chưa nghiệm thu. Giữ128MiB profile chỉ cho metadata, không mở researchfit/GPU/fullCV/Holdout hoặc tựretry.",
+    "current_focus_20261109": {
+      "rq1": "E8 đã xuất bản và writing18closed, conditional Paper1 localtrajectory/finiteH/cap. NewN0; CPU09 native mastery truth vẫn pending, không retry tự động.",
+      "rq2": "Conditional localtrajectory proof +6fixtures actual91PASS closed17. FiniteH/cap boundaries; separate domain28 US42 witness closed28. Không RQ completion/empirical matrix. Learned31 ability×prerequisite extension đang chuẩn bị nguồn, chưa thực thi.",
+      "rq3": "GKTdata canonical20actual/58closed, chưa model28 fitted. SAKT07admittedproducer chưa bắt đầu. MainC12/13collection221 nhưngtestsNO_GO; Gate STALE/nativeCUDA/resume pending.",
+      "financial": "Modal0USD cho các lượt hiện hành,30USDfreecredit ceiling vẫn giữ.",
+      "human_reports": "Chặng12 đã published,11SVG/11tables; actualQA1280/390,own_tabclosed/no server/requests. Không researchN.",
+      "artifacts": "E8writing18/GKT58/MainC45closed tách mức bằng chứng. RawGit119ở47b466a và84GKT/E8 đã kiểm cho6141→6344/latest0c4ad897. MainC45 chưa cộngrawGit."
+    },
+    "cuda_main_batch_c_20261109": {
+      "status": "IN_PROGRESS_TEST_BODY_FAILURES_FROM_HARNESS_NATIVE_PENDING",
+      "spec": "artifacts/akt/local-tests/akt-research-runner-20261108-01/CUDA_MAIN_INTEGRATION_BATCHC_PLAN01.md",
+      "spec_sha256": "060a93185265d2c1b2e6be009888c1365e6f22f266ca9e1a67696118e915ff42",
+      "production_files_changed": true,
+      "tests_executed": true,
+      "candidate_directory": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cuda-main-batchc-candidate01",
+      "candidate_inventory_sha256": "bc8a3af1d7661f32b387ccf9df2e12be53d7b46d765973c6e7514d46d160f8e0",
+      "syntax_proof": "artifacts/akt/local-tests/akt-research-runner-20261108-01/batchc_syntax_check01.json",
+      "application_receipt": "artifacts/akt/local-tests/akt-research-runner-20261108-01/batchc-canonical-apply01.json",
+      "application_receipt_sha256": "8f608a5d66b8afa2dda730aac690b36e41a017fe8e6b59c21026c4c52dc5a3b7",
+      "root_review": "artifacts/akt/local-tests/akt-research-runner-20261108-01/APPLY_BATCHC_ROOT_REVIEW01.md",
+      "root_review_sha256": "de15ae53aac04e8498c5aa28884245c0bc65439ea1fb5b4c8ef3794e81ef8a3d",
+      "applied_sources": {
+        "src/knowledge_tracing/akt/authorization.py": "f35dc9f14a9edf7d1cacf82085db67a11e2c1ca540fe9121a60a14d2f0785027",
+        "src/knowledge_tracing/akt/research_execution.py": "df39d898f80efbe0cb43f5ff6d8f0bb64e2302a3353ba8023b3ed88cf9242001",
+        "src/knowledge_tracing/akt/research_main_execution.py": "0b3b671acf0601b3e84be9439187cf4a7f15bd0e6bd36470a576697bd2147ddb",
+        "src/knowledge_tracing/akt/research_selected_runner.py": "b9a9876a536964920e64ffac354c467ec8da9776e52b7a88b51d81e0b963848c",
+        "tests/akt/test_research_execution.py": "53827d176cf372181486622ef45b4d1d9f89ef9f67ece0644c965dcec77fb453",
+        "tests/akt/test_research_main_execution.py": "3a02dc6a873d5a57970992b96b964fc7957a194c6b0445f7ebc33923a1dcb215",
+        "tests/akt/test_research_selected_runner.py": "699a33e1ac4a7dc05cb6673940e0eb70f33b7e6a7619103fac28cf411e74a3b4",
+        "tests/akt/test_runtime.py": "780bc3d45b0b36b162a33fd095713c74e7599e601b2ab700b7162a3d241460f1"
+      },
+      "native_checkpoint04_packet_stale_never_dispatched": true,
+      "actual_CUDA_verified": false,
+      "metadata_collection01": {
+        "status": "REJECTED_RAM_BEFORE_METADATA_PYTEST",
+        "result": "artifacts/akt/local-tests/akt-research-runner-20261108-01/batchc-metadata-collection01-owned/final.json",
+        "result_sha256": "8d7d7f6465ff63c8d2ff8a4509242fdf6770b8ab6dad2f657240b0450996f93c",
+        "collection_ids": 0,
+        "test_bodies": 0,
+        "worker_seconds": 0.5437661,
+        "root_terminal_seconds": 1.0049725,
+        "source_hashes_unchanged": 33,
+        "runtime_hashes_unchanged": 8,
+        "observed_free_bytes": 1583316992,
+        "floor_bytes": 1610612736,
+        "worker_peak_rss_bytes": 26374144,
+        "Job_active_after_cleanup": 0,
+        "automatic_retry": false,
+        "observation_origin": "ROOT actual receipts and terminal message"
+      },
+      "metadata_tests_executed": true,
+      "native_tests_executed": false,
+      "attempts_bundle": "research_tracking/runs/akt-main-batchc-metadata-attempts-20261109-01",
+      "attempts_manifest_sha256": "25ca4b701886e188447d6275887d9ed72f26fe5936cafc734dface16f25dff57",
+      "attempts_outputs": 65,
+      "attempts_report": "research_tracking/reports/akt_main_batchc_metadata_attempts_20261109.md",
+      "collection01_04": "REJECTED_BEFORE_TEST_BODY_COUNTS_NULL",
+      "attempt05": "NO_GO_BEFORE_CHILD_LAUNCH_NO_JOB_RECEIPT",
+      "automatic_retry": false,
+      "later_attempts_06_09": {
+        "scope": "Raw còn ở P, tách khỏi closed01–05bundle65. Terminal elapsed dưới đây do ROOT quan sát; storedelapsed có scope riêng.",
+        "collection06": "PARTIAL155_IDS_DEPENDENCY_READ_GUARD_REJECTION_NO_TEST_BODIES",
+        "collection07": {
+          "status": "ACCEPTED_COLLECTION_NOT_TEST_PASS",
+          "ids": 221,
+          "new": 17,
+          "prior": 204,
+          "result": "artifacts/akt/local-tests/akt-research-runner-20261108-01/batchc-metadata-collection07/result.json"
+        },
+        "tests07": {
+          "status": "REJECTED_PARTIAL_HARNESS_INTERNAL_ERROR",
+          "body_entries": 85,
+          "junit_cases": 86,
+          "passed": 85,
+          "failures": 0,
+          "errors": 1,
+          "skips": 0,
+          "root_terminal_seconds": 35.188362,
+          "result": "artifacts/akt/local-tests/akt-research-runner-20261108-01/batchc-metadata-tests07/result.json",
+          "reason": "Harness Path.open bị negativefixture monkeypatch va chạm; không coi remaining cases là PASS."
+        },
+        "collection08": {
+          "status": "ACCEPTED_EXACT_SAME221_IDS",
+          "result": "artifacts/akt/local-tests/akt-research-runner-20261108-01/batchc-metadata-collection08/result.json"
+        },
+        "tests08": {
+          "status": "REJECTED_53_HARNESS_METADATA_PATH_FAILURES",
+          "body_entries": 221,
+          "junit_cases": 221,
+          "passed": 168,
+          "failures": 53,
+          "errors": 0,
+          "skips": 0,
+          "root_terminal_seconds": 36.517482,
+          "result": "artifacts/akt/local-tests/akt-research-runner-20261108-01/batchc-metadata-tests08/result.json",
+          "optional_owned_symlink_attempts_blocked_before_OS": 183,
+          "symlink_error_type": "PermissionError",
+          "path_open_restored": true,
+          "environment_restored": true,
+          "source_pins_unchanged": 36,
+          "runtime_pins_unchanged": 11,
+          "Job_after_cleanup": 0,
+          "root_diagnosis": "ROOT đã parse cả53trace inspect_runtime→platform.platform→_syscmd_ver→NUL; không tuyên bố production defect từ harness failures."
+        },
+        "attempt09": {
+          "status": "NO_GO_METADATA_RAM_BEFORE_LAUNCH",
+          "available_ram_bytes": 1838166016,
+          "admission_floor_bytes": 2147483648,
+          "owned_launch_started": false,
+          "result": "artifacts/akt/local-tests/akt-research-runner-20261108-01/batchc-metadata-collection09-owned/final.json",
+          "warmup_source": "artifacts/akt/local-tests/akt-research-runner-20261108-01/windows_metadata_platform09.py",
+          "warmup_runtime_tested": false,
+          "proposed_scope": "Real platform.platform trong cùng metadata phase/literalcmdver≤3; không afterphase allow."
+        },
+        "acceptance": "MAIN_C_NOT_VERIFIED_NATIVE_PENDING",
+        "automatic_retry": false
+      },
+      "attempt10": {
+        "collection_status": "ACCEPTED_BATCHC_COLLECTION_ONLY_NOT_TEST_PASS",
+        "ids": 221,
+        "new_ids": 17,
+        "prior_ids": 204,
+        "test_bodies": 0,
+        "real_metadata_warmup09_observed_in_collection": true,
+        "source_pins_stable": 36,
+        "runtime_pins_stable": 11,
+        "collection_worker_peak_rss_bytes": 53317632,
+        "collection_minimum_available_ram_bytes": 2418601984,
+        "tests_status": "NO_GO_METADATA_RAM",
+        "tests_available_ram_bytes": 2122240000,
+        "admission_floor_bytes": 2147483648,
+        "tests_child_launched": false,
+        "actual_native_authority": false,
+        "actual_GPU_verified": false,
+        "automatic_retry": false
+      },
+      "attempts06_10_archive": {
+        "bundle": "research_tracking/runs/akt-main-batchc-metadata-attempts-06-10-20261109-01",
+        "manifest_sha256": "412da03714d2381745b75082c0abda41a7dc1b48503119ac7f367b2391a9594d",
+        "outputs": 98,
+        "kind": "OPERATIONAL_FAILURE_HISTORY_NOT_MAINC_ACCEPTANCE"
+      },
+      "attempts11_13_archive": {
+        "bundle": "research_tracking/runs/akt-main-batchc-metadata-attempts-11-13-20261109-01",
+        "manifest_sha256": "a7cc60d85b1acd851c6a73f3d5155cfc8ec92eb618ff629ade4d644b52d20cb1",
+        "outputs": 45,
+        "commit": "PENDING",
+        "collections12_13": "ACCEPTED_EXACT_SAME221_IDS_ZERO_BODIES",
+        "tests12_13": "NO_GO_BEFORE_CHILD",
+        "actual_MainC_verified": false,
+        "native_pending": true,
+        "adopted_metadata_profile": {
+          "worker_RSS_cap_bytes": 134217728,
+          "min_available_bytes": 1610612736,
+          "prelaunch_admission_bytes": 1744830464,
+          "scope": "METADATA_ONLY_ROOT_VERSIONED_ADOPTION",
+          "review": "research_tracking/runs/akt-main-batchc-metadata-attempts-11-13-20261109-01/BATCHC_METADATA_RESOURCE_PROFILE12_REVIEW01.md",
+          "footprint_basis": "Actual08peak64675840/221bodies but53FAIL; not proof221PASS footprint.",
+          "native_and_GPU_budgets_unchanged": true
+        }
+      }
+    }
+  },
+  "gkt_recipe29_adoption_20261109": {
+    "decision": "D42",
+    "path": "docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md",
+    "sha256": "059c98909c38856afd830d1cd296ce8875682ba9c7c226ad923c432e4328ce64",
+    "status": "ADOPTED_BEFORE_RESEARCH_FIT_MODEL_SOURCE_REVIEW",
+    "selection_reason": "Giữ dropout và batch normalization theo journal; công bố batch4/full-prefix và trục BN riêng trước fit.",
+    "research_model_native_verified": false,
+    "research_fitted": false
+  },
+  "checkpoint_b_current38_20261109": {
+    "status": "CURRENT_METADATA_38_VERIFIED_NATIVE_CPU_CUDA_PENDING",
+    "actual_run": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cuda-checkpoint-metadata-tests03-owned/final.json",
+    "actual_outer_sha256": "0ca581457e7b0268f295ab363c30926f4c02e01b20ea0d759ef92b012cbe96d6",
+    "report": "research_tracking/reports/akt_cuda_checkpoint_metadata_readiness_20261109.md",
+    "bundle": "research_tracking/runs/akt-cuda-checkpoint-metadata-engineering-20261109-01",
+    "manifest_sha256": "faa4c52a0221b3ed0bca2824af18976e9dddd71021c6a7fafb1a885d2361b471",
+    "outputs": 47,
+    "physical_tests": 38,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "source_bindings": 20,
+    "runtime_anchors": 11,
+    "native06_executed": false,
+    "native06_admission_available_bytes": 4294967296,
+    "cloud_spending_USD": 0
+  },
+  "bc_coherent_commit_20261109": {
+    "status": "READY_FOR_SCOPED_SOURCE_AND_METADATA_COMMIT",
+    "source_and_test_files": 10,
+    "reason": "Main selected runner dùng checkpoint cuda_profile API mới, cần cùng commit B2+C8.",
+    "current_native_cpu_verified": false,
+    "current_cuda_verified": false,
+    "current_gate": "STALE",
+    "modal_spend_USD": 0
   }
 }

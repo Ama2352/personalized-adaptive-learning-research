@@ -30,4 +30,3 @@ User chấp thuận pilot factorial10seed/profile×120steps và Junyi32inner-tra
 Root chọn recipe29 theo quyền triển khai người dùng đã giao. GKT static-expert dùng domain28, hidden/embedding32, MLP hai lớp ELU với dropout0,5 và batch normalization. Batch4, whole-prefix210 và normalization theo timestep là các lựa chọn triển khai của khóa luận, được công bố trước fit. Chưa xác minh tương đương code tác giả. Thiết kế C0 được giữ như phương án engineering đã cân nhắc. [Đặc tả và nguồn sơ cấp](../docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md)
 
 Model, trainer, checkpoint, admitted producer và adapter là các bước riêng. Data bridge đã đạt20tests, còn model candidate mới ở bước review source. Quyết định này chốt công thức để triển khai, chưa là bằng chứng baseline fitted hoặc quyền chạy research training. Giữ nguyên RQ, model bắt buộc, protocol21, nhánh AKT và ngân sách cloud. Các phép kiểm native cần allocation riêng.
-

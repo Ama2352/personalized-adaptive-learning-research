@@ -1,0 +1,3 @@
+# Checkpoint CUDA BatchB —38metadata cases hiện hành
+
+M02 bị read guard chặn pyproject trước collection, countsNULL; giữ REJECTED. ROOT thêm đúng readonly SHA trong namespace03; actual03 đạt38physical0FES,20source/11runtime ổn định, env/sys khôi phục và Job0cleanup. Không import actual Torch/NumPy/Pandas, deserialize tensor hoặc chạy mô hình/CUDA. Giữ exact B2/config snapshots, before-B inventory, raw02/03 và native06 source proposal chưa phải runtime evidence. MainC78 được tham chiếu manifest riêng. Native CPU/currentGate/CUDA/fullresume tiếp tục có scope pending riêng. Đọc readiness_report.md/copy_inventory.json/reference_inputs.json; closure chỉ lưu bằng chứng.

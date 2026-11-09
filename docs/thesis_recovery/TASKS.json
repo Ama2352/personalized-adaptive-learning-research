@@ -5088,21 +5088,36 @@
       "acceptance_criteria": "38metadata PASS và16CPU native regression đủ96targets/4Adam/7save/8load; source/runtime unchanged, Job0. ActualCUDA roundtrip cần nghiệm thu riêng.",
       "verification_steps": "Root đọc source/diff. Chỉ dispatch04 khi đủ biên RAM trên2GiBfloor, một workload và120s tổng. Sau đó CUDA ladder riêng.",
       "required_artifacts": [
-        "metadata38JUnit/logs",
-        "native16JUnit/logs",
-        "checkpoint/parity proof",
-        "source/runtime pins",
-        "failure snapshots",
-        "bundle/report"
+        "research_tracking/reports/akt_cuda_checkpoint_metadata_readiness_20261109.md",
+        "research_tracking/runs/akt-cuda-checkpoint-metadata-engineering-20261109-01/manifest.json",
+        "Native16 và actualCUDA receipts còn thiếu."
       ],
       "estimated_effort": "38metadata actual2,447784s, native04 chưa đo. Source implementation đã làm.",
       "compute_cost_category": "local_CPU_no_cloud_then_separately_approved_CUDA",
       "authorization_requirements": "Local engineering user đã giao. Không tự chi GPU hoặc bỏ RAM/runtime/source guard.",
-      "status": "IMPLEMENTED_38_METADATA_PASS_NATIVE_CPU_AND_ACTUAL_CUDA_PENDING",
+      "status": "IMPLEMENTED_CURRENT_38_METADATA_VERIFIED_NATIVE_CPU_CUDA_PENDING",
       "blockers": [
-        "RAM phải còn ít nhất2GiB trong native regression. Peak fixture lịch sử634617856B."
+        "Native06 chưa chạy, cần actual RAM available4GiB trước launch, giữ free2GiB/family1GiB. CUDA và current Gate còn pending."
       ],
-      "completion_evidence": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cuda-checkpoint-metadata-tests01/result.json"
+      "completion_evidence": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cuda-checkpoint-metadata-tests01/result.json",
+      "current_metadata_evidence": {
+        "status": "CURRENT_METADATA_38_VERIFIED_NATIVE_CPU_CUDA_PENDING",
+        "actual_run": "artifacts/akt/local-tests/akt-research-runner-20261108-01/cuda-checkpoint-metadata-tests03-owned/final.json",
+        "actual_outer_sha256": "0ca581457e7b0268f295ab363c30926f4c02e01b20ea0d759ef92b012cbe96d6",
+        "report": "research_tracking/reports/akt_cuda_checkpoint_metadata_readiness_20261109.md",
+        "bundle": "research_tracking/runs/akt-cuda-checkpoint-metadata-engineering-20261109-01",
+        "manifest_sha256": "faa4c52a0221b3ed0bca2824af18976e9dddd71021c6a7fafb1a885d2361b471",
+        "outputs": 47,
+        "physical_tests": 38,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "source_bindings": 20,
+        "runtime_anchors": 11,
+        "native06_executed": false,
+        "native06_admission_available_bytes": 4294967296,
+        "cloud_spending_USD": 0
+      }
     },
     {
       "id": "RQDIAG24",
@@ -5281,8 +5296,8 @@
         "src/knowledge_tracing/akt/research_selected_runner.py"
       ],
       "implementation_objective": "MainC8 APPLIED; collection hợp lệ trước test/native, không biến metadata hoặc current-source code thành actualCUDA proof.",
-      "acceptance_criteria": "Collection08 accepted221IDs nhưng tests08 có168PASS/53FAIL do harness metadata path. Chưa metadata/nativeCPU/CUDA acceptance;09warmup chưa runtime kiểm.",
-      "verification_steps": "Archive65 giữ01–05.07có85bodies rồi harness error;08đủ221bodies/53FAIL/0ES;09NO_GO RAM trướclaunch. Không tự retry, hạRAM hoặc dùng packet stale.",
+      "acceptance_criteria": "Metadata221/0FES trên nguồn hiện tại đã đạt ở tests15. Native CPU checkpoint, Main lifecycle, CUDA và Gate hiện hành cần bằng chứng riêng.",
+      "verification_steps": "Giữ các failure01–14. Collection15 và tests15 khớp221IDs,37source/11runtime,0FES và owned cleanup. Kiểm native với packet nguồn hiện hành, giữ floor4GiB trước launch.",
       "required_artifacts": [
         "research_tracking/reports/akt_main_batchc_metadata_attempts_20261109.md",
         "research_tracking/runs/akt-main-batchc-metadata-attempts-20261109-01/manifest.json",
@@ -5291,14 +5306,32 @@
         "artifacts/akt/local-tests/akt-research-runner-20261108-01/batchc-metadata-tests08/result.json",
         "artifacts/akt/local-tests/akt-research-runner-20261108-01/batchc-metadata-collection09-owned/final.json"
       ],
-      "status": "IN_PROGRESS_TEST_BODY_FAILURES_FROM_HARNESS_NATIVE_PENDING",
+      "status": "IN_PROGRESS_METADATA_221_VERIFIED_NATIVE_PENDING",
       "blockers": [
-        "53failures đi qua inspect_runtime/platform.platform/_syscmd_ver/NUL dưới harness.09warmup chưa chạy vì RAM; actualCUDA chưa kiểm; current Gate STALE."
+        "Current native CPU checkpoint/Gate/CUDA chưa nghiệm thu, không cấp GPU authority từ metadata."
       ],
-      "evidence_bundle": "research_tracking/runs/akt-main-batchc-metadata-attempts-20261109-01",
-      "evidence_manifest_sha256": "25ca4b701886e188447d6275887d9ed72f26fe5936cafc734dface16f25dff57",
-      "verified_bundle_outputs": 65,
-      "completion_evidence": "research_tracking/reports/akt_main_batchc_metadata_attempts_20261109.md"
+      "evidence_bundle": "research_tracking/runs/akt-main-cuda-metadata-engineering-20261109-01",
+      "evidence_manifest_sha256": "61f0c70915831d96118abe0125557d057cb017fb173322c819fa5ebd778d93df",
+      "verified_bundle_outputs": 78,
+      "completion_evidence": "research_tracking/reports/akt_main_cuda_metadata_readiness_20261109.md",
+      "metadata_history_before_accepted15": {
+        "status": "IN_PROGRESS_TEST_BODY_FAILURES_FROM_HARNESS_NATIVE_PENDING",
+        "blockers": [
+          "53failures đi qua inspect_runtime/platform.platform/_syscmd_ver/NUL dưới harness.09warmup chưa chạy vì RAM; actualCUDA chưa kiểm; current Gate STALE."
+        ]
+      },
+      "current_metadata_evidence": {
+        "status": "ACCEPTED_METADATA_221_NOT_NATIVE",
+        "report": "research_tracking/reports/akt_main_cuda_metadata_readiness_20261109.md",
+        "bundle": "research_tracking/runs/akt-main-cuda-metadata-engineering-20261109-01",
+        "manifest_sha256": "61f0c70915831d96118abe0125557d057cb017fb173322c819fa5ebd778d93df",
+        "outputs": 78,
+        "tests": 221,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "native_cpu_and_cuda_pending": true
+      }
     },
     {
       "priority": "P0",
@@ -5391,7 +5424,7 @@
         "GKT07"
       ],
       "research_objective": "Nối actual research28 core/trainer/full-prefix checkpoint/export và inference adaptor sau data bridge.",
-      "required_inputs": "GKT07, protocol21 staticexpert/concept28 và numerical recipe ROOTreview trước modelallocation.",
+      "required_inputs": "GKT07 data20 đã kiểm; protocol21 và recipe29 BN-D5 theo D42; nguồn candidate cần Root review trước apply và native allocation.",
       "files_components": [
         "src/knowledge_tracing/gkt/research_data.py",
         "Research core/training/checkpoint/export/adaptor files còn cần thiết kế hữu hạn."
@@ -5402,10 +5435,16 @@
       "required_artifacts": [
         "Finite recipe/implementation/source review và actual acceptance receipts tương lai, hiện chưa có."
       ],
-      "status": "NOT_STARTED_RESEARCH28_MODEL_TRAINER_CP_EXPORT_ADAPTOR",
+      "status": "IN_PROGRESS_RECIPE_ADOPTED_MODEL_SOURCE_REVIEW",
       "blockers": [
-        "Data bridge đã có, model research28 và fitted lifecycle/adaptor chưa được nghiệm thu."
-      ]
+        "Model chưa apply/native test. Trainer/checkpoint/admitted producer/adapter và fit attestation còn thiếu."
+      ],
+      "adopted_recipe": {
+        "path": "docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md",
+        "sha256": "059c98909c38856afd830d1cd296ce8875682ba9c7c226ad923c432e4328ce64",
+        "decision": "D42",
+        "fitted": false
+      }
     },
     {
       "rq": [

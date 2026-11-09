@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "junyi-knowledge-tracing"
+version = "0.1.0"
+description = "Pipeline nghiên cứu standard BKT cho Junyi Academy"
+requires-python = ">=3.11"
+
+[project.scripts]
+bkt-baseline = "knowledge_tracing.bkt_baseline.cli:main"
+gam-kt = "knowledge_tracing.gam_kt.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -20,10 +20,11 @@ from ..simulator_bridge import identity_hash
 
 def _tools():
     tools=primitive._lazy()
-    from .research_graph_model import ResearchGraphAKTAdapter
+    from .research_graph_model import ResearchGraphAKTAdapter,_cuda_execution_check
     from . import research_graph_checkpoint as cp
     from .research_graph_context import ResearchGraphContextLimits,prepare_research_graph_context
     tools.graph_adapter=ResearchGraphAKTAdapter;tools.cp=cp
+    tools.cuda_execution_check=_cuda_execution_check
     tools.context_limits_type=ResearchGraphContextLimits;tools.context_index=prepare_research_graph_context
     return tools
 
@@ -39,6 +40,7 @@ class _Run:
         self.reserved_targets=self.returned_targets=self.completed_targets=0
         self.batch_targets=None;self.constructors=0;self.optimizer_constructors=0
         self.output_bytes=0;self.events=[]
+        self.cuda_check=None;self.cuda_resources=None
 
     def clocks(self):
         training=self.training_spent
@@ -53,7 +55,15 @@ class _Run:
         need(self.output_bytes<=self.spec.max_output_bytes,'cumulative selected output bytes cap')
 
     def boundary(self):
-        self.guard();self.execution.revalidate(self.clocks()['training_seconds']);self.guard()
+        self.guard();self.execution.revalidate(self.clocks()['training_seconds'])
+        if self.cuda_check is not None:
+            sample=self.cuda_check()
+            if self.cuda_resources is None:
+                self.cuda_resources=dict(samples=0,peak_bytes={name:0 for name in sample})
+            self.cuda_resources['samples']+=1
+            for name,value in sample.items():
+                self.cuda_resources['peak_bytes'][name]=max(self.cuda_resources['peak_bytes'][name],value)
+        self.guard()
 
     def json(self,name,value):
         self.guard();path=self.output/name
@@ -94,11 +104,18 @@ def _construct(run,tools,encoding,index,condition):
     run.boundary();need(run.constructors<2 and run.optimizer_constructors<2,'one fresh fit plus one fresh best reload only')
     random.seed(run.config.seed);tools.np.random.seed(run.config.seed)
     tools.torch.random.default_generator.manual_seed(run.config.seed)
+    profile=run.spec.cuda_profile
+    adapter_args=dict(config=run.config,encoding=encoding,index=index,condition=condition)
+    adam_args=dict(lr=run.config.lr,betas=run.config.betas,eps=run.config.eps,weight_decay=run.config.weight_decay)
+    if profile is not None:
+        tools.torch.cuda.manual_seed(run.config.seed)  # Boundary verified current logical device0.
+        adapter_args['cuda_profile']=profile
+        for name in ('foreach','fused','capturable','differentiable','amsgrad','maximize','decoupled_weight_decay'):
+            adam_args[name]=getattr(profile,name)
     with tools.torch.device('cpu'):
-        adapter=tools.graph_adapter(config=run.config,encoding=encoding,index=index,condition=condition)
+        adapter=tools.graph_adapter(**adapter_args)
         run.constructors+=1
-        optimizer=tools.torch.optim.Adam(adapter.native.parameters(),lr=run.config.lr,betas=run.config.betas,
-            eps=run.config.eps,weight_decay=run.config.weight_decay)
+        optimizer=tools.torch.optim.Adam(adapter.native.parameters(),**adam_args)
         run.optimizer_constructors+=1
     run.boundary()
     return adapter,optimizer
@@ -151,8 +168,12 @@ def _epoch(run,tools,data,adapter,optimizer,tracker,phase,encoding,index,epoch):
 
 
 def _profile(run,tools,initial_backbone):
+    fingerprint=dict(lock=run.execution.evidence.lock_sha256,cpu_threads=run.spec.cpu_threads)
+    if run.spec.cuda_profile is not None:
+        from .research_main_execution import CUDA_RECIPE_SHA256
+        fingerprint.update(cuda_execution_profile=asdict(run.spec.cuda_profile),cuda_recipe_sha256=CUDA_RECIPE_SHA256)
     return tools.cp.GraphCheckpointProfile(run.spec.stage.context.protocol21_sha256,run.spec.stage.context.recipe26_sha256,
-        run.execution.evidence.runtime_report_sha256,identity_hash(dict(lock=run.execution.evidence.lock_sha256,cpu_threads=run.spec.cpu_threads)),
+        run.execution.evidence.runtime_report_sha256,identity_hash(fingerprint),
         initial_backbone,run.spec.stage.context.allocation_sha256,'selected_fit_candidate',None)
 
 
@@ -200,7 +221,7 @@ def run_main_selected_candidate(spec,evidence,*,authorization_file,expected_auth
     for name in ('fit80','selection','checkpoints'):(run.output/name).mkdir()
     tools=torch=None;old_dtype=old_threads=None;tracker=restored=None;threads_restored=False
     try:
-        run.json('invocation.json',dict(scope='MAIN_SELECTED_ONLY_NO_REFIT',spec=asdict(spec),identity=json.loads(actual.identity_json),
+        run.json('invocation.json',dict(scope='MAIN_SELECTED_ONLY_NO_REFIT',spec=spec.metadata(),identity=json.loads(actual.identity_json),
             authorization_sha256=actual.authorization_sha256,required_matrix_candidates=9,
             cpu_threads=spec.cpu_threads,initialization_seed=run.config.seed,resume_supported=False))
         data=primitive._data();corpus=actual._corpus
@@ -209,6 +230,8 @@ def run_main_selected_candidate(spec,evidence,*,authorization_file,expected_auth
         tools=_tools();run.guard();torch=tools.torch
         old_dtype,old_threads=torch.get_default_dtype(),torch.get_num_threads()
         need(old_dtype==torch.float32,'runtime must start FP32');torch.set_num_threads(spec.cpu_threads)
+        if spec.cuda_profile is not None:
+            run.cuda_check=lambda:tools.cuda_execution_check(spec.cuda_profile,synchronize=True)
         from .research_main_execution import decode
         context_limits=tools.context_limits_type(**decode(spec.context_limits_json))
         checkpoint_limits=tools.cp.GraphCheckpointLimits(**decode(spec.checkpoint_limits_json))
@@ -223,10 +246,12 @@ def run_main_selected_candidate(spec,evidence,*,authorization_file,expected_auth
         run.boundary()
         run.stage=run.stage.begin_selected_fit();run.event('selected_fit_started')
         adapter,optimizer=_construct(run,tools,encoding,train_index,condition)
-        initial_backbone=tools.cp._state_sha(adapter.native.backbone.state_dict());initial_model=tools.cp._state_sha(adapter.native.state_dict())
+        initial_backbone=tools.cp._state_sha(adapter.native.backbone.state_dict(),cuda_profile=spec.cuda_profile)
+        initial_model=tools.cp._state_sha(adapter.native.state_dict(),cuda_profile=spec.cuda_profile)
         tracker=tools.cp.GraphAdamParticipation(adapter,optimizer,event_sink=run.optimizer_event)
         profile=_profile(run,tools,initial_backbone)
-        identity=tools.cp.graph_checkpoint_identity(config=run.config,encoding=encoding,condition=condition,index=train_index,profile=profile)
+        identity=tools.cp.graph_checkpoint_identity(config=run.config,encoding=encoding,condition=condition,index=train_index,
+            profile=profile,cuda_profile=spec.cuda_profile)
         stopper=tools.EarlyStopping(run.config.patience,run.config.min_delta);history=[];best=None
         run.json('fit80/encoding.json',asdict(encoding))
         for epoch in range(1,run.config.max_epochs+1):
@@ -248,7 +273,7 @@ def run_main_selected_candidate(spec,evidence,*,authorization_file,expected_auth
         run.json('fit80/epochs.json',history);tracker.close();tracker=None
         # Fresh containers for verified best reload, never a continuation/refit.
         fresh,fresh_optimizer=_construct(run,tools,encoding,train_index,condition)
-        need(tools.cp._state_sha(fresh.native.backbone.state_dict())==initial_backbone,'independent same initial backbone')
+        need(tools.cp._state_sha(fresh.native.backbone.state_dict(),cuda_profile=spec.cuda_profile)==initial_backbone,'independent same initial backbone')
         inspected=tools.cp.inspect_graph_epoch_state(best.directory,expected_identity=identity,expected_complete_sha256=best.complete_sha256,limits=checkpoint_limits)
         restored=tools.cp.restore_graph_epoch_state(inspected,fresh_adapter=fresh,fresh_owned_optimizer=fresh_optimizer,
             expected_identity=identity,profile=profile,limits=checkpoint_limits,event_sink=lambda event:run.event('best_reload',checkpoint_event=event))
@@ -279,6 +304,8 @@ def run_main_selected_candidate(spec,evidence,*,authorization_file,expected_auth
                 reserved_targets=run.reserved_targets,body_returned_targets=run.returned_targets,complete_targets=run.completed_targets,
                 model_constructors=run.constructors,adam_constructors=run.optimizer_constructors),
             fresh_best_reload=True,system_selection_performed=False,external_freeze_authority=False,refit_started=False,calibration_used_for_selection=False)
+        if spec.cuda_profile is not None:
+            evidence_record.update(cuda_execution_profile=asdict(spec.cuda_profile),cuda_resources=run.cuda_resources)
         run.json('selected-terminal.json',evidence_record)
         claim=_claim(run,summary,rows,best,stopper.best_epoch,len(history),initial_model,initial_backbone,encoding,selection,run.output/'selected-terminal.json')
         run.stage=run.stage.finish_selected(claim);run.json('selected-claim.json',asdict(claim))
