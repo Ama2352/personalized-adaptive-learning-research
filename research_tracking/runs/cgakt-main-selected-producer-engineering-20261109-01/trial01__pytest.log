@@ -1,0 +1,24 @@
+....F...........                                                         [100%]
+================================== FAILURES ===================================
+____ test_auth_consistency_only_with_explicit_metadata_mock_no_guard_grant ____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/msr01/t/test_auth_consistency_only_wit0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002ACF552A580>
+
+    def test_auth_consistency_only_with_explicit_metadata_mock_no_guard_grant(tmp_path,monkeypatch):
+        c=make_case(tmp_path,monkeypatch);identity={'MANUFACTURED_METADATA_NOT_RUNTIME_OR_GATE':True}
+        value=auth_value(c,identity);relative,pin=put_auth(c,value)
+        monkeypatch.setattr(main,'_metadata',lambda *a:identity)
+        got,matched=main._auth(c.spec,c.evidence,relative,pin)
+>       assert got==value and matched==identity
+E       AssertionError: assert ({'schema_vers...it-main', ...} == {'schema_vers...it-main', ...}
+E         
+E         Omitting 10 identical items, use -vv to show
+E         Differing items:
+E         {'caps': {'research_budget': {'train_learners': 8, 'selection_learners': 1, 'calibration_learners': 1, 'train_targets'...heckpoint_limits': {'max_checkpoint_bytes': 8388608, 'max_metadata_bytes': 1048576, 'max_tensor_bytes': 8388608}, ...}} != {'caps': {'research_budget': {'train_learners': 8, 'selection_learners': 1, 'calibration_learners': 1, 'train_targets'...heckpoint_limits': {'max_checkpoint_bytes': 8388608, 'max_metadata_bytes': 1048576, 'max_tensor_bytes': 8388608}, ...}}
+E         Use -v to get more diff)
+
+tests\akt\test_research_main_execution.py:98: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_research_main_execution.py::test_auth_consistency_only_with_explicit_metadata_mock_no_guard_grant
+1 failed, 15 passed in 1.21s
