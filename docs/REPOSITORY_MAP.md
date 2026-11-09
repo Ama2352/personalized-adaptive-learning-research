@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 09/11 — đối chiếu thành thạo và quần thể do selector chọn
+
+[Phân tích đã xuất bản](../research_tracking/reports/rq1_on_policy_mastery_witness_20261109.md) dùng120readouts của một lịch sử.22concept được phục vụ đã đạt tiêu chí latent từfirstvisit. Cả120thetaước lượng dưới ngưỡng trên các câu policy chọn, nên cần đọc cùng selectionconditioning và initialization. Chặng14 đã cập nhật trong hai fileGVHD,11SVG nguyên byte. StaticQA đạt, visualQA còn chờ.
+
 ## Cập nhật 09/11 — phép xác nhận RQ2 mới đang dở dang
 
 [Trạng thái phép kiểm mới](../research_tracking/reports/rq2_fresh_replication_readiness_20261109.md) ghi nhận 61/120 ca hoàn tất và 30 tương tác của ca tiếp theo trước khi dừng do RAM trống hệ thống. [Bundle failure](../research_tracking/runs/rq2-fresh-graph-source-attempt02-20261109-01/README.md) giữ 39 đầu ra nhỏ và tham chiếu 72 file gốc. Chưa nghiệm thu toàn bộ 120 ca hoặc bổ sung kết luận chính từ tập con này.

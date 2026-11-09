@@ -1,5 +1,9 @@
 # Chỉ mục bằng chứng
 
+## 09/11 — đối chiếu thành thạo và quần thể do selector chọn
+
+[Phân tích đã xuất bản](reports/rq1_on_policy_mastery_witness_20261109.md) dùng120readouts của một lịch sử.22concept được phục vụ đã đạt tiêu chí latent từfirstvisit. Cả120thetaước lượng dưới ngưỡng trên các câu policy chọn, nên cần đọc cùng selectionconditioning và initialization. Chặng14 đã cập nhật trong hai fileGVHD,11SVG nguyên byte. StaticQA đạt, visualQA còn chờ.
+
 ## 09/11 — witness thành thạo trên một quỹ đạo đã được đối chiếu
 
 [Bundle67](runs/rq1-observer03-cached-truth-20261109-01/README.md) giữ120readouts dùng lại của một historyPG. Nativeθ chưa đạt1250 ở cả120câu được chọn, trong khi tiêu chí latent đều đạt.22concept được phục vụ đã latent-positive từ firstvisit. Mẫu bị điều kiện bởi selector ưu tiên unmastered, nên chưa là độ chính xác toàn bộ trạng thái. Giữ cả lỗi bộ đoRAM, sourcefix, probes và crosscheck độc lập. Báo cáo canonical và hai fileGVHD còn chờWRITE06 xuất bản.

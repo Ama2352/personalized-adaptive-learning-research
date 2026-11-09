@@ -1,0 +1,131 @@
+# Báo cáo tiến độ khóa luận — 09/11/2026
+
+**Đề tài:** Nghiên cứu và phát triển hệ thống học tập thích ứng cá nhân hóa dựa trên mô hình hóa tri thức và tối ưu hóa lộ trình.
+
+**GVHD:** TS. Lê Văn Tuấn. **Sinh viên:** Phạm Triều Dương và Hồ Nguyễn Minh Sang.
+
+[Báo cáo chi tiết: diễn tiến nghiên cứu, số liệu và biểu đồ](BAO_CAO_NGHIEN_CUU.html).
+
+## Điểm xuất phát và tiến độ hiện tại
+
+Paper 1 được kế thừa theo bản PDF phát triển dùng để nộp, là nguồn chuẩn về thiết kế và kết quả, còn notebook trong repository là bản tiền kỳ. Theo PDF, tính liên tục của lộ trình chịu ảnh hưởng của cách chọn bài, trong khi đồ thị mở rộng chưa cải thiện ổn định mức thành thạo. Paper 2 quan sát cải thiện dự báo nhỏ ở một số nhóm mô phỏng nhưng chưa phát hiện lợi ích rõ ở kết quả học tập chính. Khóa luận đi tiếp từ khoảng trống này: vì sao đồ thị chưa giúp ổn định, khi nào nó có ích và liệu CG-AKT sử dụng độ tin cậy cạnh có cải thiện được không?
+
+**Đã có bằng chứng chẩn đoán mới cho RQ1–RQ2, gồm phép đo trực tiếp hai điều kiện xét thành thạo; RQ3 đã có dữ liệu, bước ước lượng cạnh, lõi CG-AKT được kiểm tính toán và quy trình chọn checkpoint AKT không đồ thị chạy thành công trên corpus nhỏ. Chưa RQ nào hoàn tất; chưa có kết quả CG-AKT đã huấn luyện để kết luận mô hình này tốt hơn.**
+
+**Mốc chẩn đoán thành thạo trước đó.** Đã giải thích đủ 30 thời điểm nhãn thành thạo khác nhau nhưng tập sẵn sàng ban đầu giống nhau, với phần trùng nhau giữa các điều kiện được kiểm riêng.
+
+**Đã giải thích vì sao hai đường đi khác nhau cùng dừng ở 172 lượt trong ví dụ Paper 1. Khi giữ cùng trạng thái ban đầu và cùng số ngẫu nhiên ở từng lần luyện của mỗi khái niệm, nếu cả hai nhánh đều hoàn tất, tổng lượt và trạng thái cuối bằng nhau dù thứ tự chương có thể khác. Sáu tình huống dựng tay đã kiểm cả điều kiện này và giới hạn khi dừng sớm hoặc chạm trần trạng thái.**
+
+**Mốc mới cho RQ2.** Đã mở rộng đối chứng sang đồ thị học từ dữ liệu. Cả 18 cặp đổi chuỗi bài. Ở nhóm năng lực cao có cơ chế thiếu tiên quyết bất hoạt, đổi nguồn đồ thị vẫn làm kết quả học khác nhau, còn bật mức phạt giữ nguyên lịch sử và trạng thái cuối. Điều này tách được một chênh lệch ngoài cơ chế phạt thiếu nền tảng; khả năng khái quát và thứ hạng đồ thị còn phải kiểm tiếp.
+
+## Quá trình đã thực hiện
+
+**Trước hết, nhóm kiểm lại nền thí nghiệm.** Đã dựng phản ví dụ quay lại chương trên notebook tiền kỳ của Paper 1 và chỉ dùng kết quả để mô tả quy tắc của bản tiền kỳ đó. Thiết kế và kết quả kế thừa lấy theo PDF chuẩn. Các mô phỏng mới tiếp nối Paper 1 cần bám PDF, ghi rõ phiên bản và tiêu chí đối chiếu hành vi. Cần kiểm chứng riêng trước khi gọi là tái lập chính xác thí nghiệm gốc. Đã làm rõ khi tiến bộ ròng sau 14 ngày chỉ tỷ lệ với tiến bộ cuối lịch; điều này không chứng minh hai kết quả chính của Paper 2 dư thừa. Trên Junyi, đã lượng hóa trường hợp tỷ lệ khớp thứ tự tăng dù số trường hợp phù hợp giảm, do mẫu số thay đổi. Những kiểm tra này giúp tránh coi giả định mô phỏng hoặc thứ tự luyện là bằng chứng đồ thị dạy tốt.
+
+**Sau đó, nhóm tách riêng đầu vào cạnh trên cùng tình huống.** Trong 1.080 câu hỏi/nhãn được giữ chung, 963 dự báo thay đổi nhưng 943 trong số đó giữ đề xuất khái niệm xem trước; chỉ 22 đề xuất thử đầy đủ thay đổi. Tác động dự báo khác chiều giữa các hồ sơ. Phân tích bản tái dựng quỹ đạo còn cho thấy 2.041/2.740 lượt chọn khái niệm có tiên quyết cần ngoại lệ đã luyện đủ lần, thay vì mọi kiến thức nền được đánh dấu thành thạo. Đã xác định được cơ chế cụ thể trong quyết định cho phép học; chưa chứng minh cơ chế này gây lợi, gây hại hoặc che khuất bao nhiêu tác động của đồ thị.
+
+**Trở lại 1.080 tình huống giữ chung câu hỏi, nhóm kiểm nơi quyết định được giữ lại.** Có 55 lần tập cho phép thay đổi nhưng đề xuất thử giữ nguyên; 17 lần đề xuất thử đổi dù cả tập thành thạo và tập cho phép giữ nguyên. Trong 5 lần cả ba đầu ra cùng đổi, khái niệm full chọn nằm ngoài tập cho phép đã ghi của empty. Đây là đề xuất thử, chưa là bài giao cho người học; tập ghi lại chưa phản ánh mọi bước lọc của bộ chọn bài và không cho phép quy riêng cho điểm xếp hạng. Phân tích đọc lại mẫu cũ, không tăng số người học hay mẫu độc lập.
+
+**Tái dựng các bước lọc giúp giải thích cụ thể hơn.** Trong 55 lần tập cho phép đổi nhưng đề xuất giữ nguyên, 4 lần khác biệt bị loại khỏi tập cuối sau cân bằng số lượt; 51 lần tập cuối vẫn khác nhưng cùng khái niệm thắng. 17 lần đổi khái niệm trong cùng tập cuối khớp khóa xếp hạng của nguồn. Đây là giải thích quyết định thử từ dữ liệu đã lưu, không phải các tập ứng viên ghi trực tiếp, thành thạo đã hiệu chuẩn hoặc lợi ích học tập; không thêm mẫu độc lập.
+
+**Tiếp theo, nhóm kiểm điều kiện người học.** Đối chứng thay lượng lịch sử không cho một chiều tác động đều. Đối chứng năng lực chung và mức phạt thiếu nền tảng không cho lợi thế đồ thị tăng nhất quán khi bật mức phạt. Đây là kết quả hữu hạn trong mô phỏng với ba khối ngẫu nhiên dùng lại, chưa phải quy luật về học sinh thật hoặc đánh giá đầy đủ các mức nhiễu đồ thị.
+
+**Từ đó, nhóm chuẩn bị phép kiểm CG-AKT.** Đã tạo corpus mô phỏng riêng gồm 60 người học ×210 lượt, phân vai 48 huấn luyện /6 chọn số vòng học /6 hiệu chỉnh xác suất. Bước ước lượng cạnh từ TRAIN đã hoàn tất 2.352 lần khớp mô hình CPU và tạo đồ thị ứng viên 31 cạnh theo quy tắc định trước. Điểm cạnh phản ánh mức ổn định của lợi ích dự báo, không phải xác suất tiên quyết đúng; chưa chứng minh khôi phục đúng đồ thị hoặc cải thiện CG-AKT. Điểm của 31 cạnh đã được đọc lại theo đúng hợp đồng dữ liệu; cầu tính toán SAKT cũng đã được kiểm tra trên dữ liệu nhỏ. Đây là chuẩn bị phần mềm, chưa là kết quả SAKT hoặc CG-AKT đã huấn luyện trên corpus nghiên cứu.
+
+**Cuối cùng, nhóm quay lại đo trực tiếp quyết định thành thạo.** Đã phát lại đủ 18 lượt trên chín lịch sử cũ, khớp toàn bộ 2.160 thời điểm với kết quả đã lưu. Trên 30.240 cặp khái niệm–thời điểm, có 3.428 cặp khác điều kiện bất định nhưng vẫn cùng đánh giá chưa thành thạo, vì điểm kiến thức ước lượng của cả hai dưới ngưỡng. Cả 90 cặp khác quyết định thành thạo đều khác điều kiện kiến thức, khi hai phía cùng đạt điều kiện bất định. Đây là bất đồng giữa cấu hình ở cùng thời điểm, không phải 90 lần học vượt ngưỡng. Đã xác định thêm nơi tác động bị giữ lại; chưa nói được đánh giá nào đúng hơn hay giúp học tốt hơn.
+
+**Ghép tiếp với khái niệm đang được hỏi cho thấy hai con số 22 không ứng với cùng một nhóm tình huống.** Trong cùng 1.080 cặp full–empty, tiêu chí dựa trên xác suất trung bình của ba câu tham chiếu và khái niệm được đề xuất thử đều khác nhau ở 22 tình huống, nhưng chỉ trùng 2 tình huống. Cả 5 bất đồng đánh giá thành thạo riêng của khái niệm đang được hỏi đều không đi kèm đổi khái niệm đề xuất. Điều này không mâu thuẫn với 90 bất đồng tập thành thạo ở trên: câu đang hỏi chỉ gắn với một khái niệm, còn tập thành thạo xét cả 28 và bộ chọn có thể đề xuất khái niệm khác. Tiêu chí xác suất chưa được hiệu chỉnh; đề xuất xem trước chưa là bài thực giao. Đây là đọc lại cùng mẫu cũ, không thêm người học hay chứng minh xác suất thay đổi gây đổi bài.
+
+**Lõi CG-AKT đầu tiên cũng đã được kiểm bằng tính toán và gradient thật trên CPU.** Có confidence theo cạnh, gate điều chỉnh ảnh hưởng và đường tắt graph; dữ liệu kiểm được dựng sẵn. Chưa huấn luyện trên corpus nghiên cứu, chưa chứng minh các biến thể hoặc hệ thống chọn bài tốt hơn. Phần lưu và nạp lại trạng thái huấn luyện đã được kiểm qua hai tiến trình độc lập trên CPU. Chạy lại trọn vòng dữ liệu kế tiếp cho cùng thứ tự mẫu và cùng trạng thái mô hình. Đây là kiểm khả năng khôi phục ở cuối một vòng huấn luyện trên dữ liệu dựng sẵn; workflow huấn luyện trên corpus nghiên cứu, lựa chọn mô hình, đánh giá vòng kín và CUDA vẫn còn phải hoàn thiện.
+
+**Tiếp đó, nhóm kiểm tra vì sao thay cơ chế học trong mô phỏng chưa chắc làm đổi lịch sử bài làm.** Nhóm đọc lại đủ 14.400 lượt của pilot cũ, gồm 10 khối ngẫu nhiên ×3 hồ sơ ×4 điều kiện. Khi giữ cùng cấu hình mô hình và bật/tắt mức phạt thiếu kiến thức nền, 58/60 cặp giữ nguyên toàn bộ đáp án quan sát và 59/60 cặp giữ nguyên chuỗi bài. Khi đổi hai cơ chế dùng thông tin cha của GAM, cả 60/60 cặp có chuỗi bài khác. Mỗi cặp so hai quỹ đạo dùng chung điều kiện ban đầu; các cặp lặp bên trong 10 khối, không phải 60 người học độc lập.
+
+Phát hiện này phân biệt **kiến thức thật thay đổi trong simulator** với **phản hồi mà mô hình nhận được**. Mức học liên tục có thể thay đổi dù người học vẫn trả lời giống nhau trên cùng bài. Bởi vậy, chỉ thấy chuỗi bài gần như giữ nguyên chưa đủ để kết luận cơ chế thiếu nền tảng không ảnh hưởng học tập. Nhóm đã nối từng quỹ đạo với các kết quả cuối cũ và giữ cả trường hợp bất lợi; chưa tách được tác động riêng của năng lực chung hoặc chứng minh lợi ích của đồ thị trên người học thật. Đây là phân tích bổ sung trên dữ liệu đã xem, không phải thí nghiệm xác nhận mới.
+
+**Từ lịch sử quan sát ấy, nhóm kiểm tiếp mức tự tin của dự báo theo từng hồ sơ.** Trên cùng 14.400 lượt đã lưu, mô hình GAM tắt hai cơ chế dùng thông tin cha dự báo trung bình khoảng 55% cho hồ sơ PG, trong khi tỷ lệ đúng quan sát gần 75% và xác suất từ simulator gần 77%. Với hồ sơ PY, ba giá trị tương ứng khoảng 47%, 30% và 31%. Những sai lệch trái chiều có thể bù trừ khi gộp các hồ sơ vào cùng khoảng dự báo. Đã kiểm và lưu đủ các khoảng xác suất cho bốn điều kiện của pilot.
+
+Phân tích mới cho thấy **chỉ số phù hợp xác suất tính gộp có thể che sai lệch lớn ở từng hồ sơ và đảo thứ hạng mô tả giữa cấu hình**. Đây là một lời giải thích cụ thể cần kiểm trong RQ1, bổ sung cho các bảng dự báo tổng hợp của Paper 2. Các cấu hình có thể phục vụ những bài và lịch sử khác nhau, nên kết quả hiện tại chưa xác định cấu hình nào hiệu chỉnh tốt hơn trên cùng tình huống. Bước tiếp theo là đối chiếu trực tiếp quyết định thành thạo với trạng thái thật đã lưu, rồi kiểm một biện pháp hiệu chỉnh trên dữ liệu tách riêng.
+
+**Mốc tích hợp mới nhất, AKT đã đi qua quy trình chọn checkpoint thực tế.** Nhóm đã chạy thành công quy trình AKT không đồ thị trên corpus kiểm tích hợp riêng gồm 10 người học ×84 lượt. Tám người dùng để huấn luyện, một người chọn số vòng học và một người được giữ riêng cho hiệu chỉnh. Lượt kiểm hoàn tất 7 vòng học với 14 bước cập nhật, chọn checkpoint ở vòng 4, nạp lại vào mô hình mới và xuất đủ 84 dự báo trên người học chọn vòng. Kết quả sau nạp lại khớp checkpoint đã chọn. Toàn bộ lượt kiểm chạy trên CPU local, chưa dùng credit Modal.
+
+Mốc này xác nhận đường đi dữ liệu → huấn luyện → chọn checkpoint → nạp lại → xuất dự báo của AKT không đồ thị trên corpus nhỏ. Huấn luyện lại, hiệu chỉnh xác suất, khôi phục toàn bộ quy trình, kiểm Linux/CUDA và các so sánh CG-AKT trên corpus nghiên cứu còn phải thực hiện. Bộ kiểm chỉ có một người học chọn vòng, nên chưa cung cấp bằng chứng so sánh chất lượng mô hình cho RQ3.
+
+Song song, nhóm đã nối hồ sơ người học, world, ước lượng Elo và bộ chọn bài thành một lượt mô phỏng riêng theo PDF Paper 1. Bộ kiểm hiện có 85 trường hợp đã đạt, gồm 13 ca mới cho việc sinh dữ liệu theo seed. Bộ đầu vào ứng viên đã nạp thành công, gồm 28 khái niệm, 84 câu và hai đồ thị 25/31 cạnh. Nhóm đã nối bộ sinh riêng theo từng người học, khái niệm và lần luyện với lượt mô phỏng. Hai nhánh có thể dùng lại cùng trạng thái ban đầu và cùng số ngẫu nhiên ở lần luyện tương ứng của khái niệm. Các kiểm tra trên bộ câu dựng tay xác nhận tái tạo được lượt chạy và giữ thứ tự dự đoán–phản hồi–cập nhật. Đã kiểm thêm một lượt trên miền 28 khái niệm và 84 câu, giữ cùng hồ sơ US và bộ số ngẫu nhiên theo lần luyện của từng khái niệm. Trong đúng lượt seed 42 này, hai nhánh đều dừng sau 172 tương tác khi bộ ước lượng đánh dấu đủ 28 khái niệm thành thạo. Đồ thị 25 cạnh có 0 lần quay lại chương, còn đồ thị 31 cạnh có 2 lần. Trạng thái kiến thức ẩn cuối của hai nhánh giống nhau. Ví dụ này nối được lập luận về quy tắc chương với một lượt chạy có đầy đủ dấu vết. Một cặp lượt chạy chưa xác định được thứ hạng đồ thị hoặc lợi ích học tập. Còn phải hoàn thiện các chính sách so sánh và kiểm các điều kiện làm thay đổi kết quả trước thí nghiệm đầy đủ.
+
+**Kiểm tiếp điểm tổng hợp trên cùng lịch sử.** Ở các chặng trước, nhóm đã đọc xác suất trung bình của ba câu tham chiếu để theo dõi một tiêu chí gắn với quyết định. Trước khi dùng điểm này để đánh giá thành thạo, cần biết nó có phù hợp với đáp án hay không. Nhóm kiểm lại trên 1.080 tình huống cũ, nơi câu hỏi được lấy ngẫu nhiên đều từ bộ câu cố định và hai cấu hình nhận cùng lịch sử, câu hỏi, đáp án. Mỗi khái niệm có ba câu tham chiếu, nên trung bình ba dự báo có thể được đánh giá như dự báo cho một câu lấy ngẫu nhiên trong nhóm đó.
+
+Điểm tổng hợp vẫn thấp hơn tỷ lệ đúng ở PG và cao hơn ở PY/PYH. Để kiểm độ phù hợp của xác suất, nhóm gom dự báo vào 15 khoảng cố định, so dự báo trung bình với tỷ lệ đúng trong từng khoảng và tổng hợp độ lệch theo số lượt. Độ lệch tính gộp khoảng 4,3 điểm phần trăm, trong khi ở PG khoảng 26 điểm phần trăm. Như vậy, hiện tượng gộp nhóm che sai lệch còn xuất hiện ở điểm đọc từ ba câu tham chiếu, trên phép so đã giữ chung dòng dữ liệu. Nhận đủ cạnh làm sai lệch nhỏ hơn ở PY/PYH nhưng lớn hơn ở PG; chưa có một chiều cải thiện ổn định.
+
+Phép kiểm dùng lại ba khối ngẫu nhiên với chín lịch sử hồ sơ, không thêm người học hoặc mẫu độc lập. Mỗi đáp án được dùng một lần cho mỗi cấu hình. Kết quả mới đánh giá sự phù hợp với đáp án của điểm tổng hợp; độ đúng của đánh giá thành thạo so với trạng thái thật và tác động lên học tập còn phải kiểm riêng.
+
+**Bổ sung lời giải thích cho kết quả không quay lại chương trong Paper 1.** Từ quy tắc ready và giữ chương, nhóm đã chứng minh một điều kiện đủ. Khi đồ thị chỉ có cạnh nội chương, khái niệm đã đạt ngưỡng được giữ nguyên và chương còn khái niệm chưa đạt luôn có bài được phép học. Bộ chọn vì vậy chỉ rời chương sau khi hoàn tất chương đó. Dưới những giả thiết này, không quay lại chương là hệ quả của quy tắc. Nhóm đã kiểm bốn tình huống nhỏ, gồm cả đáp án sai. Với cạnh liên chương, một phản ví dụ cho chuỗi A → B → A dù bộ chọn vẫn giữ đúng quy tắc. Phần bổ sung xác định ranh giới của cơ chế; hiệu quả học tập còn cần đối chiếu trạng thái kiến thức thật và kết quả cuối.
+
+**Giải thích bước từ thành thạo đến tập sẵn sàng ban đầu.** Trên cùng 1.080 thời điểm, hai cấu hình Graph-GAM-KT nhận 31 và 0 cạnh có 90 thời điểm khác nhãn thành thạo ở một khái niệm. Tập sẵn sàng ban đầu R khác nhau ở 60 thời điểm và giống nhau ở 30 thời điểm. R là đầu vào cho các bước lọc và mở rộng ứng viên tiếp theo của bộ chọn bài. Trong cả 90 thời điểm, chính khái niệm mang nhãn khác nhau đều còn bị điều kiện tiên quyết chặn khỏi R.
+
+Đã giải thích đủ 30 thời điểm có cùng R. Có 18 trường hợp ở khái niệm không có con trực tiếp trong đồ thị của bộ điều khiển, còn 12 trường hợp có khái niệm con đã mang nhãn thành thạo ở cả hai cấu hình. Trong 12 trường hợp sau có 4 trường hợp đồng thời đủ 6 lần luyện ở tiên quyết, nên cần ghi rõ phần trùng nhau khi giải thích. Tất cả 30 trường hợp thuộc hồ sơ PG. Kết quả đã được tính lại trực tiếp từ 18 trace gốc của cùng chín lịch sử. Phần đánh giá độ đúng của nhãn so với kiến thức thật và tác động lên học tập vẫn cần làm tiếp.
+
+## Chặng 12. Vì sao hai đường đi khác nhau cùng dừng ở 172 lượt?
+
+Paper1 tách vai trò của đồ thị và chính sách trong đường đi học. Paper2 còn cho thấy cần phân biệt dự báo, quyết định và kết quả học. Sau ví dụ hai đồ thị cùng dừng ở 172 tương tác nhưng quay lại chương khác nhau, nhóm đặt câu hỏi số lượt bằng nhau có phản ánh hiệu quả tương đương, hay đến từ quy tắc mô phỏng.
+
+Nhóm kiểm lại quy tắc trạng thái của từng khái niệm trong phiên bản Paper1 đang triển khai. Hai nhánh giữ cùng trạng thái ban đầu, bộ câu, quy tắc chọn độ khó và dòng số ngẫu nhiên theo số lần luyện riêng của mỗi khái niệm. Trạng thái chỉ cập nhật ở khái niệm được chọn, không quên theo thời gian hoặc nhận tác động học từ khái niệm khác. Bởi vậy, lần luyện thứ n của một khái niệm có cùng câu hỏi, dự báo, đáp án và cập nhật ở hai nhánh, dù lần luyện đó xuất hiện ở những vị trí khác nhau trên toàn đường đi.
+
+Từ đó có một kết luận có điều kiện. Nếu cả hai lượt đều hoàn tất mọi khái niệm theo ngưỡng của bộ ước lượng, mỗi khái niệm cần cùng số lần luyện để chạm ngưỡng lần đầu. Tổng số tương tác và trạng thái cuối vì vậy bằng nhau, trong khi thứ tự chương và số lần quay lại vẫn có thể khác. Điều này giải thích sự bằng nhau ở 172 trong ví dụ đã chạy dưới các giả thiết được giữ cố định, chưa chứng minh hai đồ thị đem lại kết quả học tương đương ở mọi điều kiện. Các tình huống dựng tay đã kiểm cả đáp án sai, đổi độ khó câu hỏi và mức cập nhật thay đổi theo số lần luyện.
+
+Điều kiện hoàn tất không thể bị bỏ qua. Khi dừng vì hết ngân sách trước lúc hoàn tất, hai đường đi có thể dành số lượt khác nhau cho từng khái niệm. Những đoạn luyện chung của từng khái niệm vẫn giống nhau, nhưng trạng thái cuối của cả bộ khái niệm có thể khác. Một trường hợp nhỏ còn cho thấy vai trò của trần trạng thái 1500. Nếu chỉ có một lượt phản hồi, luyện khái niệm đang ở 1498 làm trạng thái thật tăng 2, còn luyện khái niệm đang ở 1200 làm nó tăng 12. Với cùng số lượt mà mọi cập nhật đều tăng đủ 12, tổng mức tăng bằng 12 nhân số phản hồi, ngay cả khi đáp án và phân bổ lượt luyện khác nhau.
+
+Phần bổ sung làm rõ chỉ tiêu nào có thể đã bị quy tắc của mô phỏng ràng buộc. Nó không biến toàn bộ hai lịch sử thành giống nhau, không xếp hạng đồ thị và không xác nhận lợi ích trên người học thật. Còn phải đối chiếu phân bổ dưới ngân sách hữu hạn, các chính sách so sánh và những cơ chế học khác trước khi kết luận về hiệu quả học.
+
+## Chặng 13. Đổi nguồn đồ thị khi cơ chế thiếu nền tảng bất hoạt
+
+Các chặng trước đã cho thấy kết quả học có thể chịu ảnh hưởng của cơ chế mô phỏng và cách mô hình sử dụng thông tin cha. Từ đây, nhóm đặt câu hỏi tiếp theo cho RQ2. Khi thay đồ thị chuyên gia bằng đồ thị được ước lượng từ dữ liệu, chênh lệch học tập có thực sự đi qua cơ chế thiếu kiến thức nền, hay còn xuất hiện qua những đường khác của hệ thống?
+
+Nhóm dùng đồ thị 31 cạnh đã ước lượng từ phần huấn luyện, chỉ thay đầu vào đồ thị của mô hình GAM. Đồ thị mô tả thế giới và đồ thị của bộ điều khiển giữ nguyên theo chuyên gia. Các cơ chế dùng tín hiệu cha và điều chỉnh theo cha được giữ bật, điều chỉnh cục bộ giữ tắt. Mỗi cặp giữ cùng trạng thái kiến thức thật ban đầu, lịch thời gian và dòng số ngẫu nhiên. Lượt mở rộng có 18 ca mới, tương ứng ba khối ngẫu nhiên, ba mức năng lực và hai mức phạt thiếu nền tảng. Trước đó, một ca đối chứng cũ được chạy lại và khớp đủ 120 lượt cùng trạng thái cuối.
+
+Để đánh giá học thêm được bao nhiêu, nhóm đo mức tăng ròng của kiến thức ẩn trung bình trên 28 khái niệm ở cuối lịch 41 ngày, trên thang Elo của simulator. Đây là đầu ra học tập của thế giới mô phỏng. Các thước đo dự báo đáp án như Log Loss vẫn có vai trò riêng ở bước đánh giá mô hình ước lượng.
+
+Kết quả cho thấy cả 18 cặp chuyên gia–đồ thị học đều có chuỗi câu hỏi khác nhau. Tổng cộng 1.409 trong 2.160 vị trí thứ tự dùng câu hỏi khác, trong đó nhóm năng lực 1300 có 600 trong 720 vị trí. Sau khi đường đi phân kỳ, cùng vị trí thứ tự có thể là hai bài khác nhau, nên cần đọc chênh lệch học tập trong bối cảnh hai lộ trình đã khác.
+
+Ở nhóm năng lực 1300, mô phỏng xác nhận thiếu hụt tiên quyết bằng 0 trong toàn bộ các lượt mới. Với từng đồ thị, bật mức phạt từ 0 lên 0,55 giữ nguyên cả lịch sử và trạng thái cuối. Tuy vậy, khi đổi nguồn đồ thị, mức tăng kiến thức vẫn khác. Chênh lệch giữa hai đồ thị ở ba khối lần lượt là −0,197266, +0,181461 và +0,076440 Elo, và giữ nguyên khi bật mức phạt. Như vậy, chênh lệch tổng thể còn có thể xuất hiện qua đường ước lượng và chọn bài khi cơ chế phạt thiếu nền tảng đang bất hoạt.
+
+Nhóm lấy mức tăng của cấu hình chuyên gia trừ cấu hình đồ thị học, rồi kiểm chênh lệch đó thay đổi bao nhiêu khi bật mức phạt. Bảng dưới giữ đầy đủ ba khối. Ở mức năng lực 1150, cả ba thay đổi đều âm. Ở mức 1000, dấu thay đổi trái chiều giữa các khối. Ở mức 1300, cả ba bằng 0 theo đối chứng bất hoạt đã kiểm. Các mức năng lực này là can thiệp vào trạng thái ban đầu trong mô phỏng.
+
+| Khối | Chuyên gia − đồ thị học ở năng lực 1300 | Thay đổi khi bật phạt, năng lực 1000 | Thay đổi khi bật phạt, năng lực 1150 | Thay đổi khi bật phạt, năng lực 1300 |
+| --- | --- | --- | --- | --- |
+| 1 | -0.197266 | -0.017810 | -0.035150 | +0.000000 |
+| 2 | +0.181461 | -0.016087 | -0.038274 | +0.000000 |
+| 3 | +0.076440 | +0.029300 | -0.036009 | +0.000000 |
+
+Giá trị âm ở cột chênh lệch nghĩa là cấu hình đồ thị học có mức tăng lớn hơn. Ba cột cuối là chênh lệch tại mức phạt 0,55 trừ chênh lệch tại mức phạt 0. Các giá trị chỉ mô tả những trường hợp đã khảo sát.
+
+Phần mở rộng đã tách thêm được nguồn đồ thị của bộ ước lượng khỏi đồ thị thế giới và bộ điều khiển, đồng thời xác định một chênh lệch vẫn tồn tại khi cơ chế thiếu tiên quyết bất hoạt. Ba khối được dùng lại từ chẩn đoán trước, nên chưa tăng số khối độc lập. Điều kiện cũ được tái dựng từ nguồn và kiểm khớp qua một ca đối chứng đầy đủ. Khả năng khái quát sang người học mới, mức nhiễu khác và chất lượng đồ thị tiên quyết còn cần đánh giá tiếp. Kết quả hiện tại chưa xác lập thứ hạng chung giữa đồ thị chuyên gia và đồ thị học.
+
+
+## Chặng 14. Đối chiếu thành thạo cần kiểm soát cả cách chọn bài
+
+Paper2 dùng dự báo đáp án để cập nhật trạng thái kiến thức, rồi dựa vào trạng thái đó để quyết định khái niệm nào đã thành thạo. Sau các phép kiểm đường đi, nhóm quay lại câu hỏi nền của RQ1. Quyết định thành thạo có phản ánh trạng thái thật trong simulator tại các câu đang được giao hay không?
+
+Nhóm dùng lại nhật ký đã kiểm của một lịch sử thuộc hồ sơ năng lực cao PG, gồm 120 lượt hỏi trước khi cập nhật bằng đáp án hiện tại. Hai đường đưa tín hiệu và điều chỉnh theo cha vào bộ ước lượng được tắt, điều chỉnh cục bộ được tắt. Bộ chọn bài vẫn giữ đồ thị tiên quyết. Các bản ghi được ghép chính xác theo câu hỏi, khái niệm, dự báo và lịch thời gian với trạng thái thật đã lưu của simulator.
+
+Theo quy tắc Paper2, mô hình công nhận thành thạo khi điểm kiến thức ước lượng đạt 1250 và điều kiện về bất định cùng đạt. Phép đối chiếu dùng tiêu chí latent của simulator tại cùng ngưỡng 1250. Cả 120 khái niệm đang được hỏi đều đạt tiêu chí latent, trong khi điểm ước lượng ở những thời điểm đó đều dưới ngưỡng. Số lượt có điểm ước lượng đạt để xét vai trò chặn bổ sung của điều kiện bất định bằng 0.
+
+| Đánh giá của mô hình tại câu được hỏi | Simulator chưa đạt ngưỡng | Simulator đạt ngưỡng |
+|---|---:|---:|
+| Chưa công nhận thành thạo | 0 | 120 |
+| Công nhận thành thạo | 0 | 0 |
+
+Bảng cần được đọc cùng cách chọn bài. Bộ chọn ưu tiên khái niệm mà mô hình đang đánh giá chưa thành thạo, rồi ưu tiên điểm thành thạo thấp trong các ứng viên. Vì vậy những trạng thái xuất hiện ở câu được giao đã chịu ảnh hưởng của chính mô hình và chính sách. Bộ chọn còn có nhánh ôn tập và nhánh khi mọi khái niệm đã thành thạo, nên kết quả điểm ước lượng dưới ngưỡng ở cả 120 lượt vẫn là một quan sát của lịch sử này.
+
+Kiểm lần thực hành đầu tiên cho thấy cả 22 khái niệm được phục vụ đã đạt tiêu chí latent ngay từ lần đầu xuất hiện. Mô hình bắt đầu với điểm ước lượng 1200. Trong cơ chế hiện tại, trạng thái thật chỉ nhận mức tăng không âm và quên dần về mức nền, nên các khái niệm có mức nền đã đạt ngưỡng tiếp tục thuộc lớp đạt ngưỡng. Phép kiểm này vì thế chưa quan sát một lần chuyển từ chưa đạt sang đạt của thế giới mô phỏng. Trạng thái của sáu khái niệm còn lại cần bằng chứng riêng.
+
+Phát hiện bổ sung cho RQ1 là cần kiểm soát quần thể khi đánh giá trạng thái kiến thức. Một bảng chỉ gồm các câu do chính hệ thống chọn chưa đủ để đánh giá chất lượng toàn bộ trạng thái. Vai trò riêng của điều kiện bất định cũng còn cần các trường hợp điểm kiến thức đã đạt. Bước kiểm tiếp theo được đề xuất là một tập khái niệm và thời điểm định trước, độc lập với quyết định chọn bài, có cả trạng thái mô hình lẫn trạng thái thật tương ứng. Thiết kế đó còn cần được chốt trong hợp đồng thực nghiệm chính.
+
+Kết quả hiện tại là một lịch sử dùng lại, với 120 thời điểm có tương quan. Nó bổ sung chẩn đoán về cách đo và ảnh hưởng của năng lực ban đầu. So sánh giữa các đồ thị, hiệu chỉnh xác suất, thay đổi kết quả học và khả năng khái quát sang nhiều người học vẫn là những phần còn thiếu.
+
+## Còn phải chứng minh
+
+- **RQ1** đã có đối chiếu tại câu được giao của một lịch sử. Cần mở rộng sang quần thể khái niệm–thời điểm độc lập với selector, hiệu chỉnh xác suất và nối với kết quả học tập.
+- **RQ2:** kiểm khả năng khái quát qua đồ thị nhiễu, nhóm khái niệm và người học mới, với đối chứng đúng quần thể.
+- **RQ3:** mở rộng từ quy trình chọn checkpoint AKT đã kiểm sang Linux/CUDA và corpus nghiên cứu, hoàn thiện huấn luyện lại và hiệu chỉnh; so sánh không đồ thị / đồ thị cố định / confidence / gate cùng các baseline bắt buộc, rồi đánh giá chọn bài và kết quả học vòng kín.
+
+Các mô hình và demo trong đề cương vẫn được giữ. Kết quả không cải thiện hoặc cổng chọn tắt đồ thị vẫn được báo cáo nếu bằng chứng hỗ trợ; chưa có kết luận ưu thế của CG-AKT hoặc hiệu quả giáo dục trên người học thật.

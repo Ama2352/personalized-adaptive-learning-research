@@ -1000,3 +1000,8 @@ Recovery03 source độc lập được review, preflight22source/119input và59
 Pure8 đạt ở cả controller01/02. Cached01 dừng do worker256MiB; probe3calls xác nhận pointercache tăng2types/call. Roothoist cấu hìnhctypes, new3calls cachegiữ22, caps/analyzer/tests không đổi. Cached02accepted120 trong~1s/49MiB/Job0. Independentrawcheck đạt,22servedconcepts đã latentpositive firstvisit. Full120rows ở ônativeFalse/latentTrue, thetaOnlysame và số trường hợppi chặn thêm0. Source review chỉ ra sampleon-policy và basepositiveabsorbing, khôngglobal0accuracy/humantruth hoặcgraphcomparison. Bundle67manifest592cc856 đã đóng. WRITE06 phải cập nhật hai report ngay trước mở rộng nghiên cứu tiếp.
 
 Cold299collection03 đạt, tests03 đủ299bodies/298PASS1FAIL do mockJSONwriter chưa canonicalizePath. Đã sửa đúng mockhelper, giữ assertions vàproduction. Currentcold04collection NO_GO RAM trướcchild, giữwhole120 và cácfloors. Native07stale1testpin, chưachạy. Goal cóprogress thực nhưngchưacomplete, cloudspend0.
+
+
+## 09/11 — xuất bản witness120 vào báo cáo
+
+Một technicalreport và Chặng14 trong cả BAO_CAO.md/HTML đã xuất bản từ bundle67. Đã đối chiếu số liệu, uniqueIDs và cấu trúcHTML, giữ11SVG nguyên văn. Publicationbundle giữ before/after và staticQA. Visual/responsiveQA còn thiếu, WRITE06 chưa đóng hoàn toàn. Không tăngN hoặcmodelcalls. Các sourceAKT/GKT chưa được commit do native/currenttest cònpending.
