@@ -1,5 +1,11 @@
 # Chỉ mục bằng chứng
 
+## Bổ sung09/11 — lưu figure có nguồn và hồ sơ MainC06–10
+
+[11SVG độc lập](runs/supervisor-figures-20261109-01/figure_index.md) đi cùng [Nguồn số liệu và mã dựng hình](runs/supervisor-figure-data-lineage-20261109-01/README.md). Đã kiểm27nguồn,54giá trị biểu đồ và11SVG nguyên byte; giữ năm phiên bản mã dựng. Đây là kiểm lưu trữ và nguồn số liệu. Khả năng dựng lại trọn vẹn vẫn chưa kiểm.
+
+[Hồ sơ MainC06–10](reports/akt_main_batchc_metadata_attempts_06_10_20261109.md) giữ98outputs gồm lỗi và các lượt dừng. Collection10 đã kiểm warmup thật, nhưng tests10 chưa khởi động vì RAM. MainC chưa nghiệm thu đầy đủ, Gate hiện hành vẫn stale. Các mốc dưới đây là diễn tiến lịch sử.
+
 ## Mốc09/11 — Paper1 có proof điều kiện; MainC8 đã áp dụng, kiểm còn pending
 
 [Proof Paper1](reports/paper1_concept_local_invariance_20261109.md) và [bundle17](runs/paper1-concept-local-invariance-20261109-01/README.md). Khi cùng bank/init/local tape và update concept-local, nếu cả hai DAG branches hoàn thành thì local stopping counts, terminal states và tổng feedback giống nhau; order/re-entry có thể khác. Actual91tests/0FES gồm6fixture mới kiểm cả wrongY/finiteH/cap/no-cap. 13episodes/464feedback là trần tĩnh, không measuredledger hoặc sample nghiên cứu.
