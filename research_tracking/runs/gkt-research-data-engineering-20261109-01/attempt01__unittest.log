@@ -1,0 +1,39 @@
+test_bank_registry_distinct_from_train_observed_vocabulary (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_bank_registry_distinct_from_train_observed_vocabulary) ... ok
+test_bank_shape_and_three_declared_reference_difficulties_required (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_bank_shape_and_three_declared_reference_difficulties_required) ... ERROR
+test_calibration_labels_do_not_affect_train_data (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_calibration_labels_do_not_affect_train_data) ... ok
+test_calibration_requires_refit_encoding_and_same_freeze (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_calibration_requires_refit_encoding_and_same_freeze) ... ok
+test_current_label_only_enters_next_prefix (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_current_label_only_enters_next_prefix) ... ok
+test_full_chronological_population_and_prefix_inputs (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_full_chronological_population_and_prefix_inputs) ... ok
+test_future_and_peer_labels_do_not_change_current_features (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_future_and_peer_labels_do_not_change_current_features) ... ok
+test_graph_node_edge_and_kind_rejections (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_graph_node_edge_and_kind_rejections) ... ok
+test_inputs_immutable_and_repeated_prediction_identical (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_inputs_immutable_and_repeated_prediction_identical) ... ok
+test_nested_metadata_tamper_rejected_at_boundary (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_nested_metadata_tamper_rejected_at_boundary) ... ok
+test_prediction_roles_cannot_train_or_fit_vocabulary (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_prediction_roles_cannot_train_or_fit_vocabulary) ... ok
+test_recipe_does_not_adopt_difficulty_or_truncated_history (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_recipe_does_not_adopt_difficulty_or_truncated_history) ... ok
+test_refit_encoding_changes_lineage_and_keeps_graph_train80 (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_refit_encoding_changes_lineage_and_keeps_graph_train80) ... ok
+test_selection_oov_keeps_all_rows_and_blocks_later_full_prefix (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_selection_oov_keeps_all_rows_and_blocks_later_full_prefix) ... ok
+test_target_and_expanded_prefix_caps_reject_before_first_yield (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_target_and_expanded_prefix_caps_reject_before_first_yield) ... ok
+test_training_labels_are_separate_wrappers (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_training_labels_are_separate_wrappers) ... ok
+test_wrong_domain_and_train_role_rejected (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_wrong_domain_and_train_role_rejected) ... ok
+
+======================================================================
+ERROR: test_bank_shape_and_three_declared_reference_difficulties_required (test_gkt_research_data_candidate01.GKTResearchDataCandidateTests.test_bank_shape_and_three_declared_reference_difficulties_required)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\test_gkt_research_data_candidate01.py", line 127, in test_bank_shape_and_three_declared_reference_difficulties_required
+    self.corpus = fixture(levels)
+                  ~~~~~~~^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\test_gkt_research_data_candidate01.py", line 58, in fixture
+    roles.append(role_data(plan, bank, limits, role, trajectories))
+                 ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\test_gkt_research_data_candidate01.py", line 35, in role_data
+    audit = audit_research_shard(trajectories, plan=plan, bank=bank, role=role, provenance=provenance,
+        expected_provenance_sha256=provenance.identity, limits=limits.shard_limits, reference_items=bank.item_ids)
+  File "D:\Dev\KLTN\src\knowledge_tracing\simulator_research_data.py", line 154, in audit_research_shard
+    raise ValueError('protocol V1 requires 28 concepts with exactly three reference difficulties')
+ValueError: protocol V1 requires 28 concepts with exactly three reference difficulties
+
+----------------------------------------------------------------------
+Ran 17 tests in 3.431s
+
+FAILED (errors=1)

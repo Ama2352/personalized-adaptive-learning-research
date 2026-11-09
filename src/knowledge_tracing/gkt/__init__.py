@@ -1,7 +1,15 @@
-"""GKT Batch A: pure static message/readout kernel, GKT vẫn INCOMPLETE."""
+"""GKT static kernel và research data, neural exports được nạp khi sử dụng."""
 
 from .config import GKTBinding, GKTKernelConfig
-from .core import GKTMessages, GKTReadout, StaticGKTKernel, adjacency_sha256, dense_adjacency
 
 __all__ = ['GKTBinding', 'GKTKernelConfig', 'GKTMessages', 'GKTReadout',
            'StaticGKTKernel', 'adjacency_sha256', 'dense_adjacency']
+
+
+def __getattr__(name):
+    if name in ('GKTMessages', 'GKTReadout', 'StaticGKTKernel', 'adjacency_sha256', 'dense_adjacency'):
+        from . import core
+        value = getattr(core, name)
+        globals()[name] = value
+        return value
+    raise AttributeError(f'module {__name__!r} has no attribute {name!r}')
