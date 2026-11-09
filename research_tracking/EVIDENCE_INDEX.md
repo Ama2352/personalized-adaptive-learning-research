@@ -336,3 +336,9 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 - [Inventory dependency](reports/akt_colab_contract_inventory_20261109.md), [manifest](runs/colab-contract-dependency-inventory-20261109-01/manifest.json):73outputs/8PASS, local memory only, không ZIP/export.
 - [Producer](reports/cgakt_main_selected_producer_readiness_20261109.md), [manifest](runs/cgakt-main-selected-producer-engineering-20261109-01/manifest.json):63outputs/16mockPASS, actual fit/integration chưa xác minh.
 - Raw Git146blobs đối chiếu nguồn/manifest;136outputs mới không phải136thí nghiệm/mẫu nghiên cứu.
+
+## 09/11 — secondaryCPU09 và JUnit
+
+- [RQDIAG14](reports/rq2_cached_mechanism_diagnostic_20261109.md),[manifest](runs/rq2-cached-mechanism-diagnostic-20261109-01/manifest.json):68outputs/5be277c. MechanismquerydivergencePG0/20,PY1/20,PYH0/20; policyquerydivergence20/20mỗiprofile. Không newseed/model/world; không time-DiD hoặc causal ability.
+- [SoftwareGate](reports/akt_windows_gate_current_20261109.md),[manifest](runs/akt-windows-gate-current177-20261109-01/manifest.json):90outputs/e1a0d82. Gate04terminalREJECTED,99targetedfixturesacceptedriêng; không pointerpublication.
+- RawGit164blobs verified,158outputs mới; counter4882→5040 không đếm mẫu nghiên cứu.

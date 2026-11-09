@@ -797,3 +797,15 @@ G10closed48/test5bd/reportc017 commit5e1eb40,51rawGitblobsverified; outputinvent
 - Raw Git146blobs khớp; bộ đếm outputs4746→4882 chỉ đếm136outputs mới. Paper/protocol/data/holdout không đổi.
 - Sửa draft RQ1 sau review: R là ready-set ban đầu, escape_all_nodes có thể mở rộng pool; không C⊆R bắt buộc. Số liệu/bundle nguồn không đổi.
 - Browserclose actual báo No open tabs, không previewserver của lượt này; giữ quy tắc đóng sau QA.
+
+### 09/11 — RQ2 đọc đầy đủ cache, không chạy lại simulation
+
+- Parser16methods đạt; native01dừng trướcGO do lazyformatterread và startupcleanupREJECTED/Job0. Giữ nguyên failure;02chỉ sửa displaybootstrap/preimportstdlib, parser/contract/pure16 giữ nguyên. Actual02accepted dưới1giây stored, scope/data/source/monitor/Jobcleanup đủ.
+- Đọc đủ14400old events/120worlds:mechanismpairs58/60giữ toàn nhãn,59/60giữ toàn query; policypairs60/60đổi query. Ghép đủ30endpoints; PG0deficit không đồng nghĩa graphneutral vì graphrelativegain+0,11085 ở cảλ. Giữ10sharedseedclusters và3negativeIseeds mỗiPY/PYH; không newN/CI/causalclaim.
+- Đóng68outputs/5be277c. Sourceplumbing cho thấyλchỉvào world, KTnhậnquery/y/time; conditionalhistoryargument có giới hạn runtime-tracer, không theorem về mọi policy.
+
+### 09/11 — currentGate04 bị từ chối, không relabel
+
+- Collection10đạt1726nodeIDs/177sources/81modules sau sửa ordermetadata. Full04raw1726physicaltestcases0FESkhớpIDs, nhưng nativeCLImergefail do remaining@tests1501vs1436physical+65consolepassedsubtests; outer293,183giây/630,Job0cleanupaccepted.
+- Bản sửa parser/merger giữrawattrs/strictFES/nonempty/identities và đếmphysicalitems,99targetedcasesđạt. Đóng90outputs/e1a0d82, Gate04vẫnREJECTED; không publishpointer/GPUtraining/Modal. Independentstaticreview còn bắt cùng lỗi đếm ở fullouter02 trước lượt chạy mới, sẽ sửaderivative riêng.
+- RawGit164blobs verified và taskDAG142IDs khôngcycle; counteroutputs5040 không là tỷ lệ hoàn tất.

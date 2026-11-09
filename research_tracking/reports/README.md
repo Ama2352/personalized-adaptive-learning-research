@@ -251,3 +251,6 @@ Gate21 chỉ chạy `tests/akt tests/shared_kt`; các số139SAKT và38Graph-GAM
 
 - [Dependency tài liệu AKT](akt_colab_contract_inventory_20261109.md):8kiểm inventory đạt, không tạo ZIP/export; giữ ba lỗi bootstrap. Gói73outputs/387b5bc.
 - [Main selected-only producer](cgakt_main_selected_producer_readiness_20261109.md):16mockPASS, gói63outputs/1f17f15; chưa actual guard/fit/full public success path.
+
+- [RQ2: deficit và phân kỳ quỹ đạo](rq2_cached_mechanism_diagnostic_20261109.md):đọc14.400cached events/120worlds, chỉ1/60mechanismpairs đổi bài và2/60đổi nhãn; policy-switch60/60đổi bài. Exploratory10reusedseeds, không causal/confirmatory; bundle68/5be277c.
+- [Gate177 và sửa JUnit](akt_windows_gate_current_20261109.md):Gate04REJECTEDdù1726physicalIDs0FES; giữrawattrs/65consolepassedsubtests, targetedfix99PASS. Bundle90/e1a0d82, chưa currentGate.
