@@ -1,5 +1,15 @@
 # Sổ cái thí nghiệm
 
+## Mốc09/11 — GKT data bridge20ca, E8 đã xuất bản, MainC11–13 chưa có test PASS
+
+[GKT data bridge](reports/gkt_research_data_readiness_20261109.md) / [bundle58](runs/gkt-research-data-engineering-20261109-01/README.md). Canonical data/lazy initializer đã áp dụng, normal import20/0FES (17data+3package); giữ01fixtureERROR và02PASS riêng. Chưa research28 model/trainer/checkpoint/export/adaptor hoặc fitted baseline. GKT08 và SAKT07 là việc chưa bắt đầu, cần ROOT review finite recipe/actual guarded producer, giữ old toy caps và đủ9model conditions.
+
+[E8 bản thảo luận văn](reports/THESIS_RQ1_MECHANISMS_DRAFT_20261109.md) / [writing18](runs/thesis-rq1-e8-writing-20261109-01/README.md). Prose mới về conditional concept-local invariance đã xuất bản, giữ35807byte E1–E7,94source/22pointers. Hai nhánh complete có cùng local stopping states dù interleaving khác; finiteH/cap2vs12 là fixture dựng tay. Writing không chạy thêm model hoặc tăngN, không RQ completion.
+
+[MainC11–13 operational45](runs/akt-main-batchc-metadata-attempts-11-13-20261109-01/README.md). Collection12/13 cùng221IDs,0bodies, không442PASS. Tests12/13NO_GO trướcchild. ROOT adopt profile metadata worker128MiB/free floor1536MiB/admission1664MiB từ review hữu hạn. Footprint08 đã đi qua221bodies nhưng168PASS/53FAIL, chưa footprint của221PASS. Giữ nguyên native/GPU floors, Gate STALE/MainC chưaverified/nativepending, không tựretry hoặc fit grant.
+
+[Raw Git proof119](../docs/thesis_recovery/evidence/figure_lineage_mainc0610_raw_git_20261109.json) và [Raw Git proof84](../docs/thesis_recovery/evidence/gkt_data_e8_raw_git_20261109.json). Hai proof actual cho6141+119+84=6344, latest verified0c4ad897. 84paths gồm78bundle files và6canonical ở GKT/E8, là kiểm lưu trữ, không tăngN hoặc RQ%. MainC45 chưa cộngrawGit. Các source closures tiếp tục tách mức với bằng chứng khoa học. Goal ACTIVE, không chi cloud/Holdout mới. Các mốc cũ bên dưới giữ nguyên theo thời điểm.
+
 ## Bổ sung09/11 — lưu figure có nguồn và hồ sơ MainC06–10
 
 [11SVG độc lập](runs/supervisor-figures-20261109-01/figure_index.md) đi cùng [Nguồn số liệu và mã dựng hình](runs/supervisor-figure-data-lineage-20261109-01/README.md). Đã kiểm27nguồn,54giá trị biểu đồ và11SVG nguyên byte; giữ năm phiên bản mã dựng. Đây là kiểm lưu trữ và nguồn số liệu. Khả năng dựng lại trọn vẹn vẫn chưa kiểm.

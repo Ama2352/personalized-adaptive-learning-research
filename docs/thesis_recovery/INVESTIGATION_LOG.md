@@ -934,3 +934,17 @@ Root đối chiếu đủ142raw files của domain28/proof17/UI28/MainC65 với 
 ##09/11 — nguồn figure và MainC06–10 đã đóng
 
 Đã lưu11SVG độc lập, kiểm27nguồn/54pointer values/36Yterms và giữ năm builder versions trong lineage bundle19. End-to-end rebuild chưa chạy. MainC failure bundle98 giữ06–10 nguyên verdict. GKTdata candidate01 chạy17ca,16PASS/1fixtureERROR do badbank bị public audit chặn trước assert. Chuẩn bị fixture02, chưa áp dụng production. Không model fit/GPU/Modal/Holdout.
+
+## Mốc09/11 — GKT data bridge20ca, E8 đã xuất bản, MainC11–13 chưa có test PASS
+
+[GKT data bridge](../../research_tracking/reports/gkt_research_data_readiness_20261109.md) / [bundle58](../../research_tracking/runs/gkt-research-data-engineering-20261109-01/README.md). Canonical data/lazy initializer đã áp dụng, normal import20/0FES (17data+3package); giữ01fixtureERROR và02PASS riêng. Chưa research28 model/trainer/checkpoint/export/adaptor hoặc fitted baseline. GKT08 và SAKT07 là việc chưa bắt đầu, cần ROOT review finite recipe/actual guarded producer, giữ old toy caps và đủ9model conditions.
+
+[E8 bản thảo luận văn](../../research_tracking/reports/THESIS_RQ1_MECHANISMS_DRAFT_20261109.md) / [writing18](../../research_tracking/runs/thesis-rq1-e8-writing-20261109-01/README.md). Prose mới về conditional concept-local invariance đã xuất bản, giữ35807byte E1–E7,94source/22pointers. Hai nhánh complete có cùng local stopping states dù interleaving khác; finiteH/cap2vs12 là fixture dựng tay. Writing không chạy thêm model hoặc tăngN, không RQ completion.
+
+[MainC11–13 operational45](../../research_tracking/runs/akt-main-batchc-metadata-attempts-11-13-20261109-01/README.md). Collection12/13 cùng221IDs,0bodies, không442PASS. Tests12/13NO_GO trướcchild. ROOT adopt profile metadata worker128MiB/free floor1536MiB/admission1664MiB từ review hữu hạn. Footprint08 đã đi qua221bodies nhưng168PASS/53FAIL, chưa footprint của221PASS. Giữ nguyên native/GPU floors, Gate STALE/MainC chưaverified/nativepending, không tựretry hoặc fit grant.
+
+[Raw Git proof119](evidence/figure_lineage_mainc0610_raw_git_20261109.json) và [Raw Git proof84](evidence/gkt_data_e8_raw_git_20261109.json). Hai proof actual cho6141+119+84=6344, latest verified0c4ad897. 84paths gồm78bundle files và6canonical ở GKT/E8, là kiểm lưu trữ, không tăngN hoặc RQ%. MainC45 chưa cộngrawGit. Các source closures tiếp tục tách mức với bằng chứng khoa học. Goal ACTIVE, không chi cloud/Holdout mới. Các mốc cũ bên dưới giữ nguyên theo thời điểm.
+
+##09/11 — đối chiếu blockers sau GKT/E8
+
+MainC đã port nhưng chưa đủ221metadataPASS. GKT data20đã đạt, model research28 còn thiếu. Giữ danh sách blockers cũ trong state cùng lý do thay. Lượt này có tiến bộ thực và goal tiếp tục ACTIVE. RQ2 learned31×ability×prerequisite đang chuẩn bị19worlds/0fits, có giới hạn old initial policy hash chưa được log. Chưa chạy extension. Xem evidence/engineering_gkt_e8_turn_20261109.json.
