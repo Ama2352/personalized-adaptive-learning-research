@@ -1,5 +1,9 @@
 # Chỉ mục bằng chứng
 
+## 10/11 — chuẩn bị đối chiếu quần thể trước chốt mô hình
+
+[Candidate F/K-y](runs/main-selection-population-candidate-20261110-01/README.md) đạt sáu fixture tests, giữ đúng thứ tự lịch sử khi dựng key và chỉ sắp xếp bản sao cho đối chiếu. Đây là helper riêng chưa tích hợp canonical. Chưa kiểm đủ chín model artifacts, chọn winner hoặc cấp quyền refit.
+
 ## 10/11 — hồ sơ CPU SAKT và tái dùng đồ thị đã đóng
 
 [SAKT selected CPU](runs/sakt-selected-engineering-20261110-01/README.md) có full84exports sau6epochs/best1. Giữ failure và72physicalupdates của cả hai lượt đã train. [Main60 sáu cấu hình](runs/main60-graph-condition-binding-20261110-01/README.md) tái dùng Method24 đã fit, không thêm solver hoặc NN. [Notebook CPU](../notebooks/README.md) có gói nguồn/dữ liệu đã kiểm trên Windows, chưa chạy Colab/Linux. Main neural matrix, refit/calibration và CUDA còn chờ.
