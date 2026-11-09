@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**CPU09 observer đã qua kiểm một lịch sử.** [Readiness và giới hạn](../runs/rq1-cpu09-observer-readiness-20261109-01/CPU09_OBSERVER_READINESS_REPORT01.md), [gói32outputs](../runs/rq1-cpu09-observer-readiness-20261109-01/README.md). Hai policy mới giữ đủ120query/P/readouts và endpoint fingerprints,240updates hoàn tất. Giữ cả failure UTC02 và RAM refusal. Phép đối chiếu mastery truth đủ14400events đang được chuẩn bị riêng.
+
 **Core CUDA, kiểm metadata và tương thích CPU đã đạt.** [Kết quả batchA](cgakt_cuda_core_cpu_readiness_20261109.md), [gói36outputs](../runs/cgakt-cuda-core-cpu-engineering-20261109-01/README.md). Có13kiểm metadata và26kiểm CPU, quan sát8forward/5backward/0Adam. Actual CUDA, checkpoint schema2 và Main GPU là bước tiếp theo.
 
 **Paper1, đã nối một lượt mô phỏng nhận draws cấp sẵn.** [Readiness](paper1_supplied_episode_readiness_20261109.md), [gói bằng chứng](../runs/paper1-supplied-episode-engineering-20261109-01/README.md). Toàn bộ72kiểm đạt, gồm18ca mới về profile, chronology, oracle separation và điểm dừng. Còn RNG-owned runner, các chính sách so sánh và ma trận nghiên cứu.

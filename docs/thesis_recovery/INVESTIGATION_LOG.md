@@ -869,3 +869,8 @@ Cài profile US/UW/FW từ z cấp sẵn và nối continuity controller/world. 
 ## 09/11 — core CUDA batchA đã kiểm CPU
 
 Root chọn execution profile28 và cùng reviewer đọc bốn source/test. Lượt13metadata đạt0,4977573giây. NativeCPU04 đạt26cases/8forward/5backward/0Adam, outer27,7877699giây/90, peak280629248B và minfree1850941440B trên allocation1536MiBfloor riêng đã có rationale. Source31trước=sau, genuineGit/EOL/loader, Job0 và restoration đạt. Bundle36outputs đã đóng, manifest401638d85bfe8f98495a1b45b7944c9a08da2d6650177c5170ea2611be177868. Tiếp theoCPschema2/Main/actualCUDA.
+
+
+## 09/11 — observer một lịch sử đã nghiệm thu và đóng
+
+Revision02 xác định đúng UTC111bytes bị read guard từ chối, còn source-before/after bằng nhau. Giữ RAM refusal trước đó. Revision03 chỉ cấp entitlement đúng UTC đã pin, đạt hai policy/240updates,120readouts và endpoint states exact. Outer11,4506305giây trước final receipt, Job0, source38trước=sau. Đã đóng32outputs tại rq1-cpu09-observer-readiness-20261109-01, manifestde9c9b9b938765ec95229a22d4df5c3f6cbbd1a5ab13ef1c21c5079ea134dfa4. Chưa đối chiếu nativeM với world truth đủ14400events. Backlog chỉnh dependency để CUDAcore đi song song Linux provenance và route replay mới kế thừa cache/observer đã đạt.

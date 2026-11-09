@@ -119,7 +119,7 @@ Các mục count/inventory phía trên là snapshots có ngày, không tự cậ
 
 ## Báo cáo GVHD hiện hành09/11
 
-Mở [tóm tắt GVHD](../research_tracking/supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md) và [báo cáo minh họa](../research_tracking/supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html): ngữ cảnh hai paper → tiến độ hiện tại → năm chặng nghiên cứu (bổ sung phép đo trực tiếp hai điều kiện xét thành thạo) → phần còn phải chứng minh. Mỗi ngày giữ đúng hai file đọc; log và hồ sơ kiểm chứng không đưa vào gói GVHD. [RQ1 transitions](../research_tracking/reports/rq1_transition_evidence_20261108.md), [RQ1 cross-ready](../research_tracking/reports/rq1_cross_ready_membership_20261109.md) và [RQ2 conditions](../research_tracking/reports/rq2_conditions_evidence_20261108.md) có scripts tái tính ở scripts/research và bundles theo run trong research_tracking/runs; reuse dữ liệu đã lưu, không rerun tất cả paper hoặc dùng software pass làm efficacy.
+Mở [tóm tắt GVHD](../research_tracking/supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md) và [báo cáo minh họa](../research_tracking/supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html). Báo cáo đi từ ngữ cảnh hai paper qua tiến độ và mười chặng đến phần còn phải chứng minh. Hai chặng mới nhất kiểm điểm tổng hợp trên cùng dòng dữ liệu và giải thích điều kiện không quay lại chương. Mỗi ngày giữ đúng hai file đọc, còn log và hồ sơ kiểm chứng dùng các chỉ mục bằng chứng. [RQ1 transitions](../research_tracking/reports/rq1_transition_evidence_20261108.md), [RQ1 cross-ready](../research_tracking/reports/rq1_cross_ready_membership_20261109.md) và [RQ2 conditions](../research_tracking/reports/rq2_conditions_evidence_20261108.md) có scripts tái tính và bundles theo run.
 
 ## Điểm vào engineering08/11
 
@@ -129,3 +129,9 @@ Mở [tóm tắt GVHD](../research_tracking/supervisor_reports/2026-11-09/01_tie
 ## Mô phỏng theo PDF Paper1
 
 `src/knowledge_tracing/paper1_pdf/` giữ các quy tắc world/Elo/controller phiên bản riêng theo PDF chuẩn. `tests/paper1_pdf/` kiểm bằng fixture dựng tay. `domain.py` đọc bộ CSV ứng viên đã pin, giữ metadata đầu vào và tách chapter keys ngoài domain. Source Paper1 lịch sử giữ nguyên. [Phạm vi đã kiểm và phần còn thiếu](../research_tracking/reports/paper1_pdf_primitives_readiness_20261109.md).
+
+`episode.py` nối profile US/UW/FW với controller/world và tape cấp sẵn, có trace observable/oracle riêng và horizon tối đa500. Bộ kiểm Paper1 hiện đạt72ca, gồm18episode cases. [Readiness](../research_tracking/reports/paper1_supplied_episode_readiness_20261109.md). RNG-owned runner và các policy so sánh còn ở bước tiếp theo.
+
+## Chuẩn bị CUDA cho core nghiên cứu
+
+Profile có phiên bản nằm trong [quyết định28](thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md). Source tiếp tục ở `src/knowledge_tracing/akt/`, bằng chứng metadata/CPU của batchA dùng [report](../research_tracking/reports/cgakt_cuda_core_cpu_readiness_20261109.md) và bundle theo run. Checkpoint CUDA schema2, Main wiring và các lượt kiểm trên GPU thực tế được theo dõi riêng trong kế hoạch GPU.
