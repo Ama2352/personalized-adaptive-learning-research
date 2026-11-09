@@ -789,3 +789,11 @@ G10closed48/test5bd/reportc017 commit5e1eb40,51rawGitblobsverified; outputinvent
 - FullE2 cảhai8windows/48targets/2steps, orderedbatch+q/qa/target/inputledger/state/Adam/RNG/modes/readout exact. Physical6updates/8forward/144reusedtargetexposures; không cộngcumulative4+4 thành8.
 - Whole43,723s/150, producerRSS473MB/consumer410MB; dữ liệu handmade, không dự báoGPU/fullcorpus. Bundle50 giữbinaryref26,7MB, khôngcopybinary/119oldbundle.
 - Graph11 nghiệm thu CPUepoch-boundary state+freshprocess đã có; lifecycle/globalbudget/EarlyStopping/sampler-midcursor/GPU/mainfit vẫn không tự verified.
+
+### 09/11 — chốt hai gói kỹ thuật, chưa actual selected fit
+
+- Commit387b5bc: builder thêm đúng5tài liệu public,8inventory tests đạt; không ZIP/remote, giữ bootstrap01–03 và archiver failure.
+- Commit1f17f15: concrete guard/producer và16mockPASS, giữ lỗi representation15/1 lượt01. Actual public success chưa thực thi, không tuyên bố training ready.
+- Raw Git146blobs khớp; bộ đếm outputs4746→4882 chỉ đếm136outputs mới. Paper/protocol/data/holdout không đổi.
+- Sửa draft RQ1 sau review: R là ready-set ban đầu, escape_all_nodes có thể mở rộng pool; không C⊆R bắt buộc. Số liệu/bundle nguồn không đổi.
+- Browserclose actual báo No open tabs, không previewserver của lượt này; giữ quy tắc đóng sau QA.

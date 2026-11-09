@@ -330,3 +330,9 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 - **RQ1 readiness exposure,08/11:** [báo cáo](reports/rq1_ready_set_exposure_results_20261108.md), [bundle28outputs](runs/rq1-ready-set-exposure-20261108-01/README.md). ExactR3240;500roots táchriêng;2740nonroots=2041exposure+699strict.0newN/native; shared3seedfamilies/current-source, không causal/calibratedmastery.
 
 - **Metric consistency08/11:** [báo cáo](reports/akt_metric_consistency_20261108.md), [bundle42outputs](runs/akt-metric-consistency-engineering-20261108-01/README.md).13fixturePASS/0NN/corpus; giữpartialJUnitcontrollerfailure; khôngchấm lại số liệu lịch sử.
+
+## 09/11 — inventory dependency và main producer
+
+- [Inventory dependency](reports/akt_colab_contract_inventory_20261109.md), [manifest](runs/colab-contract-dependency-inventory-20261109-01/manifest.json):73outputs/8PASS, local memory only, không ZIP/export.
+- [Producer](reports/cgakt_main_selected_producer_readiness_20261109.md), [manifest](runs/cgakt-main-selected-producer-engineering-20261109-01/manifest.json):63outputs/16mockPASS, actual fit/integration chưa xác minh.
+- Raw Git146blobs đối chiếu nguồn/manifest;136outputs mới không phải136thí nghiệm/mẫu nghiên cứu.

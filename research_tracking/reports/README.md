@@ -248,3 +248,6 @@ Gate21 chỉ chạy `tests/akt tests/shared_kt`; các số139SAKT và38Graph-GAM
 - [RQ1: thành thạo hay đủ số lần luyện?](rq1_ready_set_exposure_results_20261108.md):3240cached served actions;2740có tiên quyết gồm2041exposure và699strict. [Bundle28outputs](../runs/rq1-ready-set-exposure-20261108-01/README.md); không lợi ích nhân quả/calibration/RQcomplete.
 
 - [AKT metric consistency](akt_metric_consistency_20261108.md):13actual evaluator fixtures PASS; sửaepsilonbootstrap khớp metricchuẩn, chưa impact trên artifacts thật hoặc fullGate.
+
+- [Dependency tài liệu AKT](akt_colab_contract_inventory_20261109.md):8kiểm inventory đạt, không tạo ZIP/export; giữ ba lỗi bootstrap. Gói73outputs/387b5bc.
+- [Main selected-only producer](cgakt_main_selected_producer_readiness_20261109.md):16mockPASS, gói63outputs/1f17f15; chưa actual guard/fit/full public success path.
