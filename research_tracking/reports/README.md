@@ -2,6 +2,8 @@
 
 ## Mốc09/11 — learned graph trong đối chứng năng lực đã có kết quả
 
+[E9 bản thảo luận văn](THESIS_RQ1_MECHANISMS_DRAFT_20261109.md) đã xuất bản từ learned19, giữ43.799bytes E1–E8. [Writing11](../runs/thesis-rq1-e9-writing-20261109-01/README.md) giữ before/after và map112nguồn, Root kiểm66JSONpointers/hai phép cộng. Viết không thêm model call hoặc mẫu độc lập.
+
 [Phân tích nguồn đồ thị](rq2_learned_graph_source_ability_results_20261109.md) / [bundle32](../runs/rq2-learned-graph-ability-20261109-01/README.md). Đã nghiệm thu19worlds,2280adaptive updates,18Q/9K và exact sentinel trước18ca mới. Cả18cặp đổi chuỗi bài,1409/2160vị trí khác câu hỏi. Khi cơ chế thiếu tiên quyết bất hoạt ở mức1300, K bằng0 nhưng Q khác0 và đổi dấu theo block. Kết quả tách thêm đường tác động ngoài cơ chế phạt. Ba block dùng lại/newN0 và initial-source reconstruction là giới hạn bắt buộc, chưa hoàn tất RQ.
 
 [Bản GVHD Chặng13](../supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html) đã cập nhật hai file. [Hồ sơ QA27](../runs/supervisor-learned-graph-update-20261109-01/README.md) giữ before/after, screenshot gốc và lỗi preview.11SVG cũ nguyên byte, bảng mới có nhóm mobile. Root đã xem desktop và component bảng mobile, đo full-document sizing, đóng tab/server do agent mở. Kiểm trình bày không tăng mẫu nghiên cứu.

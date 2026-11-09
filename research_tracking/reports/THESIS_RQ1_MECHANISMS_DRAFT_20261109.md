@@ -266,3 +266,61 @@ Phần này thu hẹp cách diễn giải một equality đã quan sát. Nó ch�
 - **E8a** dùng [witness domain28](paper1_seeded_domain_smoke_readiness_20261109.md) và [result của hai episode đã lưu](../runs/paper1-seeded-domain-smoke-engineering-20261109-01/scientific__result.json).
 - **E8b** dùng [chứng minh điều kiện](paper1_concept_local_invariance_20261109.md), [source primitives đã đóng](../runs/paper1-pdf-primitives-engineering-20261109-01/simulator.py), [supplied episode](../runs/paper1-supplied-episode-engineering-20261109-01/episode.py) và [recipe coupling](../runs/paper1-seeded-episode-engineering-20261109-01/seeded_episode.py).
 - **E8c** dùng [sáu fixture đã chạy](../runs/paper1-concept-local-invariance-20261109-01/test_concept_local_invariance.py) và [receipt91tests](../runs/paper1-concept-local-invariance-20261109-01/result.json). Source map phân biệt JSON pointers của measurements, expected values trong assertion đã đạt và các lập luận có điều kiện từ source.
+
+
+## 12. Bổ sung E9 về nguồn đồ thị và điều kiện năng lực trong world Paper2
+
+### Từ cơ chế của controller đến kết quả học trong simulator
+
+E7 xác định những điều kiện có thể giữ bất đồng thành thạo ngoài tập sẵn sàng. E8 chỉ ra một trường hợp mà graph đổi thứ tự học nhưng vẫn giữ kết quả cuối do cấu trúc cập nhật cục bộ của world Paper1. Câu hỏi tiếp theo là khi world có learning dynamics phụ thuộc trạng thái và mức thiếu tiên quyết, đổi nguồn graph của bộ ước lượng có làm endpoint thay đổi theo cùng một chiều hay không.
+
+Phép kiểm mới dùng world Paper2, giữ graph chuyên gia của môi trường G_env và controller G_controller, mỗi graph31cạnh. G_estimator đổi từ expert31 sang learned31 đã được học trên48 learners TRAIN rồi giữ cố định. Cùng một GAM variant vẫn bật signal và parent adaptation, tắt local adaptation. Điểm confidence của learned edges không được dùng làm trọng số GAM. Thiết kế giữ số cạnh bằng nhau nhưng chưa xác lập một graph là đúng hoặc chất lượng cao hơn graph kia. [E9a]
+
+### Thiết kế ghép hữu hạn và giả thiết về trạng thái đầu
+
+Ba blocks21000–21002 được dùng lại với cùng residual vector năng lực và cùng cặp uniforms cho response/learning theo step. Mỗi residual được đặt quanh scalar ability1000,1150 hoặc1300. Các mức này thuộc thiết kế world, khác các persona PG/PY/PYH trong những pilot trước. World prerequisite strength nhận λ=0 hoặc0,55. Mỗi trajectory có120phản hồi theo cùng lịch kết thúc ở ngày41. Outcome Y là trung bình trên28khái niệm của latent theta cuối trừ latent ban đầu, đơn vị theta/Elo points. [E9a]
+
+Có18worlds learned mới và một expert sentinel, tổng19worlds với2.280native online policy updates. Đối chứng expert gồm18outcomes đã có trong study controlled-ability trước, không chạy lại. Sentinel tái hiện cell expert ở block21000, ability1150, λ0,55. Toàn120observable rows,120oracle rows và endpoint/state phải khớp exact trước khi chạy learned cells. Việc dùng lại ba seed blocks không bổ sung seed family độc lập. [E9a, E9b]
+
+Study cũ có assertion về cùng nonedge initial policy state và theta ban đầu1200, nhưng không lưu raw initial-policy hash. Vì vậy, phép ghép dựa trên giả thiết initial state được tái dựng từ nguồn đã ghim, cùng sentinel exact. Hash của19initial states mới được lưu riêng, không điền ngược vào trường lịch sử còn thiếu. Một sentinel không chứng minh tương đương cho mọi arm, runtime hoặc phần cứng. Các contrasts dưới đây giữ điều kiện provenance này. [E9b]
+
+### Khoảng cách giữa hai nguồn graph không có một dấu chung
+
+Đặt Q_b(a,λ)=Y_expert−Y_learned tại block b và ability a. Q dương nghĩa net latent gain của expert cao hơn trong cell ấy. Đặt K_b(a)=Q_b(a,0,55)−Q_b(a,0), là thay đổi của khoảng cách graph-source khi đổi world prerequisite penalty. Đây là contrasts potential outcomes hữu hạn trong world và coupling đã quy định. Không dùng K làm human difference-in-differences hoặc causal mediation. [E9c]
+
+| Ability | Block | Q tại λ0 | Q tại λ0,55 | K |
+|---|---|---:|---:|---:|
+|1000|21000|−0,055965|−0,073775|−0,017810|
+|1000|21001|−0,022627|−0,038715|−0,016087|
+|1000|21002|+0,056961|+0,086262|+0,029300|
+|1150|21000|−0,743541|−0,778692|−0,035150|
+|1150|21001|+0,333994|+0,295720|−0,038274|
+|1150|21002|−0,620649|−0,656658|−0,036009|
+|1300|21000|−0,197266|−0,197266|0|
+|1300|21001|+0,181461|+0,181461|0|
+|1300|21002|+0,076440|+0,076440|0|
+
+Bảng giữ đủ18components và9contrasts, làm tròn6chữ số, cùng đơn vị theta/Elo points. Q âm là expert có net gain thấp hơn learned trong phép so ấy, chưa có nghĩa kiến thức giảm dưới baseline. Ở1000 và1150, expert thấp hơn trong hai blocks và cao hơn ở block còn lại. Ở1300, expert thấp hơn một block và cao hơn hai. K1150 âm trong cả ba blocks, còn K1000 có hai âm và một dương. Dấu và độ lớn hữu hạn này chưa cho phép xếp hạng graph nguồn nào tốt hơn nói chung hoặc xác lập ý nghĩa thực tiễn. [E9c]
+
+Đối chứng ability1300 làm rõ một giới hạn đặc biệt. Hai λ có semantic trace và endpoint giống exact trong từng block vì prerequisite deficit bằng0 theo thiết kế. Ba K1300 do đó bằng0 là kết quả phù hợp negative control đã biết trước. Tuy vậy, ba Q1300 đều khác0 và mang cả hai dấu. Khác biệt nguồn graph vẫn có thể đi cùng endpoint khác khi world penalty này không hoạt động. Chưa thể quy toàn bộ graph-source advantage cho cơ chế thiếu tiên quyết, cũng chưa tách riêng signal, parent adaptation, chọn bài hoặc challenge/response dynamics. [E9c]
+
+### Đường đi khác nhau chưa chỉ định một mediator
+
+Trong cả18cặp expert–learned, có ít nhất một câu hỏi được chọn khác nhau. Tổng1.409/2.160vị trí ordinal khác question ID. Mẫu số này là18cặp trajectory×120steps, không phải2.160independent observations. Đáp án trước lần phân kỳ câu hỏi đầu tiên vẫn trùng trong từng cặp. Sau đó, cùng ordinal step có thể thuộc query và history khác, nên không dùng các vị trí ấy để tính paired response loss hoặc giải thích matched-query probability changes. [E9d]
+
+E9 bổ sung một bước giữa câu hỏi cơ học của RQ1 và kiểm tra endpoint của RQ2. Đổi nguồn graph có thể đổi đường đi và net latent endpoint, nhưng chiều endpoint phụ thuộc block và world condition. Dữ liệu này chưa xác định việc đổi native mastery, readiness hay một rank score nào đã trung gian hóa effect. Nó cũng chưa đánh giá mastery accuracy hoặc response calibration. Các analyses E1–E7 và contrasts E9 vì vậy cần được đọc theo đúng population và intervention của từng phần.
+
+### Những điều còn chưa biết
+
+Kết quả chỉ dùng một learned graph, một native GAM variant và ba blocks đã có. Graph học có thể phản ánh support hoặc logged order của corpus TRAIN, chưa là recovery của prerequisite truth. Confidence không phải xác suất edge đúng. Same-step uniforms là coupling đã khai báo, còn ability là scalar cộng residual trong simulator, chưa đại diện cho nguyên nhân năng lực ở người học thật.
+
+Cần tiếp tục kiểm các graph conditions và worlds độc lập theo thiết kế đã freeze, đánh giá calibrated controller cùng neural comparators bắt buộc, và giữ nguồn gốc mọi state/role. Pilot này không thay main matrix hai environments hoặc fitted AKT/SAKT/GKT/CG-AKT results. Việc viết E9 không sinh thêm world, model fit, CI hoặc p-value, và chưa hoàn tất RQ1/RQ2/RQ3.
+
+### Nguồn bổ sung E9
+
+- **E9a** dùng plan, admission, summary và worker receipt của pilot learned19, cùng [báo cáo chuyên đề đã lưu trong bundle](../runs/rq2-learned-graph-ability-20261109-01/report_draft.md).
+- **E9b** dùng sentinel, initial-state scope và [bản kiểm độc lập trong bundle](../runs/rq2-learned-graph-ability-20261109-01/independent_verification.json).
+- **E9c** dùng đủ [18graph-source components](../runs/rq2-learned-graph-ability-20261109-01/native__graph_source_contrasts.json), [9conditional contrasts](../runs/rq2-learned-graph-ability-20261109-01/native__conditional_lambda_contrasts.json) và high controls.
+- **E9d** dùng đủ18trajectory joins trong independent verification, source chronology và raw-output hashes. Source map ghi phép cộng18question-ID counts cho1.409/2.160, không tạo thêm phép chạy hoặc metric population mới.
+
+Pilot E9 đã đóng bằng chứng trong [bundle learned19](../runs/rq2-learned-graph-ability-20261109-01/README.md). Manifest và SHA của sources được ghi trong source map. Root đã đối chiếu 18 nguồn cùng 66 giá trị theo đường dẫn JSON và hai phép cộng từ dữ liệu đã lưu trước xuất bản. Các mục 1–11 cùng toàn bộ nguồn E1–E8 được giữ nguyên.

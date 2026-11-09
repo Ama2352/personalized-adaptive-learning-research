@@ -86,11 +86,11 @@
     "Phân tích cuối, demo dùng checkpoint fitted và bản luận văn hoàn chỉnh còn việc. Chưa có bằng chứng hoàn tất toàn bộ RQ1–RQ3."
   ],
   "next_recommended_investigation": [
-    "Đọc closure này và currentfocus trước lặp lại. Kiểm RAM thực, không suy đủ4GiB từ lời hứa giải phóng RAM.",
-    "Review native06/current38 receipt và GKT native02 source. Chỉ dispatch tuần tự khi actual available>=4GiB.",
-    "Review/ghép E9 candidate và18source/66pointers, giữ43.799byte E1–E8.",
-    "Review GKT trainercontract trước candidate, giữ evalpast+tail tuyến tính và final-label boundary.",
-    "Review GRAPH29resume plan và replication10newblocks source preparation. Chưa chạy các lượt đó."
+    "Đọc currentfocus/turnclosure và các publication trước lặp lại. E9 đã publish và giữ E1–E8.",
+    "Đo actualRAM. Review native06/current38 và GKTnative02 source, chỉ dispatch tuần tự khi available>=4GiB.",
+    "Review120fresh-world worker/plan trước boundedCPU dispatch, chưa sinh draws hoặc chạy source preparation.",
+    "Review GKT trainer candidates theo contract và GRAPH29 resume plan, không suy fullresume từ lowlevelCP.",
+    "Giữ source hashes, raw logs, figure snapshots và commit từng batch đã kiểm, cloud/Holdout/fullCV tiếp tục gated."
   ],
   "resume_instructions": "Đọc current_readiness_summary/current_software_gate/autonomous_engineering_loop trước các snapshots cũ; đọc actual raw bundle/commit và poll handle trước remote. Không rerun completed worker/Gate để lấy artifact; mọi paid GPU/fullCV/Holdout cần authorization riêng.",
   "resolved_questions": {
@@ -5639,6 +5639,69 @@
     "append_map_sha256": "d94537f88c9a46d57e54a29e7a0f27a20b2c4bc0887a5f4650720cc54b71c9e1",
     "previous43_799bytes_preserved": true,
     "direct_JSON_pointers": 66,
-    "note": "Root cần đọc nội dung và kiểm pointer map trước ghép vào bản thảo canonical."
+    "note": "Root cần đọc nội dung và kiểm pointer map trước ghép vào bản thảo canonical.",
+    "publication": {
+      "status": "PUBLISHED_E9_APPEND_ONLY_NOT_RQ_COMPLETE",
+      "draft": "research_tracking/reports/THESIS_RQ1_MECHANISMS_DRAFT_20261109.md",
+      "draft_sha256": "388da94d2165928ae9007c0bfa953a618ad85d559a2d92c0d0f7ca46f3e662b6",
+      "map_sha256": "304d6e11ed566c44609759645ce03a68fe551a4105a58f4b4e440f501909907a",
+      "bundle": "research_tracking/runs/thesis-rq1-e9-writing-20261109-01",
+      "manifest_sha256": "68946caae325598a0e27969e19408f2169154b57305f52af20b2186bd6057896",
+      "outputs": 11,
+      "previous_bytes_preserved": 43799,
+      "source_inventory": 112,
+      "direct_JSON_pointers": 66,
+      "derived_sums": 2,
+      "new_model_or_world_calls": 0,
+      "new_independent_N": 0
+    }
+  },
+  "rq1_thesis_E9_20261109": {
+    "status": "PUBLISHED_E9_APPEND_ONLY_NOT_RQ_COMPLETE",
+    "draft": "research_tracking/reports/THESIS_RQ1_MECHANISMS_DRAFT_20261109.md",
+    "draft_sha256": "388da94d2165928ae9007c0bfa953a618ad85d559a2d92c0d0f7ca46f3e662b6",
+    "map_sha256": "304d6e11ed566c44609759645ce03a68fe551a4105a58f4b4e440f501909907a",
+    "bundle": "research_tracking/runs/thesis-rq1-e9-writing-20261109-01",
+    "manifest_sha256": "68946caae325598a0e27969e19408f2169154b57305f52af20b2186bd6057896",
+    "outputs": 11,
+    "previous_bytes_preserved": 43799,
+    "source_inventory": 112,
+    "direct_JSON_pointers": 66,
+    "derived_sums": 2,
+    "new_model_or_world_calls": 0,
+    "new_independent_N": 0
+  },
+  "rq2_fresh_replication_preparation_20261109": {
+    "status": "DESIGN_FROZEN_WORKER_SOURCE_IN_PROGRESS_NOT_EXECUTED",
+    "design": "artifacts/akt/local-tests/akt-research-runner-20261108-01/RQ2_FRESH_GRAPH_SOURCE_REPLICATION_DESIGN01.md",
+    "design_sha256": "47fd5733677d922ac555205e99df45dd5c52f56449f53f3e3cc8d924756ed223",
+    "blocks": [
+      21010,
+      21011,
+      21012,
+      21013,
+      21014,
+      21015,
+      21016,
+      21017,
+      21018,
+      21019
+    ],
+    "planned_worlds": 120,
+    "planned_interactions": 14400,
+    "rejected_seed_proposal": "21003–21012 trùng7CPU09 random blocks, giữ lịch sử lý do bỏ trước draws.",
+    "proposed_whole_seconds": 240,
+    "proposed_worker_seconds": 210,
+    "rationale": "Measured learned19 cellphase naiveprojection120cells≈141s trướcfinalization, không dùng allocation130s thiếu thời gian.",
+    "source_resource_and_dispatch_root_review_pending": true,
+    "actual_world_calls": 0,
+    "audit_limit": "rg cacheaccess lỗi được ghi, chỉ chứng minh chưa tìm executed scientific uses trong phạm vi đã audit."
+  },
+  "gkt_trainer_preparation_20261109": {
+    "contract": "artifacts/akt/local-tests/akt-research-runner-20261108-01/GKT_RESEARCH_TRAINER_CONTRACT01.md",
+    "contract_sha256": "5448d0fe39d1edd16104d313fb7a1c13e640128af0f76c4098afbbf1567f42c7",
+    "status": "ROOT_CONTRACT_REVIEWED_SOURCE_CANDIDATE_IN_PROGRESS_NOT_APPLIED",
+    "raw_prediction_strategy": "Past sequence rồi tail predict, giữ tuyến tính và không đọc last current label.",
+    "actual_native_calls": 0
   }
 }

@@ -967,3 +967,8 @@ Root chạy đúng allocation19worlds/60s, terminal0 trong33,8794518s. Independe
 ##09/11 — Đóng lượt metadata và learned19, giữ goal active
 
 Ba commit4575e79/4037472/7165c81 giữ recipe, source/contracts đã kiểm và kết quả RQ2. Root readback203raw Git paths nguyên byte. Hai file GKT model/test còn ngoài commit để chờ native11. E9 candidate/map đã freeze, chưa canonical. Native CPU06/GKT11 chưa dispatch do RAM thực thấp hơn4GiB. Hợp đồng trainer GKT và GRAPH29resume/replication tiếp tục review nguồn. Mọi owned preview đã đóng. Goal vẫn ACTIVE, chưa hoàn tất RQ hoặc chi cloud.
+
+
+##09/11 — E9 đã nối vào bản thảo
+
+Root đã đọc E9 và kiểm18source/66directpointers/hai sums, giữ43.799bytes E1–E8 cùng94entries cũ. Canonical map112nguồn và writing11bundle đã đóng. GKT trainercontract được review để chuẩn bịsource; GRAPH29 và replication120worlds còn chuẩn bị, chưa gọi model/world. Nativecheckpoint/GKT vẫn chờ actual4GiB, không chi cloud hoặc truy cập Holdout.
