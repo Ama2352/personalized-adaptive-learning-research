@@ -1,0 +1,49 @@
+{
+  "test_dispatch": "ROOT-owned bounded controller only; no agent execution",
+  "before_inventory_sha256": "c33c8a49f4c485d5a1f1ab80c3378b4bafebc15e119d4ea5a2b99043393eed05",
+  "limitations_vi": [
+    "Chưa có actual Linux source proof/runtime/Gate.",
+    "Fixtures metadata/tmpFS không tạo execution grant hoặc host acceptance.",
+    "Public imports có thể nạp NumPy qua existing dependencies; không import/chạy bởi agent.",
+    "Historical Windows profile/env và publicauthorization không đổi. Gate05 stale qua current source binding."
+  ],
+  "static_expected_cases": {
+    "scope": "Source-derived estimate, not pytest collection or PASS",
+    "combined": 154,
+    "gate_refresh": 103,
+    "main_execution": 51
+  },
+  "before_inventory": "artifacts/akt/local-tests/akt-research-runner-20261108-01/pre-linux-main-provenance01/inventory.json",
+  "source_files": [
+    {
+      "sha256_after_copy": "73bbacc8c8bd196cc9d3eeb7e3ac65f27a51f3a52fa8d3fe83d14dd87ac8c7aa",
+      "path": "src/knowledge_tracing/akt/research_main_execution.py",
+      "sha256_before_copy": "73bbacc8c8bd196cc9d3eeb7e3ac65f27a51f3a52fa8d3fe83d14dd87ac8c7aa",
+      "bytes": 31796,
+      "snapshot": "artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-provenance-source01/research_main_execution.py"
+    },
+    {
+      "sha256_after_copy": "f7ed9b4dc7d28c54e3899089c5db8876d2f0fd4bf9532a901fa5eaef46431e55",
+      "path": "tests/akt/test_research_main_execution.py",
+      "sha256_before_copy": "f7ed9b4dc7d28c54e3899089c5db8876d2f0fd4bf9532a901fa5eaef46431e55",
+      "bytes": 17181,
+      "snapshot": "artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-provenance-source01/test_research_main_execution.py"
+    },
+    {
+      "sha256_after_copy": "ed87ee74589087b66b434137f67388b64efb4160c41c33ff423ffc41bcc9e157",
+      "path": "scripts/akt/refresh_gate2.py",
+      "sha256_before_copy": "ed87ee74589087b66b434137f67388b64efb4160c41c33ff423ffc41bcc9e157",
+      "bytes": 19410,
+      "snapshot": "artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-provenance-source01/refresh_gate2.py"
+    },
+    {
+      "sha256_after_copy": "8f15c3d48edbca88bad8b5534c900841831e98b97d005000b46c598c7f5c9aea",
+      "path": "tests/akt/test_gate2_refresh.py",
+      "sha256_before_copy": "8f15c3d48edbca88bad8b5534c900841831e98b97d005000b46c598c7f5c9aea",
+      "bytes": 32679,
+      "snapshot": "artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-provenance-source01/test_gate2_refresh.py"
+    }
+  ],
+  "status": "SOURCE_ONLY_NOT_EXECUTED",
+  "proposed_root_test_command": ".venv\\Scripts\\python.exe -B -m pytest tests/akt/test_research_main_execution.py tests/akt/test_gate2_refresh.py -q -o addopts= -p no:cacheprovider --junitxml <fresh-owned-output>/pytest.xml"
+}

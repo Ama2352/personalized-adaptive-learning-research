@@ -179,12 +179,15 @@ def _publisher(tmp_path, monkeypatch, *, elapsed):
         return SimpleNamespace(returncode=observed.get('returncodes', {}).get(group, 0))
 
     monkeypatch.setitem(namespace, 'ROOT', root)
-    monkeypatch.setitem(namespace, 'sys', SimpleNamespace(prefix=str(root / '.venv'), executable='fixture-python'))
+    monkeypatch.setitem(namespace, 'sys', SimpleNamespace(prefix=str(root / '.venv'), executable='fixture-python',platform='win32'))
     monkeypatch.setitem(namespace, 'time', SimpleNamespace(perf_counter=lambda: clock.now))
     monkeypatch.setitem(namespace, '_fixture_clock', clock)
     monkeypatch.setitem(namespace, 'subprocess', SimpleNamespace(run=child, STDOUT=-2))
     monkeypatch.setitem(namespace, 'verify_upstream', lambda *args: {'commit': 'synthetic source'})
-    monkeypatch.setitem(namespace, 'gate2_build_hashes', lambda: {'fixture.py': 'source hash'})
+    writer_sha256 = hashlib.sha256(Path(namespace['__file__']).read_bytes()).hexdigest()
+    build_hashes = {'fixture.py': 'source hash', 'scripts/akt/refresh_gate2.py': writer_sha256}
+    monkeypatch.setitem(namespace, '_fixture_build_hashes', build_hashes)
+    monkeypatch.setitem(namespace, 'gate2_build_hashes', lambda: dict(build_hashes))
     def reader(*args, **kwargs):
         observed['reader_kwargs'] = kwargs
         if 'reader_elapsed' in observed:
@@ -209,7 +212,7 @@ def test_gate2_exit_zero_clock_overrun_rejected_without_pointer_change(tmp_path,
     assert rejected['status'] == 'REJECTED_RESOURCE_BOUND'
     assert rejected['elapsed_seconds'] == 1084.0 and rejected['timeout_seconds'] == 540
     assert rejected['test_result']['passed'] == 1  # First process finished before the clock overrun.
-    assert rejected['build_hashes'] == {'fixture.py': 'source hash'}
+    assert rejected['build_hashes'] == refresh.__globals__['_fixture_build_hashes']
     assert rejected['test_log_sha256'] == hashlib.sha256(
         (directory / 'gate2-tests-synthetic-overrun.log').read_bytes()).hexdigest()
     assert not (directory / 'gate2-pointer-before-synthetic-overrun.json').exists()
@@ -240,6 +243,35 @@ def test_gate2_inbudget_publisher_retains_counts_and_bounds_child_threads(tmp_pa
                 'OMP_NUM_THREADS': '2', 'MKL_NUM_THREADS': '2', 'OPENBLAS_NUM_THREADS': '2',
                 'CUDA_VISIBLE_DEVICES': ''}
     assert time.perf_counter is real_counter  # Only the loaded script's clock was replaced.
+
+
+@pytest.mark.parametrize('platform_id', ['win32', 'linux'])
+def test_gate2_profile_records_process_values_and_current_writer(tmp_path, monkeypatch, platform_id):
+    refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.)
+    namespace = refresh.__globals__
+    namespace['sys'].platform = platform_id  # Declared fixture, no actual Linux run.
+    before = pointer.read_bytes()
+    refresh('synthetic-profile', publish_current=False, timeout_seconds=30)
+    report = json.loads((directory / 'gate2-evidence-synthetic-profile.json').read_bytes())
+    assert report['execution_profile'] == dict(schema_version=1,platform_id=platform_id,
+        project_root=str(namespace['ROOT']),python=namespace['sys'].executable,
+        python_prefix=namespace['sys'].prefix,writer_sha256=namespace['_fixture_build_hashes']['scripts/akt/refresh_gate2.py'])
+    assert report['execution_profile']['writer_sha256'] == hashlib.sha256(Path(namespace['__file__']).read_bytes()).hexdigest()
+    assert pointer.read_bytes() == before
+
+
+@pytest.mark.parametrize('writer_pin', [None, 'f'*64])
+def test_gate2_rejects_missing_or_stale_writer_before_child(tmp_path, monkeypatch, writer_pin):
+    refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.)
+    before = pointer.read_bytes()
+    build_hashes = refresh.__globals__['_fixture_build_hashes']
+    if writer_pin is None:
+        build_hashes.pop('scripts/akt/refresh_gate2.py')
+    else:
+        build_hashes['scripts/akt/refresh_gate2.py'] = writer_pin
+    with pytest.raises(ValueError,match='writer'):
+        refresh('synthetic-bad-writer',publish_current=False,timeout_seconds=30)
+    assert not observed.get('children') and pointer.read_bytes() == before
 
 
 def test_gate2_unique_run_root_supports_real_nested_pytest_basetemps(tmp_path_factory, monkeypatch):

@@ -1,0 +1,335 @@
+........................................................................ [ 46%]
+......................................................FFFFFF..FFFFFFFF.. [ 93%]
+..........                                                               [100%]
+================================== FAILURES ===================================
+_______ test_gate2_invalid_selected_lock_rejects_before_child[outside] ________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-metadata-tests01/pytest-temp/test_gate2_invalid_selected_lo0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCC69EC280>
+case = 'outside'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+            refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+>       assert not observed and pointer.read_bytes() == original
+E       AssertionError: assert (not {'build_hashes': {'fixture.py': 'source hash', 'scripts/akt/refresh_gate2.py': 'ed87ee74589087b66b434137f67388b64efb4160c41c33ff423ffc41bcc9e157'}})
+
+tests\akt\test_gate2_refresh.py:423: AssertionError
+_______ test_gate2_invalid_selected_lock_rejects_before_child[missing] ________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-metadata-tests01/pytest-temp/test_gate2_invalid_selected_lo1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCC6BBF000>
+case = 'missing'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+            refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+>       assert not observed and pointer.read_bytes() == original
+E       AssertionError: assert (not {'build_hashes': {'fixture.py': 'source hash', 'scripts/akt/refresh_gate2.py': 'ed87ee74589087b66b434137f67388b64efb4160c41c33ff423ffc41bcc9e157'}})
+
+tests\akt\test_gate2_refresh.py:423: AssertionError
+_______ test_gate2_invalid_selected_lock_rejects_before_child[private] ________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-metadata-tests01/pytest-temp/test_gate2_invalid_selected_lo2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCC6BBFE00>
+case = 'private'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+            refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+>       assert not observed and pointer.read_bytes() == original
+E       AssertionError: assert (not {'build_hashes': {'fixture.py': 'source hash', 'scripts/akt/refresh_gate2.py': 'ed87ee74589087b66b434137f67388b64efb4160c41c33ff423ffc41bcc9e157'}})
+
+tests\akt\test_gate2_refresh.py:423: AssertionError
+______ test_gate2_invalid_selected_lock_rejects_before_child[protected] _______
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-metadata-tests01/pytest-temp/test_gate2_invalid_selected_lo3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCC69EEBA0>
+case = 'protected'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+            refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+>       assert not observed and pointer.read_bytes() == original
+E       AssertionError: assert (not {'build_hashes': {'fixture.py': 'source hash', 'scripts/akt/refresh_gate2.py': 'ed87ee74589087b66b434137f67388b64efb4160c41c33ff423ffc41bcc9e157'}})
+
+tests\akt\test_gate2_refresh.py:423: AssertionError
+______ test_gate2_invalid_selected_lock_rejects_before_child[directory] _______
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-metadata-tests01/pytest-temp/test_gate2_invalid_selected_lo4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCC69A78C0>
+case = 'directory'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+            refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+>       assert not observed and pointer.read_bytes() == original
+E       AssertionError: assert (not {'build_hashes': {'fixture.py': 'source hash', 'scripts/akt/refresh_gate2.py': 'ed87ee74589087b66b434137f67388b64efb4160c41c33ff423ffc41bcc9e157'}})
+
+tests\akt\test_gate2_refresh.py:423: AssertionError
+___ test_gate2_invalid_selected_lock_rejects_before_child[unapproved_root] ____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-metadata-tests01/pytest-temp/test_gate2_invalid_selected_lo5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCC69A4D00>
+case = 'unapproved_root'
+
+    @pytest.mark.parametrize('case', ['outside', 'missing', 'private', 'protected', 'directory', 'unapproved_root'])
+    def test_gate2_invalid_selected_lock_rejects_before_child(tmp_path, monkeypatch, case):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=1.0)
+        root = directory.parents[2]
+        paths = {'outside': tmp_path / 'outside.lock.txt',
+                 'missing': root / 'artifacts/akt/missing.lock.txt',
+                 'private': root / 'artifacts/akt/private/lock.txt',
+                 'protected': root / 'dataset/lock.txt',
+                 'directory': root / 'artifacts/akt/runtime',
+                 'unapproved_root': root / 'other.lock.txt'}
+        selected = paths[case]
+        if case == 'directory':
+            selected.mkdir(parents=True)
+        elif case != 'missing':
+            selected.parent.mkdir(parents=True, exist_ok=True)
+            selected.write_bytes(b'not an allowed lock')
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='lock'):
+            refresh('synthetic-invalid', publish_current=True, lock_file=selected)
+>       assert not observed and pointer.read_bytes() == original
+E       AssertionError: assert (not {'build_hashes': {'fixture.py': 'source hash', 'scripts/akt/refresh_gate2.py': 'ed87ee74589087b66b434137f67388b64efb4160c41c33ff423ffc41bcc9e157'}})
+
+tests\akt\test_gate2_refresh.py:423: AssertionError
+________ test_gate2_missing_required_pure_module_fails_before_child[0] ________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-metadata-tests01/pytest-temp/test_gate2_missing_required_pu0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCC69A5860>
+index = 0
+
+    @pytest.mark.parametrize('index', range(7))
+    def test_gate2_missing_required_pure_module_fails_before_child(tmp_path, monkeypatch, index):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=0.)
+        ns = refresh.__globals__; root = directory.parents[2]
+        (root / (*ns['STRICT_STDLIB'], *ns['NO_TORCH'])[index]).unlink()
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='every explicit pure'):
+            refresh('missing-group', publish_current=True, timeout_seconds=30)
+>       assert not observed and pointer.read_bytes() == original
+E       AssertionError: assert (not {'build_hashes': {'fixture.py': 'source hash', 'scripts/akt/refresh_gate2.py': 'ed87ee74589087b66b434137f67388b64efb4160c41c33ff423ffc41bcc9e157'}})
+
+tests\akt\test_gate2_refresh.py:470: AssertionError
+________ test_gate2_missing_required_pure_module_fails_before_child[1] ________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-metadata-tests01/pytest-temp/test_gate2_missing_required_pu1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCC69A4980>
+index = 1
+
+    @pytest.mark.parametrize('index', range(7))
+    def test_gate2_missing_required_pure_module_fails_before_child(tmp_path, monkeypatch, index):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=0.)
+        ns = refresh.__globals__; root = directory.parents[2]
+        (root / (*ns['STRICT_STDLIB'], *ns['NO_TORCH'])[index]).unlink()
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='every explicit pure'):
+            refresh('missing-group', publish_current=True, timeout_seconds=30)
+>       assert not observed and pointer.read_bytes() == original
+E       AssertionError: assert (not {'build_hashes': {'fixture.py': 'source hash', 'scripts/akt/refresh_gate2.py': 'ed87ee74589087b66b434137f67388b64efb4160c41c33ff423ffc41bcc9e157'}})
+
+tests\akt\test_gate2_refresh.py:470: AssertionError
+________ test_gate2_missing_required_pure_module_fails_before_child[2] ________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-metadata-tests01/pytest-temp/test_gate2_missing_required_pu2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCC69A6890>
+index = 2
+
+    @pytest.mark.parametrize('index', range(7))
+    def test_gate2_missing_required_pure_module_fails_before_child(tmp_path, monkeypatch, index):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=0.)
+        ns = refresh.__globals__; root = directory.parents[2]
+        (root / (*ns['STRICT_STDLIB'], *ns['NO_TORCH'])[index]).unlink()
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='every explicit pure'):
+            refresh('missing-group', publish_current=True, timeout_seconds=30)
+>       assert not observed and pointer.read_bytes() == original
+E       AssertionError: assert (not {'build_hashes': {'fixture.py': 'source hash', 'scripts/akt/refresh_gate2.py': 'ed87ee74589087b66b434137f67388b64efb4160c41c33ff423ffc41bcc9e157'}})
+
+tests\akt\test_gate2_refresh.py:470: AssertionError
+________ test_gate2_missing_required_pure_module_fails_before_child[3] ________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-metadata-tests01/pytest-temp/test_gate2_missing_required_pu3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCC69A7850>
+index = 3
+
+    @pytest.mark.parametrize('index', range(7))
+    def test_gate2_missing_required_pure_module_fails_before_child(tmp_path, monkeypatch, index):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=0.)
+        ns = refresh.__globals__; root = directory.parents[2]
+        (root / (*ns['STRICT_STDLIB'], *ns['NO_TORCH'])[index]).unlink()
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='every explicit pure'):
+            refresh('missing-group', publish_current=True, timeout_seconds=30)
+>       assert not observed and pointer.read_bytes() == original
+E       AssertionError: assert (not {'build_hashes': {'fixture.py': 'source hash', 'scripts/akt/refresh_gate2.py': 'ed87ee74589087b66b434137f67388b64efb4160c41c33ff423ffc41bcc9e157'}})
+
+tests\akt\test_gate2_refresh.py:470: AssertionError
+________ test_gate2_missing_required_pure_module_fails_before_child[4] ________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-metadata-tests01/pytest-temp/test_gate2_missing_required_pu4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCC69A7460>
+index = 4
+
+    @pytest.mark.parametrize('index', range(7))
+    def test_gate2_missing_required_pure_module_fails_before_child(tmp_path, monkeypatch, index):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=0.)
+        ns = refresh.__globals__; root = directory.parents[2]
+        (root / (*ns['STRICT_STDLIB'], *ns['NO_TORCH'])[index]).unlink()
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='every explicit pure'):
+            refresh('missing-group', publish_current=True, timeout_seconds=30)
+>       assert not observed and pointer.read_bytes() == original
+E       AssertionError: assert (not {'build_hashes': {'fixture.py': 'source hash', 'scripts/akt/refresh_gate2.py': 'ed87ee74589087b66b434137f67388b64efb4160c41c33ff423ffc41bcc9e157'}})
+
+tests\akt\test_gate2_refresh.py:470: AssertionError
+________ test_gate2_missing_required_pure_module_fails_before_child[5] ________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-metadata-tests01/pytest-temp/test_gate2_missing_required_pu5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCC69A7D20>
+index = 5
+
+    @pytest.mark.parametrize('index', range(7))
+    def test_gate2_missing_required_pure_module_fails_before_child(tmp_path, monkeypatch, index):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=0.)
+        ns = refresh.__globals__; root = directory.parents[2]
+        (root / (*ns['STRICT_STDLIB'], *ns['NO_TORCH'])[index]).unlink()
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='every explicit pure'):
+            refresh('missing-group', publish_current=True, timeout_seconds=30)
+>       assert not observed and pointer.read_bytes() == original
+E       AssertionError: assert (not {'build_hashes': {'fixture.py': 'source hash', 'scripts/akt/refresh_gate2.py': 'ed87ee74589087b66b434137f67388b64efb4160c41c33ff423ffc41bcc9e157'}})
+
+tests\akt\test_gate2_refresh.py:470: AssertionError
+________ test_gate2_missing_required_pure_module_fails_before_child[6] ________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-metadata-tests01/pytest-temp/test_gate2_missing_required_pu6')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCC69A77E0>
+index = 6
+
+    @pytest.mark.parametrize('index', range(7))
+    def test_gate2_missing_required_pure_module_fails_before_child(tmp_path, monkeypatch, index):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=0.)
+        ns = refresh.__globals__; root = directory.parents[2]
+        (root / (*ns['STRICT_STDLIB'], *ns['NO_TORCH'])[index]).unlink()
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='every explicit pure'):
+            refresh('missing-group', publish_current=True, timeout_seconds=30)
+>       assert not observed and pointer.read_bytes() == original
+E       AssertionError: assert (not {'build_hashes': {'fixture.py': 'source hash', 'scripts/akt/refresh_gate2.py': 'ed87ee74589087b66b434137f67388b64efb4160c41c33ff423ffc41bcc9e157'}})
+
+tests\akt\test_gate2_refresh.py:470: AssertionError
+__________ test_gate2_empty_remaining_group_is_not_silently_omitted ___________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/akt-research-runner-20261108-01/linux-main-metadata-tests01/pytest-temp/test_gate2_empty_remaining_gro0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FCC69A5390>
+
+    def test_gate2_empty_remaining_group_is_not_silently_omitted(tmp_path, monkeypatch):
+        refresh, directory, pointer, observed = _publisher(tmp_path, monkeypatch, elapsed=0.)
+        (directory.parents[2] / 'tests/akt/test_fixture_remaining.py').unlink()
+        original = pointer.read_bytes()
+        with pytest.raises(ValueError, match='without empty groups'):
+            refresh('empty-group', publish_current=True, timeout_seconds=30)
+>       assert not observed and pointer.read_bytes() == original
+E       AssertionError: assert (not {'build_hashes': {'fixture.py': 'source hash', 'scripts/akt/refresh_gate2.py': 'ed87ee74589087b66b434137f67388b64efb4160c41c33ff423ffc41bcc9e157'}})
+
+tests\akt\test_gate2_refresh.py:479: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_invalid_selected_lock_rejects_before_child[outside]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_invalid_selected_lock_rejects_before_child[missing]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_invalid_selected_lock_rejects_before_child[private]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_invalid_selected_lock_rejects_before_child[protected]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_invalid_selected_lock_rejects_before_child[directory]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_invalid_selected_lock_rejects_before_child[unapproved_root]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_missing_required_pure_module_fails_before_child[0]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_missing_required_pure_module_fails_before_child[1]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_missing_required_pure_module_fails_before_child[2]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_missing_required_pure_module_fails_before_child[3]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_missing_required_pure_module_fails_before_child[4]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_missing_required_pure_module_fails_before_child[5]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_missing_required_pure_module_fails_before_child[6]
+FAILED tests/akt/test_gate2_refresh.py::test_gate2_empty_remaining_group_is_not_silently_omitted
+14 failed, 140 passed in 5.26s

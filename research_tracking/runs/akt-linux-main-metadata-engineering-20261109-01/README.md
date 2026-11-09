@@ -1,0 +1,3 @@
+# Linux CPU provenance — metadata engineering trên Windows
+
+Giữ hai lượt cùng154cases:01REJECTED140PASS14FAIL vì fixture observation pollution, 02ACCEPTED154PASS. Raw và source trước/sau không sửa. Additive Gate execution profile, Linux Git/source metadata và fail-closed report bindings được kiểm bằng manufactured fixtures. Chưa actual Linux source/runtime/Gate hoặc CUDA, không fit/admission/chi phí authority. Gate05 lịch sử không attests current source bytes. Wrappers timeout30s, không có Job/RSS receipt. Không copy pytest-temp/corpus/deps. Manifest chỉ chứng nhận evidence closure. Báo cáo tại ../../reports/akt_linux_main_metadata_readiness_20261109.md.

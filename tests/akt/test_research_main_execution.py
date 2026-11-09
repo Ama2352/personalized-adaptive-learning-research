@@ -1,7 +1,7 @@
 """Main execution metadata/file mocks only; never actual runtime/Gate/fit proof."""
 from dataclasses import asdict,replace
 import json
-from pathlib import Path
+from pathlib import Path,PurePosixPath
 from types import SimpleNamespace
 import pytest
 
@@ -145,3 +145,126 @@ def test_git_extra_configuration_transport_or_wrong_safe_root_rejects_before_nat
     for changes in ({'GIT_CONFIG_COUNT':'4'},{'GIT_CONFIG_KEY_3':'credential.helper'},{'GIT_SSH_COMMAND':'untrusted'},
                     {'GH_TOKEN':'untrusted'},{'GIT_CONFIG_VALUE_1':root.parent.as_posix()},{'GIT_ALLOW_PROTOCOL':'https'}):
         with pytest.raises(ValueError):main._validate_git_environment(profile,root,'win32',env|changes)
+
+
+def linux_metadata(monkeypatch):
+    """Declared POSIX metadata only, never a host/runtime/Gate execution proof."""
+    root=PurePosixPath('/fixture/project')
+    config=SimpleNamespace(project_root=root,source_root=root/'artifacts/akt/dependencies/upstream',source_commit=cfg.SOURCE_COMMIT)
+    profile=main.MainLinuxGitProfile('linux-cpu-lf-v1','/fixture/git',H,config.source_root.as_posix(),
+        'artifacts/akt/manufactured-source-proof.json',H,main.LINUX_UPSTREAM_FILES)
+    process=SimpleNamespace(platform='linux',executable=str(root/'.venv/bin/python'),prefix=str(root/'.venv'))
+    monkeypatch.setattr(main,'sys',process)
+    evidence=SimpleNamespace(runtime_report_sha256='b'*64,lock_sha256='c'*64)
+    source=dict(commit=cfg.SOURCE_COMMIT,tree=main.UPSTREAM_TREE,remote='https://github.com/arghosh/AKT.git',
+                files=dict(main.LINUX_UPSTREAM_FILES))
+    proof=dict(schema_version=1,kind='MAIN_LINUX_CPU_SOURCE_PROVENANCE_V1',platform_id='linux',
+        project_root=str(root),python=process.executable,python_prefix=process.prefix,source_root=str(config.source_root),
+        git=dict(executable=profile.executable,executable_sha256=profile.executable_sha256),
+        git_environment=main._git_environment(profile,config.source_root,'linux'),source=source,
+        source_before=dict(source['files']),source_after=dict(source['files']),
+        runtime_report_sha256=evidence.runtime_report_sha256,lock_sha256=evidence.lock_sha256)
+    return SimpleNamespace(config=config,profile=profile,evidence=evidence,proof=proof)
+
+
+def test_linux_profile_and_source_metadata_consistency_is_not_execution(monkeypatch):
+    c=linux_metadata(monkeypatch)
+    env=main._git_environment(c.profile,c.config.source_root,'linux')
+    assert main._validate_git_environment(c.profile,c.config.source_root,'linux',env|{'PATH':'fixture'})==env
+    assert env['GIT_CONFIG_GLOBAL']=='/dev/null' and env['GIT_CONFIG_VALUE_2']=='false'
+    assert main._validate_linux_source_proof(c.profile,c.config,c.evidence,c.proof) is None
+    assert not isinstance(c.profile,main.MainSelectedExecution)
+
+
+@pytest.mark.parametrize('changes',[
+    {'mode':'windows-native03-v1'},{'executable':'relative/git'},{'executable':'/fixture/../git'},
+    {'executable':'//fixture/git'},{'executable':'/fixture/./git'},{'executable_sha256':'not-sha'},
+    {'proof_file':'artifacts/akt/../proof.json'},{'proof_file':'/tmp/proof.json'},
+    {'proof_file':'experiments/proof.json'},{'upstream_files_sha256':main.WINDOWS_UPSTREAM_FILES}])
+def test_linux_profile_rejects_unsafe_or_windows_metadata(monkeypatch,changes):
+    c=linux_metadata(monkeypatch)
+    with pytest.raises(ValueError):replace(c.profile,**changes)
+
+
+@pytest.mark.parametrize('changes',[
+    {'GIT_CONFIG_GLOBAL':'nul'},{'GIT_CONFIG_VALUE_2':'true'},
+    {'GIT_CONFIG_VALUE_1':'/different/source'},{'GIT_SSH_COMMAND':'fixture'},
+    {'GH_TOKEN':'fixture'},{'GIT_ALLOW_PROTOCOL':'https'}])
+def test_linux_environment_remains_closed(monkeypatch,changes):
+    c=linux_metadata(monkeypatch);env=main._git_environment(c.profile,c.config.source_root,'linux')
+    with pytest.raises(ValueError):main._validate_git_environment(c.profile,c.config.source_root,'linux',env|changes)
+    with pytest.raises(ValueError):main._git_environment(c.profile,c.config.source_root,'win32')
+
+
+@pytest.mark.parametrize('field,value',[
+    ('schema_version',True),('platform_id','win32'),('project_root','/other'),('python','/usr/bin/python'),
+    ('python_prefix','/usr'),('runtime_report_sha256','f'*64),('lock_sha256','f'*64),
+    ('source_before',dict(main.WINDOWS_UPSTREAM_FILES)),('source_after',{}),('source',{}),
+    ('git',{'executable':'/other/git','executable_sha256':H}),('git_environment',{})])
+def test_linux_source_proof_rejects_stale_or_cross_host_metadata(monkeypatch,field,value):
+    c=linux_metadata(monkeypatch);c.proof[field]=value
+    with pytest.raises(ValueError):main._validate_linux_source_proof(c.profile,c.config,c.evidence,c.proof)
+
+
+def test_linux_source_proof_requires_exact_schema(monkeypatch):
+    c=linux_metadata(monkeypatch)
+    for proof in (c.proof|{'verified':True},{k:v for k,v in c.proof.items() if k!='source_after'}):
+        with pytest.raises(ValueError):main._validate_linux_source_proof(c.profile,c.config,c.evidence,proof)
+
+
+def linux_gate_metadata(tmp_path,monkeypatch):
+    """TmpFS reader-bound report fixture, not an actual Linux software Gate."""
+    root=tmp_path/'g';root.mkdir()
+    writer=root/main.GATE_WRITER;writer.parent.mkdir(parents=True);writer.write_bytes(b'MANUFACTURED WRITER\n')
+    writer_sha=main.old._hash_file(writer,cap=65536)[0]
+    process=SimpleNamespace(platform='linux',executable=str(root/'.venv/bin/python'),prefix=str(root/'.venv'))
+    monkeypatch.setattr(main,'sys',process)
+    profile=dict(schema_version=1,platform_id='linux',project_root=str(root),python=process.executable,
+                 python_prefix=process.prefix,writer_sha256=writer_sha)
+    builds={main.GATE_WRITER:writer_sha}
+    report=root/'artifacts/akt/preflight/gate2-manufactured.json';report.parent.mkdir(parents=True)
+    value=dict(build_hashes=builds,execution_profile=profile)
+    runtime=dict(runtime=dict(platform_id='linux',project_root=str(root),python=process.executable,python_prefix=process.prefix))
+    return SimpleNamespace(root=root,report=report,value=value,builds=builds,runtime=runtime)
+
+
+def check_linux_gate_fixture(c,*,digest_override=None):
+    c.report.write_text(json.dumps(c.value),encoding='utf-8')
+    digest=main.old._hash_file(c.report,cap=65536)[0]
+    evidence=SimpleNamespace(gate_report_sha256=digest)
+    gate=dict(evidence_path=str(c.report),report_sha256=digest_override or digest)
+    return main._linux_gate_profile(SimpleNamespace(project_root=c.root),evidence,c.runtime,gate,c.builds,65536)
+
+
+def test_linux_gate_profile_checks_bound_report_without_grant(tmp_path,monkeypatch):
+    c=linux_gate_metadata(tmp_path,monkeypatch)
+    assert check_linux_gate_fixture(c) is None
+    assert not isinstance(c.value,main.MainSelectedExecution)
+
+
+@pytest.mark.parametrize('field,value',[
+    ('schema_version',True),('platform_id','win32'),('project_root','/other'),('python','/other/python'),
+    ('python_prefix','/other/venv'),('writer_sha256','f'*64),('extra','not-closed')])
+def test_linux_gate_profile_rejects_stale_or_foreign_writer_process(tmp_path,monkeypatch,field,value):
+    c=linux_gate_metadata(tmp_path,monkeypatch);c.value['execution_profile'][field]=value
+    with pytest.raises(ValueError):check_linux_gate_fixture(c)
+
+
+def test_linux_gate_rejects_legacy_windows_report_without_profile(tmp_path,monkeypatch):
+    c=linux_gate_metadata(tmp_path,monkeypatch);c.value.pop('execution_profile')
+    with pytest.raises(ValueError,match='execution profile'):check_linux_gate_fixture(c)
+
+
+def test_linux_gate_rejects_report_reread_drift(tmp_path,monkeypatch):
+    c=linux_gate_metadata(tmp_path,monkeypatch)
+    with pytest.raises(ValueError,match='changed after public reader'):
+        check_linux_gate_fixture(c,digest_override='f'*64)
+
+
+def test_linux_gate_rejects_build_and_runtime_mismatch(tmp_path,monkeypatch):
+    c=linux_gate_metadata(tmp_path,monkeypatch)
+    c.runtime['runtime']['platform_id']='win32'
+    with pytest.raises(ValueError,match='runtime'):check_linux_gate_fixture(c)
+    c.runtime['runtime']['platform_id']='linux'
+    c.builds.pop(main.GATE_WRITER)
+    with pytest.raises(ValueError,match='current build'):check_linux_gate_fixture(c)

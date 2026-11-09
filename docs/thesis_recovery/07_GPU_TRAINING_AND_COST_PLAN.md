@@ -1,8 +1,12 @@
 # GPU, artifact và ngân sách
 
-## Trạng thái hiện hành09/11 — CPU admission đã đạt, CUDA còn thiếu
+## Trạng thái hiện hành09/11 — source Linux đã kiểm metadata, cần Gate mới
 
-Nguồn177 và81module hiện hành đã qua1.748ca kiểm Windows CPU, không failure/error/skip. Runtime schema2 được đo mới trong .venv, explicit index dẫn đúng Gate05 và globalpointer lịch sử giữ nguyên. [Gate đã đóng](../../research_tracking/reports/akt_windows_gate_accepted_20261109.md), [runtime và index](../../research_tracking/reports/akt_windows_runtime_gate_index_20261109.md).
+Bốn file Main/Gate và test tương ứng vừa bổ sung profile Linux CPU. Hai module kiểm tra đã đạt 154 ca trên Windows. Gói bằng chứng giữ cả lượt đầu 140 đạt/14 lỗi fixture và lượt sau 154 đạt. Các profile Linux được dựng trong test, còn source proof, runtime và Gate Linux thực tế cần kiểm trên máy đích. Gate05 đã đạt ở phiên bản trước. Bốn file mới làm binding của Gate05 cũ hết hiệu lực với source hiện tại, nên cần refresh software Gate trước lượt Main tiếp theo. [Kết quả và phạm vi 154 ca](../../research_tracking/reports/akt_linux_main_metadata_readiness_20261109.md).
+
+Các mốc phía dưới là bằng chứng của phiên bản tại thời điểm chạy.
+
+Nguồn177 và81module ở mốc Gate05 đã qua1.748ca kiểm Windows CPU, không failure/error/skip. Runtime schema2 được đo trong .venv, explicit index dẫn đúng Gate05. [Gate đã đóng](../../research_tracking/reports/akt_windows_gate_accepted_20261109.md), [runtime và index](../../research_tracking/reports/akt_windows_runtime_gate_index_20261109.md).
 
 Main A0 guard đã được thực hiện qua public factory trên corpus mô phỏng đã lưu, dùng cấu hình frozen20epochs và resource envelope chỉ dành cho guard. Outer ghi10,9232783giây,20Git provenance commands thật, source/data trước=sau, lỗi rỗng và Job0. Không gọi mô hình, optimizer hoặc teacher. Trước đó prepare và materialize cũng đã đạt. [Gói53outputs đã đóng](../../research_tracking/reports/akt_main_guard_admission_20261109.md) và commit8e2ffc5 giữ đủ raw logs của ba operation. Đây là admission proof riêng. Lượt selected-fit nhỏ được nghiệm thu tiếp theo như mô tả dưới đây.
 

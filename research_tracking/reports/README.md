@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**AKT, chuẩn bị Linux CPU.** [154 kiểm metadata đã đạt](akt_linux_main_metadata_readiness_20261109.md), [gói bằng chứng](../runs/akt-linux-main-metadata-engineering-20261109-01/README.md). Giữ hai lượt cùng bộ test, lần đầu có 14 lỗi do fixture. Cần source proof/runtime/Gate thực trên Linux. Gate05 thuộc phiên bản trước bốn file vừa sửa.
+
 **RQ1 — điểm tổng hợp ba câu tham chiếu trên dòng dữ liệu chung.** [Kết quả và nguồn](rq1_reference_mixture_reliability_20261109.md), [bundle42outputs](../runs/rq1-reference-mixture-reliability-20261109-01/README.md). Giữ2160arm rows/1080query–Y/3seed blocks, kiểm Decimal đủ32views/480bins/64strata. Sai lệch khác chiều giữa hồ sơ còn tồn tại, chưa kết luận native mastery truth.
 
 **Paper1 PDF — primitives và input ứng viên.** [26kiểm kỹ thuật](paper1_pdf_primitives_readiness_20261109.md), [bundle25outputs](../runs/paper1-pdf-primitives-engineering-20261109-01/README.md). Tách world/Elo/controller, giữ nguồn lịch sử. Có thêm24kiểm input và nạp bộ ứng viên thật28/84/25–31, [bundle13outputs](../runs/paper1-pdf-domain-engineering-20261109-01/README.md). Chưa là thí nghiệm đầy đủ hoặc kết quả RQ mới.

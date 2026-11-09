@@ -839,3 +839,8 @@ Root kiểm dry94copies+9generated, sau đó đóng và verify103outputs. Manife
 ## 09/11 — raw reference-mixture cached đã đạt
 
 Root chạy pure01 gồm7PASS/1FAIL do known-answer float ULP, giữ source trước sửa. Test-only tolerance sửa đúng một assertion, wire admission giữ exact. Pure02 đạt8ca. Actual cached outer đạt1,5012412giây, toolwall2,0847346giây dưới10giây, helper8/cleanup2 vàJob0. Đủ2160arm/1080queryY/18CRC. Independent Decimal50digits kiểm32views/480bins/64strata trong0,0607666giây. Bundle42outputs đã đóng, manifest1d85675a7d9d5b5215298ea21bdddd457473f6145263dc4b5ff24560480348ac. Báo cáo người đọc thêm Chặng9 và giải thích đối tượng response-mixture. Không thêm mẫu, masterytruth hoặc fit mới.
+
+
+## 09/11 — đóng metadata Linux, Gate cũ cần refresh
+
+Bốn source/test được kiểm qua hai module. Lượt01 có140PASS/14FAIL do fixture build-map làm bẩn observed; sửa riêng fixture, lượt02 đạt154PASS/0FES trong3,7100974giây. Giữ cùng154case IDs, source trước/sau và cả failure. Bundle32outputs đã đóng, SHA manifest895b7319b9bc6914d1fc5cce3b9dbe4e7904c396e049cd732735e802d6c5a799. Đây là Windows-host metadata/tmpFS. Cập nhật GPUplan và GRAPH25 để Gate05 cũ không bị coi là chứng nhận source mới. Actual Linux/CUDA và software Gate mới vẫn cần làm.

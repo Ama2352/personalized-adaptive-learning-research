@@ -9,7 +9,7 @@ import hashlib
 import json
 import math
 import os
-from pathlib import Path
+from pathlib import Path,PurePosixPath
 import re
 import shutil
 import sys
@@ -34,6 +34,12 @@ EOL_SHA='a0307845fbd04ff1b7e52dea821ed9159462005876c4facfdd18be62c40ca6fd'
 WINDOWS_UPSTREAM_FILES=(('LICENSE','891133edce0d8693f5b916d4257ce70b71a02aa110cb02cc5d47326544ea4522'),
     ('README.md','df8eea9919dcdb343f3a841540af18e2039b8b0c33af449ca9c752d11f56ee8b'),
     ('akt.py','be2788c20cac602e86ef3a51e5294b37dd7b200f818be4e173dbd69069a3ec6d'))
+# Prospective CRLF-to-LF hashes of the pinned Windows bytes, not a Linux receipt.
+LINUX_UPSTREAM_FILES=(('LICENSE','50a2c2d2521182935c537a56220083c7a4194abdfbd459b6c682fae32cceb4cf'),
+    ('README.md','bec19014f10f469002e46f53175a1599b1be9b2d3fc9fe184129e6da1efd442b'),
+    ('akt.py','ace9e4486ea6d8f8c52310a8ddf27212022136eda719c12d8204fab1bfcfdc67'))
+UPSTREAM_TREE='904863502337ef2eefd1769d14836b62e3c3804a'
+GATE_WRITER='scripts/akt/refresh_gate2.py'
 
 
 def need(ok,message):
@@ -75,8 +81,48 @@ class MainGitProfile:
              and self.upstream_files_sha256==WINDOWS_UPSTREAM_FILES,'actual reviewed Windows EOL/source profile required')
 
 
+def _linux_absolute(value):
+    need(type(value) is str and '\\' not in value and ':' not in value,'absolute POSIX profile path required')
+    path=PurePosixPath(value)
+    need(path.is_absolute() and path.anchor=='/' and path.as_posix()==value and '..' not in path.parts,
+         'canonical absolute POSIX profile path required')
+    return path
+
+
+@dataclass(frozen=True)
+class MainLinuxGitProfile:
+    """Declared Linux metadata; actual source/runtime/Gate proof is still required."""
+    mode: str
+    executable: str
+    executable_sha256: str
+    source_root: str
+    proof_file: str
+    proof_sha256: str
+    upstream_files_sha256: tuple[tuple[str,str],...]
+
+    def __post_init__(self):
+        need(self.mode=='linux-cpu-lf-v1','unsupported Linux Git profile')
+        _linux_absolute(self.executable);_linux_absolute(self.source_root)
+        old._sha(self.executable_sha256);old._sha(self.proof_sha256)
+        need(type(self.proof_file) is str and '\\' not in self.proof_file and ':' not in self.proof_file,
+             'relative Linux source proof required')
+        proof=PurePosixPath(self.proof_file)
+        need(not proof.is_absolute() and proof.as_posix()==self.proof_file and '..' not in proof.parts
+             and proof.parts[:2]==('artifacts','akt') and len(proof.parts)>2,'root-bound Linux source proof required')
+        need(self.upstream_files_sha256==LINUX_UPSTREAM_FILES,'prospective pinned Linux LF hashes required')
+
+
 def _git_environment(profile,source_root,platform_name):
     """Pure metadata profile, NOT actual Git/runtime verification."""
+    if type(profile) is MainLinuxGitProfile:
+        profile.__post_init__()
+        need(platform_name=='linux','Linux profile cannot attest another platform')
+        need(profile.source_root==source_root.as_posix(),'safe.directory must equal exact native source root')
+        return dict(GIT_CONFIG_NOSYSTEM='1',GIT_CONFIG_GLOBAL='/dev/null',GIT_CONFIG_COUNT='3',
+            GIT_CONFIG_KEY_0='core.fsmonitor',GIT_CONFIG_VALUE_0='false',
+            GIT_CONFIG_KEY_1='safe.directory',GIT_CONFIG_VALUE_1=source_root.as_posix(),
+            GIT_CONFIG_KEY_2='core.autocrlf',GIT_CONFIG_VALUE_2='false',
+            GIT_OPTIONAL_LOCKS='0',GIT_TERMINAL_PROMPT='0',GIT_ALLOW_PROTOCOL='__NO_TRANSPORT__')
     need(type(profile) is MainGitProfile,'concrete Git profile required');profile.__post_init__()
     need(platform_name=='win32','Windows reviewed profile cannot attest Linux LF runtime')
     need(profile.source_root.replace('\\','/')==source_root.as_posix(),'safe.directory must equal exact native source root')
@@ -95,6 +141,68 @@ def _validate_git_environment(profile,source_root,platform_name,environment):
     return expected
 
 
+def _validate_linux_source_proof(profile,config,evidence,proof):
+    """Proof metadata consistency only; actual file/Git/runtime checks are separate."""
+    root=config.project_root
+    fields={'schema_version','kind','platform_id','project_root','python','python_prefix','source_root','git',
+            'git_environment','source','source_before','source_after','runtime_report_sha256','lock_sha256'}
+    need(set(proof)==fields and type(proof['schema_version']) is int and proof['schema_version']==1
+         and proof['kind']=='MAIN_LINUX_CPU_SOURCE_PROVENANCE_V1',
+         'actual closed Linux source provenance proof required')
+    need(proof['platform_id']=='linux' and proof['project_root']==str(root) and proof['python']==sys.executable
+         and proof['python_prefix']==sys.prefix and proof['source_root']==str(config.source_root),
+         'Linux proof actual host/interpreter/root binding')
+    need(proof['git']==dict(executable=profile.executable,executable_sha256=profile.executable_sha256)
+         and proof['git_environment']==_git_environment(profile,config.source_root,'linux'),
+         'Linux proof Git binary/process environment binding')
+    expected=dict(commit=config.source_commit,tree=UPSTREAM_TREE,remote='https://github.com/arghosh/AKT.git',
+                  files=dict(LINUX_UPSTREAM_FILES))
+    need(proof['source']==expected and proof['source_before']==proof['source_after']==expected['files']
+         and proof['runtime_report_sha256']==evidence.runtime_report_sha256 and proof['lock_sha256']==evidence.lock_sha256,
+         'Linux proof original source/runtime/lock binding')
+
+
+def _linux_source_proof(profile,config,evidence,cap):
+    """Read an externally pinned actual proof; never manufacture one from metadata."""
+    root=config.project_root
+    executable=shutil.which('git')
+    need(executable is not None,'actual Linux Git executable required')
+    binary=Path(executable);declared=Path(profile.executable)
+    need(binary.is_absolute() and binary.resolve()==declared and declared.resolve()==declared
+         and old._hash_file(declared,cap=16*1024**2)[0]==profile.executable_sha256,
+         'actual physical Linux Git executable/origin/hash')
+    for directory in (root,Path(sys.executable).parent,Path(sys._base_executable).parent):
+        need(not (directory/'git').exists() and not (directory/'git').is_symlink(),'shadow Linux Git executable rejected')
+    proof,pin,_=old._read_json(old._path(root,profile.proof_file),cap)
+    need(pin==profile.proof_sha256,'actual Linux source proof SHA mismatch')
+    _validate_linux_source_proof(profile,config,evidence,proof)
+    for name,digest in LINUX_UPSTREAM_FILES:
+        need(old._hash_file(old._path(root,'artifacts/akt/dependencies/upstream/'+name),cap=cap)[0]==digest,
+             'actual Linux raw LF source drift')
+    return proof
+
+
+def _linux_gate_profile(config,evidence,runtime,gate,build_hashes,cap):
+    """Additional Linux provenance after the unchanged genuine public readers."""
+    root=config.project_root
+    relative=Path(gate['evidence_path']).relative_to(root).as_posix()
+    report,digest,_=old._read_json(old._path(root,relative),cap)
+    need(digest==gate['report_sha256']==evidence.gate_report_sha256,'Linux Gate report changed after public reader')
+    profile=report.get('execution_profile')
+    fields={'schema_version','platform_id','project_root','python','python_prefix','writer_sha256'}
+    need(type(profile) is dict and set(profile)==fields and type(profile['schema_version']) is int
+         and profile['schema_version']==1,'closed actual Linux Gate execution profile required')
+    writer=old._hash_file(old._path(root,GATE_WRITER),cap=cap)[0]
+    expected=dict(schema_version=1,platform_id='linux',project_root=str(root),python=sys.executable,
+                  python_prefix=sys.prefix,writer_sha256=writer)
+    need(profile==expected and build_hashes.get(GATE_WRITER)==writer
+         and report.get('build_hashes')==build_hashes,'Linux Gate actual process/writer/current build binding')
+    actual=runtime['runtime']
+    need(actual.get('platform_id')=='linux' and actual.get('project_root')==profile['project_root']
+         and actual.get('python')==profile['python'] and actual.get('python_prefix')==profile['python_prefix'],
+         'Linux Gate/runtime process binding')
+
+
 def _main_native_evidence(spec,evidence):
     """Same genuine native validators; only process-profile admission differs.
 
@@ -103,17 +211,21 @@ def _main_native_evidence(spec,evidence):
     """
     research=spec.research;c=research.native_config;root=c.project_root;cap=research.budget.max_input_bytes
     _validate_git_environment(spec.git_profile,c.source_root,sys.platform,os.environ)
-    executable=shutil.which('git')
-    need(executable is not None and os.path.normcase(os.path.abspath(executable))==os.path.normcase(os.path.abspath(spec.git_profile.executable))
-         and old._hash_file(Path(executable),cap=16*1024**2)[0]==GIT_EXE_SHA,'actual Git executable/origin/hash')
-    for directory in (root,Path(sys.executable).parent,Path(sys._base_executable).parent):
-        need(not any((directory/name).exists() for name in ('git.exe','git.com','git.cmd','git.bat')),'shadow Git executable rejected')
-    proof,pin,_=old._read_json(old._path(root,EOL_PROOF),cap)
-    need(pin==EOL_SHA and proof['raw_sha256']==dict(WINDOWS_UPSTREAM_FILES)['akt.py']
-         and proof['config_autocrlf']['returncode']==0 and proof['config_autocrlf']['stdout'].endswith('\ttrue')
-         and proof['normal_hash']['returncode']==proof['isolated_hash']['returncode']==0,
-         'reviewed actual EOL comparison proof required, not fabricated normalization')
-    for name,pin in WINDOWS_UPSTREAM_FILES:need(old._hash_file(c.source_root/name,cap=cap)[0]==pin,'physical upstream profile drift')
+    linux=type(spec.git_profile) is MainLinuxGitProfile
+    if linux:
+        proof=_linux_source_proof(spec.git_profile,c,evidence,cap)
+    else:
+        executable=shutil.which('git')
+        need(executable is not None and os.path.normcase(os.path.abspath(executable))==os.path.normcase(os.path.abspath(spec.git_profile.executable))
+             and old._hash_file(Path(executable),cap=16*1024**2)[0]==GIT_EXE_SHA,'actual Git executable/origin/hash')
+        for directory in (root,Path(sys.executable).parent,Path(sys._base_executable).parent):
+            need(not any((directory/name).exists() for name in ('git.exe','git.com','git.cmd','git.bat')),'shadow Git executable rejected')
+        proof,pin,_=old._read_json(old._path(root,EOL_PROOF),cap)
+        need(pin==EOL_SHA and proof['raw_sha256']==dict(WINDOWS_UPSTREAM_FILES)['akt.py']
+             and proof['config_autocrlf']['returncode']==0 and proof['config_autocrlf']['stdout'].endswith('\ttrue')
+             and proof['normal_hash']['returncode']==proof['isolated_hash']['returncode']==0,
+             'reviewed actual EOL comparison proof required, not fabricated normalization')
+        for name,pin in WINDOWS_UPSTREAM_FILES:need(old._hash_file(c.source_root/name,cap=cap)[0]==pin,'physical upstream profile drift')
     paths={name:old._path(root,getattr(evidence,name)) for name in ('runtime_report','lock_file','gate_pointer')}
     preflight=root/'artifacts/akt/preflight'
     need(paths['runtime_report'].parent==preflight and paths['gate_pointer'].parent==preflight,'native preflight paths')
@@ -132,7 +244,12 @@ def _main_native_evidence(spec,evidence):
     need(runtime['runtime_report_sha256']==evidence.runtime_report_sha256 and runtime['lock_sha256']==evidence.lock_sha256
          and gate['pointer_sha256']==evidence.gate_pointer_sha256 and gate['report_sha256']==evidence.gate_report_sha256
          and gate['test_log_sha256']==evidence.gate_log_sha256,'genuine runtime/Gate/source/elapsed checks remain mandatory')
-    return dict(runtime=runtime,gate=gate,build_hashes=old.native_auth.gate2_build_hashes(root))
+    build_hashes=old.native_auth.gate2_build_hashes(root)
+    if linux:
+        need(runtime['source']==proof['source'],'genuine Linux source verification differs from pinned proof')
+        _linux_gate_profile(c,evidence,runtime,gate,build_hashes,cap)
+        need(_linux_source_proof(spec.git_profile,c,evidence,cap)==proof,'Linux source proof changed during preflight')
+    return dict(runtime=runtime,gate=gate,build_hashes=build_hashes)
 
 
 @dataclass(frozen=True)
@@ -168,7 +285,7 @@ class MainSelectedExecutionSpec:
     max_graph_input_bytes: int
     max_output_bytes: int
     cpu_threads: int
-    git_profile: MainGitProfile
+    git_profile: MainGitProfile | MainLinuxGitProfile
 
     def __post_init__(self):
         need(type(self.research) is old.SimulatorResearchSpec and type(self.stage) is MainSelectedStageSpec,'exact research/stage spec required')
@@ -178,8 +295,9 @@ class MainSelectedExecutionSpec:
         need(self.stage.candidate_id=='A0' or self.stage.candidate_id.startswith(('A1_','A2_','A3_')),
              'SAKT/GKT selected producers pending; required matrix is not waived')
         need(type(self.read_limits) is CorpusReadLimits and type(self.graph_input) is MainGraphInput,'typed data/graph inputs required')
-        need(type(self.git_profile) is MainGitProfile,'typed process-only Git profile required');self.git_profile.__post_init__()
-        _git_environment(self.git_profile,self.research.native_config.source_root,'win32')
+        need(type(self.git_profile) in (MainGitProfile,MainLinuxGitProfile),'typed process-only Git profile required');self.git_profile.__post_init__()
+        profile_platform='linux' if type(self.git_profile) is MainLinuxGitProfile else 'win32'
+        _git_environment(self.git_profile,self.research.native_config.source_root,profile_platform)
         old.SimulatorResearchSpec(**{n:getattr(self.research,n) for n in self.research.__dataclass_fields__})
         self.read_limits.__post_init__();self.graph_input.__post_init__()
         for name in ('max_graph_input_bytes','max_output_bytes'):old._positive(getattr(self,name))

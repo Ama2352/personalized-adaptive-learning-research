@@ -215,6 +215,9 @@ def refresh(run_id, *, publish_current=False, timeout_seconds=300, lock_file=Non
     os.environ['GIT_CONFIG_COUNT'] = str(count + 1)
     source = verify_upstream(ROOT / 'artifacts/akt/dependencies/upstream', SOURCE_COMMIT)
     before = gate2_build_hashes()
+    writer_sha256 = sha256_file(Path(__file__))
+    if before.get('scripts/akt/refresh_gate2.py') != writer_sha256:
+        raise ValueError('Gate2 writer must belong to the current build inventory')
     lock_before = sha256_file(lock_path)
     env = {**os.environ, 'PYTHONPATH': str(ROOT / 'src') + os.pathsep + str(ROOT / 'third_party'),
            'CUDA_VISIBLE_DEVICES': '', 'PYTHONDONTWRITEBYTECODE': '1',
@@ -238,6 +241,9 @@ def refresh(run_id, *, publish_current=False, timeout_seconds=300, lock_file=Non
                'command': commands, 'python': sys.executable, 'timeout_seconds': timeout_seconds,
                'process_isolation_schema_version': 1, 'test_module_sha256': module_hashes,
                'process_groups': groups,
+               'execution_profile': {'schema_version': 1, 'platform_id': sys.platform,
+                                     'project_root': str(ROOT), 'python': sys.executable,
+                                     'python_prefix': sys.prefix, 'writer_sha256': writer_sha256},
                'scope': 'CPU synthetic/software gate only, no CUDA or full-training acceptance'}
     try:
         with log.open('xb') as combined:
