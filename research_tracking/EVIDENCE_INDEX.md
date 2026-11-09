@@ -1,5 +1,8 @@
 # Chỉ mục bằng chứng
 
+[Actual Main A0 guard](reports/akt_main_guard_admission_20261109.md) đã đóng53outputs, commit8e2ffc5. Ba operations10/10/20Git, Job0 và0NN. Chưa selected fit/CUDA. Raw57files đã kiểm.
+
+
 ## Mốc hiện hành09/11 — reliability và Gate177 đã đóng
 
 [RQ1 reliability](reports/rq1_response_reliability_diagnostic_20261109.md) đã đóng58outputs, giữ120world/14.400lượt cũ và10seedclusters. Sai lệch trái chiều theo hồ sơ có thể bù trừ khi gộp. Đã cập nhật cả [tóm tắt](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md) và [HTML](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html),10SVG/9bảng, QA1365/390 và browser đã đóng.

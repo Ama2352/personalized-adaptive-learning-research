@@ -1,5 +1,8 @@
 # Mục lục báo cáo và phân tích KLTN
 
+[Actual Main A0 guard](akt_main_guard_admission_20261109.md) đạt, bundle53outputs và raw57Gitfiles đã kiểm. Chuẩn bị10×84 integration và đo chi phí revalidation trước GPU. Chưa selected fit/CUDA.
+
+
 ## Mốc hiện hành09/11 — reliability và Gate177 đã đóng
 
 [RQ1 reliability](rq1_response_reliability_diagnostic_20261109.md) đã đóng58outputs, giữ120world/14.400lượt cũ và10seedclusters. Sai lệch trái chiều theo hồ sơ có thể bù trừ khi gộp. Đã cập nhật cả [tóm tắt](../supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md) và [HTML](../supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html),10SVG/9bảng, QA1365/390 và browser đã đóng.
