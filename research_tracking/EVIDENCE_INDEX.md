@@ -1,5 +1,11 @@
 # Chỉ mục bằng chứng
 
+## Cập nhật 09/11 — phép xác nhận RQ2 mới đang dở dang
+
+[Trạng thái phép kiểm mới](reports/rq2_fresh_replication_readiness_20261109.md) ghi nhận 61/120 ca hoàn tất và 30 tương tác của ca tiếp theo trước khi dừng do RAM trống hệ thống. [Bundle failure](runs/rq2-fresh-graph-source-attempt02-20261109-01/README.md) giữ 39 đầu ra nhỏ và tham chiếu 72 file gốc. Chưa nghiệm thu toàn bộ 120 ca hoặc bổ sung kết luận chính từ tập con này.
+
+[Probe bộ đo RAM](runs/owned-job-family-query-engineering-20261109-01/README.md) đã kiểm sáu lần lấy mẫu toàn bộ owned Job và đóng 15 đầu ra. GKT model/trainer đã áp dụng ở mức kiểm cú pháp, kiểm mô hình thật còn chờ RAM trống 4 GiB. GRAPH29 resume có bản nguồn đang review, chưa áp dụng. Các mốc đã nghiệm thu dưới đây được giữ nguyên.
+
 ## Mốc09/11 — learned graph trong đối chứng năng lực đã có kết quả
 
 [E9 bản thảo luận văn](reports/THESIS_RQ1_MECHANISMS_DRAFT_20261109.md) đã xuất bản từ learned19, giữ43.799bytes E1–E8. [Writing11](runs/thesis-rq1-e9-writing-20261109-01/README.md) giữ before/after và map112nguồn, Root kiểm66JSONpointers/hai phép cộng. Viết không thêm model call hoặc mẫu độc lập.

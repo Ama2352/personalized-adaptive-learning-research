@@ -972,3 +972,10 @@ Ba commit4575e79/4037472/7165c81 giữ recipe, source/contracts đã kiểm và 
 ##09/11 — E9 đã nối vào bản thảo
 
 Root đã đọc E9 và kiểm18source/66directpointers/hai sums, giữ43.799bytes E1–E8 cùng94entries cũ. Canonical map112nguồn và writing11bundle đã đóng. GKT trainercontract được review để chuẩn bịsource; GRAPH29 và replication120worlds còn chuẩn bị, chưa gọi model/world. Nativecheckpoint/GKT vẫn chờ actual4GiB, không chi cloud hoặc truy cập Holdout.
+
+
+## 09/11 — giữ failure RQ2 và sửa đường ngắt GKT
+
+Probe Windows Job đạt sáu samples, xác nhận có một owned member ngoài cây con của worker. Bundle15 đã đóng, chỉ là kiểm bộ đo. Fresh120 nguồn02 dừng do RAM sau 61 ca hoàn tất và30 tương tác F062, thực7350adaptive updates. Root và verifier độc lập đối chiếu72file/61pins, giữ seed/U và failure. Bundle39 đã đóng, chưa nghiệm thu120ca. Phương án recovery cần sửa cumulative worker cap và công khai30replayed interactions trước khi code/run.
+
+GKT trainer02 bị phát hiện bỏ sót KeyboardInterrupt/SystemExit trong poison progress. Candidate03 đã review, áp dụng và kiểm AST cùng8test functions, chưa chạy test/mô hình thật. Model11/trainer8 và AKT checkpointnative16 vẫn cần actual4GiB trước launch. GRAPH29 candidate01 có hai lỗi source-level về ghép nhầm owned receipt và retained quota; đã yêu cầu sửa derivative riêng trước canonical apply. Không chi cloud/Holdout, giữ nguyên11figures và các kết quả khoa học đã nghiệm thu. Ước lượng quản lý hiện70/55/30 cho RQ1/2/3, sai số±10điểm và chưa RQ complete.

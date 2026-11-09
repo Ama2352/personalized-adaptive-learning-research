@@ -1,0 +1,3 @@
+# Đo RAM theo named owned Job
+
+Root đã chạy6metadata samples trong owned Job, actual terminal0 và cleanupJob0. Mỗi sample thấy một Job member ngoài worker descendants. Sampled family peak43.454.464B, worker highwater24.276.992B và free tối thiểu2.095.341.568B. Đã đóng query handles, không import Torch/NumPy/Pandas/KT hoặc gọi model/world. Đây là probe hữu hạn của query API, chưa là hard memory quota hoặc fulltraining readiness. Telemetry cũ ghi family từ worker+descendants cần đọc đúng scope, chưa chứng minh wholeJob peak. Raw khoa học cũ được giữ nguyên. Pilot fresh02 dùng fullJob query trong allocation riêng.

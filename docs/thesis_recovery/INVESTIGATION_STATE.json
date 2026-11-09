@@ -86,11 +86,11 @@
     "Phân tích cuối, demo dùng checkpoint fitted và bản luận văn hoàn chỉnh còn việc. Chưa có bằng chứng hoàn tất toàn bộ RQ1–RQ3."
   ],
   "next_recommended_investigation": [
-    "Đọc currentfocus/turnclosure và các publication trước lặp lại. E9 đã publish và giữ E1–E8.",
-    "Đo actualRAM. Review native06/current38 và GKTnative02 source, chỉ dispatch tuần tự khi available>=4GiB.",
-    "Review120fresh-world worker/plan trước boundedCPU dispatch, chưa sinh draws hoặc chạy source preparation.",
-    "Review GKT trainer candidates theo contract và GRAPH29 resume plan, không suy fullresume từ lowlevelCP.",
-    "Giữ source hashes, raw logs, figure snapshots và commit từng batch đã kiểm, cloud/Holdout/fullCV tiếp tục gated."
+    "Đọc failure fresh02 và prefix verification, đóng archive trước khi triển khai continuation. Giữ nguyên61ca và10base/U, không redraw seed.",
+    "Root review continuation riêng trong cumulative allocation, chưa dispatch chỉ từ việc có file source. Nâng admission cho CPU pilot lên3GiB sau failure, giữ floor1536MiB.",
+    "Đo actualRAM trước lượt native. Chỉ chạy tuần tự GKTmodel11/checkpointnative16 khi đạt4GiB và đúng source pins, kiểm artifact cùng cleanup.",
+    "Review và freeze trainer8 harness theo canonical03, phụ thuộc model11 actual acceptance. GRAPH29 cần metadata rồi normal public native parity riêng.",
+    "Cập nhật hai file người đọc khi có kết luận nghiên cứu đáng kể. Ghi mức bằng chứng chính xác và commit các batch đã kiểm."
   ],
   "resume_instructions": "Đọc current_readiness_summary/current_software_gate/autonomous_engineering_loop trước các snapshots cũ; đọc actual raw bundle/commit và poll handle trước remote. Không rerun completed worker/Gate để lấy artifact; mọi paid GPU/fullCV/Holdout cần authorization riêng.",
   "resolved_questions": {
@@ -3707,10 +3707,11 @@
     "raw_git_proof": "docs/thesis_recovery/evidence/cpu09_observer_readiness_raw_git_20261109.json"
   },
   "current_focus_20261109": [
-    "RQ2 learned19 đã đóng32outputs và Ch13 đã cập nhật. Cần mở rộng độc lập có kế hoạch trước chạy để giải quyết giả thiết ghép initial cũ.",
-    "AKT Main221/checkpoint38 metadata đạt và đã commit coherent. NativeCPU06/currentGate/CUDA/fullproducerresume còn pending.",
-    "GKT model02/test03 đã áp dụng và AST kiểm. Cần native11 khi actualRAM>=4GiB; trainer mới có contract.",
-    "E9 viết từ bằng chứng có sẵn đang chuẩn bị, SAKT admitted producer và required baseline fits còn thiếu."
+    "RQ2 learned19 và E9 đã xuất bản. Fresh120 attempt02 dừng do RAM sau61 ca hoàn tất và30 tương tác của F062; chưa nghiệm thu120ca.",
+    "Đã kiểm6lần đo RAM toàn bộ owned Job và đóng bundle15. Số đo worker+descendants ở hồ sơ cũ phải đọc đúng phạm vi.",
+    "GKT model02/test03 và trainer03/test03 đã áp dụng, mới kiểm AST. Native model11 và trainer8 chưa chạy; cần RAM trống4GiB.",
+    "GRAPH29 có6file candidate cho intentional complete-epoch resume, đang review độc lập, chưa áp dụng hoặc nghiệm thu. Crash/CUDA recovery còn thiếu.",
+    "Native AKT checkpoint06/currentGate/CUDA/required baseline fits còn thiếu. Giữ đầy đủ figures, logs và source, chưa chi cloud hoặc truy cập Holdout."
   ],
   "cuda_core_batch_a_20261109": {
     "status": "VERIFIED_13_METADATA_AND_26_CPU_MODEL_CASES_ACTUAL_CUDA_PENDING",
@@ -5621,7 +5622,7 @@
     "no_RQ_declared_complete": true
   },
   "gkt_native11_preparation_20261109": {
-    "status": "SOURCE_ONLY_NOT_ROOT_REVIEWED_OR_DISPATCHED",
+    "status": "ROOT_SOURCE_REVIEWED_INDEPENDENT_REVIEW_AVAILABLE_NOT_DISPATCHED",
     "worker": "artifacts/akt/local-tests/akt-research-runner-20261108-01/check_gkt_research_model02.py",
     "worker_sha256": "49b92f5295f5bcfc818d528082a9bc25b6aa34e7073ee1c72eebf83816cc0b89",
     "packet": "artifacts/akt/local-tests/akt-research-runner-20261108-01/gkt_research_model02_packet.json",
@@ -5629,7 +5630,9 @@
     "expected_tests": 11,
     "expected_backwards": 2,
     "expected_Adam": 0,
-    "root_review_and_available_4GiB_required": true
+    "root_review_and_available_4GiB_required": false,
+    "available_4GiB_required": true,
+    "independent_review": "artifacts/akt/local-tests/akt-research-runner-20261108-01/GKT_RESEARCH_MODEL_NATIVE_INDEPENDENT_REVIEW02.md"
   },
   "rq1_thesis_E9_candidate_20261109": {
     "status": "FROZEN_APPEND_ONLY_NOT_PUBLISHED",
@@ -5672,7 +5675,7 @@
     "new_independent_N": 0
   },
   "rq2_fresh_replication_preparation_20261109": {
-    "status": "DESIGN_FROZEN_WORKER_SOURCE_IN_PROGRESS_NOT_EXECUTED",
+    "status": "ATTEMPT02_REJECTED_RAM_FLOOR_PARTIAL_RETAINED_FULL120_NOT_ACCEPTED",
     "design": "artifacts/akt/local-tests/akt-research-runner-20261108-01/RQ2_FRESH_GRAPH_SOURCE_REPLICATION_DESIGN01.md",
     "design_sha256": "47fd5733677d922ac555205e99df45dd5c52f56449f53f3e3cc8d924756ed223",
     "blocks": [
@@ -5693,15 +5696,71 @@
     "proposed_whole_seconds": 240,
     "proposed_worker_seconds": 210,
     "rationale": "Measured learned19 cellphase naiveprojection120cells≈141s trướcfinalization, không dùng allocation130s thiếu thời gian.",
-    "source_resource_and_dispatch_root_review_pending": true,
-    "actual_world_calls": 0,
-    "audit_limit": "rg cacheaccess lỗi được ghi, chỉ chứng minh chưa tìm executed scientific uses trong phạm vi đã audit."
+    "source_resource_and_dispatch_root_review_pending": false,
+    "actual_world_calls": 62,
+    "audit_limit": "rg cacheaccess lỗi được ghi, chỉ chứng minh chưa tìm executed scientific uses trong phạm vi đã audit.",
+    "prior_status_before_actual_attempt02": "DESIGN_FROZEN_WORKER_SOURCE_IN_PROGRESS_NOT_EXECUTED",
+    "actual_completed_worlds": 61,
+    "actual_interactions": 7350,
+    "actual_new_base_generations": 10,
+    "actual_uniform_array_generations": 10,
+    "outer": "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq2-fresh-graph-source02-outer/final.json",
+    "outer_sha256": "fb26467c7c4f58b4a678b8df2e7b326c9cc8ac8e336e4962afebea28ecdc93e9",
+    "outer_elapsed_seconds": 56.02164770005038,
+    "job_active_after_cleanup": 0,
+    "available_minimum_bytes": 1608359936,
+    "prefix_verification": "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq2_fresh02_prefix_verification01.json",
+    "prefix_verification_sha256": "9551e0b85ca48cb5fe05236b6ee8bc75e0c471fc2e17d48c5f751a23ff845f95",
+    "continuation_status": "DESIGN_REVIEW_PENDING_NO_RETRY_OR_NEW_DRAWS",
+    "scientific_primary_conclusion": "Chưa đủ population120ca, chưa Q60/K30 hoặc kết luận chính từ phần đã chạy.",
+    "failure_bundle": "research_tracking/runs/rq2-fresh-graph-source-attempt02-20261109-01",
+    "failure_manifest_sha256": "9f618023c4b771db6f5dcec59e13ab3ad1d825e47c6501ec3ceeca5e6ad518f0",
+    "failure_bundle_outputs": 39,
+    "report": "research_tracking/reports/rq2_fresh_replication_readiness_20261109.md",
+    "continuation_review_correction": "Child worker160 cộng parent53,9729 vượt original210; đề xuất mới phải giảm child155. Physical replay thêm30 interactions/+1world cần recovery amendment riêng, không gọi là trong cap logical cũ."
   },
   "gkt_trainer_preparation_20261109": {
     "contract": "artifacts/akt/local-tests/akt-research-runner-20261108-01/GKT_RESEARCH_TRAINER_CONTRACT01.md",
     "contract_sha256": "5448d0fe39d1edd16104d313fb7a1c13e640128af0f76c4098afbbf1567f42c7",
-    "status": "ROOT_CONTRACT_REVIEWED_SOURCE_CANDIDATE_IN_PROGRESS_NOT_APPLIED",
+    "status": "APPLIED_TRAINER03_TEST03_AST_ONLY_NATIVE_PENDING",
     "raw_prediction_strategy": "Past sequence rồi tail predict, giữ tuyến tính và không đọc last current label.",
-    "actual_native_calls": 0
+    "actual_native_calls": 0,
+    "trainer_sha256": "a9a145d1930544b2c9a961267c5e35b4bdd4e9bcd4dde8ae1de979dcd583997e",
+    "test_sha256": "e3446e780713f5acb3ec2a6dfb03ab236b107911338868f2a50806e2f52aba4c",
+    "apply_receipt": "artifacts/akt/local-tests/akt-research-runner-20261108-01/gkt_research_training03_apply_receipt.json",
+    "correction": "Ambient FP32 và Adam scalar FP32 được kiểm trước mutation; cancellation phải poison progress rồi rethrow nguyên nhân gốc."
+  },
+  "previous_focus_before_progress01_20261109": [
+    "RQ2 learned19 đã đóng32outputs và Ch13 đã cập nhật. Cần mở rộng độc lập có kế hoạch trước chạy để giải quyết giả thiết ghép initial cũ.",
+    "AKT Main221/checkpoint38 metadata đạt và đã commit coherent. NativeCPU06/currentGate/CUDA/fullproducerresume còn pending.",
+    "GKT model02/test03 đã áp dụng và AST kiểm. Cần native11 khi actualRAM>=4GiB; trainer mới có contract.",
+    "E9 viết từ bằng chứng có sẵn đang chuẩn bị, SAKT admitted producer và required baseline fits còn thiếu."
+  ],
+  "previous_next_before_progress01_20261109": [
+    "Đọc currentfocus/turnclosure và các publication trước lặp lại. E9 đã publish và giữ E1–E8.",
+    "Đo actualRAM. Review native06/current38 và GKTnative02 source, chỉ dispatch tuần tự khi available>=4GiB.",
+    "Review120fresh-world worker/plan trước boundedCPU dispatch, chưa sinh draws hoặc chạy source preparation.",
+    "Review GKT trainer candidates theo contract và GRAPH29 resume plan, không suy fullresume từ lowlevelCP.",
+    "Giữ source hashes, raw logs, figure snapshots và commit từng batch đã kiểm, cloud/Holdout/fullCV tiếp tục gated."
+  ],
+  "owned_job_query_20261109": {
+    "status": "ACCEPTED_SIX_METADATA_SAMPLES_NO_NATIVE_MODEL",
+    "bundle": "research_tracking/runs/owned-job-family-query-engineering-20261109-01",
+    "manifest_sha256": "6bbc8094c2849662668230e6283a627114c89eb49fe0f74cddcbfc644ee2f42d",
+    "samples": 6,
+    "sampled_family_peak_bytes": 43454464,
+    "worker_highwater_bytes": 24276992,
+    "job_active_after_cleanup": 0,
+    "scope": "Query toàn bộ named owned Job. Mỗi sample thấy một member ngoài worker descendants. Không suy peak wholeJob của lượt cũ.",
+    "actual_model_calls": 0,
+    "scientific_new_N": 0
+  },
+  "management_estimate_after_learned19_20261109": {
+    "RQ1_percent": 70,
+    "RQ2_percent": 55,
+    "RQ3_percent": 30,
+    "uncertainty_percentage_points": 10,
+    "basis": "Ước lượng quản lý theo deliverable đã nghiệm thu, chưa RQ complete. Không cộng fresh120 partial hoặc source-only native preparation.",
+    "report": "research_tracking/RESEARCH_PROGRESS.md"
   }
 }

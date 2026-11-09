@@ -5357,15 +5357,15 @@
         "src/knowledge_tracing/akt/research_graph_checkpoint.py"
       ],
       "implementation_objective": "Thiết kế envelope next-epoch/stopper/history/best/journal/authorization lineage và cumulative budget; preserve old fresh-output selected entry.",
-      "acceptance_criteria": "ROOT chốt contract trước code; interrupted→resumed so uninterrupted về weights/Adam/RNG/epoch selection/exports; reject partialepoch/stale/budget hết. Chưa triển khai/chạy.",
+      "acceptance_criteria": "Contract/plan02 đã review nội bộ,6candidate AST hợp lệ. Cần hoàn tất adversarial review, áp dụng và kiểm metadata trước public native continuous-vs-resume parity. Crash/CUDA recovery có phạm vi và acceptance riêng.",
       "verification_steps": "Lowlevel CP đã có completedepochs/step/target/participation và RNG/modes. Iterator hiện deterministic, không bịa loader RNG; CUDA state phải kiểm riêng.",
       "required_artifacts": [
         "artifacts/akt/local-tests/akt-research-runner-20261108-01/BATCHC_STATE_CLOSURE_AID01.md",
         "Contract và negative/positive acceptance receipts tương lai, chưa tồn tại."
       ],
-      "status": "FEATURE_GAP_NOT_STARTED_ROOT_CONTRACT_REVIEW_REQUIRED",
+      "status": "IN_PROGRESS_SIX_CANDIDATES_SOURCE_REVIEW_NOT_APPLIED",
       "blockers": [
-        "Public run_main_selected_candidate vẫn resume_supported=False và fresh-output guard; chưa producer state machine/continuation grant."
+        "Candidate chưa áp dụng hoặc chạy. Intentional pause chưa chứng minh unexpected crash recovery, CUDA hoặc full training readiness."
       ]
     },
     {
@@ -5430,14 +5430,14 @@
         "Research core/training/checkpoint/export/adaptor files còn cần thiết kế hữu hạn."
       ],
       "implementation_objective": "Giữ old toy caps; chuẩn bị research profile rõ source, actual predict-before-update/fullpopulation/support/null và selected-only lifecycle.",
-      "acceptance_criteria": "Recipe29 đã chốt, model02/test03 đã áp dụng và AST kiểm. Cần native11, trainer/checkpoint/export/reference parity và fitted evidence riêng.",
+      "acceptance_criteria": "Recipe29 đã chốt, model02/test03 và trainer03/test03 đã áp dụng và kiểm AST. Cần native model11 rồi trainer8, checkpoint/export/selected producer/adaptor và fitted evidence riêng.",
       "verification_steps": "Source/numerical review nội bộ trước code/run; positive/negative controls và actual phase receipts sau. Không pending advisor cho routine choice.",
       "required_artifacts": [
         "Finite recipe/implementation/source review và actual acceptance receipts tương lai, hiện chưa có."
       ],
-      "status": "IN_PROGRESS_MODEL_APPLIED_AST_ONLY_NATIVE_PENDING",
+      "status": "IN_PROGRESS_MODEL_AND_TRAINER_APPLIED_AST_ONLY_NATIVE_PENDING",
       "blockers": [
-        "Native model11 chưa chạy vì actualRAM chưa đạt4GiB. Trainer contract mới ở source, checkpoint/admitted producer/adapter/fit còn thiếu."
+        "Native model11 chưa chạy vì chưa đạt admission4GiB. Trainer8 phụ thuộc actual model11 acceptance; checkpoint/admitted producer/adapter/fit còn thiếu."
       ],
       "adopted_recipe": {
         "path": "docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md",
@@ -5588,6 +5588,40 @@
         "new_model_or_world_calls": 0,
         "new_independent_N": 0
       }
+    },
+    {
+      "id": "RQDIAG29",
+      "research_objective": "Kiểm nguồn đồ thị bằng fresh matched states, giải quyết giới hạn ghép initial cũ.",
+      "rq": [
+        "RQ1",
+        "RQ2"
+      ],
+      "workstream": "controlled_simulator_diagnostic",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RQDIAG28",
+        "EDGEFIT01"
+      ],
+      "required_inputs": "TRAIN48 learned31 đã đóng và expert31, fixed world/controller,10fresh blocks21010–21019 đã sinh và lưu.",
+      "files_components": [
+        "experiments/simulator/results/rq2-fresh-graph-source-robustness-20261109-02/",
+        "research_tracking/runs/"
+      ],
+      "implementation_objective": "Giữ nguyên parent failure và61ca hoàn tất; review continuation hữu hạn cho59ca còn lại, replay prefixF062 có đối chiếu.",
+      "acceptance_criteria": "Đủ120logical worlds/14400logical interactions, exact initial/U/source identities, high controls, Q60/K30, physical replay cost và resource/cleanup receipts. Chưa đạt.",
+      "verification_steps": "Raw prefix đã đối chiếu metadata-only. Continuation chỉ chạy sau Root review cumulative budgets, sources và RAM admission, rồi verifier độc lập.",
+      "required_artifacts": [
+        "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq2_fresh02_prefix_verification01.json",
+        "Parent failure archive, continuation contract và joined acceptance còn cần đóng."
+      ],
+      "estimated_work": "Parent actual outer56,0216477giây, không lấy thời gian này làm throughput của lượt đủ120ca.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "User đã giao chẩn đoán CPU local. Root release riêng từng bounded continuation, giữ original240s cumulative allocation. Không cloud/fullCV/Holdout.",
+      "status": "PARTIAL_ATTEMPT02_STOPPED_RAM_FLOOR_CONTINUATION_REVIEW_PENDING",
+      "blockers": [
+        "Máy giảm dưới floor1536MiB. Không chọn subset61ca để kết luận primary, không redraw seed hoặc tự chạy lại toàn bộ."
+      ]
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

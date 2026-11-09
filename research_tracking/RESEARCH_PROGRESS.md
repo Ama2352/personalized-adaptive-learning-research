@@ -1,5 +1,17 @@
 # Tiến độ nghiên cứu
 
+## Ước lượng cập nhật sau kết quả learned19 ngày 09/11
+
+Đây là ước lượng quản lý theo phần việc và bằng chứng đã nghiệm thu, sai số khoảng ±10 điểm phần trăm. Các mức cũ bên dưới giữ diễn tiến lịch sử. Chưa RQ nào hoàn tất. Lượt fresh120 dở dang và các kiểm phần mềm chưa chạy chưa được cộng vào mức nghiệm thu.
+
+| RQ | Ước lượng | Cơ sở hiện có | Bằng chứng còn thiếu chính |
+|---|---:|---|---|
+| RQ1 — nguyên nhân | ~70% | Đã chẩn đoán các chỗ tác động dự báo dừng trước quyết định, controller và giả định mô phỏng. Bản thảo E9 đã nối kết quả nguồn đồ thị. | Độ đúng của đánh giá thành thạo, calibration gần ngưỡng và liên hệ với kết quả học tập. |
+| RQ2 — điều kiện | ~55% | Đã có đối chứng năng lực, cơ chế tiên quyết và nguồn đồ thị; Junyi có phân tích giới hạn do thứ tự quan sát. | Xác nhận trên seed mới, nhiễu cạnh/độ dài lịch sử và tổng hợp điều kiện có lợi–trung tính–có hại. |
+| RQ3 — phương pháp | ~30% | Có lõi CG-AKT, kiểm cập nhật tham số/checkpoint, dữ liệu mô phỏng và bước ước lượng cạnh. | Huấn luyện các biến thể, đủ baseline bắt buộc, so sánh và kết quả vòng kín. |
+
+[Kết quả learned19](reports/rq2_learned_graph_source_ability_results_20261109.md), [bản thảo có nguồn](reports/THESIS_RQ1_MECHANISMS_DRAFT_20261109.md), [trạng thái phép xác nhận mới](reports/rq2_fresh_replication_readiness_20261109.md). Tiến độ chuẩn bị phần mềm được theo dõi riêng trong backlog.
+
 ## Chuẩn Paper1 đã được tác giả xác nhận09/11
 
 Theo xác nhận tác giả09/11, PDF Paper1 là chuẩn thiết kế và kết quả kế thừa cho KLTN. Notebook là bản tiền kỳ. Phát triển tiếp bám PDF, với phiên bản mô phỏng và kiểm đặc tả riêng theo D37.
