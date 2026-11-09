@@ -4917,6 +4917,40 @@
       "authorization_requirements": "Local engineering đã được yêu cầu, Root duyệt từng bounded operation. Không fullCV/Holdout/cloud hoặc đổi phương pháp khoa học.",
       "status": "SOURCE_PREPARATION_D39_NO_EXECUTION",
       "blockers": []
+    },
+    {
+      "id": "RQDIAG21",
+      "research_objective": "Giải thích điều kiện zero re-entry và phản ví dụ theo quy tắc PDF Paper1.",
+      "rq": [
+        "RQ1",
+        "RQ2"
+      ],
+      "workstream": "research_diagnosis",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "RQDIAG17"
+      ],
+      "required_inputs": "PDF Paper1, primitives đã kiểm, fixture khai báo tường minh.",
+      "files_components": [
+        "tests/paper1_pdf/test_reentry_mechanism.py",
+        "src/knowledge_tracing/paper1_pdf/simulator.py"
+      ],
+      "implementation_objective": "Chứng minh điều kiện đủ, kiểm DAG nội chương, gateway và phản ví dụ liên chương.",
+      "acceptance_criteria": "Proof đúng giả thiết, bốn test finite đạt, source không đổi, log và báo cáo có nguồn.",
+      "verification_steps": "Root review và unittest qua wrapper30giây, đối chiếu output và inventory.",
+      "required_artifacts": [
+        "report",
+        "raw logs",
+        "source fingerprints",
+        "bundle"
+      ],
+      "estimated_effort": "Wrapper actual0,2165947giây, effort review chưa đo riêng.",
+      "compute_cost_category": "local_CPU_synthetic",
+      "authorization_requirements": "Phạm vi engineering local đã được yêu cầu.",
+      "status": "VERIFIED_CONDITIONAL_PROOF_AND_FOUR_FIXTURES",
+      "blockers": [],
+      "completion_evidence": "research_tracking/reports/paper1_reentry_mechanism_20261109.md"
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

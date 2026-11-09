@@ -844,3 +844,8 @@ Root chạy pure01 gồm7PASS/1FAIL do known-answer float ULP, giữ source trư
 ## 09/11 — đóng metadata Linux, Gate cũ cần refresh
 
 Bốn source/test được kiểm qua hai module. Lượt01 có140PASS/14FAIL do fixture build-map làm bẩn observed; sửa riêng fixture, lượt02 đạt154PASS/0FES trong3,7100974giây. Giữ cùng154case IDs, source trước/sau và cả failure. Bundle32outputs đã đóng, SHA manifest895b7319b9bc6914d1fc5cce3b9dbe4e7904c396e049cd732735e802d6c5a799. Đây là Windows-host metadata/tmpFS. Cập nhật GPUplan và GRAPH25 để Gate05 cũ không bị coi là chứng nhận source mới. Actual Linux/CUDA và software Gate mới vẫn cần làm.
+
+
+## 09/11 — lời giải thích có điều kiện cho re-entry
+
+Đã kiểm chứng minh hấp thụ của tập mastered và tồn tại ready trong chương chưa hoàn tất với DAG nội chương. Bốn fixture mới đạt trong0,2165947giây. Phản ví dụ A→B→A có chapter quotient chỉB→A. Bundle12outputs đã đóng, manifest7e8f684d0c9fb999b7d6e3762362f4b38106ae0dd3659151f6daa1084675c70c. Hai báo cáo tiến độ thêm chặng10 và phần kết quả hiện tại, mười SVG giữ byte-identical, mười một bảng và anchors kiểm tĩnh. Chưa visual render mới. Đây là cơ chế có điều kiện và phản ví dụ dựng tay.

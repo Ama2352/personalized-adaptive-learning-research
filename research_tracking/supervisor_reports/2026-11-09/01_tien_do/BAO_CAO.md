@@ -52,6 +52,8 @@ Song song, nhóm đã cài các quy tắc world, ước lượng Elo và bộ ch
 
 Phép kiểm dùng lại ba khối ngẫu nhiên với chín lịch sử hồ sơ, không thêm người học hoặc mẫu độc lập. Mỗi đáp án được dùng một lần cho mỗi cấu hình. Kết quả mới đánh giá sự phù hợp với đáp án của điểm tổng hợp; độ đúng của đánh giá thành thạo so với trạng thái thật và tác động lên học tập còn phải kiểm riêng.
 
+**Bổ sung lời giải thích cho kết quả không quay lại chương trong Paper 1.** Từ quy tắc ready và giữ chương, nhóm đã chứng minh một điều kiện đủ. Khi đồ thị chỉ có cạnh nội chương, khái niệm đã đạt ngưỡng được giữ nguyên và chương còn khái niệm chưa đạt luôn có bài được phép học. Bộ chọn vì vậy chỉ rời chương sau khi hoàn tất chương đó. Dưới những giả thiết này, không quay lại chương là hệ quả của quy tắc. Nhóm đã kiểm bốn tình huống nhỏ, gồm cả đáp án sai. Với cạnh liên chương, một phản ví dụ cho chuỗi A → B → A dù bộ chọn vẫn giữ đúng quy tắc. Phần bổ sung xác định ranh giới của cơ chế; hiệu quả học tập còn cần đối chiếu trạng thái kiến thức thật và kết quả cuối.
+
 ## Còn phải chứng minh
 
 - **RQ1:** đánh giá độ đúng của quyết định thành thạo, hiệu chỉnh xác suất và vai trò chính sách; nối chẩn đoán nội bộ đã có với kết quả học tập.

@@ -1,5 +1,9 @@
 # Ma trận claim–evidence
 
+## Bổ sung09/11 — điều kiện đủ của zero re-entry
+
+CLM-RQ1-REENTRY-20261109. Với DAG chỉ có cạnh nội chương, ready loại node đã đạt ngưỡng, update chỉ node được chọn và continuity giữ chương còn ready, tập đạt ngưỡng hấp thụ và mỗi chương xuất hiện tối đa một khối liên tiếp. Chứng minh áp dụng dưới giả thiết không forgetting/reset hoặc đổi graph. Phản ví dụ dựng tay có một cạnh B→A cho A→B→A dù chapter quotient không chu trình. Bốn test đã đạt trong0,2165947giây. [Chứng minh và giới hạn](reports/paper1_reentry_mechanism_20261109.md), [output kiểm](runs/paper1-reentry-mechanism-20261109-01/result.json). Còn phải đo tác động học tập và tần suất trong thí nghiệm theo PDF.
+
 ## Bổ sung09/11 — raw reference-mixture trên cùng logged stream
 
 CLM-RQ1-REFMIX-20261109. Sai lệch khác chiều theo PG/PY/PYH còn xuất hiện khi kiểm raw mean của ba câu tham chiếu trên cùng lịch sử, câu hỏi và đáp án. ECE15 pooled full/empty0,043185/0,042526, PG0,263534/0,261267, PY0,131945/0,137415 vàPYH0,069198/0,075091. Mỗi arm dùng một Y cho một mean3forecast dưới source-design logger uniform84items. [Báo cáo](reports/rq1_reference_mixture_reliability_20261109.md), [manifest42outputs](runs/rq1-reference-mixture-reliability-20261109-01/manifest.json).

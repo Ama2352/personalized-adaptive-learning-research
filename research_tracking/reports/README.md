@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**RQ1/RQ2, cơ chế quay lại chương theo Paper1.** [Điều kiện đủ và phản ví dụ](paper1_reentry_mechanism_20261109.md), [bốn kiểm tra đã đạt](../runs/paper1-reentry-mechanism-20261109-01/result.json). Đã chứng minh phạm vi zero re-entry cho đồ thị nội chương và kiểm phản ví dụ A→B→A với cạnh liên chương một chiều. Hai báo cáo tiến độ đã thêm chặng10.
+
 **AKT, chuẩn bị Linux CPU.** [154 kiểm metadata đã đạt](akt_linux_main_metadata_readiness_20261109.md), [gói bằng chứng](../runs/akt-linux-main-metadata-engineering-20261109-01/README.md). Giữ hai lượt cùng bộ test, lần đầu có 14 lỗi do fixture. Cần source proof/runtime/Gate thực trên Linux. Gate05 thuộc phiên bản trước bốn file vừa sửa.
 
 **RQ1 — điểm tổng hợp ba câu tham chiếu trên dòng dữ liệu chung.** [Kết quả và nguồn](rq1_reference_mixture_reliability_20261109.md), [bundle42outputs](../runs/rq1-reference-mixture-reliability-20261109-01/README.md). Giữ2160arm rows/1080query–Y/3seed blocks, kiểm Decimal đủ32views/480bins/64strata. Sai lệch khác chiều giữa hồ sơ còn tồn tại, chưa kết luận native mastery truth.
