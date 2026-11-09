@@ -1,5 +1,11 @@
 # Chỉ mục bằng chứng
 
+## Mốc hiện hành09/11 — reliability và Gate177 đã đóng
+
+[RQ1 reliability](reports/rq1_response_reliability_diagnostic_20261109.md) đã đóng58outputs, giữ120world/14.400lượt cũ và10seedclusters. Sai lệch trái chiều theo hồ sơ có thể bù trừ khi gộp. Đã cập nhật cả [tóm tắt](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md) và [HTML](supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html),10SVG/9bảng, QA1365/390 và browser đã đóng.
+
+[Gate05](reports/akt_windows_gate_accepted_20261109.md) đã đạt1.748physicalitems/0FES trên177nguồn/81modules. [Runtime/index](reports/akt_windows_runtime_gate_index_20261109.md) đã accepted schema2 và explicit index mới. Giữ Gate04 REJECTED, globalpointer lịch sử và lỗi canary CRLF có reconciliation riêng. Ba bundle thêm161outputs và167rawGitfiles được đối chiếu. Đây là software readiness và phân tích dữ liệu cũ, chưa actual Main fit/CUDA, chưa hoàn tất RQ. Các mốc bên dưới giữ trạng thái lịch sử.
+
 **Fresh-process checkpoint:** [báo cáo](reports/cgakt_fresh_process_checkpoint_readiness_20261109.md) / [bundle50](runs/cgakt-fresh-process-checkpoint-engineering-20261109-01/README.md). Producer dừng/Job0 rồi consumer PID/creation-token khác chạy đủ E2: sample order/input, state, RNG/modes/readout exact. Tổng6actual updates/144reused-target exposures, không8updates từ hai cumulative counters. Không fitted/GPU/lifecycle promotion.
 
 **Đưa bằng chứng vào luận văn:** [bản thảo cơ chế RQ1](reports/THESIS_RQ1_MECHANISMS_DRAFT_20261109.md) và [source/numeric reconciliation](reports/THESIS_RQ1_MECHANISMS_DRAFT_20261109.sources.json), dùng ba bundle đã đóng. Không tạo model/data hay kết luận nhân quả mới.

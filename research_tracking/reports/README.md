@@ -1,5 +1,11 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## Mốc hiện hành09/11 — reliability và Gate177 đã đóng
+
+[RQ1 reliability](rq1_response_reliability_diagnostic_20261109.md) đã đóng58outputs, giữ120world/14.400lượt cũ và10seedclusters. Sai lệch trái chiều theo hồ sơ có thể bù trừ khi gộp. Đã cập nhật cả [tóm tắt](../supervisor_reports/2026-11-09/01_tien_do/BAO_CAO.md) và [HTML](../supervisor_reports/2026-11-09/01_tien_do/BAO_CAO_NGHIEN_CUU.html),10SVG/9bảng, QA1365/390 và browser đã đóng.
+
+[Gate05](akt_windows_gate_accepted_20261109.md) đã đạt1.748physicalitems/0FES trên177nguồn/81modules. [Runtime/index](akt_windows_runtime_gate_index_20261109.md) đã accepted schema2 và explicit index mới. Giữ Gate04 REJECTED, globalpointer lịch sử và lỗi canary CRLF có reconciliation riêng. Ba bundle thêm161outputs và167rawGitfiles được đối chiếu. Đây là software readiness và phân tích dữ liệu cũ, chưa actual Main fit/CUDA, chưa hoàn tất RQ. Các mốc bên dưới giữ trạng thái lịch sử.
+
 **CG-AKT khôi phục qua process mới:** [full E2 parity](cgakt_fresh_process_checkpoint_readiness_20261109.md), [bundle50](../runs/cgakt-fresh-process-checkpoint-engineering-20261109-01/README.md). Hai worker riêng đã được xác minh và dọn tuần tự; model/Adam/RNG/modes/thứ tự và input của cả epoch kế tiếp khớp. Đáp ứng phần epoch-state recovery trên CPU; chưa lifecycle/main fitting hoặc CUDA.
 
 **Bản thảo luận văn — RQ1:** [diễn giải cơ chế ngày 09/11](THESIS_RQ1_MECHANISMS_DRAFT_20261109.md), [đối chiếu số và nguồn](THESIS_RQ1_MECHANISMS_DRAFT_20261109.sources.json). Đi từ hai paper đến hai điều kiện mastery, bộ lọc ứng viên và readout của query; giữ riêng các kết luận chưa có, không thay bản thảo ngày 08/11 hoặc nghiệm thu toàn RQ1.

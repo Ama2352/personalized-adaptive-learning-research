@@ -809,3 +809,8 @@ G10closed48/test5bd/reportc017 commit5e1eb40,51rawGitblobsverified; outputinvent
 - Collection10đạt1726nodeIDs/177sources/81modules sau sửa ordermetadata. Full04raw1726physicaltestcases0FESkhớpIDs, nhưng nativeCLImergefail do remaining@tests1501vs1436physical+65consolepassedsubtests; outer293,183giây/630,Job0cleanupaccepted.
 - Bản sửa parser/merger giữrawattrs/strictFES/nonempty/identities và đếmphysicalitems,99targetedcasesđạt. Đóng90outputs/e1a0d82, Gate04vẫnREJECTED; không publishpointer/GPUtraining/Modal. Independentstaticreview còn bắt cùng lỗi đếm ở fullouter02 trước lượt chạy mới, sẽ sửaderivative riêng.
 - RawGit164blobs verified và taskDAG142IDs khôngcycle; counteroutputs5040 không là tỷ lệ hoàn tất.
+
+
+## Tiếp nối09/11 — reliability và admission thực
+
+Đã đóng RQ1response58, Gate05accepted60 và runtime/index43, kiểm167rawGitblobs. Sửa kết luận readiness từ Gate154stale sang current177accepted dùng explicitindex. Chênh lệch profile reliability đi vào cả hai file báo cáo, giữ0newseed. Lỗi chụp element mobile được ghi và thay bằng viewport đầy đủ, browser đã đóng. TASKS145IDs/DAGchecked. Native mastery replay và actual A0guard mới source-preparation.
