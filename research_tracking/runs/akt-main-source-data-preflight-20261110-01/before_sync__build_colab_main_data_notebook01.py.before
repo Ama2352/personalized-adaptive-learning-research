@@ -1,0 +1,127 @@
+"""Tạo notebook CPU kiểm gói nguồn/dữ liệu, không cài package hoặc train."""
+from pathlib import Path
+import ast
+import hashlib
+import json
+
+ROOT = Path(__file__).resolve().parents[4]
+PREP = Path(__file__).resolve().parent
+TARGET = ROOT / 'notebooks/akt_colab_main_data_preflight.ipynb'
+package = json.loads((PREP / 'main-source-data-kit01/result.json').read_bytes())
+assert package['accepted'] and package['package_bytes'] == 1127266
+tree = ast.parse((PREP / 'build_main_source_data_kit01.py').read_bytes())
+child_nodes = [node.value.value for node in tree.body if isinstance(node, ast.Assign)
+    and any(isinstance(target, ast.Name) and target.id == 'child' for target in node.targets)
+    and isinstance(node.value, ast.Constant)]
+assert len(child_nodes) == 1
+payload = child_nodes[0]
+ast.parse(payload)
+cells = []
+
+
+def markdown(text):
+    cells.append(dict(cell_type='markdown', metadata={}, source=text.splitlines(keepends=True)))
+
+
+def code(text):
+    ast.parse(text)
+    cells.append(dict(cell_type='code', execution_count=None, metadata={}, outputs=[], source=text.splitlines(keepends=True)))
+
+
+markdown('''# AKT Main — kiểm nguồn và corpus trên Colab CPU
+
+Notebook kiểm khả năng nạp đúng source và hai corpus mô phỏng đã xuất bản trên môi trường đích. Chọn runtime CPU là đủ. Các bước chỉ tạo `.venv` trong thư mục mã dự án và dùng thư viện chuẩn Python. Không có bước cài thư viện, tạo model, huấn luyện hoặc gọi Modal.
+
+Gói cần tải lên là `akt-main-source-data-20261110-01.zip`. Kết quả xuất thành hồ sơ JSON nhỏ để lưu lại trong repository. Đây là kiểm dữ liệu, chưa nghiệm thu runtime Torch, Linux Git, CUDA, checkpoint hoặc quyền chạy thí nghiệm.
+''')
+code('''from pathlib import Path
+import hashlib, json, os, platform, subprocess, sys, time, venv, zipfile
+
+assert sys.platform.startswith('linux'), 'Notebook này dành cho Colab/Kaggle Linux'
+WORKSPACE = Path('/content/kltn_main_preflight')
+WORKSPACE.mkdir(exist_ok=True)
+ZIP_PATH = WORKSPACE / 'akt-main-source-data-20261110-01.zip'
+''' + 'EXPECTED_SHA256 = ' + repr(package['package_sha256']) + '''
+if not ZIP_PATH.exists():
+    from google.colab import files
+    previous_cwd = Path.cwd()
+    try:
+        os.chdir(WORKSPACE)
+        uploaded = files.upload()
+        assert set(uploaded) == {ZIP_PATH.name}, 'Chỉ tải đúng một gói nguồn đã chỉ định'
+    finally:
+        os.chdir(previous_cwd)
+assert ZIP_PATH.stat().st_size <= 8 * 1024**2
+assert hashlib.sha256(ZIP_PATH.read_bytes()).hexdigest() == EXPECTED_SHA256
+print(json.dumps({'status': 'PACKAGE_VERIFIED', 'python': sys.version, 'platform': platform.platform(), 'bytes': ZIP_PATH.stat().st_size}, indent=2))
+''')
+code('''PROJECT = WORKSPACE / EXPECTED_SHA256[:16]
+PROJECT.mkdir(exist_ok=True)
+with zipfile.ZipFile(ZIP_PATH) as archive:
+    names = archive.namelist()
+    assert len(names) == len(set(names)) <= 512
+    assert sum(member.file_size for member in archive.infolist()) <= 16 * 1024**2
+    manifest = json.loads(archive.read('MAIN_DATA_PACKAGE_MANIFEST.json'))
+    assert manifest['schema_version'] == 3 and manifest['neural_training_authorized'] is False
+    assert set(names) == set(manifest['files']) | {'MAIN_DATA_PACKAGE_MANIFEST.json'}
+    for member in archive.infolist():
+        name = member.filename
+        assert '\\\\' not in name and not Path(name).is_absolute() and '..' not in Path(name).parts
+        assert (member.external_attr >> 16) & 0o170000 != 0o120000
+        assert member.file_size <= 2 * 1024**2
+        target = PROJECT / name
+        assert not target.is_symlink()
+        raw = archive.read(member)
+        if name in manifest['files']:
+            assert hashlib.sha256(raw).hexdigest() == manifest['files'][name]
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if target.exists():
+            assert target.read_bytes() == raw, 'Giữ nguyên nguồn cũ nếu có khác biệt, không ghi đè'
+        else:
+            with target.open('xb') as stream:
+                stream.write(raw)
+ENV = PROJECT / '.venv'
+if not ENV.exists():
+    venv.EnvBuilder(with_pip=False, system_site_packages=False, symlinks=False).create(ENV)
+PYTHON = ENV / 'bin/python'
+assert PYTHON.is_file()
+check_env = subprocess.run([str(PYTHON), '-I', '-B', '-c', 'import sys,site,json;print(json.dumps({"prefix":sys.prefix,"user_site":site.ENABLE_USER_SITE}))'], capture_output=True, text=True, timeout=10, check=True)
+details = json.loads(check_env.stdout)
+assert Path(details['prefix']) == ENV and details['user_site'] is False
+print(json.dumps({'status': 'ISOLATED_STDLIB_VENV_READY', 'source_files': len(manifest['files']), 'project': str(PROJECT)}, indent=2))
+''')
+code('PAYLOAD = ' + repr(payload) + '''
+stamp = time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())
+OUTPUT = PROJECT / ('data_preflight_' + stamp)
+OUTPUT.mkdir(exist_ok=False)
+started = time.monotonic()
+result = subprocess.run([str(PYTHON), '-I', '-B', '-c', PAYLOAD, str(PROJECT)], cwd=PROJECT, capture_output=True, text=True, timeout=30)
+(OUTPUT / 'stdout.log').write_text(result.stdout, encoding='utf-8')
+(OUTPUT / 'stderr.log').write_text(result.stderr, encoding='utf-8')
+receipt = {'returncode': result.returncode, 'elapsed_seconds': time.monotonic()-started, 'package_sha256': EXPECTED_SHA256, 'scope': 'Actual Linux public-data reader in isolated stdlib venv only', 'training_authorized': False, 'cuda_verified': False}
+if result.returncode == 0:
+    receipt['data'] = json.loads(result.stdout)
+(OUTPUT / 'receipt.json').write_text(json.dumps(receipt, ensure_ascii=False, indent=2), encoding='utf-8')
+assert result.returncode == 0, result.stderr[-3000:]
+assert receipt['data']['accepted'] is True
+print(json.dumps(receipt, ensure_ascii=False, indent=2))
+''')
+markdown('''## Lưu bằng chứng
+
+Cell cuối tải hồ sơ nhỏ của lượt kiểm vừa chạy. Giữ cả log lỗi nếu có. Dừng tại đây sau khi kiểm dữ liệu, các bước Torch/CUDA sẽ có allocation và nguồn kiểm riêng.
+''')
+code('''from google.colab import files
+import shutil
+EXPORT = Path(shutil.make_archive(str(OUTPUT), 'zip', root_dir=OUTPUT))
+assert EXPORT.stat().st_size <= 256 * 1024
+files.download(str(EXPORT))
+''')
+notebook = dict(cells=cells, metadata=dict(kernelspec=dict(display_name='Python 3', language='python', name='python3'),
+    language_info=dict(name='python')), nbformat=4, nbformat_minor=5)
+assert not TARGET.exists()
+with TARGET.open('x', encoding='utf-8', newline='\n') as stream:
+    json.dump(notebook, stream, ensure_ascii=False, indent=1)
+    stream.write('\n')
+print(json.dumps(dict(notebook=TARGET.relative_to(ROOT).as_posix(), cells=len(cells),
+    code_cells=sum(c['cell_type']=='code' for c in cells), code_AST_pass=True,
+    actual_Colab_or_venv_creation_tested=False, sha256=hashlib.sha256(TARGET.read_bytes()).hexdigest())))
