@@ -157,3 +157,8 @@ Kiểm CPU fresh-process ngày09/11 đã khớp full epoch tiếp theo nhưng ch
 Thứ tự hiện tại: localCPU → Colabfree cho CUDA smoke/checkpoint reload và các kiểm CUDA tổng quát đã chuẩn bị → Modal cho revalidation đặc thù image/Volume cùng pilot/training có kế hoạch. Không tiêu credits Modal chỉ để chạy lại các kiểm CUDA có thể làm trên Colab trước. Budgetreadiness2USD cũ chỉ là reserve cho platform-specific revalidation nếu cần, không autoallocation. Balance30free/net0 giữ nguyên. Colabunavailable/hếtquota không tự cấp quyền fallback sang paidcompute.
 
 Notebook/kitv12 hiện có actual400synthetic targets/1step và controlled fresh-process CUDA resume, với44outputs đã nhận/kiểm như đầu tài liệu; vẫn chưa fullDev/Gate4 hoặc hard-kill/Volume. CPU notebook timeout600s/JUnit/nonempty/noerrors/noskips và GPUsource/gate guards giữ workload bounded, không tự mở rộng sau PASS. Runtime availability Colab không có bảo đảm cố định4giờ; nhận và kiểm artifacts trước giải phóng runtime. [FAQ chính thức](https://research.google.com/colaboratory/faq.html). Modal vẫn cần test Linux image/runtime-origin/Volume riêng ở giới hạn nhỏ; không tự chuyển sang Modal khi Colab thiếuquota hoặc coi Colab proof thay authorization đó.
+
+
+## Bước port kế tiếp sau lượt A0 nhỏ
+
+Audit nguồn đã tách hai batch. Trước hết thêm provenance Linux CPU có profile và receipt riêng, giữ nguyên kiểm Windows. Sau đó mới thêm device CUDA, RNG của GPU, checkpoint có Adam scalar-step/moment đúng thiết bị và giới hạn VRAM. Các lựa chọn backend foreach/fused cần review rõ và kiểm riêng. Chưa có bằng chứng runtime Linux/CUDA cho pipeline hiện hành. [Audit và vị trí nguồn](evidence/main_linux_cuda_readiness_source_audit_20261109.md).

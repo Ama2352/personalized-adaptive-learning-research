@@ -4530,8 +4530,10 @@
       "acceptance_criteria": "Missing/wrong/stale authority/source/runtime/data reject before model; boundedactualproducer generates rawbest80 completecoverage+lineage counters/artifacts. SAKT/GKT/Junyi integration remains explicit required pending, not omission",
       "verification_steps": "Source/pure orchestration first; actualfinite fixture after exactRootallocation; corpusfit/paid jobs separately approved",
       "required_artifacts": "Source/tests/guard schema/actual runmanifest+terminal+rawexports/CPrefs or honest failure",
-      "status": "PARTIALLY_IMPLEMENTED_MOCKS16_ACCEPTED_ACTUAL_DRIVER_ADMISSION_PENDING",
-      "verification_evidence": "1f17f15; cgakt-main-selected-producer-engineering-20261109-01:16mockPASS, prior15PASS/1FAIL preserved; no actual public success path/fit/Gate."
+      "status": "PARTIALLY_VERIFIED_ACTUAL_A0_TINY_OTHER_MAIN_CANDIDATES_PENDING",
+      "verification_evidence": "1f17f15; cgakt-main-selected-producer-engineering-20261109-01:16mockPASS, prior15PASS/1FAIL preserved; no actual public success path/fit/Gate.",
+      "latest_evidence": "research_tracking/reports/akt_main_tiny_a0_selected_engineering_20261109.md",
+      "latest_scope_vi": "Public A0 selected-only đã chạy thật trên corpus kiểm tích hợp10×84. Các candidate khác, research corpus, refit và CUDA còn thiếu."
     },
     {
       "id": "RQDIAG14",
@@ -4727,6 +4729,68 @@
       "status": "VERIFIED_TINY_SELECTED_ONLY_ENGINEERING",
       "completion_evidence": "artifacts\\akt\\local-tests\\akt-research-runner-20261108-01\\main-tiny-selected-a0-01\\outer-final.json",
       "completion_limits_vi": "Kiểm tích hợp A0 nhỏ trên CPU, chưa có so sánh nghiên cứu hoặc kiểm CUDA."
+    },
+    {
+      "id": "GRAPH24",
+      "research_objective": "Rà soát và tách prerequisite Linux CPU, CUDA và checkpoint của pipeline hiện hành.",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "engineering",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "GRAPH23"
+      ],
+      "required_inputs": "Source hiện hành, D37 và đặc tả đã review.",
+      "files_components": [
+        "src/knowledge_tracing/akt/research_main_execution.py",
+        "src/knowledge_tracing/akt/research_selected_runner.py",
+        "src/knowledge_tracing/akt/research_graph_model.py",
+        "src/knowledge_tracing/akt/research_graph_checkpoint.py"
+      ],
+      "implementation_objective": "Rà soát và tách prerequisite Linux CPU, CUDA và checkpoint của pipeline hiện hành.",
+      "acceptance_criteria": "Có nguồn và line refs cho device, Git profile, CUDA RNG, optimizer state; kế hoạch port giữ nguyên đường CPU, không tự mở authorization GPU.",
+      "verification_steps": "Root đối chiếu10source pins, chưa chạy runtime mới. Port và regression là batch tiếp theo riêng.",
+      "required_artifacts": [
+        "Ghi chú nguồn, kết quả kiểm và hash inventory theo scope."
+      ],
+      "estimated_effort": "Chưa đo, tách source effort và elapsed của checks.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Local engineering đã được yêu cầu. Không training nghiên cứu, fullCV, Holdout hoặc cloud spending.",
+      "status": "VERIFIED_SOURCE_AUDIT_PORT_PENDING",
+      "blockers": [],
+      "completion_evidence": "docs/thesis_recovery/evidence/main_linux_cuda_readiness_source_audit_20261109.md"
+    },
+    {
+      "id": "RQDIAG17",
+      "research_objective": "Triển khai và kiểm các quy tắc PDF Paper1 trong simulator riêng để tiếp tục chẩn đoán.",
+      "rq": [
+        "RQ1",
+        "RQ2"
+      ],
+      "workstream": "engineering",
+      "priority": "P0",
+      "owner": "Codex",
+      "dependencies": [
+        "T03"
+      ],
+      "required_inputs": "Source hiện hành, D37 và đặc tả đã review.",
+      "files_components": [
+        "src/knowledge_tracing/paper1_pdf/simulator.py",
+        "tests/paper1_pdf/test_simulator.py"
+      ],
+      "implementation_objective": "Triển khai và kiểm các quy tắc PDF Paper1 trong simulator riêng để tiếp tục chẩn đoán.",
+      "acceptance_criteria": "Synthetic tests xác nhận ready set, continuity có điều kiện, predict-before-observe, K, latent/estimate tách riêng và learning+12/cap1500. Giữ kết quả PDF kế thừa, không gọi primitive tests là tái lập450runs.",
+      "verification_steps": "Root review source và chạy bounded synthetic checks phù hợp trước commit.",
+      "required_artifacts": [
+        "Ghi chú nguồn, kết quả kiểm và hash inventory theo scope."
+      ],
+      "estimated_effort": "Chưa đo, tách source effort và elapsed của checks.",
+      "compute_cost_category": "local_CPU_no_cloud",
+      "authorization_requirements": "Local engineering đã được yêu cầu. Không training nghiên cứu, fullCV, Holdout hoặc cloud spending.",
+      "status": "SOURCE_PREPARATION_IN_PROGRESS",
+      "blockers": []
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",
