@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**Bản thảo RQ1 đã bổ sung hai phần bằng chứng.** [Chương kết quả](THESIS_RQ1_MECHANISMS_DRAFT_20261109.md) hiện nối reliability trên cùng dòng dữ liệu với chứng minh điều kiện zero re-entry. [Gói phiên bản](../runs/thesis-rq1-e5-e6-writing-20261109-01/README.md) giữ bản trước sửa, 29 nguồn và proof kiểm 12 liên kết. Đây là tiến độ viết từ kết quả đã có.
+
 **Log vận hành CPU09, pilot observer bị từ chối.** [Hồ sơ lỗi](../runs/rq1-cpu09-targeted-observer-attempt-20261109-01/report.md). Năm kiểm dựng tay đạt, chưa bắt đầu tạo policy hoặc replay. Read guard chặn trước cache validation. Đã giữ raw lỗi và cleanup Job0, còn phải xác định file bị chặn đầu tiên trước khi đề xuất lượt mới.
 
 **RQ1/RQ2, cơ chế quay lại chương theo Paper1.** [Điều kiện đủ và phản ví dụ](paper1_reentry_mechanism_20261109.md), [bốn kiểm tra đã đạt](../runs/paper1-reentry-mechanism-20261109-01/result.json). Đã chứng minh phạm vi zero re-entry cho đồ thị nội chương và kiểm phản ví dụ A→B→A với cạnh liên chương một chiều. Hai báo cáo tiến độ đã thêm chặng10.

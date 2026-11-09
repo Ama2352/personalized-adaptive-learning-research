@@ -854,3 +854,8 @@ Bốn source/test được kiểm qua hai module. Lượt01 có140PASS/14FAIL do
 ## 09/11 — lưu failure của pilot observer mới
 
 Một allocation60giây đã dừng sau khoảng3,3976giây. Năm inline checks đạt, lỗi read guard xảy ra trước cache validation và estimator. Không constructor/update/readout parity được tạo. Job0, monitor dừng và environment đã khôi phục. Đã đóng34outputs trong rq1-cpu09-targeted-observer-attempt-20261109-01, giữ verdict REJECTED. File bị chặn đầu tiên chưa được log. Source review xác định thiếu self-contract read entitlement trong postcheck. Allocation dừng, không retry. Lượt xem HTML qua file protocol bị chặn và localhost timeout, giữ QA tĩnh, browser và server84894 đã đóng.
+
+
+## 09/11 — bản thảo RQ1 nối thêm E5 và E6
+
+Đã công bố candidate03 sau independent static review. Thêm response-mixture reliability trên fixed stream và chứng minh zero re-entry có điều kiện, giữ nội dung E4. Root kiểm29nguồn,12liên kết và8ô số E5. Snapshot hai bản cũ trước sửa, đóng12outputs tại thesis-rq1-e5-e6-writing-20261109-01. Đây là phần viết từ bằng chứng đã có, chưa tăng mẫu hay hoàn tất RQ.
