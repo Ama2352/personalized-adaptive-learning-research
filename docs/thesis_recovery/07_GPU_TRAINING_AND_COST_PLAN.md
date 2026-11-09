@@ -170,3 +170,25 @@ Notebook/kitv12 hiện có actual400synthetic targets/1step và controlled fresh
 ## Bước port kế tiếp sau lượt A0 nhỏ
 
 Audit nguồn đã tách hai batch. Trước hết thêm provenance Linux CPU có profile và receipt riêng, giữ nguyên kiểm Windows. Sau đó mới thêm device CUDA, RNG của GPU, checkpoint có Adam scalar-step/moment đúng thiết bị và giới hạn VRAM. Các lựa chọn backend foreach/fused cần review rõ và kiểm riêng. Chưa có bằng chứng runtime Linux/CUDA cho pipeline hiện hành. [Audit và vị trí nguồn](evidence/main_linux_cuda_readiness_source_audit_20261109.md).
+
+
+## Cập nhật10/11 về dữ liệu đầu vào và đơn vị dự toán
+
+[Kiểm dữ liệu corpus60](../../research_tracking/runs/simulator-main60-data-preflight-20261110-01/README.md) đã dùng public reader và window generator chuẩn, không model hoặc worldcall. Train48learners/10080targets, selection6/1260 vàcalibration6/1260 disjoint, train vocabulary84items và selection khôngOOV. AKT context100/targetblock100 có144trainwindows,19680inputslots và10080scoredslots mỗi epoch. Mỗi target xuất hiện đúng một lần. 18selectionwindows phủ1260targets.
+
+| Đơn vị mỗi epoch trên corpus60 | AKT family | SAKT recipe30 | GKT recipe29 |
+|---|---:|---:|---:|
+| Input tối ưu |144windows|10080terminal-query windows|48full trajectories|
+| Batches theo recipe đang giữ |36với batch4|79với batch128|12với batch4|
+| Scored targets |10080|10080|10080|
+| Epoch cap |20|50|50|
+
+Batches giữa các mô hình có hình học và công việc khác nhau. GKT cần đếm sequence/tail và các cập nhật state theo thời gian, SAKT lặp lại history trong terminal windows, AKT còn context/padding. Bảng không phải số đo tốc độGPU hoặc bằng chứng model nhanh hơn. Giữ hyperparameters và targetpopulation, benchmark đúng inputshape trước khi so cost/target.
+
+Với7điều kiện AKT-family và1SAKT/1GKT, trần giả định dùng hết số epoch ở selected-fit là2419200optimizedtargets. Freshrefit90 có11340targets/epoch, trần tương ứng2721600. Tổng trần simulator5140800chưa gồm validation, checkpoint/reload, calibration, inference tham chiếu, thất bại hoặc Junyi. Epoch refit thực phải bằng epoch đã chọn, không ép chạy tới trần. Bảng máy đọc trong bundle ghi runtime/cost null.
+
+Public AKT control E7/best4 và intentional parentE5/latest5→childE6–7 đã khớp đủ history và84rawexports trên corpusengineering nhỏ. [Bundle resume](../../research_tracking/runs/akt-public-selected-resume-20261110-01/README.md) giữ cả failure01 và chi phí đã tiêu. Điều này chưa nghiệm thu unexpectedfault/partialepoch, Linux/CUDA hoặc cloud durability. Không dùng tốc độCPU nhỏ để đưa runtimeGPU chính xác.
+
+Method24 train-only artifact đã có trên chính corpus60 cần được kiểm lại binding và tái sử dụng trước khi cân nhắc fit lại. Minimum conceptcoverage47–48learners chưa thay thế pairwise support đã ghi của estimator. Không lấy artifact48trainlearners gắn vào engineering8trainlearners. Main graph input limits và chi phí hash/read artifact phải dự toán riêng từ dữ liệu thực, không giữ8MiB từ A0graph-off.
+
+Credit Modal của các lượt trong đợt này vẫn0USD. Khoản30USD còn lại là thông tin người dùng cung cấp, cần đối chiếu trước lượt trả phí. Chưa có quyền launchGPU. Giữ Colabfree trước Modal theo thứ tự đã chọn.

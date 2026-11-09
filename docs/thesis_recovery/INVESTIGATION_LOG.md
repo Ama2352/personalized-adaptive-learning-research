@@ -1050,3 +1050,7 @@ E11 đã được peer scopedPASS, không cần sửa luận điểm. RecipeSAKT
 ## 10/11 — nối mô tả RQ2 với bất định thăm dò
 
 Root chọn family ba estimands trước phép tính bổ sung nhưng sau khi đã thấy kết quả, giữ nhãn posthoc. Shared paired-block bootstrap10000/seed42, không thêm mẫu độc lập. Actual watchdog và kiểm độc lập Decimal60 đạt, khác biệt lớn nhất khoảng1,13e-16. Khoảng hiệu giữa mức1150 và1000 còn chứa0. Không gọi riêng intervalK1150 là bằng chứng tương tác năng lực. Hai báo cáo nối Chặng16 và QA desktop/mobile, tab/server đã đóng. SAKTmetadata34 đã commit, positive dry02 đạt. AKTparent02 đã seal sau Job0, child đang kiểm.
+
+## 10/11 — tránh lặp fit và sửa trạng thái backlog
+
+Public AKT resume accepted66,637s và raw84exports byteexact. Corpus60 windowpreflight accepted2,546s, không modelcall. GKT producer3files đã áp dụng, SAKTclosure2files sửa sau fail trướcconstructor. Cold62 đạt35SAKT+27GKT, không scientificimports. Đối chiếu các nhãn PLANNED/NOT_STARTED cũ với source và actualartifacts, giữ mục tiêu/acceptance chưađạt. Method24 có artifact đúngmain60 nên ưu tiên currentbinding/no-refit. F041panel accepted5,087s, independent cachedreview0,388s, toàn3360TN và thiếupositiveclass. Hai kiểm năng lực còn lại chọn theo block/fields trong plan, không đoánID hoặc chọn kết quả.

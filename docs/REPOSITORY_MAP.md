@@ -224,3 +224,7 @@ Profile có phiên bản nằm trong [quyết định28](thesis_recovery/28_CUDA
 ## 10/11 — bất định theo mười block RQ2
 
 [Phân tích thăm dò](../research_tracking/reports/rq2_fresh_block_uncertainty_20261110.md) giữ đúng mười block, ba so sánh và10.000 shared draws. KhoảngK1150 phía dương, nhưng khoảng hiệuK1150−K1000 chứa0 nên chưa tách rõ khác biệt giữa hai mức khởi tạo. [Bundle](../research_tracking/runs/rq2-fresh-block-uncertainty-20261110-01/README.md) giữ CSV và kiểm Decimal độc lập. Phân tích hậu nghiệm, mức bao phủ xấp xỉ và một learned graph cố định. Hai báo cáo đã có Chặng16,11SVG cũ nguyên byte, bảng15 đạt desktop/mobile. Không thêm world/modelcall hoặc chi Modal.
+
+## 10/11 — source producer và dữ liệu main đã kiểm rõ phạm vi
+
+[Cold62](../research_tracking/runs/neural-selected-producer-metadata62-20261110-01/README.md) gồm35SAKT/27GKT,0FES, khôngNN. GKT đã có selected producer source, còn nativepositive. SAKT sửa mandatorypackageinit sau lỗi trướcconstructor, không thay toán học. [Corpus60](../research_tracking/runs/simulator-main60-data-preflight-20261110-01/README.md) đạt learnerdisjoint48/6/6 vàwindowcoverage10080/1260, chưa throughputGPU. [F041](../research_tracking/runs/rq1-f041-native-panel-20261110-01/README.md) có3360readouts toàn28concept, một lịch sử thấp đềuTN và0positiveclass, chưa đánh giá được nhận diện thành thạo. Không đóngRQ hoặc dùng Modal.

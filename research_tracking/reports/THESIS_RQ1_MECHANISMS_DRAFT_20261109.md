@@ -410,3 +410,28 @@ E11 bổ sung đối chứng có trạng thái khởi đầu được lưu thự
 - **E11d** đối chiếu nguồn E9 đã nghiệm thu với [báo cáo fresh120](rq2_fresh_graph_source_replication_20261110.md). Việc viết E11 không thực hiện thêm tương tác hoặc tăng cỡ mẫu của bất kỳ phép kiểm nào.
 
 [Bundle viết E11](../runs/thesis-rq2-e11-writing-20261110-01/README.md) giữ before/after và source map. Toàn bộ phần trước E11 được bảo toàn byte.
+
+
+## 15. E12 — Bất định giữa các khối và giới hạn của so sánh năng lực
+
+Phần E11 cho thấy trung bình của tương tác nguồn đồ thị với cơ chế phạt có thể khác nhau giữa hai mức khởi tạo. Câu hỏi tiếp theo là sự khác nhau ấy có đủ rõ so với biến động giữa các khối mô phỏng hay không. Đơn vị độc lập tiếp tục là mười khối21010–21019. Các120worlds và14.400tương tác bên trong không được xem là các quan sát độc lập. Ba khối E9 không được gộp vào phép tính mới.
+
+Gọi K(a) là phần thay đổi của chênh lệch expert–learned khi bật cơ chế phạt tại mức khởi tạo a, với định nghĩa Y và Q giữ như E11. Phân tích bổ sung xét ba trung bình gồm K(1000), K(1150) và K(1150)−K(1000) được trừ trong cùng khối. Đại lượng thứ ba trả lời trực tiếp câu hỏi tác động có khác giữa hai mức khởi tạo hay không. Việc hai khoảng riêng lẻ có quan hệ khác nhau với0 chưa tự chứng minh chênh lệch giữa hai tác động.
+
+Nhóm dùng paired-block bootstrap với10.000lần lấy mẫu lại mười khối có hoàn lại, private seed42. Các điều kiện trong cùng khối luôn đi cùng nhau. Ba khoảng percentile loại7 dùng điều chỉnh Bonferroni, mỗi khoảng có mức danh nghĩa98,333333%, tương ứng mức đồng thời danh nghĩa95% của gia đình ba so sánh. Đây là mức xấp xỉ của bootstrap, không bảo đảm bao phủ chính xác với n=10. Các estimands và thuật toán được đóng băng trước phép tính bổ sung, nhưng kết quả mô tả đã được xem trước, nên toàn bộ phân tích mang tính thăm dò sau kết quả.
+
+| Đại lượng | Trung bình, Elo | Khoảng bootstrap đã điều chỉnh, Elo |
+|---|---:|---|
+| K(1000) | +0.004496 | -0.024649 đến +0.035327 |
+| K(1150) | +0.024530 | +0.005767 đến +0.047248 |
+| K(1150) − K(1000), trong cùng khối | +0.020034 | -0.021413 đến +0.058529 |
+
+Khoảng của K(1000) chứa cả giá trị âm và dương. Khoảng của K(1150) nằm phía dương trong phép thăm dò này. Tuy nhiên, khoảng của hiệu K(1150)−K(1000) còn chứa0, nên dữ liệu hiện tại chưa phân biệt rõ tác động giữa hai mức khởi tạo. Kết quả không được diễn giải thành bằng chứng khẳng định đồ thị có ích hơn cho một nhóm năng lực của người học thật.
+
+K(1300)=0 vẫn là đối chứng bất hoạt theo điều kiện của simulator. Nhóm không lập khoảng hoặc kiểm định cho đại lượng này. Đổi nguồn đồ thị vẫn tạo Q khác0 ở mức khởi tạo1300, như E11 đã ghi, nên không được dùng K bằng0 để suy mọi đường tác động của đồ thị đã biến mất.
+
+Độ bất định đã được lượng hóa thêm trên đúng quần thể và giữ các kết quả âm. Tăng số lần bootstrap chỉ giảm nhiễu Monte Carlo, không tạo thêm khối độc lập. Khoảng hiện có chưa bao gồm biến động do nhiều đồ thị học độc lập, nhiều seed huấn luyện, môi trường khác hoặc người học thật. RQ2 còn cần khảo sát đồ thị nhiễu và khả năng khái quát. Phần này chưa đóng RQ2 và chưa là bằng chứng ưu thế của CG-AKT.
+
+Các phép tính đã được kiểm độc lập từ30K và10.000vector đã lưu bằng số thập phân độ chính xác60chữ số. Không lấy mẫu lại hoặc chạy mô phỏng mới trong kiểm này. Sai khác lớn nhất do số thực nhỏ hơn1,14e−16, trong ngưỡng kiểm số1e−12 đã công bố. Ngưỡng này kiểm tái lập số học, không là biên hiệu quả nghiên cứu. Bảng làm tròn sáu chữ số thập phân, JSON giữ độ chính xác đầy đủ.
+
+[Báo cáo kỹ thuật](rq2_fresh_block_uncertainty_20261110.md). [Bằng chứng và giới hạn](../runs/rq2-fresh-block-uncertainty-20261110-01/README.md).

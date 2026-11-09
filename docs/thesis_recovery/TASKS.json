@@ -269,11 +269,18 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "local",
       "authorization_requirements": "ARCHITECTURE_APPROVAL_THEN_SAFE",
-      "status": "PLANNED",
+      "status": "PARTIALLY_VERIFIED_GRAPH_CORE_IMPLEMENTED_MAIN_COMPARISONS_PENDING",
       "blockers": [
         "Chưa triển khai"
       ],
-      "execution_owner": "Codex"
+      "execution_owner": "Codex",
+      "previous_status_before_reconciliation_20261110": "PLANNED",
+      "reconciliation_evidence_20261110": [
+        "src/knowledge_tracing/akt/research_graph_model.py",
+        "docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md",
+        "research_tracking/runs/akt-current-gate183-20261110-01/README.md"
+      ],
+      "reconciliation_scope_vi": "Đối chiếu tiến độ component, không coi metadata/core là main fit hoặc hoàn tất RQ. Giữ mục tiêu và acceptance gốc."
     },
     {
       "id": "T10",
@@ -300,11 +307,16 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "bounded CPU",
       "authorization_requirements": "BOUNDED_EXECUTION_APPROVAL",
-      "status": "PLANNED",
+      "status": "PARTIALLY_VERIFIED_PUBLIC60_CORPUS_FINAL_SCALE_PENDING",
       "blockers": [
         "Full simulator corpus not generated; DATA05 only2×12train fixture; approved mixture/profile/coverage/allocation required"
       ],
-      "execution_owner": "Codex"
+      "execution_owner": "Codex",
+      "previous_status_before_reconciliation_20261110": "PLANNED",
+      "reconciliation_evidence_20261110": [
+        "research_tracking/runs/simulator-main60-data-preflight-20261110-01/README.md"
+      ],
+      "reconciliation_scope_vi": "Đối chiếu tiến độ component, không coi metadata/core là main fit hoặc hoàn tất RQ. Giữ mục tiêu và acceptance gốc."
     },
     {
       "id": "T11",
@@ -525,11 +537,17 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "GPU bounded/full",
       "authorization_requirements": "MODEL_PROTOCOL_AND_EXECUTION_APPROVAL",
-      "status": "PLANNED",
+      "status": "PARTIALLY_VERIFIED_SAKT_PRIMITIVES_SELECTED_METADATA35_NATIVE_PRODUCER_PENDING",
       "blockers": [
         "Chưa source pinned"
       ],
-      "execution_owner": "Codex"
+      "execution_owner": "Codex",
+      "previous_status_before_reconciliation_20261110": "PLANNED",
+      "reconciliation_evidence_20261110": [
+        "src/knowledge_tracing/sakt/research_runner.py",
+        "research_tracking/runs/neural-selected-producer-metadata62-20261110-01/README.md"
+      ],
+      "reconciliation_scope_vi": "Đối chiếu tiến độ component, không coi metadata/core là main fit hoặc hoàn tất RQ. Giữ mục tiêu và acceptance gốc."
     },
     {
       "id": "T18",
@@ -4324,8 +4342,15 @@
       "elapsed_duration": "Chưa đo",
       "compute_cost_category": "local_CPU_preparation; GRAPH15 actualGPU separately_authorized",
       "authorization_requirements": "User đã giao localengineering; Root review finite commands/caps trước execution. FullCV/Holdout/finalselection/paidGPU vẫn quyền riêng, không chiModal từ taskstatus.",
-      "status": "NOT_STARTED",
-      "blockers": []
+      "status": "PARTIALLY_IMPLEMENTED_SELECTED_FACTORY_REFIT_AFTER_FREEZE_PENDING",
+      "blockers": [],
+      "previous_status_before_reconciliation_20261110": "NOT_STARTED",
+      "reconciliation_evidence_20261110": [
+        "src/knowledge_tracing/akt/research_main_execution.py",
+        "src/knowledge_tracing/akt/research_selected_runner.py",
+        "research_tracking/runs/akt-public-selected-resume-20261110-01/README.md"
+      ],
+      "reconciliation_scope_vi": "Đối chiếu tiến độ component, không coi metadata/core là main fit hoặc hoàn tất RQ. Giữ mục tiêu và acceptance gốc."
     },
     {
       "id": "GRAPH15",
@@ -4351,8 +4376,15 @@
       "elapsed_duration": "Chưa đo",
       "compute_cost_category": "local_CPU_preparation; GRAPH15 actualGPU separately_authorized",
       "authorization_requirements": "User đã giao localengineering; Root review finite commands/caps trước execution. FullCV/Holdout/finalselection/paidGPU vẫn quyền riêng, không chiModal từ taskstatus.",
-      "status": "NOT_STARTED",
-      "blockers": []
+      "status": "IMPLEMENTED_CUDA_PROFILE_CPU_VERIFIED_ACTUAL_CUDA_PENDING",
+      "blockers": [],
+      "previous_status_before_reconciliation_20261110": "NOT_STARTED",
+      "reconciliation_evidence_20261110": [
+        "docs/thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md",
+        "src/knowledge_tracing/akt/research_main_execution.py",
+        "src/knowledge_tracing/akt/research_graph_model.py"
+      ],
+      "reconciliation_scope_vi": "Đối chiếu tiến độ component, không coi metadata/core là main fit hoặc hoàn tất RQ. Giữ mục tiêu và acceptance gốc."
     },
     {
       "owner": "Codex",
@@ -4627,12 +4659,18 @@
       "estimated_effort": "Chưa đo thời gian phát triển. Native execution có cap riêng, không suy effort từ elapsed.",
       "compute_cost_category": "local_CPU_numpy_pandas_estimator_replay_no_new_world",
       "authorization_requirements": "Local engineering theo user. Root review exact nguồn/input/workload trước native dispatch. Không fullCV/Holdout/Modal hoặc fitted research từ task status.",
-      "status": "NATIVE05_TIMEOUT_NO_ACCEPTED_TRUTH_OBSERVER_COST_PLAN_REQUIRED",
+      "status": "PARTIALLY_VERIFIED_CACHED_PG120_AND_F041_PANEL_FULL_CPU09_DEFERRED",
       "blockers": [
         "Full replay chưa hoàn tất trong173giây worker. Dừng lane, đóng raw và thiết kế đo observer overhead riêng."
       ],
       "verification_evidence": "artifacts/akt/local-tests/akt-research-runner-20261108-01/rq1-cpu09-mastery-pure01/result.json",
-      "replacement_execution_task": "RQDIAG23"
+      "replacement_execution_task": "RQDIAG23",
+      "previous_status_before_reconciliation_20261110": "NATIVE05_TIMEOUT_NO_ACCEPTED_TRUTH_OBSERVER_COST_PLAN_REQUIRED",
+      "reconciliation_evidence_20261110": [
+        "research_tracking/runs/rq1-observer03-cached-truth-20261109-01/README.md",
+        "research_tracking/runs/rq1-f041-native-panel-20261110-01/README.md"
+      ],
+      "reconciliation_scope_vi": "Đối chiếu tiến độ component, không coi metadata/core là main fit hoặc hoàn tất RQ. Giữ mục tiêu và acceptance gốc."
     },
     {
       "id": "GRAPH21",
@@ -5436,7 +5474,7 @@
       "required_artifacts": [
         "Finite recipe/implementation/source review và actual acceptance receipts tương lai, hiện chưa có."
       ],
-      "status": "MODEL11_TRAINER8_CHECKPOINT28_PASS_PRODUCER_ADAPTER_PENDING",
+      "status": "MODEL_TRAINER_CHECKPOINT_AND_SELECTED_METADATA27_PASS_NATIVE_PRODUCER_PENDING",
       "blockers": [
         "Research producer/export/adaptor/fit còn thiếu. Checkpoint28 là same-process complete-epoch, chưa lifecycle/freshOS resume."
       ],
@@ -5446,7 +5484,13 @@
         "decision": "D42",
         "fitted": false
       },
-      "verification_evidence": "research_tracking/runs/gkt-research-model-trainer-20261110-01"
+      "verification_evidence": "research_tracking/runs/gkt-research-model-trainer-20261110-01",
+      "previous_status_before_reconciliation_20261110": "MODEL11_TRAINER8_CHECKPOINT28_PASS_PRODUCER_ADAPTER_PENDING",
+      "reconciliation_evidence_20261110": [
+        "src/knowledge_tracing/gkt/research_runner.py",
+        "research_tracking/runs/neural-selected-producer-metadata62-20261110-01/README.md"
+      ],
+      "reconciliation_scope_vi": "Đối chiếu tiến độ component, không coi metadata/core là main fit hoặc hoàn tất RQ. Giữ mục tiêu và acceptance gốc."
     },
     {
       "rq": [
@@ -5477,11 +5521,17 @@
       "required_artifacts": [
         "Selected-only producer source/tests và actual receipts tương lai, chưa có."
       ],
-      "status": "CANONICAL_METADATA34_GENUINE_DRY02_PASS_NATIVE_SELECTED_PENDING",
+      "status": "CURRENT_CLOSURE_METADATA35_PASS_GENUINE_DRY03_NATIVE_RETRY_PENDING",
       "blockers": [
         "Isolatedsource2modules/tests đãreview; apply/pure34 vàactual normal-entry producer cònchờ."
       ],
-      "adopted_recipe": "docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md"
+      "adopted_recipe": "docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md",
+      "previous_status_before_reconciliation_20261110": "CANONICAL_METADATA34_GENUINE_DRY02_PASS_NATIVE_SELECTED_PENDING",
+      "reconciliation_evidence_20261110": [
+        "src/knowledge_tracing/sakt/research_execution.py",
+        "research_tracking/runs/neural-selected-producer-metadata62-20261110-01/README.md"
+      ],
+      "reconciliation_scope_vi": "Đối chiếu tiến độ component, không coi metadata/core là main fit hoặc hoàn tất RQ. Giữ mục tiêu và acceptance gốc."
     },
     {
       "id": "RQDIAG28",
