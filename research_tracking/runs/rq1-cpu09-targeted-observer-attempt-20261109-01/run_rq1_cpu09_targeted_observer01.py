@@ -1,0 +1,249 @@
+"""ROOT-only owned pilot một history, cap whole60 gồm cleanup/finalization."""
+import argparse
+import hashlib
+import json
+import math
+import os
+from pathlib import Path
+import sys
+import threading
+import time
+
+ROOT = Path(__file__).resolve().parents[4]
+PREP = Path(__file__).resolve().parent
+WORKER = PREP / 'pilot_rq1_cpu09_targeted_observer01.py'
+CONTRACT = PREP / 'rq1_cpu09_targeted_observer_contract01.json'
+START, WALL = time.perf_counter(), time.time()
+
+
+def need(ok, message):
+    if not ok:
+        raise ValueError(message)
+
+
+def elapsed():
+    return max(time.perf_counter() - START, time.time() - WALL)
+
+
+def sha(path):
+    need(path.is_absolute() and path.is_relative_to(ROOT) and path.resolve() == path, 'physical workspace path')
+    current = ROOT
+    for part in path.relative_to(ROOT).parts:
+        current /= part
+        need(not current.is_symlink() and not getattr(current, 'is_junction', lambda: False)(), 'no aliases')
+    need(path.is_file() and path.stat().st_size <= 4 * 1024**2, 'bounded regular file')
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def read(path):
+    sha(path)
+    return json.loads(path.read_bytes())
+
+
+def write(path, value):
+    raw = (json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + '\n').encode()
+    need(len(raw) <= 2 * 1024**2, 'bounded controller metadata')
+    with path.open('xb') as stream:
+        stream.write(raw)
+        stream.flush()
+        os.fsync(stream.fileno())
+
+
+class FamilyMonitor:
+    """Cùng nguồn ý tưởng native05, paths/deadline60 explicit cho pilot mới."""
+    def __init__(self, helper, owned, output, worker_sha):
+        import psutil
+        self.psutil, self.helper, self.owned, self.output = psutil, helper, owned, output
+        self.worker_sha = worker_sha
+        self.parent = psutil.Process(os.getpid())
+        self.stop_event = threading.Event()
+        self.thread = threading.Thread(target=self.loop, daemon=True)
+        self.errors = []
+        self.samples = self.child_samples = self.peak = 0
+        self.minimum_free = None
+        self.terminated_job = False
+
+    def sample(self):
+        total, rows = 0, []
+        family = [self.parent, *self.parent.children(recursive=True)]
+        need(len(family) <= 17, 'bounded owned family')
+        for process in family:
+            try:
+                memory = process.memory_info()
+                peak = max(memory.rss, getattr(memory, 'peak_wset', 0))
+                total += peak
+                rows.append(dict(pid=process.pid, create_time=process.create_time(), rss=memory.rss, peak=peak))
+            except self.psutil.NoSuchProcess:
+                need(process.pid != self.parent.pid, 'parent vanished')
+        free = int(self.psutil.virtual_memory().available)
+        self.samples += 1
+        self.child_samples += int(any(row['pid'] != self.parent.pid for row in rows))
+        self.peak = max(self.peak, total)
+        self.minimum_free = free if self.minimum_free is None else min(self.minimum_free, free)
+        self.journal.write(json.dumps(dict(seconds=elapsed(), family=rows, family_peak_sum_bytes=total, free_bytes=free)) + '\n')
+        self.journal.flush()
+        need(self.samples <= 650 and self.journal.tell() <= 1024**2, 'bounded resource journal')
+        need(total <= 1024**3 and free >= 2 * 1024**3, 'actual family RSS/freeRAM caps')
+        need(elapsed() < 60, 'same whole60 deadline')
+
+    def terminate_owned(self):
+        path = self.owned / 'launch.json'
+        until = min(time.perf_counter() + 1, START + 60)
+        launch = None
+        while launch is None and time.perf_counter() < until:
+            if path.exists():
+                try:
+                    launch = read(path)
+                except json.JSONDecodeError:
+                    pass
+            if launch is None:
+                time.sleep(.005)
+        need(launch is not None and launch['parent']['pid'] == os.getpid()
+             and launch['worker_relative'] == WORKER.relative_to(ROOT).as_posix()
+             and launch['worker_sha256'] == self.worker_sha
+             and launch['job_name'] == 'KLTN_OWNED_' + launch['nonce'], 'exact current owned Job binding')
+        api = self.helper.Kernel()
+        handle = api.check(api.k.OpenJobObjectW(0x0004 | 0x0008, False, launch['job_name']))
+        try:
+            api.check(api.k.TerminateJobObject(handle, 1))
+            self.terminated_job = True
+        finally:
+            api.close(handle)
+
+    def loop(self):
+        try:
+            with (self.output / 'memory.jsonl').open('x', encoding='utf-8') as self.journal:
+                while not self.stop_event.wait(.1):
+                    self.sample()
+                self.sample()
+        except BaseException as error:
+            self.errors.append(dict(type=type(error).__name__, message=str(error)))
+            try:
+                self.terminate_owned()
+            except BaseException as cleanup:
+                self.errors.append(dict(type=type(cleanup).__name__, message=str(cleanup)))
+
+    def stop(self):
+        self.stop_event.set()
+        self.thread.join(timeout=.5)
+        need(not self.thread.is_alive(), 'monitor stopped')
+
+    def result(self):
+        return dict(samples=self.samples, child_family_samples=self.child_samples,
+            observed_family_peak_rss_bytes=self.peak, observed_minimum_available_ram_bytes=self.minimum_free,
+            monitor_stopped=not self.thread.is_alive(), terminated_owned_job=self.terminated_job, errors=self.errors,
+            scope='SAMPLED_PARENT_AND_LIVE_DESCENDANTS_NOT_CONTINUOUS_HARD_RSS_PROOF')
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--source-sha256', required=True)
+    parser.add_argument('--contract-sha256', required=True)
+    parser.add_argument('--controller-sha256', required=True)
+    parser.add_argument('--approval-reference', required=True)
+    parser.add_argument('--phase', choices=('pure', 'native'), required=True)
+    args = parser.parse_args()
+    need(Path.cwd().resolve() == ROOT and Path(sys.prefix).resolve() == ROOT / '.venv', 'actual repository .venv')
+    need(sha(WORKER) == args.source_sha256 and sha(CONTRACT) == args.contract_sha256
+         and sha(Path(__file__).resolve()) == args.controller_sha256 and args.approval_reference.strip(), 'Root reviewed exact source pins')
+    contract = read(CONTRACT)
+    need(contract['worker_sha256'] == args.source_sha256
+         and contract['controller_sha256'] == args.controller_sha256, 'contract source agreement')
+    before = {}
+    for name, row in contract['bindings'].items():
+        need(sha(ROOT / name) == row['sha256'] and (ROOT / name).stat().st_size == row['bytes'], 'prebound source/input bytes')
+        before[name] = row['sha256']
+    output = PREP / contract['outer_names'][args.phase]
+    owned = PREP / contract['owned_names'][args.phase]
+    inner = PREP / contract['output_names'][args.phase]
+    need(all(path.parent == PREP and path.resolve() == path and not path.exists() for path in (output, owned, inner)), 'all three exclusive fresh namespaces')
+    sys.path.insert(0, str(ROOT / 'scripts/research'))
+    import windows_owned_worker as helper
+    need(sha(Path(helper.__file__)) == '0dc8723170467e9ae73c4e233a357b9d584c66a8c183c478bdcff358fb0a95a1', 'genuine unchanged owner helper')
+    helper.entry()
+    monitor = FamilyMonitor(helper, owned, output, args.source_sha256)
+    import psutil
+    need(psutil.virtual_memory().available >= 2 * 1024**3, 'actual parent freeRAM before any worker')
+    output.mkdir()
+    write(output / 'admission.json', dict(source_input_before=before, approval_reference=args.approval_reference,
+        phase=args.phase, whole_seconds=60, owned_seconds=57, worker_seconds=53, cleanup_seconds=3,
+        old_native05_lane_reopened=False, new_allocation=True))
+    errors, receipt, files, after = [], None, {}, {}
+    original_environment = {name: os.environ.get(name) for name in ('CUDA_VISIBLE_DEVICES', 'OMP_NUM_THREADS', 'MKL_NUM_THREADS', 'OPENBLAS_NUM_THREADS')}
+    try:
+        os.environ.update(CUDA_VISIBLE_DEVICES='', OMP_NUM_THREADS='2', MKL_NUM_THREADS='2', OPENBLAS_NUM_THREADS='2')
+        monitor.thread.start()
+        need(elapsed() < 3, 'prelaunch source work within whole60 allocation')
+        receipt = helper.run_owned(WORKER, ['--source-sha256', args.source_sha256,
+            '--contract-sha256', args.contract_sha256, '--phase', args.phase], owned,
+            expected_worker_sha256=args.source_sha256, approval_reference=args.approval_reference,
+            max_seconds=min(57., 60. - elapsed() - 3.), cleanup_reserve_seconds=3, max_output_bytes=65536)
+        write((owned if owned.is_dir() else output) / 'receipt.json', receipt)
+        need(receipt['accepted'] is True and receipt['returncode'] == receipt['worker_returncode_before_cleanup'] == 0
+             and receipt['cleanup_accepted'] is True and receipt['job_active_after_cleanup'] == 0
+             and receipt['popen_handle_closed'] is True and receipt['errors'] == receipt['cleanup_errors'] == [], 'actual clean owned terminal')
+        expected = {'pure_checks.json', 'result.json'} if args.phase == 'pure' else {
+            'pure_checks.json', 'native_metadata.json', 'reservation.json', 'off.json', 'on.json', 'result.json'}
+        need({path.name for path in inner.iterdir()} == expected, 'all terminal output files, no failure/partial acceptance')
+        files = {path.name: dict(sha256=sha(path), bytes=path.stat().st_size) for path in inner.iterdir()}
+        need(sum(row['bytes'] for row in files.values()) <= 2 * 1024**2, 'small pilot outputs')
+        result = read(inner / 'result.json')
+        need(read(inner / 'pure_checks.json')['manufactured_checks'] == 5, 'actual five manufactured checks')
+        need(result['errors'] == result['restoration_errors'] == result['denied'] == []
+             and result['source_before'] == result['source_after'] == before
+             and result['profiler_installed'] is False and result['old_five_attempt_lane_reopened'] is False,
+             'all source/restoration/pilot scope checks')
+        if args.phase == 'pure':
+            need(result['status'] == 'ACCEPTED_FIVE_MANUFACTURED_PILOT_CHECKS'
+                 and result['direct_started'] == result['direct_returned'] == {}, 'manufactured-only result')
+        else:
+            need(result['status'] == 'COMPLETE_ONE_HISTORY_OFF_ON_PARITY_PENDING_ROOT'
+                 and result['direct_started'] == result['direct_returned'] == contract['direct_reservation']
+                 and result['loader_truth_validation_started'] is True and result['loader_truth_validation_completed'] is True,
+                 'two-policy complete direct ledger / strict cache validation')
+            off, on = read(inner / 'off.json'), read(inner / 'on.json')
+            need(off['key'] == on['key'] == contract['selected_key'] and off['events'] == on['events'] == 120
+                 and off['initial_state_sha256'] == on['initial_state_sha256']
+                 and off['final_state_sha256'] == on['final_state_sha256'] and off['readouts'] == on['readouts'], 'all one-history endpoint/readout parity')
+            need(on['observer']['started'] == on['observer']['returned'] == contract['on_method_caps']
+                 and on['observer']['raised'] == {} and on['observer']['class_attributes_restored'] is True
+                 and on['observer']['instance_attributes_added'] is False and off['observer']['nested_calls_observed'] is False,
+                 'targeted ON scope / honest OFF observation')
+            metadata = read(inner / 'native_metadata.json')
+            need(metadata['phase_closed'] is True and metadata['outside_phase_popen_attempts'] == metadata['outside_phase_socket_attempts']
+                 == metadata['blocked_bootstrap_attempts'] == 0, 'real metadata closed and no late attempts')
+        after = {name: sha(ROOT / name) for name in before}
+        need(after == before and sha(CONTRACT) == args.contract_sha256
+             and sha(Path(__file__).resolve()) == args.controller_sha256, 'all source/input final hashes')
+        need(all(sha(owned / name) == pin for name, pin in receipt['output_sha256'].items()), 'original stdout/stderr identity')
+    except BaseException as error:
+        errors.append(dict(type=type(error).__name__, message=str(error)))
+    finally:
+        if monitor.thread.ident is not None:
+            try:
+                monitor.stop()
+            except BaseException as error:
+                errors.append(dict(type=type(error).__name__, message=str(error)))
+        for name, value in original_environment.items():
+            if value is None:
+                os.environ.pop(name, None)
+            else:
+                os.environ[name] = value
+    resources = monitor.result()
+    restored = all(os.environ.get(name) == value for name, value in original_environment.items())
+    accepted = not errors and not resources['errors'] and resources['monitor_stopped'] and restored and elapsed() < 60
+    final = dict(status='ACCEPTED_ONE_HISTORY_TARGETED_OBSERVER_OPERATIONAL_PILOT' if accepted else 'REJECTED_KEEP_PILOT_NO_RETRY',
+        phase=args.phase, errors=errors, elapsed_before_receipt_seconds=elapsed(), whole_cap_seconds=60,
+        receipt=receipt, source_input_before=before, source_input_after=after, outputs=files,
+        resources=resources, environment_restored=restored, full120worlds_or_truth_accuracy_claimed=False,
+        old_five_attempt_lane_reopened=False, automatic_retry=False)
+    write(output / 'final.json', final)
+    if elapsed() >= 60:
+        accepted = False
+        write(output / 'postwrite-rejection.json', dict(status='REJECTED_AFTER_FINALWRITE', elapsed_seconds=elapsed()))
+    print(json.dumps(dict(status=final['status'] if accepted else 'REJECTED_KEEP_PILOT_NO_RETRY', errors=errors, elapsed_seconds=elapsed())))
+    raise SystemExit(0 if accepted else 1)
+
+
+if __name__ == '__main__':
+    main()

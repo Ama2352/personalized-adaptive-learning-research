@@ -849,3 +849,8 @@ Bốn source/test được kiểm qua hai module. Lượt01 có140PASS/14FAIL do
 ## 09/11 — lời giải thích có điều kiện cho re-entry
 
 Đã kiểm chứng minh hấp thụ của tập mastered và tồn tại ready trong chương chưa hoàn tất với DAG nội chương. Bốn fixture mới đạt trong0,2165947giây. Phản ví dụ A→B→A có chapter quotient chỉB→A. Bundle12outputs đã đóng, manifest7e8f684d0c9fb999b7d6e3762362f4b38106ae0dd3659151f6daa1084675c70c. Hai báo cáo tiến độ thêm chặng10 và phần kết quả hiện tại, mười SVG giữ byte-identical, mười một bảng và anchors kiểm tĩnh. Chưa visual render mới. Đây là cơ chế có điều kiện và phản ví dụ dựng tay.
+
+
+## 09/11 — lưu failure của pilot observer mới
+
+Một allocation60giây đã dừng sau khoảng3,3976giây. Năm inline checks đạt, lỗi read guard xảy ra trước cache validation và estimator. Không constructor/update/readout parity được tạo. Job0, monitor dừng và environment đã khôi phục. Đã đóng34outputs trong rq1-cpu09-targeted-observer-attempt-20261109-01, giữ verdict REJECTED. File bị chặn đầu tiên chưa được log. Source review xác định thiếu self-contract read entitlement trong postcheck. Allocation dừng, không retry. Lượt xem HTML qua file protocol bị chặn và localhost timeout, giữ QA tĩnh, browser và server84894 đã đóng.

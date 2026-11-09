@@ -1,0 +1,19 @@
+# Duyệt lượt kiểm observer một lịch sử
+
+Ngày 09/11/2026, Root đối chiếu trực tiếp worker, controller, contract và primitives replay. Đây là kiểm vận hành CPU trong phạm vi engineering người dùng đã yêu cầu tiếp tục.
+
+Worker được ghim `7409070ce651595232a638ef5312b4fde1074976aa16ea624c042134065277e6`, controller `79b31078490d76e9b288674a096f532302e938c6daa17c0e21cc8b5be36d70b0`, contract `59d1bdabdb243d078698bc292a058b9cc0f49100b68626f9491995007a9d6d2a`.
+
+## Phạm vi được chạy
+
+Một lần gọi phase native, bao gồm ba kiểm dựng tay trước khi import mô hình. Chỉ lịch sử có khóa `(21000, PG, false, false)`, 120 tương tác đã lưu. Hai policy mới chạy lần lượt với observer tắt và bật. Trần tổng 60 giây, worker 53 giây, owned operation tối đa 57 giây có dự trữ dọn 3 giây, tổng RSS lấy mẫu không quá 1 GiB và RAM khả dụng tối thiểu 2 GiB. Nếu từ chối phải giữ failure và dừng allocation này. Không tự gọi lại hoặc tăng giới hạn.
+
+Reader kiểm toàn bộ cache 14.400 dòng theo validator sẵn có trước khi chiếu ra năm trường quan sát. Policy nhận câu hỏi và thời điểm hiện tại. Đáp án hiện tại chỉ được dùng sau predict và capture. D39 cho phép reader parse truth để kiểm cấu trúc cache. Pilot chỉ kiểm parity và chi phí vận hành.
+
+## Tiêu chí nghiệm thu
+
+Hai constructor và 240 lần gọi mỗi thao tác select, predict, capture, update đều hoàn tất. Toàn bộ 120 query và xác suất phải khớp bit với lịch sử gốc ở cả hai lượt. Hai lượt có cùng readout và fingerprint toàn bộ state tại đầu và cuối. Các original method phải được khôi phục trước fingerprint và khi thoát. Bộ đếm observer bật phải đủ số method đã khai báo. Thông tin môi trường, source/input SHA, cleanup Job0 và monitor terminal được kiểm trong controller. Mỗi thành phần phải thành công, kết thúc process với mã 0 chỉ là một điều kiện.
+
+## Giới hạn diễn giải
+
+Thứ tự tắt rồi bật có ảnh hưởng cache và khởi động. Thời gian đo dùng để chẩn đoán lượt này. Chưa có cơ sở ngoại suy runtime của toàn bộ 120 lịch sử. Năm lượt native mastery trước vẫn được giữ ở trạng thái dừng. Kết quả này chưa đánh giá độ đúng của mastery hoặc thêm mẫu nghiên cứu độc lập.

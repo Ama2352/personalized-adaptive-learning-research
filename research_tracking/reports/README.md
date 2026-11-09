@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+**Log vận hành CPU09, pilot observer bị từ chối.** [Hồ sơ lỗi](../runs/rq1-cpu09-targeted-observer-attempt-20261109-01/report.md). Năm kiểm dựng tay đạt, chưa bắt đầu tạo policy hoặc replay. Read guard chặn trước cache validation. Đã giữ raw lỗi và cleanup Job0, còn phải xác định file bị chặn đầu tiên trước khi đề xuất lượt mới.
+
 **RQ1/RQ2, cơ chế quay lại chương theo Paper1.** [Điều kiện đủ và phản ví dụ](paper1_reentry_mechanism_20261109.md), [bốn kiểm tra đã đạt](../runs/paper1-reentry-mechanism-20261109-01/result.json). Đã chứng minh phạm vi zero re-entry cho đồ thị nội chương và kiểm phản ví dụ A→B→A với cạnh liên chương một chiều. Hai báo cáo tiến độ đã thêm chặng10.
 
 **AKT, chuẩn bị Linux CPU.** [154 kiểm metadata đã đạt](akt_linux_main_metadata_readiness_20261109.md), [gói bằng chứng](../runs/akt-linux-main-metadata-engineering-20261109-01/README.md). Giữ hai lượt cùng bộ test, lần đầu có 14 lỗi do fixture. Cần source proof/runtime/Gate thực trên Linux. Gate05 thuộc phiên bản trước bốn file vừa sửa.

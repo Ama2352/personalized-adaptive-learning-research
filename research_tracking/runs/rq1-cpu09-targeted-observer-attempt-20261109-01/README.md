@@ -1,0 +1,3 @@
+# CPU09 targeted observer — pilot bị từ chối trước estimator
+
+Đây là archive failure vận hành. Five inline manufacturedchecks đã chạy; readguard từ chối trước cachevalidation/constructor/update, không có OFF/ON/parity/timing result. Knownpostcheckselfcontract không nằmallowlist, firstreadpathUNKNOWN do messagegeneric. Nativeverdict REJECTED, cleanupJob0/resourcechecks riêng đạt. Manifestcompleted chỉ xác nhận archive hoàn tất, không nativePASS/RQprogress. Lane5attempts cũ vẫnSTOPPED, không retry/đổi nguồn trongclosure. Report chi tiết tại [report.md](report.md). Originalcache/dependencies chỉreferenceSHA.
