@@ -128,6 +128,16 @@ LocalSDK1.6.3 đã cài bằng pinned supplemental wheel lock trongprojectvenv, 
 
 Cập nhật câu trả lời user07/11: còn30USDfree credits,bắt đầu07/11/2026/reset tháng kế,không trả thêm tiền; grossceiling30USD/net0USD là binding. API xác nhận auth/workspace riêng; balance/cycle do user báo, chưa readback balance/spendlimits. Reset day/time cụ thể chưa biết, không suy ngày07/12 hoặc tự cộng30USDthángsau. Thông tin “chưa biết loạicredits/workspace” trong hồ sơ cũ là snapshot trước câu trả lời này. Cácstageallocations vẫnproposed, không là permissionlaunch.
 
+## Cập nhật nguồn09/11 — CG-AKT chưa sẵn đường chạy GPU nghiên cứu
+
+Đã lưu [rà soát device/checkpoint/launcher](evidence/cgakt_gpu_device_source_review_20261109.md) cùng inventory đối chiếu trước/sau sao chép. Đây là kiểm nguồn; các SHA mô tả snapshot lúc review, không chứng nhận runtime hiện tại hoặc thay kiểm CUDA. TASKS/index đã được cập nhật sau snapshot đó.
+
+Đường chạy CG-AKT nghiên cứu hiện còn khóa CPU ở guard, model, training context và checkpoint. Probe CUDA tổng quát đã đạt trước đây không chứng minh đường chạy này dùng được GPU. Public full-fold entry vẫn bị khóa; chưa có Modal training app/launcher hoàn chỉnh. Không gọi private helper để vượt khóa hoặc đổi riêng tên device thành cuda.
+
+Thứ tự cần làm tiếp: nghiệm thu selected-only lifecycle CPU → port device/runtime guard, tensor placement, CPU+CUDA RNG và Adam state đúng semantics → finite CUDA forward/backward/update → save/reload/fresh-process recovery → benchmark có đồng bộ CUDA → image/Volume/budget Modal và lượt chạy được duyệt riêng. Không blanket chuyển mọi tensor Adam sang GPU; step scalar và moment buffers có quy tắc khác nhau theo backend/config.
+
+Kiểm CPU fresh-process ngày09/11 đã khớp full epoch tiếp theo nhưng chưa chứng minh CUDA/cross-host, global-budget resume hoặc sampler giữa epoch. Trạng thái GPU nghiên cứu vẫn **CHƯA SẴN SÀNG**. Chưa có throughput GPU cho pipeline này nên chưa thể chốt giá một fold; tiếp tục dùng công thức theo scored-target throughput đã đo trong stage5, không suy runtime từ CPU fixtures hoặc số testPASS. Giữ30USD free credits/net0 và không tự phát sinh chi phí.
+
 ## Ưu tiên Colab trước Modal theo user07/11
 
 Thứ tự hiện tại: localCPU → Colabfree cho CUDA smoke/checkpoint reload và các kiểm CUDA tổng quát đã chuẩn bị → Modal cho revalidation đặc thù image/Volume cùng pilot/training có kế hoạch. Không tiêu credits Modal chỉ để chạy lại các kiểm CUDA có thể làm trên Colab trước. Budgetreadiness2USD cũ chỉ là reserve cho platform-specific revalidation nếu cần, không autoallocation. Balance30free/net0 giữ nguyên. Colabunavailable/hếtquota không tự cấp quyền fallback sang paidcompute.
