@@ -1104,3 +1104,7 @@ User chuyển ưu tiên sang nghiên cứu chính trong kịch bản7ngày. Back
 ## 10/11 — chốt portability1992 trên Colab CPU
 
 Colab CPU đã đạt1.992ca trên92module trong294,935giây,0failure/error/skip; tách riêng1ca kiểm môi trường cô lập. Đã sửa gói thiếu cấu hình, bỏ phụ thuộc snapshot chưa tracked và làm kiểm timestamp xác định. Reader/model production giữ nguyên; inventory198file, chưa full Gate/CUDA/training chính. Giữ4attempts:01 4F/19E,02 26F/749E do thiếu parenttmp,03 1F timestamp,04 0FES. Local101pure/13IO, giữ lỗi PYTHONPATH/TEMP. Đã tải279901byte/39files vớiCRC/SHA/JUnit độc lập, rawlogsnativeZIP, nguồn279payload khớpbuilderlocal.11SVG/17tables nguyên. Không chiModal. Next isolatedCPU/fullGate/CUDA, không thêmnhánhphụ.
+
+## 10/11 — Gate Linux cô lập đạt, ưu tiên bằng chứng cốt lõi AKT
+
+Môi trường Linux cô lập đã nghiệm thu 44 package, Gate CPU đạt 1.993/1.993 ca trên 198 file nguồn và 92 module, không loại ca. Đã tải về, kiểm CRC/SHA, JUnit và nguồn. CUDA/recovery/throughput và training nghiên cứu chính còn thiếu. Modal 0 USD. Lượt cài trước không thu được kết quả cuối khi runtime đổi, giữ UNKNOWN. Lượt phục hồi riêng đã đạt. Ba notebook gói nguồn được xóa output trên bản sao, mã model/tests giữ nguyên. Trình kiểm local đã sửa sai tên field report trước khi nghiệm thu. Ưu tiên A0/A1/A2/A3 và cùng-quần-thể comparison; tạm hoãn các mở rộng. Hồ sơ tại research_tracking/runs/akt-colab-isolated-cpu-20261110-01/.

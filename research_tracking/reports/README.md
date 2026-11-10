@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 10/11 — đã nghiệm thu Gate CPU cô lập cho AKT
+
+Môi trường Linux cô lập đã nghiệm thu 44 package, Gate CPU đạt 1.993/1.993 ca trên 198 file nguồn và 92 module, không loại ca. Đã tải về, kiểm CRC/SHA, JUnit và nguồn. CUDA/recovery/throughput và training nghiên cứu chính còn thiếu. Modal 0 USD. [Bằng chứng](../runs/akt-colab-isolated-cpu-20261110-01/README.md).
+
+
 ## 10/11 — đã kiểm tích hợp trên Colab CPU
 
 Colab CPU đã đạt1.992ca trên92module trong294,935giây,0failure/error/skip; tách riêng1ca kiểm môi trường cô lập. Đã sửa gói thiếu cấu hình, bỏ phụ thuộc snapshot chưa tracked và làm kiểm timestamp xác định. Reader/model production giữ nguyên; inventory198file, chưa full Gate/CUDA/training chính. [Bằng chứng](../runs/akt-colab-integration-20261110-01/README.md).
