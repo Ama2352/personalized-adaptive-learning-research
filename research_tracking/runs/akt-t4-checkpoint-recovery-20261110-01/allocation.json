@@ -1,0 +1,35 @@
+{
+  "status": "PREPARED_NOT_EXECUTION_EVIDENCE",
+  "scope": "Fixture CUDA complete-epoch checkpoint trên A0/A3; không Main fit",
+  "remote_root": "/content/kltn-current-t4-20261110-01",
+  "remote_output": "experiments/akt/results/t4-checkpoint-recovery-20261110-01",
+  "variants": [
+    "A0",
+    "A3"
+  ],
+  "phases": [
+    "continuous",
+    "interrupted",
+    "resumed"
+  ],
+  "max_processes": 6,
+  "max_worker_seconds": 90,
+  "max_overall_seconds": 360,
+  "max_physical_optimizer_updates": 16,
+  "max_physical_targets": 384,
+  "max_vram_bytes": 2147483648,
+  "max_checkpoint_outputs_bytes": 268435456,
+  "min_free_disk_bytes": 32212254720,
+  "expected_checkpoints": 4,
+  "source_zip_sha256": "604bcaf17edb0e623b6e50c10537dd1aa382d77e15da6367565d1cb649b14713",
+  "source_files": {
+    "checkpoint_worker.py": "5e3e7417d8cc53a589eaf1c0ef874ea03b4576427ff53f77118d928b09bce2d5",
+    "checkpoint_controller.py": "9ec8ca8a2b1c188742fc62c1dae95724418629c9c44686c0669b542cd7c2c8fd"
+  },
+  "expected_inputs": "Cùng fixture handmade, frozen recipe26/28, venv 44 package đã nghiệm thu và đủ source279. Không Junyi/Holdout.",
+  "acceptance": "Sáu process khác PID; restore E1 sang E2 khớp chính xác continuous về model/Adam/RNG/counters/participation/predictions. Giữ failure đầu và không retry tự động.",
+  "artifact_acceptance": "Checkpoint, metadata, COMPLETE.json và logs giữ native. Chỉ đánh dấu đã lưu về máy sau nhận và kiểm archive SHA/inventory; hiện đường tải file lớn chưa xác nhận.",
+  "limits": "Chỉ complete-epoch state restore; không kết luận hard-kill, full selected-runner resume hoặc durability cloud.",
+  "authorization": "User đã giao bounded free-T4 engineering. Không quyền Modal/full CV/Holdout phát sinh.",
+  "modal_spend_usd": 0
+}

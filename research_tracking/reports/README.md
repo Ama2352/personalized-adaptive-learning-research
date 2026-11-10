@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 10/11 — gói checkpoint CUDA đã chuẩn bị, chưa chạy
+
+[Gói chuẩn bị và giới hạn](../runs/akt-t4-checkpoint-recovery-20261110-01/README.md) có worker A0/A3, controller và allocation sáu process/16updates/384target giả. Chưa có output thực thi mới qua MCP hoặc đường nhận checkpoint lớn được xác nhận. Đây là hồ sơ vận hành, không phải kết quả nghiên cứu hoặc restore đã đạt.
+
+
 ## 10/11 — bốn biến thể AKT đã qua CUDA smoke trên T4
 
 T4 miễn phí đã chạy A0–A3 theo recipe CUDA, tổng 8 Adam updates/192 target giả/24 dự báo, chung initial backbone, nguồn nguyên và số học hữu hạn. Đã tải và kiểm log cùng 44 package. Chưa checkpoint/restore, throughput đại diện hoặc Main fit. Modal 0 USD. [Hồ sơ](../runs/akt-colab-t4-current-20261110-01/README.md).

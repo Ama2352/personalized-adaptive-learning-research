@@ -1112,3 +1112,7 @@ Môi trường Linux cô lập đã nghiệm thu 44 package, Gate CPU đạt 1.9
 ## 10/11 — actual T4 core A0–A3
 
 T4 miễn phí đã chạy A0–A3 theo recipe CUDA, tổng 8 Adam updates/192 target giả/24 dự báo, chung initial backbone, nguồn nguyên và số học hữu hạn. Đã tải và kiểm log cùng 44 package. Chưa checkpoint/restore, throughput đại diện hoặc Main fit. Modal 0 USD. Giữ failure do pin Python3.13.18 ở lượt cài đầu; lượt hai ghim3.13.16 đúng máy đích, không đổi lock/model và không cài global. Nguồn279 cùng kit hiện hành, source smoke trước–sau nguyên. Hồ sơ tại research_tracking/runs/akt-colab-t4-current-20261110-01/.
+
+## 10/11 — chuẩn bị kiểm checkpoint CUDA A0/A3, chưa chạy
+
+Đã chuẩn bị sáu process/16updates/384target giả, đối chiếu complete-epoch restore với continuous. Hai script parse được, 11 API calls khớp source. MCP chưa cho output thực thi mới, canary download chưa xác nhận, nên chưa submit workload. Đã giữ quan sát và nhờ user chạy health. Không checkpoint mới, không Main/GPU kết quả mới và không Modal. Bundle research_tracking/runs/akt-t4-checkpoint-recovery-20261110-01/.
