@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 10/11 — chuẩn hóa đầu ra trước so sánh mô hình
+
+[Chuẩn hóa selected rows](../research_tracking/runs/selected-row-normalization-20261110-01/README.md) đạt24tests và336dòng của4môhình trên corpus engineering, khớp quần thể độc lập. Chưa kiểm đủ metadata/chín candidate hoặc chọn winner. Gate cần refresh trên source189.
+
+
 ## 10/11 — AKT đồ thị cố định và GKT qua trọn lượt kiểm CPU
 
 [A1 expert](../research_tracking/runs/a1-expert-selected-engineering-20261110-01/README.md) đạt7epoch/best4 và [GKT](../research_tracking/runs/gkt-selected-engineering-20261110-01/README.md) đạt11epoch/best6, đều nạp lại và xuất đủ84dự báo. Giữ nguyên cấu hình đã chốt, corpus kiểm kỹ thuật riêng và source provenance. [Bộ theo dõi RAM](../research_tracking/runs/owned-job-resource-exit-guard-20261110-01/README.md) có9canaries và hai probe, giữ lỗi cũ và chỉ bỏ qua exact handle đã xác nhận kết thúc. Các mốc này chưa là Main60, Junyi, refit/calibration hoặc CUDA. Báo cáo hiện hành đã cập nhật và kiểm desktop/mobile.
