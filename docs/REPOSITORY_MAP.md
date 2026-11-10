@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 10/11 — chín bộ file đã ghép vào thống kê chung
+
+[Hồ sơ kiểm](../research_tracking/runs/nine-selected-file-statistics-20261110-01/README.md) đạt67tests trên dữ liệu giả, nối reader/metadata/CSV/accumulator/kernel2000draws. Chưa actual Main admission hoặc lựa chọn mô hình. Source195 cần refresh Gate.
+
+
 ## 10/11 — đối chiếu hồ sơ thực thi bốn lượt CPU
 
 [Hồ sơ kiểm](../research_tracking/runs/selected-operation-reconciliation-20261110-01/README.md) đạt43tests và hash lại116nativefiles. Giữ riêng schema tài nguyên A0 cũ. Chưa admission matrix chính hoặc chọn winner.
