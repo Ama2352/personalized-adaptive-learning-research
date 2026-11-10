@@ -4,6 +4,7 @@ Không thay accepted-operation receipts, source snapshot verification, kiểm CS
 toàn quần thể hoặc quyền freeze/refit. Không đọc file và không import model.
 """
 from dataclasses import asdict
+import math
 from pathlib import PurePosixPath
 
 from .research_admission import PopulationExpectation
@@ -17,6 +18,97 @@ DOCUMENT_ROLES = ('invocation', 'complete', 'terminal', 'claim', 'coverage',
 ARTIFACT_ROLES = (*DOCUMENT_ROLES, 'checkpoint', 'predictions', 'targets', 'events', 'runtime', 'config_or_spec')
 CLAIM_ARTIFACTS = {'terminal': 'terminal', 'checkpoint': 'checkpoint', 'raw_predictions': 'predictions',
                    'targets': 'targets', 'coverage': 'coverage'}
+
+# Bốn controller CPU đã review, không dùng startswith('ACCEPTED') hoặc cho
+# controller khác tự thừa kế quyền. Matrix chính cần profile thực thi riêng.
+ENGINEERING_CONTROLLERS = {
+    'A0': ('ACCEPTED_ACTUAL_TINY_A0_SELECTED_ONLY_ENGINEERING', 'ACTUAL_TINY_A0_SELECTED_ONLY_PENDING_OUTER'),
+    'A1_EXPERT': ('ACCEPTED_ACTUAL_A1_EXPERT_SELECTED_ONLY_ENGINEERING', 'ACTUAL_A1_EXPERT_SELECTED_ONLY_PENDING_OUTER'),
+    'SAKT': ('ACCEPTED_ACTUAL_SAKT_SELECTED_ONLY_ENGINEERING', 'ACTUAL_SAKT_SELECTED_ENGINEERING_PENDING_OUTER'),
+    'GKT': ('ACCEPTED_ACTUAL_GKT_SELECTED_ONLY_ENGINEERING', 'ACTUAL_GKT_SELECTED_ENGINEERING_PENDING_OUTER'),
+}
+
+
+def validate_engineering_operation(*, candidate_id, outer, owned, worker,
+                                   request_ref, worker_ref, expected_source_hashes,
+                                   native_refs, expected_input_hashes=None, expected_runtime_hashes=None):
+    """Đối chiếu receipt bốn controller lịch sử, chưa phải main fit admission.
+
+    Caller pin và hash receipt/worker/request/output, kiểm marker vắng mặt lại
+    trước publication. Hàm không coi assertion về marker là bằng chứng I/O.
+    """
+    need(candidate_id in ENGINEERING_CONTROLLERS, 'Unreviewed operation controller')
+    need(type(request_ref) is FileRef and type(worker_ref) is FileRef, 'Pinned request/worker required')
+    need(type(outer) is dict and type(owned) is dict and type(worker) is dict, 'Operation JSON objects required')
+    outer_status, worker_status = ENGINEERING_CONTROLLERS[candidate_id]
+    need(outer['status'] == outer_status and worker['status'] == worker_status, 'Exact controller verdict required')
+    need(_json(outer['owned_receipt']) == _json(owned) and _json(outer['worker_result']) == _json(worker),
+         'Outer/owned/worker receipt mismatch')
+    need(outer['request_sha256'] == worker['request_sha256'] == request_ref.sha256,
+         'Operation request binding mismatch')
+    need(outer['environment_restored'] is True and outer['automatic_retry'] is False
+         and worker['error'] is None and worker['cuda_initialized'] is False
+         and worker['observer_restored'] is True and worker['monitor_stopped'] is True
+         and worker['denied'] == worker['monitor_errors'] == [], 'Operation restoration/error mismatch')
+    need(owned['status'] == 'ACCEPTED_OWNED_PROCESS_LAUNCH_NOT_SCIENTIFIC_ACCEPTANCE'
+         and owned['accepted'] is True and owned['GO_released'] is True
+         and owned['actual_worker_in_job_before_GO'] is True and owned['cleanup_accepted'] is True
+         and owned['popen_handle_closed'] is True and type(owned['returncode']) is int and owned['returncode'] == 0
+         and type(owned['job_active_after_cleanup']) is int and owned['job_active_after_cleanup'] == 0
+         and owned['errors'] == owned['cleanup_errors'] == [] and owned['automatic_retry'] is False
+         and owned['worker_sha256'] == worker_ref.sha256, 'Owned process/cleanup/worker binding mismatch')
+    need(type(expected_source_hashes) is dict and expected_source_hashes
+         and worker['source_before'] == worker['source_after'] == expected_source_hashes,
+         'Operation source before/after mismatch')
+    resources = worker['resources']
+    need(type(resources['samples']) is int and resources['samples'] > 0, 'Actual resource samples required')
+    if candidate_id == 'A0':
+        need(type(resources['peak_rss_bytes']) is int and 0 <= resources['peak_rss_bytes'] <= 2**30
+             and type(resources['min_available_ram_bytes']) is int
+             and resources['min_available_ram_bytes'] >= 2 * 2**30, 'A0 reviewed worker RAM bounds required')
+    else:
+        need(all(type(resources[name]) is int and 0 <= resources[name] <= 2 * 2**30
+                 for name in ('peak_worker_rss_bytes', 'peak_family_rss_bytes'))
+             and type(resources['minimum_available_ram_bytes']) is int
+             and resources['minimum_available_ram_bytes'] >= 2 * 2**30, 'Reviewed sampled Job RAM bounds required')
+    if candidate_id == 'A1_EXPERT':
+        need(worker['job_query_handle_closed'] is True, 'A1 resource query handle must be closed')
+    if candidate_id in ('A0', 'A1_EXPERT'):
+        need(outer['error'] is None and outer['research_matrix_completed'] is False
+             and outer['cuda_readiness'] is False and worker['research_main_matrix_completed'] is False,
+             'AKT engineering scope mismatch')
+        outer_cap = outer['outer_cap_seconds']
+        need(expected_input_hashes is None and expected_runtime_hashes is None,
+             'AKT controller uses its reviewed source inventory for operation inputs')
+    else:
+        need(outer['errors'] == [] and outer['full_main_matrix_completed'] is False
+             and outer['refit_or_calibration_performed'] is False and outer['gpu_ready'] is False
+             and outer['owned_launch_requested'] is True and outer['worker_GO_released'] is True
+             and worker['environment_and_sys_restored'] is True and worker['job_query_handle_closed'] is True
+             and worker['full_main_matrix_completed'] is False and worker['refit_or_calibration_performed'] is False,
+             'Baseline engineering scope/restoration mismatch')
+        need(type(expected_input_hashes) is dict and expected_input_hashes
+             and worker['input_before'] == worker['input_after'] == expected_input_hashes
+             and type(expected_runtime_hashes) is dict and expected_runtime_hashes
+             and worker['runtime_before'] == worker['runtime_after'] == expected_runtime_hashes,
+             'Baseline operation input/runtime mismatch')
+        need(outer['authorization_sha256'] == worker['authorization_sha256'], 'Baseline authorization mismatch')
+        outer_cap = outer['whole_cap_seconds']
+    need(type(owned['max_seconds']) in (int, float) and math.isfinite(owned['max_seconds'])
+         and 0 < owned['max_seconds'] <= 580, 'Reviewed owned budget required')
+    need(type(outer_cap) is int and outer_cap == 600, 'Reviewed outer budget required')
+    for value, cap in ((outer['elapsed_seconds'], outer_cap), (worker['elapsed_seconds'], 560),
+                       (owned['elapsed_seconds'], owned['max_seconds'])):
+        need(type(value) in (int, float) and math.isfinite(value) and 0 <= value < cap,
+             'Operation finite elapsed budget required')
+    need(type(native_refs) is dict and native_refs and all(type(ref) is FileRef for ref in native_refs.values()),
+         'Externally verified full native inventory required')
+    need(set(worker['native_outputs']) == set(native_refs), 'Operation native inventory mismatch')
+    for path, ref in native_refs.items():
+        record = worker['native_outputs'][path]
+        need(path == ref.path and record['sha256'] == ref.sha256
+             and type(record['bytes']) is int and record['bytes'] == ref.size_bytes,
+             'Operation output byte binding mismatch')
 
 
 def validate_selected_metadata(*, documents, artifact_refs, expected_claim_binding,

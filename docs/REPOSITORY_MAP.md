@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 10/11 — đối chiếu hồ sơ thực thi bốn lượt CPU
+
+[Hồ sơ kiểm](../research_tracking/runs/selected-operation-reconciliation-20261110-01/README.md) đạt43tests và hash lại116nativefiles. Giữ riêng schema tài nguyên A0 cũ. Chưa admission matrix chính hoặc chọn winner.
+
+
 ## 10/11 — metadata ba pipeline đã nối với checkpoint
 
 [Hồ sơ kiểm](../research_tracking/runs/selected-producer-metadata-20261110-01/README.md) đạt39tests và4producer engineering, gồm nguồn thực trước–sau. Chưa review operation receipts/request độc lập hoặc admission đủ9. Source193 cần refresh Gate.

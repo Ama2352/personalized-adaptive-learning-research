@@ -5,7 +5,9 @@ import json
 import unittest
 
 from knowledge_tracing import research_admission as admission
-from knowledge_tracing.research_selected_metadata import validate_selected_metadata, CLAIM_ARTIFACTS
+from knowledge_tracing.research_selected_metadata import (
+    validate_selected_metadata, validate_engineering_operation, CLAIM_ARTIFACTS, ENGINEERING_CONTROLLERS,
+)
 from knowledge_tracing.research_selection_io import FileRef
 from knowledge_tracing.simulator_bridge import identity_hash
 from test_research_selected_checkpoint import fixture as checkpoint_fixture
@@ -139,6 +141,86 @@ class ProducerMetadataTests(unittest.TestCase):
         data['expected_checkpoint_identity']['neural_binding']['encoding_sha256'] = 'b' * 64
         with self.assertRaises(ValueError):
             validate_selected_metadata(**data)
+
+
+def operation_fixture(candidate='A0'):
+    worker = dict(status=ENGINEERING_CONTROLLERS[candidate][1], error=None, request_sha256=H,
+        cuda_initialized=False, observer_restored=True, monitor_stopped=True, denied=[], monitor_errors=[],
+        source_before={'source.py': H}, source_after={'source.py': H}, research_main_matrix_completed=False,
+        elapsed_seconds=1., native_outputs={'run/output.json': dict(sha256=H, bytes=100)},
+        job_query_handle_closed=True, resources=dict(samples=1, peak_worker_rss_bytes=100,
+            peak_family_rss_bytes=100, minimum_available_ram_bytes=4 * 2**30))
+    owned = dict(status='ACCEPTED_OWNED_PROCESS_LAUNCH_NOT_SCIENTIFIC_ACCEPTANCE', accepted=True,
+        GO_released=True, actual_worker_in_job_before_GO=True, cleanup_accepted=True, popen_handle_closed=True,
+        returncode=0, job_active_after_cleanup=0, errors=[], cleanup_errors=[], automatic_retry=False,
+        worker_sha256=H, elapsed_seconds=2., max_seconds=580.)
+    outer = dict(status=ENGINEERING_CONTROLLERS[candidate][0], owned_receipt=owned, worker_result=worker,
+        request_sha256=H, environment_restored=True, automatic_retry=False, error=None,
+        research_matrix_completed=False, cuda_readiness=False, elapsed_seconds=3., outer_cap_seconds=600)
+    data = dict(candidate_id=candidate, outer=outer, owned=owned, worker=worker,
+        request_ref=FileRef('request.json', H, 100), worker_ref=FileRef('worker.py', H, 100),
+        expected_source_hashes={'source.py': H}, native_refs={'run/output.json': FileRef('run/output.json', H, 100)})
+    if candidate == 'A0':
+        worker['resources'] = dict(samples=1, peak_rss_bytes=100, min_available_ram_bytes=4 * 2**30)
+    if candidate in ('SAKT', 'GKT'):
+        outer.update(errors=[], full_main_matrix_completed=False, refit_or_calibration_performed=False,
+            gpu_ready=False, owned_launch_requested=True, worker_GO_released=True, authorization_sha256=H,
+            whole_cap_seconds=600)
+        worker.update(environment_and_sys_restored=True, job_query_handle_closed=True,
+            full_main_matrix_completed=False, refit_or_calibration_performed=False, authorization_sha256=H,
+            input_before={'input.json': H}, input_after={'input.json': H},
+            runtime_before={'python': H}, runtime_after={'python': H})
+        data.update(expected_input_hashes={'input.json': H}, expected_runtime_hashes={'python': H})
+    return data
+
+
+class OperationReceiptTests(unittest.TestCase):
+    def test_four_exact_controller_profiles(self):
+        for candidate in ENGINEERING_CONTROLLERS:
+            self.assertIsNone(validate_engineering_operation(**operation_fixture(candidate)))
+        data = operation_fixture()
+        data['worker']['resources']['peak_rss_bytes'] = 2**30 + 1
+        with self.assertRaises(ValueError):
+            validate_engineering_operation(**data)
+        data = operation_fixture()
+        data['candidate_id'] = 'A3_EXPERT'
+        with self.assertRaises(ValueError):
+            validate_engineering_operation(**data)
+
+    def test_no_status_only_acceptance_or_boolean_exit_codes(self):
+        for section, key, wrong in (('outer', 'status', 'ACCEPTED'), ('outer', 'environment_restored', False),
+                ('worker', 'denied', ['network']), ('owned', 'returncode', False),
+                ('owned', 'cleanup_accepted', False), ('owned', 'job_active_after_cleanup', 1),
+                ('owned', 'max_seconds', float('inf')), ('outer', 'elapsed_seconds', float('nan'))):
+            data = operation_fixture()
+            data[section][key] = wrong
+            with self.subTest(section=section, key=key), self.assertRaises(ValueError):
+                validate_engineering_operation(**data)
+
+    def test_source_input_request_worker_and_output_bindings(self):
+        for candidate in ENGINEERING_CONTROLLERS:
+            for section, key, wrong in (('worker', 'source_after', {}), ('worker', 'request_sha256', 'b' * 64),
+                    ('worker', 'native_outputs', {}), ('owned', 'worker_sha256', 'b' * 64)):
+                data = operation_fixture(candidate)
+                data[section][key] = wrong
+                with self.subTest(candidate=candidate, key=key), self.assertRaises(ValueError):
+                    validate_engineering_operation(**data)
+        for candidate in ('SAKT', 'GKT'):
+            data = operation_fixture(candidate)
+            data['worker']['runtime_after'] = {}
+            with self.assertRaises(ValueError):
+                validate_engineering_operation(**data)
+
+    def test_independent_receipt_consistency_and_scope(self):
+        data = operation_fixture()
+        data['outer']['owned_receipt'] = dict(data['owned'], cleanup_accepted=False)
+        with self.assertRaises(ValueError):
+            validate_engineering_operation(**data)
+        for candidate in ('SAKT', 'GKT'):
+            data = operation_fixture(candidate)
+            data['outer']['full_main_matrix_completed'] = True
+            with self.assertRaises(ValueError):
+                validate_engineering_operation(**data)
 
 
 if __name__ == '__main__':
