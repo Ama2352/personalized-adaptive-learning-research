@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 10/11 — AKT đã kiểm trực tiếp trên Colab CPU
+
+Đã chuyển được lượt kiểm AKT sang Colab CPU có đủ RAM. Baseline đạt67/67, research core đạt113/113, không lỗi/bỏ qua; đã tải logs và JUnit về, kiểm CRC/SHA. Runtime kế thừa qua venv được ghi rõ; chưa full Gate, CUDA hoặc Main training. Modal0USD. [Bằng chứng](../runs/colab-current-cpu-20261110-01/README.md).
+
+
 ## 10/11 — chốt gói review thống kê, chuyển ưu tiên sang nghiên cứu
 
 [Hồ sơ78tests](../runs/nine-review-publication-20261110-01/README.md) giữ input/output hashes, lỗi muộn và quota. Đây là fixtures, chưa Main freeze. Dừng mở rộng tổng quát khi chưa có thí nghiệm bị chặn.

@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 10/11 — AKT đã kiểm trực tiếp trên Colab CPU
+
+Đã chuyển được lượt kiểm AKT sang Colab CPU có đủ RAM. Baseline đạt67/67, research core đạt113/113, không lỗi/bỏ qua; đã tải logs và JUnit về, kiểm CRC/SHA. Runtime kế thừa qua venv được ghi rõ; chưa full Gate, CUDA hoặc Main training. Modal0USD. [Bằng chứng](../research_tracking/runs/colab-current-cpu-20261110-01/README.md).
+
+
 ## Ưu tiên hiện hành — nghiên cứu cốt lõi trong7ngày
 
 [Roadmap08](thesis_recovery/08_CRITICAL_PATH_ROADMAP.md) và TASKS.json đã ưu tiên evidence RQ1/RQ2, GPU tối thiểu, actual A0–A3/baselines, closed-loop và viết. Gói kỹ thuật78tests đã chốt, không mở rộng infrastructure khi chưa có thí nghiệm bị chặn.

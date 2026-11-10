@@ -13,6 +13,9 @@ RESEARCH_CONTRACT_FILES = (
     'docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md',
     'docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md',
     'docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md',
+    'docs/thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md',
+    'docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+    'docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
     'docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json',
 )
 

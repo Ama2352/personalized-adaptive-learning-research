@@ -1092,3 +1092,7 @@ Readiness reconciliation:3PDF repo/Desktop identical,14current gaps và8parent s
 Cached publication đã chốt78tests/0FES, fixture9×4target, exclusivewrite/rehash/failureoverride và không resetbudget. Không actualMain/modelselection. Source195 cần freeze mới. Theo user, dừng genericengineering để ưu tiên nghiên cứu chính trong kịch bản7ngày. Bundle nine-review-publication-20261110-01,0NN/Modal/subagent.
 
 User chuyển ưu tiên sang nghiên cứu chính trong kịch bản7ngày. Backlog giữ178IDs và scope, chỉ đổi queue/science-first policy, không cấp spending/CV/Holdout/finalselection. Gói78 đãcommit5d4d04d. Ước lượng quản lý RQ1/2/3=75/60/35±10điểm, không phải researchmetric hoặc RQcomplete. Roadmap08 ghi nhịp7ngày và các nhánh hoãn.
+
+## 10/11 — Colab CPU thay lượt kiểm local bị thiếu RAM
+
+Đã chuyển được lượt kiểm AKT sang Colab CPU có đủ RAM. Baseline đạt67/67, research core đạt113/113, không lỗi/bỏ qua; đã tải logs và JUnit về, kiểm CRC/SHA. Runtime kế thừa qua venv được ghi rõ; chưa full Gate, CUDA hoặc Main training. Modal0USD. Người dùng cho phép rõ gói nguồn275file sau rejection truyền nguồn. Local11, remote67+113 đã kiểm JUnit/SHA. Gói đóng275file có8contract docs. Không hạ guard4GiB, không khóa runtime/CUDA claim. Ghi nhận outputs rỗng cần quan sát lại, không suy PASS. Bundle colab-current-cpu-20261110-01. Next A0 checkpoint→online bridge.

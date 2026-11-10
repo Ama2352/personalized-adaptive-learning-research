@@ -1,5 +1,10 @@
 # Tiến độ nghiên cứu
 
+## 10/11 — thay điểm thực thi cho lượt kiểm tốn RAM
+
+Đã chuyển được lượt kiểm AKT sang Colab CPU có đủ RAM. Baseline đạt67/67, research core đạt113/113, không lỗi/bỏ qua; đã tải logs và JUnit về, kiểm CRC/SHA. Runtime kế thừa qua venv được ghi rõ; chưa full Gate, CUDA hoặc Main training. Modal0USD. [Bundle](runs/colab-current-cpu-20261110-01/README.md).
+
+
 ## Mốc nghiệm thu hiện hành ngày 10/11
 
 Bảng này cập nhật bằng chứng đã có. Các ước lượng phần trăm ngày09/11 bên dưới được giữ như lịch sử quản lý.

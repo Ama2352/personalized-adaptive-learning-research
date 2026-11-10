@@ -17,7 +17,7 @@ def test_bundle_contains_current_test_dependencies_and_source_only_notebooks():
         assert name in contents
     assert 'requirements-akt.lock.txt' in contents
     contract_files = runpy.run_path('scripts/akt/build_colab_bundle.py')['RESEARCH_CONTRACT_FILES']
-    assert len(contract_files) == 5
+    assert len(contract_files) == 8
     assert {name for name in contents if name.startswith('docs/')} == set(contract_files)
     assert all(contents[name] == Path(name).read_bytes() for name in contract_files)
     assert not any(name.startswith(('dataset/','artifacts/')) or '/results/' in name for name in contents)
@@ -111,6 +111,9 @@ def test_fixed_docs_raw_bytes_and_notebook_transform_without_zip(tmp_path_factor
     'docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md',
     'docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md',
     'docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md',
+    'docs/thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md',
+    'docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+    'docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
     'docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json',
 ])
 def test_missing_fixed_contract_stops_local_inventory_without_zip(tmp_path_factory, monkeypatch, missing):

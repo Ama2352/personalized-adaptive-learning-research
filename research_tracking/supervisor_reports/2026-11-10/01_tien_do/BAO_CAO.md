@@ -218,3 +218,7 @@ Mô hình bắt đầu với điểm ước lượng 1200, còn trạng thái n�
 - **RQ3:** mở rộng từ quy trình chọn checkpoint AKT đã kiểm sang Linux/CUDA và corpus nghiên cứu, hoàn thiện huấn luyện lại và hiệu chỉnh; so sánh không đồ thị / đồ thị cố định / confidence / gate cùng các baseline bắt buộc, rồi đánh giá chọn bài và kết quả học vòng kín.
 
 Các mô hình và demo trong đề cương vẫn được giữ. Kết quả không cải thiện hoặc cổng chọn tắt đồ thị vẫn được báo cáo nếu bằng chứng hỗ trợ; chưa có kết luận ưu thế của CG-AKT hoặc hiệu quả giáo dục trên người học thật.
+
+## Cập nhật kỹ thuật ngày 10/11 — AKT chạy được trên Colab CPU
+
+Đã chuyển các lượt kiểm AKT tốn RAM sang Colab CPU. Bảy nhóm kiểm baseline đạt 67 ca và bốn nhóm kiểm phần đồ thị đạt 113 ca, không lỗi hoặc bỏ qua. Đã lưu log cùng kết quả từng ca về repository. Mốc này xác nhận mã hiện hành chạy được trên môi trường Linux CPU đã ghi nhận, còn bộ kiểm toàn nguồn, CUDA và huấn luyện nghiên cứu vẫn cần hoàn tất.
