@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 10/11 — liên kết checkpoint trước so sánh mô hình
+
+[Hồ sơ kiểm](../runs/selected-checkpoint-binding-20261110-01/README.md) đạt32tests và đọc/hash4checkpoint thật, giữ failure do ánh xạ tên kiến trúc. Chưa admission provenance/chín candidate. Source191 cần refresh Gate.
+
+
 ## 10/11 — chuẩn hóa đầu ra trước so sánh mô hình
 
 [Chuẩn hóa selected rows](../runs/selected-row-normalization-20261110-01/README.md) đạt24tests và336dòng của4môhình trên corpus engineering, khớp quần thể độc lập. Chưa kiểm đủ metadata/chín candidate hoặc chọn winner. Gate cần refresh trên source189.
