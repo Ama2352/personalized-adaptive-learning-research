@@ -399,3 +399,7 @@ Gate21 chỉ chạy `tests/akt tests/shared_kt`; các số139SAKT và38Graph-GAM
 ## 10/11 — source producer và dữ liệu main đã kiểm rõ phạm vi
 
 [Cold62](../runs/neural-selected-producer-metadata62-20261110-01/README.md) gồm35SAKT/27GKT,0FES, khôngNN. GKT đã có selected producer source, còn nativepositive. SAKT sửa mandatorypackageinit sau lỗi trướcconstructor, không thay toán học. [Corpus60](../runs/simulator-main60-data-preflight-20261110-01/README.md) đạt learnerdisjoint48/6/6 vàwindowcoverage10080/1260, chưa throughputGPU. [F041](../runs/rq1-f041-native-panel-20261110-01/README.md) có3360readouts toàn28concept, một lịch sử thấp đềuTN và0positiveclass, chưa đánh giá được nhận diện thành thạo. Không đóngRQ hoặc dùng Modal.
+
+## 10/11 — population helper đã tích hợp
+
+[Bundle population](../runs/main-selection-population-integration-20261110-01/README.md) đã kiểm đủ1260targets Main và hash84target A0, sáu tests canonical đạt. Chưa chọn mô hình; candidate IO còn1error và source185 cần refresh Gate.

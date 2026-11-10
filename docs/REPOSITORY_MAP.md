@@ -236,3 +236,8 @@ Profile có phiên bản nằm trong [quyết định28](thesis_recovery/28_CUDA
 ## 10/11 — source producer và dữ liệu main đã kiểm rõ phạm vi
 
 [Cold62](../research_tracking/runs/neural-selected-producer-metadata62-20261110-01/README.md) gồm35SAKT/27GKT,0FES, khôngNN. GKT đã có selected producer source, còn nativepositive. SAKT sửa mandatorypackageinit sau lỗi trướcconstructor, không thay toán học. [Corpus60](../research_tracking/runs/simulator-main60-data-preflight-20261110-01/README.md) đạt learnerdisjoint48/6/6 vàwindowcoverage10080/1260, chưa throughputGPU. [F041](../research_tracking/runs/rq1-f041-native-panel-20261110-01/README.md) có3360readouts toàn28concept, một lịch sử thấp đềuTN và0positiveclass, chưa đánh giá được nhận diện thành thạo. Không đóngRQ hoặc dùng Modal.
+
+## 10/11 — tập đích chuẩn trước so sánh mô hình
+
+Module src/knowledge_tracing/research_population.py đã tích hợp và kiểm sáu tests cùng tập selection Main1260targets/6learners. Hash84targets engineering khớp export A0. Bundle research_tracking/runs/main-selection-population-integration-20261110-01 giữ cả lỗi driver và candidate IO chưa đạt. Build185 cần refresh Gate; Gate183/1913 là snapshot đã nghiệm thu trước thay đổi này. Chưa chọn winner hoặc cấp quyền refit.
+
