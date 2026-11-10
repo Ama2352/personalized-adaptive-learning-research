@@ -1108,3 +1108,7 @@ Colab CPU đã đạt1.992ca trên92module trong294,935giây,0failure/error/skip
 ## 10/11 — Gate Linux cô lập đạt, ưu tiên bằng chứng cốt lõi AKT
 
 Môi trường Linux cô lập đã nghiệm thu 44 package, Gate CPU đạt 1.993/1.993 ca trên 198 file nguồn và 92 module, không loại ca. Đã tải về, kiểm CRC/SHA, JUnit và nguồn. CUDA/recovery/throughput và training nghiên cứu chính còn thiếu. Modal 0 USD. Lượt cài trước không thu được kết quả cuối khi runtime đổi, giữ UNKNOWN. Lượt phục hồi riêng đã đạt. Ba notebook gói nguồn được xóa output trên bản sao, mã model/tests giữ nguyên. Trình kiểm local đã sửa sai tên field report trước khi nghiệm thu. Ưu tiên A0/A1/A2/A3 và cùng-quần-thể comparison; tạm hoãn các mở rộng. Hồ sơ tại research_tracking/runs/akt-colab-isolated-cpu-20261110-01/.
+
+## 10/11 — actual T4 core A0–A3
+
+T4 miễn phí đã chạy A0–A3 theo recipe CUDA, tổng 8 Adam updates/192 target giả/24 dự báo, chung initial backbone, nguồn nguyên và số học hữu hạn. Đã tải và kiểm log cùng 44 package. Chưa checkpoint/restore, throughput đại diện hoặc Main fit. Modal 0 USD. Giữ failure do pin Python3.13.18 ở lượt cài đầu; lượt hai ghim3.13.16 đúng máy đích, không đổi lock/model và không cài global. Nguồn279 cùng kit hiện hành, source smoke trước–sau nguyên. Hồ sơ tại research_tracking/runs/akt-colab-t4-current-20261110-01/.

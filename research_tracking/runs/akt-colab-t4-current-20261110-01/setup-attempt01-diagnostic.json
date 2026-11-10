@@ -1,0 +1,12 @@
+{
+  "t4_setup_diagnostic": true,
+  "observed_at_epoch": 1794296505.9563081,
+  "files": {
+    "artifacts/akt/runtime/isolated-install01/empty-venv.stderr": "Traceback (most recent call last):\n  File \"/content/kltn-current-t4-20261110-01/artifacts/akt/runtime/isolated-install01/empty-venv.py\", line 5, in <module>\n    assert platform.python_version()=='3.13.18' and platform.system()=='Linux' and platform.machine()=='x86_64'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+    "artifacts/akt/runtime/isolated-install01/empty-venv.stdout": "",
+    "artifacts/akt/runtime/isolated-install01/failure.log": "Traceback (most recent call last):\n  File \"/content/kltn-current-t4-20261110-01/artifacts/akt/runtime/t4-input01/install_controller.py\", line 38, in <module>\n    probe = stage.python('empty-venv', TARGET, helper.PROBE, 20)\n  File \"/content/kltn-current-t4-20261110-01/artifacts/akt/runtime/t4-input01/bounded_install_reuse.py\", line 108, in python\n    output=self.run(name,[str(interpreter),\"-I\",\"-B\",str(p)],limit)\n  File \"/content/kltn-current-t4-20261110-01/artifacts/akt/runtime/t4-input01/bounded_install_reuse.py\", line 90, in run\n    if entry[\"returncode\"]!=0:raise RuntimeError(name+\" failed; retain stdout/stderr\")\n                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: empty-venv failed; retain stdout/stderr\n"
+  },
+  "pip_returncode": 0,
+  "pip_stdout": "{\"version\": \"26.2.2\", \"file\": \"/usr/local/lib/python3.13/dist-packages/pip/__init__.py\", \"python\": \"3.13.16\", \"base_prefix\": \"/usr\"}\n",
+  "pip_stderr": ""
+}

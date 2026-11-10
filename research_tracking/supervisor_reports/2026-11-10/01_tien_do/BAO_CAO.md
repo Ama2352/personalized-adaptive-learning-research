@@ -236,3 +236,9 @@ Bộ kiểm tích hợp AKT trên Colab CPU đã đạt 1.992 ca qua ba tiến t
 Môi trường Linux cô lập đã được nghiệm thu với 44 package đúng phiên bản và nguồn thư viện, giữ nguyên package hệ thống. Trên môi trường này, bộ kiểm đầy đủ đạt 1.993/1.993 ca, không lỗi, bỏ qua hoặc loại ca; ca kiểm cô lập trước đây phải tách riêng cũng đã đạt. Log, kết quả từng ca và hồ sơ nguồn đã tải về và kiểm độc lập. Đây là mốc hoàn tất kiểm phần mềm CPU trước training GPU. CUDA, phục hồi checkpoint trên GPU, tốc độ thực tế và các lượt huấn luyện nghiên cứu chính còn thiếu. Chưa có kết luận mới về ưu thế của CG-AKT.
 
 Ưu tiên tiếp theo là hoàn thiện bằng chứng của AKT không đồ thị, đồ thị cố định, confidence và confidence kết hợp gate trên cùng dữ liệu. Các mở rộng demo, simulator và quét cấu hình rộng tạm hoãn. Các checkpoint engineering trước vẫn được giữ, còn bước cài và kiểm phần mềm lần này không tạo checkpoint nghiên cứu chính.
+
+## Cập nhật tiếp theo ngày 10/11 — bốn biến thể AKT đã chạy trên T4
+
+Đã kiểm trực tiếp cả bốn biến thể AKT trên GPU T4 miễn phí. AKT không đồ thị, đồ thị cố định, confidence và confidence kết hợp gate đều thực hiện được hai bước cập nhật trọng số trên 48 tương tác giả, rồi xuất sáu dự báo hợp lệ. Các backbone khởi tạo giống nhau, cấu hình mô hình giữ nguyên và không gặp lỗi số học. Mốc này xác nhận đường chạy CUDA của phần lõi. Việc lưu–phục hồi checkpoint trên GPU, đo tốc độ ở quy mô đại diện và training nghiên cứu chính còn thiếu; chưa có kết luận biến thể nào tốt hơn.
+
+Lượt chuẩn bị đầu bị chặn do khác phiên bản Python giữa runtime CPU và T4. Đã giữ log lỗi, sửa phần nhận diện môi trường và kiểm lại 44 package trước chạy. Các lượt này chỉ dùng Colab miễn phí.

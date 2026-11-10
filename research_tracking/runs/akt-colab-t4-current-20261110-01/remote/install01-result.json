@@ -1,0 +1,47 @@
+{
+  "status": "FAILED_RETAIN_PARTIAL_NO_RETRY",
+  "scope": "Venv installation on free T4; model GPU steps not started",
+  "source_sha256": "18cb52deab3e4b8ac66d32114fafbfb21d73b3bcaf35efd57627f677cf766399",
+  "target": "/content/kltn-current-t4-20261110-01/.venv/bin/python",
+  "lock_sha256": "60dad3de310562db4f775d1977e2097a6d1c8f57a22bfa4f7afc3ceab35cc45a",
+  "global_install": false,
+  "gpu_allocation": false,
+  "gpu_model_steps": 0,
+  "optimizer_steps": 0,
+  "modal_spend_usd": 0,
+  "error_type": "RuntimeError",
+  "error": "empty-venv failed; retain stdout/stderr",
+  "elapsed_seconds": 0.09349731600002542,
+  "peak_workspace_bytes": 98410496,
+  "children": [
+    {
+      "name": "empty-venv",
+      "pid": 2073,
+      "pgid": 2073,
+      "command": [
+        "/content/kltn-current-t4-20261110-01/.venv/bin/python",
+        "-I",
+        "-B",
+        "/content/kltn-current-t4-20261110-01/artifacts/akt/runtime/isolated-install01/empty-venv.py"
+      ],
+      "source_sha256": "18cb52deab3e4b8ac66d32114fafbfb21d73b3bcaf35efd57627f677cf766399",
+      "returncode": 1,
+      "elapsed_seconds": 0.07471630699996012,
+      "cleanup_attempted": true,
+      "group_cleanup_completed": true,
+      "elapsed_including_cleanup_seconds": 0.08197598300000664
+    }
+  ],
+  "cleanup": [
+    {
+      "pgid": 2073,
+      "signal": "SIGTERM",
+      "already_absent": true
+    },
+    {
+      "pgid": 2073,
+      "signal": "SIGKILL",
+      "already_absent": true
+    }
+  ]
+}

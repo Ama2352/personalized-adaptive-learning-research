@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 10/11 — bốn biến thể AKT đã qua CUDA smoke trên T4
+
+T4 miễn phí đã chạy A0–A3 theo recipe CUDA, tổng 8 Adam updates/192 target giả/24 dự báo, chung initial backbone, nguồn nguyên và số học hữu hạn. Đã tải và kiểm log cùng 44 package. Chưa checkpoint/restore, throughput đại diện hoặc Main fit. Modal 0 USD. [Hồ sơ](../runs/akt-colab-t4-current-20261110-01/README.md).
+
+
 ## 10/11 — đã nghiệm thu Gate CPU cô lập cho AKT
 
 Môi trường Linux cô lập đã nghiệm thu 44 package, Gate CPU đạt 1.993/1.993 ca trên 198 file nguồn và 92 module, không loại ca. Đã tải về, kiểm CRC/SHA, JUnit và nguồn. CUDA/recovery/throughput và training nghiên cứu chính còn thiếu. Modal 0 USD. [Bằng chứng](../runs/akt-colab-isolated-cpu-20261110-01/README.md).
