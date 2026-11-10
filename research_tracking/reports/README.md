@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 10/11 — checkpoint A0 đã nối vào dự báo tuần tự
+
+Đã nối checkpoint nghiên cứu A0 vào dự báo tuần tự bằng loader tái dùng backend hiện có. Colab đạt22/22ca, gồm12mới và10hồi quy; checkpoint fixture48targets/2updates cho6dự báo khớp wrapper trong1e-6. Giữ lượt lỗi fixture, chưa final fitted/refit/calibration hoặc closed-loop chính. [Bằng chứng](../runs/akt-a0-online-colab-20261110-01/README.md).
+
+
 ## 10/11 — AKT đã kiểm trực tiếp trên Colab CPU
 
 Đã chuyển được lượt kiểm AKT sang Colab CPU có đủ RAM. Baseline đạt67/67, research core đạt113/113, không lỗi/bỏ qua; đã tải logs và JUnit về, kiểm CRC/SHA. Runtime kế thừa qua venv được ghi rõ; chưa full Gate, CUDA hoặc Main training. Modal0USD. [Bằng chứng](../runs/colab-current-cpu-20261110-01/README.md).

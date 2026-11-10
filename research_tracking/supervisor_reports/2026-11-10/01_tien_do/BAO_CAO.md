@@ -222,3 +222,7 @@ Các mô hình và demo trong đề cương vẫn được giữ. Kết quả kh
 ## Cập nhật kỹ thuật ngày 10/11 — AKT chạy được trên Colab CPU
 
 Đã chuyển các lượt kiểm AKT tốn RAM sang Colab CPU. Bảy nhóm kiểm baseline đạt 67 ca và bốn nhóm kiểm phần đồ thị đạt 113 ca, không lỗi hoặc bỏ qua. Đã lưu log cùng kết quả từng ca về repository. Mốc này xác nhận mã hiện hành chạy được trên môi trường Linux CPU đã ghi nhận, còn bộ kiểm toàn nguồn, CUDA và huấn luyện nghiên cứu vẫn cần hoàn tất.
+
+## Cập nhật tích hợp AKT ngày 10/11
+
+Đã nối thêm checkpoint nghiên cứu của AKT không đồ thị vào luồng dự báo tuần tự. Lượt kiểm trên Colab đạt 22 ca, gồm 12 ca mới và 10 ca hồi quy. Trên dữ liệu giả nhỏ, sáu dự báo khớp bản nghiên cứu trong sai số đã đặt và việc nạp mô hình giữ nguyên luồng ngẫu nhiên của mô phỏng. Lượt đầu dùng fixture thu nhỏ sai cấu hình đã chốt nên bị chặn; đã sửa fixture và giữ log lỗi. Mốc này hoàn thiện một phần tích hợp AKT, còn mô hình cuối sau refit, hiệu chỉnh và kết quả vòng kín chính cần tiếp tục.

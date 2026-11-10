@@ -1,0 +1,1501 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="12" failures="0" skipped="0" tests="22" time="12.855" timestamp="2026-11-10T04:29:17.783283+00:00" hostname="d0c1959a4866"><testcase classname="tests.akt.test_research_a0_online" name="test_native_saved_a0_matches_research_predictions_without_optimizer_or_rng_restore" time="0.529"><error message="failed on setup with &quot;ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold&quot;">@pytest.fixture(scope='module')
+    def native_case():
+        case = core_fixture.handmade()
+        config = replace(case['config'], run_id='a0-online-fixture-'+uuid.uuid4().hex[:10],
+            d_model=16, heads=2, d_ff=32, final_fc=16, batch_size=4, max_steps=2)
+        config = replace(config, output_dir=config.project_root/'experiments/akt/results'/config.run_id)
+        setup = condition.prepare_research_graph_condition(variant='A0', graph_mode='none',
+            bank=case['bank'], nodes=(), edges=(), train80=case['condition'].train80,
+            expected_sources=condition.source_inventory())
+        def index(phase):
+            return context.prepare_research_graph_context(phase, case['encoding'], setup,
+                limits=case['index'].limits, fit80_encoding_sha256=case['encoding'].identity,
+                context=config.context, target_block=config.target_block)
+        train_index, prediction_index = index(case['train']), index(case['prediction'])
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+&gt;           adapter = model.ResearchGraphAKTAdapter(config=config, encoding=case['encoding'],
+                index=train_index, condition=setup)
+
+tests/akt/test_research_a0_online.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/knowledge_tracing/akt/research_graph_model.py:294: in __init__
+    validate_config(config, cuda_profile=cuda_profile)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+config = AKTConfig(project_root=PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701'), output_dir=PosixPath('...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+
+    def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionProfile | None = None) -&gt; None:
+        if cuda_profile is not None:
+            if type(cuda_profile) is not ResearchCUDAExecutionProfile:
+                raise ValueError('exact typed CUDA research profile required')
+            cuda_profile.__post_init__()
+            if config.phase != 'simulator-research' or config.device != 'cuda':
+                raise ValueError('CUDA research profile requires explicit simulator-research CUDA config')
+        if config.recovery is not None:
+            from .recovery import validate_options
+            validate_options(config)
+        if config.project_root.resolve() != PROJECT_ROOT.resolve():
+            raise ValueError('project root must be the trusted repository root')
+        if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold', 'simulator-research'}:
+            raise ValueError('invalid phase')
+        if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,79}', config.run_id):
+            raise ValueError('invalid run_id')
+        if config.phase in {'smoke', 'cuda-smoke', 'pilot', 'fold'} and config.output_dir.name != config.run_id:
+            raise ValueError('run_id must namespace the output directory')
+        if config.phase == 'fold-readiness' and config.execution_enabled:
+            raise ValueError('fold readiness cannot enable execution')
+        if config.partition != 'development':
+            raise ValueError('invalid partition')
+        if config.graph or config.n_pid != 0:
+            raise ValueError('graph and Rasch inputs are unavailable')
+        if config.source_commit != SOURCE_COMMIT:
+            raise ValueError('invalid source commit')
+        if config.device not in {'cpu', 'cuda'} or config.outer_fold not in range(5):
+            raise ValueError('invalid device or fold')
+        if min(config.context, config.target_block, config.max_length, config.d_model,
+               config.heads, config.blocks, config.batch_size, config.threads, config.fetch_rows) &lt;= 0:
+            raise ValueError('invalid positive configuration')
+        if config.context + config.target_block &gt; config.max_length or config.d_model % config.heads:
+            raise ValueError('invalid window or model dimensions')
+        if (config.lr &lt;= 0 or config.eps &lt;= 0 or config.max_grad_norm &lt;= 0
+                or len(config.betas) != 2 or not all(0 &lt;= value &lt; 1 for value in config.betas)
+                or config.weight_decay &lt; 0 or not 0 &lt; config.inner_val_fraction &lt; 1
+                or config.patience &lt;= 0 or config.max_epochs &lt;= 0 or config.min_delta &lt; 0
+                or not 0 &lt;= config.dropout &lt; 1):
+            raise ValueError('invalid training configuration')
+        if config.inner_val_fraction != 0.1:
+            raise ValueError('protocol v1 requires the frozen 10% inner learner split')
+        for name in ('max_train_users', 'max_val_users', 'max_targets_per_side', 'max_total_targets',
+                     'max_steps', 'max_seconds', 'max_wall_seconds', 'max_rss_bytes', 'min_available_ram_bytes'):
+            value = getattr(config, name)
+            if value is not None and (not math.isfinite(float(value)) or value &lt;= 0):
+                raise ValueError(f'invalid resource cap: {name}')
+        if config.output_dir == Path('.'):
+            raise ValueError('invalid output')
+        root = config.project_root.resolve()
+        output = config.output_dir.resolve()
+        allowed = (root / 'experiments/akt/results', root / 'experiments/akt/readiness', root / 'artifacts/akt')
+        protected = (root / 'dataset', root / 'artifacts/bkt_baseline', root / 'venv', root / '.wsl')
+        if (any(output.is_relative_to(path.resolve()) for path in protected)
+                or not any(output.is_relative_to(path.resolve()) and output != path.resolve() for path in allowed)):
+            raise ValueError('protected output or output outside AKT directory')
+        if config.phase == 'fold' and output.parent != (root / 'experiments/akt/results').resolve():
+            raise ValueError('fold output must use a unique results run directory')
+        if config.phase in {'smoke','cuda-smoke'}:
+            required_device='cpu' if config.phase=='smoke' else 'cuda'
+            if (config.device != required_device or config.context != 100 or config.target_block != 100
+                    or config.d_model != 32 or config.heads != 4 or config.blocks != 1
+                    or config.d_ff != 64 or config.final_fc != 32 or config.batch_size &gt; 4
+                    or config.max_epochs != 1 or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 32
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 16
+                    or config.max_targets_per_side is None or not 1 &lt;= config.max_targets_per_side &lt;= 4096
+                    or (config.max_total_targets is not None and config.max_total_targets &gt; 8192)
+                    or config.max_steps is None or config.max_steps &gt; 20
+                    or config.max_seconds is None or config.max_seconds &gt; 120
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 300
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('smoke cap or architecture exceeded')
+        if config.phase == 'pilot':
+            if (config.device != 'cpu' or config.context != 100 or config.target_block != 100
+                    or config.d_model != 256 or config.heads != 8 or config.blocks != 1 or config.d_ff != 1024
+                    or config.batch_size &gt; 4 or config.max_epochs != 1
+                    or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 1024
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 256
+                    or config.max_total_targets is None or not 1 &lt;= config.max_total_targets &lt;= 100000
+                    or config.max_seconds is None or config.max_seconds &gt; 900
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 1200
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('pilot cap or architecture exceeded')
+        if config.phase == 'simulator-research':
+            # New scope only; no dataclass/default/hash change for historical phases.
+            frozen = {'device': 'cpu' if cuda_profile is None else 'cuda', 'seed': 42, 'context': 100, 'target_block': 100, 'max_length': 200,
+                      'd_model': 256, 'heads': 8, 'blocks': 1, 'd_ff': 1024, 'final_fc': 512,
+                      'dropout': 0.05, 'kq_same': 1, 'separate_qa': False, 'n_pid': 0, 'graph': False,
+                      'batch_size': 4, 'lr': 1e-4, 'betas': (0.9, 0.999), 'eps': 1e-8,
+                      'weight_decay': 0.0, 'max_grad_norm': 1.0, 'max_epochs': 20,
+                      'patience': 3, 'min_delta': 0.0001, 'outer_fold': 0}
+            if (any(type(getattr(config, name)) is not type(value) or getattr(config, name) != value
+                    for name, value in frozen.items()) or config.recovery is not None
+                    or type(config.execution_enabled) is not bool):
+&gt;               raise ValueError('simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold')
+E               ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold
+
+src/knowledge_tracing/akt/config.py:217: ValueError</error></testcase><testcase classname="tests.akt.test_research_a0_online" name="test_native_loader_rejects_incompatible_binding_before_model_creation[hash]" time="0.000"><error message="failed on setup with &quot;ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold&quot;">@pytest.fixture(scope='module')
+    def native_case():
+        case = core_fixture.handmade()
+        config = replace(case['config'], run_id='a0-online-fixture-'+uuid.uuid4().hex[:10],
+            d_model=16, heads=2, d_ff=32, final_fc=16, batch_size=4, max_steps=2)
+        config = replace(config, output_dir=config.project_root/'experiments/akt/results'/config.run_id)
+        setup = condition.prepare_research_graph_condition(variant='A0', graph_mode='none',
+            bank=case['bank'], nodes=(), edges=(), train80=case['condition'].train80,
+            expected_sources=condition.source_inventory())
+        def index(phase):
+            return context.prepare_research_graph_context(phase, case['encoding'], setup,
+                limits=case['index'].limits, fit80_encoding_sha256=case['encoding'].identity,
+                context=config.context, target_block=config.target_block)
+        train_index, prediction_index = index(case['train']), index(case['prediction'])
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+&gt;           adapter = model.ResearchGraphAKTAdapter(config=config, encoding=case['encoding'],
+                index=train_index, condition=setup)
+
+tests/akt/test_research_a0_online.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/knowledge_tracing/akt/research_graph_model.py:294: in __init__
+    validate_config(config, cuda_profile=cuda_profile)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+config = AKTConfig(project_root=PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701'), output_dir=PosixPath('...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+
+    def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionProfile | None = None) -&gt; None:
+        if cuda_profile is not None:
+            if type(cuda_profile) is not ResearchCUDAExecutionProfile:
+                raise ValueError('exact typed CUDA research profile required')
+            cuda_profile.__post_init__()
+            if config.phase != 'simulator-research' or config.device != 'cuda':
+                raise ValueError('CUDA research profile requires explicit simulator-research CUDA config')
+        if config.recovery is not None:
+            from .recovery import validate_options
+            validate_options(config)
+        if config.project_root.resolve() != PROJECT_ROOT.resolve():
+            raise ValueError('project root must be the trusted repository root')
+        if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold', 'simulator-research'}:
+            raise ValueError('invalid phase')
+        if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,79}', config.run_id):
+            raise ValueError('invalid run_id')
+        if config.phase in {'smoke', 'cuda-smoke', 'pilot', 'fold'} and config.output_dir.name != config.run_id:
+            raise ValueError('run_id must namespace the output directory')
+        if config.phase == 'fold-readiness' and config.execution_enabled:
+            raise ValueError('fold readiness cannot enable execution')
+        if config.partition != 'development':
+            raise ValueError('invalid partition')
+        if config.graph or config.n_pid != 0:
+            raise ValueError('graph and Rasch inputs are unavailable')
+        if config.source_commit != SOURCE_COMMIT:
+            raise ValueError('invalid source commit')
+        if config.device not in {'cpu', 'cuda'} or config.outer_fold not in range(5):
+            raise ValueError('invalid device or fold')
+        if min(config.context, config.target_block, config.max_length, config.d_model,
+               config.heads, config.blocks, config.batch_size, config.threads, config.fetch_rows) &lt;= 0:
+            raise ValueError('invalid positive configuration')
+        if config.context + config.target_block &gt; config.max_length or config.d_model % config.heads:
+            raise ValueError('invalid window or model dimensions')
+        if (config.lr &lt;= 0 or config.eps &lt;= 0 or config.max_grad_norm &lt;= 0
+                or len(config.betas) != 2 or not all(0 &lt;= value &lt; 1 for value in config.betas)
+                or config.weight_decay &lt; 0 or not 0 &lt; config.inner_val_fraction &lt; 1
+                or config.patience &lt;= 0 or config.max_epochs &lt;= 0 or config.min_delta &lt; 0
+                or not 0 &lt;= config.dropout &lt; 1):
+            raise ValueError('invalid training configuration')
+        if config.inner_val_fraction != 0.1:
+            raise ValueError('protocol v1 requires the frozen 10% inner learner split')
+        for name in ('max_train_users', 'max_val_users', 'max_targets_per_side', 'max_total_targets',
+                     'max_steps', 'max_seconds', 'max_wall_seconds', 'max_rss_bytes', 'min_available_ram_bytes'):
+            value = getattr(config, name)
+            if value is not None and (not math.isfinite(float(value)) or value &lt;= 0):
+                raise ValueError(f'invalid resource cap: {name}')
+        if config.output_dir == Path('.'):
+            raise ValueError('invalid output')
+        root = config.project_root.resolve()
+        output = config.output_dir.resolve()
+        allowed = (root / 'experiments/akt/results', root / 'experiments/akt/readiness', root / 'artifacts/akt')
+        protected = (root / 'dataset', root / 'artifacts/bkt_baseline', root / 'venv', root / '.wsl')
+        if (any(output.is_relative_to(path.resolve()) for path in protected)
+                or not any(output.is_relative_to(path.resolve()) and output != path.resolve() for path in allowed)):
+            raise ValueError('protected output or output outside AKT directory')
+        if config.phase == 'fold' and output.parent != (root / 'experiments/akt/results').resolve():
+            raise ValueError('fold output must use a unique results run directory')
+        if config.phase in {'smoke','cuda-smoke'}:
+            required_device='cpu' if config.phase=='smoke' else 'cuda'
+            if (config.device != required_device or config.context != 100 or config.target_block != 100
+                    or config.d_model != 32 or config.heads != 4 or config.blocks != 1
+                    or config.d_ff != 64 or config.final_fc != 32 or config.batch_size &gt; 4
+                    or config.max_epochs != 1 or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 32
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 16
+                    or config.max_targets_per_side is None or not 1 &lt;= config.max_targets_per_side &lt;= 4096
+                    or (config.max_total_targets is not None and config.max_total_targets &gt; 8192)
+                    or config.max_steps is None or config.max_steps &gt; 20
+                    or config.max_seconds is None or config.max_seconds &gt; 120
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 300
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('smoke cap or architecture exceeded')
+        if config.phase == 'pilot':
+            if (config.device != 'cpu' or config.context != 100 or config.target_block != 100
+                    or config.d_model != 256 or config.heads != 8 or config.blocks != 1 or config.d_ff != 1024
+                    or config.batch_size &gt; 4 or config.max_epochs != 1
+                    or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 1024
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 256
+                    or config.max_total_targets is None or not 1 &lt;= config.max_total_targets &lt;= 100000
+                    or config.max_seconds is None or config.max_seconds &gt; 900
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 1200
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('pilot cap or architecture exceeded')
+        if config.phase == 'simulator-research':
+            # New scope only; no dataclass/default/hash change for historical phases.
+            frozen = {'device': 'cpu' if cuda_profile is None else 'cuda', 'seed': 42, 'context': 100, 'target_block': 100, 'max_length': 200,
+                      'd_model': 256, 'heads': 8, 'blocks': 1, 'd_ff': 1024, 'final_fc': 512,
+                      'dropout': 0.05, 'kq_same': 1, 'separate_qa': False, 'n_pid': 0, 'graph': False,
+                      'batch_size': 4, 'lr': 1e-4, 'betas': (0.9, 0.999), 'eps': 1e-8,
+                      'weight_decay': 0.0, 'max_grad_norm': 1.0, 'max_epochs': 20,
+                      'patience': 3, 'min_delta': 0.0001, 'outer_fold': 0}
+            if (any(type(getattr(config, name)) is not type(value) or getattr(config, name) != value
+                    for name, value in frozen.items()) or config.recovery is not None
+                    or type(config.execution_enabled) is not bool):
+&gt;               raise ValueError('simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold')
+E               ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold
+
+src/knowledge_tracing/akt/config.py:217: ValueError</error></testcase><testcase classname="tests.akt.test_research_a0_online" name="test_native_loader_rejects_incompatible_binding_before_model_creation[domain]" time="0.000"><error message="failed on setup with &quot;ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold&quot;">@pytest.fixture(scope='module')
+    def native_case():
+        case = core_fixture.handmade()
+        config = replace(case['config'], run_id='a0-online-fixture-'+uuid.uuid4().hex[:10],
+            d_model=16, heads=2, d_ff=32, final_fc=16, batch_size=4, max_steps=2)
+        config = replace(config, output_dir=config.project_root/'experiments/akt/results'/config.run_id)
+        setup = condition.prepare_research_graph_condition(variant='A0', graph_mode='none',
+            bank=case['bank'], nodes=(), edges=(), train80=case['condition'].train80,
+            expected_sources=condition.source_inventory())
+        def index(phase):
+            return context.prepare_research_graph_context(phase, case['encoding'], setup,
+                limits=case['index'].limits, fit80_encoding_sha256=case['encoding'].identity,
+                context=config.context, target_block=config.target_block)
+        train_index, prediction_index = index(case['train']), index(case['prediction'])
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+&gt;           adapter = model.ResearchGraphAKTAdapter(config=config, encoding=case['encoding'],
+                index=train_index, condition=setup)
+
+tests/akt/test_research_a0_online.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/knowledge_tracing/akt/research_graph_model.py:294: in __init__
+    validate_config(config, cuda_profile=cuda_profile)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+config = AKTConfig(project_root=PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701'), output_dir=PosixPath('...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+
+    def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionProfile | None = None) -&gt; None:
+        if cuda_profile is not None:
+            if type(cuda_profile) is not ResearchCUDAExecutionProfile:
+                raise ValueError('exact typed CUDA research profile required')
+            cuda_profile.__post_init__()
+            if config.phase != 'simulator-research' or config.device != 'cuda':
+                raise ValueError('CUDA research profile requires explicit simulator-research CUDA config')
+        if config.recovery is not None:
+            from .recovery import validate_options
+            validate_options(config)
+        if config.project_root.resolve() != PROJECT_ROOT.resolve():
+            raise ValueError('project root must be the trusted repository root')
+        if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold', 'simulator-research'}:
+            raise ValueError('invalid phase')
+        if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,79}', config.run_id):
+            raise ValueError('invalid run_id')
+        if config.phase in {'smoke', 'cuda-smoke', 'pilot', 'fold'} and config.output_dir.name != config.run_id:
+            raise ValueError('run_id must namespace the output directory')
+        if config.phase == 'fold-readiness' and config.execution_enabled:
+            raise ValueError('fold readiness cannot enable execution')
+        if config.partition != 'development':
+            raise ValueError('invalid partition')
+        if config.graph or config.n_pid != 0:
+            raise ValueError('graph and Rasch inputs are unavailable')
+        if config.source_commit != SOURCE_COMMIT:
+            raise ValueError('invalid source commit')
+        if config.device not in {'cpu', 'cuda'} or config.outer_fold not in range(5):
+            raise ValueError('invalid device or fold')
+        if min(config.context, config.target_block, config.max_length, config.d_model,
+               config.heads, config.blocks, config.batch_size, config.threads, config.fetch_rows) &lt;= 0:
+            raise ValueError('invalid positive configuration')
+        if config.context + config.target_block &gt; config.max_length or config.d_model % config.heads:
+            raise ValueError('invalid window or model dimensions')
+        if (config.lr &lt;= 0 or config.eps &lt;= 0 or config.max_grad_norm &lt;= 0
+                or len(config.betas) != 2 or not all(0 &lt;= value &lt; 1 for value in config.betas)
+                or config.weight_decay &lt; 0 or not 0 &lt; config.inner_val_fraction &lt; 1
+                or config.patience &lt;= 0 or config.max_epochs &lt;= 0 or config.min_delta &lt; 0
+                or not 0 &lt;= config.dropout &lt; 1):
+            raise ValueError('invalid training configuration')
+        if config.inner_val_fraction != 0.1:
+            raise ValueError('protocol v1 requires the frozen 10% inner learner split')
+        for name in ('max_train_users', 'max_val_users', 'max_targets_per_side', 'max_total_targets',
+                     'max_steps', 'max_seconds', 'max_wall_seconds', 'max_rss_bytes', 'min_available_ram_bytes'):
+            value = getattr(config, name)
+            if value is not None and (not math.isfinite(float(value)) or value &lt;= 0):
+                raise ValueError(f'invalid resource cap: {name}')
+        if config.output_dir == Path('.'):
+            raise ValueError('invalid output')
+        root = config.project_root.resolve()
+        output = config.output_dir.resolve()
+        allowed = (root / 'experiments/akt/results', root / 'experiments/akt/readiness', root / 'artifacts/akt')
+        protected = (root / 'dataset', root / 'artifacts/bkt_baseline', root / 'venv', root / '.wsl')
+        if (any(output.is_relative_to(path.resolve()) for path in protected)
+                or not any(output.is_relative_to(path.resolve()) and output != path.resolve() for path in allowed)):
+            raise ValueError('protected output or output outside AKT directory')
+        if config.phase == 'fold' and output.parent != (root / 'experiments/akt/results').resolve():
+            raise ValueError('fold output must use a unique results run directory')
+        if config.phase in {'smoke','cuda-smoke'}:
+            required_device='cpu' if config.phase=='smoke' else 'cuda'
+            if (config.device != required_device or config.context != 100 or config.target_block != 100
+                    or config.d_model != 32 or config.heads != 4 or config.blocks != 1
+                    or config.d_ff != 64 or config.final_fc != 32 or config.batch_size &gt; 4
+                    or config.max_epochs != 1 or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 32
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 16
+                    or config.max_targets_per_side is None or not 1 &lt;= config.max_targets_per_side &lt;= 4096
+                    or (config.max_total_targets is not None and config.max_total_targets &gt; 8192)
+                    or config.max_steps is None or config.max_steps &gt; 20
+                    or config.max_seconds is None or config.max_seconds &gt; 120
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 300
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('smoke cap or architecture exceeded')
+        if config.phase == 'pilot':
+            if (config.device != 'cpu' or config.context != 100 or config.target_block != 100
+                    or config.d_model != 256 or config.heads != 8 or config.blocks != 1 or config.d_ff != 1024
+                    or config.batch_size &gt; 4 or config.max_epochs != 1
+                    or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 1024
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 256
+                    or config.max_total_targets is None or not 1 &lt;= config.max_total_targets &lt;= 100000
+                    or config.max_seconds is None or config.max_seconds &gt; 900
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 1200
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('pilot cap or architecture exceeded')
+        if config.phase == 'simulator-research':
+            # New scope only; no dataclass/default/hash change for historical phases.
+            frozen = {'device': 'cpu' if cuda_profile is None else 'cuda', 'seed': 42, 'context': 100, 'target_block': 100, 'max_length': 200,
+                      'd_model': 256, 'heads': 8, 'blocks': 1, 'd_ff': 1024, 'final_fc': 512,
+                      'dropout': 0.05, 'kq_same': 1, 'separate_qa': False, 'n_pid': 0, 'graph': False,
+                      'batch_size': 4, 'lr': 1e-4, 'betas': (0.9, 0.999), 'eps': 1e-8,
+                      'weight_decay': 0.0, 'max_grad_norm': 1.0, 'max_epochs': 20,
+                      'patience': 3, 'min_delta': 0.0001, 'outer_fold': 0}
+            if (any(type(getattr(config, name)) is not type(value) or getattr(config, name) != value
+                    for name, value in frozen.items()) or config.recovery is not None
+                    or type(config.execution_enabled) is not bool):
+&gt;               raise ValueError('simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold')
+E               ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold
+
+src/knowledge_tracing/akt/config.py:217: ValueError</error></testcase><testcase classname="tests.akt.test_research_a0_online" name="test_native_loader_rejects_incompatible_binding_before_model_creation[geometry]" time="0.000"><error message="failed on setup with &quot;ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold&quot;">@pytest.fixture(scope='module')
+    def native_case():
+        case = core_fixture.handmade()
+        config = replace(case['config'], run_id='a0-online-fixture-'+uuid.uuid4().hex[:10],
+            d_model=16, heads=2, d_ff=32, final_fc=16, batch_size=4, max_steps=2)
+        config = replace(config, output_dir=config.project_root/'experiments/akt/results'/config.run_id)
+        setup = condition.prepare_research_graph_condition(variant='A0', graph_mode='none',
+            bank=case['bank'], nodes=(), edges=(), train80=case['condition'].train80,
+            expected_sources=condition.source_inventory())
+        def index(phase):
+            return context.prepare_research_graph_context(phase, case['encoding'], setup,
+                limits=case['index'].limits, fit80_encoding_sha256=case['encoding'].identity,
+                context=config.context, target_block=config.target_block)
+        train_index, prediction_index = index(case['train']), index(case['prediction'])
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+&gt;           adapter = model.ResearchGraphAKTAdapter(config=config, encoding=case['encoding'],
+                index=train_index, condition=setup)
+
+tests/akt/test_research_a0_online.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/knowledge_tracing/akt/research_graph_model.py:294: in __init__
+    validate_config(config, cuda_profile=cuda_profile)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+config = AKTConfig(project_root=PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701'), output_dir=PosixPath('...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+
+    def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionProfile | None = None) -&gt; None:
+        if cuda_profile is not None:
+            if type(cuda_profile) is not ResearchCUDAExecutionProfile:
+                raise ValueError('exact typed CUDA research profile required')
+            cuda_profile.__post_init__()
+            if config.phase != 'simulator-research' or config.device != 'cuda':
+                raise ValueError('CUDA research profile requires explicit simulator-research CUDA config')
+        if config.recovery is not None:
+            from .recovery import validate_options
+            validate_options(config)
+        if config.project_root.resolve() != PROJECT_ROOT.resolve():
+            raise ValueError('project root must be the trusted repository root')
+        if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold', 'simulator-research'}:
+            raise ValueError('invalid phase')
+        if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,79}', config.run_id):
+            raise ValueError('invalid run_id')
+        if config.phase in {'smoke', 'cuda-smoke', 'pilot', 'fold'} and config.output_dir.name != config.run_id:
+            raise ValueError('run_id must namespace the output directory')
+        if config.phase == 'fold-readiness' and config.execution_enabled:
+            raise ValueError('fold readiness cannot enable execution')
+        if config.partition != 'development':
+            raise ValueError('invalid partition')
+        if config.graph or config.n_pid != 0:
+            raise ValueError('graph and Rasch inputs are unavailable')
+        if config.source_commit != SOURCE_COMMIT:
+            raise ValueError('invalid source commit')
+        if config.device not in {'cpu', 'cuda'} or config.outer_fold not in range(5):
+            raise ValueError('invalid device or fold')
+        if min(config.context, config.target_block, config.max_length, config.d_model,
+               config.heads, config.blocks, config.batch_size, config.threads, config.fetch_rows) &lt;= 0:
+            raise ValueError('invalid positive configuration')
+        if config.context + config.target_block &gt; config.max_length or config.d_model % config.heads:
+            raise ValueError('invalid window or model dimensions')
+        if (config.lr &lt;= 0 or config.eps &lt;= 0 or config.max_grad_norm &lt;= 0
+                or len(config.betas) != 2 or not all(0 &lt;= value &lt; 1 for value in config.betas)
+                or config.weight_decay &lt; 0 or not 0 &lt; config.inner_val_fraction &lt; 1
+                or config.patience &lt;= 0 or config.max_epochs &lt;= 0 or config.min_delta &lt; 0
+                or not 0 &lt;= config.dropout &lt; 1):
+            raise ValueError('invalid training configuration')
+        if config.inner_val_fraction != 0.1:
+            raise ValueError('protocol v1 requires the frozen 10% inner learner split')
+        for name in ('max_train_users', 'max_val_users', 'max_targets_per_side', 'max_total_targets',
+                     'max_steps', 'max_seconds', 'max_wall_seconds', 'max_rss_bytes', 'min_available_ram_bytes'):
+            value = getattr(config, name)
+            if value is not None and (not math.isfinite(float(value)) or value &lt;= 0):
+                raise ValueError(f'invalid resource cap: {name}')
+        if config.output_dir == Path('.'):
+            raise ValueError('invalid output')
+        root = config.project_root.resolve()
+        output = config.output_dir.resolve()
+        allowed = (root / 'experiments/akt/results', root / 'experiments/akt/readiness', root / 'artifacts/akt')
+        protected = (root / 'dataset', root / 'artifacts/bkt_baseline', root / 'venv', root / '.wsl')
+        if (any(output.is_relative_to(path.resolve()) for path in protected)
+                or not any(output.is_relative_to(path.resolve()) and output != path.resolve() for path in allowed)):
+            raise ValueError('protected output or output outside AKT directory')
+        if config.phase == 'fold' and output.parent != (root / 'experiments/akt/results').resolve():
+            raise ValueError('fold output must use a unique results run directory')
+        if config.phase in {'smoke','cuda-smoke'}:
+            required_device='cpu' if config.phase=='smoke' else 'cuda'
+            if (config.device != required_device or config.context != 100 or config.target_block != 100
+                    or config.d_model != 32 or config.heads != 4 or config.blocks != 1
+                    or config.d_ff != 64 or config.final_fc != 32 or config.batch_size &gt; 4
+                    or config.max_epochs != 1 or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 32
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 16
+                    or config.max_targets_per_side is None or not 1 &lt;= config.max_targets_per_side &lt;= 4096
+                    or (config.max_total_targets is not None and config.max_total_targets &gt; 8192)
+                    or config.max_steps is None or config.max_steps &gt; 20
+                    or config.max_seconds is None or config.max_seconds &gt; 120
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 300
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('smoke cap or architecture exceeded')
+        if config.phase == 'pilot':
+            if (config.device != 'cpu' or config.context != 100 or config.target_block != 100
+                    or config.d_model != 256 or config.heads != 8 or config.blocks != 1 or config.d_ff != 1024
+                    or config.batch_size &gt; 4 or config.max_epochs != 1
+                    or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 1024
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 256
+                    or config.max_total_targets is None or not 1 &lt;= config.max_total_targets &lt;= 100000
+                    or config.max_seconds is None or config.max_seconds &gt; 900
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 1200
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('pilot cap or architecture exceeded')
+        if config.phase == 'simulator-research':
+            # New scope only; no dataclass/default/hash change for historical phases.
+            frozen = {'device': 'cpu' if cuda_profile is None else 'cuda', 'seed': 42, 'context': 100, 'target_block': 100, 'max_length': 200,
+                      'd_model': 256, 'heads': 8, 'blocks': 1, 'd_ff': 1024, 'final_fc': 512,
+                      'dropout': 0.05, 'kq_same': 1, 'separate_qa': False, 'n_pid': 0, 'graph': False,
+                      'batch_size': 4, 'lr': 1e-4, 'betas': (0.9, 0.999), 'eps': 1e-8,
+                      'weight_decay': 0.0, 'max_grad_norm': 1.0, 'max_epochs': 20,
+                      'patience': 3, 'min_delta': 0.0001, 'outer_fold': 0}
+            if (any(type(getattr(config, name)) is not type(value) or getattr(config, name) != value
+                    for name, value in frozen.items()) or config.recovery is not None
+                    or type(config.execution_enabled) is not bool):
+&gt;               raise ValueError('simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold')
+E               ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold
+
+src/knowledge_tracing/akt/config.py:217: ValueError</error></testcase><testcase classname="tests.akt.test_research_a0_online" name="test_native_loader_rejects_incompatible_binding_before_model_creation[variant]" time="0.000"><error message="failed on setup with &quot;ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold&quot;">@pytest.fixture(scope='module')
+    def native_case():
+        case = core_fixture.handmade()
+        config = replace(case['config'], run_id='a0-online-fixture-'+uuid.uuid4().hex[:10],
+            d_model=16, heads=2, d_ff=32, final_fc=16, batch_size=4, max_steps=2)
+        config = replace(config, output_dir=config.project_root/'experiments/akt/results'/config.run_id)
+        setup = condition.prepare_research_graph_condition(variant='A0', graph_mode='none',
+            bank=case['bank'], nodes=(), edges=(), train80=case['condition'].train80,
+            expected_sources=condition.source_inventory())
+        def index(phase):
+            return context.prepare_research_graph_context(phase, case['encoding'], setup,
+                limits=case['index'].limits, fit80_encoding_sha256=case['encoding'].identity,
+                context=config.context, target_block=config.target_block)
+        train_index, prediction_index = index(case['train']), index(case['prediction'])
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+&gt;           adapter = model.ResearchGraphAKTAdapter(config=config, encoding=case['encoding'],
+                index=train_index, condition=setup)
+
+tests/akt/test_research_a0_online.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/knowledge_tracing/akt/research_graph_model.py:294: in __init__
+    validate_config(config, cuda_profile=cuda_profile)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+config = AKTConfig(project_root=PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701'), output_dir=PosixPath('...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+
+    def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionProfile | None = None) -&gt; None:
+        if cuda_profile is not None:
+            if type(cuda_profile) is not ResearchCUDAExecutionProfile:
+                raise ValueError('exact typed CUDA research profile required')
+            cuda_profile.__post_init__()
+            if config.phase != 'simulator-research' or config.device != 'cuda':
+                raise ValueError('CUDA research profile requires explicit simulator-research CUDA config')
+        if config.recovery is not None:
+            from .recovery import validate_options
+            validate_options(config)
+        if config.project_root.resolve() != PROJECT_ROOT.resolve():
+            raise ValueError('project root must be the trusted repository root')
+        if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold', 'simulator-research'}:
+            raise ValueError('invalid phase')
+        if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,79}', config.run_id):
+            raise ValueError('invalid run_id')
+        if config.phase in {'smoke', 'cuda-smoke', 'pilot', 'fold'} and config.output_dir.name != config.run_id:
+            raise ValueError('run_id must namespace the output directory')
+        if config.phase == 'fold-readiness' and config.execution_enabled:
+            raise ValueError('fold readiness cannot enable execution')
+        if config.partition != 'development':
+            raise ValueError('invalid partition')
+        if config.graph or config.n_pid != 0:
+            raise ValueError('graph and Rasch inputs are unavailable')
+        if config.source_commit != SOURCE_COMMIT:
+            raise ValueError('invalid source commit')
+        if config.device not in {'cpu', 'cuda'} or config.outer_fold not in range(5):
+            raise ValueError('invalid device or fold')
+        if min(config.context, config.target_block, config.max_length, config.d_model,
+               config.heads, config.blocks, config.batch_size, config.threads, config.fetch_rows) &lt;= 0:
+            raise ValueError('invalid positive configuration')
+        if config.context + config.target_block &gt; config.max_length or config.d_model % config.heads:
+            raise ValueError('invalid window or model dimensions')
+        if (config.lr &lt;= 0 or config.eps &lt;= 0 or config.max_grad_norm &lt;= 0
+                or len(config.betas) != 2 or not all(0 &lt;= value &lt; 1 for value in config.betas)
+                or config.weight_decay &lt; 0 or not 0 &lt; config.inner_val_fraction &lt; 1
+                or config.patience &lt;= 0 or config.max_epochs &lt;= 0 or config.min_delta &lt; 0
+                or not 0 &lt;= config.dropout &lt; 1):
+            raise ValueError('invalid training configuration')
+        if config.inner_val_fraction != 0.1:
+            raise ValueError('protocol v1 requires the frozen 10% inner learner split')
+        for name in ('max_train_users', 'max_val_users', 'max_targets_per_side', 'max_total_targets',
+                     'max_steps', 'max_seconds', 'max_wall_seconds', 'max_rss_bytes', 'min_available_ram_bytes'):
+            value = getattr(config, name)
+            if value is not None and (not math.isfinite(float(value)) or value &lt;= 0):
+                raise ValueError(f'invalid resource cap: {name}')
+        if config.output_dir == Path('.'):
+            raise ValueError('invalid output')
+        root = config.project_root.resolve()
+        output = config.output_dir.resolve()
+        allowed = (root / 'experiments/akt/results', root / 'experiments/akt/readiness', root / 'artifacts/akt')
+        protected = (root / 'dataset', root / 'artifacts/bkt_baseline', root / 'venv', root / '.wsl')
+        if (any(output.is_relative_to(path.resolve()) for path in protected)
+                or not any(output.is_relative_to(path.resolve()) and output != path.resolve() for path in allowed)):
+            raise ValueError('protected output or output outside AKT directory')
+        if config.phase == 'fold' and output.parent != (root / 'experiments/akt/results').resolve():
+            raise ValueError('fold output must use a unique results run directory')
+        if config.phase in {'smoke','cuda-smoke'}:
+            required_device='cpu' if config.phase=='smoke' else 'cuda'
+            if (config.device != required_device or config.context != 100 or config.target_block != 100
+                    or config.d_model != 32 or config.heads != 4 or config.blocks != 1
+                    or config.d_ff != 64 or config.final_fc != 32 or config.batch_size &gt; 4
+                    or config.max_epochs != 1 or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 32
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 16
+                    or config.max_targets_per_side is None or not 1 &lt;= config.max_targets_per_side &lt;= 4096
+                    or (config.max_total_targets is not None and config.max_total_targets &gt; 8192)
+                    or config.max_steps is None or config.max_steps &gt; 20
+                    or config.max_seconds is None or config.max_seconds &gt; 120
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 300
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('smoke cap or architecture exceeded')
+        if config.phase == 'pilot':
+            if (config.device != 'cpu' or config.context != 100 or config.target_block != 100
+                    or config.d_model != 256 or config.heads != 8 or config.blocks != 1 or config.d_ff != 1024
+                    or config.batch_size &gt; 4 or config.max_epochs != 1
+                    or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 1024
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 256
+                    or config.max_total_targets is None or not 1 &lt;= config.max_total_targets &lt;= 100000
+                    or config.max_seconds is None or config.max_seconds &gt; 900
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 1200
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('pilot cap or architecture exceeded')
+        if config.phase == 'simulator-research':
+            # New scope only; no dataclass/default/hash change for historical phases.
+            frozen = {'device': 'cpu' if cuda_profile is None else 'cuda', 'seed': 42, 'context': 100, 'target_block': 100, 'max_length': 200,
+                      'd_model': 256, 'heads': 8, 'blocks': 1, 'd_ff': 1024, 'final_fc': 512,
+                      'dropout': 0.05, 'kq_same': 1, 'separate_qa': False, 'n_pid': 0, 'graph': False,
+                      'batch_size': 4, 'lr': 1e-4, 'betas': (0.9, 0.999), 'eps': 1e-8,
+                      'weight_decay': 0.0, 'max_grad_norm': 1.0, 'max_epochs': 20,
+                      'patience': 3, 'min_delta': 0.0001, 'outer_fold': 0}
+            if (any(type(getattr(config, name)) is not type(value) or getattr(config, name) != value
+                    for name, value in frozen.items()) or config.recovery is not None
+                    or type(config.execution_enabled) is not bool):
+&gt;               raise ValueError('simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold')
+E               ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold
+
+src/knowledge_tracing/akt/config.py:217: ValueError</error></testcase><testcase classname="tests.akt.test_research_a0_online" name="test_native_loader_rejects_incompatible_binding_before_model_creation[encoding]" time="0.000"><error message="failed on setup with &quot;ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold&quot;">@pytest.fixture(scope='module')
+    def native_case():
+        case = core_fixture.handmade()
+        config = replace(case['config'], run_id='a0-online-fixture-'+uuid.uuid4().hex[:10],
+            d_model=16, heads=2, d_ff=32, final_fc=16, batch_size=4, max_steps=2)
+        config = replace(config, output_dir=config.project_root/'experiments/akt/results'/config.run_id)
+        setup = condition.prepare_research_graph_condition(variant='A0', graph_mode='none',
+            bank=case['bank'], nodes=(), edges=(), train80=case['condition'].train80,
+            expected_sources=condition.source_inventory())
+        def index(phase):
+            return context.prepare_research_graph_context(phase, case['encoding'], setup,
+                limits=case['index'].limits, fit80_encoding_sha256=case['encoding'].identity,
+                context=config.context, target_block=config.target_block)
+        train_index, prediction_index = index(case['train']), index(case['prediction'])
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+&gt;           adapter = model.ResearchGraphAKTAdapter(config=config, encoding=case['encoding'],
+                index=train_index, condition=setup)
+
+tests/akt/test_research_a0_online.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/knowledge_tracing/akt/research_graph_model.py:294: in __init__
+    validate_config(config, cuda_profile=cuda_profile)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+config = AKTConfig(project_root=PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701'), output_dir=PosixPath('...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+
+    def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionProfile | None = None) -&gt; None:
+        if cuda_profile is not None:
+            if type(cuda_profile) is not ResearchCUDAExecutionProfile:
+                raise ValueError('exact typed CUDA research profile required')
+            cuda_profile.__post_init__()
+            if config.phase != 'simulator-research' or config.device != 'cuda':
+                raise ValueError('CUDA research profile requires explicit simulator-research CUDA config')
+        if config.recovery is not None:
+            from .recovery import validate_options
+            validate_options(config)
+        if config.project_root.resolve() != PROJECT_ROOT.resolve():
+            raise ValueError('project root must be the trusted repository root')
+        if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold', 'simulator-research'}:
+            raise ValueError('invalid phase')
+        if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,79}', config.run_id):
+            raise ValueError('invalid run_id')
+        if config.phase in {'smoke', 'cuda-smoke', 'pilot', 'fold'} and config.output_dir.name != config.run_id:
+            raise ValueError('run_id must namespace the output directory')
+        if config.phase == 'fold-readiness' and config.execution_enabled:
+            raise ValueError('fold readiness cannot enable execution')
+        if config.partition != 'development':
+            raise ValueError('invalid partition')
+        if config.graph or config.n_pid != 0:
+            raise ValueError('graph and Rasch inputs are unavailable')
+        if config.source_commit != SOURCE_COMMIT:
+            raise ValueError('invalid source commit')
+        if config.device not in {'cpu', 'cuda'} or config.outer_fold not in range(5):
+            raise ValueError('invalid device or fold')
+        if min(config.context, config.target_block, config.max_length, config.d_model,
+               config.heads, config.blocks, config.batch_size, config.threads, config.fetch_rows) &lt;= 0:
+            raise ValueError('invalid positive configuration')
+        if config.context + config.target_block &gt; config.max_length or config.d_model % config.heads:
+            raise ValueError('invalid window or model dimensions')
+        if (config.lr &lt;= 0 or config.eps &lt;= 0 or config.max_grad_norm &lt;= 0
+                or len(config.betas) != 2 or not all(0 &lt;= value &lt; 1 for value in config.betas)
+                or config.weight_decay &lt; 0 or not 0 &lt; config.inner_val_fraction &lt; 1
+                or config.patience &lt;= 0 or config.max_epochs &lt;= 0 or config.min_delta &lt; 0
+                or not 0 &lt;= config.dropout &lt; 1):
+            raise ValueError('invalid training configuration')
+        if config.inner_val_fraction != 0.1:
+            raise ValueError('protocol v1 requires the frozen 10% inner learner split')
+        for name in ('max_train_users', 'max_val_users', 'max_targets_per_side', 'max_total_targets',
+                     'max_steps', 'max_seconds', 'max_wall_seconds', 'max_rss_bytes', 'min_available_ram_bytes'):
+            value = getattr(config, name)
+            if value is not None and (not math.isfinite(float(value)) or value &lt;= 0):
+                raise ValueError(f'invalid resource cap: {name}')
+        if config.output_dir == Path('.'):
+            raise ValueError('invalid output')
+        root = config.project_root.resolve()
+        output = config.output_dir.resolve()
+        allowed = (root / 'experiments/akt/results', root / 'experiments/akt/readiness', root / 'artifacts/akt')
+        protected = (root / 'dataset', root / 'artifacts/bkt_baseline', root / 'venv', root / '.wsl')
+        if (any(output.is_relative_to(path.resolve()) for path in protected)
+                or not any(output.is_relative_to(path.resolve()) and output != path.resolve() for path in allowed)):
+            raise ValueError('protected output or output outside AKT directory')
+        if config.phase == 'fold' and output.parent != (root / 'experiments/akt/results').resolve():
+            raise ValueError('fold output must use a unique results run directory')
+        if config.phase in {'smoke','cuda-smoke'}:
+            required_device='cpu' if config.phase=='smoke' else 'cuda'
+            if (config.device != required_device or config.context != 100 or config.target_block != 100
+                    or config.d_model != 32 or config.heads != 4 or config.blocks != 1
+                    or config.d_ff != 64 or config.final_fc != 32 or config.batch_size &gt; 4
+                    or config.max_epochs != 1 or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 32
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 16
+                    or config.max_targets_per_side is None or not 1 &lt;= config.max_targets_per_side &lt;= 4096
+                    or (config.max_total_targets is not None and config.max_total_targets &gt; 8192)
+                    or config.max_steps is None or config.max_steps &gt; 20
+                    or config.max_seconds is None or config.max_seconds &gt; 120
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 300
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('smoke cap or architecture exceeded')
+        if config.phase == 'pilot':
+            if (config.device != 'cpu' or config.context != 100 or config.target_block != 100
+                    or config.d_model != 256 or config.heads != 8 or config.blocks != 1 or config.d_ff != 1024
+                    or config.batch_size &gt; 4 or config.max_epochs != 1
+                    or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 1024
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 256
+                    or config.max_total_targets is None or not 1 &lt;= config.max_total_targets &lt;= 100000
+                    or config.max_seconds is None or config.max_seconds &gt; 900
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 1200
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('pilot cap or architecture exceeded')
+        if config.phase == 'simulator-research':
+            # New scope only; no dataclass/default/hash change for historical phases.
+            frozen = {'device': 'cpu' if cuda_profile is None else 'cuda', 'seed': 42, 'context': 100, 'target_block': 100, 'max_length': 200,
+                      'd_model': 256, 'heads': 8, 'blocks': 1, 'd_ff': 1024, 'final_fc': 512,
+                      'dropout': 0.05, 'kq_same': 1, 'separate_qa': False, 'n_pid': 0, 'graph': False,
+                      'batch_size': 4, 'lr': 1e-4, 'betas': (0.9, 0.999), 'eps': 1e-8,
+                      'weight_decay': 0.0, 'max_grad_norm': 1.0, 'max_epochs': 20,
+                      'patience': 3, 'min_delta': 0.0001, 'outer_fold': 0}
+            if (any(type(getattr(config, name)) is not type(value) or getattr(config, name) != value
+                    for name, value in frozen.items()) or config.recovery is not None
+                    or type(config.execution_enabled) is not bool):
+&gt;               raise ValueError('simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold')
+E               ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold
+
+src/knowledge_tracing/akt/config.py:217: ValueError</error></testcase><testcase classname="tests.akt.test_research_a0_online" name="test_native_loader_rejects_incompatible_binding_before_model_creation[phase]" time="0.000"><error message="failed on setup with &quot;ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold&quot;">@pytest.fixture(scope='module')
+    def native_case():
+        case = core_fixture.handmade()
+        config = replace(case['config'], run_id='a0-online-fixture-'+uuid.uuid4().hex[:10],
+            d_model=16, heads=2, d_ff=32, final_fc=16, batch_size=4, max_steps=2)
+        config = replace(config, output_dir=config.project_root/'experiments/akt/results'/config.run_id)
+        setup = condition.prepare_research_graph_condition(variant='A0', graph_mode='none',
+            bank=case['bank'], nodes=(), edges=(), train80=case['condition'].train80,
+            expected_sources=condition.source_inventory())
+        def index(phase):
+            return context.prepare_research_graph_context(phase, case['encoding'], setup,
+                limits=case['index'].limits, fit80_encoding_sha256=case['encoding'].identity,
+                context=config.context, target_block=config.target_block)
+        train_index, prediction_index = index(case['train']), index(case['prediction'])
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+&gt;           adapter = model.ResearchGraphAKTAdapter(config=config, encoding=case['encoding'],
+                index=train_index, condition=setup)
+
+tests/akt/test_research_a0_online.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/knowledge_tracing/akt/research_graph_model.py:294: in __init__
+    validate_config(config, cuda_profile=cuda_profile)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+config = AKTConfig(project_root=PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701'), output_dir=PosixPath('...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+
+    def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionProfile | None = None) -&gt; None:
+        if cuda_profile is not None:
+            if type(cuda_profile) is not ResearchCUDAExecutionProfile:
+                raise ValueError('exact typed CUDA research profile required')
+            cuda_profile.__post_init__()
+            if config.phase != 'simulator-research' or config.device != 'cuda':
+                raise ValueError('CUDA research profile requires explicit simulator-research CUDA config')
+        if config.recovery is not None:
+            from .recovery import validate_options
+            validate_options(config)
+        if config.project_root.resolve() != PROJECT_ROOT.resolve():
+            raise ValueError('project root must be the trusted repository root')
+        if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold', 'simulator-research'}:
+            raise ValueError('invalid phase')
+        if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,79}', config.run_id):
+            raise ValueError('invalid run_id')
+        if config.phase in {'smoke', 'cuda-smoke', 'pilot', 'fold'} and config.output_dir.name != config.run_id:
+            raise ValueError('run_id must namespace the output directory')
+        if config.phase == 'fold-readiness' and config.execution_enabled:
+            raise ValueError('fold readiness cannot enable execution')
+        if config.partition != 'development':
+            raise ValueError('invalid partition')
+        if config.graph or config.n_pid != 0:
+            raise ValueError('graph and Rasch inputs are unavailable')
+        if config.source_commit != SOURCE_COMMIT:
+            raise ValueError('invalid source commit')
+        if config.device not in {'cpu', 'cuda'} or config.outer_fold not in range(5):
+            raise ValueError('invalid device or fold')
+        if min(config.context, config.target_block, config.max_length, config.d_model,
+               config.heads, config.blocks, config.batch_size, config.threads, config.fetch_rows) &lt;= 0:
+            raise ValueError('invalid positive configuration')
+        if config.context + config.target_block &gt; config.max_length or config.d_model % config.heads:
+            raise ValueError('invalid window or model dimensions')
+        if (config.lr &lt;= 0 or config.eps &lt;= 0 or config.max_grad_norm &lt;= 0
+                or len(config.betas) != 2 or not all(0 &lt;= value &lt; 1 for value in config.betas)
+                or config.weight_decay &lt; 0 or not 0 &lt; config.inner_val_fraction &lt; 1
+                or config.patience &lt;= 0 or config.max_epochs &lt;= 0 or config.min_delta &lt; 0
+                or not 0 &lt;= config.dropout &lt; 1):
+            raise ValueError('invalid training configuration')
+        if config.inner_val_fraction != 0.1:
+            raise ValueError('protocol v1 requires the frozen 10% inner learner split')
+        for name in ('max_train_users', 'max_val_users', 'max_targets_per_side', 'max_total_targets',
+                     'max_steps', 'max_seconds', 'max_wall_seconds', 'max_rss_bytes', 'min_available_ram_bytes'):
+            value = getattr(config, name)
+            if value is not None and (not math.isfinite(float(value)) or value &lt;= 0):
+                raise ValueError(f'invalid resource cap: {name}')
+        if config.output_dir == Path('.'):
+            raise ValueError('invalid output')
+        root = config.project_root.resolve()
+        output = config.output_dir.resolve()
+        allowed = (root / 'experiments/akt/results', root / 'experiments/akt/readiness', root / 'artifacts/akt')
+        protected = (root / 'dataset', root / 'artifacts/bkt_baseline', root / 'venv', root / '.wsl')
+        if (any(output.is_relative_to(path.resolve()) for path in protected)
+                or not any(output.is_relative_to(path.resolve()) and output != path.resolve() for path in allowed)):
+            raise ValueError('protected output or output outside AKT directory')
+        if config.phase == 'fold' and output.parent != (root / 'experiments/akt/results').resolve():
+            raise ValueError('fold output must use a unique results run directory')
+        if config.phase in {'smoke','cuda-smoke'}:
+            required_device='cpu' if config.phase=='smoke' else 'cuda'
+            if (config.device != required_device or config.context != 100 or config.target_block != 100
+                    or config.d_model != 32 or config.heads != 4 or config.blocks != 1
+                    or config.d_ff != 64 or config.final_fc != 32 or config.batch_size &gt; 4
+                    or config.max_epochs != 1 or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 32
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 16
+                    or config.max_targets_per_side is None or not 1 &lt;= config.max_targets_per_side &lt;= 4096
+                    or (config.max_total_targets is not None and config.max_total_targets &gt; 8192)
+                    or config.max_steps is None or config.max_steps &gt; 20
+                    or config.max_seconds is None or config.max_seconds &gt; 120
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 300
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('smoke cap or architecture exceeded')
+        if config.phase == 'pilot':
+            if (config.device != 'cpu' or config.context != 100 or config.target_block != 100
+                    or config.d_model != 256 or config.heads != 8 or config.blocks != 1 or config.d_ff != 1024
+                    or config.batch_size &gt; 4 or config.max_epochs != 1
+                    or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 1024
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 256
+                    or config.max_total_targets is None or not 1 &lt;= config.max_total_targets &lt;= 100000
+                    or config.max_seconds is None or config.max_seconds &gt; 900
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 1200
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('pilot cap or architecture exceeded')
+        if config.phase == 'simulator-research':
+            # New scope only; no dataclass/default/hash change for historical phases.
+            frozen = {'device': 'cpu' if cuda_profile is None else 'cuda', 'seed': 42, 'context': 100, 'target_block': 100, 'max_length': 200,
+                      'd_model': 256, 'heads': 8, 'blocks': 1, 'd_ff': 1024, 'final_fc': 512,
+                      'dropout': 0.05, 'kq_same': 1, 'separate_qa': False, 'n_pid': 0, 'graph': False,
+                      'batch_size': 4, 'lr': 1e-4, 'betas': (0.9, 0.999), 'eps': 1e-8,
+                      'weight_decay': 0.0, 'max_grad_norm': 1.0, 'max_epochs': 20,
+                      'patience': 3, 'min_delta': 0.0001, 'outer_fold': 0}
+            if (any(type(getattr(config, name)) is not type(value) or getattr(config, name) != value
+                    for name, value in frozen.items()) or config.recovery is not None
+                    or type(config.execution_enabled) is not bool):
+&gt;               raise ValueError('simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold')
+E               ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold
+
+src/knowledge_tracing/akt/config.py:217: ValueError</error></testcase><testcase classname="tests.akt.test_research_a0_online" name="test_native_loader_rejects_authenticated_inconsistent_payload_before_model[extra_parameter]" time="0.000"><error message="failed on setup with &quot;ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold&quot;">@pytest.fixture(scope='module')
+    def native_case():
+        case = core_fixture.handmade()
+        config = replace(case['config'], run_id='a0-online-fixture-'+uuid.uuid4().hex[:10],
+            d_model=16, heads=2, d_ff=32, final_fc=16, batch_size=4, max_steps=2)
+        config = replace(config, output_dir=config.project_root/'experiments/akt/results'/config.run_id)
+        setup = condition.prepare_research_graph_condition(variant='A0', graph_mode='none',
+            bank=case['bank'], nodes=(), edges=(), train80=case['condition'].train80,
+            expected_sources=condition.source_inventory())
+        def index(phase):
+            return context.prepare_research_graph_context(phase, case['encoding'], setup,
+                limits=case['index'].limits, fit80_encoding_sha256=case['encoding'].identity,
+                context=config.context, target_block=config.target_block)
+        train_index, prediction_index = index(case['train']), index(case['prediction'])
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+&gt;           adapter = model.ResearchGraphAKTAdapter(config=config, encoding=case['encoding'],
+                index=train_index, condition=setup)
+
+tests/akt/test_research_a0_online.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/knowledge_tracing/akt/research_graph_model.py:294: in __init__
+    validate_config(config, cuda_profile=cuda_profile)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+config = AKTConfig(project_root=PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701'), output_dir=PosixPath('...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+
+    def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionProfile | None = None) -&gt; None:
+        if cuda_profile is not None:
+            if type(cuda_profile) is not ResearchCUDAExecutionProfile:
+                raise ValueError('exact typed CUDA research profile required')
+            cuda_profile.__post_init__()
+            if config.phase != 'simulator-research' or config.device != 'cuda':
+                raise ValueError('CUDA research profile requires explicit simulator-research CUDA config')
+        if config.recovery is not None:
+            from .recovery import validate_options
+            validate_options(config)
+        if config.project_root.resolve() != PROJECT_ROOT.resolve():
+            raise ValueError('project root must be the trusted repository root')
+        if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold', 'simulator-research'}:
+            raise ValueError('invalid phase')
+        if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,79}', config.run_id):
+            raise ValueError('invalid run_id')
+        if config.phase in {'smoke', 'cuda-smoke', 'pilot', 'fold'} and config.output_dir.name != config.run_id:
+            raise ValueError('run_id must namespace the output directory')
+        if config.phase == 'fold-readiness' and config.execution_enabled:
+            raise ValueError('fold readiness cannot enable execution')
+        if config.partition != 'development':
+            raise ValueError('invalid partition')
+        if config.graph or config.n_pid != 0:
+            raise ValueError('graph and Rasch inputs are unavailable')
+        if config.source_commit != SOURCE_COMMIT:
+            raise ValueError('invalid source commit')
+        if config.device not in {'cpu', 'cuda'} or config.outer_fold not in range(5):
+            raise ValueError('invalid device or fold')
+        if min(config.context, config.target_block, config.max_length, config.d_model,
+               config.heads, config.blocks, config.batch_size, config.threads, config.fetch_rows) &lt;= 0:
+            raise ValueError('invalid positive configuration')
+        if config.context + config.target_block &gt; config.max_length or config.d_model % config.heads:
+            raise ValueError('invalid window or model dimensions')
+        if (config.lr &lt;= 0 or config.eps &lt;= 0 or config.max_grad_norm &lt;= 0
+                or len(config.betas) != 2 or not all(0 &lt;= value &lt; 1 for value in config.betas)
+                or config.weight_decay &lt; 0 or not 0 &lt; config.inner_val_fraction &lt; 1
+                or config.patience &lt;= 0 or config.max_epochs &lt;= 0 or config.min_delta &lt; 0
+                or not 0 &lt;= config.dropout &lt; 1):
+            raise ValueError('invalid training configuration')
+        if config.inner_val_fraction != 0.1:
+            raise ValueError('protocol v1 requires the frozen 10% inner learner split')
+        for name in ('max_train_users', 'max_val_users', 'max_targets_per_side', 'max_total_targets',
+                     'max_steps', 'max_seconds', 'max_wall_seconds', 'max_rss_bytes', 'min_available_ram_bytes'):
+            value = getattr(config, name)
+            if value is not None and (not math.isfinite(float(value)) or value &lt;= 0):
+                raise ValueError(f'invalid resource cap: {name}')
+        if config.output_dir == Path('.'):
+            raise ValueError('invalid output')
+        root = config.project_root.resolve()
+        output = config.output_dir.resolve()
+        allowed = (root / 'experiments/akt/results', root / 'experiments/akt/readiness', root / 'artifacts/akt')
+        protected = (root / 'dataset', root / 'artifacts/bkt_baseline', root / 'venv', root / '.wsl')
+        if (any(output.is_relative_to(path.resolve()) for path in protected)
+                or not any(output.is_relative_to(path.resolve()) and output != path.resolve() for path in allowed)):
+            raise ValueError('protected output or output outside AKT directory')
+        if config.phase == 'fold' and output.parent != (root / 'experiments/akt/results').resolve():
+            raise ValueError('fold output must use a unique results run directory')
+        if config.phase in {'smoke','cuda-smoke'}:
+            required_device='cpu' if config.phase=='smoke' else 'cuda'
+            if (config.device != required_device or config.context != 100 or config.target_block != 100
+                    or config.d_model != 32 or config.heads != 4 or config.blocks != 1
+                    or config.d_ff != 64 or config.final_fc != 32 or config.batch_size &gt; 4
+                    or config.max_epochs != 1 or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 32
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 16
+                    or config.max_targets_per_side is None or not 1 &lt;= config.max_targets_per_side &lt;= 4096
+                    or (config.max_total_targets is not None and config.max_total_targets &gt; 8192)
+                    or config.max_steps is None or config.max_steps &gt; 20
+                    or config.max_seconds is None or config.max_seconds &gt; 120
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 300
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('smoke cap or architecture exceeded')
+        if config.phase == 'pilot':
+            if (config.device != 'cpu' or config.context != 100 or config.target_block != 100
+                    or config.d_model != 256 or config.heads != 8 or config.blocks != 1 or config.d_ff != 1024
+                    or config.batch_size &gt; 4 or config.max_epochs != 1
+                    or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 1024
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 256
+                    or config.max_total_targets is None or not 1 &lt;= config.max_total_targets &lt;= 100000
+                    or config.max_seconds is None or config.max_seconds &gt; 900
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 1200
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('pilot cap or architecture exceeded')
+        if config.phase == 'simulator-research':
+            # New scope only; no dataclass/default/hash change for historical phases.
+            frozen = {'device': 'cpu' if cuda_profile is None else 'cuda', 'seed': 42, 'context': 100, 'target_block': 100, 'max_length': 200,
+                      'd_model': 256, 'heads': 8, 'blocks': 1, 'd_ff': 1024, 'final_fc': 512,
+                      'dropout': 0.05, 'kq_same': 1, 'separate_qa': False, 'n_pid': 0, 'graph': False,
+                      'batch_size': 4, 'lr': 1e-4, 'betas': (0.9, 0.999), 'eps': 1e-8,
+                      'weight_decay': 0.0, 'max_grad_norm': 1.0, 'max_epochs': 20,
+                      'patience': 3, 'min_delta': 0.0001, 'outer_fold': 0}
+            if (any(type(getattr(config, name)) is not type(value) or getattr(config, name) != value
+                    for name, value in frozen.items()) or config.recovery is not None
+                    or type(config.execution_enabled) is not bool):
+&gt;               raise ValueError('simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold')
+E               ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold
+
+src/knowledge_tracing/akt/config.py:217: ValueError</error></testcase><testcase classname="tests.akt.test_research_a0_online" name="test_native_loader_rejects_authenticated_inconsistent_payload_before_model[nonfinite]" time="0.000"><error message="failed on setup with &quot;ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold&quot;">@pytest.fixture(scope='module')
+    def native_case():
+        case = core_fixture.handmade()
+        config = replace(case['config'], run_id='a0-online-fixture-'+uuid.uuid4().hex[:10],
+            d_model=16, heads=2, d_ff=32, final_fc=16, batch_size=4, max_steps=2)
+        config = replace(config, output_dir=config.project_root/'experiments/akt/results'/config.run_id)
+        setup = condition.prepare_research_graph_condition(variant='A0', graph_mode='none',
+            bank=case['bank'], nodes=(), edges=(), train80=case['condition'].train80,
+            expected_sources=condition.source_inventory())
+        def index(phase):
+            return context.prepare_research_graph_context(phase, case['encoding'], setup,
+                limits=case['index'].limits, fit80_encoding_sha256=case['encoding'].identity,
+                context=config.context, target_block=config.target_block)
+        train_index, prediction_index = index(case['train']), index(case['prediction'])
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+&gt;           adapter = model.ResearchGraphAKTAdapter(config=config, encoding=case['encoding'],
+                index=train_index, condition=setup)
+
+tests/akt/test_research_a0_online.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/knowledge_tracing/akt/research_graph_model.py:294: in __init__
+    validate_config(config, cuda_profile=cuda_profile)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+config = AKTConfig(project_root=PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701'), output_dir=PosixPath('...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+
+    def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionProfile | None = None) -&gt; None:
+        if cuda_profile is not None:
+            if type(cuda_profile) is not ResearchCUDAExecutionProfile:
+                raise ValueError('exact typed CUDA research profile required')
+            cuda_profile.__post_init__()
+            if config.phase != 'simulator-research' or config.device != 'cuda':
+                raise ValueError('CUDA research profile requires explicit simulator-research CUDA config')
+        if config.recovery is not None:
+            from .recovery import validate_options
+            validate_options(config)
+        if config.project_root.resolve() != PROJECT_ROOT.resolve():
+            raise ValueError('project root must be the trusted repository root')
+        if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold', 'simulator-research'}:
+            raise ValueError('invalid phase')
+        if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,79}', config.run_id):
+            raise ValueError('invalid run_id')
+        if config.phase in {'smoke', 'cuda-smoke', 'pilot', 'fold'} and config.output_dir.name != config.run_id:
+            raise ValueError('run_id must namespace the output directory')
+        if config.phase == 'fold-readiness' and config.execution_enabled:
+            raise ValueError('fold readiness cannot enable execution')
+        if config.partition != 'development':
+            raise ValueError('invalid partition')
+        if config.graph or config.n_pid != 0:
+            raise ValueError('graph and Rasch inputs are unavailable')
+        if config.source_commit != SOURCE_COMMIT:
+            raise ValueError('invalid source commit')
+        if config.device not in {'cpu', 'cuda'} or config.outer_fold not in range(5):
+            raise ValueError('invalid device or fold')
+        if min(config.context, config.target_block, config.max_length, config.d_model,
+               config.heads, config.blocks, config.batch_size, config.threads, config.fetch_rows) &lt;= 0:
+            raise ValueError('invalid positive configuration')
+        if config.context + config.target_block &gt; config.max_length or config.d_model % config.heads:
+            raise ValueError('invalid window or model dimensions')
+        if (config.lr &lt;= 0 or config.eps &lt;= 0 or config.max_grad_norm &lt;= 0
+                or len(config.betas) != 2 or not all(0 &lt;= value &lt; 1 for value in config.betas)
+                or config.weight_decay &lt; 0 or not 0 &lt; config.inner_val_fraction &lt; 1
+                or config.patience &lt;= 0 or config.max_epochs &lt;= 0 or config.min_delta &lt; 0
+                or not 0 &lt;= config.dropout &lt; 1):
+            raise ValueError('invalid training configuration')
+        if config.inner_val_fraction != 0.1:
+            raise ValueError('protocol v1 requires the frozen 10% inner learner split')
+        for name in ('max_train_users', 'max_val_users', 'max_targets_per_side', 'max_total_targets',
+                     'max_steps', 'max_seconds', 'max_wall_seconds', 'max_rss_bytes', 'min_available_ram_bytes'):
+            value = getattr(config, name)
+            if value is not None and (not math.isfinite(float(value)) or value &lt;= 0):
+                raise ValueError(f'invalid resource cap: {name}')
+        if config.output_dir == Path('.'):
+            raise ValueError('invalid output')
+        root = config.project_root.resolve()
+        output = config.output_dir.resolve()
+        allowed = (root / 'experiments/akt/results', root / 'experiments/akt/readiness', root / 'artifacts/akt')
+        protected = (root / 'dataset', root / 'artifacts/bkt_baseline', root / 'venv', root / '.wsl')
+        if (any(output.is_relative_to(path.resolve()) for path in protected)
+                or not any(output.is_relative_to(path.resolve()) and output != path.resolve() for path in allowed)):
+            raise ValueError('protected output or output outside AKT directory')
+        if config.phase == 'fold' and output.parent != (root / 'experiments/akt/results').resolve():
+            raise ValueError('fold output must use a unique results run directory')
+        if config.phase in {'smoke','cuda-smoke'}:
+            required_device='cpu' if config.phase=='smoke' else 'cuda'
+            if (config.device != required_device or config.context != 100 or config.target_block != 100
+                    or config.d_model != 32 or config.heads != 4 or config.blocks != 1
+                    or config.d_ff != 64 or config.final_fc != 32 or config.batch_size &gt; 4
+                    or config.max_epochs != 1 or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 32
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 16
+                    or config.max_targets_per_side is None or not 1 &lt;= config.max_targets_per_side &lt;= 4096
+                    or (config.max_total_targets is not None and config.max_total_targets &gt; 8192)
+                    or config.max_steps is None or config.max_steps &gt; 20
+                    or config.max_seconds is None or config.max_seconds &gt; 120
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 300
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('smoke cap or architecture exceeded')
+        if config.phase == 'pilot':
+            if (config.device != 'cpu' or config.context != 100 or config.target_block != 100
+                    or config.d_model != 256 or config.heads != 8 or config.blocks != 1 or config.d_ff != 1024
+                    or config.batch_size &gt; 4 or config.max_epochs != 1
+                    or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 1024
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 256
+                    or config.max_total_targets is None or not 1 &lt;= config.max_total_targets &lt;= 100000
+                    or config.max_seconds is None or config.max_seconds &gt; 900
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 1200
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('pilot cap or architecture exceeded')
+        if config.phase == 'simulator-research':
+            # New scope only; no dataclass/default/hash change for historical phases.
+            frozen = {'device': 'cpu' if cuda_profile is None else 'cuda', 'seed': 42, 'context': 100, 'target_block': 100, 'max_length': 200,
+                      'd_model': 256, 'heads': 8, 'blocks': 1, 'd_ff': 1024, 'final_fc': 512,
+                      'dropout': 0.05, 'kq_same': 1, 'separate_qa': False, 'n_pid': 0, 'graph': False,
+                      'batch_size': 4, 'lr': 1e-4, 'betas': (0.9, 0.999), 'eps': 1e-8,
+                      'weight_decay': 0.0, 'max_grad_norm': 1.0, 'max_epochs': 20,
+                      'patience': 3, 'min_delta': 0.0001, 'outer_fold': 0}
+            if (any(type(getattr(config, name)) is not type(value) or getattr(config, name) != value
+                    for name, value in frozen.items()) or config.recovery is not None
+                    or type(config.execution_enabled) is not bool):
+&gt;               raise ValueError('simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold')
+E               ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold
+
+src/knowledge_tracing/akt/config.py:217: ValueError</error></testcase><testcase classname="tests.akt.test_research_a0_online" name="test_native_loader_rejects_authenticated_inconsistent_payload_before_model[digest]" time="0.000"><error message="failed on setup with &quot;ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold&quot;">@pytest.fixture(scope='module')
+    def native_case():
+        case = core_fixture.handmade()
+        config = replace(case['config'], run_id='a0-online-fixture-'+uuid.uuid4().hex[:10],
+            d_model=16, heads=2, d_ff=32, final_fc=16, batch_size=4, max_steps=2)
+        config = replace(config, output_dir=config.project_root/'experiments/akt/results'/config.run_id)
+        setup = condition.prepare_research_graph_condition(variant='A0', graph_mode='none',
+            bank=case['bank'], nodes=(), edges=(), train80=case['condition'].train80,
+            expected_sources=condition.source_inventory())
+        def index(phase):
+            return context.prepare_research_graph_context(phase, case['encoding'], setup,
+                limits=case['index'].limits, fit80_encoding_sha256=case['encoding'].identity,
+                context=config.context, target_block=config.target_block)
+        train_index, prediction_index = index(case['train']), index(case['prediction'])
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+&gt;           adapter = model.ResearchGraphAKTAdapter(config=config, encoding=case['encoding'],
+                index=train_index, condition=setup)
+
+tests/akt/test_research_a0_online.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/knowledge_tracing/akt/research_graph_model.py:294: in __init__
+    validate_config(config, cuda_profile=cuda_profile)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+config = AKTConfig(project_root=PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701'), output_dir=PosixPath('...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+
+    def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionProfile | None = None) -&gt; None:
+        if cuda_profile is not None:
+            if type(cuda_profile) is not ResearchCUDAExecutionProfile:
+                raise ValueError('exact typed CUDA research profile required')
+            cuda_profile.__post_init__()
+            if config.phase != 'simulator-research' or config.device != 'cuda':
+                raise ValueError('CUDA research profile requires explicit simulator-research CUDA config')
+        if config.recovery is not None:
+            from .recovery import validate_options
+            validate_options(config)
+        if config.project_root.resolve() != PROJECT_ROOT.resolve():
+            raise ValueError('project root must be the trusted repository root')
+        if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold', 'simulator-research'}:
+            raise ValueError('invalid phase')
+        if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,79}', config.run_id):
+            raise ValueError('invalid run_id')
+        if config.phase in {'smoke', 'cuda-smoke', 'pilot', 'fold'} and config.output_dir.name != config.run_id:
+            raise ValueError('run_id must namespace the output directory')
+        if config.phase == 'fold-readiness' and config.execution_enabled:
+            raise ValueError('fold readiness cannot enable execution')
+        if config.partition != 'development':
+            raise ValueError('invalid partition')
+        if config.graph or config.n_pid != 0:
+            raise ValueError('graph and Rasch inputs are unavailable')
+        if config.source_commit != SOURCE_COMMIT:
+            raise ValueError('invalid source commit')
+        if config.device not in {'cpu', 'cuda'} or config.outer_fold not in range(5):
+            raise ValueError('invalid device or fold')
+        if min(config.context, config.target_block, config.max_length, config.d_model,
+               config.heads, config.blocks, config.batch_size, config.threads, config.fetch_rows) &lt;= 0:
+            raise ValueError('invalid positive configuration')
+        if config.context + config.target_block &gt; config.max_length or config.d_model % config.heads:
+            raise ValueError('invalid window or model dimensions')
+        if (config.lr &lt;= 0 or config.eps &lt;= 0 or config.max_grad_norm &lt;= 0
+                or len(config.betas) != 2 or not all(0 &lt;= value &lt; 1 for value in config.betas)
+                or config.weight_decay &lt; 0 or not 0 &lt; config.inner_val_fraction &lt; 1
+                or config.patience &lt;= 0 or config.max_epochs &lt;= 0 or config.min_delta &lt; 0
+                or not 0 &lt;= config.dropout &lt; 1):
+            raise ValueError('invalid training configuration')
+        if config.inner_val_fraction != 0.1:
+            raise ValueError('protocol v1 requires the frozen 10% inner learner split')
+        for name in ('max_train_users', 'max_val_users', 'max_targets_per_side', 'max_total_targets',
+                     'max_steps', 'max_seconds', 'max_wall_seconds', 'max_rss_bytes', 'min_available_ram_bytes'):
+            value = getattr(config, name)
+            if value is not None and (not math.isfinite(float(value)) or value &lt;= 0):
+                raise ValueError(f'invalid resource cap: {name}')
+        if config.output_dir == Path('.'):
+            raise ValueError('invalid output')
+        root = config.project_root.resolve()
+        output = config.output_dir.resolve()
+        allowed = (root / 'experiments/akt/results', root / 'experiments/akt/readiness', root / 'artifacts/akt')
+        protected = (root / 'dataset', root / 'artifacts/bkt_baseline', root / 'venv', root / '.wsl')
+        if (any(output.is_relative_to(path.resolve()) for path in protected)
+                or not any(output.is_relative_to(path.resolve()) and output != path.resolve() for path in allowed)):
+            raise ValueError('protected output or output outside AKT directory')
+        if config.phase == 'fold' and output.parent != (root / 'experiments/akt/results').resolve():
+            raise ValueError('fold output must use a unique results run directory')
+        if config.phase in {'smoke','cuda-smoke'}:
+            required_device='cpu' if config.phase=='smoke' else 'cuda'
+            if (config.device != required_device or config.context != 100 or config.target_block != 100
+                    or config.d_model != 32 or config.heads != 4 or config.blocks != 1
+                    or config.d_ff != 64 or config.final_fc != 32 or config.batch_size &gt; 4
+                    or config.max_epochs != 1 or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 32
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 16
+                    or config.max_targets_per_side is None or not 1 &lt;= config.max_targets_per_side &lt;= 4096
+                    or (config.max_total_targets is not None and config.max_total_targets &gt; 8192)
+                    or config.max_steps is None or config.max_steps &gt; 20
+                    or config.max_seconds is None or config.max_seconds &gt; 120
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 300
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('smoke cap or architecture exceeded')
+        if config.phase == 'pilot':
+            if (config.device != 'cpu' or config.context != 100 or config.target_block != 100
+                    or config.d_model != 256 or config.heads != 8 or config.blocks != 1 or config.d_ff != 1024
+                    or config.batch_size &gt; 4 or config.max_epochs != 1
+                    or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 1024
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 256
+                    or config.max_total_targets is None or not 1 &lt;= config.max_total_targets &lt;= 100000
+                    or config.max_seconds is None or config.max_seconds &gt; 900
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 1200
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('pilot cap or architecture exceeded')
+        if config.phase == 'simulator-research':
+            # New scope only; no dataclass/default/hash change for historical phases.
+            frozen = {'device': 'cpu' if cuda_profile is None else 'cuda', 'seed': 42, 'context': 100, 'target_block': 100, 'max_length': 200,
+                      'd_model': 256, 'heads': 8, 'blocks': 1, 'd_ff': 1024, 'final_fc': 512,
+                      'dropout': 0.05, 'kq_same': 1, 'separate_qa': False, 'n_pid': 0, 'graph': False,
+                      'batch_size': 4, 'lr': 1e-4, 'betas': (0.9, 0.999), 'eps': 1e-8,
+                      'weight_decay': 0.0, 'max_grad_norm': 1.0, 'max_epochs': 20,
+                      'patience': 3, 'min_delta': 0.0001, 'outer_fold': 0}
+            if (any(type(getattr(config, name)) is not type(value) or getattr(config, name) != value
+                    for name, value in frozen.items()) or config.recovery is not None
+                    or type(config.execution_enabled) is not bool):
+&gt;               raise ValueError('simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold')
+E               ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold
+
+src/knowledge_tracing/akt/config.py:217: ValueError</error></testcase><testcase classname="tests.akt.test_research_a0_online" name="test_native_loader_rejects_authenticated_inconsistent_payload_before_model[payload_identity]" time="0.000"><error message="failed on setup with &quot;ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold&quot;">@pytest.fixture(scope='module')
+    def native_case():
+        case = core_fixture.handmade()
+        config = replace(case['config'], run_id='a0-online-fixture-'+uuid.uuid4().hex[:10],
+            d_model=16, heads=2, d_ff=32, final_fc=16, batch_size=4, max_steps=2)
+        config = replace(config, output_dir=config.project_root/'experiments/akt/results'/config.run_id)
+        setup = condition.prepare_research_graph_condition(variant='A0', graph_mode='none',
+            bank=case['bank'], nodes=(), edges=(), train80=case['condition'].train80,
+            expected_sources=condition.source_inventory())
+        def index(phase):
+            return context.prepare_research_graph_context(phase, case['encoding'], setup,
+                limits=case['index'].limits, fit80_encoding_sha256=case['encoding'].identity,
+                context=config.context, target_block=config.target_block)
+        train_index, prediction_index = index(case['train']), index(case['prediction'])
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+&gt;           adapter = model.ResearchGraphAKTAdapter(config=config, encoding=case['encoding'],
+                index=train_index, condition=setup)
+
+tests/akt/test_research_a0_online.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/knowledge_tracing/akt/research_graph_model.py:294: in __init__
+    validate_config(config, cuda_profile=cuda_profile)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+config = AKTConfig(project_root=PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701'), output_dir=PosixPath('...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+
+    def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionProfile | None = None) -&gt; None:
+        if cuda_profile is not None:
+            if type(cuda_profile) is not ResearchCUDAExecutionProfile:
+                raise ValueError('exact typed CUDA research profile required')
+            cuda_profile.__post_init__()
+            if config.phase != 'simulator-research' or config.device != 'cuda':
+                raise ValueError('CUDA research profile requires explicit simulator-research CUDA config')
+        if config.recovery is not None:
+            from .recovery import validate_options
+            validate_options(config)
+        if config.project_root.resolve() != PROJECT_ROOT.resolve():
+            raise ValueError('project root must be the trusted repository root')
+        if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold', 'simulator-research'}:
+            raise ValueError('invalid phase')
+        if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,79}', config.run_id):
+            raise ValueError('invalid run_id')
+        if config.phase in {'smoke', 'cuda-smoke', 'pilot', 'fold'} and config.output_dir.name != config.run_id:
+            raise ValueError('run_id must namespace the output directory')
+        if config.phase == 'fold-readiness' and config.execution_enabled:
+            raise ValueError('fold readiness cannot enable execution')
+        if config.partition != 'development':
+            raise ValueError('invalid partition')
+        if config.graph or config.n_pid != 0:
+            raise ValueError('graph and Rasch inputs are unavailable')
+        if config.source_commit != SOURCE_COMMIT:
+            raise ValueError('invalid source commit')
+        if config.device not in {'cpu', 'cuda'} or config.outer_fold not in range(5):
+            raise ValueError('invalid device or fold')
+        if min(config.context, config.target_block, config.max_length, config.d_model,
+               config.heads, config.blocks, config.batch_size, config.threads, config.fetch_rows) &lt;= 0:
+            raise ValueError('invalid positive configuration')
+        if config.context + config.target_block &gt; config.max_length or config.d_model % config.heads:
+            raise ValueError('invalid window or model dimensions')
+        if (config.lr &lt;= 0 or config.eps &lt;= 0 or config.max_grad_norm &lt;= 0
+                or len(config.betas) != 2 or not all(0 &lt;= value &lt; 1 for value in config.betas)
+                or config.weight_decay &lt; 0 or not 0 &lt; config.inner_val_fraction &lt; 1
+                or config.patience &lt;= 0 or config.max_epochs &lt;= 0 or config.min_delta &lt; 0
+                or not 0 &lt;= config.dropout &lt; 1):
+            raise ValueError('invalid training configuration')
+        if config.inner_val_fraction != 0.1:
+            raise ValueError('protocol v1 requires the frozen 10% inner learner split')
+        for name in ('max_train_users', 'max_val_users', 'max_targets_per_side', 'max_total_targets',
+                     'max_steps', 'max_seconds', 'max_wall_seconds', 'max_rss_bytes', 'min_available_ram_bytes'):
+            value = getattr(config, name)
+            if value is not None and (not math.isfinite(float(value)) or value &lt;= 0):
+                raise ValueError(f'invalid resource cap: {name}')
+        if config.output_dir == Path('.'):
+            raise ValueError('invalid output')
+        root = config.project_root.resolve()
+        output = config.output_dir.resolve()
+        allowed = (root / 'experiments/akt/results', root / 'experiments/akt/readiness', root / 'artifacts/akt')
+        protected = (root / 'dataset', root / 'artifacts/bkt_baseline', root / 'venv', root / '.wsl')
+        if (any(output.is_relative_to(path.resolve()) for path in protected)
+                or not any(output.is_relative_to(path.resolve()) and output != path.resolve() for path in allowed)):
+            raise ValueError('protected output or output outside AKT directory')
+        if config.phase == 'fold' and output.parent != (root / 'experiments/akt/results').resolve():
+            raise ValueError('fold output must use a unique results run directory')
+        if config.phase in {'smoke','cuda-smoke'}:
+            required_device='cpu' if config.phase=='smoke' else 'cuda'
+            if (config.device != required_device or config.context != 100 or config.target_block != 100
+                    or config.d_model != 32 or config.heads != 4 or config.blocks != 1
+                    or config.d_ff != 64 or config.final_fc != 32 or config.batch_size &gt; 4
+                    or config.max_epochs != 1 or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 32
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 16
+                    or config.max_targets_per_side is None or not 1 &lt;= config.max_targets_per_side &lt;= 4096
+                    or (config.max_total_targets is not None and config.max_total_targets &gt; 8192)
+                    or config.max_steps is None or config.max_steps &gt; 20
+                    or config.max_seconds is None or config.max_seconds &gt; 120
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 300
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('smoke cap or architecture exceeded')
+        if config.phase == 'pilot':
+            if (config.device != 'cpu' or config.context != 100 or config.target_block != 100
+                    or config.d_model != 256 or config.heads != 8 or config.blocks != 1 or config.d_ff != 1024
+                    or config.batch_size &gt; 4 or config.max_epochs != 1
+                    or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 1024
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 256
+                    or config.max_total_targets is None or not 1 &lt;= config.max_total_targets &lt;= 100000
+                    or config.max_seconds is None or config.max_seconds &gt; 900
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 1200
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('pilot cap or architecture exceeded')
+        if config.phase == 'simulator-research':
+            # New scope only; no dataclass/default/hash change for historical phases.
+            frozen = {'device': 'cpu' if cuda_profile is None else 'cuda', 'seed': 42, 'context': 100, 'target_block': 100, 'max_length': 200,
+                      'd_model': 256, 'heads': 8, 'blocks': 1, 'd_ff': 1024, 'final_fc': 512,
+                      'dropout': 0.05, 'kq_same': 1, 'separate_qa': False, 'n_pid': 0, 'graph': False,
+                      'batch_size': 4, 'lr': 1e-4, 'betas': (0.9, 0.999), 'eps': 1e-8,
+                      'weight_decay': 0.0, 'max_grad_norm': 1.0, 'max_epochs': 20,
+                      'patience': 3, 'min_delta': 0.0001, 'outer_fold': 0}
+            if (any(type(getattr(config, name)) is not type(value) or getattr(config, name) != value
+                    for name, value in frozen.items()) or config.recovery is not None
+                    or type(config.execution_enabled) is not bool):
+&gt;               raise ValueError('simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold')
+E               ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold
+
+src/knowledge_tracing/akt/config.py:217: ValueError</error></testcase><testcase classname="tests.akt.test_research_a0_online" name="test_native_loader_rejects_authenticated_inconsistent_payload_before_model[receipt]" time="0.000"><error message="failed on setup with &quot;ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold&quot;">@pytest.fixture(scope='module')
+    def native_case():
+        case = core_fixture.handmade()
+        config = replace(case['config'], run_id='a0-online-fixture-'+uuid.uuid4().hex[:10],
+            d_model=16, heads=2, d_ff=32, final_fc=16, batch_size=4, max_steps=2)
+        config = replace(config, output_dir=config.project_root/'experiments/akt/results'/config.run_id)
+        setup = condition.prepare_research_graph_condition(variant='A0', graph_mode='none',
+            bank=case['bank'], nodes=(), edges=(), train80=case['condition'].train80,
+            expected_sources=condition.source_inventory())
+        def index(phase):
+            return context.prepare_research_graph_context(phase, case['encoding'], setup,
+                limits=case['index'].limits, fit80_encoding_sha256=case['encoding'].identity,
+                context=config.context, target_block=config.target_block)
+        train_index, prediction_index = index(case['train']), index(case['prediction'])
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(42)
+&gt;           adapter = model.ResearchGraphAKTAdapter(config=config, encoding=case['encoding'],
+                index=train_index, condition=setup)
+
+tests/akt/test_research_a0_online.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/knowledge_tracing/akt/research_graph_model.py:294: in __init__
+    validate_config(config, cuda_profile=cuda_profile)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+config = AKTConfig(project_root=PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701'), output_dir=PosixPath('...ram_bytes=1073741824, protocol_version='akt-nr-exercise-v1', memory_mb=512, threads=2, fetch_rows=50000, recovery=None)
+
+    def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionProfile | None = None) -&gt; None:
+        if cuda_profile is not None:
+            if type(cuda_profile) is not ResearchCUDAExecutionProfile:
+                raise ValueError('exact typed CUDA research profile required')
+            cuda_profile.__post_init__()
+            if config.phase != 'simulator-research' or config.device != 'cuda':
+                raise ValueError('CUDA research profile requires explicit simulator-research CUDA config')
+        if config.recovery is not None:
+            from .recovery import validate_options
+            validate_options(config)
+        if config.project_root.resolve() != PROJECT_ROOT.resolve():
+            raise ValueError('project root must be the trusted repository root')
+        if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold', 'simulator-research'}:
+            raise ValueError('invalid phase')
+        if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,79}', config.run_id):
+            raise ValueError('invalid run_id')
+        if config.phase in {'smoke', 'cuda-smoke', 'pilot', 'fold'} and config.output_dir.name != config.run_id:
+            raise ValueError('run_id must namespace the output directory')
+        if config.phase == 'fold-readiness' and config.execution_enabled:
+            raise ValueError('fold readiness cannot enable execution')
+        if config.partition != 'development':
+            raise ValueError('invalid partition')
+        if config.graph or config.n_pid != 0:
+            raise ValueError('graph and Rasch inputs are unavailable')
+        if config.source_commit != SOURCE_COMMIT:
+            raise ValueError('invalid source commit')
+        if config.device not in {'cpu', 'cuda'} or config.outer_fold not in range(5):
+            raise ValueError('invalid device or fold')
+        if min(config.context, config.target_block, config.max_length, config.d_model,
+               config.heads, config.blocks, config.batch_size, config.threads, config.fetch_rows) &lt;= 0:
+            raise ValueError('invalid positive configuration')
+        if config.context + config.target_block &gt; config.max_length or config.d_model % config.heads:
+            raise ValueError('invalid window or model dimensions')
+        if (config.lr &lt;= 0 or config.eps &lt;= 0 or config.max_grad_norm &lt;= 0
+                or len(config.betas) != 2 or not all(0 &lt;= value &lt; 1 for value in config.betas)
+                or config.weight_decay &lt; 0 or not 0 &lt; config.inner_val_fraction &lt; 1
+                or config.patience &lt;= 0 or config.max_epochs &lt;= 0 or config.min_delta &lt; 0
+                or not 0 &lt;= config.dropout &lt; 1):
+            raise ValueError('invalid training configuration')
+        if config.inner_val_fraction != 0.1:
+            raise ValueError('protocol v1 requires the frozen 10% inner learner split')
+        for name in ('max_train_users', 'max_val_users', 'max_targets_per_side', 'max_total_targets',
+                     'max_steps', 'max_seconds', 'max_wall_seconds', 'max_rss_bytes', 'min_available_ram_bytes'):
+            value = getattr(config, name)
+            if value is not None and (not math.isfinite(float(value)) or value &lt;= 0):
+                raise ValueError(f'invalid resource cap: {name}')
+        if config.output_dir == Path('.'):
+            raise ValueError('invalid output')
+        root = config.project_root.resolve()
+        output = config.output_dir.resolve()
+        allowed = (root / 'experiments/akt/results', root / 'experiments/akt/readiness', root / 'artifacts/akt')
+        protected = (root / 'dataset', root / 'artifacts/bkt_baseline', root / 'venv', root / '.wsl')
+        if (any(output.is_relative_to(path.resolve()) for path in protected)
+                or not any(output.is_relative_to(path.resolve()) and output != path.resolve() for path in allowed)):
+            raise ValueError('protected output or output outside AKT directory')
+        if config.phase == 'fold' and output.parent != (root / 'experiments/akt/results').resolve():
+            raise ValueError('fold output must use a unique results run directory')
+        if config.phase in {'smoke','cuda-smoke'}:
+            required_device='cpu' if config.phase=='smoke' else 'cuda'
+            if (config.device != required_device or config.context != 100 or config.target_block != 100
+                    or config.d_model != 32 or config.heads != 4 or config.blocks != 1
+                    or config.d_ff != 64 or config.final_fc != 32 or config.batch_size &gt; 4
+                    or config.max_epochs != 1 or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 32
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 16
+                    or config.max_targets_per_side is None or not 1 &lt;= config.max_targets_per_side &lt;= 4096
+                    or (config.max_total_targets is not None and config.max_total_targets &gt; 8192)
+                    or config.max_steps is None or config.max_steps &gt; 20
+                    or config.max_seconds is None or config.max_seconds &gt; 120
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 300
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('smoke cap or architecture exceeded')
+        if config.phase == 'pilot':
+            if (config.device != 'cpu' or config.context != 100 or config.target_block != 100
+                    or config.d_model != 256 or config.heads != 8 or config.blocks != 1 or config.d_ff != 1024
+                    or config.batch_size &gt; 4 or config.max_epochs != 1
+                    or config.max_train_users is None or not 1 &lt;= config.max_train_users &lt;= 1024
+                    or config.max_val_users is None or not 1 &lt;= config.max_val_users &lt;= 256
+                    or config.max_total_targets is None or not 1 &lt;= config.max_total_targets &lt;= 100000
+                    or config.max_seconds is None or config.max_seconds &gt; 900
+                    or config.max_wall_seconds is None or config.max_wall_seconds &gt; 1200
+                    or config.max_rss_bytes is None or config.max_rss_bytes &gt; 2 * 1024**3
+                    or config.min_available_ram_bytes is None or config.min_available_ram_bytes &lt; 1024**3):
+                raise ValueError('pilot cap or architecture exceeded')
+        if config.phase == 'simulator-research':
+            # New scope only; no dataclass/default/hash change for historical phases.
+            frozen = {'device': 'cpu' if cuda_profile is None else 'cuda', 'seed': 42, 'context': 100, 'target_block': 100, 'max_length': 200,
+                      'd_model': 256, 'heads': 8, 'blocks': 1, 'd_ff': 1024, 'final_fc': 512,
+                      'dropout': 0.05, 'kq_same': 1, 'separate_qa': False, 'n_pid': 0, 'graph': False,
+                      'batch_size': 4, 'lr': 1e-4, 'betas': (0.9, 0.999), 'eps': 1e-8,
+                      'weight_decay': 0.0, 'max_grad_norm': 1.0, 'max_epochs': 20,
+                      'patience': 3, 'min_delta': 0.0001, 'outer_fold': 0}
+            if (any(type(getattr(config, name)) is not type(value) or getattr(config, name) != value
+                    for name, value in frozen.items()) or config.recovery is not None
+                    or type(config.execution_enabled) is not bool):
+&gt;               raise ValueError('simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold')
+E               ValueError: simulator research requires frozen CPU A0 policy; no graph/recovery/fake fold
+
+src/knowledge_tracing/akt/config.py:217: ValueError</error></testcase><testcase classname="tests.akt.test_online_simulator" name="test_online_matches_offline_with_global_blocks_oov_partial_and_future_invariance[sequence0]" time="5.895" /><testcase classname="tests.akt.test_online_simulator" name="test_online_matches_offline_with_global_blocks_oov_partial_and_future_invariance[sequence1]" time="0.247" /><testcase classname="tests.akt.test_online_simulator" name="test_loader_preserves_rng_and_rejects_domain_recipe_vocab_hash_and_nonselected_snapshot" time="0.218" /><testcase classname="tests.akt.test_online_simulator" name="test_reference_probes_snapshot_reset_and_learner_isolation_with_frozen_native_akt" time="0.187" /><testcase classname="tests.akt.test_online_simulator" name="test_checkpoint_without_simulator_identity_cannot_be_silently_assigned_to_simulator" time="0.091" /><testcase classname="tests.akt.test_online_simulator" name="test_export_does_not_reanchor_prebuilt_windows_when_context_is_not_multiple_of_block" time="0.112" /><testcase classname="tests.akt.test_online_simulator" name="test_default_100_100_geometry_keeps_legacy_window_predictions_and_online_boundary_parity" time="0.257" /><testcase classname="tests.akt.test_online_simulator" name="test_original_akt_has_no_elapsed_time_feature_despite_timestamped_api" time="0.149" /><testcase classname="tests.akt.test_online_simulator" name="test_batched_counterfactual_queries_match_sequential_without_cross_candidate_history" time="0.183" /><testcase classname="tests.akt.test_online_simulator" name="test_native_batched_windows_keep_padding_and_per_window_shapes_separate" time="0.095" /></testsuite></testsuites>

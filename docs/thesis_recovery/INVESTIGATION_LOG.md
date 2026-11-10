@@ -1096,3 +1096,7 @@ User chuyển ưu tiên sang nghiên cứu chính trong kịch bản7ngày. Back
 ## 10/11 — Colab CPU thay lượt kiểm local bị thiếu RAM
 
 Đã chuyển được lượt kiểm AKT sang Colab CPU có đủ RAM. Baseline đạt67/67, research core đạt113/113, không lỗi/bỏ qua; đã tải logs và JUnit về, kiểm CRC/SHA. Runtime kế thừa qua venv được ghi rõ; chưa full Gate, CUDA hoặc Main training. Modal0USD. Người dùng cho phép rõ gói nguồn275file sau rejection truyền nguồn. Local11, remote67+113 đã kiểm JUnit/SHA. Gói đóng275file có8contract docs. Không hạ guard4GiB, không khóa runtime/CUDA claim. Ghi nhận outputs rỗng cần quan sát lại, không suy PASS. Bundle colab-current-cpu-20261110-01. Next A0 checkpoint→online bridge.
+
+## 10/11 — checkpoint nghiên cứu A0 sang backend online
+
+Đã nối checkpoint nghiên cứu A0 vào dự báo tuần tự bằng loader tái dùng backend hiện có. Colab đạt22/22ca, gồm12mới và10hồi quy; checkpoint fixture48targets/2updates cho6dự báo khớp wrapper trong1e-6. Giữ lượt lỗi fixture, chưa final fitted/refit/calibration hoặc closed-loop chính. Actual epoch4 engineering chỉ kiểm metadata/SHA/nguồn, khôngTorch. Nguồn197/92, chưaGate. Đối chiếu recipe26 refit giữencoding90; loader không phát hành fittedcertificate hoặc grant. Hai báo cáo cập nhật,11SVG/17tables nguyên. Next current-source integration và final refit/calibration.

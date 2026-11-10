@@ -83,7 +83,8 @@ def handmade():
         max_train_users=8, max_val_users=1, max_targets_per_side=100, max_total_targets=200,
         max_steps=1, max_seconds=60., max_wall_seconds=90., max_rss_bytes=2*1024**3,
         min_available_ram_bytes=1024**3)
-    return dict(config=config, encoding=encoding, condition=setup, index=train_index,
+    return dict(config=config, bank=bank, train=train, prediction=prediction,
+        encoding=encoding, condition=setup, index=train_index,
         prediction_index=prediction_index, entries=entries)
 
 

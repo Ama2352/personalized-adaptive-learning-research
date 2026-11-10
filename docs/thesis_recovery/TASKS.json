@@ -653,12 +653,16 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "GPU full",
       "authorization_requirements": "EXPLICIT_EXPERIMENT_AND_BUDGET_APPROVAL",
-      "status": "PLANNED",
+      "status": "PARTIALLY_VERIFIED_ENGINEERING_MAIN_PENDING",
       "blockers": [
-        "Chưa train data/architecture"
+        "Đã có corpus và CPU engineering A0/A1, còn current Gate/CUDA, actual Main matrix và refit/calibration theo protocol."
       ],
       "execution_owner": "Codex",
-      "financial_constraint": "Freecredits-only30USDmonthly ceiling; out-of-pocket0; userreportedworkspacehonguyenminhsang2005. Measure cost/target before approved exactrun; no inherited larger envelope."
+      "financial_constraint": "Freecredits-only30USDmonthly ceiling; out-of-pocket0; userreportedworkspacehonguyenminhsang2005. Measure cost/target before approved exactrun; no inherited larger envelope.",
+      "evidence": [
+        "research_tracking/runs/akt-a0-online-colab-20261110-01/README.md"
+      ],
+      "a0_online_progress_vi": "Loader A0 complete-epoch đã kiểm fixture22ca trên Colab; chưa final fitted certificate, final refit/calibration hoặc Main closed-loop."
     },
     {
       "id": "T20",
@@ -687,9 +691,13 @@
       "authorization_requirements": "BOUNDED_EXPERIMENT_APPROVAL",
       "status": "PLANNED",
       "blockers": [
-        "Model checkpoints pending"
+        "Còn final Main checkpoints/refit/calibration và quyền đánh giá vòng kín; loader A0 mới đạt fixtures."
       ],
-      "execution_owner": "Codex"
+      "execution_owner": "Codex",
+      "evidence": [
+        "research_tracking/runs/akt-a0-online-colab-20261110-01/README.md"
+      ],
+      "a0_online_progress_vi": "Loader A0 complete-epoch đã kiểm fixture22ca trên Colab; chưa final fitted certificate, final refit/calibration hoặc Main closed-loop."
     },
     {
       "id": "T21",
@@ -4541,7 +4549,11 @@
       "files_components": "src/knowledge_tracing/akt/online.py; response_calibration.py; simulator_bridge.py; graphonline/fittedloader; controlledclosedloop/protocol21 exports; research_demo",
       "implementation_objective": "Validate graphrecipe/condition/checkpoint/initialbackbone/domain/vocab/phase/freeze/confidence/Tbindings trước backendconstruction; sharefrozenweights acrosssessions, historylearnerlocal. Connectpredict_many/reference84→calibration→mastery→ready→selectedactivity→worldresponse withtrace. Không dùng graphtrainingstate checkpoint làm fittedcertificate hoặc đổiJunyiindices đểdùngGrade10.",
       "acceptance_criteria": "Wrong/engineering/crossdomain/phase/freeze/temp artifacts reject; actualtrainedpredictions/readOnlyweights/currenthistorycorrect; roundtriptarget/coverage/OOV; controllerchaintrace/closedloopoutcomes theoapprovedunits. Benchmarklogicalreferencequeryworkload trướcforecastGPUcost; negativegraph/A0fallback đượcghi trungthực.",
-      "verification_steps": "Boundedloader/contract/syntheticconformance trước actualtrainedlifecycle+controlledDevelopmentevaluation authorizedseparately; no finalHoldout."
+      "verification_steps": "Boundedloader/contract/syntheticconformance trước actualtrainedlifecycle+controlledDevelopmentevaluation authorizedseparately; no finalHoldout.",
+      "evidence": [
+        "research_tracking/runs/akt-a0-online-colab-20261110-01/README.md"
+      ],
+      "a0_online_progress_vi": "Loader A0 complete-epoch đã kiểm fixture22ca trên Colab; chưa final fitted certificate, final refit/calibration hoặc Main closed-loop."
     },
     {
       "id": "RQDIAG13",
