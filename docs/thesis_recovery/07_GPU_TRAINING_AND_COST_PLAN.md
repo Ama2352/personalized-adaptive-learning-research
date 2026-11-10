@@ -2,6 +2,8 @@
 
 ## Cập nhật10/11 — CPU lifecycle đã đạt, chưa đủ điều kiện training Modal
 
+Lượt chuẩn bị refresh Gate source195 đã ghim chính xác91module theo API production. Dispatch collection13 bị ngưỡng4GiB chặn trước collect/test body, nên chưa có inventory IDs mới hoặc Gate PASS mới. Controller derivative chỉ đổi population195/91 và con trỏ worker, giữ guards/caps. Hồ sơ tiếp tục ở [gói chuẩn bị Gate195](../../research_tracking/runs/gate195-preparation-20261110-01/README.md). Cần có dư RAM ngoài4GiB tối thiểu ở thời điểm dispatch để giảm NO-GO do overhead/fluctuation; không hạ ngưỡng của controller.
+
 AKT graph-free và fixed-graph expert đã qua selected-fit CPU, nạp lại best checkpoint và xuất đủ84dự báo trên corpus engineering. AKT đã có bằng chứng public intentional complete-epoch pause/resume, còn unexpected fault recovery, Linux/CUDA hiện hành và độ bền storage cloud vẫn cần nghiệm thu. Chín điều kiện Main60/Junyi chưa có đủ kết quả fit. Không dùng bốn run engineering thay cho matrix nghiên cứu.
 
 Đường đọc chín bộ file vào thống kê đã nối với kernel cố định. Lượt synthetic1.260target ngày10/11 phát hiện cách mở lại CSV từng dòng vượt45giây. Scoped cursor mới giữ18handle trong context, đọc thành công trong11,807giây với peak57.769.984bytes, cùng45giây reader cap và71tests đạt. Hash từng dòng, kiểm identity/stamp khi mở–đóng, rehash toàn input cuối lượt và các giới hạn vẫn được áp dụng. Peak RAM được đọc sau lượt từ high-water mark của worker, chưa phải OS hard memory quota. Đây là đo xử lý artifact, chưa là training targets/giây. [Bằng chứng](../../research_tracking/runs/nine-file-scaling-20261110-01/README.md).

@@ -1,0 +1,24 @@
+--- windows_current_gate_worker03.py
++++ windows_current_gate_worker04.py
+@@ -65,8 +65,8 @@
+     need(set(inputs['support_document_sha256']) == expected_docs
+          and final['source_before']['support_document_sha256'] == final['source_after']['support_document_sha256']
+              == inputs['support_document_sha256'], 'separate current support document identity')
+-    need(type(build) is dict and len(build) == 183 and len(inputs['test_module_sha256']) == 85,
+-         'this ROOT-frozen183source/85module recipe only')
++    need(type(build) is dict and len(build) == 195 and len(inputs['test_module_sha256']) == 91,
++         'this ROOT-frozen195source/91module recipe only')
+     need(final['source_before'] == final['source_after'] and final['source_before']['gate_build_hashes'] == build
+          and final['root_freeze_reference'] == inputs['root_freeze_reference'], 'collection source freeze')
+     groups = inputs['module_groups']
+--- windows_current_gate_outer04.py
++++ windows_current_gate_outer05.py
+@@ -19,7 +19,7 @@
+ 
+ ROOT = Path(__file__).resolve().parents[4]
+ PREP = Path(__file__).resolve().parent
+-WORKER = PREP/'windows_current_gate_worker03.py'
++WORKER = PREP/'windows_current_gate_worker04.py'
+ HELPER = ROOT/'scripts/research/windows_owned_worker.py'
+ HELPER_SHA = '0dc8723170467e9ae73c4e233a357b9d584c66a8c183c478bdcff358fb0a95a1'
+ JUNIT = ROOT/'.venv/Lib/site-packages/_pytest/junitxml.py'

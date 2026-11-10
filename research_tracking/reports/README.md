@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 10/11 — Gate195 đã ghim nguồn, collection bị chặn RAM
+
+[Hồ sơ vận hành](../runs/gate195-preparation-20261110-01/README.md) xác nhận195sources/91modules. Collection13 dừng tại fresh4GiB trước GO, chưa có IDs/tests/PASS mới. Giữ derivative AST và failure để tiếp tục khi đủ điều kiện.
+
+
 ## 10/11 — reader đủ quy mô1.260target giả
 
 [Hồ sơ kiểm](../runs/nine-file-scaling-20261110-01/README.md) đạt71tests, reader11,807giây/45giây và peak57.769.984bytes. Giữ timeout cũ, cap18handle được đo riêng. Đây là đọc artifact, chưa là GPU training throughput.
