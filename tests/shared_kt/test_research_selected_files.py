@@ -159,6 +159,16 @@ class SelectedFilesTests(unittest.TestCase):
         return module.read_nine_selected_statistics(self.root, request_ref=self.json('request.json', request),
             population=population, io_limits=io_limits(), admission_limits=replace(admission_limits(), **changes))
 
+    def publish(self, request, population, *, output='research_tracking/runs/review-test', output_limit=None,
+                input_limit=None):
+        (self.root / 'research_tracking/runs').mkdir(parents=True, exist_ok=True)
+        logical = 'src/knowledge_tracing/akt/filesystem.py'
+        publisher = self.put(logical, (Path(__file__).resolve().parents[2] / logical).read_bytes())
+        return module.publish_nine_statistics_review(self.root, request_ref=self.json('request.json', request),
+            population=population, output_directory=output, atomic_publisher_ref=publisher,
+            io_limits=input_limit or replace(io_limits(), max_open_files=18), admission_limits=admission_limits(),
+            publication_limits=output_limit or module.StatisticsPublicationLimits(2**20, 512*1024, 15.))
+
     def test_nine_files_to_common_statistics_without_authority(self):
         result = self.read(*self.fixture())
         self.assertEqual((result.statistics.full_targets, result.statistics.common_targets, result.statistics.row_checks), (4, 3, 36))
@@ -250,6 +260,89 @@ class SelectedFilesTests(unittest.TestCase):
                 patch.object(reader_module, '_now', side_effect=lambda: clock() + (100 if constructed else 0)), \
                 self.assertRaisesRegex(ValueError, 'deadline'):
             self.read(request, population)
+
+    def test_publication_readback_and_no_selection_authority(self):
+        complete_ref = self.publish(*self.fixture())
+        complete = json.loads((self.root / complete_ref.path).read_bytes())
+        self.assertEqual(complete['status'], 'COMPLETE_CACHED_NINE_STATISTICS_REVIEW_V1')
+        self.assertTrue(complete['caller_operation_acceptance_required'])
+        self.assertFalse(complete['operation_receipts_accepted'] or complete['external_freeze_authority']
+                         or complete['main_refit_authorized'] or complete['actual_model_selection'])
+        self.assertFalse((self.root / complete_ref.path).with_name('FAILURE.json').exists())
+        for ref in complete['outputs'].values():
+            raw = (self.root / ref['path']).read_bytes()
+            self.assertEqual((hashlib.sha256(raw).hexdigest(), len(raw)), (ref['sha256'], ref['size_bytes']))
+
+    def test_publication_existing_run_and_protected_paths_rejected(self):
+        request, population = self.fixture()
+        directory = self.root / 'research_tracking/runs/review-test'
+        directory.mkdir(parents=True)
+        (directory / 'sentinel.txt').write_bytes(b'keep')
+        with self.assertRaisesRegex(ValueError, 'Never overwrite'):
+            self.publish(request, population)
+        self.assertEqual((directory / 'sentinel.txt').read_bytes(), b'keep')
+        for path in ('dataset/new', 'artifacts/bkt_baseline/new', 'research_tracking/runs/../new'):
+            with self.subTest(path=path), self.assertRaises(ValueError):
+                self.publish(request, population, output=path)
+
+    def test_publication_quota_keeps_failure_without_complete(self):
+        with self.assertRaisesRegex(ValueError, 'output quota'):
+            self.publish(*self.fixture(), output_limit=module.StatisticsPublicationLimits(18000, 8192, 15.))
+        directory = self.root / 'research_tracking/runs/review-test'
+        self.assertTrue((directory / 'FAILURE.json').is_file())
+        self.assertFalse((directory / 'COMPLETE.json').exists())
+        self.assertLessEqual(sum(path.stat().st_size for path in directory.iterdir()), 18000)
+
+    def test_publication_input_budget_is_not_reset_after_statistics(self):
+        request, population = self.fixture()
+        read = self.read(request, population)
+        limits = replace(io_limits(), max_open_files=18,
+                         max_total_read_bytes=io_limits().max_file_bytes + read.bytes_read // 2)
+        with self.assertRaisesRegex(ValueError, 'remaining cumulative input byte budget'):
+            self.publish(request, population, input_limit=limits)
+        self.assertFalse((self.root / 'research_tracking/runs/review-test').exists())
+
+    def test_publication_input_mutation_after_complete_has_failure_override(self):
+        request, population = self.fixture()
+        original = module.publish_new_file
+
+        def mutate(source, destination):
+            original(source, destination)
+            (self.root / 'snapshots/producer.py').write_bytes(b'# changed after COMPLETE\n')
+
+        with patch.object(module, 'publish_new_file', side_effect=mutate), self.assertRaises(ValueError):
+            self.publish(request, population)
+        directory = self.root / 'research_tracking/runs/review-test'
+        self.assertTrue((directory / 'COMPLETE.json').is_file() and (directory / 'FAILURE.json').is_file())
+
+    def test_publication_output_mutation_after_complete_rejected(self):
+        request, population = self.fixture()
+        original = module.publish_new_file
+
+        def mutate(source, destination):
+            original(source, destination)
+            path = destination.parent / 'statistics.json'
+            path.write_bytes(path.read_bytes().replace(b'"full_targets":4', b'"full_targets":3'))
+
+        with patch.object(module, 'publish_new_file', side_effect=mutate), self.assertRaisesRegex(ValueError, 'SHA mismatch'):
+            self.publish(request, population)
+        self.assertTrue((self.root / 'research_tracking/runs/review-test/FAILURE.json').is_file())
+
+    def test_publication_deadline_after_complete_keeps_failure(self):
+        request, population = self.fixture()
+        publish, clock = module.publish_new_file, module._publication_clock
+        complete_written = False
+
+        def late(source, destination):
+            nonlocal complete_written
+            publish(source, destination)
+            complete_written = True
+
+        with patch.object(module, 'publish_new_file', side_effect=late), \
+                patch.object(module, '_publication_clock', side_effect=lambda: clock() + (100 if complete_written else 0)), \
+                self.assertRaisesRegex(ValueError, 'deadline'):
+            self.publish(request, population)
+        self.assertTrue((self.root / 'research_tracking/runs/review-test/FAILURE.json').is_file())
 
 
 if __name__ == '__main__':

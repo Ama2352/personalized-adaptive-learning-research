@@ -1,10 +1,16 @@
 """Ghép chín bộ file selected-only thành thống kê trên quần thể chung.
 
-Chỉ đọc các refs trong request đã pin. Chưa nghiệm thu operation/late-failure,
-chọn winner, ghi freeze hoặc cấp quyền refit. Tái dùng accumulator đã cố định.
+Đọc các refs trong request đã pin và có thể công bố gói review thống kê mới.
+Chưa chọn winner, ghi freeze hoặc cấp quyền refit. Tái dùng accumulator đã cố định.
 """
 from dataclasses import asdict, dataclass, replace
 from contextlib import ExitStack
+import hashlib
+import math
+import os
+from pathlib import Path, PurePosixPath
+import re
+import time
 
 from .research_admission import AdmissionLimits, MainAdmissionAccumulator, MainAdmissionStatistics, PopulationExpectation
 from .research_selected_metadata import validate_selected_metadata, DOCUMENT_ROLES, ARTIFACT_ROLES
@@ -12,6 +18,9 @@ from .research_selected_rows import _exact_fields, normalize_selected_row
 from .research_selection import REQUIRED_CANDIDATE_IDS
 from .research_selection_io import BoundedArtifactReader, FileReadLimits, FileRef, need
 from .research_selected_checkpoint import _json
+from .akt.filesystem import publish_new_file
+
+_publication_clock = time.perf_counter
 
 REQUIRED_SOURCES = tuple('src/knowledge_tracing/' + name for name in (
     'research_admission.py', 'research_selection.py', 'research_population.py', 'research_selection_io.py',
@@ -31,6 +40,20 @@ class SelectedFileStatistics:
     operation_receipts_accepted: bool = False
     external_freeze_authority: bool = False
     main_refit_authorized: bool = False
+
+
+@dataclass(frozen=True)
+class StatisticsPublicationLimits:
+    max_output_bytes: int
+    max_file_bytes: int
+    max_seconds: float
+
+    def __post_init__(self):
+        need(type(self.max_output_bytes) is int and type(self.max_file_bytes) is int
+             and 8192 <= self.max_file_bytes <= self.max_output_bytes - 8192 <= 2**30,
+             'Explicit output quota with failure reserve required')
+        need(type(self.max_seconds) in (int, float) and math.isfinite(self.max_seconds)
+             and 0 < self.max_seconds <= 120, 'Finite publication time cap required')
 
 
 def _refs(document):
@@ -115,3 +138,131 @@ def read_nine_selected_statistics(root, *, request_ref, population, io_limits, a
             final['bytes_read'], final['index_entries'], final['elapsed_seconds'])
         reader._guard()
         return result
+
+
+def _review_directory(root, relative):
+    need(type(relative) is str, 'Relative review directory required')
+    path = PurePosixPath(relative)
+    need(len(path.parts) == 3 and path.parts[:2] == ('research_tracking', 'runs')
+         and path.as_posix() == relative and re.fullmatch('[a-z0-9][a-z0-9_-]{2,100}', path.name) is not None,
+         'One named review run under research_tracking/runs required')
+    cursor = root
+    for part in ('', *path.parts):
+        cursor = cursor / part
+        need(not cursor.is_symlink() and not getattr(cursor, 'is_junction', lambda: False)(),
+             'Review directory ancestor alias forbidden')
+    need(root.resolve() == root and cursor.resolve() == cursor and cursor.parent.is_dir(),
+         'Physical existing review parent required')
+    return cursor
+
+
+def publish_nine_statistics_review(root, *, request_ref, population, output_directory, atomic_publisher_ref,
+                                   io_limits, admission_limits, publication_limits):
+    """Ghi review thống kê mới, giữ failure ưu tiên hơn COMPLETE khi có lỗi muộn.
+
+    COMPLETE chỉ mô tả gói cached statistics. Caller phải nghiệm thu operation
+    sau khi hàm trả về. Chưa có quyền selection, external freeze hoặc refit.
+    """
+    need(type(publication_limits) is StatisticsPublicationLimits, 'Typed publication limits required')
+    publication_limits.__post_init__()
+    need(type(atomic_publisher_ref) is FileRef
+         and atomic_publisher_ref.path == 'src/knowledge_tracing/akt/filesystem.py', 'Pinned atomic publisher required')
+    started = _publication_clock()
+    root = Path(root).absolute()
+    directory = _review_directory(root, output_directory)
+    need(not directory.exists(), 'Never overwrite an existing review run')
+    total_seconds = min(io_limits.max_seconds, publication_limits.max_seconds)
+
+    def guard():
+        elapsed = _publication_clock() - started
+        need(math.isfinite(elapsed) and 0 <= elapsed < total_seconds, 'Publication cumulative deadline exceeded')
+        need(_review_directory(root, output_directory) == directory, 'Review directory changed')
+        return elapsed
+
+    result = read_nine_selected_statistics(root, request_ref=request_ref, population=population,
+        io_limits=replace(io_limits, max_seconds=total_seconds), admission_limits=admission_limits)
+    input_refs = (*result.verified_files, atomic_publisher_ref)
+    guard()
+    remaining_bytes = io_limits.max_total_read_bytes - result.bytes_read
+    need(remaining_bytes >= io_limits.max_file_bytes, 'No remaining cumulative input byte budget')
+    directory.mkdir(exist_ok=False)
+    written_bytes, outputs = 0, {}
+
+    def write(name, payload):
+        nonlocal written_bytes
+        guard()
+        raw = (_json(payload) + '\n').encode('utf-8')
+        need(len(raw) <= publication_limits.max_file_bytes
+             and written_bytes + len(raw) <= publication_limits.max_output_bytes - 8192,
+             'Publication output quota before write')
+        path = directory / name
+        with path.open('xb') as stream:
+            stream.write(raw)
+            stream.flush()
+            os.fsync(stream.fileno())
+        written_bytes += len(raw)
+        with path.open('rb') as stream:
+            need(stream.read(len(raw) + 1) == raw, 'Publication readback mismatch')
+        guard()
+        return FileRef(path.relative_to(root).as_posix(), hashlib.sha256(raw).hexdigest(), len(raw))
+
+    def verify_outputs():
+        guard()
+        for ref in outputs.values():
+            path = root / ref.path
+            need(not path.is_symlink() and path.is_file() and path.stat().st_size == ref.size_bytes,
+                 'Publication output identity/size mismatch')
+            with path.open('rb') as stream:
+                raw = stream.read(ref.size_bytes + 1)
+            need(len(raw) == ref.size_bytes and hashlib.sha256(raw).hexdigest() == ref.sha256,
+                 'Publication output SHA mismatch')
+        guard()
+
+    try:
+        outputs['statistics.json'] = write('statistics.json', asdict(result.statistics))
+        outputs['coverage.json'] = write('coverage.json', dict(full_targets=result.statistics.full_targets,
+            common_targets=result.statistics.common_targets, learners=[asdict(row) for row in result.statistics.learner_coverage],
+            candidates=[asdict(row) for row in result.statistics.candidate_coverage]))
+        outputs['input-inventory.json'] = write('input-inventory.json', dict(request=asdict(request_ref),
+            population=asdict(population), files=[asdict(ref) for ref in input_refs],
+            operation_receipts_accepted=False, external_freeze_authority=False, main_refit_authorized=False))
+        remaining_seconds = total_seconds - guard()
+        verification_limits = replace(io_limits, max_total_read_bytes=remaining_bytes, max_seconds=remaining_seconds)
+        with BoundedArtifactReader(root, verification_limits) as reader:
+            for ref in input_refs:
+                reader.verify_file(ref)
+            verify_outputs()
+            complete = dict(schema_version=1, status='COMPLETE_CACHED_NINE_STATISTICS_REVIEW_V1',
+                scope=REQUEST_SCOPE, request_sha256=request_ref.sha256,
+                outputs={name: asdict(ref) for name, ref in outputs.items()},
+                operation_receipts_accepted=False, external_freeze_authority=False,
+                main_refit_authorized=False, actual_model_selection=False,
+                failure_marker='FAILURE.json', caller_operation_acceptance_required=True)
+            pending = write('COMPLETE.pending.json', complete)
+            guard()
+            publish_new_file(root / pending.path, directory / 'COMPLETE.json')
+            complete_ref = FileRef((directory / 'COMPLETE.json').relative_to(root).as_posix(), pending.sha256, pending.size_bytes)
+            outputs['COMPLETE.json'] = complete_ref
+            guard()
+            reader.verify_unchanged()
+            need(result.bytes_read + reader.bytes_read <= io_limits.max_total_read_bytes, 'Cumulative input quota exceeded')
+            verify_outputs()
+            need({path.name for path in directory.iterdir()} == set(outputs), 'Unexpected publication file')
+            guard()
+        return complete_ref
+    except BaseException as error:
+        failure = dict(status='FAILED_CACHED_STATISTICS_REVIEW_DO_NOT_ACCEPT', error_type=type(error).__name__,
+            error=str(error)[:512], COMPLETE_is_not_authority=True, automatic_retry=False,
+            external_freeze_authority=False, main_refit_authorized=False)
+        try:
+            _review_directory(root, output_directory)
+            raw = (_json(failure) + '\n').encode('utf-8')
+            need(len(raw) <= 8192 and written_bytes + len(raw) <= publication_limits.max_output_bytes,
+                 'Reserved failure quota')
+            with (directory / 'FAILURE.json').open('xb') as stream:
+                stream.write(raw)
+                stream.flush()
+                os.fsync(stream.fileno())
+        except BaseException as secondary:
+            error.add_note('Failure receipt unavailable: ' + type(secondary).__name__)
+        raise

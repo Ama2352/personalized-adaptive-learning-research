@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 10/11 — chốt gói review thống kê, chuyển ưu tiên sang nghiên cứu
+
+[Hồ sơ78tests](../research_tracking/runs/nine-review-publication-20261110-01/README.md) giữ input/output hashes, lỗi muộn và quota. Đây là fixtures, chưa Main freeze. Dừng mở rộng tổng quát khi chưa có thí nghiệm bị chặn.
+
+
 ## 10/11 — sổ khoảng trống và tiến độ đã đối chiếu lại
 
 [Hồ sơ audit](../research_tracking/runs/research-readiness-reconciliation-20261110-01/README.md) xác nhận3PDF chuẩn,14gap hiện hành và cập nhật8parent tasks. Giữ178IDs,11SVG và17tables. Không có kết quả nghiên cứu mới; hai file GVHD đã làm rõ trạng thái chuẩn bị.
