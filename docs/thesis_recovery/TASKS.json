@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "roadmap_version": "1.0",
-  "as_of": "2026-11-09",
+  "as_of": "2026-11-10",
   "execution_authorized": false,
   "approval_rule": "Không tự approve methodology, data execution, cloud spend, full CV, Holdout hoặc final selection",
   "tasks": [
@@ -27,11 +27,21 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "local",
       "authorization_requirements": "SAFE",
-      "status": "PLANNED",
+      "status": "PARTIALLY_VERIFIED_CANONICAL_PDF_IDENTITIES_REQUIREMENT_REVIEW_PENDING",
       "blockers": [
         "Sẵn sàng"
       ],
-      "execution_owner": "Codex"
+      "execution_owner": "Codex",
+      "verification_update_20261110": {
+        "id": "T01",
+        "previous_status": "PLANNED",
+        "status": "PARTIALLY_VERIFIED_CANONICAL_PDF_IDENTITIES_REQUIREMENT_REVIEW_PENDING",
+        "evidence": [
+          "docs/thesis_recovery/02_RESEARCH_TRACEABILITY.md",
+          "research_tracking/runs/research-readiness-reconciliation-20261110-01/README.md"
+        ],
+        "verified_scope_and_remaining_vi": "Ba PDF chuẩn có mặt và khớp bytes file người dùng cung cấp, review đầy đủ requirements/owner/article còn riêng."
+      }
     },
     {
       "id": "T02",
@@ -204,7 +214,7 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "local",
       "authorization_requirements": "SAFE_ENGINEERING_AFTER_INSTRUCTION",
-      "status": "PARTIALLY_VERIFIED",
+      "status": "PARTIALLY_VERIFIED_CPU_CHECKPOINT_EXPORT_AND_IO_UNEXPECTED_FAULT_PENDING",
       "blockers": [
         "Windows native no-overwrite publish và existing integration verified, Linux GPU/Volume validation pending"
       ],
@@ -212,7 +222,17 @@
       "evidence": [
         "evidence/b0-filesystem-tests-20261107.log",
         "evidence/b0-full-tests-20261107.log"
-      ]
+      ],
+      "verification_update_20261110": {
+        "id": "T07",
+        "previous_status": "PARTIALLY_VERIFIED",
+        "status": "PARTIALLY_VERIFIED_CPU_CHECKPOINT_EXPORT_AND_IO_UNEXPECTED_FAULT_PENDING",
+        "evidence": [
+          "research_tracking/runs/akt-public-selected-resume-20261110-01/README.md",
+          "research_tracking/runs/nine-file-scaling-20261110-01/README.md"
+        ],
+        "verified_scope_and_remaining_vi": "Có CPU best exports, complete-epoch resume và file IO, không đóng failure Task14/Junyi hoặc cloud recovery."
+      }
     },
     {
       "id": "T08",
@@ -377,14 +397,23 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "bounded CPU",
       "authorization_requirements": "METHOD_AND_BOUNDED_APPROVAL",
-      "status": "PLANNED",
+      "status": "PARTIALLY_VERIFIED_TRAIN48_METHOD24_CONDITIONS_MAIN_EDGE_EVALUATION_PENDING",
       "blockers": [
         "Identifiability cần kiểm"
       ],
       "execution_owner": "Codex",
       "engineering_worker_status": "21PURE_PASS_NATIVE_SOLVER_PENDING",
       "engineering_worker_evidence": "research_tracking/runs/edge-confidence-worker-engineering-20261108-01",
-      "actual_solver_fits": 0
+      "actual_solver_fits": 0,
+      "verification_update_20261110": {
+        "id": "T12",
+        "previous_status": "PLANNED",
+        "status": "PARTIALLY_VERIFIED_TRAIN48_METHOD24_CONDITIONS_MAIN_EDGE_EVALUATION_PENDING",
+        "evidence": [
+          "research_tracking/runs/main60-graph-condition-binding-20261110-01/README.md"
+        ],
+        "verified_scope_and_remaining_vi": "Sáu condition Main60 đã bind artifact train48, edge-confidence quality/oracle separation/evaluation chính còn thiếu."
+      }
     },
     {
       "id": "T13",
@@ -537,7 +566,7 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "GPU bounded/full",
       "authorization_requirements": "MODEL_PROTOCOL_AND_EXECUTION_APPROVAL",
-      "status": "PARTIALLY_VERIFIED_SAKT_PRIMITIVES_SELECTED_METADATA35_NATIVE_PRODUCER_PENDING",
+      "status": "PARTIALLY_VERIFIED_SELECTED_CPU_ENGINEERING_MAIN_FIT_AND_ONLINE_PENDING",
       "blockers": [
         "Chưa source pinned"
       ],
@@ -547,7 +576,16 @@
         "src/knowledge_tracing/sakt/research_runner.py",
         "research_tracking/runs/neural-selected-producer-metadata62-20261110-01/README.md"
       ],
-      "reconciliation_scope_vi": "Đối chiếu tiến độ component, không coi metadata/core là main fit hoặc hoàn tất RQ. Giữ mục tiêu và acceptance gốc."
+      "reconciliation_scope_vi": "Đối chiếu tiến độ component, không coi metadata/core là main fit hoặc hoàn tất RQ. Giữ mục tiêu và acceptance gốc.",
+      "verification_update_20261110": {
+        "id": "T17",
+        "previous_status": "PARTIALLY_VERIFIED_SAKT_PRIMITIVES_SELECTED_METADATA35_NATIVE_PRODUCER_PENDING",
+        "status": "PARTIALLY_VERIFIED_SELECTED_CPU_ENGINEERING_MAIN_FIT_AND_ONLINE_PENDING",
+        "evidence": [
+          "research_tracking/runs/sakt-selected-engineering-20261110-01/README.md"
+        ],
+        "verified_scope_and_remaining_vi": "SAKT có actual selected CPU6epochs/best1/full84exports, chưa main fits/online comparator đầy đủ."
+      }
     },
     {
       "id": "T18",
@@ -573,11 +611,20 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "GPU bounded/full",
       "authorization_requirements": "MODEL_PROTOCOL_AND_EXECUTION_APPROVAL",
-      "status": "IN_PROGRESS",
+      "status": "PARTIALLY_VERIFIED_SELECTED_CPU_ENGINEERING_MAIN_FIT_AND_ONLINE_PENDING",
       "blockers": [
         "Chưa chọn variant"
       ],
-      "execution_owner": "Codex"
+      "execution_owner": "Codex",
+      "verification_update_20261110": {
+        "id": "T18",
+        "previous_status": "IN_PROGRESS",
+        "status": "PARTIALLY_VERIFIED_SELECTED_CPU_ENGINEERING_MAIN_FIT_AND_ONLINE_PENDING",
+        "evidence": [
+          "research_tracking/runs/gkt-selected-engineering-20261110-01/README.md"
+        ],
+        "verified_scope_and_remaining_vi": "GKT có actual selected CPU11epochs/best6/full84exports, chưa main fits/online comparator đầy đủ."
+      }
     },
     {
       "id": "T19",
@@ -742,7 +789,7 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "local",
       "authorization_requirements": "SAFE_WRITING",
-      "status": "IN_PROGRESS",
+      "status": "IN_PROGRESS_E13_EVIDENCE_BOUND_DRAFT_FINAL_THESIS_AND_ARTICLE_PENDING",
       "blockers": [
         "Chưa manuscript tích hợp"
       ],
@@ -751,7 +798,16 @@
       "latest_rq1_draft_sources": "research_tracking/reports/THESIS_RQ1_MECHANISMS_DRAFT_20261109.sources.json",
       "writing_limitations": "Chương kết quả RQ1 dạng draft có bằng chứng, chưa hoàn chỉnh RQ2/RQ3/thesis/article/defense",
       "latest_rq1_source_review": "docs/thesis_recovery/evidence/thesis_rq1_mechanisms_review_20261109.md",
-      "latest_rq1_revision": "E5/E6 peer review và Root kiểm29sources/12links, bundle57d98aed; RQ1 còn mở."
+      "latest_rq1_revision": "E5/E6 peer review và Root kiểm29sources/12links, bundle57d98aed; RQ1 còn mở.",
+      "verification_update_20261110": {
+        "id": "T23",
+        "previous_status": "IN_PROGRESS",
+        "status": "IN_PROGRESS_E13_EVIDENCE_BOUND_DRAFT_FINAL_THESIS_AND_ARTICLE_PENDING",
+        "evidence": [
+          "research_tracking/runs/thesis-rq1-e13-full-panel-20261110-01/README.md"
+        ],
+        "verified_scope_and_remaining_vi": "E13 đã nối vào bản thảo, chưa đủ thesis, bài báo hoặc defense package hoàn chỉnh."
+      }
     },
     {
       "id": "T24",
@@ -4281,8 +4337,17 @@
       "elapsed_duration": "Chưa đo",
       "compute_cost_category": "local_CPU_preparation; GRAPH15 actualGPU separately_authorized",
       "authorization_requirements": "User đã giao localengineering; Root review finite commands/caps trước execution. FullCV/Holdout/finalselection/paidGPU vẫn quyền riêng, không chiModal từ taskstatus.",
-      "status": "IN_PROGRESS_TYPED_CLAIMS8_MAIN_SELECTED_ONLY_PRODUCER_PENDING",
-      "blockers": []
+      "status": "PARTIALLY_VERIFIED_FOUR_ENGINEERING_PRODUCERS_NINE_MAIN_RECEIPTS_PENDING",
+      "blockers": [],
+      "verification_update_20261110": {
+        "id": "GRAPH12",
+        "previous_status": "IN_PROGRESS_TYPED_CLAIMS8_MAIN_SELECTED_ONLY_PRODUCER_PENDING",
+        "status": "PARTIALLY_VERIFIED_FOUR_ENGINEERING_PRODUCERS_NINE_MAIN_RECEIPTS_PENDING",
+        "evidence": [
+          "research_tracking/runs/selected-operation-reconciliation-20261110-01/README.md"
+        ],
+        "verified_scope_and_remaining_vi": "Bốn controller engineering đã đối chiếu, chưa đủ9Main selected receipts, không cấp refit."
+      }
     },
     {
       "id": "GRAPH13",
@@ -4307,7 +4372,7 @@
       "elapsed_duration": "Chưa đo",
       "compute_cost_category": "local_CPU_preparation; GRAPH15 actualGPU separately_authorized",
       "authorization_requirements": "User đã giao localengineering; Root review finite commands/caps trước execution. FullCV/Holdout/finalselection/paidGPU vẫn quyền riêng, không chiModal từ taskstatus.",
-      "status": "IN_PROGRESS_STATISTICS8_TYPED_ADMISSION8_DISK_DRIVER_FREEZE_PENDING",
+      "status": "PARTIALLY_VERIFIED_NINE_FILE_STATISTICS_SCALED1260_CLOSED_FREEZE_PENDING",
       "blockers": [],
       "verified_cases": 8,
       "remaining_scope": [
@@ -4315,7 +4380,17 @@
         "Externallypinnedclosedfreeze consumption byrefitentry"
       ],
       "evidence_bundle": "research_tracking/runs/research-selection-kernel-engineering-20261109-01",
-      "additional_evidence_bundle": "research_tracking/runs/research-admission-core-engineering-20261109-01"
+      "additional_evidence_bundle": "research_tracking/runs/research-admission-core-engineering-20261109-01",
+      "verification_update_20261110": {
+        "id": "GRAPH13",
+        "previous_status": "IN_PROGRESS_STATISTICS8_TYPED_ADMISSION8_DISK_DRIVER_FREEZE_PENDING",
+        "status": "PARTIALLY_VERIFIED_NINE_FILE_STATISTICS_SCALED1260_CLOSED_FREEZE_PENDING",
+        "evidence": [
+          "research_tracking/runs/nine-selected-file-statistics-20261110-01/README.md",
+          "research_tracking/runs/nine-file-scaling-20261110-01/README.md"
+        ],
+        "verified_scope_and_remaining_vi": "Reader/metadata/rows/accumulator/kernel đã nối bằng fixtures, còn independent operation review, late-failure và publication."
+      }
     },
     {
       "id": "GRAPH14",
@@ -6029,5 +6104,39 @@
     "canonical": "PDF",
     "notebook": "PRECURSOR",
     "missing_final_source_blocks_execution": false
-  }
+  },
+  "last_evidence_audit": "research_tracking/runs/research-readiness-reconciliation-20261110-01",
+  "current_execution_owner": "Codex Root, tuần tự, không subagent theo yêu cầu tiết kiệm tài nguyên",
+  "current_execution_queue": [
+    {
+      "id": "GRAPH13",
+      "action_vi": "Hoàn thiện đóng kết quả độc quyền và review late-failure trên fixtures",
+      "stop_before_vi": "Actual final selection/refit khi chưa có grant và đủ9fit"
+    },
+    {
+      "id": "T08",
+      "action_vi": "Hoàn tất shared code rồi collect/Gate mới khi dư RAM4GiB; chuẩn bị máy Linux/CUDA",
+      "stop_before_vi": "Không bỏ Gate hoặc tự dùng Modal"
+    },
+    {
+      "id": "T16",
+      "action_vi": "Kiểm và hoàn thiện producer Junyi theo split/vocabulary đã chốt",
+      "stop_before_vi": "Không sửa split, dùng Holdout hoặc tự chạy fullCV"
+    },
+    {
+      "id": "T20",
+      "action_vi": "Chuẩn bị matrix noise/history/profile theo đề cương và controls đã có",
+      "stop_before_vi": "Không chạy thí nghiệm ngoài authorization hoặc đổi phương pháp ngầm"
+    },
+    {
+      "id": "T21",
+      "action_vi": "Nối hợp đồng fitted models vào demo khi có artifact hợp lệ",
+      "stop_before_vi": "Không coi viewer lịch sử là demo người học mới đã hoàn tất"
+    },
+    {
+      "id": "T23",
+      "action_vi": "Viết tiếp từ claim ledger đã đóng, giữ phân biệt evidence và giới hạn",
+      "stop_before_vi": "Không tự gửi báo cáo hoặc claim ưu thế CG-AKT khi chưa có kết quả"
+    }
+  ]
 }

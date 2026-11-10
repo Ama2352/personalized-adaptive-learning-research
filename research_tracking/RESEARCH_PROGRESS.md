@@ -8,11 +8,13 @@ Bảng này cập nhật bằng chứng đã có. Các ước lượng phần tr
 |---|---|---|
 | RQ1 | Đối chiếu đủ28khái niệm×120bước trên3lịch sử/1block, E13, 215TP/5FP ngoài câu hỏi | Mở rộng nhiều block độc lập, calibration gần ngưỡng và liên hệ outcome |
 | RQ2 | Fresh120ca thuộc10block,60Q/30K, cả60cặp đổi hành động, giữ negativecontrol dự kiến | Đã có khoảng bootstrap hậu nghiệm n10. Còn graph noise/history/quality và khả năng khái quát |
-| RQ3 | CurrentAKT Gate1913, publicCPUresume parity, SAKT selectedCPU6epochs/best1, GKT selectedCPU11epochs/best6, A1 expertCPU7epochs/best4 | Fault recovery, CUDA, các main fits/adaptor và so sánh đầy đủ |
+| RQ3 | Gate183/1913 lịch sử, publicCPUresume parity, SAKT selectedCPU6epochs/best1, GKT selectedCPU11epochs/best6, A1 expertCPU7epochs/best4, đường ghép9bộ file đã kiểm synthetic1260 | Source195 đang chờ Gate mới sau NO-GO RAM, fault recovery, CUDA, Junyi producer, main fits/refits/calibration và so sánh đầy đủ |
 | Demo | Viewer đọc kết quả fresh120,113HTTPtests vàJavaScript/desktop/mobile | Luồng fittedmodels và chọn bài cho người học mới |
 | Bản thảo | Đã nốiE13 từ nguồn đã đóng, kiểm81pointers mới, prefix E1–E12 nguyên byte | Tích hợp các chương, kết quả neural và kiểm cuối luận văn |
 
 [Bản đọc GVHD ngày10/11](supervisor_reports/2026-11-10/01_tien_do/BAO_CAO_NGHIEN_CUU.html) giữ diễn tiến nghiên cứu và giới hạn. Logs/model outputs giữ ở các bundle và native run paths tương ứng. Quỹ Modal đã dùng0USD.
+
+[Sổ khoảng trống hiện hành](RESEARCH_GAPS.md) đã tách các mục tìm nguồn/tài liệu đã giải quyết khỏi bằng chứng khoa học còn thiếu. Lượt đối chiếu10/11 không thêm tương tác, mẫu độc lập hoặc kết luận RQ. [Reader synthetic1260](runs/nine-file-scaling-20261110-01/README.md) là đo khâu xử lý artifact; [Gate195 preparation](runs/gate195-preparation-20261110-01/README.md) chưa có collection IDs hoặc GatePASS mới.
 
 ## Ước lượng cập nhật sau kết quả learned19 ngày 09/11
 
