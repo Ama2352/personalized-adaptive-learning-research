@@ -1,0 +1,93 @@
+{
+  "integration02_diagnostics": true,
+  "issues": [
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_protected_source_rejected_before_any_protected_open[collection_sources]",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-stdlib'\"",
+      "tail": "<_pytest.monkeypatch.MonkeyPatch object at 0x7f56e46e8d60>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:28: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.13/dist-packages/_pytest/tmpdir.py:130: in mktemp\n    basename = self._ensure_relative_to_basetemp(basename)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.13/dist-packages/_pytest/tmpdir.py:111: in _ensure_relative_to_basetemp\n    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():\n        ^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.13/dist-packages/_pytest/tmpdir.py:152: in getbasetemp\n    basetemp.mkdir(mode=0o700)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-stdlib')\nmode = 448, parents = False, exist_ok = False\n\n    def mkdir(self, mode=0o777, parents=False, exist_ok=False):\n        \"\"\"\n        Create a new directory at this given path.\n        \"\"\"\n        try:\n>           os.mkdir(self, mode)\nE           FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-stdlib'\n\n/usr/lib/python3.13/pathlib/_local.py:722: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_protected_source_rejected_before_any_protected_open[extra_sources]",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-stdlib'\"",
+      "tail": "<_pytest.monkeypatch.MonkeyPatch object at 0x7f56e4646fd0>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n>       root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:28: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.13/dist-packages/_pytest/tmpdir.py:130: in mktemp\n    basename = self._ensure_relative_to_basetemp(basename)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.13/dist-packages/_pytest/tmpdir.py:111: in _ensure_relative_to_basetemp\n    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():\n        ^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.13/dist-packages/_pytest/tmpdir.py:152: in getbasetemp\n    basetemp.mkdir(mode=0o700)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-stdlib')\nmode = 448, parents = False, exist_ok = False\n\n    def mkdir(self, mode=0o777, parents=False, exist_ok=False):\n        \"\"\"\n        Create a new directory at this given path.\n        \"\"\"\n        try:\n>           os.mkdir(self, mode)\nE           FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-stdlib'\n\n/usr/lib/python3.13/pathlib/_local.py:722: FileNotFoundError"
+    },
+    {
+      "group": "no-torch",
+      "case": {
+        "classname": "tests.akt.test_research_execution",
+        "name": "test_cpu_spec_stored_fields_and_identity_remain_legacy",
+        "time": "0.001"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-no-torch'\"",
+      "tail": "self = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-no-torch')\nmode = 448, parents = False, exist_ok = False\n\n    def mkdir(self, mode=0o777, parents=False, exist_ok=False):\n        \"\"\"\n        Create a new directory at this given path.\n        \"\"\"\n        try:\n>           os.mkdir(self, mode)\nE           FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-no-torch'\n\n/usr/lib/python3.13/pathlib/_local.py:722: FileNotFoundError"
+    },
+    {
+      "group": "no-torch",
+      "case": {
+        "classname": "tests.akt.test_research_execution",
+        "name": "test_cuda_nested_spec_needs_exact_profile_and_does_not_retain_it",
+        "time": "0.001"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-no-torch'\"",
+      "tail": "self = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-no-torch')\nmode = 448, parents = False, exist_ok = False\n\n    def mkdir(self, mode=0o777, parents=False, exist_ok=False):\n        \"\"\"\n        Create a new directory at this given path.\n        \"\"\"\n        try:\n>           os.mkdir(self, mode)\nE           FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-no-torch'\n\n/usr/lib/python3.13/pathlib/_local.py:722: FileNotFoundError"
+    },
+    {
+      "group": "remaining",
+      "case": {
+        "classname": "tests.akt.test_checkpoint",
+        "name": "test_checkpoint_roundtrip_restores_state_and_rejects_mismatch",
+        "time": "0.001"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-remaining'\"",
+      "tail": "self = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-remaining')\nmode = 448, parents = False, exist_ok = False\n\n    def mkdir(self, mode=0o777, parents=False, exist_ok=False):\n        \"\"\"\n        Create a new directory at this given path.\n        \"\"\"\n        try:\n>           os.mkdir(self, mode)\nE           FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-remaining'\n\n/usr/lib/python3.13/pathlib/_local.py:722: FileNotFoundError"
+    },
+    {
+      "group": "remaining",
+      "case": {
+        "classname": "tests.akt.test_checkpoint",
+        "name": "test_checkpoint_rejects_incomplete_epoch",
+        "time": "0.001"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-remaining'\"",
+      "tail": "self = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-remaining')\nmode = 448, parents = False, exist_ok = False\n\n    def mkdir(self, mode=0o777, parents=False, exist_ok=False):\n        \"\"\"\n        Create a new directory at this given path.\n        \"\"\"\n        try:\n>           os.mkdir(self, mode)\nE           FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-remaining'\n\n/usr/lib/python3.13/pathlib/_local.py:722: FileNotFoundError"
+    },
+    {
+      "group": "remaining",
+      "case": {
+        "classname": "tests.akt.test_colab_bundle",
+        "name": "test_fixed_docs_raw_bytes_and_notebook_transform_without_zip",
+        "time": "0.001"
+      },
+      "kind": "failure",
+      "message": "FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-remaining'",
+      "tail": "ent-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tm...e=<pluggy._tracing.TagTracerSub object at 0x79dd5c8c0510>, _basetemp=None, _retention_count=3, _retention_policy='all')\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x79dd1f1cb230>\n\n    def test_fixed_docs_raw_bytes_and_notebook_transform_without_zip(tmp_path_factory, monkeypatch):\n>       tmp_path = tmp_path_factory.mktemp('b')  # Bound Windows ancestor length for Paper2 fixture filenames.\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\ntests/akt/test_colab_bundle.py:93: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.13/dist-packages/_pytest/tmpdir.py:130: in mktemp\n    basename = self._ensure_relative_to_basetemp(basename)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.13/dist-packages/_pytest/tmpdir.py:111: in _ensure_relative_to_basetemp\n    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():\n        ^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.13/dist-packages/_pytest/tmpdir.py:152: in getbasetemp\n    basetemp.mkdir(mode=0o700)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-remaining')\nmode = 448, parents = False, exist_ok = False\n\n    def mkdir(self, mode=0o777, parents=False, exist_ok=False):\n        \"\"\"\n        Create a new directory at this given path.\n        \"\"\"\n        try:\n>           os.mkdir(self, mode)\nE           FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-remaining'\n\n/usr/lib/python3.13/pathlib/_local.py:722: FileNotFoundError"
+    },
+    {
+      "group": "remaining",
+      "case": {
+        "classname": "tests.akt.test_colab_bundle",
+        "name": "test_missing_fixed_contract_stops_local_inventory_without_zip[docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md]",
+        "time": "0.001"
+      },
+      "kind": "failure",
+      "message": "FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-remaining'",
+      "tail": "ICAL_RECIPE_V1.md',\n        'docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md',\n        'docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json',\n        'experiments/akt/configs/simulator-research-corpus01.json',\n        'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt',\n    ])\n    def test_missing_fixed_contract_stops_local_inventory_without_zip(tmp_path_factory, monkeypatch, missing):\n>       tmp_path = tmp_path_factory.mktemp('b')\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\ntests/akt/test_colab_bundle.py:125: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.13/dist-packages/_pytest/tmpdir.py:130: in mktemp\n    basename = self._ensure_relative_to_basetemp(basename)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.13/dist-packages/_pytest/tmpdir.py:111: in _ensure_relative_to_basetemp\n    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():\n        ^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.13/dist-packages/_pytest/tmpdir.py:152: in getbasetemp\n    basetemp.mkdir(mode=0o700)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-remaining')\nmode = 448, parents = False, exist_ok = False\n\n    def mkdir(self, mode=0o777, parents=False, exist_ok=False):\n        \"\"\"\n        Create a new directory at this given path.\n        \"\"\"\n        try:\n>           os.mkdir(self, mode)\nE           FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/tmp/integration02-remaining'\n\n/usr/lib/python3.13/pathlib/_local.py:722: FileNotFoundError"
+    }
+  ]
+}

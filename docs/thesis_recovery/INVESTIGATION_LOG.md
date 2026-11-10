@@ -1100,3 +1100,7 @@ User chuyển ưu tiên sang nghiên cứu chính trong kịch bản7ngày. Back
 ## 10/11 — checkpoint nghiên cứu A0 sang backend online
 
 Đã nối checkpoint nghiên cứu A0 vào dự báo tuần tự bằng loader tái dùng backend hiện có. Colab đạt22/22ca, gồm12mới và10hồi quy; checkpoint fixture48targets/2updates cho6dự báo khớp wrapper trong1e-6. Giữ lượt lỗi fixture, chưa final fitted/refit/calibration hoặc closed-loop chính. Actual epoch4 engineering chỉ kiểm metadata/SHA/nguồn, khôngTorch. Nguồn197/92, chưaGate. Đối chiếu recipe26 refit giữencoding90; loader không phát hành fittedcertificate hoặc grant. Hai báo cáo cập nhật,11SVG/17tables nguyên. Next current-source integration và final refit/calibration.
+
+## 10/11 — chốt portability1992 trên Colab CPU
+
+Colab CPU đã đạt1.992ca trên92module trong294,935giây,0failure/error/skip; tách riêng1ca kiểm môi trường cô lập. Đã sửa gói thiếu cấu hình, bỏ phụ thuộc snapshot chưa tracked và làm kiểm timestamp xác định. Reader/model production giữ nguyên; inventory198file, chưa full Gate/CUDA/training chính. Giữ4attempts:01 4F/19E,02 26F/749E do thiếu parenttmp,03 1F timestamp,04 0FES. Local101pure/13IO, giữ lỗi PYTHONPATH/TEMP. Đã tải279901byte/39files vớiCRC/SHA/JUnit độc lập, rawlogsnativeZIP, nguồn279payload khớpbuilderlocal.11SVG/17tables nguyên. Không chiModal. Next isolatedCPU/fullGate/CUDA, không thêmnhánhphụ.

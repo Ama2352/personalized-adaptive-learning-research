@@ -226,3 +226,7 @@ Các mô hình và demo trong đề cương vẫn được giữ. Kết quả kh
 ## Cập nhật tích hợp AKT ngày 10/11
 
 Đã nối thêm checkpoint nghiên cứu của AKT không đồ thị vào luồng dự báo tuần tự. Lượt kiểm trên Colab đạt 22 ca, gồm 12 ca mới và 10 ca hồi quy. Trên dữ liệu giả nhỏ, sáu dự báo khớp bản nghiên cứu trong sai số đã đặt và việc nạp mô hình giữ nguyên luồng ngẫu nhiên của mô phỏng. Lượt đầu dùng fixture thu nhỏ sai cấu hình đã chốt nên bị chặn; đã sửa fixture và giữ log lỗi. Mốc này hoàn thiện một phần tích hợp AKT, còn mô hình cuối sau refit, hiệu chỉnh và kết quả vòng kín chính cần tiếp tục.
+
+## Cập nhật kiểm tích hợp AKT ngày 10/11
+
+Bộ kiểm tích hợp AKT trên Colab CPU đã đạt 1.992 ca qua ba tiến trình độc lập, không lỗi hoặc bỏ qua. Các lượt kiểm đã tìm và xử lý phần đóng gói thiếu cấu hình, phụ thuộc một snapshot cũ chưa được Git lưu và giả định timestamp của filesystem. Có một ca yêu cầu môi trường thư viện cô lập được tách riêng vì phiên này kế thừa thư viện Colab. Đã lưu cả log lỗi và JUnit lượt đạt. Mốc này tăng độ tin cậy trước khi dùng GPU; môi trường đúng phiên bản, CUDA, phục hồi và đo chi phí vẫn cần hoàn tất. Lượt điều phối thứ hai thiếu thư mục cha vùng tạm; đã sửa và giữ log.

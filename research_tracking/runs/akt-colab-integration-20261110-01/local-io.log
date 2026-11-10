@@ -1,0 +1,1268 @@
+FEFEFEFEFEFEFEFEFEFEFEFEFE                                        [100%]
+=================================== ERRORS ====================================
+_ ERROR at teardown of FileTests.test_all_nine_producer_headers_and_null_wire_strings _
+
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_n0nc8s8s'
+onexc = <function TemporaryDirectory._rmtree.<locals>.onexc at 0x000002D710B36660>
+
+    def _rmtree_unsafe(path, onexc):
+        def onerror(err):
+            if not isinstance(err, FileNotFoundError):
+                onexc(os.scandir, err.filename, err)
+        results = os.walk(path, topdown=False, onerror=onerror, followlinks=os._walk_symlinks_as_files)
+        for dirpath, dirnames, filenames in results:
+            for name in dirnames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.rmdir(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.rmdir, fullname, err)
+            for name in filenames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.unlink(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.unlink, fullname, err)
+        try:
+>           os.rmdir(path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_n0nc8s8s'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:631: PermissionError
+
+During handling of the above exception, another exception occurred:
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:954: in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:934: in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:790: in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:635: in _rmtree_unsafe
+    onexc(os.rmdir, path, err)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:906: in onexc
+    _resetperms(path)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:286: in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <built-in function chmod>
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_n0nc8s8s'
+args = (448,)
+
+    def _dont_follow_symlinks(func, path, *args):
+        # Pass follow_symlinks=False, unless not supported on this platform.
+        if func in _os.supports_follow_symlinks:
+>           func(path, *args, follow_symlinks=False)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_n0nc8s8s'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:275: PermissionError
+_ ERROR at teardown of FileTests.test_bad_paths_protected_names_and_ancestor_alias _
+
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_dy3_b19h'
+onexc = <function TemporaryDirectory._rmtree.<locals>.onexc at 0x000002D710B356C0>
+
+    def _rmtree_unsafe(path, onexc):
+        def onerror(err):
+            if not isinstance(err, FileNotFoundError):
+                onexc(os.scandir, err.filename, err)
+        results = os.walk(path, topdown=False, onerror=onerror, followlinks=os._walk_symlinks_as_files)
+        for dirpath, dirnames, filenames in results:
+            for name in dirnames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.rmdir(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.rmdir, fullname, err)
+            for name in filenames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.unlink(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.unlink, fullname, err)
+        try:
+>           os.rmdir(path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_dy3_b19h'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:631: PermissionError
+
+During handling of the above exception, another exception occurred:
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:954: in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:934: in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:790: in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:635: in _rmtree_unsafe
+    onexc(os.rmdir, path, err)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:906: in onexc
+    _resetperms(path)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:286: in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <built-in function chmod>
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_dy3_b19h'
+args = (448,)
+
+    def _dont_follow_symlinks(func, path, *args):
+        # Pass follow_symlinks=False, unless not supported on this platform.
+        if func in _os.supports_follow_symlinks:
+>           func(path, *args, follow_symlinks=False)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_dy3_b19h'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:275: PermissionError
+---------------------------- Captured stdout call -----------------------------
+uuuuuuu
+______ ERROR at teardown of FileTests.test_ctime_checked_within_each_api ______
+
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_mdt4w4pj'
+onexc = <function TemporaryDirectory._rmtree.<locals>.onexc at 0x000002D710B351C0>
+
+    def _rmtree_unsafe(path, onexc):
+        def onerror(err):
+            if not isinstance(err, FileNotFoundError):
+                onexc(os.scandir, err.filename, err)
+        results = os.walk(path, topdown=False, onerror=onerror, followlinks=os._walk_symlinks_as_files)
+        for dirpath, dirnames, filenames in results:
+            for name in dirnames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.rmdir(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.rmdir, fullname, err)
+            for name in filenames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.unlink(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.unlink, fullname, err)
+        try:
+>           os.rmdir(path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_mdt4w4pj'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:631: PermissionError
+
+During handling of the above exception, another exception occurred:
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:954: in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:934: in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:790: in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:635: in _rmtree_unsafe
+    onexc(os.rmdir, path, err)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:906: in onexc
+    _resetperms(path)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:286: in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <built-in function chmod>
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_mdt4w4pj'
+args = (448,)
+
+    def _dont_follow_symlinks(func, path, *args):
+        # Pass follow_symlinks=False, unless not supported on this platform.
+        if func in _os.supports_follow_symlinks:
+>           func(path, *args, follow_symlinks=False)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_mdt4w4pj'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:275: PermissionError
+_ ERROR at teardown of FileTests.test_cursor_tampering_and_handle_limit_fail_closed _
+
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_cesfc0yy'
+onexc = <function TemporaryDirectory._rmtree.<locals>.onexc at 0x000002D710B36FC0>
+
+    def _rmtree_unsafe(path, onexc):
+        def onerror(err):
+            if not isinstance(err, FileNotFoundError):
+                onexc(os.scandir, err.filename, err)
+        results = os.walk(path, topdown=False, onerror=onerror, followlinks=os._walk_symlinks_as_files)
+        for dirpath, dirnames, filenames in results:
+            for name in dirnames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.rmdir(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.rmdir, fullname, err)
+            for name in filenames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.unlink(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.unlink, fullname, err)
+        try:
+>           os.rmdir(path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_cesfc0yy'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:631: PermissionError
+
+During handling of the above exception, another exception occurred:
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:954: in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:934: in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:790: in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:635: in _rmtree_unsafe
+    onexc(os.rmdir, path, err)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:906: in onexc
+    _resetperms(path)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:286: in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <built-in function chmod>
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_cesfc0yy'
+args = (448,)
+
+    def _dont_follow_symlinks(func, path, *args):
+        # Pass follow_symlinks=False, unless not supported on this platform.
+        if func in _os.supports_follow_symlinks:
+>           func(path, *args, follow_symlinks=False)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_cesfc0yy'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:275: PermissionError
+____ ERROR at teardown of FileTests.test_deadline_and_closed_reader_reject ____
+
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_ig1gxx1f'
+onexc = <function TemporaryDirectory._rmtree.<locals>.onexc at 0x000002D710B35760>
+
+    def _rmtree_unsafe(path, onexc):
+        def onerror(err):
+            if not isinstance(err, FileNotFoundError):
+                onexc(os.scandir, err.filename, err)
+        results = os.walk(path, topdown=False, onerror=onerror, followlinks=os._walk_symlinks_as_files)
+        for dirpath, dirnames, filenames in results:
+            for name in dirnames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.rmdir(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.rmdir, fullname, err)
+            for name in filenames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.unlink(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.unlink, fullname, err)
+        try:
+>           os.rmdir(path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_ig1gxx1f'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:631: PermissionError
+
+During handling of the above exception, another exception occurred:
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:954: in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:934: in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:790: in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:635: in _rmtree_unsafe
+    onexc(os.rmdir, path, err)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:906: in onexc
+    _resetperms(path)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:286: in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <built-in function chmod>
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_ig1gxx1f'
+args = (448,)
+
+    def _dont_follow_symlinks(func, path, *args):
+        # Pass follow_symlinks=False, unless not supported on this platform.
+        if func in _os.supports_follow_symlinks:
+>           func(path, *args, follow_symlinks=False)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_ig1gxx1f'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:275: PermissionError
+_ ERROR at teardown of FileTests.test_duplicates_extra_headers_and_foreign_role_rejected _
+
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_43ic429d'
+onexc = <function TemporaryDirectory._rmtree.<locals>.onexc at 0x000002D710B356C0>
+
+    def _rmtree_unsafe(path, onexc):
+        def onerror(err):
+            if not isinstance(err, FileNotFoundError):
+                onexc(os.scandir, err.filename, err)
+        results = os.walk(path, topdown=False, onerror=onerror, followlinks=os._walk_symlinks_as_files)
+        for dirpath, dirnames, filenames in results:
+            for name in dirnames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.rmdir(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.rmdir, fullname, err)
+            for name in filenames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.unlink(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.unlink, fullname, err)
+        try:
+>           os.rmdir(path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_43ic429d'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:631: PermissionError
+
+During handling of the above exception, another exception occurred:
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:954: in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:934: in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:790: in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:635: in _rmtree_unsafe
+    onexc(os.rmdir, path, err)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:906: in onexc
+    _resetperms(path)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:286: in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <built-in function chmod>
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_43ic429d'
+args = (448,)
+
+    def _dont_follow_symlinks(func, path, *args):
+        # Pass follow_symlinks=False, unless not supported on this platform.
+        if func in _os.supports_follow_symlinks:
+>           func(path, *args, follow_symlinks=False)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_43ic429d'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:275: PermissionError
+_ ERROR at teardown of FileTests.test_final_hash_rejects_mutation_with_unchanged_stat_stamp _
+
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_qfg3iz8i'
+onexc = <function TemporaryDirectory._rmtree.<locals>.onexc at 0x000002D710B35440>
+
+    def _rmtree_unsafe(path, onexc):
+        def onerror(err):
+            if not isinstance(err, FileNotFoundError):
+                onexc(os.scandir, err.filename, err)
+        results = os.walk(path, topdown=False, onerror=onerror, followlinks=os._walk_symlinks_as_files)
+        for dirpath, dirnames, filenames in results:
+            for name in dirnames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.rmdir(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.rmdir, fullname, err)
+            for name in filenames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.unlink(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.unlink, fullname, err)
+        try:
+>           os.rmdir(path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_qfg3iz8i'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:631: PermissionError
+
+During handling of the above exception, another exception occurred:
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:954: in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:934: in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:790: in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:635: in _rmtree_unsafe
+    onexc(os.rmdir, path, err)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:906: in onexc
+    _resetperms(path)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:286: in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <built-in function chmod>
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_qfg3iz8i'
+args = (448,)
+
+    def _dont_follow_symlinks(func, path, *args):
+        # Pass follow_symlinks=False, unless not supported on this platform.
+        if func in _os.supports_follow_symlinks:
+>           func(path, *args, follow_symlinks=False)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_qfg3iz8i'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:275: PermissionError
+_ ERROR at teardown of FileTests.test_index_order_is_statistical_and_postread_tampering_rejected _
+
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_cigar18i'
+onexc = <function TemporaryDirectory._rmtree.<locals>.onexc at 0x000002D710E78220>
+
+    def _rmtree_unsafe(path, onexc):
+        def onerror(err):
+            if not isinstance(err, FileNotFoundError):
+                onexc(os.scandir, err.filename, err)
+        results = os.walk(path, topdown=False, onerror=onerror, followlinks=os._walk_symlinks_as_files)
+        for dirpath, dirnames, filenames in results:
+            for name in dirnames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.rmdir(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.rmdir, fullname, err)
+            for name in filenames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.unlink(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.unlink, fullname, err)
+        try:
+>           os.rmdir(path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_cigar18i'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:631: PermissionError
+
+During handling of the above exception, another exception occurred:
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:954: in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:934: in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:790: in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:635: in _rmtree_unsafe
+    onexc(os.rmdir, path, err)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:906: in onexc
+    _resetperms(path)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:286: in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <built-in function chmod>
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_cigar18i'
+args = (448,)
+
+    def _dont_follow_symlinks(func, path, *args):
+        # Pass follow_symlinks=False, unless not supported on this platform.
+        if func in _os.supports_follow_symlinks:
+>           func(path, *args, follow_symlinks=False)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_cigar18i'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:275: PermissionError
+_ ERROR at teardown of FileTests.test_json_zero_file_and_final_hash_readback __
+
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_hx2htp6b'
+onexc = <function TemporaryDirectory._rmtree.<locals>.onexc at 0x000002D710E78AE0>
+
+    def _rmtree_unsafe(path, onexc):
+        def onerror(err):
+            if not isinstance(err, FileNotFoundError):
+                onexc(os.scandir, err.filename, err)
+        results = os.walk(path, topdown=False, onerror=onerror, followlinks=os._walk_symlinks_as_files)
+        for dirpath, dirnames, filenames in results:
+            for name in dirnames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.rmdir(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.rmdir, fullname, err)
+            for name in filenames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.unlink(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.unlink, fullname, err)
+        try:
+>           os.rmdir(path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_hx2htp6b'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:631: PermissionError
+
+During handling of the above exception, another exception occurred:
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:954: in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:934: in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:790: in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:635: in _rmtree_unsafe
+    onexc(os.rmdir, path, err)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:906: in onexc
+    _resetperms(path)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:286: in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <built-in function chmod>
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_hx2htp6b'
+args = (448,)
+
+    def _dont_follow_symlinks(func, path, *args):
+        # Pass follow_symlinks=False, unless not supported on this platform.
+        if func in _os.supports_follow_symlinks:
+>           func(path, *args, follow_symlinks=False)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_hx2htp6b'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:275: PermissionError
+_ ERROR at teardown of FileTests.test_multiline_control_and_oversize_fields_rejected _
+
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_2um3vz11'
+onexc = <function TemporaryDirectory._rmtree.<locals>.onexc at 0x000002D710E78180>
+
+    def _rmtree_unsafe(path, onexc):
+        def onerror(err):
+            if not isinstance(err, FileNotFoundError):
+                onexc(os.scandir, err.filename, err)
+        results = os.walk(path, topdown=False, onerror=onerror, followlinks=os._walk_symlinks_as_files)
+        for dirpath, dirnames, filenames in results:
+            for name in dirnames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.rmdir(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.rmdir, fullname, err)
+            for name in filenames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.unlink(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.unlink, fullname, err)
+        try:
+>           os.rmdir(path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_2um3vz11'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:631: PermissionError
+
+During handling of the above exception, another exception occurred:
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:954: in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:934: in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:790: in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:635: in _rmtree_unsafe
+    onexc(os.rmdir, path, err)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:906: in onexc
+    _resetperms(path)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:286: in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <built-in function chmod>
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_2um3vz11'
+args = (448,)
+
+    def _dont_follow_symlinks(func, path, *args):
+        # Pass follow_symlinks=False, unless not supported on this platform.
+        if func in _os.supports_follow_symlinks:
+>           func(path, *args, follow_symlinks=False)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_2um3vz11'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:275: PermissionError
+_ ERROR at teardown of FileTests.test_scoped_cursor_preserves_rows_and_closes_handle _
+
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_e6lqs9v6'
+onexc = <function TemporaryDirectory._rmtree.<locals>.onexc at 0x000002D710E79080>
+
+    def _rmtree_unsafe(path, onexc):
+        def onerror(err):
+            if not isinstance(err, FileNotFoundError):
+                onexc(os.scandir, err.filename, err)
+        results = os.walk(path, topdown=False, onerror=onerror, followlinks=os._walk_symlinks_as_files)
+        for dirpath, dirnames, filenames in results:
+            for name in dirnames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.rmdir(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.rmdir, fullname, err)
+            for name in filenames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.unlink(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.unlink, fullname, err)
+        try:
+>           os.rmdir(path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_e6lqs9v6'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:631: PermissionError
+
+During handling of the above exception, another exception occurred:
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:954: in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:934: in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:790: in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:635: in _rmtree_unsafe
+    onexc(os.rmdir, path, err)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:906: in onexc
+    _resetperms(path)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:286: in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <built-in function chmod>
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_e6lqs9v6'
+args = (448,)
+
+    def _dont_follow_symlinks(func, path, *args):
+        # Pass follow_symlinks=False, unless not supported on this platform.
+        if func in _os.supports_follow_symlinks:
+>           func(path, *args, follow_symlinks=False)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_e6lqs9v6'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:275: PermissionError
+_ ERROR at teardown of FileTests.test_sha_size_byte_and_index_limits_fail_before_acceptance _
+
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_472xda0m'
+onexc = <function TemporaryDirectory._rmtree.<locals>.onexc at 0x000002D710E78220>
+
+    def _rmtree_unsafe(path, onexc):
+        def onerror(err):
+            if not isinstance(err, FileNotFoundError):
+                onexc(os.scandir, err.filename, err)
+        results = os.walk(path, topdown=False, onerror=onerror, followlinks=os._walk_symlinks_as_files)
+        for dirpath, dirnames, filenames in results:
+            for name in dirnames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.rmdir(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.rmdir, fullname, err)
+            for name in filenames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.unlink(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.unlink, fullname, err)
+        try:
+>           os.rmdir(path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_472xda0m'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:631: PermissionError
+
+During handling of the above exception, another exception occurred:
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:954: in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:934: in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:790: in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:635: in _rmtree_unsafe
+    onexc(os.rmdir, path, err)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:906: in onexc
+    _resetperms(path)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:286: in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <built-in function chmod>
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_472xda0m'
+args = (448,)
+
+    def _dont_follow_symlinks(func, path, *args):
+        # Pass follow_symlinks=False, unless not supported on this platform.
+        if func in _os.supports_follow_symlinks:
+>           func(path, *args, follow_symlinks=False)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_472xda0m'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:275: PermissionError
+__ ERROR at teardown of FileTests.test_unique_finite_json_and_failed_reader ___
+
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_gp1u8zeg'
+onexc = <function TemporaryDirectory._rmtree.<locals>.onexc at 0x000002D710E79BC0>
+
+    def _rmtree_unsafe(path, onexc):
+        def onerror(err):
+            if not isinstance(err, FileNotFoundError):
+                onexc(os.scandir, err.filename, err)
+        results = os.walk(path, topdown=False, onerror=onerror, followlinks=os._walk_symlinks_as_files)
+        for dirpath, dirnames, filenames in results:
+            for name in dirnames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.rmdir(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.rmdir, fullname, err)
+            for name in filenames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.unlink(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.unlink, fullname, err)
+        try:
+>           os.rmdir(path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_gp1u8zeg'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:631: PermissionError
+
+During handling of the above exception, another exception occurred:
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:954: in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:934: in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:790: in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\shutil.py:635: in _rmtree_unsafe
+    onexc(os.rmdir, path, err)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:906: in onexc
+    _resetperms(path)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:286: in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = <built-in function chmod>
+path = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_gp1u8zeg'
+args = (448,)
+
+    def _dont_follow_symlinks(func, path, *args):
+        # Pass follow_symlinks=False, unless not supported on this platform.
+        if func in _os.supports_follow_symlinks:
+>           func(path, *args, follow_symlinks=False)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_gp1u8zeg'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\tempfile.py:275: PermissionError
+================================== FAILURES ===================================
+_______ FileTests.test_all_nine_producer_headers_and_null_wire_strings ________
+
+self = <test_research_selection_io.FileTests testMethod=test_all_nine_producer_headers_and_null_wire_strings>
+
+    def test_all_nine_producer_headers_and_null_wire_strings(self):
+        for candidate in m.REQUIRED_CANDIDATE_IDS:
+            for kind in ('predictions', 'targets'):
+>               ref = self.csv(candidate, kind, name=candidate + '-' + kind + '.csv')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_research_selection_io.py:163: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\shared_kt\test_research_selection_io.py:45: in csv
+    return self.put(name, stream.getvalue().encode())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\shared_kt\test_research_selection_io.py:31: in put
+    path.write_bytes(data)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}/AC/Temp/selection_io_n0nc8s8s/A0-predictions.csv')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [Errno 13] Permission denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_n0nc8s8s\\A0-predictions.csv'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: PermissionError
+_________ FileTests.test_bad_paths_protected_names_and_ancestor_alias _________
+
+self = <test_research_selection_io.FileTests testMethod=test_bad_paths_protected_names_and_ancestor_alias>
+
+    def test_bad_paths_protected_names_and_ancestor_alias(self):
+        for path in ('../x', '/x', 'x\\y', './x', 'a//b', '.', 'C:/x'):
+            with self.subTest(path=path), self.assertRaises(ValueError):
+                m.FileRef(path, H, 0)
+>       ref = self.put('dataset/forbidden.json', b'{}')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_research_selection_io.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\shared_kt\test_research_selection_io.py:30: in put
+    path.parent.mkdir(parents=True, exist_ok=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}/AC/Temp/selection_io_dy3_b19h/dataset')
+mode = 511, parents = True, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_dy3_b19h\\dataset'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: PermissionError
+---------------------------- Captured stdout call -----------------------------
+uuuuuuu
+________________ FileTests.test_ctime_checked_within_each_api _________________
+
+self = <test_research_selection_io.FileTests testMethod=test_ctime_checked_within_each_api>
+
+    def test_ctime_checked_within_each_api(self):
+>       ref = self.put('ctime.json', b'{"value":1}')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_research_selection_io.py:133: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\shared_kt\test_research_selection_io.py:31: in put
+    path.write_bytes(data)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}/AC/Temp/selection_io_mdt4w4pj/ctime.json')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [Errno 13] Permission denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_mdt4w4pj\\ctime.json'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: PermissionError
+________ FileTests.test_cursor_tampering_and_handle_limit_fail_closed _________
+
+self = <test_research_selection_io.FileTests testMethod=test_cursor_tampering_and_handle_limit_fail_closed>
+
+    def test_cursor_tampering_and_handle_limit_fail_closed(self):
+>       ref = self.csv()
+              ^^^^^^^^^^
+
+tests\shared_kt\test_research_selection_io.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\shared_kt\test_research_selection_io.py:45: in csv
+    return self.put(name, stream.getvalue().encode())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\shared_kt\test_research_selection_io.py:31: in put
+    path.write_bytes(data)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}/AC/Temp/selection_io_cesfc0yy/input.csv')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [Errno 13] Permission denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_cesfc0yy\\input.csv'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: PermissionError
+______________ FileTests.test_deadline_and_closed_reader_reject _______________
+
+self = <test_research_selection_io.FileTests testMethod=test_deadline_and_closed_reader_reject>
+
+    def test_deadline_and_closed_reader_reject(self):
+>       ref = self.put('metadata.json', b'{}')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_research_selection_io.py:217: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\shared_kt\test_research_selection_io.py:31: in put
+    path.write_bytes(data)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}/AC/Temp/selection_io_ig1gxx1f/metadata.json')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [Errno 13] Permission denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_ig1gxx1f\\metadata.json'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: PermissionError
+______ FileTests.test_duplicates_extra_headers_and_foreign_role_rejected ______
+
+self = <test_research_selection_io.FileTests testMethod=test_duplicates_extra_headers_and_foreign_role_rejected>
+
+    def test_duplicates_extra_headers_and_foreign_role_rejected(self):
+>       for ref in (self.csv(rows=[{}, {}], name='duplicate.csv'),
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    self.csv(fields=(*m.csv_fields('A0', 'predictions'), 'calibrated_probability'), name='extra.csv'),
+                    self.csv(fields=(*m.csv_fields('A0', 'predictions'), 'probability'), name='duplicate-header.csv'),
+                    self.csv(rows=[dict(origin_role='train')], name='foreign-role.csv')):
+
+tests\shared_kt\test_research_selection_io.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\shared_kt\test_research_selection_io.py:45: in csv
+    return self.put(name, stream.getvalue().encode())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\shared_kt\test_research_selection_io.py:31: in put
+    path.write_bytes(data)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}/AC/Temp/selection_io_43ic429d/duplicate.csv')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [Errno 13] Permission denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_43ic429d\\duplicate.csv'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: PermissionError
+____ FileTests.test_final_hash_rejects_mutation_with_unchanged_stat_stamp _____
+
+self = <test_research_selection_io.FileTests testMethod=test_final_hash_rejects_mutation_with_unchanged_stat_stamp>
+
+    def test_final_hash_rejects_mutation_with_unchanged_stat_stamp(self):
+>       ref = self.csv()
+              ^^^^^^^^^^
+
+tests\shared_kt\test_research_selection_io.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\shared_kt\test_research_selection_io.py:45: in csv
+    return self.put(name, stream.getvalue().encode())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\shared_kt\test_research_selection_io.py:31: in put
+    path.write_bytes(data)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}/AC/Temp/selection_io_qfg3iz8i/input.csv')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [Errno 13] Permission denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_qfg3iz8i\\input.csv'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: PermissionError
+__ FileTests.test_index_order_is_statistical_and_postread_tampering_rejected __
+
+self = <test_research_selection_io.FileTests testMethod=test_index_order_is_statistical_and_postread_tampering_rejected>
+
+    def test_index_order_is_statistical_and_postread_tampering_rejected(self):
+>       ref = self.csv(rows=[dict(item_id='z'), dict(item_id='a', timestamp='200', source_row='2', global_rank='1')])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_research_selection_io.py:205: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\shared_kt\test_research_selection_io.py:45: in csv
+    return self.put(name, stream.getvalue().encode())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\shared_kt\test_research_selection_io.py:31: in put
+    path.write_bytes(data)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}/AC/Temp/selection_io_cigar18i/input.csv')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [Errno 13] Permission denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_cigar18i\\input.csv'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: PermissionError
+____________ FileTests.test_json_zero_file_and_final_hash_readback ____________
+
+self = <test_research_selection_io.FileTests testMethod=test_json_zero_file_and_final_hash_readback>
+
+    def test_json_zero_file_and_final_hash_readback(self):
+>       ref = self.put('metadata.json', b'{"ok":true,"n":1}')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_research_selection_io.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\shared_kt\test_research_selection_io.py:31: in put
+    path.write_bytes(data)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}/AC/Temp/selection_io_hx2htp6b/metadata.json')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [Errno 13] Permission denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_hx2htp6b\\metadata.json'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: PermissionError
+________ FileTests.test_multiline_control_and_oversize_fields_rejected ________
+
+self = <test_research_selection_io.FileTests testMethod=test_multiline_control_and_oversize_fields_rejected>
+
+    def test_multiline_control_and_oversize_fields_rejected(self):
+        for value in ('quoted\nnewline', 'control\tchar', 'x' * 2049):
+>           ref = self.csv(rows=[dict(item_id=value)])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_research_selection_io.py:182: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\shared_kt\test_research_selection_io.py:45: in csv
+    return self.put(name, stream.getvalue().encode())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\shared_kt\test_research_selection_io.py:31: in put
+    path.write_bytes(data)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}/AC/Temp/selection_io_2um3vz11/input.csv')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [Errno 13] Permission denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_2um3vz11\\input.csv'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: PermissionError
+________ FileTests.test_scoped_cursor_preserves_rows_and_closes_handle ________
+
+self = <test_research_selection_io.FileTests testMethod=test_scoped_cursor_preserves_rows_and_closes_handle>
+
+    def test_scoped_cursor_preserves_rows_and_closes_handle(self):
+>       ref = self.csv(rows=[{}, {'source_row': '2', 'global_rank': '1'}])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_research_selection_io.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\shared_kt\test_research_selection_io.py:45: in csv
+    return self.put(name, stream.getvalue().encode())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\shared_kt\test_research_selection_io.py:31: in put
+    path.write_bytes(data)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}/AC/Temp/selection_io_e6lqs9v6/input.csv')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [Errno 13] Permission denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_e6lqs9v6\\input.csv'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: PermissionError
+____ FileTests.test_sha_size_byte_and_index_limits_fail_before_acceptance _____
+
+self = <test_research_selection_io.FileTests testMethod=test_sha_size_byte_and_index_limits_fail_before_acceptance>
+
+    def test_sha_size_byte_and_index_limits_fail_before_acceptance(self):
+>       ref = self.put('metadata.json', b'{"x":1}')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_research_selection_io.py:187: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\shared_kt\test_research_selection_io.py:31: in put
+    path.write_bytes(data)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}/AC/Temp/selection_io_472xda0m/metadata.json')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [Errno 13] Permission denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_472xda0m\\metadata.json'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: PermissionError
+_____________ FileTests.test_unique_finite_json_and_failed_reader _____________
+
+self = <test_research_selection_io.FileTests testMethod=test_unique_finite_json_and_failed_reader>
+
+    def test_unique_finite_json_and_failed_reader(self):
+        for data in (b'{"x":1,"x":2}', b'{"x":NaN}', b'{"x":1e999}', b'[]'):
+>           ref = self.put('bad.json', data)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\shared_kt\test_research_selection_io.py:123: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\shared_kt\test_research_selection_io.py:31: in put
+    path.write_bytes(data)
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:641: in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}/AC/Temp/selection_io_gp1u8zeg/bad.json')
+mode = 'wb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       PermissionError: [Errno 13] Permission denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{979b6f05-3072-4362-8b8a-116a30a89397}\\AC\\Temp\\selection_io_gp1u8zeg\\bad.json'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: PermissionError
+=========================== short test summary info ===========================
+FAILED tests/shared_kt/test_research_selection_io.py::FileTests::test_all_nine_producer_headers_and_null_wire_strings
+FAILED tests/shared_kt/test_research_selection_io.py::FileTests::test_bad_paths_protected_names_and_ancestor_alias
+FAILED tests/shared_kt/test_research_selection_io.py::FileTests::test_ctime_checked_within_each_api
+FAILED tests/shared_kt/test_research_selection_io.py::FileTests::test_cursor_tampering_and_handle_limit_fail_closed
+FAILED tests/shared_kt/test_research_selection_io.py::FileTests::test_deadline_and_closed_reader_reject
+FAILED tests/shared_kt/test_research_selection_io.py::FileTests::test_duplicates_extra_headers_and_foreign_role_rejected
+FAILED tests/shared_kt/test_research_selection_io.py::FileTests::test_final_hash_rejects_mutation_with_unchanged_stat_stamp
+FAILED tests/shared_kt/test_research_selection_io.py::FileTests::test_index_order_is_statistical_and_postread_tampering_rejected
+FAILED tests/shared_kt/test_research_selection_io.py::FileTests::test_json_zero_file_and_final_hash_readback
+FAILED tests/shared_kt/test_research_selection_io.py::FileTests::test_multiline_control_and_oversize_fields_rejected
+FAILED tests/shared_kt/test_research_selection_io.py::FileTests::test_scoped_cursor_preserves_rows_and_closes_handle
+FAILED tests/shared_kt/test_research_selection_io.py::FileTests::test_sha_size_byte_and_index_limits_fail_before_acceptance
+FAILED tests/shared_kt/test_research_selection_io.py::FileTests::test_unique_finite_json_and_failed_reader
+ERROR tests/shared_kt/test_research_selection_io.py::FileTests::test_all_nine_producer_headers_and_null_wire_strings
+ERROR tests/shared_kt/test_research_selection_io.py::FileTests::test_bad_paths_protected_names_and_ancestor_alias
+ERROR tests/shared_kt/test_research_selection_io.py::FileTests::test_ctime_checked_within_each_api
+ERROR tests/shared_kt/test_research_selection_io.py::FileTests::test_cursor_tampering_and_handle_limit_fail_closed
+ERROR tests/shared_kt/test_research_selection_io.py::FileTests::test_deadline_and_closed_reader_reject
+ERROR tests/shared_kt/test_research_selection_io.py::FileTests::test_duplicates_extra_headers_and_foreign_role_rejected
+ERROR tests/shared_kt/test_research_selection_io.py::FileTests::test_final_hash_rejects_mutation_with_unchanged_stat_stamp
+ERROR tests/shared_kt/test_research_selection_io.py::FileTests::test_index_order_is_statistical_and_postread_tampering_rejected
+ERROR tests/shared_kt/test_research_selection_io.py::FileTests::test_json_zero_file_and_final_hash_readback
+ERROR tests/shared_kt/test_research_selection_io.py::FileTests::test_multiline_control_and_oversize_fields_rejected
+ERROR tests/shared_kt/test_research_selection_io.py::FileTests::test_scoped_cursor_preserves_rows_and_closes_handle
+ERROR tests/shared_kt/test_research_selection_io.py::FileTests::test_sha_size_byte_and_index_limits_fail_before_acceptance
+ERROR tests/shared_kt/test_research_selection_io.py::FileTests::test_unique_finite_json_and_failed_reader
+13 failed, 13 errors, 7 subtests passed in 1.94s

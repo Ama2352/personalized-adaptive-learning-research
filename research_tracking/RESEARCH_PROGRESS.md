@@ -1,5 +1,10 @@
 # Tiến độ nghiên cứu
 
+## 10/11 — đã kiểm tích hợp trên Colab CPU
+
+Colab CPU đã đạt1.992ca trên92module trong294,935giây,0failure/error/skip; tách riêng1ca kiểm môi trường cô lập. Đã sửa gói thiếu cấu hình, bỏ phụ thuộc snapshot chưa tracked và làm kiểm timestamp xác định. Reader/model production giữ nguyên; inventory198file, chưa full Gate/CUDA/training chính. [Bằng chứng](runs/akt-colab-integration-20261110-01/README.md).
+
+
 ## 10/11 — checkpoint A0 đã nối vào dự báo tuần tự
 
 Đã nối checkpoint nghiên cứu A0 vào dự báo tuần tự bằng loader tái dùng backend hiện có. Colab đạt22/22ca, gồm12mới và10hồi quy; checkpoint fixture48targets/2updates cho6dự báo khớp wrapper trong1e-6. Giữ lượt lỗi fixture, chưa final fitted/refit/calibration hoặc closed-loop chính. [Bằng chứng](runs/akt-a0-online-colab-20261110-01/README.md).
@@ -18,7 +23,7 @@ Bảng này cập nhật bằng chứng đã có. Các ước lượng phần tr
 |---|---|---|
 | RQ1 | Đối chiếu đủ28khái niệm×120bước trên3lịch sử/1block, E13, 215TP/5FP ngoài câu hỏi | Mở rộng nhiều block độc lập, calibration gần ngưỡng và liên hệ outcome |
 | RQ2 | Fresh120ca thuộc10block,60Q/30K, cả60cặp đổi hành động, giữ negativecontrol dự kiến | Đã có khoảng bootstrap hậu nghiệm n10. Còn graph noise/history/quality và khả năng khái quát |
-| RQ3 | Gate183/1913 lịch sử, publicCPUresume parity, SAKT selectedCPU6epochs/best1, GKT selectedCPU11epochs/best6, A1 expertCPU7epochs/best4, đường ghép9bộ file đã kiểm synthetic1260 | Source195 đang chờ Gate mới sau NO-GO RAM, fault recovery, CUDA, Junyi producer, main fits/refits/calibration và so sánh đầy đủ |
+| RQ3 | Gate183/1913 lịch sử, publicCPUresume parity, SAKT selectedCPU6epochs/best1, GKT selectedCPU11epochs/best6, A1 expertCPU7epochs/best4, đường ghép9bộ file đã kiểm synthetic1260 | Source198 đã đạt portability1992 trên Colab; full Gate còn ca isolation, fault recovery, CUDA, Junyi producer, main fits/refits/calibration và so sánh đầy đủ |
 | Demo | Viewer đọc kết quả fresh120,113HTTPtests vàJavaScript/desktop/mobile | Luồng fittedmodels và chọn bài cho người học mới |
 | Bản thảo | Đã nốiE13 từ nguồn đã đóng, kiểm81pointers mới, prefix E1–E12 nguyên byte | Tích hợp các chương, kết quả neural và kiểm cuối luận văn |
 

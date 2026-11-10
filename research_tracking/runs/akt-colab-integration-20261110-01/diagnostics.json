@@ -1,0 +1,441 @@
+{
+  "integration_diagnostics": true,
+  "status": {
+    "status": "FAILED",
+    "scope": "Scoped Linux CPU integration, inherited runtime; explicit isolated-runtime test deselection; no fresh Gate",
+    "groups": [
+      {
+        "name": "stdlib",
+        "command": [
+          "/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/.venv/bin/python",
+          "-B",
+          "-m",
+          "pytest",
+          "tests/shared_kt/test_development_corpus_worker.py",
+          "-q",
+          "-o",
+          "addopts=",
+          "-p",
+          "no:cacheprovider",
+          "--deselect=tests/akt/test_runtime.py::test_native_akt_import_cpu",
+          "--basetemp",
+          "/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/pytest-integration01-stdlib",
+          "--junitxml",
+          "/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/integration-evidence01/stdlib.xml"
+        ],
+        "module_count": 1,
+        "returncode": 1,
+        "tests": 19,
+        "counts": {
+          "failure": 0,
+          "error": 19,
+          "skipped": 0
+        }
+      },
+      {
+        "name": "no-torch",
+        "command": [
+          "/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/.venv/bin/python",
+          "-B",
+          "-m",
+          "pytest",
+          "tests/akt/test_research_execution.py",
+          "tests/akt/test_research_lifecycle.py",
+          "tests/akt/test_research_runner.py",
+          "tests/akt/test_research_simulator_data.py",
+          "tests/shared_kt/test_simulator_corpus_publisher.py",
+          "tests/shared_kt/test_simulator_corpus_reader.py",
+          "-q",
+          "-o",
+          "addopts=",
+          "-p",
+          "no:cacheprovider",
+          "--deselect=tests/akt/test_runtime.py::test_native_akt_import_cpu",
+          "--basetemp",
+          "/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/pytest-integration01-no-torch",
+          "--junitxml",
+          "/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/integration-evidence01/no-torch.xml"
+        ],
+        "module_count": 6,
+        "returncode": 1,
+        "tests": 274,
+        "counts": {
+          "failure": 1,
+          "error": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "name": "remaining",
+        "command": [
+          "/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/.venv/bin/python",
+          "-B",
+          "-m",
+          "pytest",
+          "tests/akt/test_batch_factory.py",
+          "tests/akt/test_causality.py",
+          "tests/akt/test_checkpoint.py",
+          "tests/akt/test_cli_recovery.py",
+          "tests/akt/test_colab_bundle.py",
+          "tests/akt/test_context.py",
+          "tests/akt/test_context_recovery.py",
+          "tests/akt/test_cuda_budget.py",
+          "tests/akt/test_data.py",
+          "tests/akt/test_encoding.py",
+          "tests/akt/test_evaluation.py",
+          "tests/akt/test_filesystem.py",
+          "tests/akt/test_gate2_refresh.py",
+          "tests/akt/test_graph_lifecycle.py",
+          "tests/akt/test_graph_prototype.py",
+          "tests/akt/test_graph_training.py",
+          "tests/akt/test_model.py",
+          "tests/akt/test_online_simulator.py",
+          "tests/akt/test_pilot.py",
+          "tests/akt/test_prediction.py",
+          "tests/akt/test_provenance.py",
+          "tests/akt/test_recovery_checkpoint.py",
+          "tests/akt/test_recovery_contract.py",
+          "tests/akt/test_recovery_integration.py",
+          "tests/akt/test_refit_recovery.py",
+          "tests/akt/test_research_a0_online.py",
+          "tests/akt/test_research_cuda_profile.py",
+          "tests/akt/test_research_graph_checkpoint.py",
+          "tests/akt/test_research_graph_condition.py",
+          "tests/akt/test_research_graph_context.py",
+          "tests/akt/test_research_graph_cuda_checkpoint.py",
+          "tests/akt/test_research_graph_model.py",
+          "tests/akt/test_research_graph_online.py",
+          "tests/akt/test_research_graph_optimizer.py",
+          "tests/akt/test_research_main_execution.py",
+          "tests/akt/test_research_main_stage.py",
+          "tests/akt/test_research_selected_resume.py",
+          "tests/akt/test_research_selected_runner.py",
+          "tests/akt/test_resumable.py",
+          "tests/akt/test_runner.py",
+          "tests/akt/test_runtime.py",
+          "tests/akt/test_sampler.py",
+          "tests/akt/test_selection_recovery.py",
+          "tests/akt/test_simulator_engineering.py",
+          "tests/akt/test_simulator_role_windows.py",
+          "tests/akt/test_synthetic_context_builder.py",
+          "tests/akt/test_synthetic_recovery_probe.py",
+          "tests/akt/test_training.py",
+          "tests/akt/test_upstream_data_contract.py",
+          "tests/akt/test_upstream_parity.py",
+          "tests/akt/test_watchdog.py",
+          "tests/akt/test_windows.py",
+          "tests/akt/test_worker_lifecycle.py",
+          "tests/shared_kt/test_bootstrap.py",
+          "tests/shared_kt/test_contracts.py",
+          "tests/shared_kt/test_cpu_closed_loop.py",
+          "tests/shared_kt/test_diagnostics.py",
+          "tests/shared_kt/test_edge_confidence.py",
+          "tests/shared_kt/test_edge_confidence_artifact.py",
+          "tests/shared_kt/test_evidence.py",
+          "tests/shared_kt/test_experimental_controls.py",
+          "tests/shared_kt/test_graph_augmentation.py",
+          "tests/shared_kt/test_graph_context.py",
+          "tests/shared_kt/test_graph_controls.py",
+          "tests/shared_kt/test_paper2_reference.py",
+          "tests/shared_kt/test_reference_controller.py",
+          "tests/shared_kt/test_research_admission.py",
+          "tests/shared_kt/test_research_population.py",
+          "tests/shared_kt/test_research_selected_checkpoint.py",
+          "tests/shared_kt/test_research_selected_files.py",
+          "tests/shared_kt/test_research_selected_metadata.py",
+          "tests/shared_kt/test_research_selected_rows.py",
+          "tests/shared_kt/test_research_selection.py",
+          "tests/shared_kt/test_research_selection_io.py",
+          "tests/shared_kt/test_response_calibration.py",
+          "tests/shared_kt/test_rq1_cross_ready.py",
+          "tests/shared_kt/test_rq1_mastery_ready_masking.py",
+          "tests/shared_kt/test_rq1_query_decision_overlap.py",
+          "tests/shared_kt/test_rq1_transitions.py",
+          "tests/shared_kt/test_rq2_controls.py",
+          "tests/shared_kt/test_simulator_bridge.py",
+          "tests/shared_kt/test_simulator_collection.py",
+          "tests/shared_kt/test_simulator_data.py",
+          "tests/shared_kt/test_simulator_research_collection.py",
+          "tests/shared_kt/test_simulator_research_data.py",
+          "-q",
+          "-o",
+          "addopts=",
+          "-p",
+          "no:cacheprovider",
+          "--deselect=tests/akt/test_runtime.py::test_native_akt_import_cpu",
+          "--basetemp",
+          "/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/pytest-integration01-remaining",
+          "--junitxml",
+          "/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/integration-evidence01/remaining.xml"
+        ],
+        "module_count": 85,
+        "returncode": 1,
+        "tests": 1696,
+        "counts": {
+          "failure": 3,
+          "error": 0,
+          "skipped": 0
+        }
+      }
+    ],
+    "excluded_node": "tests/akt/test_runtime.py::test_native_akt_import_cpu",
+    "exclusion_reason": "Inherited Colab Torch/NumPy are outside .venv; isolated runtime readiness remains unverified",
+    "source_unchanged": true,
+    "elapsed_seconds": 252.0890225029998
+  },
+  "issues": [
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_protected_source_rejected_before_any_protected_open[collection_sources]",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4e0ecd60>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_protected_source_rejected_before_any_protected_open[extra_sources]",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4e04afd0>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_frozen_config_profile_sha_cannot_be_changed",
+        "time": "0.006"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4e0772f0>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_allowlisted_source_byte_drift_rejected_before_generation",
+        "time": "0.007"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4ddc19d0>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_existing_corpus_rejected_before_generation_or_worker_writes",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4ddc2580>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_alias_rejected_before_generation[output]",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4dde1a50>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_alias_rejected_before_generation[corpus]",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4dde1150>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_alias_rejected_before_generation[source]",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4dd68b90>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_wrong_owner_stops_before_validation_or_writes[status]",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4dd1c9b0>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_wrong_owner_stops_before_validation_or_writes[pid]",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4e09b930>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_wrong_owner_stops_before_validation_or_writes[missing]",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4df08830>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_ram_guards_leave_no_success_receipt[before_heavy]",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4dfdce20>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_ram_guards_leave_no_success_receipt[after_heavy]",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4def8f50>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_ram_guards_leave_no_success_receipt[after_reader]",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4def8a10>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_positive_mock_flow_is_pending_outer_not_actual_corpus_acceptance",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4e0e5440>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_missing_role_support_stops_before_publish_reader",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4e2eba10>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_reader_content_mismatch_is_failure_not_pending_success",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4dd20a50>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_extra_source_drift_after_reader_prevents_success",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4dd223f0>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "stdlib",
+      "case": {
+        "classname": "tests.shared_kt.test_development_corpus_worker",
+        "name": "test_post_result_ram_failure_retains_failure_override_not_final_acceptance",
+        "time": "0.005"
+      },
+      "kind": "error",
+      "message": "failed on setup with \"FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\"",
+      "tail": "pytest.monkeypatch.MonkeyPatch object at 0x7e3c4dc339b0>\n\n    @pytest.fixture\n    def case(tmp_path_factory,monkeypatch):\n        spec=importlib.util.spec_from_file_location('isolated_development_worker',DRIVER)\n        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)\n        # Short per-case ordinal avoids Windows MAX_PATH with exact native source filenames.\n        root=tmp_path_factory.mktemp('c')/'workspace';root.mkdir()\n>       config_bytes=CONFIG.read_bytes()\n                     ^^^^^^^^^^^^^^^^^^^\n\ntests/shared_kt/test_development_corpus_worker.py:29: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_abc.py:625: in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json')\nmode = 'rb', buffering = -1, encoding = None, errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/experiments/akt/configs/simulator-research-corpus01.json'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "no-torch",
+      "case": {
+        "classname": "tests.akt.test_research_execution",
+        "name": "test_legacy_dataclass_ast_and_phase_defaults_unchanged",
+        "time": "0.016"
+      },
+      "kind": "failure",
+      "message": "FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/local-tests/akt-research-execution-20261108-01/config.py.before'",
+      "tail": "al-tests/akt-research-execution-20261108-01/config.py.before').read_text(encoding='utf-8')\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\ntests/akt/test_research_execution.py:220: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.13/pathlib/_local.py:546: in read_text\n    return PathBase.read_text(self, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/lib/python3.13/pathlib/_abc.py:632: in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/local-tests/akt-research-execution-20261108-01/config.py.before')\nmode = 'r', buffering = -1, encoding = 'utf-8', errors = None, newline = None\n\n    def open(self, mode='r', buffering=-1, encoding=None,\n             errors=None, newline=None):\n        \"\"\"\n        Open the file pointed to by this path and return a file object, as\n        the built-in open() function does.\n        \"\"\"\n        if \"b\" not in mode:\n            encoding = io.text_encoding(encoding)\n>       return io.open(self, mode, buffering, encoding, errors, newline)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       FileNotFoundError: [Errno 2] No such file or directory: '/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/artifacts/akt/local-tests/akt-research-execution-20261108-01/config.py.before'\n\n/usr/lib/python3.13/pathlib/_local.py:537: FileNotFoundError"
+    },
+    {
+      "group": "remaining",
+      "case": {
+        "classname": "tests.akt.test_cuda_budget",
+        "name": "test_new_cuda_phase_does_not_enable_cuda_on_legacy_cpu_phase",
+        "time": "0.009"
+      },
+      "kind": "failure",
+      "message": "ValueError: protected output or output outside AKT directory",
+      "tail": "ons')\n        if (config.lr <= 0 or config.eps <= 0 or config.max_grad_norm <= 0\n                or len(config.betas) != 2 or not all(0 <= value < 1 for value in config.betas)\n                or config.weight_decay < 0 or not 0 < config.inner_val_fraction < 1\n                or config.patience <= 0 or config.max_epochs <= 0 or config.min_delta < 0\n                or not 0 <= config.dropout < 1):\n            raise ValueError('invalid training configuration')\n        if config.inner_val_fraction != 0.1:\n            raise ValueError('protocol v1 requires the frozen 10% inner learner split')\n        for name in ('max_train_users', 'max_val_users', 'max_targets_per_side', 'max_total_targets',\n                     'max_steps', 'max_seconds', 'max_wall_seconds', 'max_rss_bytes', 'min_available_ram_bytes'):\n            value = getattr(config, name)\n            if value is not None and (not math.isfinite(float(value)) or value <= 0):\n                raise ValueError(f'invalid resource cap: {name}')\n        if config.output_dir == Path('.'):\n            raise ValueError('invalid output')\n        root = config.project_root.resolve()\n        output = config.output_dir.resolve()\n        allowed = (root / 'experiments/akt/results', root / 'experiments/akt/readiness', root / 'artifacts/akt')\n        protected = (root / 'dataset', root / 'artifacts/bkt_baseline', root / 'venv', root / '.wsl')\n        if (any(output.is_relative_to(path.resolve()) for path in protected)\n                or not any(output.is_relative_to(path.resolve()) and output != path.resolve() for path in allowed)):\n>           raise ValueError('protected output or output outside AKT directory')\nE           ValueError: protected output or output outside AKT directory\n\nsrc/knowledge_tracing/akt/config.py:176: ValueError"
+    },
+    {
+      "group": "remaining",
+      "case": {
+        "classname": "tests.akt.test_cuda_budget",
+        "name": "test_cuda_entry_requires_context_before_any_runtime_or_data_access",
+        "time": "0.004"
+      },
+      "kind": "failure",
+      "message": "AssertionError: Regex pattern did not match.\n Regex: 'context'\n Input: 'protected output or output outside AKT directory'",
+      "tail": "            if value is not None and (not math.isfinite(float(value)) or value <= 0):\n                raise ValueError(f'invalid resource cap: {name}')\n        if config.output_dir == Path('.'):\n            raise ValueError('invalid output')\n        root = config.project_root.resolve()\n        output = config.output_dir.resolve()\n        allowed = (root / 'experiments/akt/results', root / 'experiments/akt/readiness', root / 'artifacts/akt')\n        protected = (root / 'dataset', root / 'artifacts/bkt_baseline', root / 'venv', root / '.wsl')\n        if (any(output.is_relative_to(path.resolve()) for path in protected)\n                or not any(output.is_relative_to(path.resolve()) and output != path.resolve() for path in allowed)):\n>           raise ValueError('protected output or output outside AKT directory')\nE           ValueError: protected output or output outside AKT directory\n\nsrc/knowledge_tracing/akt/config.py:176: ValueError\n\nDuring handling of the above exception, another exception occurred:\n\ntmp_path = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/pytest-integration01-remaining/test_cuda_entry_requires_conte0')\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7adad5e56dd0>\n\n    def test_cuda_entry_requires_context_before_any_runtime_or_data_access(tmp_path,monkeypatch):\n        monkeypatch.setattr(runner,'_require_authorization',lambda *a,**k:pytest.fail('must reject before auth'))\n>       with pytest.raises(ValueError,match='context'):runner.run_cuda_smoke(cuda_config(tmp_path))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       AssertionError: Regex pattern did not match.\nE        Regex: 'context'\nE        Input: 'protected output or output outside AKT directory'\n\ntests/akt/test_cuda_budget.py:66: AssertionError"
+    },
+    {
+      "group": "remaining",
+      "case": {
+        "classname": "tests.akt.test_cuda_budget",
+        "name": "test_cuda_setup_failure_keeps_original_error_and_manifest",
+        "time": "0.006"
+      },
+      "kind": "failure",
+      "message": "AssertionError: Regex pattern did not match.\n Regex: 'MOCK_CUDA_SETUP_FAILURE'\n Input: 'protected output or output outside AKT directory'",
+      "tail": "g/akt/config.py:176: ValueError\n\nDuring handling of the above exception, another exception occurred:\n\ntmp_path = PosixPath('/content/kltn-current-cpu-c7c0f45b35ca40cf8f7a36624b1d4701/pytest-integration01-remaining/test_cuda_setup_failure_keeps_0')\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7adad6047290>\n\n    def test_cuda_setup_failure_keeps_original_error_and_manifest(tmp_path,monkeypatch):\n        config=cuda_config(tmp_path)\n        context=SimpleNamespace(validate_for=lambda cfg:None,cuda_limits=SimpleNamespace(max_vram_bytes=2*1024**3))\n        names=('max_train_users','max_val_users','max_targets_per_side','max_steps','max_seconds',\n               'max_wall_seconds','max_rss_bytes','min_available_ram_bytes')\n        approval={'caps':{n:getattr(config,n) for n in names},'identity':{'fixture':'no_real_authorization'},\n                  'approval_reference':'Synthetic error-path fixture; no actual GPU'}\n        monkeypatch.setattr(runner,'_require_authorization',lambda *a,**k:approval)\n        monkeypatch.setattr(runner,'_require_gate2_evidence',lambda *a,**k:{'fixture':True})\n        monkeypatch.setattr(runner,'_check_resource_budget',lambda *a,**k:0)\n        monkeypatch.setattr(runner,'_load_phase_inputs',lambda *a,**k:pytest.fail('no loader before CUDA setup'))\n        def fail(*args,**kwargs):raise ValueError('MOCK_CUDA_SETUP_FAILURE')\n        monkeypatch.setattr(runner,'configure_cuda_budget',fail)\n>       with pytest.raises(ValueError,match='MOCK_CUDA_SETUP_FAILURE'):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       AssertionError: Regex pattern did not match.\nE        Regex: 'MOCK_CUDA_SETUP_FAILURE'\nE        Input: 'protected output or output outside AKT directory'\n\ntests/akt/test_cuda_budget.py:82: AssertionError"
+    }
+  ]
+}

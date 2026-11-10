@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 10/11 — đã kiểm tích hợp trên Colab CPU
+
+Colab CPU đã đạt1.992ca trên92module trong294,935giây,0failure/error/skip; tách riêng1ca kiểm môi trường cô lập. Đã sửa gói thiếu cấu hình, bỏ phụ thuộc snapshot chưa tracked và làm kiểm timestamp xác định. Reader/model production giữ nguyên; inventory198file, chưa full Gate/CUDA/training chính. [Bằng chứng](../research_tracking/runs/akt-colab-integration-20261110-01/README.md).
+
+
 ## 10/11 — checkpoint A0 đã nối vào dự báo tuần tự
 
 Đã nối checkpoint nghiên cứu A0 vào dự báo tuần tự bằng loader tái dùng backend hiện có. Colab đạt22/22ca, gồm12mới và10hồi quy; checkpoint fixture48targets/2updates cho6dự báo khớp wrapper trong1e-6. Giữ lượt lỗi fixture, chưa final fitted/refit/calibration hoặc closed-loop chính. [Bằng chứng](../research_tracking/runs/akt-a0-online-colab-20261110-01/README.md).

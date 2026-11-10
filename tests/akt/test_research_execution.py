@@ -217,7 +217,9 @@ def test_newphase_frozen_policy_and_all_caps(files,field,value):
 
 
 def test_legacy_dataclass_ast_and_phase_defaults_unchanged(files):
-    before=(REAL_ROOT/'artifacts/akt/local-tests/akt-research-execution-20261108-01/config.py.before').read_text(encoding='utf-8')
+    snapshot=(REAL_ROOT/'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt').read_bytes()
+    assert hashlib.sha256(snapshot).hexdigest()=='6f972accc31a20a95cd2964042632ac39a8c89d08768d4c9932cac5fa7c59185'
+    before=snapshot.decode('utf-8')
     current=(REAL_ROOT/'src/knowledge_tracing/akt/config.py').read_text(encoding='utf-8')
     cls=lambda text:next(n for n in ast.parse(text).body if isinstance(n,ast.ClassDef) and n.name=='AKTConfig')
     assert ast.dump(cls(before))==ast.dump(cls(current))

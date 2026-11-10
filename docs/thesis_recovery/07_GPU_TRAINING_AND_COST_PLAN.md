@@ -1,5 +1,10 @@
 # GPU, artifact và ngân sách
 
+## 10/11 — cập nhật Colab CPU sau tích hợp
+
+Colab CPU đã đạt1.992ca trên92module trong294,935giây,0failure/error/skip; tách riêng1ca kiểm môi trường cô lập. Đã sửa gói thiếu cấu hình, bỏ phụ thuộc snapshot chưa tracked và làm kiểm timestamp xác định. Reader/model production giữ nguyên; inventory198file, chưa full Gate/CUDA/training chính. Cần môi trường cô lập đúng profile, Gate đầy đủ, CUDA/recovery và throughput trước phê duyệt Main. Modal0USD. [Bundle](../../research_tracking/runs/akt-colab-integration-20261110-01/README.md).
+
+
 ## Cập nhật10/11 — CPU lifecycle đã đạt, chưa đủ điều kiện training Modal
 
 Lượt chuẩn bị refresh Gate source195 đã ghim chính xác91module theo API production. Dispatch collection13 bị ngưỡng4GiB chặn trước collect/test body, nên chưa có inventory IDs mới hoặc Gate PASS mới. Controller derivative chỉ đổi population195/91 và con trỏ worker, giữ guards/caps. Hồ sơ tiếp tục ở [gói chuẩn bị Gate195](../../research_tracking/runs/gate195-preparation-20261110-01/README.md). Cần có dư RAM ngoài4GiB tối thiểu ở thời điểm dispatch để giảm NO-GO do overhead/fluctuation; không hạ ngưỡng của controller.

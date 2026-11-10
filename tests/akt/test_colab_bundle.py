@@ -13,7 +13,9 @@ def test_bundle_contains_current_test_dependencies_and_source_only_notebooks():
     collect = runpy.run_path('scripts/akt/build_colab_bundle.py')['bundle_contents']
     contents, transforms = collect()
     for name in ('scripts/akt/refresh_gate2.py','scripts/research/run_cpu_diagnostics.py',
-                 'src/knowledge_tracing/paper2_reference.py'):
+                 'src/knowledge_tracing/paper2_reference.py',
+                 'experiments/akt/configs/simulator-research-corpus01.json',
+                 'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt'):
         assert name in contents
     assert 'requirements-akt.lock.txt' in contents
     contract_files = runpy.run_path('scripts/akt/build_colab_bundle.py')['RESEARCH_CONTRACT_FILES']
@@ -63,7 +65,8 @@ def synthetic_collector(tmp_path, monkeypatch, missing=None):
     contracts = namespace['RESEARCH_CONTRACT_FILES']
     paper = 'paper2/rivf2026_gam_kt_artifact_v20/rivf2026_gam_kt_artifact_v20'
     names = [*contracts, 'requirements-akt.in', 'requirements-akt.lock.txt',
-        *(f'experiments/akt/configs/{n}.json' for n in ('smoke','pilot','fold0')),
+        'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt',
+        *(f'experiments/akt/configs/{n}.json' for n in ('smoke','pilot','fold0','simulator-research-corpus01')),
         'paper1/AdaptiveEngineSimulation_Enhanced.ipynb',
         *(paper+'/source/'+n+'.ipynb' for n in ('adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1',
                                                'junyi_cycle_corrected_ablation_confirmation')),
@@ -115,6 +118,8 @@ def test_fixed_docs_raw_bytes_and_notebook_transform_without_zip(tmp_path_factor
     'docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
     'docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
     'docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json',
+    'experiments/akt/configs/simulator-research-corpus01.json',
+    'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt',
 ])
 def test_missing_fixed_contract_stops_local_inventory_without_zip(tmp_path_factory, monkeypatch, missing):
     tmp_path = tmp_path_factory.mktemp('b')

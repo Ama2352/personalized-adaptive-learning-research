@@ -77,7 +77,9 @@ class FileTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 with index.open_rows():
                     path = self.root / ref.path
+                    stamp = path.stat()
                     path.write_bytes(path.read_bytes().replace(b'oov_item', b'bad_item'))
+                    os.utime(path, ns=(stamp.st_atime_ns, stamp.st_mtime_ns + 2_000_000_000))
             self.assertTrue(reader.failed)
             self.assertEqual(reader.open_files, 0)
         ref = self.csv(name='fresh.csv')
@@ -87,6 +89,21 @@ class FileTests(unittest.TestCase):
                 with index.open_rows():
                     with index.open_rows():
                         self.fail('Second open handle must be rejected')
+            self.assertTrue(reader.failed)
+            self.assertEqual(reader.open_files, 0)
+
+    def test_final_hash_rejects_mutation_with_unchanged_stat_stamp(self):
+        ref = self.csv()
+        with m.BoundedArtifactReader(self.root, limits()) as reader:
+            index = reader.index_csv(ref, candidate_id='A0', kind='predictions')
+            path = self.root / ref.path
+            stamp = reader._stamp(path.stat())
+            # Model a filesystem whose clock does not distinguish two writes.
+            with patch.object(reader, '_stamp', return_value=stamp):
+                with index.open_rows():
+                    path.write_bytes(path.read_bytes().replace(b'oov_item', b'bad_item'))
+                with self.assertRaisesRegex(ValueError, 'SHA'):
+                    reader.verify_unchanged()
             self.assertTrue(reader.failed)
             self.assertEqual(reader.open_files, 0)
 

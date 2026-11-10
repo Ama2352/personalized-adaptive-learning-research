@@ -23,11 +23,13 @@ RESEARCH_CONTRACT_FILES = (
 def bundle_contents():
     paths = sorted((ROOT / 'src/knowledge_tracing').rglob('*.py'))
     paths += sorted((ROOT / 'tests/akt').glob('*.py'))
+    paths += [ROOT/'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt']
     paths += sorted((ROOT / 'tests/shared_kt').glob('*.py'))
     paths += sorted((ROOT / 'tests/gam_kt').glob('*.py'))
     paths += sorted((ROOT / 'scripts/akt').glob('*.py'))
     paths += sorted((ROOT / 'scripts/research').glob('*.py'))
-    paths += [ROOT / 'experiments/akt/configs' / name for name in ('smoke.json', 'pilot.json', 'fold0.json')]
+    paths += [ROOT / 'experiments/akt/configs' / name for name in
+              ('smoke.json', 'pilot.json', 'fold0.json', 'simulator-research-corpus01.json')]
     paths += [ROOT/'requirements-akt.in', ROOT/'requirements-akt.lock.txt']
     # Fixed public contract dependencies read by graph/stage/driver source;
     # no docs glob, runtime credentials, authorization or execution grant.

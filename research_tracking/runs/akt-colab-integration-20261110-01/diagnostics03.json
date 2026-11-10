@@ -1,0 +1,13 @@
+{
+  "integration03_issues": [
+    {
+      "case": {
+        "classname": "tests.shared_kt.test_research_selection_io.FileTests",
+        "name": "test_cursor_tampering_and_handle_limit_fail_closed",
+        "time": "0.002"
+      },
+      "message": "AssertionError: ValueError not raised",
+      "detail": "self = <test_research_selection_io.FileTests testMethod=test_cursor_tampering_and_handle_limit_fail_closed>\n\n    def test_cursor_tampering_and_handle_limit_fail_closed(self):\n        ref = self.csv()\n        with m.BoundedArtifactReader(self.root, limits()) as reader:\n            index = reader.index_csv(ref, candidate_id='A0', kind='predictions')\n>           with self.assertRaises(ValueError):\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE           AssertionError: ValueError not raised\n\ntests/shared_kt/test_research_selection_io.py:77: AssertionError"
+    }
+  ]
+}

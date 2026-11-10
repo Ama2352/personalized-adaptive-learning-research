@@ -96,6 +96,7 @@ def _runtime_report_matches(report, *, source: dict, lock_hash: str, lock_file: 
 def gate2_build_hashes(project_root: Path = PROJECT_ROOT) -> dict:
     paths = list((project_root / 'src/knowledge_tracing/akt').glob('*.py'))
     paths += list((project_root / 'tests/akt').glob('*.py'))
+    paths += list((project_root / 'tests/akt/fixtures').glob('*.txt'))
     paths += list((project_root / 'tests/shared_kt').glob('*.py'))
     paths += [project_root / 'src/knowledge_tracing/shared_kt.py',
               project_root / 'src/knowledge_tracing/paired_bootstrap.py',
