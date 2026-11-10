@@ -4372,7 +4372,7 @@
       "elapsed_duration": "Chưa đo",
       "compute_cost_category": "local_CPU_preparation; GRAPH15 actualGPU separately_authorized",
       "authorization_requirements": "User đã giao localengineering; Root review finite commands/caps trước execution. FullCV/Holdout/finalselection/paidGPU vẫn quyền riêng, không chiModal từ taskstatus.",
-      "status": "PARTIALLY_VERIFIED_NINE_FILE_STATISTICS_SCALED1260_CLOSED_FREEZE_PENDING",
+      "status": "PARTIALLY_VERIFIED_CACHED_REVIEW_PUBLICATION_MAIN_FREEZE_PENDING",
       "blockers": [],
       "verified_cases": 8,
       "remaining_scope": [
@@ -4390,7 +4390,15 @@
           "research_tracking/runs/nine-file-scaling-20261110-01/README.md"
         ],
         "verified_scope_and_remaining_vi": "Reader/metadata/rows/accumulator/kernel đã nối bằng fixtures, còn independent operation review, late-failure và publication."
-      }
+      },
+      "progress_updates": [
+        {
+          "date": "2026-11-10",
+          "evidence": "research_tracking/runs/nine-review-publication-20261110-01/README.md",
+          "scope_vi": "78fixturetests đạt, có exclusive cached review. Main operation/selection freeze và refit consumer còn riêng.",
+          "priority_vi": "Chỉ tiếp tục phần tối thiểu khi nó chặn actual experiment, không mở rộng tổng quát."
+        }
+      ]
     },
     {
       "id": "GRAPH14",
@@ -6109,34 +6117,51 @@
   "current_execution_owner": "Codex Root, tuần tự, không subagent theo yêu cầu tiết kiệm tài nguyên",
   "current_execution_queue": [
     {
-      "id": "GRAPH13",
-      "action_vi": "Hoàn thiện đóng kết quả độc quyền và review late-failure trên fixtures",
-      "stop_before_vi": "Actual final selection/refit khi chưa có grant và đủ9fit"
+      "id": "T13",
+      "action_vi": "Đóng claim và bảng bằng chứng RQ1/RQ2 từ kết quả đã nghiệm thu, chỉ rõ phép kiểm còn phân biệt giả thuyết",
+      "acceptance_vi": "Mỗi claim có nguồn, giới hạn và trường hợp dương/âm/bất định, tránh chạy lại Paper1/2 toàn bộ"
     },
     {
       "id": "T08",
-      "action_vi": "Hoàn tất shared code rồi collect/Gate mới khi dư RAM4GiB; chuẩn bị máy Linux/CUDA",
-      "stop_before_vi": "Không bỏ Gate hoặc tự dùng Modal"
+      "action_vi": "Gỡ đúng Gate/GPU blockers và benchmark cần cho các selected fits chính",
+      "acceptance_vi": "Nguồn hiện hành, mask/target counts, checkpoint/reload/resume/export và cost đủ quyết định",
+      "stop_before_vi": "Không bỏ guard, spending chưa có grant hoặc mở thêm framework tổng quát"
     },
     {
-      "id": "T16",
-      "action_vi": "Kiểm và hoàn thiện producer Junyi theo split/vocabulary đã chốt",
-      "stop_before_vi": "Không sửa split, dùng Holdout hoặc tự chạy fullCV"
+      "id": "T19",
+      "action_vi": "Chạy matrix A0–A3 và baseline bắt buộc trên môi trường chính đã chốt",
+      "acceptance_vi": "Cùng split/quần thể, confidence và gate có audit, đủ actual outputs để so sánh",
+      "stop_before_vi": "Thực thi thật cần authorization, không lấy4run engineering thay Main"
     },
     {
       "id": "T20",
-      "action_vi": "Chuẩn bị matrix noise/history/profile theo đề cương và controls đã có",
-      "stop_before_vi": "Không chạy thí nghiệm ngoài authorization hoặc đổi phương pháp ngầm"
+      "action_vi": "Chạy/bổ sung đúng noise/history/ability controls còn thiếu và closed-loop Development được duyệt",
+      "acceptance_vi": "Matrix tối thiểu đã đăng ký, learner/seed inference unit và phản chứng rõ",
+      "stop_before_vi": "Không thay simulator/phương pháp hoặc mở rộng toàn bộ Cartesian matrix ngầm"
     },
     {
-      "id": "T21",
-      "action_vi": "Nối hợp đồng fitted models vào demo khi có artifact hợp lệ",
-      "stop_before_vi": "Không coi viewer lịch sử là demo người học mới đã hoàn tất"
+      "id": "T22",
+      "action_vi": "Phân tích prediction/calibration, chuỗi quyết định và outcome, báo cả kết quả âm và bất định",
+      "acceptance_vi": "Ba bảng trả lời RQ cùng figure/CSV nguồn và đúng cấp độ bằng chứng"
     },
     {
       "id": "T23",
-      "action_vi": "Viết tiếp từ claim ledger đã đóng, giữ phân biệt evidence và giới hạn",
-      "stop_before_vi": "Không tự gửi báo cáo hoặc claim ưu thế CG-AKT khi chưa có kết quả"
+      "action_vi": "Cập nhật report/HTML và bản thảo ngay khi có kết quả đáng kể",
+      "acceptance_vi": "Mạch lập luận từ Paper1/2 đến phát hiện mới và phần chưa chứng minh, không lấp bằng test counts"
+    },
+    {
+      "id": "T21",
+      "action_vi": "Demo nhỏ giải thích fitted traces/graph influence và quyết định",
+      "acceptance_vi": "Dùng artifact đã nghiệm thu, giữ UI hiện có và rõ phạm vi replay/online"
     }
-  ]
+  ],
+  "execution_priority_policy_20261110": {
+    "horizon_days": 7,
+    "purpose_vi": "Bằng chứng nghiên cứu cốt lõi cho RQ1–RQ3",
+    "engineering_admission_vi": "Chỉ làm khi chặn thí nghiệm cụ thể hoặc cần ngăn sai kết quả/lãng phí credit.",
+    "generic_infrastructure_expansion_deferred": true,
+    "original_thesis_scope_unchanged": true,
+    "new_cloud_or_full_cv_grant": false,
+    "roadmap": "docs/thesis_recovery/08_CRITICAL_PATH_ROADMAP.md"
+  }
 }

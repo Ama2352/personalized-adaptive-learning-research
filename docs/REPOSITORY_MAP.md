@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## Ưu tiên hiện hành — nghiên cứu cốt lõi trong7ngày
+
+[Roadmap08](thesis_recovery/08_CRITICAL_PATH_ROADMAP.md) và TASKS.json đã ưu tiên evidence RQ1/RQ2, GPU tối thiểu, actual A0–A3/baselines, closed-loop và viết. Gói kỹ thuật78tests đã chốt, không mở rộng infrastructure khi chưa có thí nghiệm bị chặn.
+
+
 ## 10/11 — chốt gói review thống kê, chuyển ưu tiên sang nghiên cứu
 
 [Hồ sơ78tests](../research_tracking/runs/nine-review-publication-20261110-01/README.md) giữ input/output hashes, lỗi muộn và quota. Đây là fixtures, chưa Main freeze. Dừng mở rộng tổng quát khi chưa có thí nghiệm bị chặn.

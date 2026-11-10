@@ -1090,3 +1090,5 @@ Gate195 preparation: genuineAPI195sources/91modules frozen snapshot08/packet08. 
 Readiness reconciliation:3PDF repo/Desktop identical,14current gaps và8parent statuses sửa theo evidence,178IDs giữ. Snapshot gap cũ nguyên; không taskcompleted/newN. Hai report đổi cụmGate và thêm mục đích readerfixture,11SVG nguyên/17tables, staticQA. Writer02 CRLF lỗi đã03 sửa từbytebefore trướccommit, giữpost02. Gate195 vẫnSTALE/RAMNO-GO,0NN/Modal/subagent. Bundle research-readiness-reconciliation-20261110-01.
 
 Cached publication đã chốt78tests/0FES, fixture9×4target, exclusivewrite/rehash/failureoverride và không resetbudget. Không actualMain/modelselection. Source195 cần freeze mới. Theo user, dừng genericengineering để ưu tiên nghiên cứu chính trong kịch bản7ngày. Bundle nine-review-publication-20261110-01,0NN/Modal/subagent.
+
+User chuyển ưu tiên sang nghiên cứu chính trong kịch bản7ngày. Backlog giữ178IDs và scope, chỉ đổi queue/science-first policy, không cấp spending/CV/Holdout/finalselection. Gói78 đãcommit5d4d04d. Ước lượng quản lý RQ1/2/3=75/60/35±10điểm, không phải researchmetric hoặc RQcomplete. Roadmap08 ghi nhịp7ngày và các nhánh hoãn.

@@ -16,6 +16,12 @@ Bảng này cập nhật bằng chứng đã có. Các ước lượng phần tr
 
 [Sổ khoảng trống hiện hành](RESEARCH_GAPS.md) đã tách các mục tìm nguồn/tài liệu đã giải quyết khỏi bằng chứng khoa học còn thiếu. Lượt đối chiếu10/11 không thêm tương tác, mẫu độc lập hoặc kết luận RQ. [Reader synthetic1260](runs/nine-file-scaling-20261110-01/README.md) là đo khâu xử lý artifact; [Gate195 preparation](runs/gate195-preparation-20261110-01/README.md) chưa có collection IDs hoặc GatePASS mới.
 
+## Ước lượng quản lý và ưu tiên ngày10/11
+
+Theo bằng chứng đã nghiệm thu, ước lượng RQ1 khoảng75%, RQ2 khoảng60%, RQ3 khoảng35%, sai số khoảng±10điểm phần trăm. Đây là dự báo quản lý theo deliverables, chưa RQ nào được nghiệm thu hoàn tất. Các batch phần mềm không tự tăng mức hoàn thành bằng chứng khoa học.
+
+Người dùng yêu cầu ưu tiên nghiên cứu trong kịch bản chỉ còn7ngày. [Roadmap hiện hành](../docs/thesis_recovery/08_CRITICAL_PATH_ROADMAP.md) tập trung actual experiments, ba bảng kết quả RQ, figure nguồn và bản thảo/demo gọn. Các nhánh verifier/publisher tổng quát, fullreproduction/CV diện rộng và UI/repo refactor được hoãn khi chưa trực tiếp chặn nghiên cứu. Scope đề cương và các approval vẫn giữ nguyên.
+
 ## Ước lượng cập nhật sau kết quả learned19 ngày 09/11
 
 Đây là ước lượng quản lý theo phần việc và bằng chứng đã nghiệm thu, sai số khoảng ±10 điểm phần trăm. Các mức cũ bên dưới giữ diễn tiến lịch sử. Chưa RQ nào hoàn tất. Lượt fresh120 dở dang và các kiểm phần mềm chưa chạy chưa được cộng vào mức nghiệm thu.
