@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 10/11 — metadata ba pipeline đã nối với checkpoint
+
+[Hồ sơ kiểm](../research_tracking/runs/selected-producer-metadata-20261110-01/README.md) đạt39tests và4producer engineering, gồm nguồn thực trước–sau. Chưa review operation receipts/request độc lập hoặc admission đủ9. Source193 cần refresh Gate.
+
+
 ## 10/11 — liên kết checkpoint trước so sánh mô hình
 
 [Hồ sơ kiểm](../research_tracking/runs/selected-checkpoint-binding-20261110-01/README.md) đạt32tests và đọc/hash4checkpoint thật, giữ failure do ánh xạ tên kiến trúc. Chưa admission provenance/chín candidate. Source191 cần refresh Gate.
