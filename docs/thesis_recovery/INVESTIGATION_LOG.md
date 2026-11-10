@@ -1070,3 +1070,5 @@ A1 expert selected accepted138.404s,7epochs/best4/14updates4704targets, cùng ba
 Kiểm cuối:183sourcehashGate hiện hành khớp, không rerun1913tests. Gitrawreadback341files của sáu bundle mới đạt tại0299cc3. Báo cáo đã đặt phát hiện khoa học trước mốc phần mềm, desktop/mobile đã xem,11SVG nguyên/17tables, browser vàpreview đều đóng. Các nativejobs terminal/Job0, không cóModalcompute. Gói việc đã đóng, cácRQ/mainmatrix vẫn còn thiếu.
 
 Batch tiết kiệm token: ngắt2adapters agents, agent IO dừng sau một gói. Population helper tích hợp canonical,6tests và integration1260/84hash đạt1.130s. Driver01 APIkeyword lỗi giữ nguyên; candidate IO9methods còn1error stat/fstat, không promote. Source185 làm Gate183 stale, cần refresh sau ổn định code. Không NN/Holdout/Modal.
+
+IO stamp diagnostic xác định chênh ctime giữa path/handle trong fixture Windows. Sửa so sánh crossAPI không bỏ kiểm ctime trong từngAPI/SHA.10tests canonical và8CSV của4môhình khớp84K/y độc lập, actual2.260s. Không model/selector. Module IO tích hợp, build187 cần refreshGate sau adapters, không dùngGate183 cho source mới. Hiện0subagent/Modal0, nguồn và lỗi trước giữ nguyên.

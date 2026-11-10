@@ -240,3 +240,7 @@ Profile có phiên bản nằm trong [quyết định28](thesis_recovery/28_CUDA
 ## 10/11 — tập đích chuẩn trước so sánh mô hình
 
 Module src/knowledge_tracing/research_population.py đã tích hợp và kiểm sáu tests cùng tập selection Main1260targets/6learners. Hash84targets engineering khớp export A0. Bundle research_tracking/runs/main-selection-population-integration-20261110-01 giữ cả lỗi driver và candidate IO chưa đạt. Build185 cần refresh Gate; Gate183/1913 là snapshot đã nghiệm thu trước thay đổi này. Chưa chọn winner hoặc cấp quyền refit.
+
+## 10/11 — đọc artifact cho selector
+
+src/knowledge_tracing/research_selection_io.py cung cấp FileRef, giới hạn đọc, JSON/CSV nghiêm ngặt và offset index.10tests cùng8CSV đã đạt, xem research_tracking/runs/selection-artifact-io-integration-20261110-01. Đây chưa là external freeze; build187 cần refresh Gate.

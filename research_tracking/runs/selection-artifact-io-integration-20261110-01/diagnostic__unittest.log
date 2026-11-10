@@ -1,0 +1,36 @@
+test_all_nine_producer_headers_and_null_wire_strings (test_main_selection_file_primitives_candidate01.FileTests.test_all_nine_producer_headers_and_null_wire_strings) ... ERROR
+test_bad_paths_protected_names_and_ancestor_alias (test_main_selection_file_primitives_candidate01.FileTests.test_bad_paths_protected_names_and_ancestor_alias) ... ok
+test_deadline_and_closed_reader_reject (test_main_selection_file_primitives_candidate01.FileTests.test_deadline_and_closed_reader_reject) ... ok
+test_duplicates_extra_headers_and_foreign_role_rejected (test_main_selection_file_primitives_candidate01.FileTests.test_duplicates_extra_headers_and_foreign_role_rejected) ... ok
+test_index_order_is_statistical_and_postread_tampering_rejected (test_main_selection_file_primitives_candidate01.FileTests.test_index_order_is_statistical_and_postread_tampering_rejected) ... ok
+test_json_zero_file_and_final_hash_readback (test_main_selection_file_primitives_candidate01.FileTests.test_json_zero_file_and_final_hash_readback) ... ok
+test_multiline_control_and_oversize_fields_rejected (test_main_selection_file_primitives_candidate01.FileTests.test_multiline_control_and_oversize_fields_rejected) ... ok
+test_sha_size_byte_and_index_limits_fail_before_acceptance (test_main_selection_file_primitives_candidate01.FileTests.test_sha_size_byte_and_index_limits_fail_before_acceptance) ... ok
+test_unique_finite_json_and_failed_reader (test_main_selection_file_primitives_candidate01.FileTests.test_unique_finite_json_and_failed_reader) ... ok
+
+======================================================================
+ERROR: test_all_nine_producer_headers_and_null_wire_strings (test_main_selection_file_primitives_candidate01.FileTests.test_all_nine_producer_headers_and_null_wire_strings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\test_main_selection_file_primitives_candidate01.py", line 89, in test_all_nine_producer_headers_and_null_wire_strings
+    index = reader.index_csv(ref, candidate_id=candidate, kind=kind)
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\main_selection_file_primitives_candidate01.py", line 104, in wrapped
+    return method(self, *args, **kwargs)
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\main_selection_file_primitives_candidate01.py", line 259, in index_csv
+    with self._opened(ref, self.limits.max_csv_bytes) as (stream, stamp):
+         ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\main_selection_file_primitives_candidate01.py", line 184, in _opened
+    need(self._stamp(os.fstat(stream.fileno())) == token, 'Opened exact file identity')
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\diagnose_selection_file_stamp01.py", line 42, in observed_need
+    return original_need(ok, message)
+  File "D:\Dev\KLTN\artifacts\akt\local-tests\akt-research-runner-20261108-01\main_selection_file_primitives_candidate01.py", line 32, in need
+    raise ValueError(message)
+ValueError: Opened exact file identity
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.066s
+
+FAILED (errors=1)

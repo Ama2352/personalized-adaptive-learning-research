@@ -403,3 +403,7 @@ Gate21 chỉ chạy `tests/akt tests/shared_kt`; các số139SAKT và38Graph-GAM
 ## 10/11 — population helper đã tích hợp
 
 [Bundle population](../runs/main-selection-population-integration-20261110-01/README.md) đã kiểm đủ1260targets Main và hash84target A0, sáu tests canonical đạt. Chưa chọn mô hình; candidate IO còn1error và source185 cần refresh Gate.
+
+## 10/11 — IO artifact canonical đã kiểm
+
+[Bundle IO](../runs/selection-artifact-io-integration-20261110-01/README.md) giữ diagnostic, 10tests và8CSV khớp84K/y. Còn metadata adapters và nine-file admission. Build187 chưa refresh Gate.
