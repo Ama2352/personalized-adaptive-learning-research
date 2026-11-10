@@ -1082,3 +1082,5 @@ Producer metadata:39tests đạt,4actual engineering producers khớp invocation
 Operation reconciliation:43tests đạt,4exact controller receipts và116nativefiles/222853565bytes được hash lại. Lỗi03 do schemaRAM A0 khác Job-family giữ nguyên,04 kiểm đúng worker1GiB/A1-SAKT-GKT2GiB. Chưa nine-file request/late-marker publication/main admission. Source193 Gate stale,0NN/Modal/subagent. Bundle selected-operation-reconciliation-20261110-01.
 
 Nine-file statistics:67tests đạt, manufactured9layouts→full4/common3/36checks→frozen2000draw kernel/A0expected. Giữ01/66ca và02/67ca, không cộngN. Có trường hợp9candidate cùngsainhãn và late-result deadline bị reject. API không cấp operation/freeze/refit. Source195 Gate stale,0NN/Holdout/Modal/subagent. Bundle nine-selected-file-statistics-20261110-01.
+
+Synthetic file scaling:01/68tests đạt nhưng reader timeout45, giữ nguồn/failure. Scoped cursors cap18 và ExitStack giữ hash/identity/rehash.02/71tests đạt,1260targets/11340checks/22680indices, reader11.807s/45s, peak57769984B. Không training/GPU throughput hoặc RQ evidence. Source195 Gate stale,0NN/Modal/subagent. Bundle nine-file-scaling-20261110-01, GPUplan07 cập nhật.

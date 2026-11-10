@@ -4,6 +4,7 @@ Chỉ đọc các refs trong request đã pin. Chưa nghiệm thu operation/late
 chọn winner, ghi freeze hoặc cấp quyền refit. Tái dùng accumulator đã cố định.
 """
 from dataclasses import asdict, dataclass, replace
+from contextlib import ExitStack
 
 from .research_admission import AdmissionLimits, MainAdmissionAccumulator, MainAdmissionStatistics, PopulationExpectation
 from .research_selected_metadata import validate_selected_metadata, DOCUMENT_ROLES, ARTIFACT_ROLES
@@ -99,11 +100,16 @@ def read_nine_selected_statistics(root, *, request_ref, population, io_limits, a
         keys = indices['A0']['targets'].keys
         need(len(keys) == population.full_targets and all(index.keys == keys
              for pair in indices.values() for index in pair.values()), 'All nine full prediction/target keys required')
-        for key in keys:
-            rows = tuple(normalize_selected_row(indices[candidate]['predictions'].row(key),
-                indices[candidate]['targets'].row(key), claims[candidate]) for candidate in REQUIRED_CANDIDATE_IDS)
-            accumulator.add_row_group(rows)
-        statistics = accumulator.finish()
+        with ExitStack() as stack:
+            row_readers = indices
+            if io_limits.max_open_files >= 2 * len(REQUIRED_CANDIDATE_IDS):
+                row_readers = {candidate: {kind: stack.enter_context(index.open_rows())
+                    for kind, index in pair.items()} for candidate, pair in indices.items()}
+            for key in keys:
+                rows = tuple(normalize_selected_row(row_readers[candidate]['predictions'].row(key),
+                    row_readers[candidate]['targets'].row(key), claims[candidate]) for candidate in REQUIRED_CANDIDATE_IDS)
+                accumulator.add_row_group(rows)
+            statistics = accumulator.finish()
         final = reader.verify_unchanged()
         result = SelectedFileStatistics(statistics, tuple(verified[path] for path in sorted(verified)),
             final['bytes_read'], final['index_entries'], final['elapsed_seconds'])

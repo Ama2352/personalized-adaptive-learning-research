@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 10/11 — reader đủ quy mô1.260target giả
+
+[Hồ sơ kiểm](../research_tracking/runs/nine-file-scaling-20261110-01/README.md) đạt71tests, reader11,807giây/45giây và peak57.769.984bytes. Giữ timeout cũ, cap18handle được đo riêng. Đây là đọc artifact, chưa là GPU training throughput.
+
+
 ## 10/11 — chín bộ file đã ghép vào thống kê chung
 
 [Hồ sơ kiểm](../research_tracking/runs/nine-selected-file-statistics-20261110-01/README.md) đạt67tests trên dữ liệu giả, nối reader/metadata/CSV/accumulator/kernel2000draws. Chưa actual Main admission hoặc lựa chọn mô hình. Source195 cần refresh Gate.

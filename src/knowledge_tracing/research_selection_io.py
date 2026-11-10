@@ -123,6 +123,19 @@ class CsvRowIndex:
         for key in self.keys:
             yield self.row(key)
 
+    def open_rows(self):
+        """Giữ một handle đã xác minh trong context, tính vào max_open_files."""
+        return self._reader.open_index_rows(self)
+
+
+class _IndexedRowCursor:
+    def __init__(self, reader, index, stream):
+        self.reader, self.index, self.stream = reader, index, stream
+        self.closed = False
+
+    def row(self, key):
+        return self.reader._cursor_row(self, key)
+
 
 class BoundedArtifactReader:
     def __init__(self, root, limits):
@@ -285,20 +298,41 @@ class BoundedArtifactReader:
 
     @_fail_closed
     def _indexed_row(self, index, key):
+        with self.open_index_rows(index) as cursor:
+            return cursor.row(key)
+
+    @contextmanager
+    def open_index_rows(self, index):
+        try:
+            need(type(index) is CsvRowIndex and index._reader is self, 'Index owned by this reader')
+            with self._opened(index.ref, self.limits.max_csv_bytes) as (stream, _):
+                cursor = _IndexedRowCursor(self, index, stream)
+                try:
+                    yield cursor
+                finally:
+                    cursor.closed = True
+        except BaseException:
+            self.failed = True
+            raise
+
+    @_fail_closed
+    def _cursor_row(self, cursor, key):
+        need(type(cursor) is _IndexedRowCursor and cursor.reader is self and not cursor.closed,
+             'Active owned row cursor required')
+        index, stream = cursor.index, cursor.stream
         need(type(index) is CsvRowIndex and index._reader is self and type(key) is ModelNeutralKey,
              'Index/key owned by this reader')
         need(key in index._entries, 'Unknown target key')
         offset, length, digest = index._entries[key]
-        with self._opened(index.ref, self.limits.max_csv_bytes) as (stream, _):
-            self._reserve_read(length)
-            stream.seek(offset)
-            raw = stream.read(length)
-            self._charge(len(raw))
-            need(len(raw) == length and hashlib.sha256(raw).hexdigest() == digest, 'Indexed row bytes changed')
-            values = self._csv_line(raw)
-            need(len(values) == len(index.header), 'Indexed row field count')
-            row = dict(zip(index.header, values))
-            need(_key(row) == key, 'Indexed row identity changed')
+        self._reserve_read(length)
+        stream.seek(offset)
+        raw = stream.read(length)
+        self._charge(len(raw))
+        need(len(raw) == length and hashlib.sha256(raw).hexdigest() == digest, 'Indexed row bytes changed')
+        values = self._csv_line(raw)
+        need(len(values) == len(index.header), 'Indexed row field count')
+        row = dict(zip(index.header, values))
+        need(_key(row) == key, 'Indexed row identity changed')
         return row  # Strings unchanged, including null ''. Normalization belongs to producer adapters.
 
     @_fail_closed

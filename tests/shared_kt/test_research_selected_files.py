@@ -21,7 +21,7 @@ from test_research_selected_rows import H
 
 def io_limits():
     return FileReadLimits(2**20, 32 * 2**20, 256, 1, 2**20, 2**20, 16384,
-                         32, 128, 16384, 64, 4096, 15.)
+                         32, 256, 16384, 64, 4096, 15.)
 
 
 def admission_limits():
@@ -50,16 +50,20 @@ class SelectedFilesTests(unittest.TestCase):
         writer.writerows(rows)
         return self.put(path, buffer.getvalue().encode())
 
-    def fixture(self, *, wrong_labels=False, different_backbone=False, foreign_key=False, empty_common=False):
+    def fixture(self, *, wrong_labels=False, different_backbone=False, foreign_key=False, empty_common=False,
+                learner_targets=None):
+        learner_ranks = (('a', 0), ('a', 1), ('b', 0), ('c', 0)) if learner_targets is None else tuple(
+            (learner, rank) for learner, count in learner_targets for rank in range(count))
         keys = tuple(admission.ModelNeutralKey(learner, 'item', ordinal, ordinal, rank,
             admission.HISTORY_SCHEME, H, 'selection') for ordinal, (learner, rank) in
-            enumerate((('a', 0), ('a', 1), ('b', 0), ('c', 0))))
+            enumerate(learner_ranks))
+        count = len(keys)
         key_hash, label_hash = hashlib.sha256(), hashlib.sha256()
         for ordinal, key in enumerate(keys):
             key_hash.update(admission._canonical(key.values()))
             label_hash.update(admission._canonical((key.values(), ordinal % 2)))
         context = admission.MainSelectionContext(**metadata_fixture()['documents']['claim']['context'])
-        population = admission.PopulationExpectation(context, 4, key_hash.hexdigest(), label_hash.hexdigest())
+        population = admission.PopulationExpectation(context, count, key_hash.hexdigest(), label_hash.hexdigest())
         request = dict(schema_version=1, kind=module.REQUEST_KIND, scope=module.REQUEST_SCOPE,
                        population=asdict(population), candidates={}, source_inventory={})
         repo = Path(__file__).resolve().parents[2]
@@ -72,17 +76,17 @@ class SelectedFilesTests(unittest.TestCase):
             docs, wire = base['documents'], base['documents']['claim']
             directory = 'runs/' + candidate + '/'
             refs = {}
-            wire.update(full_targets=4, supported_targets=3 if candidate == 'A3_EXPERT' else 4,
+            wire.update(full_targets=count, supported_targets=count-1 if candidate == 'A3_EXPERT' else count,
                 unsupported_counts=[['oov_item', 1]] if candidate == 'A3_EXPERT' else [],
                 sources_sha256=identity_hash(source_hashes))
             if empty_common and candidate == 'A0':
-                wire.update(supported_targets=0, unsupported_counts=[['oov_item', 4]])
+                wire.update(supported_targets=0, unsupported_counts=[['oov_item', count]])
             if different_backbone and candidate == 'A1_EXPERT':
                 wire['initial_backbone_sha256'] = 'b' * 64
                 docs['checkpoint_metadata']['identity']['profile']['initial_backbone_sha256'] = 'b' * 64
             coverage = docs['coverage']
-            coverage.update(full_targets=4, supported_targets=wire['supported_targets'],
-                            unsupported_targets=4-wire['supported_targets'])
+            coverage.update(full_targets=count, supported_targets=wire['supported_targets'],
+                            unsupported_targets=count-wire['supported_targets'])
             if not candidate.startswith('A'):
                 coverage.update(unsupported_counts={}, population=dict(scheme=population.scheme,
                     full_keys_sha256=population.full_keys_sha256, full_keys_labels_sha256=population.full_keys_labels_sha256))
@@ -95,7 +99,7 @@ class SelectedFilesTests(unittest.TestCase):
                 docs['terminal']['source_sha256'] = wire['sources_sha256']
             predictions, targets = [], []
             for ordinal, key in enumerate(keys):
-                unsupported = candidate == 'A3_EXPERT' and ordinal == 3 or empty_common and candidate == 'A0'
+                unsupported = candidate == 'A3_EXPERT' and ordinal == count-1 or empty_common and candidate == 'A0'
                 values = dict(**asdict(key), phase_scope='raw_selection10', phase_sha256=H, encoding_sha256=H,
                     correct=(1-ordinal % 2 if wrong_labels and ordinal == 0 else ordinal % 2),
                     probability='' if unsupported else '0.5', support_reason='oov_item' if unsupported else 'supported',
@@ -166,6 +170,20 @@ class SelectedFilesTests(unittest.TestCase):
         self.assertFalse(result.operation_receipts_accepted or result.external_freeze_authority or result.main_refit_authorized)
         self.assertFalse(result.statistics.artifact_bytes_verified or result.statistics.nine_terminal_files_admitted)
         self.assertEqual(result.index_entries, 72)
+
+    def test_fixture_scales_without_changing_original_population(self):
+        request, population = self.fixture(learner_targets=(('a', 4), ('b', 4)))
+        result = self.read(request, population)
+        self.assertEqual((population.full_targets, result.statistics.common_targets, result.index_entries), (8, 7, 144))
+
+    def test_scoped_eighteen_handles_preserve_same_statistics(self):
+        request, population = self.fixture()
+        original = self.read(request, population)
+        result = module.read_nine_selected_statistics(self.root, request_ref=self.json('request.json', request),
+            population=population, io_limits=replace(io_limits(), max_open_files=18), admission_limits=admission_limits())
+        self.assertEqual(replace(original.statistics, elapsed_seconds=0), replace(result.statistics, elapsed_seconds=0))
+        self.assertEqual(original.verified_files, result.verified_files)
+        self.assertEqual(original.bytes_read, result.bytes_read)
 
     def test_missing_candidate_rejected_before_artifact_read(self):
         request, population = self.fixture()

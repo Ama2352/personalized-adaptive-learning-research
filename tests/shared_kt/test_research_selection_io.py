@@ -55,6 +55,41 @@ class FileTests(unittest.TestCase):
             self.assertFalse(proof['external_freeze_authority'])
         self.assertTrue(reader.closed)
 
+    def test_scoped_cursor_preserves_rows_and_closes_handle(self):
+        ref = self.csv(rows=[{}, {'source_row': '2', 'global_rank': '1'}])
+        with m.BoundedArtifactReader(self.root, limits()) as reader:
+            index = reader.index_csv(ref, candidate_id='A0', kind='predictions')
+            expected = [index.row(key) for key in index.keys]
+            with index.open_rows() as cursor:
+                self.assertEqual(reader.open_files, 1)
+                self.assertEqual([cursor.row(key) for key in index.keys], expected)
+                self.assertEqual(reader.open_files, 1)
+            self.assertEqual(reader.open_files, 0)
+            self.assertTrue(reader.verify_unchanged()['source_and_input_hashes_rechecked'])
+            with self.assertRaisesRegex(ValueError, 'Active owned'):
+                cursor.row(index.keys[0])
+            self.assertTrue(reader.failed)
+
+    def test_cursor_tampering_and_handle_limit_fail_closed(self):
+        ref = self.csv()
+        with m.BoundedArtifactReader(self.root, limits()) as reader:
+            index = reader.index_csv(ref, candidate_id='A0', kind='predictions')
+            with self.assertRaises(ValueError):
+                with index.open_rows():
+                    path = self.root / ref.path
+                    path.write_bytes(path.read_bytes().replace(b'oov_item', b'bad_item'))
+            self.assertTrue(reader.failed)
+            self.assertEqual(reader.open_files, 0)
+        ref = self.csv(name='fresh.csv')
+        with m.BoundedArtifactReader(self.root, limits()) as reader:
+            index = reader.index_csv(ref, candidate_id='A0', kind='predictions')
+            with self.assertRaises(ValueError):
+                with index.open_rows():
+                    with index.open_rows():
+                        self.fail('Second open handle must be rejected')
+            self.assertTrue(reader.failed)
+            self.assertEqual(reader.open_files, 0)
+
     def test_bad_paths_protected_names_and_ancestor_alias(self):
         for path in ('../x', '/x', 'x\\y', './x', 'a//b', '.', 'C:/x'):
             with self.subTest(path=path), self.assertRaises(ValueError):

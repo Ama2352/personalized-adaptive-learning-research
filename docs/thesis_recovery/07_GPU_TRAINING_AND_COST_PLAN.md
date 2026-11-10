@@ -1,5 +1,13 @@
 # GPU, artifact và ngân sách
 
+## Cập nhật10/11 — CPU lifecycle đã đạt, chưa đủ điều kiện training Modal
+
+AKT graph-free và fixed-graph expert đã qua selected-fit CPU, nạp lại best checkpoint và xuất đủ84dự báo trên corpus engineering. AKT đã có bằng chứng public intentional complete-epoch pause/resume, còn unexpected fault recovery, Linux/CUDA hiện hành và độ bền storage cloud vẫn cần nghiệm thu. Chín điều kiện Main60/Junyi chưa có đủ kết quả fit. Không dùng bốn run engineering thay cho matrix nghiên cứu.
+
+Đường đọc chín bộ file vào thống kê đã nối với kernel cố định. Lượt synthetic1.260target ngày10/11 phát hiện cách mở lại CSV từng dòng vượt45giây. Scoped cursor mới giữ18handle trong context, đọc thành công trong11,807giây với peak57.769.984bytes, cùng45giây reader cap và71tests đạt. Hash từng dòng, kiểm identity/stamp khi mở–đóng, rehash toàn input cuối lượt và các giới hạn vẫn được áp dụng. Peak RAM được đọc sau lượt từ high-water mark của worker, chưa phải OS hard memory quota. Đây là đo xử lý artifact, chưa là training targets/giây. [Bằng chứng](../../research_tracking/runs/nine-file-scaling-20261110-01/README.md).
+
+Trước Modal còn cần đóng operation/late-failure publication của kết quả nghiên cứu, refresh Gate trên source195 đã ổn định, chạy CUDA smoke/bounded lifecycle/recovery trên GPU miễn phí và đo throughput để tính toàn matrix. Gate183/1913 là lịch sử và không cấp quyền cho nguồn mới. Hiện chưa có số đo GPU đủ để ước lượng giá mỗi epoch hoặc full experiment. Modal sử dụng0USD, giữ giới hạn30USD free credits, chưa có grant chạy trả phí hoặc quyền trả thêm.
+
 ## Bổ sung09/11 — core có execution profile CUDA
 
 BatchA đã bổ sung typed profile theo [quyết định28](28_CUDA_EXECUTION_PROFILE_V1.md), explicit device và các boundary kiểm tài nguyên/đồng bộ. Local đạt13kiểm metadata và26kiểm mô hình trênCPU, gồm8forward/5backward/0Adam. ActualGPU chưa được dùng để nghiệm thu batch này. Checkpoint CUDA schema2 và Main wiring đang là hai phần cần nối tiếp trước ladder máy đích. [Bằng chứng36outputs](../../research_tracking/reports/cgakt_cuda_core_cpu_readiness_20261109.md). Gate05 vẫn thuộc phiên bản source cũ.
