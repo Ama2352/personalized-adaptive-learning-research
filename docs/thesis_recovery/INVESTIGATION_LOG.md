@@ -1124,3 +1124,10 @@ T4 miễn phí đã chạy A0–A3 theo recipe CUDA, tổng 8 Adam updates/192 t
 Pilot12 trên NVIDIA A10G đạt sáu process A0/A3,16Adam updates/384lượt target giả,4checkpoint. Kiểm độc lập archive96.803.095bytes và đọc lại12file checkpoint/106.888.132bytes từ Volumev2 đều đạt. Model/Adam/RNG/counters/predictions continuous/resumed khớp. Đây là hoàn tất checkpoint cuối epoch trong fixture, còn full workflow/preemption recovery và kết quả nghiên cứu chính.
 
 User yêu cầu các lượt training tiếp theo dùng GPU. Đã dừng nhánh CPU engineering sau hai lượt lỗi, giữ source/log/archive. Actual A0 GPU lifecycle engineering10x84 đang chạy App ap-AQ8b3MZdb4slmFfg4EJak1/session47716. Tổng API mới nhất0,09055687USD, net billed0USD; grant pilot tổng0,50USD. Bằng chứng tại research_tracking/runs/modal-akt-recovery-20261112-01/. Hai file báo cáo GVHD đã cập nhật mốc GPUcheckpoint.
+
+
+## 12/11 — Main60 A0 GPU đã hoàn tất
+
+Ngày 12/11 — đã huấn luyện baseline AKT không đồ thị trên GPU Modal. Sau khi kiểm trọn quy trình trên nhóm nhỏ, đã chạy corpus nghiên cứu Grade 10 gồm 60 học viên, với 48 người huấn luyện, 6 người chọn epoch và 6 người dành riêng cho hiệu chỉnh. Lượt A0 hoàn tất 8 epoch và 288 bước cập nhật, chọn checkpoint epoch 5, nạp lại rồi xuất đủ 1.260 dự báo trên 6 người của tập selection. Năm checkpoint cùng log và archive khoảng 124 MB đã được giữ; file kết quả, mã kiểm toàn vẹn, danh tính dự báo và hai phép tính Log Loss/Brier đã được đối chiếu độc lập sau khi tải về. Tổng chi phí sử dụng của workspace tại lần đọc sau lượt này khoảng 0,171 USD, được bù bằng credits/allowance; số liệu có thể cập nhật trễ. Tập selection đã dùng chọn epoch, vì vậy cần tiếp tục các bản đồ thị, bước refit/hiệu chỉnh và đánh giá độc lập trước khi kết luận về lợi ích của CG-AKT. Chưa có kết quả Junyi từ lượt này.
+
+Đối chiếu độc lập đạt, native App đã kết thúc trước tải archive. Training đo78,005giây; nativewall192,157giây; tổngremotecontroller199,801giây. Không lấy thời gian cohort84 suy thành benchmark chính. Chưa đo tên GPU trong worker này, receipt xác nhận CUDA.

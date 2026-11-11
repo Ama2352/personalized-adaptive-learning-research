@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 12/11 — Main60 A0 đã training CUDA và kiểm kết quả
+
+AKT không đồ thị hoàn tất8epoch/best5/288updates và1260dự báo selection trên corpus60học viên Grade10. Đã tải năm checkpoint/archive124MB và kiểm độc lập. Chưa so sánh graph, refit/calibration hoặc Junyi. Bằng chứng `research_tracking/runs/modal-akt-recovery-20261112-01/main60-a0-verification.json`.
+
 ## 12/11 — checkpoint CUDA và lưu trữ Modal đã nghiệm thu
 
 Đã đạt Gate CPU1.994ca/198nguồn/92module trên image Modal. Pilot GPU A0/A3 đã đạt16Adam updates trên dữ liệu giả, bốn checkpoint và cùng kết quả model/Adam/RNG/counters/predictions giữa liên tục và phục hồi. Đã tải archive96,8MB và đọc lại bốn checkpoint từ Volumev2 để đối chiếu độc lập. Sửa runner để native checkpoint ở filesystem cục bộ, durable copy từng pha có SHA và sync; source model/hyperparameter giữ nguyên. Actual A0 GPU lifecycle engineering10x84 đang kiểm tiếp. Main60/Junyi, full workflow/preemption recovery và throughput đại diện còn thiếu. [Hồ sơ](../research_tracking/runs/modal-akt-recovery-20261112-01/README.md).

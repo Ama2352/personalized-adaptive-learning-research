@@ -1,0 +1,51 @@
+{
+  "status": "PREPARED_MAIN60_A0_SELECTED_GPU",
+  "research_question": "RQ3, baseline dự báo không đồ thị; chưa so sánh graph hoặc chọn winner hệ thống",
+  "run_id": "modal-main60-a0-selected-20261112-01",
+  "corpus_id": "grade10-development-lifecycle01-20261108",
+  "roles": {
+    "train": {
+      "learners": 48,
+      "targets": 10080
+    },
+    "selection": {
+      "learners": 6,
+      "targets": 1260
+    },
+    "calibration": {
+      "learners": 6,
+      "targets": 1260,
+      "used_in_this_run": false
+    }
+  },
+  "max_epochs": 20,
+  "patience": 3,
+  "max_optimizer_steps": 720,
+  "max_physical_train_targets": 201600,
+  "max_training_seconds": 600,
+  "max_native_wall_seconds": 750,
+  "max_function_seconds": 840,
+  "startup_seconds": 60,
+  "gpu_idle_reserve_seconds": 60,
+  "max_gpu_charge_envelope_seconds": 960,
+  "gpu_options": [
+    "L4",
+    "T4",
+    "A10"
+  ],
+  "max_containers": 1,
+  "retries": 0,
+  "max_rss_bytes": 6442450944,
+  "max_vram_bytes": 2147483648,
+  "worker_sha256": "87bacc1a16ff83621e43ad8b48a2234f2afa357494307ac44aa99a83959e5d08",
+  "archive_sha256": "f0fcaea118aae1c4922d194559d53ca5600a764e08b9912affeddf95f0fc0777",
+  "archive": "artifacts/akt/modal/main60-akt-inputs-20261112-01/public-corpus.zip",
+  "last_metered_usd": 0.10055816,
+  "conservative_compute_envelope_usd": 0.3359616,
+  "aggregate_compute_envelope_usd": 0.43651976000000003,
+  "authorized_total_pilot_usd": 0.5,
+  "pricing_source": "https://modal.com/pricing",
+  "limits": "Đây là trần dự toán theo request/limit và một GPU, số API có thể trễ. Dừng khi native/resource/time/source mismatch. Giữ partial checkpoint, không coi partial là final model. Hyperparameter, chia tập và corpus giữ nguyên.",
+  "approval_reference": "User20261112 yêu cầu loop hoàn thiện và training các AKT, dùng free credits30USD; lượt này giữ trong grant0,50USD đã duyệt.",
+  "actual_runtime_forecast": "Chưa có throughput Main60/210 thật. Cohort84 có training6,377s/4704targets và whole55,23s; modelgraph-none nên chưa dự toán graph/horizon/inference từ tỷ lệ này."
+}

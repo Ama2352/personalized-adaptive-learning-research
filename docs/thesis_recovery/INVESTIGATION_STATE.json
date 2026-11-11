@@ -6802,7 +6802,7 @@
     "all_owned_apps_stopped": true
   },
   "modal_recovery_20261112": {
-    "status": "CUDA_EPOCH_RECOVERY_VERIFIED_A0_GPU_LIFECYCLE_RUNNING",
+    "status": "VERIFIED_MAIN60_A0_CUDA_SELECTED",
     "bundle": "research_tracking/runs/modal-akt-recovery-20261112-01",
     "gpu_run": "modal-checkpoint-pilot-20261112-08",
     "gpu_app": "ap-pJapDHiGPJjPBD7ocO5f0f",
@@ -6811,13 +6811,13 @@
     "cpu_app": "ap-YOoJ2FO9WRPNmC6MEVI8Wz",
     "cpu_session": 66268,
     "authorized_total_usd": 0.5,
-    "last_metered_usd": 0.09055687,
+    "last_metered_usd": 0.17055957,
     "capacity_evidence": "previous07-system.log: waiting to be scheduled, acquiring more capacity",
     "cpu_preflight_reason": "Actual Main pipeline cần Gate có /opt/kltn/.venv, Linux lock và nguồn trên image Modal. Chạy bằng CPU để tránh tiêu GPU cho software tests.",
     "checkpoint_verified": true,
-    "main_training": false,
-    "updated_at_utc": "2026-11-11T18:43:22.248992+00:00",
-    "next": "Theo dõi session47716 đến terminal. Kiểm actual selected GPU checkpoint/reload/prediction và chi phí. Sau đó mới mở rộng Main60 hoặc các điều kiện A1–A3.",
+    "main_training": true,
+    "updated_at_utc": "2026-11-11T19:51:40.997877+00:00",
+    "next": "Chuẩn bị allocation có giới hạn cho sáu A1/A2/A3 expert/learned từ thời gian Main60 thật. Chỉ mở GPU theo grant còn hiệu lực. Chưa refit/calibration/Junyi hoặc comparative RQ3.",
     "gpu_attempt08": "Hết600giây chờ, backlog1/tasks0 tại lần quan sát",
     "gpu_attempt09": "SandboxT4 hết180giây tạo; finally cleanup đã thực thi",
     "cpu_gate": "modal-cpu-preflight-20261112-04",
@@ -6841,9 +6841,9 @@
     "local_regression": "14 passed, bundle-regression02.xml",
     "expected_gate_items": 1994,
     "model_architecture_changed": false,
-    "active_gpu_session": 47716,
-    "active_gpu_app": "ap-AQ8b3MZdb4slmFfg4EJak1",
-    "active_gpu_run": "modal-a0-gpu-lifecycle-engineering10x84-20261112-01",
+    "active_gpu_session": null,
+    "active_gpu_app": null,
+    "active_gpu_run": "modal-main60-a0-selected-20261112-01",
     "gpu11_actual": {
       "gpu": "TeslaT4",
       "optimizer_updates": 6,
@@ -6857,6 +6857,12 @@
     "durable_verification": "research_tracking/runs/modal-akt-recovery-20261112-01/checkpoint12-durable-verification.json",
     "pilot12_optimizer_updates": 16,
     "pilot12_physical_synthetic_targets": 384,
-    "pilot12_complete_checkpoints": 4
+    "pilot12_complete_checkpoints": 4,
+    "a0_engineering_status": "VERIFIED:7epochs/best4/14updates/4704train-target-exposures/84predictions/4checkpoints",
+    "a0_engineering_verification": "research_tracking/runs/modal-akt-recovery-20261112-01/a0-gpu-lifecycle-verification.json",
+    "main60_allocation": "research_tracking/runs/modal-akt-recovery-20261112-01/main60-a0-allocation.json",
+    "main60_input_bundle": "artifacts/akt/modal/main60-akt-inputs-20261112-01/research-inputs.zip",
+    "current_aggregate_compute_envelope_usd": 0.43651976,
+    "main60_verification": "research_tracking/runs/modal-akt-recovery-20261112-01/main60-a0-verification.json"
   }
 }

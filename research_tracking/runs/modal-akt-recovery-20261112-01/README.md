@@ -2,7 +2,7 @@
 
 ## Trạng thái hiện hành
 
-Gói nguồn sửa đóng gói đã qua Gate CPU đầy đủ1.994/1.994ca trên VM8GiB. GPU pilot11 đã thực hiện6Adam updates/144target giả trên TeslaT4 nhưng chưa lưu/phục hồi checkpoint thành công. Kiểm storage bằng vài byte đã đạt trên native filesystem và Volumev2. Pilot12 đã đạt đủ6process/16updates/384lượt target giả,4checkpoint và parity A0/A3. Đã đọc lại12file/106.888.132bytes của bốn checkpoint trực tiếp từ Volumev2, khớp archive native. Actual A0 GPU lifecycle đang chạy tiếp.
+Gói nguồn sửa đóng gói đã qua Gate CPU đầy đủ1.994/1.994ca trên VM8GiB. GPU pilot11 đã thực hiện6Adam updates/144target giả trên TeslaT4 nhưng chưa lưu/phục hồi checkpoint thành công. Kiểm storage bằng vài byte đã đạt trên native filesystem và Volumev2. Pilot12 đã đạt đủ6process/16updates/384lượt target giả,4checkpoint và parity A0/A3. Đã đọc lại12file/106.888.132bytes của bốn checkpoint trực tiếp từ Volumev2, khớp archive native. Actual A0 GPU lifecycle đã đạt7epochs/best4/14updates/4.704lượt train-target/84dự báo và4checkpoint. Đã kiểm độc lập artifact. Actual Main60 A0 selected đang chạy tiếp, allocation riêng giữ aggregate dự toán0,437USD dưới grant0,50USD.
 
 Người dùng yêu cầu các lượt training tiếp theo dùng GPU Modal. Nhánh CPU training engineering đã dừng sau lượt02, lỗi và artifact được giữ. Chưa Main60, Junyi, Holdout, full CV hoặc kết quả so sánh chất lượng A0–A3 mới từ bundle này.
 
@@ -31,3 +31,10 @@ Pilot12 đã đạt sáu tiến trình A0/A3, bốn checkpoint, model/Adam/RNG/c
 ## Nguồn bên ngoài
 
 [GPU và fallback](https://modal.com/docs/guide/gpu), [Volumev2 và hard-link/sync](https://modal.com/docs/guide/volumes), [Runtime VM/gVisor](https://modal.com/docs/guide/sandboxes#runtimes). Không suy nguyên nhân quota/payment từ trạng thái chờ.
+
+
+## Mốc tiếp theo đã đạt — Main60 A0 trên GPU
+
+Ngày 12/11 — đã huấn luyện baseline AKT không đồ thị trên GPU Modal. Sau khi kiểm trọn quy trình trên nhóm nhỏ, đã chạy corpus nghiên cứu Grade 10 gồm 60 học viên, với 48 người huấn luyện, 6 người chọn epoch và 6 người dành riêng cho hiệu chỉnh. Lượt A0 hoàn tất 8 epoch và 288 bước cập nhật, chọn checkpoint epoch 5, nạp lại rồi xuất đủ 1.260 dự báo trên 6 người của tập selection. Năm checkpoint cùng log và archive khoảng 124 MB đã được giữ; file kết quả, mã kiểm toàn vẹn, danh tính dự báo và hai phép tính Log Loss/Brier đã được đối chiếu độc lập sau khi tải về. Tổng chi phí sử dụng của workspace tại lần đọc sau lượt này khoảng 0,171 USD, được bù bằng credits/allowance; số liệu có thể cập nhật trễ. Tập selection đã dùng chọn epoch, vì vậy cần tiếp tục các bản đồ thị, bước refit/hiệu chỉnh và đánh giá độc lập trước khi kết luận về lợi ích của CG-AKT. Chưa có kết quả Junyi từ lượt này.
+
+Bằng chứng độc lập `main60-a0-verification.json`, mã dựng lại `verify_main60_a0.py`, lịch sử `main60-a0__fit80__epochs.json` và `main60-a0__events.jsonl`. Artifact lớn tại `experiments/akt/results/modal-main60-a0-selected-20261112-01/`. Phần còn thiếu là A1/A2/A3, refit/calibration, so sánh độc lập và Junyi. Full workflow resume trên GPU vẫn chưa được nghiệm thu.
