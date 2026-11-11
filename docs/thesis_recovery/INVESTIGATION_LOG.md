@@ -1116,3 +1116,11 @@ T4 miễn phí đã chạy A0–A3 theo recipe CUDA, tổng 8 Adam updates/192 t
 ## 10/11 — chuẩn bị kiểm checkpoint CUDA A0/A3, chưa chạy
 
 Đã chuẩn bị sáu process/16updates/384target giả, đối chiếu complete-epoch restore với continuous. Hai script parse được, 11 API calls khớp source. MCP chưa cho output thực thi mới, canary download chưa xác nhận, nên chưa submit workload. Đã giữ quan sát và nhờ user chạy health. Không checkpoint mới, không Main/GPU kết quả mới và không Modal. Bundle research_tracking/runs/akt-t4-checkpoint-recovery-20261110-01/.
+
+## 12/11/2026 — setup Modal và checkpoint CUDA đã đạt
+
+Đã phân biệt chờ cấp GPU với lỗi port runner. VM8GiB đạt Gate1.993ca, sau sửa packager giữ bytes notebook đã sạch đạt1.994ca. Corpus và source notebook gốc giữ nguyên. Lỗi storage được truy tới hard-link trên Volumev1 và alias ở native output mount. Đã kiểm helper trên native filesystem/Volumev2, chuyển native checkpoint về filesystem container và đồng bộ có SHA/sync.
+
+Pilot12 trên NVIDIA A10G đạt sáu process A0/A3,16Adam updates/384lượt target giả,4checkpoint. Kiểm độc lập archive96.803.095bytes và đọc lại12file checkpoint/106.888.132bytes từ Volumev2 đều đạt. Model/Adam/RNG/counters/predictions continuous/resumed khớp. Đây là hoàn tất checkpoint cuối epoch trong fixture, còn full workflow/preemption recovery và kết quả nghiên cứu chính.
+
+User yêu cầu các lượt training tiếp theo dùng GPU. Đã dừng nhánh CPU engineering sau hai lượt lỗi, giữ source/log/archive. Actual A0 GPU lifecycle engineering10x84 đang chạy App ap-AQ8b3MZdb4slmFfg4EJak1/session47716. Tổng API mới nhất0,09055687USD, net billed0USD; grant pilot tổng0,50USD. Bằng chứng tại research_tracking/runs/modal-akt-recovery-20261112-01/. Hai file báo cáo GVHD đã cập nhật mốc GPUcheckpoint.

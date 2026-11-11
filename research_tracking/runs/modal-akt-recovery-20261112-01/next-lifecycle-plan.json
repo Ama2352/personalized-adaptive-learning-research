@@ -1,0 +1,97 @@
+{
+  "status": "CPU_ENGINEERING_FALLBACK_AUTHORIZED_BY_USER_CONTINUATION",
+  "corpus_id": "grade10-main-lifecycle-engineering10x84-20261109-01",
+  "classification": "engineering lifecycle, không kết quả chính RQ3",
+  "variant": "A0",
+  "source_image": "im-PcG3UeRJq1Qu86G1dHDXz8",
+  "roles": {
+    "train": {
+      "learners": 8,
+      "targets": 672
+    },
+    "selection": {
+      "learners": 1,
+      "targets": 84
+    },
+    "calibration": {
+      "learners": 1,
+      "targets": 84,
+      "used_for_this_operation": false
+    }
+  },
+  "max_epochs": 20,
+  "patience": 3,
+  "max_optimizer_steps": 40,
+  "max_optimized_targets": 13440,
+  "max_training_seconds": 300,
+  "max_wall_seconds": 360,
+  "max_rss_bytes": 6442450944,
+  "min_available_ram_bytes": 2147483648,
+  "max_vram_bytes": 2147483648,
+  "max_gpu_seconds": 600,
+  "max_containers": 1,
+  "remaining_grant_required": true,
+  "preconditions": [
+    "Gate CPU03 đạt và archive SHA đối chiếu",
+    "Runtime CPU/Git/Gate/data binding đúng trong actual selected guard",
+    "Giữ tổng pilot dưới0,50USD"
+  ],
+  "acceptance": [
+    "Train qua selected pipeline thật",
+    "Validation theo raw_selection10 và chọn best epoch bằng quy tắc frozen",
+    "Nạp best checkpoint vào model mới",
+    "Xuất toàn bộ84 target có định danh, giữ support/OOV rõ ràng",
+    "Tải và kiểm toàn bộ archive/checkpoint/log",
+    "Đo training/validation/checkpoint walltime và RAM/VRAM"
+  ],
+  "inputs": {
+    "artifacts/simulator/corpora/grade10-main-lifecycle-engineering10x84-20261109-01/corpus.json": {
+      "bytes": 3922,
+      "sha256": "78da1a4fd1708bb1efca723caed4976ed518687eb70b847fbdf780f111191151"
+    },
+    "artifacts/simulator/corpora/grade10-main-lifecycle-engineering10x84-20261109-01/bank.json": {
+      "bytes": 8869,
+      "sha256": "4ef02907ee9071ba2ed6b4bba4d4dab728d390e9bbff8218a4e39bbb32f48034"
+    },
+    "artifacts/simulator/corpora/grade10-main-lifecycle-engineering10x84-20261109-01/plan.json": {
+      "bytes": 4104,
+      "sha256": "79082af87c32262a5e6a8c8715ee0dad2bd1e2f49891ac956e37c570e1d7dab1"
+    },
+    "artifacts/simulator/corpora/grade10-main-lifecycle-engineering10x84-20261109-01/train.jsonl": {
+      "bytes": 76627,
+      "sha256": "837faef8a18451aaef8f36449977cbe80a51a4512f8dd8b6d3c26b314cb43891"
+    },
+    "artifacts/simulator/corpora/grade10-main-lifecycle-engineering10x84-20261109-01/train.manifest.json": {
+      "bytes": 2360,
+      "sha256": "aace64a47a86c69b53932ed9c00cd648274fcdea2fbf1c2b3cf0c725d08a7699"
+    },
+    "artifacts/simulator/corpora/grade10-main-lifecycle-engineering10x84-20261109-01/selection.jsonl": {
+      "bytes": 9632,
+      "sha256": "e657ee907bca2792a54dfe8707c3ce5f6e53c60ad60a2e87d139decac7db39e6"
+    },
+    "artifacts/simulator/corpora/grade10-main-lifecycle-engineering10x84-20261109-01/selection.manifest.json": {
+      "bytes": 1870,
+      "sha256": "f766c598254fa667b8ff54436ee088a24879a7f42593182743cfd6137615598c"
+    },
+    "artifacts/simulator/corpora/grade10-main-lifecycle-engineering10x84-20261109-01/calibration.jsonl": {
+      "bytes": 9632,
+      "sha256": "f19dc49aa9c8ace0032d0c98563ee5be3fcfbb64ef26b530ec2a6d3611912bdc"
+    },
+    "artifacts/simulator/corpora/grade10-main-lifecycle-engineering10x84-20261109-01/calibration.manifest.json": {
+      "bytes": 1874,
+      "sha256": "54de73a1dbc8a28c4759a4aff9354433dcc4404cdbe7ab2132c561c213282f22"
+    },
+    "artifacts/simulator/corpora/grade10-main-lifecycle-engineering10x84-20261109-01/DONE.json": {
+      "bytes": 927,
+      "sha256": "9b565431267a1e0e6f6fb4c05b42a989b2d533d2de98991e64927149b1c5b710"
+    }
+  },
+  "archive": "artifacts/akt/modal/modal-a0-lifecycle-engineering10x84-20261112-01/public-corpus.zip",
+  "archive_sha256": "2a6f243ceda795c3c4f8408a65a74fade1c9b58714233193d4918c33c1c3ba05",
+  "excluded": "oracle/, Junyi, Holdout, credentials, historical model artifacts",
+  "device": "cpu",
+  "runtime": "vm",
+  "memory_request_mib": 8192,
+  "cuda_checkpoint_precondition": "Chỉ áp dụng cho nhánh GPU. Nhánh CPU dùng Gate1993 và kiểm CPU checkpoint đã đạt nguyên nguồn.",
+  "reason": "GPU Function08 và Sandbox09 chưa cấp được GPU. VM8GiB Gate03 đạt nguyên1993 ca. Tận dụng CPU cho integration lifecycle thật trước khi GPU sẵn sàng."
+}

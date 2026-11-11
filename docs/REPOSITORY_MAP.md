@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 12/11 — checkpoint CUDA và lưu trữ Modal đã nghiệm thu
+
+Đã đạt Gate CPU1.994ca/198nguồn/92module trên image Modal. Pilot GPU A0/A3 đã đạt16Adam updates trên dữ liệu giả, bốn checkpoint và cùng kết quả model/Adam/RNG/counters/predictions giữa liên tục và phục hồi. Đã tải archive96,8MB và đọc lại bốn checkpoint từ Volumev2 để đối chiếu độc lập. Sửa runner để native checkpoint ở filesystem cục bộ, durable copy từng pha có SHA và sync; source model/hyperparameter giữ nguyên. Actual A0 GPU lifecycle engineering10x84 đang kiểm tiếp. Main60/Junyi, full workflow/preemption recovery và throughput đại diện còn thiếu. [Hồ sơ](../research_tracking/runs/modal-akt-recovery-20261112-01/README.md).
+
+
 ## 12/11 — pilot Modal đã thực thi tới kiểm runtime, phục hồi checkpoint còn bị chặn
 
 Đã tạo entrypoint Modal riêng, xác nhận nhận NVIDIA L4 ở canary, và kiểm môi trường CUDA thực trong các lượt pilot. Volume đã lưu và tải được ba archive lỗi, mỗi archive được đối chiếu CRC/SHA. Các lỗi chuyển đường dẫn và output từ Colab đã sửa. Lượt tiếp theo bị chặn trước batch đầu bởi cap RSS 2 GiB, đo thực tế khoảng 4 GiB; cap mới 6 GiB chưa được nghiệm thu vì lượt07 hết hạn chờ 600 giây. Mọi App của lượt kiểm đã dừng. Billing đọc gần nhất ghi tổng kỳ khoảng 0,02056 USD, net billed 0 USD sau credits/allowance. Chưa có checkpoint GPU phục hồi đạt hoặc training nghiên cứu chính. [Hồ sơ vận hành](../research_tracking/runs/modal-quick-preflight-20261111-01/README.md).

@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py", line 127, in <module>
+    saved = checkpoint.save_graph_epoch_state(OUT/'checkpoint', adapter=adapter,
+        optimizer=optimizer, participation=tracker, epoch_receipt=receipt,
+        expected_identity=identity, profile=profile, limits=limits)
+  File "/opt/kltn/src/knowledge_tracing/akt/research_graph_checkpoint.py", line 657, in save_graph_epoch_state
+    directory = _directory(directory); _need(directory.parent.is_dir(), 'caller must own existing run/checkpoint parent')
+  File "/opt/kltn/src/knowledge_tracing/akt/research_graph_checkpoint.py", line 563, in _directory
+    path = _physical(path)
+  File "/opt/kltn/src/knowledge_tracing/akt/research_graph_checkpoint.py", line 557, in _physical
+    _need(not cursor.is_symlink() and not getattr(cursor, 'is_junction', lambda: False)(), 'checkpoint/source alias forbidden')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/kltn/src/knowledge_tracing/akt/research_graph_checkpoint.py", line 31, in _need
+    raise ValueError(message)
+ValueError: checkpoint/source alias forbidden

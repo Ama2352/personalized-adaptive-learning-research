@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/opt/a0_lifecycle_worker.py", line 138, in <module>
+    identity = main._metadata(spec, evidence)
+  File "/opt/kltn/src/knowledge_tracing/akt/research_main_execution.py", line 370, in _metadata
+    native=_main_native_evidence(spec,evidence);corpus=old._corpus(r,native)
+                                                       ~~~~~~~~~~~^^^^^^^^^^
+  File "/opt/kltn/src/knowledge_tracing/akt/research_execution.py", line 329, in _corpus
+    _require((name == PROTOCOL_PATH and digest == spec.expected_protocol_sha256)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+             or native['build_hashes'].get(name) == digest, 'corpus source differs from current source-bound Gate')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/kltn/src/knowledge_tracing/akt/research_execution.py", line 29, in _require
+    if not ok: raise ValueError(message)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: corpus source differs from current source-bound Gate

@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "/opt/a0_lifecycle_worker.py", line 150, in <module>
+    claim = run_main_selected_candidate(spec, evidence,
+        authorization_file=authorization_file.relative_to(ROOT).as_posix(),
+        expected_authorization_sha256=sha(authorization_file))
+  File "/opt/kltn/src/knowledge_tracing/akt/research_selected_runner.py", line 407, in run_main_selected_candidate
+    return _run_selected(spec,evidence,authorization_file=authorization_file,
+        expected_authorization_sha256=expected_authorization_sha256,pause_policy=pause_policy)
+  File "/opt/kltn/src/knowledge_tracing/akt/research_selected_runner.py", line 318, in _run_selected
+    reference=best=_save(run,tools,adapter,optimizer,tracker,receipt,profile,identity,epoch,checkpoint_limits)
+                   ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/kltn/src/knowledge_tracing/akt/research_selected_runner.py", line 198, in _save
+    reference=tools.cp.save_graph_epoch_state(directory,adapter=adapter,optimizer=optimizer,participation=tracker,
+        epoch_receipt=receipt,expected_identity=identity,profile=profile,limits=limits)
+  File "/opt/kltn/src/knowledge_tracing/akt/research_graph_checkpoint.py", line 660, in save_graph_epoch_state
+    _publish(directory, 'state.pt', raw, limits.max_checkpoint_bytes)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/kltn/src/knowledge_tracing/akt/research_graph_checkpoint.py", line 587, in _publish
+    publish_new_file(path, directory/name)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/kltn/src/knowledge_tracing/akt/filesystem.py", line 16, in publish_new_file
+    os.link(source, destination)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: '/opt/kltn/experiments/akt/results/modal-a0-lifecycle-engineering10x84-20261112-02/checkpoints/epoch-1/state.pt.pending' -> '/opt/kltn/experiments/akt/results/modal-a0-lifecycle-engineering10x84-20261112-02/checkpoints/epoch-1/state.pt'

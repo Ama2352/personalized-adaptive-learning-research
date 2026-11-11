@@ -15,6 +15,7 @@ INPUTS = ROOT/'artifacts/akt/modal'/RUN_ID
 NATIVE = ROOT/'experiments/akt/results'/RUN_ID
 VOLUME_NAME = 'kltn-akt-checkpoint-pilot-20261111-01'
 GPU = 'T4'
+WAIT_SECONDS = 600
 LOCK = ROOT/'artifacts/akt/colab/gpu08-linux-20261108-01/received/resolution-attempt01/candidate-linux-cuda.lock.txt'
 LOCK_SHA = '60dad3de310562db4f775d1977e2097a6d1c8f57a22bfa4f7afc3ceab35cc45a'
 EXPECTED = 'CUDA_CHECKPOINT_FRESH_PROCESS_RESTORE_VERIFIED'
@@ -48,6 +49,22 @@ def prepare():
             'run_id=BASE.name, output_dir=BASE')
         code = code.replace("device='cuda', max_steps=4,", "device='cuda', max_steps=4, max_rss_bytes=6*1024**3,")
         code = code.replace('max_rss_bytes=2*1024**3,', 'max_rss_bytes=6*1024**3,')
+        if source == 'checkpoint_controller.py':
+            code = code.replace("            assert entry['returncode'] == 0, entry", """            durable_phase = Path(os.environ['PILOT_DURABLE_ROOT'])/variant/phase
+            durable_phase.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copytree(BASE/variant/phase, durable_phase)
+            copied = {}
+            for native_file in sorted((BASE/variant/phase).rglob('*')):
+                if native_file.is_file():
+                    relative = native_file.relative_to(BASE/variant/phase)
+                    with native_file.open('rb') as stream:
+                        native_sha = hashlib.file_digest(stream, 'sha256').hexdigest()
+                    with (durable_phase/relative).open('rb') as stream:
+                        assert hashlib.file_digest(stream, 'sha256').hexdigest() == native_sha
+                    copied[relative.as_posix()] = native_sha
+            (durable_phase/'TRANSFER_SHA256.json').write_text(json.dumps(copied, indent=2)+'\\n')
+            subprocess.run(['sync', '/durable'], timeout=20, check=True)
+            assert entry['returncode'] == 0, entry""")
         contents['artifacts/akt/runtime/'+target] = code.encode()
     accepted = ROOT/'research_tracking/runs/akt-colab-t4-current-20261110-01/remote/smoke-result.json'
     contents['artifacts/akt/runtime/accepted-colab-smoke.json'] = accepted.read_bytes()
@@ -65,11 +82,14 @@ def prepare():
             for name, data in contents.items():
                 saved.writestr(name, data)
             saved.writestr('MANIFEST.json', json.dumps(manifest, indent=2)+'\n')
-    plan = dict(run_id=RUN_ID, gpu=['A10', 'L4', 'T4'] if GPU == 'auto' else GPU, max_containers=1, retries=0,
+    plan = dict(run_id=RUN_ID, gpu=['L4', 'T4', 'A10'] if GPU == 'auto' else GPU, max_containers=1, retries=0,
         timeout_seconds=420, startup_timeout_seconds=120, max_gpu_startup_and_run_seconds=600,
+        client_wait_seconds=WAIT_SECONDS,
         cpu_request=0.25, cpu_limit=2,
         memory_request_mib=4096, memory_limit_mib=8192, pilot_budget_usd=0.50,
         worker_max_rss_bytes=6*1024**3,
+        volume_version=2, native_checkpoint_filesystem='container-local',
+        durable_checkpoint_boundary='after each fresh-process phase, SHA256 plus sync',
         max_optimizer_updates=16, max_synthetic_targets=384, main_training=False,
         source_zip_sha256=sha_file(archive), source_files=len(source_hashes), lock_sha256=LOCK_SHA,
         volume_name=VOLUME_NAME, image_build_dependency_timeout_seconds=480)
@@ -85,8 +105,12 @@ def remote_pilot(expected_zip_sha, run_id, expected_gpu, volume_name):
     import traceback
     remote = Path('/opt/kltn')
     results = remote/'experiments/akt/results'
+    results.mkdir(parents=True, exist_ok=True)
     out = results/run_id
     out.mkdir(exist_ok=False)
+    durable = Path('/durable')/run_id
+    durable.mkdir(exist_ok=False)
+    print(json.dumps(dict(event='pilot_started', run_id=run_id)), flush=True)
     began = time.monotonic()
     summary = dict(status='FAILED', run_id=run_id, gpu_requested=expected_gpu,
         main_training=False, source_zip_sha256=expected_zip_sha)
@@ -101,7 +125,8 @@ def remote_pilot(expected_zip_sha, run_id, expected_gpu, volume_name):
                 assert not path.is_absolute() and '..' not in path.parts and '\\' not in name
                 assert hashlib.sha256(source.read(name)).hexdigest() == expected_sha
             source.extractall(remote)
-        env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1', EXPECTED_PILOT_GPU=expected_gpu)
+        env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1', EXPECTED_PILOT_GPU=expected_gpu,
+                   PILOT_DURABLE_ROOT=str(durable/'phase-checkpoints'))
         runtime_command = [str(remote/'.venv/bin/python'), '-I', '-B',
             str(remote/'scripts/akt/check_runtime.py'), '--upstream',
             str(remote/'artifacts/akt/dependencies/upstream'), '--device', 'cuda',
@@ -140,6 +165,10 @@ def remote_pilot(expected_zip_sha, run_id, expected_gpu, volume_name):
         summary.update(archive_sha256=sha_file(out/'artifacts.zip'),
             archive_bytes=(out/'artifacts.zip').stat().st_size)
         (out/'receipt.json').write_text(json.dumps(summary, indent=2)+'\n')
+        import shutil
+        shutil.copyfile(out/'artifacts.zip', durable/'artifacts.zip')
+        assert sha_file(durable/'artifacts.zip') == summary['archive_sha256']
+        shutil.copyfile(out/'receipt.json', durable/'receipt.json')
         volume.commit()
     return summary
 
@@ -163,7 +192,7 @@ def execute(archive, plan, *, define_only=False):
             await client._close()
     asyncio.run(check_workspace())
     assert not (NATIVE/'receipt.json').exists(), 'pilot already downloaded, inspect existing output'
-    volume = modal.Volume.from_name(VOLUME_NAME, create_if_missing=True, version=1)
+    volume = modal.Volume.from_name(VOLUME_NAME, create_if_missing=True, version=2)
     image = (modal.Image.debian_slim(python_version='3.13').apt_install('git')
         .add_local_file(LOCK, '/opt/locked-cu126.txt', copy=True)
         .run_commands('python -m venv --without-pip /opt/kltn/.venv',
@@ -180,7 +209,7 @@ def execute(archive, plan, *, define_only=False):
 
     pilot = app.function(image=image, gpu=plan['gpu'], cpu=(0.25, 2), memory=(4096, 8192),
         timeout=420, startup_timeout=120, retries=0, max_containers=1,
-        volumes={'/opt/kltn/experiments/akt/results': volume})(remote_pilot)
+        volumes={'/durable': volume})(remote_pilot)
 
     if define_only:
         print('LOCAL_MODAL_DEFINITION_VERIFIED; no remote App run', flush=True)
@@ -189,7 +218,9 @@ def execute(archive, plan, *, define_only=False):
     with modal.enable_output():
         with app.run(environment_name='main'):
             call = pilot.spawn(plan['source_zip_sha256'], RUN_ID, 'L4,A10,T4' if GPU == 'auto' else GPU, VOLUME_NAME)
-            receipt = call.get(timeout=600)
+            (NATIVE/'dispatch.json').write_text(json.dumps(dict(
+                call_id=call.object_id, client_wait_seconds=plan['client_wait_seconds']))+'\n')
+            receipt = call.get(timeout=plan['client_wait_seconds'])
             (NATIVE/'remote-receipt.json').write_text(json.dumps(receipt, indent=2)+'\n')
             partial = NATIVE/'artifacts.zip.partial'
             with partial.open('xb') as output:
@@ -223,10 +254,14 @@ if __name__ == '__main__':
     parser.add_argument('--define-only', action='store_true', help='Kiểm SDK và cấu hình, chưa build image hoặc chạy App')
     parser.add_argument('--gpu', choices=('T4', 'L4', 'auto'), default='T4')
     parser.add_argument('--run-id', default=RUN_ID)
+    parser.add_argument('--wait-seconds', type=int, default=600,
+                        help='Chờ cấp phát và kết quả 600–1800 giây; runtime GPU vẫn giữ cap600giây')
     arguments = parser.parse_args()
     assert re.fullmatch(r'modal-checkpoint-pilot-[0-9-]{11,24}', arguments.run_id)
     RUN_ID = arguments.run_id
     GPU = arguments.gpu
+    assert 600 <= arguments.wait_seconds <= 1800
+    WAIT_SECONDS = arguments.wait_seconds
     INPUTS = ROOT/'artifacts/akt/modal'/RUN_ID
     NATIVE = ROOT/'experiments/akt/results'/RUN_ID
     VOLUME_NAME = RUN_ID.replace('modal-', 'kltn-akt-', 1)

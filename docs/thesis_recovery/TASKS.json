@@ -250,7 +250,7 @@
         "T07"
       ],
       "required_inputs": "upstream hash, CPU lock, stage specs",
-      "files_components": "future scripts/akt/modal_plan_runner.py; akt/config.py; authorization.py",
+      "files_components": "experiments/akt/modal_checkpoint_pilot.py; experiments/akt/modal_a0_gpu_pilot.py; experiments/akt/modal_artifact_sync.py",
       "implementation_objective": "Add explicit CUDA validation phases with per-run caps, Linux paths, image lock, no self approval",
       "acceptance_criteria": "Local schema rejects missing auth/budget/mismatch, CUDA smoke job at most oneGPU, no auto next-stage",
       "verification_steps": "Mock remote lifecycle, local import/preflight tests",
@@ -261,12 +261,12 @@
       "authorization_requirements": "SAFE_PREPARATION; CLOUD_APPROVAL_FOR_RUN",
       "status": "PARTIALLY_VERIFIED",
       "blockers": [
-        "Read-only auth/workspace verified; LinuxCUDAimage/lock/runtime-origin and per-run bounded entrypoint/Volume still pending; budget limits userreported not API readback",
-        "Colab-first userpolicy: no Modal genericCUDAdebug before Colab evidence; no automatic paidfallback"
+        "Actual A0 GPU selected lifecycle chưa nghiệm thu; throughput đại diện và allocation Main60/Junyi còn thiếu",
+        "Grant hiện hành tổng0,50USD cho pilot; không tự chuyển thành fullCV/Holdout hoặc allocation nghiên cứu lớn"
       ],
       "execution_owner": "Codex",
-      "verification_evidence": "cpu-modal-client-20261107-01:SDK1.6.3/27newpackages/30existingversionsunchanged/pipcheck;docs/akt-modal-setup.md;cpu-modal-access-20261107-01:workspace/tokenexpiry/defaultenvironment verified without compute",
-      "verification_scope": "Local SDK/controller and read-only auth verified; no remote compute or paid run",
+      "verification_evidence": "research_tracking/runs/modal-akt-recovery-20261112-01/{cpu04-verification.json,checkpoint12-verification.json,checkpoint12-durable-verification.json,storage-probe-result.json}",
+      "verification_scope": "Modal image44package và Gate1994; checkpoint CUDA cuối epoch A0/A3, copy bền vững Volumev2 và tải về đã đạt; full lifecycle nghiên cứu còn thiếu",
       "evidence": [
         "research_tracking/runs/akt-colab-integration-20261110-01/README.md"
       ],
@@ -274,7 +274,7 @@
       "current_t4_smoke_evidence": "research_tracking/runs/akt-colab-t4-current-20261110-01/verification.json",
       "current_t4_smoke_limitations": "A0–A3 chỉ hai updates/48 target giả mỗi variant; chưa checkpoint/recovery, throughput đại diện hoặc Main fit.",
       "next_checkpoint_stage": "research_tracking/runs/akt-t4-checkpoint-recovery-20261110-01/allocation.json",
-      "next_checkpoint_status": "PREPARED_NOT_RUN_MCP_EXECUTION_UNCONFIRMED"
+      "next_checkpoint_status": "VERIFIED_CUDA_COMPLETE_EPOCH_A0_A3_NOT_FULL_LIFECYCLE"
     },
     {
       "id": "T09",
@@ -301,7 +301,7 @@
       "authorization_requirements": "ARCHITECTURE_APPROVAL_THEN_SAFE",
       "status": "PARTIALLY_VERIFIED_GRAPH_CORE_IMPLEMENTED_MAIN_COMPARISONS_PENDING",
       "blockers": [
-        "Chưa triển khai"
+        "Lõi A0–A3 đã có và kiểm CPU/CUDA; các actual selected/refit/calibration và so sánh nghiên cứu trên Main60/Junyi còn thiếu"
       ],
       "execution_owner": "Codex",
       "previous_status_before_reconciliation_20261110": "PLANNED",
@@ -310,7 +310,8 @@
         "docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md",
         "research_tracking/runs/akt-current-gate183-20261110-01/README.md"
       ],
-      "reconciliation_scope_vi": "Đối chiếu tiến độ component, không coi metadata/core là main fit hoặc hoàn tất RQ. Giữ mục tiêu và acceptance gốc."
+      "reconciliation_scope_vi": "Đối chiếu tiến độ component, không coi metadata/core là main fit hoặc hoàn tất RQ. Giữ mục tiêu và acceptance gốc.",
+      "modal_checkpoint_evidence_20261112": "research_tracking/runs/modal-akt-recovery-20261112-01/checkpoint12-verification.json"
     },
     {
       "id": "T10",
@@ -372,7 +373,7 @@
       "authorization_requirements": "SAFE_ENGINEERING_AFTER_INSTRUCTION",
       "status": "PARTIALLY_VERIFIED",
       "blockers": [
-        "CPU sampler/model/RNG/CLI selection/refit recovery verified; Linux/CUDA/Volume durability remains pending"
+        "CUDA model/Adam/RNG cuối epoch đã kiểm trên A0/A3; sampler/early-stopping/full-controller GPU và phục hồi sau preemption bất ngờ chưa được nghiệm thu"
       ],
       "execution_owner": "Codex",
       "evidence": [
@@ -380,7 +381,8 @@
         "evidence/resumable-epoch-tests.log",
         "evidence/engineering-loop-final-tests.log"
       ],
-      "verification_evidence": "REC01–06;cpu-akt-recovery-20261107-01;17_AKT_RECOVERY_ENGINEERING_LOG.md;T14 for remote durability"
+      "verification_evidence": "REC01–06;cpu-akt-recovery-20261107-01;17_AKT_RECOVERY_ENGINEERING_LOG.md;T14 for remote durability",
+      "modal_epoch_recovery_evidence_20261112": "research_tracking/runs/modal-akt-recovery-20261112-01/checkpoint12-durable-verification.json"
     },
     {
       "id": "T12",

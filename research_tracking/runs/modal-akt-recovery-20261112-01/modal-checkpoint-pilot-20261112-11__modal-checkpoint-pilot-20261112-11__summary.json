@@ -1,0 +1,56 @@
+{
+  "status": "FAILED",
+  "run_id": "modal-checkpoint-pilot-20261112-11",
+  "gpu_requested": "L4,A10,T4",
+  "main_training": false,
+  "source_zip_sha256": "d1cd5447136026cffedd18f844035c445039a3372c5b9f80a40da067a7619913",
+  "controller_returncode": 0,
+  "controller_result": {
+    "status": "FAILED",
+    "scope": "Fixture CUDA complete-epoch checkpoint and fresh-process restore",
+    "main_training": false,
+    "modal_spend_usd": null,
+    "processes": [
+      {
+        "variant": "A0",
+        "phase": "continuous",
+        "command": [
+          "/opt/kltn/.venv/bin/python",
+          "-I",
+          "-B",
+          "/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py",
+          "--variant",
+          "A0",
+          "--phase",
+          "continuous"
+        ],
+        "pid": 18,
+        "returncode": 0
+      },
+      {
+        "variant": "A0",
+        "phase": "interrupted",
+        "command": [
+          "/opt/kltn/.venv/bin/python",
+          "-I",
+          "-B",
+          "/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py",
+          "--variant",
+          "A0",
+          "--phase",
+          "interrupted"
+        ],
+        "pid": 36,
+        "returncode": 1
+      }
+    ],
+    "timeout_seconds": 360,
+    "max_physical_optimizer_updates": 16,
+    "max_physical_targets": 384,
+    "worker_sha256": "59661ad03aa2fb94b54079b54cd55e894dbc02350785b64ad8b10dce2e88cef0",
+    "error_type": "AssertionError",
+    "error": "{'variant': 'A0', 'phase': 'interrupted', 'command': ['/opt/kltn/.venv/bin/python', '-I', '-B', '/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py', '--variant', 'A0', '--phase', 'interrupted'], 'pid': 36, 'returncode': 1}",
+    "elapsed_seconds": 16.762789709
+  },
+  "elapsed_seconds": 22.396569071000002
+}

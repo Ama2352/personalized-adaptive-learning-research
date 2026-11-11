@@ -1,5 +1,10 @@
 # GPU, artifact và ngân sách
 
+## 12/11 — checkpoint CUDA và lưu trữ Modal đã nghiệm thu
+
+Đã đạt Gate CPU1.994ca/198nguồn/92module trên image Modal. Pilot GPU A0/A3 đã đạt16Adam updates trên dữ liệu giả, bốn checkpoint và cùng kết quả model/Adam/RNG/counters/predictions giữa liên tục và phục hồi. Đã tải archive96,8MB và đọc lại bốn checkpoint từ Volumev2 để đối chiếu độc lập. Sửa runner để native checkpoint ở filesystem cục bộ, durable copy từng pha có SHA và sync; source model/hyperparameter giữ nguyên. Actual A0 GPU lifecycle engineering10x84 đang kiểm tiếp. Main60/Junyi, full workflow/preemption recovery và throughput đại diện còn thiếu. [Hồ sơ](../../research_tracking/runs/modal-akt-recovery-20261112-01/README.md).
+
+
 ## 10/11 — bốn biến thể AKT đã qua CUDA smoke trên T4
 
 T4 miễn phí đã chạy A0–A3 theo recipe CUDA, tổng 8 Adam updates/192 target giả/24 dự báo, chung initial backbone, nguồn nguyên và số học hữu hạn. Đã tải và kiểm log cùng 44 package. Chưa checkpoint/restore, throughput đại diện hoặc Main fit. Modal 0 USD. [Hồ sơ](../../research_tracking/runs/akt-colab-t4-current-20261110-01/README.md).

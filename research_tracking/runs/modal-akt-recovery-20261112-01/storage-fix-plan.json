@@ -1,0 +1,39 @@
+{
+  "plan": {
+    "run_id": "modal-checkpoint-pilot-20261112-12",
+    "gpu": [
+      "L4",
+      "T4",
+      "A10"
+    ],
+    "max_containers": 1,
+    "retries": 0,
+    "timeout_seconds": 420,
+    "startup_timeout_seconds": 120,
+    "max_gpu_startup_and_run_seconds": 600,
+    "client_wait_seconds": 1800,
+    "cpu_request": 0.25,
+    "cpu_limit": 2,
+    "memory_request_mib": 4096,
+    "memory_limit_mib": 8192,
+    "pilot_budget_usd": 0.5,
+    "worker_max_rss_bytes": 6442450944,
+    "volume_version": 2,
+    "native_checkpoint_filesystem": "container-local",
+    "durable_checkpoint_boundary": "after each fresh-process phase, SHA256 plus sync",
+    "max_optimizer_updates": 16,
+    "max_synthetic_targets": 384,
+    "main_training": false,
+    "source_zip_sha256": "62920abfec45923e784c737b99ce5a3c95d1b677a7414878d10349a0466cf847",
+    "source_files": 279,
+    "lock_sha256": "60dad3de310562db4f775d1977e2097a6d1c8f57a22bfa4f7afc3ceab35cc45a",
+    "volume_name": "kltn-akt-checkpoint-pilot-20261112-12",
+    "image_build_dependency_timeout_seconds": 480
+  },
+  "reason": "Volumev1 không hỗ trợ hard-link; mount dưới native output có thể là alias. Dùng native filesystem cho checkpoint, Volumev2 /durable để giữ copy từng phase và sync.",
+  "source_architecture_modified": false,
+  "shared_filesystem_helper_modified": false,
+  "model_or_hyperparameters_modified": false,
+  "official_source": "https://modal.com/docs/guide/volumes",
+  "checkpoint_partial11": "6 Adam updates /144 target giả trên TeslaT4; dừng ở alias guard khi save, chưa recovery đạt."
+}

@@ -1,0 +1,127 @@
+{
+  "status": "CUDA_CHECKPOINT_FRESH_PROCESS_RESTORE_VERIFIED",
+  "run_id": "modal-checkpoint-pilot-20261112-12",
+  "gpu_requested": "L4,A10,T4",
+  "main_training": false,
+  "source_zip_sha256": "62920abfec45923e784c737b99ce5a3c95d1b677a7414878d10349a0466cf847",
+  "controller_returncode": 0,
+  "controller_result": {
+    "status": "CUDA_CHECKPOINT_FRESH_PROCESS_RESTORE_VERIFIED",
+    "scope": "Fixture CUDA complete-epoch checkpoint and fresh-process restore",
+    "main_training": false,
+    "modal_spend_usd": null,
+    "processes": [
+      {
+        "variant": "A0",
+        "phase": "continuous",
+        "command": [
+          "/opt/kltn/.venv/bin/python",
+          "-I",
+          "-B",
+          "/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py",
+          "--variant",
+          "A0",
+          "--phase",
+          "continuous"
+        ],
+        "pid": 18,
+        "returncode": 0
+      },
+      {
+        "variant": "A0",
+        "phase": "interrupted",
+        "command": [
+          "/opt/kltn/.venv/bin/python",
+          "-I",
+          "-B",
+          "/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py",
+          "--variant",
+          "A0",
+          "--phase",
+          "interrupted"
+        ],
+        "pid": 37,
+        "returncode": 0
+      },
+      {
+        "variant": "A0",
+        "phase": "resumed",
+        "command": [
+          "/opt/kltn/.venv/bin/python",
+          "-I",
+          "-B",
+          "/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py",
+          "--variant",
+          "A0",
+          "--phase",
+          "resumed"
+        ],
+        "pid": 56,
+        "returncode": 0
+      },
+      {
+        "variant": "A3",
+        "phase": "continuous",
+        "command": [
+          "/opt/kltn/.venv/bin/python",
+          "-I",
+          "-B",
+          "/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py",
+          "--variant",
+          "A3",
+          "--phase",
+          "continuous"
+        ],
+        "pid": 75,
+        "returncode": 0
+      },
+      {
+        "variant": "A3",
+        "phase": "interrupted",
+        "command": [
+          "/opt/kltn/.venv/bin/python",
+          "-I",
+          "-B",
+          "/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py",
+          "--variant",
+          "A3",
+          "--phase",
+          "interrupted"
+        ],
+        "pid": 94,
+        "returncode": 0
+      },
+      {
+        "variant": "A3",
+        "phase": "resumed",
+        "command": [
+          "/opt/kltn/.venv/bin/python",
+          "-I",
+          "-B",
+          "/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py",
+          "--variant",
+          "A3",
+          "--phase",
+          "resumed"
+        ],
+        "pid": 113,
+        "returncode": 0
+      }
+    ],
+    "timeout_seconds": 360,
+    "max_physical_optimizer_updates": 16,
+    "max_physical_targets": 384,
+    "worker_sha256": "59661ad03aa2fb94b54079b54cd55e894dbc02350785b64ad8b10dce2e88cef0",
+    "physical_optimizer_updates": 16,
+    "physical_optimized_targets": 384,
+    "checkpoint_download_verified": false,
+    "full_lifecycle_recovery": false,
+    "unexpected_fault_recovery": false,
+    "variants": [
+      "A0",
+      "A3"
+    ],
+    "elapsed_seconds": 58.038750165
+  },
+  "elapsed_seconds": 63.559712049
+}

@@ -1,0 +1,73 @@
+✓ Initialized. View run at 
+https://modal.com/apps/honguyenminhsang2005/main/ap-sNIPgk8rVPLMmiTKLKVTbM
+✓ Created objects.
+Building image im-XhV44QN333m1Mj6ooDTooN
+Building image im-XhV44QN333m1Mj6ooDTooN
+
+=> Step 0: FROM base
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+
+=> Step 1: COPY . /
+Saving image...
+Saving image...
+Image saved, took 1.75s
+Image saved, took 1.75s
+
+Built image im-XhV44QN333m1Mj6ooDTooN in 3.07s
+
+
+
+Built image im-XhV44QN333m1Mj6ooDTooN in 3.07s
+
+
+Stopping app - uncaught exception raised locally: TimeoutError().
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\synchronicity\synchronizer.py", line 605, in _run_function_async
+    value = await asyncio.shield(shielded_task)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\tasks.py", line 507, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\synchronicity\async_wrap.py", line 30, in wrapper
+    return await user_wrapper(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\synchronicity\synchronizer.py", line 628, in _run_function_async
+    await a_fut  # wait for cancellation logic to complete - this *normally* raises CancelledError
+    ^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\research_tracking\runs\modal-akt-recovery-20261112-01\gpu_sandbox_pilot.py", line 67, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "D:\Dev\KLTN\research_tracking\runs\modal-akt-recovery-20261112-01\gpu_sandbox_pilot.py", line 30, in main
+    sandbox = await asyncio.wait_for(modal.Sandbox.create.aio(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        timeout=600, name=RUN, volumes={'/opt/kltn/experiments/akt/results': volume}), 180)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\tasks.py", line 506, in wait_for
+    async with timeouts.timeout(timeout):
+               ~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\timeouts.py", line 116, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
