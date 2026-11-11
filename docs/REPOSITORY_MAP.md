@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 12/11 — pilot Modal đã thực thi tới kiểm runtime, phục hồi checkpoint còn bị chặn
+
+Đã tạo entrypoint Modal riêng, xác nhận nhận NVIDIA L4 ở canary, và kiểm môi trường CUDA thực trong các lượt pilot. Volume đã lưu và tải được ba archive lỗi, mỗi archive được đối chiếu CRC/SHA. Các lỗi chuyển đường dẫn và output từ Colab đã sửa. Lượt tiếp theo bị chặn trước batch đầu bởi cap RSS 2 GiB, đo thực tế khoảng 4 GiB; cap mới 6 GiB chưa được nghiệm thu vì lượt07 hết hạn chờ 600 giây. Mọi App của lượt kiểm đã dừng. Billing đọc gần nhất ghi tổng kỳ khoảng 0,02056 USD, net billed 0 USD sau credits/allowance. Chưa có checkpoint GPU phục hồi đạt hoặc training nghiên cứu chính. [Hồ sơ vận hành](../research_tracking/runs/modal-quick-preflight-20261111-01/README.md).
+
+
 ## 10/11 — bốn biến thể AKT đã qua CUDA smoke trên T4
 
 T4 miễn phí đã chạy A0–A3 theo recipe CUDA, tổng 8 Adam updates/192 target giả/24 dự báo, chung initial backbone, nguồn nguyên và số học hữu hạn. Đã tải và kiểm log cùng 44 package. Chưa checkpoint/restore, throughput đại diện hoặc Main fit. Modal 0 USD. [Hồ sơ](../research_tracking/runs/akt-colab-t4-current-20261110-01/README.md).

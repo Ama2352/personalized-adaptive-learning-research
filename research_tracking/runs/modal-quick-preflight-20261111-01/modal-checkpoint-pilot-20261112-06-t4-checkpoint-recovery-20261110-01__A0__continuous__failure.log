@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py", line 118, in <module>
+    stats = train_epoch(adapter, lambda: iter(case['entries']), optimizer=optimizer, epoch=epoch,
+        budget=dict(max_steps=2, max_targets=48, max_seconds=45., max_rss_bytes=2*1024**3,
+            min_available_ram_bytes=2*1024**3), batch_factory=tracker.collate,
+        progress_callback=tracker.progress)
+  File "/opt/kltn/src/knowledge_tracing/akt/training.py", line 333, in train_epoch
+    if len(pending) >= adapter.config.batch_size and not flush():
+                                                         ~~~~~^^
+  File "/opt/kltn/src/knowledge_tracing/akt/training.py", line 257, in flush
+    rss = _check_resource_budget(budget, samples=resource_samples, observer=resource_callback)
+  File "/opt/kltn/src/knowledge_tracing/akt/training.py", line 88, in _check_resource_budget
+    raise MemoryError(f'AKT worker RSS ceiling exceeded: {detail}')
+MemoryError: AKT worker RSS ceiling exceeded: phase=akt, run_id=unbound, pid=18, worker_rss_bytes=4089319424, worker_peak_rss_bytes=None, worker_cap_value_bytes=4089319424, system_available_ram_bytes=4566212608, system_total_ram_bytes=8589934592, max_rss_bytes=2147483648, min_available_ram_bytes=2147483648

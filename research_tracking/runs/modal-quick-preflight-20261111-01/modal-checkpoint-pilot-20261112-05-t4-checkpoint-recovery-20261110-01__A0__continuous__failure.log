@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py", line 80, in <module>
+    adapter = models.ResearchGraphAKTAdapter(config=config, encoding=case['encoding'],
+        index=index, condition=setup, cuda_profile=cuda)
+  File "/opt/kltn/src/knowledge_tracing/akt/research_graph_model.py", line 294, in __init__
+    validate_config(config, cuda_profile=cuda_profile)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/kltn/src/knowledge_tracing/akt/config.py", line 228, in validate_config
+    raise ValueError('simulator research requires bounded time and exclusive named results path')
+ValueError: simulator research requires bounded time and exclusive named results path

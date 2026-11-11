@@ -1,0 +1,33 @@
+{"run_id": "modal-checkpoint-pilot-20261112-04", "gpu": ["L4", "A10", "T4"], "max_containers": 1, "retries": 0, "timeout_seconds": 420, "startup_timeout_seconds": 120, "max_gpu_startup_and_run_seconds": 600, "cpu_request": 1, "cpu_limit": 2, "memory_request_mib": 4096, "memory_limit_mib": 8192, "pilot_budget_usd": 0.5, "max_optimizer_updates": 16, "max_synthetic_targets": 384, "main_training": false, "source_zip_sha256": "f2ed6d264ce572bb909808d6bc23b18ece9a4267d7d4ca7bb0abe60aa5df4214", "source_files": 279, "lock_sha256": "60dad3de310562db4f775d1977e2097a6d1c8f57a22bfa4f7afc3ceab35cc45a", "volume_name": "kltn-akt-checkpoint-pilot-20261112-04", "image_build_dependency_timeout_seconds": 480}
+✓ Initialized. View run at 
+https://modal.com/apps/honguyenminhsang2005/main/ap-87n60o1XsR8qTg7iVGoBkz
+Building image im-aw96MSaGWbkIBmsEeOkHaM
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 975.00ms
+
+Built image im-aw96MSaGWbkIBmsEeOkHaM in 1.95s
+
+
+✓ Created objects.
+├── ✓ Uploaded D:\Dev\KLTN\experiments\akt\modal_checkpoint_pilot.py
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\received\resolution
+│   -attempt01\candidate-linux-cuda.lock.txt
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\artifacts\akt\modal\modal-checkpoint-pilot-20261112-04\source.z
+│   ip
+└── ✓ Created Function remote_pilot.
+{"status": "FAILED", "archive_bytes": 3139, "downloaded_verified": true, "volume_name": "kltn-akt-checkpoint-pilot-20261112-04"}
+Stopping app - uncaught exception raised locally: AssertionError('inspect downloaded failure artifacts').
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\experiments\akt\modal_checkpoint_pilot.py", line 216, in <module>
+    execute(source, plan, define_only=arguments.define_only and not arguments.run)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\experiments\akt\modal_checkpoint_pilot.py", line 197, in execute
+    assert receipt['status'] == EXPECTED, 'inspect downloaded failure artifacts'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: inspect downloaded failure artifacts

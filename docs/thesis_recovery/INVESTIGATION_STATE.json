@@ -6178,7 +6178,7 @@
     "modal_volume_durability": "PENDING",
     "representative_throughput_matrix_cost": "UNMEASURED",
     "actual_paid_run_authorized": false,
-    "modal_compute_used": false,
+    "modal_compute_used": true,
     "CPU_selected_variants": [
       "A0",
       "A1_EXPERT",
@@ -6191,7 +6191,8 @@
       "Fitted online/controller adapters",
       "Junyi domain counterparts"
     ],
-    "isolated_linux_cpu_gate": "FULL_VERIFIED_1993_NO_EXCLUSIONS"
+    "isolated_linux_cpu_gate": "FULL_VERIFIED_1993_NO_EXCLUSIONS",
+    "authorized_modal_scope": "BOUNDED_PILOT_USD0.50_ONLY"
   },
   "neural_producer_metadata62_20261110": {
     "status": "ACCEPTED_COLD62_SAKT35_GKT27",
@@ -6757,5 +6758,47 @@
     "representative_throughput_measured": false,
     "cloud_spend_authorized_by_this_status_check": false,
     "modal_spend_usd_in_verified_runs": 0
+  },
+  "modal_pilot_20261111": {
+    "status": "BLOCKED_ALLOCATION_TIMEOUT_AFTER_PORTING_FIXES",
+    "run_id": "modal-checkpoint-pilot-20261112-07",
+    "exec_session_id": 44777,
+    "app_id": "ap-CEu60UOwdUgxqoSIoEB8XO",
+    "volume_name": "kltn-akt-checkpoint-pilot-20261112-07",
+    "authorized_budget_usd": 0.5,
+    "max_gpu_startup_and_run_seconds": 600,
+    "gpu": [
+      "A10",
+      "L4",
+      "T4"
+    ],
+    "max_containers": 1,
+    "retries": 0,
+    "max_updates": 16,
+    "max_synthetic_targets": 384,
+    "actual_cost_usd": null,
+    "authorization": "research_tracking/runs/modal-quick-preflight-20261111-01/authorization.json",
+    "native_output": "experiments/akt/results/modal-checkpoint-pilot-20261112-07",
+    "next": "Chẩn đoán cấp phát của đúng image/Volume/function hiện hành bằng read-only logs/Modal support; không lặp lại cùng lượt07. Nếu có giả thuyết mới, chỉ chạy bounded pilot trong phần grant0,50USD còn lại. Chưa Main training.",
+    "recorded_at_utc": "2026-11-11T17:51:04.114840+00:00",
+    "gpu_dispatch_probe": "PASS_NVIDIA_L4",
+    "cpu_dispatch_probe": "PASS",
+    "volume_small_artifact_download_verified": true,
+    "stopped_attempts": [
+      "01 queuedT4 stopped0containers",
+      "02 queuedL4 stopped0containers",
+      "03 startup ROOT IndexError stopped",
+      "04 actualModalbody failed missing Colabinstaller report; failure archive downloaded verified",
+      "05 runtime CUDA đạt, output namespace sai; failure archive đã tải và kiểm",
+      "06 output namespace đạt, RSS trước batch 4089319424 vượt cap2GiB; failure archive đã tải và kiểm, chưa optimizer update"
+    ],
+    "worker_max_rss_bytes": 6442450944,
+    "active_model_processes": 0,
+    "checkpoint_cuda_recovery_verified": false,
+    "last_attempt_status": "CLIENT_TIMEOUT_600_SECONDS",
+    "last_billing_metered_usd": "0.02055687",
+    "last_billing_net_usd": "0.00000000",
+    "billing_evidence": "research_tracking/runs/modal-quick-preflight-20261111-01/billing-after07-timeout.json",
+    "all_owned_apps_stopped": true
   }
 }

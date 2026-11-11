@@ -1,0 +1,265 @@
+[
+  {
+    "run_id": "modal-checkpoint-pilot-20261111-01",
+    "native_output": "experiments/akt/results/modal-checkpoint-pilot-20261111-01",
+    "receipt_available": false
+  },
+  {
+    "run_id": "modal-checkpoint-pilot-20261111-02",
+    "native_output": "experiments/akt/results/modal-checkpoint-pilot-20261111-02",
+    "receipt_available": false
+  },
+  {
+    "run_id": "modal-checkpoint-pilot-20261112-03",
+    "native_output": "experiments/akt/results/modal-checkpoint-pilot-20261112-03",
+    "receipt_available": false
+  },
+  {
+    "run_id": "modal-checkpoint-pilot-20261112-04",
+    "native_output": "experiments/akt/results/modal-checkpoint-pilot-20261112-04",
+    "receipt_available": true,
+    "status": "FAILED",
+    "error_type": null,
+    "error": null,
+    "archive_sha256": "2b4d7a99b1ab658023135003e85fd795104b8ee9210a3f6dd0a91493f7521b5b",
+    "archive_bytes": 3139,
+    "download_inventory_verified": true,
+    "elapsed_seconds": 0.2733332099999999,
+    "summaries": {
+      "modal-checkpoint-pilot-20261112-04/summary.json": {
+        "status": "FAILED",
+        "run_id": "modal-checkpoint-pilot-20261112-04",
+        "gpu_requested": "L4,A10,T4",
+        "main_training": false,
+        "source_zip_sha256": "f2ed6d264ce572bb909808d6bc23b18ece9a4267d7d4ca7bb0abe60aa5df4214",
+        "controller_returncode": 0,
+        "controller_result": {
+          "status": "FAILED",
+          "scope": "Fixture CUDA complete-epoch checkpoint and fresh-process restore",
+          "main_training": false,
+          "modal_spend_usd": 0,
+          "processes": [],
+          "timeout_seconds": 360,
+          "max_physical_optimizer_updates": 16,
+          "max_physical_targets": 384,
+          "worker_sha256": "a1d847c2e5290e336632fd2a5af832ed40bc54bd1db14ee13ac813de9531dbfe",
+          "error_type": "FileNotFoundError",
+          "error": "[Errno 2] No such file or directory: '/opt/kltn/artifacts/akt/runtime/isolated-install02/result.json'",
+          "elapsed_seconds": 0.008361328000000112
+        },
+        "elapsed_seconds": 0.2733332099999999
+      },
+      "t4-checkpoint-recovery-20261110-01/result.json": {
+        "status": "FAILED",
+        "scope": "Fixture CUDA complete-epoch checkpoint and fresh-process restore",
+        "main_training": false,
+        "modal_spend_usd": 0,
+        "processes": [],
+        "timeout_seconds": 360,
+        "max_physical_optimizer_updates": 16,
+        "max_physical_targets": 384,
+        "worker_sha256": "a1d847c2e5290e336632fd2a5af832ed40bc54bd1db14ee13ac813de9531dbfe",
+        "error_type": "FileNotFoundError",
+        "error": "[Errno 2] No such file or directory: '/opt/kltn/artifacts/akt/runtime/isolated-install02/result.json'",
+        "elapsed_seconds": 0.008361328000000112
+      }
+    }
+  },
+  {
+    "run_id": "modal-checkpoint-pilot-20261112-05",
+    "native_output": "experiments/akt/results/modal-checkpoint-pilot-20261112-05",
+    "receipt_available": true,
+    "status": "FAILED",
+    "error_type": null,
+    "error": null,
+    "archive_sha256": "af3c82b2749eee2be04e4bb1446194f7b13f65f9e3777b5424e1d5960958737f",
+    "archive_bytes": 6250,
+    "download_inventory_verified": true,
+    "elapsed_seconds": 10.490505874,
+    "summaries": {
+      "modal-checkpoint-pilot-20261112-05/summary.json": {
+        "status": "FAILED",
+        "run_id": "modal-checkpoint-pilot-20261112-05",
+        "gpu_requested": "L4,A10,T4",
+        "main_training": false,
+        "source_zip_sha256": "e962dfde5f5ae711c8a86260544951ee991a8f629d7c6bb2b75916db3aff5f93",
+        "controller_returncode": 0,
+        "controller_result": {
+          "status": "FAILED",
+          "scope": "Fixture CUDA complete-epoch checkpoint and fresh-process restore",
+          "main_training": false,
+          "modal_spend_usd": null,
+          "processes": [
+            {
+              "variant": "A0",
+              "phase": "continuous",
+              "command": [
+                "/opt/kltn/.venv/bin/python",
+                "-I",
+                "-B",
+                "/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py",
+                "--variant",
+                "A0",
+                "--phase",
+                "continuous"
+              ],
+              "pid": 18,
+              "returncode": 1
+            }
+          ],
+          "timeout_seconds": 360,
+          "max_physical_optimizer_updates": 16,
+          "max_physical_targets": 384,
+          "worker_sha256": "23aac1fee9cf376b67bb6bc123b4c4f8750e7d41b5b8d822cf9c9d1807a9d22e",
+          "error_type": "AssertionError",
+          "error": "{'variant': 'A0', 'phase': 'continuous', 'command': ['/opt/kltn/.venv/bin/python', '-I', '-B', '/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py', '--variant', 'A0', '--phase', 'continuous'], 'pid': 18, 'returncode': 1}",
+          "elapsed_seconds": 4.294346869
+        },
+        "elapsed_seconds": 10.490505874
+      },
+      "t4-checkpoint-recovery-20261110-01/result.json": {
+        "status": "FAILED",
+        "scope": "Fixture CUDA complete-epoch checkpoint and fresh-process restore",
+        "main_training": false,
+        "modal_spend_usd": null,
+        "processes": [
+          {
+            "variant": "A0",
+            "phase": "continuous",
+            "command": [
+              "/opt/kltn/.venv/bin/python",
+              "-I",
+              "-B",
+              "/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py",
+              "--variant",
+              "A0",
+              "--phase",
+              "continuous"
+            ],
+            "pid": 18,
+            "returncode": 1
+          }
+        ],
+        "timeout_seconds": 360,
+        "max_physical_optimizer_updates": 16,
+        "max_physical_targets": 384,
+        "worker_sha256": "23aac1fee9cf376b67bb6bc123b4c4f8750e7d41b5b8d822cf9c9d1807a9d22e",
+        "error_type": "AssertionError",
+        "error": "{'variant': 'A0', 'phase': 'continuous', 'command': ['/opt/kltn/.venv/bin/python', '-I', '-B', '/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py', '--variant', 'A0', '--phase', 'continuous'], 'pid': 18, 'returncode': 1}",
+        "elapsed_seconds": 4.294346869
+      },
+      "t4-checkpoint-recovery-20261110-01/A0/continuous/result.json": {
+        "status": "FAILED",
+        "variant": "A0",
+        "phase": "continuous",
+        "scope": "Handmade complete-epoch CUDA checkpoint check, not research fit or lifecycle recovery",
+        "main_training": false,
+        "modal_spend_usd": null,
+        "error_type": "ValueError",
+        "error": "simulator research requires bounded time and exclusive named results path",
+        "elapsed_seconds": 3.5326649850000003
+      }
+    }
+  },
+  {
+    "run_id": "modal-checkpoint-pilot-20261112-06",
+    "native_output": "experiments/akt/results/modal-checkpoint-pilot-20261112-06",
+    "receipt_available": true,
+    "status": "FAILED",
+    "error_type": null,
+    "error": null,
+    "archive_sha256": "fa8149af100404b276ec1ac1ab3fdc20cd55a1734312c5f49fb162b659967135",
+    "archive_bytes": 10848,
+    "download_inventory_verified": true,
+    "elapsed_seconds": 10.760289741,
+    "summaries": {
+      "modal-checkpoint-pilot-20261112-06/summary.json": {
+        "status": "FAILED",
+        "run_id": "modal-checkpoint-pilot-20261112-06",
+        "gpu_requested": "L4,A10,T4",
+        "main_training": false,
+        "source_zip_sha256": "985a10e54dbae4c2dd24b26012deade376e410e4c7a115466c81682a339c9e64",
+        "controller_returncode": 0,
+        "controller_result": {
+          "status": "FAILED",
+          "scope": "Fixture CUDA complete-epoch checkpoint and fresh-process restore",
+          "main_training": false,
+          "modal_spend_usd": null,
+          "processes": [
+            {
+              "variant": "A0",
+              "phase": "continuous",
+              "command": [
+                "/opt/kltn/.venv/bin/python",
+                "-I",
+                "-B",
+                "/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py",
+                "--variant",
+                "A0",
+                "--phase",
+                "continuous"
+              ],
+              "pid": 18,
+              "returncode": 1
+            }
+          ],
+          "timeout_seconds": 360,
+          "max_physical_optimizer_updates": 16,
+          "max_physical_targets": 384,
+          "worker_sha256": "1e595f1bd8334feb5f3c13afe126e7692b59ad83532fedc527c701db47fb8f77",
+          "error_type": "AssertionError",
+          "error": "{'variant': 'A0', 'phase': 'continuous', 'command': ['/opt/kltn/.venv/bin/python', '-I', '-B', '/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py', '--variant', 'A0', '--phase', 'continuous'], 'pid': 18, 'returncode': 1}",
+          "elapsed_seconds": 5.083437835
+        },
+        "elapsed_seconds": 10.760289741
+      },
+      "t4-checkpoint-recovery-20261110-01/result.json": {
+        "status": "FAILED",
+        "scope": "Fixture CUDA complete-epoch checkpoint and fresh-process restore",
+        "main_training": false,
+        "modal_spend_usd": null,
+        "processes": [
+          {
+            "variant": "A0",
+            "phase": "continuous",
+            "command": [
+              "/opt/kltn/.venv/bin/python",
+              "-I",
+              "-B",
+              "/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py",
+              "--variant",
+              "A0",
+              "--phase",
+              "continuous"
+            ],
+            "pid": 18,
+            "returncode": 1
+          }
+        ],
+        "timeout_seconds": 360,
+        "max_physical_optimizer_updates": 16,
+        "max_physical_targets": 384,
+        "worker_sha256": "1e595f1bd8334feb5f3c13afe126e7692b59ad83532fedc527c701db47fb8f77",
+        "error_type": "AssertionError",
+        "error": "{'variant': 'A0', 'phase': 'continuous', 'command': ['/opt/kltn/.venv/bin/python', '-I', '-B', '/opt/kltn/artifacts/akt/runtime/t4_checkpoint_worker.py', '--variant', 'A0', '--phase', 'continuous'], 'pid': 18, 'returncode': 1}",
+        "elapsed_seconds": 5.083437835
+      },
+      "t4-checkpoint-recovery-20261110-01/A0/continuous/result.json": {
+        "status": "FAILED",
+        "variant": "A0",
+        "phase": "continuous",
+        "scope": "Handmade complete-epoch CUDA checkpoint check, not research fit or lifecycle recovery",
+        "main_training": false,
+        "modal_spend_usd": null,
+        "error_type": "MemoryError",
+        "error": "AKT worker RSS ceiling exceeded: phase=akt, run_id=unbound, pid=18, worker_rss_bytes=4089319424, worker_peak_rss_bytes=None, worker_cap_value_bytes=4089319424, system_available_ram_bytes=4566212608, system_total_ram_bytes=8589934592, max_rss_bytes=2147483648, min_available_ram_bytes=2147483648",
+        "elapsed_seconds": 4.50666824
+      }
+    }
+  },
+  {
+    "run_id": "modal-checkpoint-pilot-20261112-07",
+    "native_output": "experiments/akt/results/modal-checkpoint-pilot-20261112-07",
+    "receipt_available": false
+  }
+]

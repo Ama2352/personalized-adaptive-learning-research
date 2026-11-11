@@ -6,6 +6,8 @@
 
 [Báo cáo chi tiết: diễn tiến nghiên cứu, số liệu và biểu đồ](BAO_CAO_NGHIEN_CUU.html).
 
+**Cập nhật kỹ thuật ngày 12/11.** Đã chuyển bước kiểm AKT sang Modal và xác nhận môi trường CUDA chạy được trên L4. Trong quá trình chuyển, đã sửa các lỗi đường dẫn và vị trí lưu kết quả, đồng thời giữ lại các lượt thất bại để truy vết. Kiểm phục hồi checkpoint còn chưa hoàn tất do giới hạn RAM ban đầu và lần chờ cấp GPU tiếp theo hết hạn. Các App đã dừng, chi phí tổng kỳ ghi nhận gần nhất khoảng 0,021 USD, được bù bằng credits/allowance. Bước kế tiếp là hoàn tất kiểm phục hồi và đo tốc độ trước huấn luyện nghiên cứu chính. Chưa bổ sung bằng chứng so sánh chất lượng mô hình cho RQ3.
+
 ## Điểm xuất phát và tiến độ hiện tại
 
 Paper 1 được kế thừa theo bản PDF phát triển dùng để nộp, là nguồn chuẩn về thiết kế và kết quả, còn notebook trong repository là bản tiền kỳ. Theo PDF, tính liên tục của lộ trình chịu ảnh hưởng của cách chọn bài, trong khi đồ thị mở rộng chưa cải thiện ổn định mức thành thạo. Paper 2 quan sát cải thiện dự báo nhỏ ở một số nhóm mô phỏng nhưng chưa phát hiện lợi ích rõ ở kết quả học tập chính. Khóa luận đi tiếp từ khoảng trống này: vì sao đồ thị chưa giúp ổn định, khi nào nó có ích và liệu CG-AKT sử dụng độ tin cậy cạnh có cải thiện được không?

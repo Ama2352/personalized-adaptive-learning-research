@@ -1,0 +1,48 @@
+{"run_id": "modal-checkpoint-pilot-20261111-02", "gpu": "L4", "max_containers": 1, "retries": 0, "timeout_seconds": 480, "startup_timeout_seconds": 120, "max_gpu_startup_and_run_seconds": 600, "cpu_request": 1, "cpu_limit": 2, "memory_request_mib": 4096, "memory_limit_mib": 8192, "pilot_budget_usd": 0.5, "max_optimizer_updates": 16, "max_synthetic_targets": 384, "main_training": false, "source_zip_sha256": "914e95a4ee20c0c8d26c96e02040b60ff164d8ca4177d993fbac967e1e4f00a8", "source_files": 279, "lock_sha256": "60dad3de310562db4f775d1977e2097a6d1c8f57a22bfa4f7afc3ceab35cc45a", "volume_name": "kltn-akt-checkpoint-pilot-20261111-02", "image_build_dependency_timeout_seconds": 480}
+✓ Initialized. View run at 
+https://modal.com/apps/honguyenminhsang2005/main/ap-WwNvVjcfBGvMH9RmK3qxeh
+Building image im-Os3SwcLoqcL5FornDC2AMk
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 813.62ms
+
+Built image im-Os3SwcLoqcL5FornDC2AMk in 3.03s
+
+
+✓ Created objects.
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\artifacts\akt\colab\gpu08-linux-20261108-01\received\resolution
+│   -attempt01\candidate-linux-cuda.lock.txt
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\artifacts\akt\modal\modal-checkpoint-pilot-20261111-02\source.z
+│   ip
+└── ✓ Created Function execute.<locals>.pilot.
+Stopping app - user stopped from CLI.
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\experiments\akt\modal_checkpoint_pilot.py", line 213, in <module>
+    execute(source, plan, define_only=arguments.define_only and not arguments.run)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\experiments\akt\modal_checkpoint_pilot.py", line 169, in execute
+    receipt = pilot.remote(plan['source_zip_sha256'], RUN_ID, GPU)
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_object.py", line 49, in wrapped
+    return await method(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 2081, in remote
+    return await self._call_function(args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 2018, in _call_function
+    return await invocation.run_function()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 498, in run_function
+    return await _process_result(
+           ^^^^^^^^^^^^^^^^^^^^^^
+        await_response.output.result, await_response.output.data_format, self.client._stub, self.client
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_utils\function_utils.py", line 574, in _process_result
+    raise RemoteError(result.exception)
+modal.exception.RemoteError
