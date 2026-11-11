@@ -1,5 +1,24 @@
 # Kết nối Modal và giữ ngân sách30USD/tháng
 
+## Trạng thái đối chiếu ngày 11/11/2026
+
+Chưa nghiệm thu cho training chính trên Modal. User đã yêu cầu tập trung hoàn toàn vào hoàn thiện AKT. Ưu tiên thực thi hiện hành là entrypoint Modal, checkpoint/restore và throughput đủ lập allocation trong 30 USD free credits.
+
+Đã nghiệm thu môi trường Linux cô lập 44 package và Gate CPU 1.993 ca trên 198 file nguồn, 92 module. T4 miễn phí đã chạy A0–A3, tổng 8 Adam updates/192 target giả/24 dự báo, cùng khởi tạo backbone. [Gate CPU](../research_tracking/runs/akt-colab-isolated-cpu-20261110-01/verification.json) và [CUDA smoke](../research_tracking/runs/akt-colab-t4-current-20261110-01/verification.json).
+
+Source kiểm checkpoint CUDA A0/A3 đã chuẩn bị, mới qua AST/API review và chưa chạy. Lượt tiếp tục ngày10/11 chưa nhận được output thực thi mới qua MCP. [Trạng thái gói checkpoint](../research_tracking/runs/akt-t4-checkpoint-recovery-20261110-01/README.md).
+
+Rà soát source ngày11/11 chưa tìm thấy entrypoint dùng Modal App/Image/Volume trong scripts hoặc src/knowledge_tracing/akt. File modal_plan_runner.py được nhắc trong backlog vẫn là việc cần triển khai. SDK/login local đã có hồ sơ lịch sử, còn cloud runtime và storage chưa được nghiệm thu.
+
+Thứ tự hoàn thiện được thu hẹp theo yêu cầu user.
+
+1. Chuẩn bị entrypoint, image từ lock Linux đã kiểm, ràng buộc input/output, một GPU/container, timeout và retry hữu hạn, checkpoint/output theo run.
+2. Kiểm native checkpoint/restore và complete lifecycle trên môi trường đích, giữ model/optimizer/RNG/counters và dự báo có danh tính target. Nghiệm thu cloud storage trước lượt training dài.
+3. Đo throughput đại diện và tính toàn chi phí của protocol đã chốt, sau đó đề xuất lượt training chính kèm giới hạn tiền và thời gian cụ thể.
+
+Modal sử dụng 0 USD trong các hồ sơ đã nghiệm thu. Số dư và giới hạn tài khoản hiện tại cần được đọc lại trước job trả phí. Các thông tin SDK, đăng nhập và giá ở phần lịch sử dưới đây giữ mốc07/11, cần đối chiếu khi thực thi.
+
+
 Ngày07/11/2026. User xác nhận workspace **honguyenminhsang2005**, còn **30USD free credits**, kỳ bắt đầu07/11/2026 và reset vào tháng kế tiếp. Ràng buộc **không trả thêm tiền: out-of-pocket ceiling0USD**, gross usage ceiling tối đa30USD trong kỳ. Đây là thông tin user cung cấp, chưa đối chiếu account/dashboard. Ngày/giờ reset chính xác chưa được xác minh; không tự giả có credits kỳ sau hoặc ngày reset cụ thể. Chưa có per-run authorization; chưa tạo remote job, image hoặc Volume.
 
 ## Local đã chuẩn bị
