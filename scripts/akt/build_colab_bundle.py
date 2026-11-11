@@ -47,14 +47,20 @@ def bundle_contents():
         if path.suffix == '.ipynb':
             original_hash = hashlib.sha256(data).hexdigest()
             notebook = json.loads(data)
-            notebook['metadata'] = {}
-            for cell in notebook['cells']:
-                cell['metadata'] = {}
-                if cell['cell_type'] == 'code':
-                    cell['outputs'] = []
-                    cell['execution_count'] = None
-            data = (json.dumps(notebook,ensure_ascii=False,indent=2)+'\n').encode('utf-8')
-            transforms[name] = {'original_sha256':original_hash,'transform':'strip notebook outputs/execution metadata in bundle copy'}
+            has_execution_outputs = any(
+                cell.get('outputs') or cell.get('execution_count') is not None
+                for cell in notebook['cells'] if cell['cell_type'] == 'code')
+            # Notebook đã sạch là nguồn tạo corpus đã ghim SHA. Giữ nguyên
+            # bytes để pipeline đích kiểm được nguồn mà không sửa corpus cũ.
+            if has_execution_outputs:
+                notebook['metadata'] = {}
+                for cell in notebook['cells']:
+                    cell['metadata'] = {}
+                    if cell['cell_type'] == 'code':
+                        cell['outputs'] = []
+                        cell['execution_count'] = None
+                data = (json.dumps(notebook,ensure_ascii=False,indent=2)+'\n').encode('utf-8')
+                transforms[name] = {'original_sha256':original_hash,'transform':'strip notebook outputs/execution metadata in bundle copy'}
         contents[name] = data
     return contents, transforms
 

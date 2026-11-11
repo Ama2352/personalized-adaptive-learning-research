@@ -23,7 +23,14 @@ def test_bundle_contains_current_test_dependencies_and_source_only_notebooks():
     assert {name for name in contents if name.startswith('docs/')} == set(contract_files)
     assert all(contents[name] == Path(name).read_bytes() for name in contract_files)
     assert not any(name.startswith(('dataset/','artifacts/')) or '/results/' in name for name in contents)
-    assert len(transforms) == 3
+    notebook_names = [name for name in contents if name.endswith('.ipynb')]
+    assert len(notebook_names) == 3
+    for name in notebook_names:
+        copied = json.loads(contents[name])
+        assert all(not cell.get('outputs') and cell.get('execution_count') is None
+                   for cell in copied['cells'] if cell['cell_type'] == 'code')
+        if name not in transforms:
+            assert contents[name] == Path(name).read_bytes()
     for name, metadata in transforms.items():
         original_bytes = Path(name).read_bytes()
         assert hashlib.sha256(original_bytes).hexdigest() == metadata['original_sha256']
@@ -107,6 +114,18 @@ def test_fixed_docs_raw_bytes_and_notebook_transform_without_zip(tmp_path_factor
         assert copied['cells'][0]['source'] == ['x = 1\n']
         assert copied['cells'][0]['outputs'] == [] and copied['cells'][0]['execution_count'] is None
     assert not list(tmp_path.rglob('*.zip'))
+
+
+def test_output_free_notebook_keeps_corpus_source_identity(tmp_path_factory, monkeypatch):
+    tmp_path = tmp_path_factory.mktemp('b')
+    collect, _ = synthetic_collector(tmp_path, monkeypatch)
+    name = 'paper1/AdaptiveEngineSimulation_Enhanced.ipynb'
+    original = b'{"metadata":{"kernelspec":{"name":"python3"}},"cells":[{"cell_type":"code","source":["x=1"],"metadata":{},"outputs":[],"execution_count":null}]}\r\n'
+    (tmp_path/name).write_bytes(original)
+    contents, transforms = collect()
+    assert contents[name] == original
+    assert name not in transforms
+    assert len(transforms) == 2
 
 
 @pytest.mark.parametrize('missing', [

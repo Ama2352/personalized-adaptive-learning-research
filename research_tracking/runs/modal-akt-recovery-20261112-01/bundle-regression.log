@@ -1,0 +1,790 @@
+F.FFFFFFFFFFFF                                                           [100%]
+================================== FAILURES ===================================
+__ test_bundle_contains_current_test_dependencies_and_source_only_notebooks ___
+
+    def test_bundle_contains_current_test_dependencies_and_source_only_notebooks():
+        collect = runpy.run_path('scripts/akt/build_colab_bundle.py')['bundle_contents']
+        contents, transforms = collect()
+        for name in ('scripts/akt/refresh_gate2.py','scripts/research/run_cpu_diagnostics.py',
+                     'src/knowledge_tracing/paper2_reference.py',
+                     'experiments/akt/configs/simulator-research-corpus01.json',
+                     'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt'):
+            assert name in contents
+        assert 'requirements-akt.lock.txt' in contents
+        contract_files = runpy.run_path('scripts/akt/build_colab_bundle.py')['RESEARCH_CONTRACT_FILES']
+        assert len(contract_files) == 8
+        assert {name for name in contents if name.startswith('docs/')} == set(contract_files)
+        assert all(contents[name] == Path(name).read_bytes() for name in contract_files)
+        assert not any(name.startswith(('dataset/','artifacts/')) or '/results/' in name for name in contents)
+>       assert len(transforms) == 3
+E       AssertionError: assert 2 == 3
+E        +  where 2 = len({'paper1/AdaptiveEngineSimulation_Enhanced.ipynb': {'original_sha256': '6941e0d103cb5fddb5fbc572dc01f2fa870531dbde4b46...070cc01304b2646b9575e632eaee8b5eeb3de357f3c', 'transform': 'strip notebook outputs/execution metadata in bundle copy'}})
+
+tests\akt\test_colab_bundle.py:26: AssertionError
+________ test_fixed_docs_raw_bytes_and_notebook_transform_without_zip _________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x000001ED2E082060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001ED2E0836F0>
+
+    def test_fixed_docs_raw_bytes_and_notebook_transform_without_zip(tmp_path_factory, monkeypatch):
+>       tmp_path = tmp_path_factory.mktemp('b')  # Bound Windows ancestor length for Paper2 fixture filenames.
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_colab_bundle.py:93: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+___________ test_output_free_notebook_keeps_corpus_source_identity ____________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x000001ED2E082060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001ED2E3F8770>
+
+    def test_output_free_notebook_keeps_corpus_source_identity(tmp_path_factory, monkeypatch):
+>       tmp_path = tmp_path_factory.mktemp('b')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_colab_bundle.py:113: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+_ test_missing_fixed_contract_stops_local_inventory_without_zip[docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x000001ED2E082060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001ED2E3557F0>
+missing = 'docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md'
+
+    @pytest.mark.parametrize('missing', [
+        'docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md',
+        'docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md',
+        'docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md',
+        'docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md',
+        'docs/thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md',
+        'docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json',
+        'experiments/akt/configs/simulator-research-corpus01.json',
+        'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt',
+    ])
+    def test_missing_fixed_contract_stops_local_inventory_without_zip(tmp_path_factory, monkeypatch, missing):
+>       tmp_path = tmp_path_factory.mktemp('b')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_colab_bundle.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+_ test_missing_fixed_contract_stops_local_inventory_without_zip[docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x000001ED2E082060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001ED2E399BF0>
+missing = 'docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md'
+
+    @pytest.mark.parametrize('missing', [
+        'docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md',
+        'docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md',
+        'docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md',
+        'docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md',
+        'docs/thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md',
+        'docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json',
+        'experiments/akt/configs/simulator-research-corpus01.json',
+        'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt',
+    ])
+    def test_missing_fixed_contract_stops_local_inventory_without_zip(tmp_path_factory, monkeypatch, missing):
+>       tmp_path = tmp_path_factory.mktemp('b')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_colab_bundle.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+_ test_missing_fixed_contract_stops_local_inventory_without_zip[docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x000001ED2E082060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001ED2E399040>
+missing = 'docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md'
+
+    @pytest.mark.parametrize('missing', [
+        'docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md',
+        'docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md',
+        'docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md',
+        'docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md',
+        'docs/thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md',
+        'docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json',
+        'experiments/akt/configs/simulator-research-corpus01.json',
+        'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt',
+    ])
+    def test_missing_fixed_contract_stops_local_inventory_without_zip(tmp_path_factory, monkeypatch, missing):
+>       tmp_path = tmp_path_factory.mktemp('b')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_colab_bundle.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+_ test_missing_fixed_contract_stops_local_inventory_without_zip[docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x000001ED2E082060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001ED2E369F50>
+missing = 'docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md'
+
+    @pytest.mark.parametrize('missing', [
+        'docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md',
+        'docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md',
+        'docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md',
+        'docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md',
+        'docs/thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md',
+        'docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json',
+        'experiments/akt/configs/simulator-research-corpus01.json',
+        'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt',
+    ])
+    def test_missing_fixed_contract_stops_local_inventory_without_zip(tmp_path_factory, monkeypatch, missing):
+>       tmp_path = tmp_path_factory.mktemp('b')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_colab_bundle.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+_ test_missing_fixed_contract_stops_local_inventory_without_zip[docs/thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x000001ED2E082060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001ED2E36A350>
+missing = 'docs/thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md'
+
+    @pytest.mark.parametrize('missing', [
+        'docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md',
+        'docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md',
+        'docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md',
+        'docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md',
+        'docs/thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md',
+        'docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json',
+        'experiments/akt/configs/simulator-research-corpus01.json',
+        'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt',
+    ])
+    def test_missing_fixed_contract_stops_local_inventory_without_zip(tmp_path_factory, monkeypatch, missing):
+>       tmp_path = tmp_path_factory.mktemp('b')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_colab_bundle.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+_ test_missing_fixed_contract_stops_local_inventory_without_zip[docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x000001ED2E082060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001ED2E447020>
+missing = 'docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md'
+
+    @pytest.mark.parametrize('missing', [
+        'docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md',
+        'docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md',
+        'docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md',
+        'docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md',
+        'docs/thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md',
+        'docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json',
+        'experiments/akt/configs/simulator-research-corpus01.json',
+        'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt',
+    ])
+    def test_missing_fixed_contract_stops_local_inventory_without_zip(tmp_path_factory, monkeypatch, missing):
+>       tmp_path = tmp_path_factory.mktemp('b')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_colab_bundle.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+_ test_missing_fixed_contract_stops_local_inventory_without_zip[docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x000001ED2E082060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001ED2E447A70>
+missing = 'docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md'
+
+    @pytest.mark.parametrize('missing', [
+        'docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md',
+        'docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md',
+        'docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md',
+        'docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md',
+        'docs/thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md',
+        'docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json',
+        'experiments/akt/configs/simulator-research-corpus01.json',
+        'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt',
+    ])
+    def test_missing_fixed_contract_stops_local_inventory_without_zip(tmp_path_factory, monkeypatch, missing):
+>       tmp_path = tmp_path_factory.mktemp('b')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_colab_bundle.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+_ test_missing_fixed_contract_stops_local_inventory_without_zip[docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x000001ED2E082060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001ED2E3B42F0>
+missing = 'docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json'
+
+    @pytest.mark.parametrize('missing', [
+        'docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md',
+        'docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md',
+        'docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md',
+        'docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md',
+        'docs/thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md',
+        'docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json',
+        'experiments/akt/configs/simulator-research-corpus01.json',
+        'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt',
+    ])
+    def test_missing_fixed_contract_stops_local_inventory_without_zip(tmp_path_factory, monkeypatch, missing):
+>       tmp_path = tmp_path_factory.mktemp('b')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_colab_bundle.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+_ test_missing_fixed_contract_stops_local_inventory_without_zip[experiments/akt/configs/simulator-research-corpus01.json] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x000001ED2E082060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001ED2E3B4210>
+missing = 'experiments/akt/configs/simulator-research-corpus01.json'
+
+    @pytest.mark.parametrize('missing', [
+        'docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md',
+        'docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md',
+        'docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md',
+        'docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md',
+        'docs/thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md',
+        'docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json',
+        'experiments/akt/configs/simulator-research-corpus01.json',
+        'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt',
+    ])
+    def test_missing_fixed_contract_stops_local_inventory_without_zip(tmp_path_factory, monkeypatch, missing):
+>       tmp_path = tmp_path_factory.mktemp('b')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_colab_bundle.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+_ test_missing_fixed_contract_stops_local_inventory_without_zip[tests/akt/fixtures/legacy_config_before_simulator_research.py.txt] _
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x000001ED2E082060>, _basetemp=None, _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001ED2E385E60>
+missing = 'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt'
+
+    @pytest.mark.parametrize('missing', [
+        'docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md',
+        'docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md',
+        'docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md',
+        'docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md',
+        'docs/thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md',
+        'docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md',
+        'docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json',
+        'experiments/akt/configs/simulator-research-corpus01.json',
+        'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt',
+    ])
+    def test_missing_fixed_contract_stops_local_inventory_without_zip(tmp_path_factory, monkeypatch, missing):
+>       tmp_path = tmp_path_factory.mktemp('b')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_colab_bundle.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\_pytest\tmpdir.py:136: in mktemp
+    basename = self._ensure_relative_to_basetemp(basename)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:117: in _ensure_relative_to_basetemp
+    if (self.getbasetemp() / basename).resolve().parent != self.getbasetemp():
+        ^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\tmpdir.py:213: in getbasetemp
+    basetemp = make_numbered_dir_with_cleanup(
+.venv\Lib\site-packages\_pytest\pathlib.py:420: in make_numbered_dir_with_cleanup
+    raise e
+.venv\Lib\site-packages\_pytest\pathlib.py:401: in make_numbered_dir_with_cleanup
+    p = make_numbered_dir(root, prefix, mode)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}/AC/Temp/pytest-of-AmaDev')
+prefix = 'pytest-', mode = 448
+
+    def make_numbered_dir(root: Path, prefix: str, mode: int = 0o700) -> Path:
+        """Create a directory with an increased number as suffix for the given prefix."""
+        for i in range(10):
+            # try up to 10 times to create the directory
+            max_existing = max(map(parse_num, find_suffixes(root, prefix)), default=-1)
+            new_number = max_existing + 1
+            new_path = root.joinpath(f"{prefix}{new_number}")
+            try:
+                new_path.mkdir(mode=mode)
+            except Exception:
+                pass
+            else:
+                _force_symlink(root, prefix + "current", new_path)
+                return new_path
+        else:
+>           raise OSError(
+                "could not create numbered dir with prefix "
+                f"{prefix} in {root} after 10 tries"
+            )
+E           OSError: could not create numbered dir with prefix pytest- in C:\Users\AmaDev\AppData\Local\Packages\sandbox.{1ff265d5-9c39-475c-b2e8-8fd452f55062}\AC\Temp\pytest-of-AmaDev after 10 tries
+
+.venv\Lib\site-packages\_pytest\pathlib.py:239: OSError
+============================== warnings summary ===============================
+.venv\Lib\site-packages\_pytest\cacheprovider.py:469
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:469: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\nodeids: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+.venv\Lib\site-packages\_pytest\cacheprovider.py:423
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:423: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\lastfailed: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/lastfailed", self.lastfailed)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/akt/test_colab_bundle.py::test_bundle_contains_current_test_dependencies_and_source_only_notebooks
+FAILED tests/akt/test_colab_bundle.py::test_fixed_docs_raw_bytes_and_notebook_transform_without_zip
+FAILED tests/akt/test_colab_bundle.py::test_output_free_notebook_keeps_corpus_source_identity
+FAILED tests/akt/test_colab_bundle.py::test_missing_fixed_contract_stops_local_inventory_without_zip[docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md]
+FAILED tests/akt/test_colab_bundle.py::test_missing_fixed_contract_stops_local_inventory_without_zip[docs/thesis_recovery/22_A0_RESEARCH_LIFECYCLE_CONTRACT.md]
+FAILED tests/akt/test_colab_bundle.py::test_missing_fixed_contract_stops_local_inventory_without_zip[docs/thesis_recovery/23_TRAINING_MATRIX_ACCOUNTING_V1.md]
+FAILED tests/akt/test_colab_bundle.py::test_missing_fixed_contract_stops_local_inventory_without_zip[docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md]
+FAILED tests/akt/test_colab_bundle.py::test_missing_fixed_contract_stops_local_inventory_without_zip[docs/thesis_recovery/28_CUDA_EXECUTION_PROFILE_V1.md]
+FAILED tests/akt/test_colab_bundle.py::test_missing_fixed_contract_stops_local_inventory_without_zip[docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md]
+FAILED tests/akt/test_colab_bundle.py::test_missing_fixed_contract_stops_local_inventory_without_zip[docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md]
+FAILED tests/akt/test_colab_bundle.py::test_missing_fixed_contract_stops_local_inventory_without_zip[docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json]
+FAILED tests/akt/test_colab_bundle.py::test_missing_fixed_contract_stops_local_inventory_without_zip[experiments/akt/configs/simulator-research-corpus01.json]
+FAILED tests/akt/test_colab_bundle.py::test_missing_fixed_contract_stops_local_inventory_without_zip[tests/akt/fixtures/legacy_config_before_simulator_research.py.txt]
+13 failed, 1 passed, 2 warnings in 0.88s
