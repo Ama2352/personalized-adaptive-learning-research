@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 12/11 lúc20giờ07 — kết quả thử tối ưu và ngân sách
+
+[Kiểm GPU và đối soát](AKT_GPU_UTILIZATION_AUDIT_20261112.md) đã bổ sung hai phép đo chưa đạt ngưỡng tiếp nhận, một lượt cache timeout, chi phí và rủi ro vượt30USD của ma trận cũ. Có SVG/CSV/log trong bundle. Không có candidate tăng tốc nào được áp dụng vào training chính.
+
+
 ## 12/11 — kiểm GPU trực tiếp trong training A0
 
 [Kiểm mức sử dụng GPU](AKT_GPU_UTILIZATION_AUDIT_20261112.md) ghi 30 mẫu training ổn định, GPU trung bình43,9%, VRAM459MiB và khoảng8.519target/giây. Chưa chứng minh tối ưu toàn bộ training. Có log, CSV và script dựng lại.

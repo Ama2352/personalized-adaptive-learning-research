@@ -262,6 +262,43 @@ try:
             repeat=repeat,model_optimizer_and_rng_exact=True,targets_per_variant=56332,updates_per_variant=256))
         del payloads
         gc.collect()
+    # Đo tăng batch riêng cho inference, cùng checkpoint và không cập nhật Adam.
+    from dataclasses import replace
+    adapter,optimizer = fresh()
+    final_case = cases[-1]
+    payload = torch.load(OUTPUT/final_case['checkpoint_relative']/'state.pt',map_location='cpu',weights_only=True)
+    restore_checkpoint(adapter,optimizer,payload)
+    del payload
+    expected_model = _state_hash(adapter)
+    cpu_rng_before = torch.get_rng_state().clone()
+    cuda_rng_before = torch.cuda.get_rng_state().clone()
+    prediction_cases = []
+    expected_predictions = None
+    windows = [entry.window for entry in shuffled]
+    for repeat,batches in enumerate(((4,32),(32,4),(4,32))):
+        for batch_size in batches:
+            adapter.config = replace(config,batch_size=batch_size)
+            phase.update(variant=f'prediction{batch_size}',repeat=repeat)
+            torch.cuda.synchronize()
+            prediction_started = time.monotonic()
+            predictions = adapter.predict_windows(windows)
+            torch.cuda.synchronize()
+            elapsed = time.monotonic()-prediction_started
+            if expected_predictions is None:
+                expected_predictions = [array.copy() for array in predictions]
+            assert len(predictions)==len(expected_predictions)==1024
+            max_difference = max(float(np.abs(a-b).max()) for a,b in zip(expected_predictions,predictions))
+            assert max_difference<=1e-6,'Prediction batch numerical tolerance exceeded'
+            prediction_cases.append(dict(repeat=repeat,batch_size=batch_size,seconds=elapsed,
+                scored_targets=56332,valid_token_predictions=100032,max_absolute_difference=max_difference,
+                absolute_tolerance=1e-6,optimizer_updates=0))
+    assert _state_hash(adapter)==expected_model
+    assert torch.equal(torch.get_rng_state(),cpu_rng_before)
+    assert torch.equal(torch.cuda.get_rng_state(),cuda_rng_before)
+    write_json(OPERATION/'prediction-batch-comparison.json',dict(cases=prediction_cases,
+        model_and_rng_unchanged=True,full_junyi_selection=False))
+    del adapter,optimizer
+    gc.collect()
     phase.update(variant='finished',repeat=None)
     stopped.set()
     sampler.join(timeout=5)
@@ -269,6 +306,7 @@ try:
     assert sum(case['targets'] for case in cases)==337992
     result.update(status='JUNYI_STEP_SYNC_PROFILE_COMPLETE',scope='engineering_step_sync_profile_only',
         cases=cases,synthetic_equivalence=equivalence,packet_state_pairs_exact=3,
+        prediction_cases=prediction_cases,prediction_model_and_rng_unchanged=True,
         actual_completed_case_updates=1536,completed_case_target_exposures=337992,
         additional_synthetic_updates=16,additional_synthetic_target_exposures=1536,
         full_main_training=False,selected_protocol_batch_size=4,

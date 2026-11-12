@@ -1,5 +1,12 @@
 # Thống kê triển khai và training AKT — 12/11/2026
 
+## Cập nhật20giờ07 ngày12/11
+
+A0 Junyi hoàn tất6epoch train/selection,348.996updates và80.083.986lượt target. Hai epoch mới có Log Loss selection0,354982644 và0,354906797. Với min_delta0,0001, best tạm thời ở5 và stale1. Chưa chốt selected cuối, refit hoặc calibration. Archive execution06 đã tải/kiểm, bản guard lỗi dừng được giữ và có xác nhận server độc lập. Không có job GPU chạy ở snapshot cuối.
+
+Các ước lượng cũ18–28giờ dựa trên1–2epoch refit chưa phù hợp với diễn tiến A0. Đợt thử tối ưu chưa có phương án được tiếp nhận. Chưa mở training dài mới trước khi cập nhật dự toán cả ma trận. [Đối soát chi tiết](AKT_GPU_UTILIZATION_AUDIT_20261112.md).
+
+
 ## Phạm vi và cách đọc
 
 Bảng này chốt theo artifact đã tải về ngày 12/11. A0 là AKT không đồ thị, A1 dùng đồ thị cố định, A2 dùng confidence theo cạnh, A3 thêm gate điều tiết ảnh hưởng đồ thị. Expert và learned là hai nguồn đồ thị riêng, thành bảy điều kiện cho mỗi môi trường. Grade10 và Junyi có vocabulary riêng và train checkpoint riêng.

@@ -1,5 +1,11 @@
 # Chỉ mục bằng chứng
 
+## 12/11 — đối soát GPU và sáu epoch A0
+
+- [Bundle tối ưu kỹ thuật đã đóng](runs/junyi-step-sync-20261112-01/README.md) giữ hai phép đo CUDA, một timeout, CSV/SVG/log, snapshot credits và quyết định chưa tiếp nhận candidate.
+- [A0 sáu epoch](runs/junyi-main-selected-20261112-01/execution06-verification.json) đã đối chiếu archive/receipt/counters và dừng server độc lập, còn selected cuối/refit/calibration.
+
+
 ## 12/11 — chỉ mục checkpoint AKT GPU
 
 [Chỉ mục theo run và epoch](runs/modal-akt-graph-selected-20261112-01/checkpoint-index.json) ghi checkpoint A0 đã nghiệm thu và các điều kiện đồ thị đang chạy. [Hướng dẫn tìm artifact](runs/modal-akt-graph-selected-20261112-01/README.md) có vị trí archive local, member checkpoint và Modal Volume dự phòng.

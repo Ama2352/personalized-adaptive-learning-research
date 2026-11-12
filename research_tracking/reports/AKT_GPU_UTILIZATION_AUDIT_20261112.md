@@ -1,5 +1,32 @@
 # Kiểm mức sử dụng GPU của AKT ngày 12/11/2026
 
+## Đối soát cuối đợt lúc 20 giờ 07
+
+API Modal ghi nhận 3,24858233USD tài nguyên được đo, trong đó 3,24USD đã trừ credits, các khoản miễn trừ được ghi riêng. `billed_cost` hiện bằng0USD. Quy đổi từ30USD credits ban đầu còn khoảng26,76USD. Đây là snapshot lúc20giờ07, chưa phải hóa đơn phân bổ cuối cùng cho từng App. Danh sách container lúc kiểm cuối rỗng.
+
+Giữa snapshot trước A0 execution06 và trước phép đo01, tổng ghi nhận tăng khoảng0,60USD. Giữa trước phép đo01 và cuối đợt tăng khoảng0,04USD. Lượt A0 đã hoàn tất sáu epoch train/selection, archive2.339.280.485byte đã tải và kiểm SHA/CRC/inventory. Không quy toàn bộ3,24USD cho việc kiểm thử tối ưu.
+
+| Phương án | Kết quả thực đo | Quyết định |
+|---|---|---|
+| Gộp kiểm tra và chẩn đoán của step | Ba cặp CUDA khớp tuyệt đối. Trung vị giảm0,13% thời gian, có một cặp chậm hơn | Loại, trả step chính về bản gốc |
+| Giữ cast ma trận khoảng cách trên GPU | Ba cặp CUDA khớp tuyệt đối. Giảm0,91%,3,53%,3,43% thời gian | Chưa đạt ngưỡng tiếp nhận5% đã đặt, giữ ở bundle thử nghiệm |
+| Tăng batch dự báo4→32 | Vượt ngưỡng sai lệch xác suất1e-6 trước khi hoàn tất bộ đo | Không tiếp nhận. Chưa lưu được độ lệch cực đại nên chưa kết luận mức sai khác |
+| Cache khoảng cách và causal mask theo độ dài/device | Đã khớp CPU. Lượt cloud chạm giới hạn400giây và App đã dừng, thiếu artifact GPU dùng được | Chưa xác nhận CUDA hoặc mức tăng tốc. Giữ code và log, không tự retry |
+
+Hai phép đo training đầu cùng batch4, seed42, thứ tự shuffle43 và packet1.024window/56.332target. Mỗi phương án có ba cặp đảo thứ tự. Sáu checkpoint mỗi phương án giống nhau từng byte, cùng model/Adam/RNG. Worker của lượt01 có trạng thái FAILED do phần dự báo chạy sau training. Phần training đã hoàn tất có sáu hồ sơ case và ba hồ sơ đối chiếu riêng, được phân tích đúng phạm vi. Giữ nguyên lỗi của toàn job.
+
+Bản chính chưa có thay đổi tăng tốc nào được tiếp nhận từ đợt này. Số sử dụng GPU cao hơn chưa đủ làm tiêu chí tiếp nhận. Cần giảm thời gian xử lý cùng workload, giữ tính đúng và đối chiếu pipeline trước khi tiếp tục training dài.
+
+## Hệ quả cho dự toán30USD
+
+Giá kiểm ngày12/11 là0,000164USD/giây cho T4,0,0000131USD/core/giây và0,00000222USD/GiB/giây. Với trần2core/8GiB, cận tài nguyên là0,00020796USD/giây, chưa cộng lưu trữ. [Bảng giá Modal](https://modal.com/pricing).
+
+Để kiểm độ nhạy ngân sách, giả sử A0 còn2epoch selected và5epoch refit, sáu điều kiện graph mỗi điều kiện8epoch selected và5epoch refit. Lấy1.640giây train và250giây selection mỗi epoch từ khoảng số đo A0, workload tương lai là151.900giây. Nhân cận đơn giá trên được khoảng31,59USD, cộng3,24USD đã dùng thành khoảng34,83USD. Đây là kịch bản minh họa có điều kiện, chưa phải dự báo chính xác. Graph chưa có thông lượng đo và số epoch cuối còn chưa biết. Phép tính chưa gồm startup, checkpoint, calibration hoặc các mô hình khác.
+
+Ước lượng18–28giờ trước đây giả định chỉ1–2epoch refit đã không còn phù hợp với diễn tiến A0. Cần lập lại dự toán toàn ma trận và chọn phương án tăng tốc có bằng chứng trước lượt training dài mới. Không bỏ baseline bắt buộc hoặc đổi split để khớp ngân sách.
+
+Nguồn đối soát, dữ liệu từng cặp, log nvidia-smi, code candidate và hình SVG/PDF/PNG ở [bundle tối ưu GPU](../runs/junyi-step-sync-20261112-01/README.md). Các file `sync-analysis.json` và `attention-analysis.json` giữ quyết định loại. `billing-final.json` và `containers-final.json` giữ snapshot cuối. Figure bảnv2 sửa nhãn bị cắt, bảnv1 và nguồn được giữ nguyên.
+
 ## Kết luận hiện tại
 
 Cách gọi trước đây rằng GPU đã được tối ưu là quá sớm. Cache, dự báo theo batch và phục hồi checkpoint đã có kiểm kỹ thuật. Mức khai thác GPU trong training chính cần được đo riêng. Đợt đo này xác nhận cấu hình batch4 còn dư VRAM và còn thời gian GPU không chạy kernel. Chưa xác định nguyên nhân nghẽn hoặc chứng minh chi phí thấp nhất để đạt chất lượng yêu cầu.

@@ -63,9 +63,21 @@ for repeat in range(3):
     pairs.append(dict(repeat=repeat, speedup=ratio, time_reduction_fraction=1-1/ratio))
 median = statistics.median(row['time_reduction_fraction'] for row in pairs)
 accepted = median >= .05 and all(row['speedup'] > 1 for row in pairs)
+prediction_cases = result['prediction_cases']
+assert len(prediction_cases) == 6 and result['prediction_model_and_rng_unchanged'] is True
+assert all(row['optimizer_updates'] == 0 and row['max_absolute_difference'] <= 1e-6
+           and row['scored_targets'] == 56332 and row['valid_token_predictions'] == 100032
+           for row in prediction_cases)
+prediction_pairs = []
+for repeat in range(3):
+    reference = next(row for row in prediction_cases if row['repeat'] == repeat and row['batch_size'] == 4)
+    candidate = next(row for row in prediction_cases if row['repeat'] == repeat and row['batch_size'] == 32)
+    prediction_pairs.append(dict(repeat=repeat, speedup=reference['seconds']/candidate['seconds']))
 summary = dict(status='ACCEPT_PACKET_OPTIMIZATION' if accepted else 'DO_NOT_ADOPT_FROM_PACKET',
                exact_cuda_state_pairs=3, rows=rows, pairs=pairs,
                median_time_reduction_fraction=median,
+               prediction_cases=prediction_cases, prediction_pairs=prediction_pairs,
+               prediction_max_absolute_difference=max(row['max_absolute_difference'] for row in prediction_cases),
                next_requirement='Ghim nguồn và kiểm resume/pipeline trước áp dụng training chính.',
                limits_vi='Ba cặp packet trên một T4, chưa đại diện toàn epoch. GPU-Util lấy mẫu '
                          'có trễ và lẫn biên pha. Mức sử dụng GPU cao chưa xác lập tối ưu chi phí.')

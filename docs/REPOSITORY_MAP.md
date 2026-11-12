@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 12/11 lúc20giờ07 — đóng đợt đo GPU và đối soát ngân sách
+
+[A0 đã nghiệm thu sáu epoch](../research_tracking/runs/junyi-main-selected-20261112-01/execution06-verification.json), archive đã kiểm và dừng App được xác nhận độc lập. [Đợt tối ưu](../research_tracking/runs/junyi-step-sync-20261112-01/README.md) có hai phương án đo CUDA chưa đạt tiêu chí tiếp nhận, một cache candidate chỉ đạt CPU trước timeout. Step chính đã khôi phục. [Đối soát và dự toán](../research_tracking/reports/AKT_GPU_UTILIZATION_AUDIT_20261112.md) ghi credits3,24USD, billed0USD, snapshot container rỗng. Chưa xác nhận tối ưu toàn GPU, cần tính lại chi phí cả ma trận trước training dài.
+
+
 ## 12/11 — ưu tiên xác nhận tối ưu GPU
 
 [Bundle kiểm đồng bộ CPU–GPU](../research_tracking/runs/junyi-step-sync-20261112-01/README.md) giữ bản trước/candidate, đối chiếu CPU chính xác và thiết kế ba cặp đo T4. Đợi A0 execution06 có archive đã kiểm và App đã dừng mới chạy một profile tối đa0,20USD. Candidate chưa nghiệm thu CUDA, chưa áp dụng vào source04 hiện hành. [Số đo nền GPU](../research_tracking/reports/AKT_GPU_UTILIZATION_AUDIT_20261112.md) cho thấy GPU43,9%, chưa đủ kết luận tối ưu.

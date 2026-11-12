@@ -1,5 +1,14 @@
 # Báo cáo tiến độ khóa luận — cập nhật 12/11/2026
 
+## Cập nhật 12/11 lúc 20 giờ 07 — sáu epoch A0 và kết quả kiểm tăng tốc
+
+Bản AKT không đồ thị trên Junyi đã hoàn tất sáu lượt học toàn tập TRAIN80 đã cố định và sáu lần kiểm trên tập selection riêng biệt. Mỗi lượt gồm 13.347.331 tương tác train và 1.600.343 tương tác selection. Checkpoint và archive đã được tải về, kiểm tính toàn vẹn và xác nhận dừng App. Bước chọn epoch cuối, refit, calibration và đánh giá độc lập còn phải thực hiện.
+
+Log Loss selection ở epoch5 là0,354982644 và epoch6 là0,354906797. Mức giảm ở epoch6 nhỏ hơn ngưỡng cải thiện tối thiểu0,0001 đã đặt, nên checkpoint tốt nhất tạm thời theo quy tắc dừng vẫn ở epoch5. Nếu epoch7–8 tiếp tục thiếu cải thiện đủ, mô hình sẽ dừng ở8 và refit5 epoch. Đây là điều kiện dự kiến, số epoch cuối chưa được chốt.
+
+Đã đo GPU trực tiếp và thực hiện hai đối chiếu tăng tốc trên cùng dữ liệu, batch và khởi tạo. Cả hai giữ nguyên model, Adam và RNG, nhưng chưa đạt tiêu chí tăng tốc đã đặt nên chưa đưa vào training chính. Một candidate cache đã khớp CPU, lượt đo cloud hết giới hạn thời gian và đã dừng. Cần xác nhận hiệu quả trên GPU và tính lại dự toán toàn ma trận trước lượt training dài tiếp theo.
+
+
 ## Cập nhật 12/11 lúc 18 giờ 53 — tiến độ A0 và kiểm tài nguyên
 
 A0 Junyi đã hoàn tất bốn epoch trên cùng tập train. Log Loss selection lần lượt là 0,359648, 0,356651, 0,355651 và 0,356488. Epoch4 kém epoch3, checkpoint tốt nhất tạm thời vẫn ở epoch3. Chưa chốt epoch cuối, refit, calibration hoặc đánh giá độc lập. Execution05 hết thời gian kiểm runtime trước training. Sau khi tăng riêng thời gian chờ kiểm môi trường, execution06 tiếp tục từ checkpoint epoch5 đã lưu.
@@ -42,14 +51,14 @@ Paper1 được kế thừa theo PDF. Phiên bản theo đặc tả đã có ki�
 | Môi trường | Đã hoàn tất | Số epoch và thời gian | Còn thiếu |
 |---|---|---|---|
 | Grade10 | Bảy điều kiện A0–A3 đã chọn checkpoint, giữ30 checkpoint và1.260 dự báo mỗi điều kiện | A0/A1 expert chạy8, chọn5. Năm điều kiện còn lại chạy7, chọn4. Tổng51 epoch, controller khoảng30 phút | Refit tổng30 epoch, calibration, đánh giá độc lập và closed-loop |
-| Junyi A0 | Ba epoch đầy đủ, mỗi epoch13.347.331 target, validation1.600.343 target | Epoch1 khoảng31phút, epoch2 khoảng31phút, epoch3 khoảng34phút gồmvalidation | Tiếp tục từ epoch4 dở dang, chốt epoch, refit và đánh giá |
+| Junyi A0 | Sáu epoch đầy đủ, mỗi epoch13.347.331 target, selection1.600.343 target | Khoảng27–29phút train và4phút selection mỗi epoch | Chốt epoch, refit, calibration và đánh giá độc lập |
 | Junyi A1/A2/A3 | A1 đã có producer và kiểm CPU. Sáu điều kiện chưa fit toàn Junyi | Chưa có epoch train chính | Confidence/topology train-only, kiểm CUDA, selected và refit |
 
-Log Loss selection A0 Junyi từ0,359648 xuống0,356651. Đây là kết quả theo dõi chọn epoch, chưa là so sánh độc lập. Nếu epoch3–5 không cải thiện đủ, A0 có thể dừng sau epoch5 và refit2 epoch. Nếu tiếp tục cải thiện, thời điểm dừng thay đổi.
+Log Loss selection ở epoch5 là0,354982644 và epoch6 là0,354906797. Mức giảm ở epoch6 nhỏ hơn ngưỡng cải thiện tối thiểu0,0001 đã đặt, nên checkpoint tốt nhất tạm thời theo quy tắc dừng vẫn ở epoch5. Nếu epoch7–8 tiếp tục thiếu cải thiện đủ, mô hình sẽ dừng ở8 và refit5 epoch. Đây là điều kiện dự kiến, số epoch cuối chưa được chốt.
 
-Kịch bản thuận lợi cho toàn bộ training Junyi còn khoảng18–28 giờ GPU, giả định sáu điều kiện graph có tốc độ gần A0, mỗi điều kiện4–5 epoch selected và1–2 epoch refit. Chưa bao gồm thời gian hoàn thiện mã, full5-fold hoặc closed-loop. Mục tiêu2–3 ngày phụ thuộc các điều kiện này và ngân sách30USD. [Bảng chi tiết và nguồn bằng chứng](../../../reports/AKT_TRAINING_STATUS_20261112.md).
+Ước lượng18–28giờ GPU trước đây dựa trên giả định chỉ1–2epoch refit đã không còn phù hợp với diễn tiến A0. Thời gian và ngân sách còn lại cần được tính lại từ số epoch thực và tốc độ từng biến thể đồ thị. Các mô hình bắt buộc, đánh giá độc lập và mô phỏng vòng kín vẫn được giữ trong phạm vi cần hoàn tất.
 
-**Mốc hiện tại ngày 12/11.** Để chuẩn bị đối chứng cho CG-AKT, AKT không đồ thị đã hoàn tất ba epoch trên toàn tập train Junyi đã cố định, gồm 126.774 người học và 13.347.331 tương tác. Validation trên 15.847 người học riêng biệt, gồm 1.600.343 tương tác, đã hoàn tất. Epoch 3 tiếp tục cải thiện trên tập selection. Đã lưu trạng thái epoch 4 dở dang và tiếp tục qua execution04. Mô hình chưa hoàn tất quy tắc dừng sớm, tối đa 20 epoch. Checkpoint tốt nhất cuối quá trình, refit, calibration và so sánh độc lập còn phải thực hiện.
+**Mốc hiện tại ngày 12/11.** Bản AKT không đồ thị trên Junyi đã hoàn tất sáu lượt học toàn tập TRAIN80 đã cố định và sáu lần kiểm trên tập selection riêng biệt. Mỗi lượt gồm 13.347.331 tương tác train và 1.600.343 tương tác selection. Checkpoint và archive đã được tải về, kiểm tính toàn vẹn và xác nhận dừng App. Bước chọn epoch cuối, refit, calibration và đánh giá độc lập còn phải thực hiện.
 
 Lượt chạy đầu bị Modal thu hồi giữa epoch. Checkpoint bước 46.000 đã giữ trạng thái sau 10.598.159 tương tác. Nhóm tiếp tục từ checkpoint đó và hoàn tất đúng quần thể epoch đầu. Kiểm độc lập số cửa sổ và padding cũng khớp kế hoạch đã tạo trước training. Hai file metadata khởi tạo bị mất được tái dựng có ghi rõ nguồn gốc. Các checkpoint và nhật ký phục hồi đã được lưu để truy vết.
 

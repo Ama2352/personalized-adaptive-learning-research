@@ -22,17 +22,13 @@ class AKTAdapter:
         self.native = build_native(config, n_items=len(encoding.vocabulary.values))
 
     def step(self, batch: AKTBatch, optimizer: torch.optim.Optimizer) -> dict:
+        if not torch.isin(batch.loss_targets, torch.tensor([-1., 0., 1.], device=batch.loss_targets.device)).all():
+            raise ValueError('invalid loss target values')
         valid_targets = batch.loss_targets >= 0
         expected = batch.target_mask & batch.valid_mask
-        values_valid, mask_invalid, n = torch.stack((
-            torch.isin(batch.loss_targets, batch.loss_targets.new_tensor([-1., 0., 1.])).all(),
-            torch.any(valid_targets & ~expected) | torch.any(batch.loss_targets > 1),
-            valid_targets.sum()
-        )).tolist()
-        if not values_valid:
-            raise ValueError('invalid loss target values')
-        if mask_invalid:
+        if torch.any(valid_targets & ~expected) or torch.any(batch.loss_targets > 1):
             raise ValueError('invalid loss target mask')
+        n = int(valid_targets.sum().item())
         optimizer.zero_grad(set_to_none=True)
         if n == 0:
             return {'stepped': False, 'valid_targets': 0, 'mean_loss': None,
@@ -41,10 +37,7 @@ class AKTAdapter:
         forward_started = time.perf_counter()
         loss, predictions, count = self.native(batch.q_data, batch.qa_data, batch.loss_targets)
         forward_seconds = time.perf_counter() - forward_started
-        actual_count, finite_loss, finite_predictions = torch.stack((
-            count, torch.isfinite(loss), torch.isfinite(predictions).all()
-        )).tolist()
-        if actual_count != n or not finite_loss or not finite_predictions:
+        if int(count.item()) != n or not torch.isfinite(loss) or not torch.isfinite(predictions).all():
             raise ValueError('nonfinite output or inconsistent loss mask')
         mean_loss = loss / n
         backward_started = time.perf_counter()
@@ -57,23 +50,17 @@ class AKTAdapter:
         probe = None
         for parameter in self.native.parameters():
             if parameter.grad is not None and torch.any(parameter.grad != 0):
-                index = parameter.grad.detach().abs().reshape(-1).argmax().reshape(1)
+                index = int(parameter.grad.detach().abs().reshape(-1).argmax().item())
                 flat_parameter = parameter.detach().reshape(-1)
-                probe = (flat_parameter, index, flat_parameter.gather(0, index))
+                probe = (flat_parameter, index, float(flat_parameter[index].item()))
                 break
         optimizer_started = time.perf_counter()
         optimizer.step()
         optimizer_seconds = time.perf_counter() - optimizer_started
-        changed = ((probe[0].gather(0, probe[1]) != probe[2]).squeeze(0)
-                   if probe is not None else loss.new_tensor(False))
-        # Gom số liệu chẩn đoán vào một lần đọc về CPU, giữ nguyên phép cập nhật.
-        loss_sum, mean, pre_clip, updated = torch.stack((
-            loss.detach(), mean_loss.detach(), norm.detach(), changed.to(loss.dtype)
-        )).tolist()
-        parameter_updated = bool(updated)
-        return {'stepped': True, 'valid_targets': n, 'loss_sum': loss_sum,
-                'mean_loss': mean, 'pre_clip_norm': pre_clip,
-                'post_clip_norm': min(pre_clip, self.config.max_grad_norm),
+        parameter_updated = bool(probe is not None and float(probe[0][probe[1]].item()) != probe[2])
+        return {'stepped': True, 'valid_targets': n, 'loss_sum': float(loss.detach().item()),
+                'mean_loss': float(mean_loss.detach().item()), 'pre_clip_norm': float(norm.item()),
+                'post_clip_norm': min(float(norm.item()), self.config.max_grad_norm),
                 'parameter_updated': parameter_updated,
                 'forward_seconds': forward_seconds, 'backward_seconds': backward_seconds,
                 'gradient_clip_seconds': gradient_clip_seconds,

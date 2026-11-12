@@ -16,7 +16,7 @@ ready = False
 with (BUNDLE/'wait-for-a0.jsonl').open('x', encoding='utf-8') as log:
     while time.monotonic() - started < 2100:
         receipt_path = PREVIOUS/'receipt.json'
-        guard_path = PREVIOUS/'app-budget-guard.json'
+        guard_path = PREVIOUS/'independent-stop-confirmation.json'
         if receipt_path.exists():
             receipt = json.loads(receipt_path.read_text())
             if receipt['status'] == 'FAILED':

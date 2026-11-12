@@ -170,7 +170,18 @@ def main():
     parser.add_argument('--run',action='store_true')
     args = parser.parse_args()
     request = json.loads(args.request.read_text(encoding='utf-8'))
-    step_profile = request.get('scope') == 'engineering_step_sync_profile_only'
+    profiles = {
+        'engineering_step_sync_profile_only':
+            ('gpu_worker.py', 'model-candidate.py', None, 'reservation.json'),
+        'engineering_attention_transfer_profile_only':
+            ('gpu_worker02.py', 'model-attention-candidate.py', 'attention_candidate.py', 'reservation02.json'),
+        'engineering_attention_cache_profile_only':
+            ('gpu_worker03.py', 'model-attention-cache-candidate.py', 'attention_cache_candidate.py', 'reservation03.json'),
+    }
+    profile = profiles.get(request.get('scope'))
+    step_profile = profile is not None
+    worker_name, candidate_name, module_name, reservation_name = profile or (
+        'gpu_worker.py', None, None, 'reservation.json')
     bundle = BUNDLE
     if step_profile:
         bundle = args.request.resolve().parent
@@ -202,14 +213,16 @@ def main():
     worker_request = dict(request,run_id=run_id,gpu=args.gpu)
     worker_request_path = native/'worker-request.json'
     worker_request_path.write_text(json.dumps(worker_request,indent=2))
-    paths = {'/opt/junyi-numerical-worker.py':bundle/'gpu_worker.py',
+    paths = {'/opt/junyi-numerical-worker.py':bundle/worker_name,
              '/opt/checkpoint-sync.py':ROOT/'experiments/akt/modal_artifact_sync.py',
              '/opt/probe-request.json':worker_request_path,
              '/opt/packet_reader.py':ROOT/'research_tracking/runs/junyi-throughput-20261112-01/packet_reader.py'}
     if step_profile:
-        paths.update({'/opt/model-candidate.py':bundle/'model-candidate.py',
+        paths.update({'/opt/model-candidate.py':bundle/candidate_name,
                       '/opt/model-before.py':bundle/'model-before.py',
                       '/opt/verify_equivalence.py':bundle/'verify_equivalence.py'})
+        if module_name is not None:
+            paths['/opt/'+module_name] = bundle/module_name
     for key,target in (('source','/opt/kltn-input.zip'),('cpu_gate','/opt/cpu-gate.zip'),('data','/opt/junyi-data.zip')):
         relative = Path(request['archives'][key]['path'])
         assert not relative.is_absolute() and '..' not in relative.parts
@@ -220,7 +233,7 @@ def main():
     pins = {name:sha(path) for name,path in paths.items()}
     assert pins['/opt/packet_reader.py']==request['reader_sha256'],'Frozen packet reader changed'
     assert sha(ledger_path)==ledger_sha256,'Project budget changed before reservation'
-    with (bundle/'reservation.json').open('x') as stream:
+    with (bundle/reservation_name).open('x') as stream:
         json.dump(dict(run_id=run_id,gpu=args.gpu,reserved_usd=reserve,inputs=pins,
             allocation_id=request['allocation_id'],project_budget_sha256=ledger_sha256,
             budget_admission=budget),stream,indent=2)

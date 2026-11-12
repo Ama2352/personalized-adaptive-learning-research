@@ -1,5 +1,26 @@
 # Giảm đồng bộ CPU–GPU trong bước training AKT
 
+
+## Kết quả cuối đợt và chi phí
+
+Đã kết thúc đợt đo, không còn container ở snapshot20giờ07. Chưa có phương án tăng tốc được tiếp nhận vào bản chính. `src/knowledge_tracing/akt/model.py` đã khôi phục nguyên byte source04. Những candidate vẫn nằm trong bundle này.
+
+| Lượt | Bằng chứng | Kết luận |
+|---|---|---|
+| 01, gom đồng bộ step | Sáu case training, ba cặp checkpoint giống từng byte, CUDA synthetic đạt. Trung vị giảm0,13%, một cặp chậm hơn | Không tiếp nhận. Worker toàn lượt FAILED do thử batch dự báo32 vượt tolerance1e-6 |
+| 02, cast khoảng cách trên GPU | Sáu case, ba cặp checkpoint giống từng byte. Giảm0,91%/3,53%/3,43% | Dưới ngưỡng5% đã đặt, giữ bản thử nghiệm |
+| 03, cache hằng số attention | CPU khớp, client chạm400giây, stop acknowledgment đạt | Chưa có artifact GPU dùng được, chưa xác định nguyên nhân sâu hơn. Không retry trong đợt này |
+
+Dùng `analyze_training_profile.py --execution 01` hoặc02 để dựng CSV/JSON từ archive. Lượt01 được phân tích riêng phần training có sáu hồ sơ hoàn tất và ba hồ sơ exact, giữ nguyên FAILED của toàn job. Phép dự báo sai tolerance chưa lưu maxdifference trước assert nên chưa thể kết luận độ lệch lớn hay nhỏ. `analyze_results.py` là bản chuẩn bị ban đầu yêu cầu toàn bộ phép thử thành công, không dùng để diễn giải kết quả01.
+
+`sync-profile-v2.svg` và `attention-profile-v2.svg` là hình đã sửa nhãn, có PDF/PNG, CSV và script dựng lại. Bảnv1 được giữ nguyên. Đã kiểm trực quan bảnv2 attention bằng ảnh render.
+
+`billing-final.json` ghi metered3,24858233USD, credits3,24USD, billed0USD. Từ trước phép đo01 đến cuối đợt, số tổng ghi nhận tăng khoảng0,04USD. Đây là delta giữa snapshot, chưa phải hóa đơn mỗi App. Tổng dự phòng ba lượt là0,40USD, khác với tiền thực ghi nhận. `containers-final.json` rỗng. `reservation*.json` và request tương ứng giữ hạn mức, source pin và tên lượt.
+
+Bước tiếp theo cần một giả thuyết mới hoặc chẩn đoán queue/startup của lượt03 trước khi đo lại. Chưa chạy tiếp A0 dài hoặc triển khai candidate vào pipeline. Dự toán toàn ma trận phải tính lại vì A0 đã cần ít nhất5epoch refit nếu quy tắc dừng giữ best hiện tại.
+
+## Thiết kế được ghi trước các lượt đo
+
 ## Mục đích và trạng thái
 
 Ưu tiên kiểm một thay đổi giữ nguyên batch4, dữ liệu, phép loss, backward, clipping, Adam và RNG. Gộp các số kiểm tra và chẩn đoán vào ít lần đọc về CPU hơn. Giữ chỉ số probe trên GPU đến khi kiểm trạng thái sau cập nhật.
@@ -33,3 +54,11 @@ Không sử dụng Holdout, calibration, outer validation hoặc nhãn thật/nh
 ## Rà soát candidate trước CUDA
 
 Bản đo dùng gather với chỉ số dạng vector trên GPU để đọc probe trước/sau Adam. Bảnv1/v2 và kết quả CPU tương ứng được giữ riêng. Bản cuối đã khớp CPU qua8updates mỗi phía, log ở `cpu-equivalence04.log`. Các primitive loss/backward/clipping/Adam và mọi phương thức ngoài step giữ nguyên AST. Việc giảm đồng bộ phù hợp hướng dẫn PyTorch, tốc độ thực phải xác nhận bằng profile. [Hướng dẫn PyTorch](https://docs.pytorch.org/tutorials/recipes/recipes/tuning_guide.html#avoid-unnecessary-cpu-gpu-synchronization).
+
+## Đo riêng batch dự báo
+
+Sau training packet, dùng cùng một checkpoint để đo batch dự báo4 và32, ba cặp đảo thứ tự. Không cập nhật optimizer. Tổng tối đa337.992lượt target cần chấm và600.192dự báo token hợp lệ. Đòi hỏi xác suất lệch tuyệt đối tối đa1e-6, model và RNG giữ nguyên. Giới hạn GPU0,20USD và runtime giữ nguyên. Đây là hướng tăng tốc validation riêng, chưa thay batch training hoặc giao thức chính.
+
+## Xác nhận dừng trước dispatch
+
+A0 execution06 đã trả receipt PARTIAL và tạo archive trên Volume. Bộ kiểm dừng ban đầu chưa xác nhận được trạng thái. Kiểm độc lập sau đó thấy đúng App stopped/tasks0 và danh sách container rỗng. Log guard gốc giữ nguyên, xác nhận độc lập nằm ở `experiments/akt/results/modal-junyi-main-selected-t4-20261112-06/independent-stop-confirmation.json`. Tải/kiểm archive cũ tiếp tục bằng CPU, độc lập với profile khởi tạo mới. Không cần chờ tải hết archive cũ để đo packet không sử dụng checkpoint đó. Controller vẫn đòi hỏi xác nhận dừng. Bộ kiểm dừng đã thêm tối đa ba lần đọc trạng thái trong thời hạn cũ, đạt29ca kiểm.

@@ -89,17 +89,36 @@
     {
       "id": "junyi-main-selected-t4-20261112-06",
       "cap_usd": 0.85,
-      "status": "ROOT_REVIEWED_RUNTIME120_RETRY_FROM04",
+      "status": "SIX_EPOCHS_ARCHIVE_VERIFIED_INDEPENDENT_STOP_ACKNOWLEDGED",
       "evidence": "research_tracking\\runs\\junyi-main-selected-20261112-01\\runtime-timeout05-remediation.json"
     },
     {
       "id": "junyi-step-sync-20261112-01",
       "cap_usd": 0.2,
-      "status": "PREPARED_WAITING_FOR_A0_STOP_NO_GPU_DISPATCH",
+      "status": "COMPLETE_MEASUREMENT_TRAIN_NO_GAIN_PREDICTION_TOLERANCE_FAILED_ARTIFACT_VERIFIED_STOPPED",
       "evidence": "research_tracking\\runs\\junyi-step-sync-20261112-01\\request.json"
+    },
+    {
+      "id": "junyi-attention-transfer-20261112-01",
+      "cap_usd": 0.1,
+      "status": "EXACT_CUDA_THREE_PAIRS_MEDIAN3P43_PERCENT_BELOW5_PERCENT_ADOPTION_GATE_STOPPED"
+    },
+    {
+      "id": "junyi-attention-cache-20261112-01",
+      "cap_usd": 0.1,
+      "status": "TOTAL_DEADLINE400_STOP_ACKNOWLEDGED_NO_USABLE_GPU_ARTIFACT_NO_RETRY"
     }
   ],
   "stop_rule": "Không mở lượt chạy nếu cận chi phí lịch sử, tổng allocation và dự phòng vượt 30 USD. Nếu chưa xác nhận dừng App thì kiểm trạng thái server trước lượt mới.",
   "historical_upper_note": "2 USD là dự phòng bảo thủ cho các lượt đã chạy trước ledger, không phải số chi phí đã đối soát cuối kỳ.",
-  "provider_metering_note": "Snapshot có thể trễ hoặc được điều chỉnh. Không dùng billing alert làm giới hạn cứng. Mỗi lượt có watchdog, timeout và tối đa một GPU."
+  "provider_metering_note": "Snapshot có thể trễ hoặc được điều chỉnh. Không dùng billing alert làm giới hạn cứng. Mỗi lượt có watchdog, timeout và tối đa một GPU.",
+  "last_accounting_snapshot": {
+    "observed_at_utc": "2026-11-12T13:07:14.932320+00:00",
+    "metered_cost_usd": 3.24858233,
+    "credits_applied_usd": 3.24,
+    "billed_cost_usd": 0,
+    "evidence": "research_tracking/runs/junyi-step-sync-20261112-01/billing-final.json",
+    "containers_empty": true,
+    "full_remaining_matrix_cost_status": "REESTIMATE_REQUIRED_DO_NOT_INFER_FROM_OLD18_TO28_HOUR_SCENARIO"
+  }
 }

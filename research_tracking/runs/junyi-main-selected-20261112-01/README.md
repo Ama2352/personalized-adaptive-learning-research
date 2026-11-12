@@ -45,3 +45,9 @@ Tiến độ ở `bounded-continuation-state.json`, log `bounded-continuation.lo
 Đã tải archive2.129.675.285byte, kiểmSHA/CRC/inventory vàstopack. Epoch3đủ13.347.331target/58.166updates, train1753,718s vàvalidation266,045s trên1.600.343target/0OOV. LogLossselection0,355650902, history1/2khớp nguyên trạng. Epoch4partial3.431.632targets/15.016updates đã đượcgiữ. `verify_execution03.py` và `execution03-verification.json` kiểmcumulative3epochs+partial, khôngcộnglại importedsteps. Selectedcuối/refit/calibration cònmở.
 
 Bộnốilượt đã dùng sai nhãnreview trongrequest04lầnđầu, controllerdừng trướcbilling/App/GPU. `gpu-execution04.log`, `request04-rejected-before-dispatch.json` vàstatecũgiữnguyên. Đãsửabộnốiđúnghợpđồngcontroller, bổsungASTcontractcheck vàdryplans3/2/1lượt. `bounded-continuation-remediation.json` giữkiểm. `gpu-execution04-reviewed.log` làlượt thựcthi04tiếptụctừepoch4step15016. Bộnối mới chạy `--after-execution04`, chờ04córeceiptverified+stopack rồi tốiđa05/06, cap1,70USDđãpreallocate. Log/state/lock cóhậutốafter04 đểgiữfailurecũ, khôngtăngallocationtừlỗilocal.
+
+## Execution06 đã nghiệm thu sáu epoch
+
+`execution06-verification.json` đối chiếu6epoch đầy đủ,348.996updates/80.083.986lượt target. History1–4 khớp verification04. Best tạm thời theo min_delta0,0001 ở5, stale1 sau6. Selected cuối/refit/calibration còn thiếu. Archive2339280485byte tại `experiments/akt/results/modal-junyi-main-selected-t4-20261112-06/artifacts.zip`, inventory đã kiểm qua `recover_execution06_artifacts.py`.
+
+Guard đầu tiên chưa xác nhận được App đã dừng và giữ nguyên log lỗi. `independent-stop-confirmation.json` trong output06 xác nhận đúng App stopped/tasks0 và không còn container. Sau đó chỉ tải artifact, không chạy lại training. Không tiếp tục A0 tự động trong lúc ưu tiên xác nhận tối ưu GPU và tính lại dự toán toàn ma trận.
