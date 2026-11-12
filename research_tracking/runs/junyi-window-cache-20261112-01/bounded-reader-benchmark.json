@@ -1,0 +1,217 @@
+{
+  "status": "ACTUAL_BOUNDED_READER_BENCHMARK_COMPLETE",
+  "iterations": 3,
+  "samples": [
+    {
+      "iteration": 1,
+      "reader": "native",
+      "seconds": 0.269646400003694,
+      "targets_per_second": 43883.39692218362,
+      "population": {
+        "records": 315,
+        "targets": 11833,
+        "tokens": 17733
+      }
+    },
+    {
+      "iteration": 1,
+      "reader": "cached",
+      "seconds": 0.282947100000456,
+      "targets_per_second": 41820.53818533899,
+      "population": {
+        "records": 315,
+        "targets": 11833,
+        "tokens": 17733
+      }
+    },
+    {
+      "iteration": 2,
+      "reader": "cached",
+      "seconds": 0.24261369998566806,
+      "targets_per_second": 48773.00828724434,
+      "population": {
+        "records": 315,
+        "targets": 11833,
+        "tokens": 17733
+      }
+    },
+    {
+      "iteration": 2,
+      "reader": "native",
+      "seconds": 0.2429322999669239,
+      "targets_per_second": 48709.04363730597,
+      "population": {
+        "records": 315,
+        "targets": 11833,
+        "tokens": 17733
+      }
+    },
+    {
+      "iteration": 3,
+      "reader": "native",
+      "seconds": 0.2756952000781894,
+      "targets_per_second": 42920.58765130502,
+      "population": {
+        "records": 315,
+        "targets": 11833,
+        "tokens": 17733
+      }
+    },
+    {
+      "iteration": 3,
+      "reader": "cached",
+      "seconds": 0.7885274000000209,
+      "targets_per_second": 15006.453802365888,
+      "population": {
+        "records": 315,
+        "targets": 11833,
+        "tokens": 17733
+      }
+    }
+  ],
+  "median_seconds": {
+    "native": 0.269646400003694,
+    "cached": 0.282947100000456
+  },
+  "cached_over_native_wall_ratio": 1.0493264512212281,
+  "cached_profile_functions": [
+    {
+      "function": "iter_junyi_window_cache",
+      "line": 274,
+      "calls": 316,
+      "own_seconds": 0.004883500000000001,
+      "cumulative_seconds": 1.3239215
+    },
+    {
+      "function": "window_cache_key",
+      "line": 66,
+      "calls": 2,
+      "own_seconds": 6.450000000000001e-05,
+      "cumulative_seconds": 0.8858304
+    },
+    {
+      "function": "_parts",
+      "line": 84,
+      "calls": 315,
+      "own_seconds": 0.06201,
+      "cumulative_seconds": 0.22761140000000002
+    },
+    {
+      "function": "_encoding_guard",
+      "line": 79,
+      "calls": 315,
+      "own_seconds": 0.0038587,
+      "cumulative_seconds": 0.10071640000000001
+    },
+    {
+      "function": "_load_shard",
+      "line": 229,
+      "calls": 317,
+      "own_seconds": 0.035663900000000005,
+      "cumulative_seconds": 0.079767
+    },
+    {
+      "function": "<genexpr>",
+      "line": 137,
+      "calls": 12148,
+      "own_seconds": 0.016175000000000002,
+      "cumulative_seconds": 0.016175000000000002
+    },
+    {
+      "function": "add",
+      "line": 149,
+      "calls": 315,
+      "own_seconds": 0.011046700000000001,
+      "cumulative_seconds": 0.015078800000000002
+    },
+    {
+      "function": "_owned_root",
+      "line": 53,
+      "calls": 1,
+      "own_seconds": 0.00042580000000000005,
+      "cumulative_seconds": 0.0056633000000000005
+    },
+    {
+      "function": "<genexpr>",
+      "line": 127,
+      "calls": 17733,
+      "own_seconds": 0.0047572000000000005,
+      "cumulative_seconds": 0.0047572000000000005
+    },
+    {
+      "function": "_need",
+      "line": 32,
+      "calls": 24407,
+      "own_seconds": 0.004351600000000001,
+      "cumulative_seconds": 0.004351600000000001
+    },
+    {
+      "function": "_sha",
+      "line": 37,
+      "calls": 3,
+      "own_seconds": 4.02e-05,
+      "cumulative_seconds": 0.0033998
+    },
+    {
+      "function": "<genexpr>",
+      "line": 270,
+      "calls": 1890,
+      "own_seconds": 0.0005943000000000001,
+      "cumulative_seconds": 0.0005943000000000001
+    },
+    {
+      "function": "<genexpr>",
+      "line": 268,
+      "calls": 1575,
+      "own_seconds": 0.0004805,
+      "cumulative_seconds": 0.0004805
+    },
+    {
+      "function": "__init__",
+      "line": 142,
+      "calls": 1,
+      "own_seconds": 7.630000000000001e-05,
+      "cumulative_seconds": 7.630000000000001e-05
+    },
+    {
+      "function": "<genexpr>",
+      "line": 71,
+      "calls": 130,
+      "own_seconds": 3.4e-05,
+      "cumulative_seconds": 3.4e-05
+    },
+    {
+      "function": "<genexpr>",
+      "line": 246,
+      "calls": 22,
+      "own_seconds": 3e-05,
+      "cumulative_seconds": 3e-05
+    },
+    {
+      "function": "<genexpr>",
+      "line": 233,
+      "calls": 26,
+      "own_seconds": 7.7e-06,
+      "cumulative_seconds": 7.7e-06
+    },
+    {
+      "function": "summary",
+      "line": 163,
+      "calls": 1,
+      "own_seconds": 4.5e-06,
+      "cumulative_seconds": 6e-06
+    }
+  ],
+  "source_evidence_sha256": "8d4a5451c6f4f37e4beb8eb467330874effe2362144ddd27bd4e70ba765f4491",
+  "source_pins": {
+    "artifacts/akt/junyi-cohorts/cuda-engineering320x300-20261112-01/manifest.json": "3c706073f93fb02d5ecd673414a23494dc3301e06b3841378cd7c499c199dec2",
+    "artifacts/akt/junyi-roles/outer4-research-v1-20261112-01/roles.json": "b0ca8f6949edd226e48d1cdb24e34ea34a042a385467e1650755994e96567ba3",
+    "artifacts/akt/junyi-cohorts/cuda-engineering320x300-20261112-01/train.jsonl": "59de9ddb4af07e8fdce1c8e3b203ee9f1491f829cf835e09e49c303d036f59a3",
+    "artifacts/akt/junyi-cohorts/cuda-engineering320x300-20261112-01/selection.jsonl": "297e3bb9a1e2749a5c54b5285df16971ee8c88fc06cdf2742f84ab8f488e2e41"
+  },
+  "module_sha256": "a0c682dc2a86f906a23d5f9ada3f5c67824bba22574254757cd0ef00a50351cd",
+  "limitations": "Local Windows, cohort320,315trainingwindows, shared OS cache. Không suy runtime fullJunyi hoặc GPUtraining.",
+  "torch_imported": false,
+  "cloud_execution": false,
+  "training_performed": false
+}
