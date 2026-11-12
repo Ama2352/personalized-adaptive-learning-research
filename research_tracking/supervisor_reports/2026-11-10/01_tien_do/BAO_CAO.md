@@ -1,5 +1,16 @@
 # Báo cáo tiến độ khóa luận — cập nhật 12/11/2026
 
+## Cập nhật12/11 lúc22giờ44 — A0 batch128 đã train thật trênH100
+
+A0 không đồ thị đã được đưa lên H100 với batch128, khởi tạo từ seed42 và dùng toàn bộ tập train Junyi đã chốt. Hai epoch đầu đã hoàn tất training, validation và lưu checkpoint. Mỗi epoch học 13,35 triệu lượt và kiểm dự báo trên 1,60 triệu lượt selection, đủ toàn bộ đối tượng dự kiến và 0 OOV.
+
+Để chọn thời điểm dừng, theo dõi mức sai lệch giữa xác suất dự báo và đáp án trên tập selection. Log Loss giảm từ0,3600 xuống0,3569 sau hai epoch, cho thấy mô hình đang học được trên cấu hình mới. Kết quả này phục vụ chọn checkpoint. Đánh giá độc lập, refit và calibration còn ở các bước tiếp theo.
+
+Training mất khoảng2phút mỗi epoch, validation thêm khoảng3phút12giây. So với lịch sửT4 batch4 khoảng31phút cho cả chu kỳ, lượtH100 batch128 hiện khoảng5phút10giây. Đây là thay đổi đồng thời phần cứng vàbatch. Lịch sử sáu epoch batch4 được lưu riêng, bảng mới đếm từ epoch1 của lượtbatch128. GPU tiếp tục chạy các epoch theo early stopping và được dừng sau khi xuất bằng chứng bền vững.
+
+![Tiến độ A0 H100](../../../runs/junyi-a0-h100-batch128-20261112-01/a0-h100-progress-epoch002v2.svg)
+
+
 ## Cập nhật12/11 — đã kiểm ý tưởng chạy đồng thời hai model
 
 Sau khi tăng batch giúpT4 hoạt động đều hơn, tiếp tục kiểm liệu hai model có thể dùng chungGPU để hoàn thành sớm hơn. Hai cách chạy dùng cùng dữ liệu, cùng seed vàbatch32 cho từng model. Kết quả hai model chạy lần lượt mất45.49giây, chạy đồng thời mất45.74giây. Mức hoạt độngGPU tăng từ87,9% lên99,9%, tổng tốc độ xử lý gần như ngang nhau. Giữ phương án một tiến trình trênT4 cho bước tiếp theo.

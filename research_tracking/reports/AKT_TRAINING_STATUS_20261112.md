@@ -1,5 +1,16 @@
 # Thống kê triển khai và training AKT — 12/11/2026
 
+## Lượt batch128 mới trênH100
+
+A0 không đồ thị đã được đưa lên H100 với batch128, khởi tạo từ seed42 và dùng toàn bộ tập train Junyi đã chốt. Hai epoch đầu đã hoàn tất training, validation và lưu checkpoint. Mỗi epoch học 13,35 triệu lượt và kiểm dự báo trên 1,60 triệu lượt selection, đủ toàn bộ đối tượng dự kiến và 0 OOV.
+
+Để chọn thời điểm dừng, theo dõi mức sai lệch giữa xác suất dự báo và đáp án trên tập selection. Log Loss giảm từ0,3600 xuống0,3569 sau hai epoch, cho thấy mô hình đang học được trên cấu hình mới. Kết quả này phục vụ chọn checkpoint. Đánh giá độc lập, refit và calibration còn ở các bước tiếp theo.
+
+Training mất khoảng2phút mỗi epoch, validation thêm khoảng3phút12giây. So với lịch sửT4 batch4 khoảng31phút cho cả chu kỳ, lượtH100 batch128 hiện khoảng5phút10giây. Đây là thay đổi đồng thời phần cứng vàbatch. Lịch sử sáu epoch batch4 được lưu riêng, bảng mới đếm từ epoch1 của lượtbatch128. GPU tiếp tục chạy các epoch theo early stopping và được dừng sau khi xuất bằng chứng bền vững.
+
+[Bằng chứng](../runs/junyi-a0-h100-batch128-20261112-01/README.md).
+
+
 ## Cập nhật20giờ07 ngày12/11
 
 A0 Junyi hoàn tất6epoch train/selection,348.996updates và80.083.986lượt target. Hai epoch mới có Log Loss selection0,354982644 và0,354906797. Với min_delta0,0001, best tạm thời ở5 và stale1. Chưa chốt selected cuối, refit hoặc calibration. Archive execution06 đã tải/kiểm, bản guard lỗi dừng được giữ và có xác nhận server độc lập. Không có job GPU chạy ở snapshot cuối.
