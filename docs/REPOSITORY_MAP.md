@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 12/11 — dữ liệu chính và context A1 Junyi
+
+[Cachefull](../research_tracking/runs/junyi-selected-cache-20261112-01/README.md) đãkiểm đủ13.347.331train/1.600.343selection,717exercise/0selectionOOV. [A1prefix](../research_tracking/runs/junyi-graph-prefix-20261112-01/README.md) chỉ dùngpastwindow,74tests/11subtests đạt. Mainproducer/refit/calibration/nativegraphadapter vẫn đang chờ nối; chưa uploadcachefull.
+
 ## 12/11 — AKT đã hoàn tất một epoch Junyi trên A10
 
 [Hồ sơ Junyi](../research_tracking/runs/junyi-akt-cuda-engineering-20261112-01/README.md) nghiệm thu11.833train/79updates,1.530selection/125OOV, checkpoint nạp lại khớp vàđọc lại3file từVolume. Gate Linux2.037ca đạt. CóSVG/PDF/PNG/CSV vàreportGVHD cập nhật. Chưa main Junyi selected/refit/calibration hoặc graph variants.

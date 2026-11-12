@@ -493,3 +493,8 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 ## 12/11 — cache Junyi train/selection chính
 
 [Cache đãkiểm](runs/junyi-selected-cache-20261112-01/README.md),13.347.331train/1.600.343selection events,717trainexercise,0selectionOOV; native reader khớp18.678events. Chưa training/uploadcloud.
+
+
+## 12/11 — A1 Junyi prefix
+
+[Contextpast-only](runs/junyi-graph-prefix-20261112-01/README.md),74localtests/11subtests,50window thực cùng835nodes/976edges. Chưa nativegraphforward/training.
