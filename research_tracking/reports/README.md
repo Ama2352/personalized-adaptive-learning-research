@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 12/11 — kiểm GPU trực tiếp trong training A0
+
+[Kiểm mức sử dụng GPU](AKT_GPU_UTILIZATION_AUDIT_20261112.md) ghi 30 mẫu training ổn định, GPU trung bình43,9%, VRAM459MiB và khoảng8.519target/giây. Chưa chứng minh tối ưu toàn bộ training. Có log, CSV và script dựng lại.
+
 ## 12/11 — exposure đồ thị trên toàn TRAIN80 Junyi
 
 [Phân tích toàn cache](../runs/rq2-junyi-window-exposure-preflight-20261112-01/FINDINGS.md) kiểm13.347.331target trong21,35giây/RAM49,9MB. Trong976cạnh,876cópriorparent exposure,100còn lại tách theo vocabulary và lịch sử. Cóchecker64windows vàfigure. Chưa kếtluận predictivebenefit.

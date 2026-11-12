@@ -1,0 +1,107 @@
+{
+  "status": "VERIFIED_STABLE_TRAINING_TELEMETRY",
+  "run": "execution06",
+  "source_raw_sha256": "c59d54a35c1bb782edce9b3b21400cb785cea431075c8f843c39ef731d5a6248",
+  "samples": 30,
+  "elapsed_seconds": 58.11372751799996,
+  "start_utc": "2026-11-12T11:52:30.920597+00:00",
+  "end_utc": "2026-11-12T11:53:28.986447+00:00",
+  "model_batch_size": 4,
+  "epoch": 5,
+  "same_worker_and_phase": true,
+  "gpu": {
+    "utilization.gpu": {
+      "min": 39.0,
+      "mean": 43.9,
+      "median": 43.0,
+      "max": 49.0
+    },
+    "utilization.memory": {
+      "min": 24.0,
+      "mean": 29.133333333333333,
+      "median": 28.5,
+      "max": 34.0
+    },
+    "memory.used": {
+      "min": 459.0,
+      "mean": 459.0,
+      "median": 459.0,
+      "max": 459.0
+    },
+    "memory.total": {
+      "min": 15360.0,
+      "mean": 15360.0,
+      "median": 15360.0,
+      "max": 15360.0
+    },
+    "power.draw": {
+      "min": 42.32,
+      "mean": 50.95433333333333,
+      "median": 49.8,
+      "max": 65.42
+    },
+    "power.limit": {
+      "min": 70.0,
+      "mean": 70.0,
+      "median": 70.0,
+      "max": 70.0
+    },
+    "clocks.sm": {
+      "min": 1530.0,
+      "mean": 1588.0,
+      "median": 1590.0,
+      "max": 1590.0
+    },
+    "clocks.max.sm": {
+      "min": 1590.0,
+      "mean": 1590.0,
+      "median": 1590.0,
+      "max": 1590.0
+    },
+    "temperature.gpu": {
+      "min": 39.12,
+      "mean": 40.342666666666666,
+      "median": 40.31,
+      "max": 41.22
+    }
+  },
+  "cpu_core_equivalents": {
+    "min": 1.1759920690895669,
+    "mean": 1.2792065325195852,
+    "median": 1.2799635760764998,
+    "max": 1.3647608154314126
+  },
+  "worker_rss_bytes": {
+    "min": 4654645248,
+    "mean": 4654945894.4,
+    "median": 4654878720.0,
+    "max": 4655206400
+  },
+  "progress_delta": {
+    "optimizer_steps": 2100,
+    "scored_targets": 496651,
+    "seconds": 58.29632449199994,
+    "targets_per_second": 8519.422181893404,
+    "valid_tokens": 896651,
+    "padding_tokens": 662729,
+    "padded_token_fraction": 0.4249951903961831
+  },
+  "vram_used_fraction": 0.0298828125,
+  "device_states": [
+    "P0"
+  ],
+  "previous_tail04": {
+    "samples": 30,
+    "worker_present": 4,
+    "worker_absent": 26,
+    "interpretation_vi": "Chuyển từ cuối training sang đóng gói, không dùng làm trung bình training ổn định."
+  },
+  "interpretation_vi": "Cấu hình hiện hành còn thời gian GPU không chạy kernel và còn dư VRAM. Chưa nhận dạng bottleneck hoặc chứng minh tối ưu toàn bộ training.",
+  "limitations_vi": [
+    "Một khoảng gần60giây, không đại diện mọi epoch hoặc validation.",
+    "GPU-Util đo thời gian có kernel, không phải phần trăm FLOPS/SM occupancy.",
+    "Không đọc được cgroup quota, CPU/RAM là số đo process.",
+    "Thông lượng dựa hai mốc progress trong cùng epoch, chưa đo time-to-quality."
+  ],
+  "metric_definition_source": "https://nvidia.custhelp.com/app/answers/detail/a_id/3751/~/useful-nvidia-smi-queries"
+}

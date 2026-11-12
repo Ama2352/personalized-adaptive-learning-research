@@ -1,5 +1,12 @@
 # Báo cáo tiến độ khóa luận — cập nhật 12/11/2026
 
+## Cập nhật 12/11 lúc 18 giờ 53 — tiến độ A0 và kiểm tài nguyên
+
+A0 Junyi đã hoàn tất bốn epoch trên cùng tập train. Log Loss selection lần lượt là 0,359648, 0,356651, 0,355651 và 0,356488. Epoch4 kém epoch3, checkpoint tốt nhất tạm thời vẫn ở epoch3. Chưa chốt epoch cuối, refit, calibration hoặc đánh giá độc lập. Execution05 hết thời gian kiểm runtime trước training. Sau khi tăng riêng thời gian chờ kiểm môi trường, execution06 tiếp tục từ checkpoint epoch5 đã lưu.
+
+Đã kiểm trực tiếp GPU trong 30 mẫu gần một phút ở epoch5. GPU-Util trung bình43,9% (39–49%), VRAM459/15.360MiB, thông lượng khoảng8.519 tương tác được chấm mỗi giây. Cấu hình hiện tại còn dư VRAM và thời gian GPU chưa chạy kernel. Chưa đủ bằng chứng khẳng định đã tối ưu. Cần so thời gian và chi phí để đạt cùng chất lượng trước khi chọn cấu hình nhanh hơn.
+
+
 **Đề tài:** Nghiên cứu và phát triển hệ thống học tập thích ứng cá nhân hóa dựa trên mô hình hóa tri thức và tối ưu hóa lộ trình.
 
 **GVHD:** TS. Lê Văn Tuấn. **Sinh viên:** Phạm Triều Dương và Hồ Nguyễn Minh Sang.
