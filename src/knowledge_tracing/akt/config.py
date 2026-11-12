@@ -124,14 +124,14 @@ def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionPro
         if type(cuda_profile) is not ResearchCUDAExecutionProfile:
             raise ValueError('exact typed CUDA research profile required')
         cuda_profile.__post_init__()
-        if config.phase != 'simulator-research' or config.device != 'cuda':
+        if config.phase not in {'simulator-research','junyi-research'} or config.device != 'cuda':
             raise ValueError('CUDA research profile requires explicit simulator-research CUDA config')
     if config.recovery is not None:
         from .recovery import validate_options
         validate_options(config)
     if config.project_root.resolve() != PROJECT_ROOT.resolve():
         raise ValueError('project root must be the trusted repository root')
-    if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold', 'simulator-research'}:
+    if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold', 'simulator-research', 'junyi-research'}:
         raise ValueError('invalid phase')
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,79}', config.run_id):
         raise ValueError('invalid run_id')
@@ -203,14 +203,16 @@ def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionPro
                 or config.max_rss_bytes is None or config.max_rss_bytes > 2 * 1024**3
                 or config.min_available_ram_bytes is None or config.min_available_ram_bytes < 1024**3):
             raise ValueError('pilot cap or architecture exceeded')
-    if config.phase == 'simulator-research':
+    if config.phase in {'simulator-research','junyi-research'}:
+        if config.phase=='junyi-research' and cuda_profile is None:
+            raise ValueError('Junyi research requires an explicit typed CUDA profile')
         # New scope only; no dataclass/default/hash change for historical phases.
         frozen = {'device': 'cpu' if cuda_profile is None else 'cuda', 'seed': 42, 'context': 100, 'target_block': 100, 'max_length': 200,
                   'd_model': 256, 'heads': 8, 'blocks': 1, 'd_ff': 1024, 'final_fc': 512,
                   'dropout': 0.05, 'kq_same': 1, 'separate_qa': False, 'n_pid': 0, 'graph': False,
                   'batch_size': 4, 'lr': 1e-4, 'betas': (0.9, 0.999), 'eps': 1e-8,
                   'weight_decay': 0.0, 'max_grad_norm': 1.0, 'max_epochs': 20,
-                  'patience': 3, 'min_delta': 0.0001, 'outer_fold': 0}
+                  'patience': 3, 'min_delta': 0.0001, 'outer_fold': 4 if config.phase=='junyi-research' else 0}
         if (any(type(getattr(config, name)) is not type(value) or getattr(config, name) != value
                 for name, value in frozen.items()) or config.recovery is not None
                 or type(config.execution_enabled) is not bool):

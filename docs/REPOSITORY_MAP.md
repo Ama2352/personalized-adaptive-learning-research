@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 12/11 — Junyi đã nối phase dữ liệu và cache kỹ thuật
+
+[Hồ sơ kiểm](../research_tracking/runs/junyi-akt-phase-views-20261112-01/README.md) đạt52tests/81subtests. Cohort320 giữ11.833train/1.530selection,1.405supported/125OOV. Chưa neural training Junyi; producerCUDA/Gate nguồn mới đang chuẩn bị.
+
 ## 12/11 — đủ A0–A3 selected GPU trên Grade10
 
 [Đợt sáu graph fits](../research_tracking/runs/modal-akt-graph-selected-20261112-01/README.md) đã nghiệm thu cả expert/learned, cùng A0 thành7selectedcheckpoints và30epochcheckpoints đã lưu. TổngModal≈0,641USD, Appđãdừng. CófigureSVG/PDF/PNG vàdữ liệu. Junyi80/10/10 metadata đãtạo/7tests đạt, producerCUDA vàGate mới còn thiếu.
