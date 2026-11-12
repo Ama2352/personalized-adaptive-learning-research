@@ -13,6 +13,12 @@ import zipfile
 ROOT = Path(__file__).resolve().parent.parent.parent
 BUNDLE = ROOT/'research_tracking/runs/junyi-main-selected-20261112-01'
 if __name__ == '__main__':
+    import tempfile
+    client_temp = ROOT/'artifacts/akt/runtime/modal-client-temp'
+    client_temp.mkdir(parents=True,exist_ok=True)
+    for variable in ('TEMP','TMP','TMPDIR'):
+        os.environ[variable] = str(client_temp)
+    tempfile.tempdir = str(client_temp)
     os.environ['MODAL_CONFIG_PATH'] = str(ROOT/'artifacts/akt/private/modal.toml')
     os.environ['MODAL_PROFILE'] = 'kltn'
 import modal
@@ -43,8 +49,9 @@ def validate_project_budget(ledger, request, metered_usd):
     caps = {entry['id']:amount(entry['cap_usd']) for entry in allocations}
     authorized = amount(request['authorized_batch_usd'])
     reserve = amount(request['reserved_usd_per_run'])
-    if not 0<reserve<=authorized<=caps[request['allocation_id']]<=Decimal('.85'):
-        raise PermissionError('Main selected must fit its explicit0.85USD allocation')
+    run_cap = Decimal('3') if request.get('gpu')=='H100' else Decimal('.85')
+    if not 0<reserve<=authorized<=caps[request['allocation_id']]<=run_cap:
+        raise PermissionError('Main selected exceeds its declared GPU allocation')
     historical = amount(ledger['historical_usage_reserved_upper_usd'])
     metered = amount(metered_usd)
     safety = amount(ledger['safety_and_final_inference_reserve_usd'])
@@ -75,6 +82,30 @@ def remote_probe(pins, run_id):
     process = None
     started = time.monotonic()
     summary = dict(status='FAILED',run_id=run_id,checkpoint_transfers={})
+    controls_done = False
+
+    def sync_controls():
+        nonlocal controls_done
+        if controls_done:
+            return
+        files = [results/run_id/name for name in ('run-manifest.json','initial-backbone.json')]
+        if not all(path.is_file() for path in files):
+            return
+        destination = durable/'run-control'
+        destination.mkdir(exist_ok=True)
+        entries = {}
+        for path in files:
+            raw = path.read_bytes()
+            try:
+                json.loads(raw)
+            except json.JSONDecodeError:
+                return
+            (destination/path.name).write_bytes(raw)
+            entries[path.name] = dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+        (destination/'COMPLETE.json').write_text(json.dumps(dict(files=entries),indent=2))
+        volume.commit()
+        summary['durable_control_files'] = entries
+        controls_done = True
 
     def sync_checkpoints(*, final=False):
         for marker in sorted((results/run_id/'checkpoints').glob('*/COMPLETE.json')):
@@ -101,6 +132,7 @@ def remote_probe(pins, run_id):
                 cwd=root,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
             while True:
                 assert time.monotonic()-started<3100,'Main selected child deadline'
+                sync_controls()
                 sync_checkpoints()
                 if process.poll() is not None:
                     sync_checkpoints(final=True)
@@ -162,13 +194,20 @@ def main():
                                     PendingOwnedModalApp,stop_owned_app_cli)
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--request',type=Path,required=True)
-    parser.add_argument('--gpu',choices=('T4',),default='T4')
+    parser.add_argument('--gpu',choices=('T4','H100'),default='T4')
     parser.add_argument('--run',action='store_true')
     args = parser.parse_args()
     request = json.loads(args.request.read_text(encoding='utf-8'))
-    assert args.gpu==request.get('gpu','T4')=='T4'
+    assert args.gpu==request.get('gpu','T4')
+    h100_batch128 = args.gpu=='H100'
+    bundle = BUNDLE
+    if h100_batch128:
+        bundle = args.request.resolve().parent
+        assert bundle==ROOT/'research_tracking/runs/junyi-a0-h100-batch128-20261112-01'
+        assert request['batch_size']==128 and request['benchmark_before_training'] is False
     run_id = request['run_id']
-    assert re.fullmatch(r'modal-junyi-main-selected-t4-[0-9]{8}-[0-9]{2}',run_id)
+    pattern = r'modal-junyi-a0-b128-h100-[0-9]{8}-[0-9]{2}' if h100_batch128 else r'modal-junyi-main-selected-t4-[0-9]{8}-[0-9]{2}'
+    assert re.fullmatch(pattern,run_id)
     print(json.dumps(dict(run_id=run_id,gpu=args.gpu,status=request['status'],execution_requested=args.run)),flush=True)
     if not args.run:
         return
@@ -189,7 +228,7 @@ def main():
     worker_request = dict(request,run_id=run_id,gpu=args.gpu)
     worker_request_path = native/'worker-request.json'
     worker_request_path.write_text(json.dumps(worker_request,indent=2))
-    paths = {'/opt/junyi-numerical-worker.py':BUNDLE/'gpu_worker.py',
+    paths = {'/opt/junyi-numerical-worker.py':bundle/'gpu_worker.py',
              '/opt/checkpoint-sync.py':ROOT/'experiments/akt/modal_artifact_sync.py',
              '/opt/probe-request.json':worker_request_path}
     for key,target in (('source','/opt/kltn-input.zip'),('cpu_gate','/opt/cpu-gate.zip'),('data','/opt/junyi-data.zip')):
@@ -201,18 +240,20 @@ def main():
         paths[target] = path
     pins = {name:sha(path) for name,path in paths.items()}
     assert sha(ledger_path)==ledger_sha256,'Project budget changed before reservation'
-    with (BUNDLE/'reservation.json').open('x') as stream:
+    with (bundle/'reservation.json').open('x') as stream:
         json.dump(dict(run_id=run_id,gpu=args.gpu,reserved_usd=reserve,inputs=pins,
             allocation_id=request['allocation_id'],project_budget_sha256=ledger_sha256,
             budget_admission=budget),stream,indent=2)
-    deadline = ModalRunDeadline(3200)
+    deadline = ModalRunDeadline(2000 if h100_batch128 else 3200)
     app = modal.App('kltn-akt-'+run_id)
     volume = modal.Volume.from_name('kltn-akt-'+run_id,create_if_missing=True,version=2)
     image = modal.Image.from_id('im-ldjZsYO21pzaupmQXGLhnS')
     for name,path in paths.items():
-        image = image.add_local_file(path,name,copy=True)
-    function = app.function(image=image,gpu=args.gpu,cpu=(.25,2),memory=(4096,8192),
-        timeout=3300,startup_timeout=60,retries=0,max_containers=1,scaledown_window=60,
+        image = image.add_local_file(path,name,copy=not h100_batch128)
+    cpu_limit = (.25,4) if h100_batch128 else (.25,2)
+    memory_limit = (4096,12288) if h100_batch128 else (4096,8192)
+    function = app.function(image=image,gpu=args.gpu,cpu=cpu_limit,memory=memory_limit,
+        timeout=2100 if h100_batch128 else 3300,startup_timeout=60,retries=0,max_containers=1,scaledown_window=60,
         volumes={'/durable':volume})(remote_probe)
     try:
         binding = PendingOwnedModalApp(run_id,app.name,lambda:app.app_id)

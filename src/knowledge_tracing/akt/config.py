@@ -105,9 +105,11 @@ class ResearchCUDAExecutionProfile:
     cublas_workspace_config: str = ':4096:8'
 
     def __post_init__(self):
-        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= 2*1024**3:
-            raise ValueError('explicit CUDA allocator budget64MiB..2GiB required')
-        fixed = dict(recipe_id='cgakt-cuda-fp32-v1',device='cuda:0',
+        large_batch = self.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
+        max_vram = 16*1024**3 if large_batch else 2*1024**3
+        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= max_vram:
+            raise ValueError('explicit CUDA allocator budget outside declared recipe')
+        fixed = dict(recipe_id='cgakt-cuda-fp32-batch128-v2' if large_batch else 'cgakt-cuda-fp32-v1',device='cuda:0',
             initialization='cpu-default-generator-42-then-device',dtype='float32',seed=42,
             foreach=False,fused=False,capturable=False,differentiable=False,amsgrad=False,
             maximize=False,decoupled_weight_decay=False,clip_foreach='native-default-None',
@@ -126,6 +128,9 @@ def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionPro
         cuda_profile.__post_init__()
         if config.phase not in {'simulator-research','junyi-research'} or config.device != 'cuda':
             raise ValueError('CUDA research profile requires explicit simulator-research CUDA config')
+        if (cuda_profile.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
+                and config.protocol_version != 'akt-nr-exercise-v2-batch128'):
+            raise ValueError('batch128 CUDA recipe requires its named protocol')
     if config.recovery is not None:
         from .recovery import validate_options
         validate_options(config)
@@ -213,6 +218,11 @@ def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionPro
                   'batch_size': 4, 'lr': 1e-4, 'betas': (0.9, 0.999), 'eps': 1e-8,
                   'weight_decay': 0.0, 'max_grad_norm': 1.0, 'max_epochs': 20,
                   'patience': 3, 'min_delta': 0.0001, 'outer_fold': 4 if config.phase=='junyi-research' else 0}
+        if config.protocol_version == 'akt-nr-exercise-v2-batch128':
+            if (config.phase != 'junyi-research' or cuda_profile is None
+                    or cuda_profile.recipe_id != 'cgakt-cuda-fp32-batch128-v2'):
+                raise ValueError('batch128 protocol requires Junyi CUDA research')
+            frozen['batch_size'] = 128
         if (any(type(getattr(config, name)) is not type(value) or getattr(config, name) != value
                 for name, value in frozen.items()) or config.recovery is not None
                 or type(config.execution_enabled) is not bool):

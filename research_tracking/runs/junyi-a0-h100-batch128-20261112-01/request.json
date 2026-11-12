@@ -1,0 +1,53 @@
+{
+  "status": "USER_APPROVED",
+  "approval_reference": "Người dùng yêu cầu hoàn tấtA0 trênH100, chọnbatch128 trực tiếp và không chạybenchmark. Lượtbatch128 mới từseed42, giữ lịch sửbatch4. Tối đa3USD đợt này, toànKLTN30USD freecredits.",
+  "root_review_status": "ROOT_REVIEWED_BOUNDED_DISPATCH",
+  "authorized_batch_usd": 3,
+  "reserved_usd_per_run": 3,
+  "allocation_id": "junyi-a0-batch128-h100-20261112-01",
+  "project_budget_file": "research_tracking/COMPUTE_BUDGET.json",
+  "gpu": "H100",
+  "run_id": "modal-junyi-a0-b128-h100-20261112-01",
+  "archives": {
+    "source": {
+      "path": "artifacts/akt/modal/junyi-a0-h100-batch128-20261112-01/source.zip",
+      "sha256": "54f83d99ebb94879d78aacbdbfa8a949e88200100257e0e6424ffbaa1d1b1d66"
+    },
+    "cpu_gate": {
+      "path": "experiments/akt/results/modal-junyi-a0-batch128-cpu-20261112-01/artifacts.zip",
+      "sha256": "ebb897d640414b2611b62952492ceeac6be5cd55d9e5c638211b6e9764e74730"
+    },
+    "data": {
+      "path": "artifacts/akt/modal/junyi-throughput-20261112-01/full-selected-data.zip",
+      "sha256": "cfa8597cae89eba796f00a119748217ee1c61e20c7f6b4e7c5452d713931de96"
+    }
+  },
+  "inputs": {
+    "selected_cache_root": "artifacts/akt/junyi-cohorts/outer4-selected-full-20261112-03",
+    "roles_path": "artifacts/akt/junyi-roles/outer4-research-v1-20261112-01/roles.json",
+    "encoding_file": "artifacts/akt/window-cache/full-train80-20261112-02.encoding.json",
+    "encoding_receipt": "artifacts/akt/window-cache/full-train80-20261112-02.encoding.receipt.json",
+    "train_window_cache": "artifacts/akt/window-cache/full-train80-20261112-02",
+    "selected_cache_manifest_sha256": "f42afe12c9566ba334dec68c1ebb22a4bfc6b2e5b673b629c9a2724c8d74db14",
+    "roles_sha256": "b0ca8f6949edd226e48d1cdb24e34ea34a042a385467e1650755994e96567ba3",
+    "encoding_sha256": "4d5d7330d17f48b3b7d759bc331a99523093cfd249a0f9d7fd455480789c209f",
+    "encoding_receipt_sha256": "9d05015ef08e0b45bfc8e0a27d0ae0b459fcc0b79f1c4d75bfb6c362cba32845",
+    "train_window_manifest_sha256": "43f48045370b6811e537d7936ed307291e1dee88be313c111e4879198556a839"
+  },
+  "purpose": "main_selected",
+  "workload_epochs": 20,
+  "train_targets": 13347331,
+  "selection_targets": 1600343,
+  "max_optimizer_steps": 36360,
+  "max_total_training_targets": 266946620,
+  "native_max_seconds": 1500,
+  "native_max_wall_seconds": 1600,
+  "worker_backup_seconds": 1800,
+  "remote_child_seconds": 1900,
+  "local_watchdog_seconds": 2000,
+  "function_timeout_seconds": 2100,
+  "checkpoint_every_steps": "native source04 unchanged1000",
+  "scope": "A0 fullTRAIN80 selected-only batch128 H100 new protocol v2, no Holdout/calibration/outer-validation",
+  "batch_size": 128,
+  "benchmark_before_training": false
+}
