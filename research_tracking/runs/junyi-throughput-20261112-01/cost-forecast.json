@@ -1,0 +1,82 @@
+{
+  "status": "CONDITIONAL_COST_FORECAST_NOT_MEASURED_FULL_EPOCH",
+  "training_targets_per_epoch": 13347331,
+  "selection_targets": 1600343,
+  "measured_packet": {
+    "status": "JUNYI_REPRESENTATIVE_BENCHMARK_COMPLETE",
+    "scope": "partial_train80_engineering",
+    "full_junyi_epoch": false,
+    "gpu": "Tesla T4",
+    "optimizer_steps": 256,
+    "targets": 56332,
+    "training_wall_seconds": 7.846841221999998,
+    "targets_per_second": 7178.939704051018,
+    "valid_tokens": 100032,
+    "padding_tokens": 86096,
+    "checkpoint_seconds": 0.06229423100000275,
+    "checkpoint_sha256": "3da17c920bbd2960e14af592480052ac7fa6fc741a15a11ef66cca43751fa99e",
+    "checkpoint_reload_predictions_exact": true,
+    "cuda_resource": {
+      "memory_allocated": 104811520,
+      "memory_reserved": 283115520,
+      "max_memory_allocated": 253450752,
+      "max_memory_reserved": 283115520
+    },
+    "legacy_prediction_seconds": 8.621698686999999,
+    "prediction_targets": 56332,
+    "prediction_sha256": "3fc8fdd42b6f8b0eab67942ffcbe109d1960b9b1f5f7a110f5422af12ee75363",
+    "source_and_input_gate": {
+      "status": "PASS",
+      "report_sha256": "c4dba9627177cd95ea5db31ad7025a039f5a1f9dbbd8e9601696783b9f79e1f1",
+      "test_log_sha256": "8480bb111083e543879809cbef92252a4bc151131ee68882f900c090109e4a69",
+      "pointer_sha256": "4e96930b8c4b8685a4c1ee0e256845a131526e83a7abfb29b8b7da2cccf1a905",
+      "evidence_path": "/opt/kltn/artifacts/akt/preflight/gate2-evidence-modal-junyi-numerical-cpu-20261112-04.json",
+      "test_log_path": "/opt/kltn/artifacts/akt/preflight/gate2-tests-modal-junyi-numerical-cpu-20261112-04.log"
+    },
+    "elapsed_seconds": 28.617016009
+  },
+  "function_rate_upper_usd_per_second": 0.00020796,
+  "pricing_source": "https://modal.com/pricing",
+  "pricing_checked_on": "2026-11-12",
+  "scenarios": {
+    "optimistic": {
+      "per_train_epoch_seconds": 1859.2343089980554,
+      "validation_proxy_seconds": 244.9349418066044,
+      "assumed_io_checkpoint_seconds_per_epoch": 0,
+      "epoch_with_validation_seconds": 2104.16925080466,
+      "selected_5_epochs_usd": 2.2185026928586056,
+      "selected_20_epochs_usd": 8.782248253818661,
+      "selected_plus_refit_5_epochs_usd": 4.393388506666805,
+      "seven_variants_selected_plus_refit_5_epochs_usd": 30.75371954666764
+    },
+    "expected": {
+      "per_train_epoch_seconds": 2324.042886247569,
+      "validation_proxy_seconds": 306.1686772582555,
+      "assumed_io_checkpoint_seconds_per_epoch": 90,
+      "epoch_with_validation_seconds": 2720.211563505825,
+      "selected_5_epochs_usd": 2.859063489605277,
+      "selected_20_epochs_usd": 11.344491440805347,
+      "selected_plus_refit_5_epochs_usd": 5.6712527568655275,
+      "seven_variants_selected_plus_refit_5_epochs_usd": 39.69876929805869
+    },
+    "conservative": {
+      "per_train_epoch_seconds": 3718.468617996111,
+      "validation_proxy_seconds": 489.8698836132088,
+      "assumed_io_checkpoint_seconds_per_epoch": 180,
+      "epoch_with_validation_seconds": 4388.33850160932,
+      "selected_5_epochs_usd": 4.59358187984529,
+      "selected_20_epochs_usd": 18.282565001765402,
+      "selected_plus_refit_5_epochs_usd": 9.130517507461692,
+      "seven_variants_selected_plus_refit_5_epochs_usd": 63.91362255223184
+    }
+  },
+  "assumptions": [
+    "Linear scaling uses engineering packet geometry, train-resubstitution inference timing is a proxy for selection speed.",
+    "I/O and slowdown factors are assumptions. Linux full strict admission and full validation wall time remain unmeasured.",
+    "Five selected epochs is a scenario, not chosen epoch count or stopping-rule change.",
+    "Refit90 assumed similar sequence geometry scaled90/80.",
+    "Excludes storage, repeated startup, failures, additional seeds, SAKT/GKT and graph extra overhead.",
+    "Full 5-fold costs require multiplying by5 plus protocol selection/refits, not treating onefit asfivefold."
+  ],
+  "decision": "Proceed A0 full selected in independently bounded tranche, measure actual full epoch before expanding. Do not declare complete matrix affordable."
+}
