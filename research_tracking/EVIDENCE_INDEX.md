@@ -1,5 +1,9 @@
 # Chỉ mục bằng chứng
 
+## 12/11 — chỉ mục checkpoint AKT GPU
+
+[Chỉ mục theo run và epoch](runs/modal-akt-graph-selected-20261112-01/checkpoint-index.json) ghi checkpoint A0 đã nghiệm thu và các điều kiện đồ thị đang chạy. [Hướng dẫn tìm artifact](runs/modal-akt-graph-selected-20261112-01/README.md) có vị trí archive local, member checkpoint và Modal Volume dự phòng.
+
 ## 10/11 — AKT đồ thị cố định và GKT qua trọn lượt kiểm CPU
 
 [A1 expert](runs/a1-expert-selected-engineering-20261110-01/README.md) đạt7epoch/best4 và [GKT](runs/gkt-selected-engineering-20261110-01/README.md) đạt11epoch/best6, đều nạp lại và xuất đủ84dự báo. Giữ nguyên cấu hình đã chốt, corpus kiểm kỹ thuật riêng và source provenance. [Bộ theo dõi RAM](runs/owned-job-resource-exit-guard-20261110-01/README.md) có9canaries và hai probe, giữ lỗi cũ và chỉ bỏ qua exact handle đã xác nhận kết thúc. Các mốc này chưa là Main60, Junyi, refit/calibration hoặc CUDA. Báo cáo hiện hành đã cập nhật và kiểm desktop/mobile.

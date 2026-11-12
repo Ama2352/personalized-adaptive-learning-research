@@ -18,7 +18,7 @@ def sha(path):
         return hashlib.file_digest(stream, 'sha256').hexdigest()
 
 
-def remote_train(expected_inputs, run_id, research_main):
+def remote_train(expected_inputs, run_id, research_main, candidate_id='A0'):
     import runpy
     import signal
     import subprocess
@@ -35,7 +35,9 @@ def remote_train(expected_inputs, run_id, research_main):
     durable.mkdir(exist_ok=False)
     process = None
     started = time.monotonic()
-    summary = dict(status='FAILED', main60_training=research_main,
+    assert candidate_id in ('A0', 'A1_EXPERT', 'A1_LEARNED', 'A2_EXPERT', 'A2_LEARNED', 'A3_EXPERT', 'A3_LEARNED')
+    graph_candidate = candidate_id != 'A0'
+    summary = dict(status='FAILED', candidate_id=candidate_id, main60_training=research_main,
                    cohort='Main60x210' if research_main else 'engineering10x84',
                    device='cuda', inputs=expected_inputs, checkpoint_transfers={})
     try:
@@ -63,6 +65,8 @@ def remote_train(expected_inputs, run_id, research_main):
         summary['worker_result'] = actual
         expected_worker = ('ACTUAL_A0_CUDA_SELECTED_MAIN60_COMPLETE' if research_main
                            else 'ACTUAL_A0_CUDA_SELECTED_ENGINEERING_COMPLETE')
+        if graph_candidate:
+            expected_worker = 'ACTUAL_GRAPH_CUDA_SELECTED_MAIN60_COMPLETE'
         assert process.returncode == 0 and actual['status'] == expected_worker
         terminal = json.loads((results/RUN/'selected-terminal.json').read_text())
         complete = json.loads((results/RUN/'COMPLETE.json').read_text())
@@ -70,6 +74,8 @@ def remote_train(expected_inputs, run_id, research_main):
         assert complete['status'] == 'COMPLETE_MAIN_SELECTED_ONLY_CANDIDATE'
         summary.update(status='CUDA_A0_SELECTED_MAIN60_COMPLETE' if research_main
                        else 'CUDA_A0_SELECTED_ENGINEERING_COMPLETE', terminal=terminal)
+        if graph_candidate:
+            summary['status'] = 'CUDA_GRAPH_SELECTED_MAIN60_COMPLETE'
     except BaseException as error:
         summary.update(error_type=type(error).__name__, error=str(error))
         (driver/'failure.log').write_text(traceback.format_exc())
