@@ -1,5 +1,12 @@
 # Kiểm mức sử dụng GPU của AKT ngày 12/11/2026
 
+## Cập nhật12/11 lúc22giờ13 — kiểm chạy hai model dùng chungGPU
+
+Sau khi batch32 đạt mức sử dụngGPU trên50%, đã kiểm ý tưởng chạy hai tiến trình cùng mộtT4 để rút ngắn thời gian hoàn thành hai model. Giữ cùng dữ liệu, batch32 mỗi model, hai seed và số lần cập nhật. Hai model chạy lần lượt mất45.49giây, đồng thời mất45.74giây cho cùng901.312target đo. GPU-Util tăng từ87,9% lên99,9%, tổng thông lượng gần như ngang nhau. Chưa có bằng chứng để tiếp nhận chạy đồng thời làm phương án tăng tốcT4.
+
+Bốn checkpoint đã tải vềD, nạp lại và update tiếp theo khớp. Hai cách chạy khớp model, optimizer, RNG và loss theo seed. Đây là phép kiểm kỹ thuật trên packet lặp. Chưa đánh giá hội tụ, chưa chạyH100 và chưa đổi batch củaA0 chính. Source vàlog lỗi output ban đầu được giữ trongbundle. [Bằng chứng vàfigure](../runs/junyi-concurrent-gpu-20261112-01/README.md).
+
+
 ## Cập nhật20giờ59 — lượt batch32 đã nghiệm thu
 
 Đã hoàn tất lượt kiểm batch32 trên T4 bằng source AKT hiện có. Trong 115 mẫu nvidia-smi qua khoảng65giây training ổn định, GPU-Util trung bình87,5%, thấp nhất76% và cao nhất90%. VRAM đang dùng1.541/15.360MiB, công suất trung bình67,7W và tốc độ khoảng19.792target/giây. Mục tiêu sử dụng GPU trên50% đã đạt trong khoảng đo.

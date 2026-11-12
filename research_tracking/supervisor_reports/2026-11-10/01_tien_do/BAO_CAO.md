@@ -1,5 +1,14 @@
 # Báo cáo tiến độ khóa luận — cập nhật 12/11/2026
 
+## Cập nhật12/11 — đã kiểm ý tưởng chạy đồng thời hai model
+
+Sau khi tăng batch giúpT4 hoạt động đều hơn, tiếp tục kiểm liệu hai model có thể dùng chungGPU để hoàn thành sớm hơn. Hai cách chạy dùng cùng dữ liệu, cùng seed vàbatch32 cho từng model. Kết quả hai model chạy lần lượt mất45.49giây, chạy đồng thời mất45.74giây. Mức hoạt độngGPU tăng từ87,9% lên99,9%, tổng tốc độ xử lý gần như ngang nhau. Giữ phương án một tiến trình trênT4 cho bước tiếp theo.
+
+Bốn checkpoint đã được lưu, kiểm toàn vẹn và phục hồi đúng. Kết quả từng model khớp giữa hai cách chạy. Phép kiểm dùng dữ liệu train nhỏ lặp lại, chưa xác nhận chất lượng trên toànJunyi hoặc hiệu quả trênH100. Các kết quả nghiên cứuRQ1–RQ3 hiện có được giữ nguyên.
+
+![Thời gian xử lý và mức hoạt độngGPU](../../../runs/junyi-concurrent-gpu-20261112-01/concurrency-comparison.svg)
+
+
 ## Cập nhật12/11 lúc20giờ59 — batch32 đạt mục tiêu tài nguyên GPU
 
 Đã hoàn tất lượt kiểm batch32 trên T4 bằng source AKT hiện có. Trong 115 mẫu nvidia-smi qua khoảng65giây training ổn định, GPU-Util trung bình87,5%, thấp nhất76% và cao nhất90%. VRAM đang dùng1.541/15.360MiB, công suất trung bình67,7W và tốc độ khoảng19.792target/giây. Mục tiêu sử dụng GPU trên50% đã đạt trong khoảng đo.

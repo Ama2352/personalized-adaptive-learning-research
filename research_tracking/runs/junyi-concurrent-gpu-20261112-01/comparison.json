@@ -1,0 +1,76 @@
+{
+  "status": "VERIFIED_CONCURRENT_SMALL_GPU_ENGINEERING",
+  "gpu": "Tesla T4",
+  "cases": [
+    {
+      "name": "solo-a",
+      "labels": [
+        "solo-a"
+      ],
+      "concurrent_processes": 1,
+      "measurement_started_monotonic": 17.198321642,
+      "measurement_finished_monotonic": 39.977440473,
+      "seconds": 22.750975843000003,
+      "targets": 450656,
+      "targets_per_second": 19808.205287979214,
+      "telemetry_samples": 38,
+      "gpu_utilization_mean": 87.97368421052632,
+      "gpu_utilization_max": 90.0,
+      "vram_used_mib_mean": 1542.0,
+      "vram_used_mib_max": 1542.0,
+      "power_w_mean": 67.45105263157895,
+      "power_w_max": 78.96
+    },
+    {
+      "name": "solo-b",
+      "labels": [
+        "solo-b"
+      ],
+      "concurrent_processes": 1,
+      "measurement_started_monotonic": 51.127848805,
+      "measurement_finished_monotonic": 73.884895216,
+      "seconds": 22.742150865000006,
+      "targets": 450656,
+      "targets_per_second": 19815.891763059055,
+      "telemetry_samples": 38,
+      "gpu_utilization_mean": 87.92105263157895,
+      "gpu_utilization_max": 90.0,
+      "vram_used_mib_mean": 1542.0,
+      "vram_used_mib_max": 1542.0,
+      "power_w_mean": 66.9278947368421,
+      "power_w_max": 77.59
+    },
+    {
+      "name": "parallel",
+      "labels": [
+        "parallel-a",
+        "parallel-b"
+      ],
+      "concurrent_processes": 2,
+      "measurement_started_monotonic": 88.429134221,
+      "measurement_finished_monotonic": 134.180835973,
+      "seconds": 45.73577367799999,
+      "targets": 901312,
+      "targets_per_second": 19706.936770013643,
+      "telemetry_samples": 79,
+      "gpu_utilization_mean": 99.9493670886076,
+      "gpu_utilization_max": 100.0,
+      "vram_used_mib_mean": 3080.0,
+      "vram_used_mib_max": 3080.0,
+      "power_w_mean": 69.25240506329114,
+      "power_w_max": 81.3
+    }
+  ],
+  "serial_combined_seconds": 45.493126708000005,
+  "parallel_seconds": 45.73577367799999,
+  "serial_targets_per_second": 19812.047779989225,
+  "parallel_targets_per_second": 19706.936770013643,
+  "aggregate_speedup": 0.9946945913343825,
+  "time_reduction_percent": -0.5333706156479989,
+  "correctness_exact": true,
+  "checkpoint_resume_exact": true,
+  "decision": "DO_NOT_ADOPT_NO_CLEAR_THROUGHPUT_GAIN",
+  "h100_generalization_verified": false,
+  "main_training_changed": false,
+  "limitations_vi": "Một đối chiếu ngắn, hai seed, packet lặp đã cache. Mỗi cách xử lý cùng dữ liệu và batch32 mỗi model. Chưa đo hội tụ, full epoch hoặc H100. Telemetry mỗi child làm overhead hai cách khác nhau. Thời gian bảng chỉ gồm training đo, chưa gồm warmup/khởi động/checkpoint."
+}

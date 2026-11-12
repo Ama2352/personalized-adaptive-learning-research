@@ -1,0 +1,77 @@
+"""Profile batch shape trên cùng packet Junyi, tách khỏi selected training."""
+from dataclasses import asdict
+import hashlib
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import time
+import traceback
+import zipfile
+
+ROOT = Path('/opt/kltn')
+REQUEST = json.loads(Path('/opt/probe-request.json').read_text())
+RUN = REQUEST['run_id']
+OUTPUT = ROOT/'experiments/akt/results'/RUN
+OPERATION = ROOT/'experiments/akt/results'/(RUN+'-operation')
+OUTPUT.mkdir(parents=True,exist_ok=False)
+OPERATION.mkdir(parents=True,exist_ok=False)
+started = time.monotonic()
+
+
+def sha(path):
+    with path.open('rb') as stream:
+        return hashlib.file_digest(stream,'sha256').hexdigest()
+
+
+def write_json(path, value):
+    path.write_text(json.dumps(value,indent=2,allow_nan=False)+'\n')
+
+
+def extract(archive):
+    with zipfile.ZipFile(archive) as saved:
+        pins = json.loads(saved.read('MANIFEST.json'))['files']
+        assert set(saved.namelist())==set(pins)|{'MANIFEST.json'}
+        for name,pin in pins.items():
+            assert not Path(name).is_absolute() and '..' not in Path(name).parts
+            assert ':' not in name and '\\' not in name
+            raw = saved.read(name)
+            expected = pin if isinstance(pin,str) else pin['sha256']
+            assert hashlib.sha256(raw).hexdigest()==expected
+            path = ROOT/name
+            path.parent.mkdir(parents=True,exist_ok=True)
+            path.write_bytes(raw)
+
+
+result = dict(status='FAILED',scope='engineering_concurrent_gpu_only',full_junyi_epoch=False)
+try:
+    assert REQUEST['status']=='USER_APPROVED' and REQUEST['gpu']=='T4'
+    assert REQUEST['max_optimizer_steps']==1160 and REQUEST['expected_targets']==56332
+    extract('/opt/kltn-input.zip')
+    extract('/opt/junyi-data.zip')
+    preflight = ROOT/'artifacts/akt/preflight'
+    preflight.mkdir(parents=True,exist_ok=True)
+    with zipfile.ZipFile('/opt/cpu-gate.zip') as saved:
+        for name,pin in json.loads(saved.read('SHA256.json')).items():
+            raw = saved.read(name)
+            assert hashlib.sha256(raw).hexdigest()==pin['sha256']
+            if name.startswith('gate2-'):
+                assert Path(name).name==name
+                (preflight/name).write_bytes(raw)
+    lock = ROOT/'artifacts/akt/runtime/modal-linux-cuda.lock.txt'
+    lock.parent.mkdir(parents=True,exist_ok=True)
+    shutil.copyfile('/opt/locked-cu126.txt',lock)
+    upstream = ROOT/'artifacts/akt/dependencies/upstream'
+    os.environ.update(GIT_CONFIG_NOSYSTEM='1',GIT_CONFIG_GLOBAL='/dev/null',GIT_CONFIG_COUNT='3',
+        GIT_CONFIG_KEY_0='core.fsmonitor',GIT_CONFIG_VALUE_0='false',
+        GIT_CONFIG_KEY_1='safe.directory',GIT_CONFIG_VALUE_1=str(upstream),
+        GIT_CONFIG_KEY_2='core.autocrlf',GIT_CONFIG_VALUE_2='false',
+        GIT_OPTIONAL_LOCKS='0',GIT_TERMINAL_PROMPT='0',GIT_ALLOW_PROTOCOL='__NO_TRANSPORT__',
+        CUBLAS_WORKSPACE_CONFIG=':4096:8',OMP_NUM_THREADS='2',MKL_NUM_THREADS='2',
+        OPENBLAS_NUM_THREADS='2',PYTHONDONTWRITEBYTECODE='1')
+    runtime = preflight/(RUN+'-runtime.json')
+    subprocess.run([sys.executable,'-I','-B',str(ROOT/'scripts/akt/check_runtime.py'),
+        '--upstream',str(upstream),'--device','cuda','--lock-file',str(lock),'--output',str(runtime)],
+        check=True,timeout=120)

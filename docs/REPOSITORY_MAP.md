@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 12/11 — hai tiến trìnhT4 chưa tăng tổng thông lượng
+
+[Kiểm song song](../research_tracking/runs/junyi-concurrent-gpu-20261112-01/README.md) đã nghiệm thu45,49giây lần lượt và45,74giây đồng thời, GPU87,9%→99,9%, bốn checkpoint khớp. Không tiếp nhận chạy hai tiến trình làm tăng tốcT4. H100 chưa chạy.
+
+
 ## 12/11 — bộ model xuất gọn trênD
 
 [Bộ model](../experiments/akt/results/model-export-20261112-01/README.md) có8file.pt đại diện, MODEL_INDEX và SUPPORT.zip, khoảng221MB. [Kiểm xuất](../research_tracking/runs/akt-model-export-20261112-01/README.md) đạt8/8SHA/schema/vocabulary trênCPU. H100 đang chờ. Grade10 selected-fit80 và Junyi best-so-far được ghi riêng.

@@ -113,6 +113,15 @@
       "cap_usd": 0.1,
       "status": "VERIFIED_GPU87P5_BATCH32_EXACT_RESUME_ARTIFACT_VERIFIED_STOPPED",
       "receipt": "experiments/akt/results/modal-junyi-batch-utilization-t4-20261112-01/receipt.json"
+    },
+    {
+      "id": "junyi-concurrent-gpu-20261112-01",
+      "cap_usd": 0.2,
+      "status": "COMPLETE_NEGATIVE_THROUGHPUT_VERIFIED_ALL_APPS_STOPPED",
+      "scope": "engineering_concurrent_gpu_only",
+      "previous_t4_reservation_usd": 0.15,
+      "snapshot_metered_delta_usd": 0.03,
+      "evidence": "research_tracking/runs/junyi-concurrent-gpu-20261112-01/README.md"
     }
   ],
   "stop_rule": "Không mở lượt chạy nếu cận chi phí lịch sử, tổng allocation và dự phòng vượt 30 USD. Nếu chưa xác nhận dừng App thì kiểm trạng thái server trước lượt mới.",
@@ -132,5 +141,13 @@
       "status": "USER_REQUESTED_DO_NOT_START",
       "reference": "User asks to wait on H100 and confirm stored training models. No H100 run started."
     }
+  },
+  "concurrency_final_billing_snapshot": {
+    "metered_usd": 3.26858233,
+    "credits_used_usd": 3.26,
+    "billed_usd": 0,
+    "remaining_initial_credits_approx_usd": 26.74,
+    "observed_at_utc": "2026-11-12T15:13:39.165876+00:00",
+    "provider_latency_possible": true
   }
 }

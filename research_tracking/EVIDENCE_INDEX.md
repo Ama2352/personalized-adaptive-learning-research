@@ -1,5 +1,10 @@
 # Chỉ mục bằng chứng
 
+## 12/11 — phép kiểm concurrencyT4
+
+[Bundle](runs/junyi-concurrent-gpu-20261112-01/README.md) giữ source/request/reservation, bốn checkpoint inventory, telemetryCSV/JSONL, SVG/PDF/PNG, đối chiếu exact và billing. Kết quả âm về tốc độ trênT4, chưa suy sangH100.
+
+
 ## 12/11 — xuất model đại diện trênD
 
 [Bundle xuất model](runs/akt-model-export-20261112-01/README.md) ghi inventory trước chuyển,8file.pt và kiểm CPU/SHA. Bộ đọc cho người dùng ở experiments/akt/results/model-export-20261112-01/README.md.

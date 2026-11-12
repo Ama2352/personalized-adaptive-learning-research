@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 12/11 — kiểm hai tiến trình dùng chungT4
+
+[Bằng chứng, số liệu vàfigure](../runs/junyi-concurrent-gpu-20261112-01/README.md) cho tổng thời gian gần ngang nhau. Chưa tiếp nhận chạy đồng thời. Có checkpoint, log lỗi và xác nhận dừng App.
+
+
 ## 12/11 — batch32 đạt mục tiêu sử dụng GPU
 
 [Bằng chứng tài nguyên](../runs/junyi-batch32-utilization-20261112-01/README.md) đã nghiệm thu GPU87,5%/VRAM1.541MiB và checkpoint/resume. Có SVG, CSV và ghi rõ giới hạn lặp packet. Chưa là đánh giá chất lượng độc lập.

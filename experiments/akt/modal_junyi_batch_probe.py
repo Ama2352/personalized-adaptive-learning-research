@@ -1,4 +1,4 @@
-"""Đo batch shape engineering Junyi trên packet cố định, một T4."""
+"""Đo engineering Junyi trên packet cố định, một GPU có giới hạn."""
 import argparse
 import asyncio
 from decimal import Decimal
@@ -13,6 +13,12 @@ import zipfile
 ROOT = Path(__file__).resolve().parent.parent.parent
 BUNDLE = ROOT/'research_tracking/runs/junyi-batch-throughput-20261112-01'
 if __name__ == '__main__':
+    import tempfile
+    client_temp = ROOT/'artifacts/akt/runtime/modal-client-temp'
+    client_temp.mkdir(parents=True,exist_ok=True)
+    for variable in ('TEMP','TMP','TMPDIR'):
+        os.environ[variable] = str(client_temp)
+    tempfile.tempdir = str(client_temp)
     os.environ['MODAL_CONFIG_PATH'] = str(ROOT/'artifacts/akt/private/modal.toml')
     os.environ['MODAL_PROFILE'] = 'kltn'
 import modal
@@ -75,10 +81,17 @@ def remote_probe(pins, run_id):
     process = None
     started = time.monotonic()
     summary = dict(status='FAILED',run_id=run_id,checkpoint_transfers={})
+    concurrent_scope = json.loads(Path('/opt/probe-request.json').read_text()).get('scope') == 'engineering_concurrent_gpu_only'
 
     def sync_checkpoints(*, final=False):
-        for marker in sorted((results/run_id/'checkpoints').glob('*/COMPLETE.json')):
-            name = marker.parent.name
+        markers = [(marker.parent.name,marker) for marker in sorted(
+            (results/run_id/'checkpoints').glob('*/COMPLETE.json'))]
+        if concurrent_scope:
+            for label in ('solo-a','solo-b','parallel-a','parallel-b'):
+                marker = results/(run_id+'-'+label)/'checkpoints/batch-032/COMPLETE.json'
+                if marker.is_file():
+                    markers.append((label,marker))
+        for name,marker in markers:
             if name in summary['checkpoint_transfers']:
                 continue
             try:
@@ -109,11 +122,12 @@ def remote_probe(pins, run_id):
         summary['returncode'] = process.returncode
         actual = json.loads((results/(run_id+'-operation')/'result.json').read_text())
         summary['worker_result'] = actual
-        assert process.returncode==0 and actual['status'] in ('JUNYI_BATCH_PROFILE_COMPLETE','JUNYI_STEP_SYNC_PROFILE_COMPLETE','JUNYI_BATCH_UTILIZATION_COMPLETE','PARTIAL_JUNYI_BATCH_PROFILE_OOM'),actual
-        if actual['status'] in ('JUNYI_BATCH_PROFILE_COMPLETE','JUNYI_STEP_SYNC_PROFILE_COMPLETE','JUNYI_BATCH_UTILIZATION_COMPLETE'):
+        assert process.returncode==0 and actual['status'] in ('JUNYI_BATCH_PROFILE_COMPLETE','JUNYI_STEP_SYNC_PROFILE_COMPLETE','JUNYI_BATCH_UTILIZATION_COMPLETE','JUNYI_CONCURRENT_GPU_COMPLETE','PARTIAL_JUNYI_BATCH_PROFILE_OOM'),actual
+        if actual['status'] in ('JUNYI_BATCH_PROFILE_COMPLETE','JUNYI_STEP_SYNC_PROFILE_COMPLETE','JUNYI_BATCH_UTILIZATION_COMPLETE','JUNYI_CONCURRENT_GPU_COMPLETE'):
             expected_checkpoints = {'JUNYI_BATCH_PROFILE_COMPLETE':4,
                                     'JUNYI_STEP_SYNC_PROFILE_COMPLETE':6,
-                                    'JUNYI_BATCH_UTILIZATION_COMPLETE':1}[actual['status']]
+                                    'JUNYI_BATCH_UTILIZATION_COMPLETE':1,
+                                    'JUNYI_CONCURRENT_GPU_COMPLETE':4}[actual['status']]
             assert len(summary['checkpoint_transfers'])==expected_checkpoints,'Completed case checkpoints required'
         else:
             assert len(summary['checkpoint_transfers'])>=len(actual['cases'])
@@ -146,7 +160,11 @@ def remote_probe(pins, run_id):
         archive = durable/'artifacts.zip'
         inventory = {}
         with zipfile.ZipFile(archive,'x',zipfile.ZIP_DEFLATED) as saved:
-            for directory in (driver,results/run_id,results/(run_id+'-operation')):
+            directories = [driver,results/run_id,results/(run_id+'-operation')]
+            if concurrent_scope:
+                directories.extend(results/(run_id+'-'+label) for label in (
+                    'solo-a','solo-b','parallel-a','parallel-b'))
+            for directory in directories:
                 for path in directory.rglob('*'):
                     if path.is_file():
                         name = path.relative_to(root).as_posix()
@@ -168,7 +186,7 @@ def main():
                                     PendingOwnedModalApp,stop_owned_app_cli)
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--request',type=Path,required=True)
-    parser.add_argument('--gpu',choices=('T4',),default='T4')
+    parser.add_argument('--gpu',choices=('T4','L4','SMALL'),default='T4')
     parser.add_argument('--run',action='store_true')
     args = parser.parse_args()
     request = json.loads(args.request.read_text(encoding='utf-8'))
@@ -181,6 +199,8 @@ def main():
             ('gpu_worker03.py', 'model-attention-cache-candidate.py', 'attention_cache_candidate.py', 'reservation03.json'),
         'engineering_batch32_utilization_only':
             ('gpu_worker.py', None, None, 'reservation.json'),
+        'engineering_concurrent_gpu_only':
+            ('gpu_worker.py', None, None, 'reservation.json'),
     }
     profile = profiles.get(request.get('scope'))
     step_profile = profile is not None
@@ -188,16 +208,29 @@ def main():
         'gpu_worker.py', None, None, 'reservation.json')
     bundle = BUNDLE
     batch_utilization = request.get('scope') == 'engineering_batch32_utilization_only'
+    concurrent_probe = request.get('scope') == 'engineering_concurrent_gpu_only'
     if step_profile:
         bundle = args.request.resolve().parent
         expected_bundle = 'junyi-batch32-utilization-20261112-01' if batch_utilization else 'junyi-step-sync-20261112-01'
+        if concurrent_probe:
+            expected_bundle = 'junyi-concurrent-gpu-20261112-01'
         assert bundle == ROOT/'research_tracking/runs'/expected_bundle
-    assert args.gpu==request.get('gpu','T4')=='T4'
+    assert args.gpu==request.get('gpu','T4')
+    assert args.gpu=='T4' or concurrent_probe
+    if concurrent_probe and args.gpu=='L4':
+        reservation_name = 'reservation02.json'
+    if concurrent_probe and args.gpu=='SMALL':
+        reservation_name = 'reservation03.json'
+    if concurrent_probe and 'reservation_file' in request:
+        assert re.fullmatch(r'reservation[0-9]{2}\.json',request['reservation_file'])
+        reservation_name = request['reservation_file']
     run_id = request['run_id']
     prefix = 'step-sync' if step_profile else 'batch-throughput'
     if batch_utilization:
         prefix = 'batch-utilization'
-    assert re.fullmatch(r'modal-junyi-'+prefix+r'-t4-[0-9]{8}-[0-9]{2}',run_id)
+    if concurrent_probe:
+        prefix = 'concurrent'
+    assert re.fullmatch(r'modal-junyi-'+prefix+'-'+args.gpu.lower()+r'-[0-9]{8}-[0-9]{2}',run_id)
     print(json.dumps(dict(run_id=run_id,gpu=args.gpu,status=request['status'],execution_requested=args.run)),flush=True)
     if not args.run:
         return
@@ -225,6 +258,8 @@ def main():
              '/opt/checkpoint-sync.py':ROOT/'experiments/akt/modal_artifact_sync.py',
              '/opt/probe-request.json':worker_request_path,
              '/opt/packet_reader.py':ROOT/'research_tracking/runs/junyi-throughput-20261112-01/packet_reader.py'}
+    if concurrent_probe:
+        paths['/opt/concurrent_child.py'] = bundle/'concurrent_child.py'
     if candidate_name is not None:
         paths.update({'/opt/model-candidate.py':bundle/candidate_name,
                       '/opt/model-before.py':bundle/'model-before.py',
@@ -245,14 +280,17 @@ def main():
         json.dump(dict(run_id=run_id,gpu=args.gpu,reserved_usd=reserve,inputs=pins,
             allocation_id=request['allocation_id'],project_budget_sha256=ledger_sha256,
             budget_admission=budget),stream,indent=2)
-    deadline = ModalRunDeadline(400)
+    deadline = ModalRunDeadline(340 if args.gpu=='SMALL' else 400)
     app = modal.App('kltn-akt-'+run_id)
     volume = modal.Volume.from_name('kltn-akt-'+run_id,create_if_missing=True,version=2)
     image = modal.Image.from_id('im-ldjZsYO21pzaupmQXGLhnS')
     for name,path in paths.items():
-        image = image.add_local_file(path,name,copy=not batch_utilization)
-    function = app.function(image=image,gpu=args.gpu,cpu=(.25,2),memory=(4096,8192),
-        timeout=420,startup_timeout=60,retries=0,max_containers=1,scaledown_window=60,
+        image = image.add_local_file(path,name,copy=not (batch_utilization or concurrent_probe))
+    cpu_limit = (.25,4) if concurrent_probe else (.25,2)
+    memory_limit = (4096,12288) if concurrent_probe else (4096,8192)
+    gpu_selection = ['T4','L4','A10'] if args.gpu=='SMALL' else args.gpu
+    function = app.function(image=image,gpu=gpu_selection,cpu=cpu_limit,memory=memory_limit,
+        timeout=360 if args.gpu=='SMALL' else 420,startup_timeout=60,retries=0,max_containers=1,scaledown_window=60,
         volumes={'/durable':volume})(remote_probe)
     try:
         binding = PendingOwnedModalApp(run_id,app.name,lambda:app.app_id)
@@ -288,7 +326,7 @@ def main():
     receipt['download_inventory_verified'] = True
     (native/'receipt.json').write_text(json.dumps(receipt,indent=2))
     print(json.dumps(receipt),flush=True)
-    assert receipt['status'] in ('JUNYI_BATCH_PROFILE_COMPLETE','JUNYI_STEP_SYNC_PROFILE_COMPLETE','JUNYI_BATCH_UTILIZATION_COMPLETE','PARTIAL_JUNYI_BATCH_PROFILE_OOM')
+    assert receipt['status'] in ('JUNYI_BATCH_PROFILE_COMPLETE','JUNYI_STEP_SYNC_PROFILE_COMPLETE','JUNYI_BATCH_UTILIZATION_COMPLETE','JUNYI_CONCURRENT_GPU_COMPLETE','PARTIAL_JUNYI_BATCH_PROFILE_OOM')
 
 
 if __name__=='__main__':
