@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 12/11 — mức bao phủ đề cương và tái hiện hai paper
+
+[Đối chiếu sáu mục tiêu cụ thể](PROPOSAL_COVERAGE_20261112.md) ghi rõ phần đã làm, bằng chứng còn thiếu và phạm vi tái hiện Paper1/Paper2. Cả sáu mục đã có công việc, chưa đóng nghiệm thu toàn phạm vi.
+
 ## 12/11 — bảng training AKT theo từng phiên bản
 
 [Bảng tiến độ, số epoch và thời gian còn lại](AKT_TRAINING_STATUS_20261112.md) đối chiếu bảy selected fits Grade10, hai epoch A0 Junyi và các bước refit/đánh giá chưa hoàn tất. Dự toán được ghi cùng giả định, tách thời gian GPU và hoàn thiện mã.

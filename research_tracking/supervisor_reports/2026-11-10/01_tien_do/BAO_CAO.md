@@ -6,6 +6,12 @@
 
 [Báo cáo chi tiết: diễn tiến nghiên cứu, số liệu và biểu đồ](BAO_CAO_NGHIEN_CUU.html).
 
+## Mức đáp ứng đề cương đến hiện tại
+
+Đề cương có sáu mục tiêu cụ thể. Cả sáu đã có triển khai hoặc bằng chứng, chưa mục nào được nghiệm thu toàn phạm vi. RQ1/RQ2 đã có kết quả chẩn đoán về tác động dự báo tới lựa chọn, điều kiện controller, retention và đối chứng ability. RQ3 đã có bảy selected fits Grade10 và hai epoch A0 Junyi, còn so sánh độc lập và closed-loop của mô hình mới.
+
+Paper1 được kế thừa theo PDF. Phiên bản theo đặc tả đã có kiểm tích hợp hai episode trên domain28, cùng172feedback trong coupling đã khai báo, và chứng minh cơ chế có điều kiện. Paper2 có frozen artifact và tái hiện chính xác pilot fixed-stream chẩn đoán. Chưa hoàn tất tái chạy toàn bộ các bảng chính của hai paper. [Đối chiếu chi tiết theo sáu mục tiêu](../../../reports/PROPOSAL_COVERAGE_20261112.md).
+
 ## Bảng tiến độ training AKT được đối chiếu ngày 12/11
 
 | Môi trường | Đã hoàn tất | Số epoch và thời gian | Còn thiếu |
