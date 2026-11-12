@@ -1,5 +1,13 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 12/11 — đủ A0–A3 selected GPU trên Grade10
+
+[Đợt sáu graph fits](../runs/modal-akt-graph-selected-20261112-01/README.md) đã nghiệm thu cả expert/learned, cùng A0 thành7selectedcheckpoints và30epochcheckpoints đã lưu. TổngModal≈0,641USD, Appđãdừng. CófigureSVG/PDF/PNG vàdữ liệu. Junyi80/10/10 metadata đãtạo/7tests đạt, producerCUDA vàGate mới còn thiếu.
+
+## 12/11 — dữ liệu AKT theo hai môi trường
+
+[Hợp đồng Junyi và Grade10](AKT_JUNYI_DATA_CONTRACT_20261112.md) phân biệt checkpoint mô phỏng với benchmark Junyi, ghi split80/10/10 đã adopt và các gap producer còn phải nối. Metadata canonical/split được đọc, không đụng Holdout events.
+
 ## 12/11 — figure A0 theo figures4papers
 
 Đã dựng và kiểm figure chọn checkpoint A0 từ số liệu GPU đã nghiệm thu. SVG/PDF/PNG, CSV và cách dựng lại ở [bundle figure](../runs/figures4papers-akt-20261112-01/README.md). Bản sửa nhãn đã nhúng trong báo cáo GVHD.

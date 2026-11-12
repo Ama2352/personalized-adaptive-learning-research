@@ -588,7 +588,757 @@ Q 755.002781 155.801251 765.553335 173.706612
   </clipPath>
  </defs>
 </svg>
-<figcaption>Đường cong A0 trên tập selection cho thấy sai số dự báo giảm tới epoch 5 rồi tăng ở ba epoch tiếp theo. Vì mục tiêu chọn checkpoint là Log Loss, pipeline giữ epoch 5 và dừng sau ba epoch không cải thiện đủ. AUC giúp theo dõi khả năng phân biệt câu đúng và sai. Các số liệu này mô tả quá trình chọn mô hình trên sáu học viên selection. Bước đánh giá độc lập và so sánh với các bản đồ thị vẫn còn cần thực hiện.</figcaption></figure><h2>Đến ngày 10/11, nghiên cứu đã đi đến đâu?</h2><div class="measure"><p><strong>Tích hợp AKT vào mô phỏng.</strong> Đã nối thêm checkpoint nghiên cứu của AKT không đồ thị vào luồng dự báo tuần tự. Lượt kiểm trên Colab đạt 22 ca, gồm 12 ca mới và 10 ca hồi quy. Trên dữ liệu giả nhỏ, sáu dự báo khớp bản nghiên cứu trong sai số đã đặt và việc nạp mô hình giữ nguyên luồng ngẫu nhiên của mô phỏng. Lượt đầu dùng fixture thu nhỏ sai cấu hình đã chốt nên bị chặn; đã sửa fixture và giữ log lỗi. Mốc này hoàn thiện một phần tích hợp AKT, còn mô hình cuối sau refit, hiệu chỉnh và kết quả vòng kín chính cần tiếp tục.</p></div><div class="measure"><p><strong>Hoàn tất kiểm phần mềm AKT trên CPU.</strong> Môi trường Linux cô lập đã được nghiệm thu với 44 package đúng phiên bản và nguồn thư viện, giữ nguyên package hệ thống. Trên môi trường này, bộ kiểm đầy đủ đạt 1.993/1.993 ca, không lỗi, bỏ qua hoặc loại ca; ca kiểm cô lập trước đây phải tách riêng cũng đã đạt. Log, kết quả từng ca và hồ sơ nguồn đã tải về và kiểm độc lập. Đây là mốc hoàn tất kiểm phần mềm CPU trước training GPU. CUDA, phục hồi checkpoint trên GPU, tốc độ thực tế và các lượt huấn luyện nghiên cứu chính còn thiếu. Chưa có kết luận mới về ưu thế của CG-AKT.</p><p><strong>Bốn biến thể đã chạy CUDA.</strong> Đã kiểm trực tiếp cả bốn biến thể AKT trên GPU T4 miễn phí. AKT không đồ thị, đồ thị cố định, confidence và confidence kết hợp gate đều thực hiện được hai bước cập nhật trọng số trên 48 tương tác giả, rồi xuất sáu dự báo hợp lệ. Các backbone khởi tạo giống nhau, cấu hình mô hình giữ nguyên và không gặp lỗi số học. Mốc này xác nhận đường chạy CUDA của phần lõi. Việc lưu–phục hồi checkpoint trên GPU, đo tốc độ ở quy mô đại diện và training nghiên cứu chính còn thiếu; chưa có kết luận biến thể nào tốt hơn.</p></div><div class="finding"><p><strong>Đã xác định thêm một giới hạn của phép đo thành thạo.</strong> Khi quan sát đủ 28 khái niệm ở mọi bước, ba lịch sử cùng một khối làm lộ 215 công nhận đúng và 5 công nhận nhầm nằm ngoài câu đang hỏi. Chặng 17 giải thích vì sao nhật ký bài làm chưa phản ánh toàn bộ trạng thái và giới hạn của bằng chứng này.</p></div><div class="measure"><p><strong>Đã kiểm thêm độ bất định theo khối.</strong> Khoảng thăm dò ở mức 1150 nằm phía dương, nhưng so sánh trực tiếp với mức 1000 còn chưa phân biệt rõ với 0. Chặng 16 trình bày phép tính, cách đọc và giới hạn hậu nghiệm.</p></div><div class="finding"><p>Mốc cập nhật ngày 10/11, phép đối chứng nguồn đồ thị đã hoàn tất 120 ca trên mười khối mô phỏng mới. Kết quả cho thấy phần thay đổi do bật cơ chế phạt còn đổi dấu giữa các khối ở mức khởi tạo thấp và trung bình. Đối chứng năng lực cao tiếp tục tách được tác động ngoài riêng cơ chế phạt. Đây là bằng chứng chẩn đoán mới, chưa là kết luận mô hình nào tốt hơn một cách ổn định.</p></div>
+<figcaption>Đường cong A0 trên tập selection cho thấy sai số dự báo giảm tới epoch 5 rồi tăng ở ba epoch tiếp theo. Vì mục tiêu chọn checkpoint là Log Loss, pipeline giữ epoch 5 và dừng sau ba epoch không cải thiện đủ. AUC giúp theo dõi khả năng phân biệt câu đúng và sai. Các số liệu này mô tả quá trình chọn mô hình trên sáu học viên selection. Bước đánh giá độc lập và so sánh với các bản đồ thị vẫn còn cần thực hiện.</figcaption></figure><section id="akt-matrix-selected-20261112"><h2>Từ A0 đến CG-AKT trên cùng corpus mô phỏng</h2><p>Tiếp tục ngày 12/11 — đã có checkpoint được chọn cho cả bốn biến thể AKT trên mô phỏng. Sau baseline A0, nhóm đã huấn luyện lần lượt đồ thị cố định (A1), trọng số cạnh theo độ tin cậy (A2), và độ tin cậy kết hợp gate điều tiết ảnh hưởng đồ thị (A3). Mỗi bản đồ thị được chạy với nguồn chuyên gia và nguồn học từ dữ liệu train. Cả bảy điều kiện dùng cùng 48 học viên train, 6 học viên chọn epoch và cùng backbone khởi tạo. Sáu lượt mới đều hoàn tất trên GPU, qua nạp lại checkpoint tốt nhất và xuất đủ 1.260 dự báo mỗi điều kiện. Đã lưu tổng cộng 30 checkpoint của bảy lượt, cùng cấu hình, log và dự báo. Đây là mốc hoàn tất bước chọn checkpoint trên corpus mô phỏng, còn refit, hiệu chỉnh và đánh giá độc lập cần tiếp tục.</p><p>Để kiểm ảnh hưởng của từng cách dùng đồ thị lên dự báo, trước hết giữ chung người học và câu cần dự báo. Log Loss đo mức phù hợp của xác suất với đáp án và là tiêu chí chọn epoch. Brier bổ sung mức sai số của xác suất. Trên tập selection này, các sai khác rất nhỏ, với độ lệch Log Loss so với A0 lớn nhất khoảng 0,000186. Tập này đã được dùng chọn epoch, nên các con số mô tả quá trình phát triển mô hình. Chưa đủ cơ sở kết luận CG-AKT cải thiện dự báo độc lập hoặc kết quả học tập. Những lượt này có một seed, sáu học viên selection, và GPU T4/A10 tùy cấp phát.</p><table><thead><tr><th>Biến thể</th><th>Nguồn đồ thị</th><th>Epoch chọn</th><th>Log Loss selection</th><th>Brier selection</th></tr></thead><tbody><tr><td>A0</td><td>Tắt đồ thị</td><td>5</td><td>0.5993101</td><td>0.2064428</td></tr><tr><td>A1</td><td>Chuyên gia</td><td>5</td><td>0.5993439</td><td>0.2064606</td></tr><tr><td>A1</td><td>Học từ dữ liệu</td><td>4</td><td>0.5993931</td><td>0.2065655</td></tr><tr><td>A2</td><td>Chuyên gia</td><td>4</td><td>0.5993342</td><td>0.2065313</td></tr><tr><td>A2</td><td>Học từ dữ liệu</td><td>4</td><td>0.5993099</td><td>0.2065221</td></tr><tr><td>A3</td><td>Chuyên gia</td><td>4</td><td>0.5993952</td><td>0.2065627</td></tr><tr><td>A3</td><td>Học từ dữ liệu</td><td>4</td><td>0.5994965</td><td>0.2066019</td></tr></tbody></table><figure><svg role="img" aria-label="Sai khác selection của bốn biến thể AKT" style="width:100%;height:auto" xmlns:xlink="http://www.w3.org/1999/xlink" width="942.48pt" height="492.602578pt" viewBox="0 0 942.48 492.602578" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-12T09:37:11.408327</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="akt-matrix-figure_1">
+  <g id="akt-matrix-patch_1">
+   <path d="M 0 492.602578
+L 942.48 492.602578
+L 942.48 0
+L 0 0
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="akt-matrix-axes_1">
+   <g id="akt-matrix-patch_2">
+    <path d="M 140.76 382.32
+L 493.818296 382.32
+L 493.818296 120.24
+L 140.76 120.24
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="akt-matrix-matplotlib.axis_1">
+    <g id="akt-matrix-xtick_1">
+     <g id="akt-matrix-line2d_1">
+      <defs>
+       <path id="akt-matrix-ma28248e470" d="M 0 0
+L 0 3.5
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#akt-matrix-ma28248e470" x="176.331784" y="382.32" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_1">
+      <!-- $\mathdefault{0.0}$ -->
+      <g transform="translate(166.731784 398.437187)">
+       <text>
+        <tspan x="0" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">0</tspan>
+        <tspan x="7.634766" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">.</tspan>
+        <tspan x="11.449219" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-xtick_2">
+     <g id="akt-matrix-line2d_2">
+      <g>
+       <use xlink:href="#akt-matrix-ma28248e470" x="223.621005" y="382.32" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_2">
+      <!-- $\mathdefault{0.5}$ -->
+      <g transform="translate(214.021005 398.437187)">
+       <text>
+        <tspan x="0" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">0</tspan>
+        <tspan x="7.634766" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">.</tspan>
+        <tspan x="11.449219" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">5</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-xtick_3">
+     <g id="akt-matrix-line2d_3">
+      <g>
+       <use xlink:href="#akt-matrix-ma28248e470" x="270.910226" y="382.32" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_3">
+      <!-- $\mathdefault{1.0}$ -->
+      <g transform="translate(261.310226 398.437187)">
+       <text>
+        <tspan x="0" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">1</tspan>
+        <tspan x="7.634766" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">.</tspan>
+        <tspan x="11.449219" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-xtick_4">
+     <g id="akt-matrix-line2d_4">
+      <g>
+       <use xlink:href="#akt-matrix-ma28248e470" x="318.199446" y="382.32" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_4">
+      <!-- $\mathdefault{1.5}$ -->
+      <g transform="translate(308.599446 398.437187)">
+       <text>
+        <tspan x="0" y="-0.25" style="font-size: 12px; font-family: 'DejaVu Sans'">1</tspan>
+        <tspan x="7.634766" y="-0.25" style="font-size: 12px; font-family: 'DejaVu Sans'">.</tspan>
+        <tspan x="11.449219" y="-0.25" style="font-size: 12px; font-family: 'DejaVu Sans'">5</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-xtick_5">
+     <g id="akt-matrix-line2d_5">
+      <g>
+       <use xlink:href="#akt-matrix-ma28248e470" x="365.488667" y="382.32" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_5">
+      <!-- $\mathdefault{2.0}$ -->
+      <g transform="translate(355.888667 398.437187)">
+       <text>
+        <tspan x="0" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">2</tspan>
+        <tspan x="7.634766" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">.</tspan>
+        <tspan x="11.449219" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-xtick_6">
+     <g id="akt-matrix-line2d_6">
+      <g>
+       <use xlink:href="#akt-matrix-ma28248e470" x="412.777888" y="382.32" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_6">
+      <!-- $\mathdefault{2.5}$ -->
+      <g transform="translate(403.177888 398.437187)">
+       <text>
+        <tspan x="0" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">2</tspan>
+        <tspan x="7.634766" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">.</tspan>
+        <tspan x="11.449219" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">5</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-xtick_7">
+     <g id="akt-matrix-line2d_7">
+      <g>
+       <use xlink:href="#akt-matrix-ma28248e470" x="460.067109" y="382.32" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_7">
+      <!-- $\mathdefault{3.0}$ -->
+      <g transform="translate(450.467109 398.437187)">
+       <text>
+        <tspan x="0" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">3</tspan>
+        <tspan x="7.634766" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">.</tspan>
+        <tspan x="11.449219" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-text_8">
+     <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="317.289148" y="415.475" transform="rotate(-0 317.289148 415.475)">Chênh lệch so với A0 (thấp hơn là tốt hơn)</text>
+    </g>
+    <g id="akt-matrix-text_9">
+     <!-- $\times\mathdefault{10^{−4}}\mathdefault{}$ -->
+     <g transform="translate(455.658296 415.48)">
+      <text>
+       <tspan x="0" y="-0.919" style="font-size: 12px; font-family: 'DejaVu Sans'">×</tspan>
+       <tspan x="10.054688" y="-0.919" style="font-size: 12px; font-family: 'DejaVu Sans'">1</tspan>
+       <tspan x="17.689453" y="-0.919" style="font-size: 12px; font-family: 'DejaVu Sans'">0</tspan>
+       <tspan x="25.439062" y="-5.875" style="font-size: 8.4px; font-family: 'DejaVu Sans'">−</tspan>
+       <tspan x="32.477344" y="-5.875" style="font-size: 8.4px; font-family: 'DejaVu Sans'">4</tspan>
+      </text>
+     </g>
+    </g>
+   </g>
+   <g id="akt-matrix-matplotlib.axis_2">
+    <g id="akt-matrix-ytick_1">
+     <g id="akt-matrix-line2d_8">
+      <path d="M 140.76 132.152727
+L 493.818296 132.152727
+" clip-path="url(#akt-matrix-p22ff8ca7da)" style="fill: none; stroke: #eeeeee; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="akt-matrix-line2d_9">
+      <defs>
+       <path id="akt-matrix-m8baa87a2ed" d="M 0 0
+L -3.5 0
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#akt-matrix-m8baa87a2ed" x="140.76" y="132.152727" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_10">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end" x="133.76" y="136.711321" transform="rotate(-0 133.76 136.711321)">A0</text>
+     </g>
+    </g>
+    <g id="akt-matrix-ytick_2">
+     <g id="akt-matrix-line2d_10">
+      <path d="M 140.76 171.861818
+L 493.818296 171.861818
+" clip-path="url(#akt-matrix-p22ff8ca7da)" style="fill: none; stroke: #eeeeee; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="akt-matrix-line2d_11">
+      <g>
+       <use xlink:href="#akt-matrix-m8baa87a2ed" x="140.76" y="171.861818" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_11">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end" x="133.76" y="176.420412" transform="rotate(-0 133.76 176.420412)">A1 · expert</text>
+     </g>
+    </g>
+    <g id="akt-matrix-ytick_3">
+     <g id="akt-matrix-line2d_12">
+      <path d="M 140.76 211.570909
+L 493.818296 211.570909
+" clip-path="url(#akt-matrix-p22ff8ca7da)" style="fill: none; stroke: #eeeeee; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="akt-matrix-line2d_13">
+      <g>
+       <use xlink:href="#akt-matrix-m8baa87a2ed" x="140.76" y="211.570909" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_12">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end" x="133.76" y="216.129972" transform="rotate(-0 133.76 216.129972)">A1 · learned</text>
+     </g>
+    </g>
+    <g id="akt-matrix-ytick_4">
+     <g id="akt-matrix-line2d_14">
+      <path d="M 140.76 251.28
+L 493.818296 251.28
+" clip-path="url(#akt-matrix-p22ff8ca7da)" style="fill: none; stroke: #eeeeee; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="akt-matrix-line2d_15">
+      <g>
+       <use xlink:href="#akt-matrix-m8baa87a2ed" x="140.76" y="251.28" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_13">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end" x="133.76" y="255.838594" transform="rotate(-0 133.76 255.838594)">A2 · expert</text>
+     </g>
+    </g>
+    <g id="akt-matrix-ytick_5">
+     <g id="akt-matrix-line2d_16">
+      <path d="M 140.76 290.989091
+L 493.818296 290.989091
+" clip-path="url(#akt-matrix-p22ff8ca7da)" style="fill: none; stroke: #eeeeee; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="akt-matrix-line2d_17">
+      <g>
+       <use xlink:href="#akt-matrix-m8baa87a2ed" x="140.76" y="290.989091" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_14">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end" x="133.76" y="295.548153" transform="rotate(-0 133.76 295.548153)">A2 · learned</text>
+     </g>
+    </g>
+    <g id="akt-matrix-ytick_6">
+     <g id="akt-matrix-line2d_18">
+      <path d="M 140.76 330.698182
+L 493.818296 330.698182
+" clip-path="url(#akt-matrix-p22ff8ca7da)" style="fill: none; stroke: #eeeeee; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="akt-matrix-line2d_19">
+      <g>
+       <use xlink:href="#akt-matrix-m8baa87a2ed" x="140.76" y="330.698182" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_15">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end" x="133.76" y="335.256776" transform="rotate(-0 133.76 335.256776)">A3 · expert</text>
+     </g>
+    </g>
+    <g id="akt-matrix-ytick_7">
+     <g id="akt-matrix-line2d_20">
+      <path d="M 140.76 370.407273
+L 493.818296 370.407273
+" clip-path="url(#akt-matrix-p22ff8ca7da)" style="fill: none; stroke: #eeeeee; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="akt-matrix-line2d_21">
+      <g>
+       <use xlink:href="#akt-matrix-m8baa87a2ed" x="140.76" y="370.407273" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_16">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end" x="133.76" y="374.966335" transform="rotate(-0 133.76 374.966335)">A3 · learned</text>
+     </g>
+    </g>
+   </g>
+   <g id="akt-matrix-line2d_22">
+    <path d="M 176.331784 382.32
+L 176.331784 120.24
+" clip-path="url(#akt-matrix-p22ff8ca7da)" style="fill: none; stroke-dasharray: 3.7,1.6; stroke-dashoffset: 0; stroke: #767676"/>
+   </g>
+   <g id="akt-matrix-patch_3">
+    <path d="M 140.76 382.32
+L 140.76 120.24
+" style="fill: none; stroke: #000000; stroke-width: 1.3; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="akt-matrix-patch_4">
+    <path d="M 140.76 382.32
+L 493.818296 382.32
+" style="fill: none; stroke: #000000; stroke-width: 1.3; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="akt-matrix-PathCollection_1">
+    <defs>
+     <path id="akt-matrix-md9c9792a7d" d="M 0 3.807887
+C 1.009863 3.807887 1.978501 3.406664 2.692582 2.692582
+C 3.406664 1.978501 3.807887 1.009863 3.807887 0
+C 3.807887 -1.009863 3.406664 -1.978501 2.692582 -2.692582
+C 1.978501 -3.406664 1.009863 -3.807887 0 -3.807887
+C -1.009863 -3.807887 -1.978501 -3.406664 -2.692582 -2.692582
+C -3.406664 -1.978501 -3.807887 -1.009863 -3.807887 0
+C -3.807887 1.009863 -3.406664 1.978501 -2.692582 2.692582
+C -1.978501 3.406664 -1.009863 3.807887 0 3.807887
+z
+" style="stroke: #767676"/>
+    </defs>
+    <g clip-path="url(#akt-matrix-p22ff8ca7da)">
+     <use xlink:href="#akt-matrix-md9c9792a7d" x="176.331784" y="132.152727" style="fill: #767676; stroke: #767676"/>
+    </g>
+   </g>
+   <g id="akt-matrix-text_17">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #767676" x="184.331784" y="134.750384" transform="rotate(-0 184.331784 134.750384)">+0.0000000</text>
+   </g>
+   <g id="akt-matrix-PathCollection_2">
+    <defs>
+     <path id="akt-matrix-mb7f551b005" d="M 0 3.807887
+C 1.009863 3.807887 1.978501 3.406664 2.692582 2.692582
+C 3.406664 1.978501 3.807887 1.009863 3.807887 0
+C 3.807887 -1.009863 3.406664 -1.978501 2.692582 -2.692582
+C 1.978501 -3.406664 1.009863 -3.807887 0 -3.807887
+C -1.009863 -3.807887 -1.978501 -3.406664 -2.692582 -2.692582
+C -3.406664 -1.978501 -3.807887 -1.009863 -3.807887 0
+C -3.807887 1.009863 -3.406664 1.978501 -2.692582 2.692582
+C -1.978501 3.406664 -1.009863 3.807887 0 3.807887
+z
+" style="stroke: #42949e"/>
+    </defs>
+    <g clip-path="url(#akt-matrix-p22ff8ca7da)">
+     <use xlink:href="#akt-matrix-mb7f551b005" x="208.216782" y="171.861818" style="fill: #42949e; stroke: #42949e"/>
+    </g>
+   </g>
+   <g id="akt-matrix-text_18">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #42949e" x="216.216782" y="174.459474" transform="rotate(-0 216.216782 174.459474)">+0.0000337</text>
+   </g>
+   <g id="akt-matrix-PathCollection_3">
+    <defs>
+     <path id="akt-matrix-m0499e0287b" d="M 0 5.385165
+L 5.385165 0
+L 0 -5.385165
+L -5.385165 0
+z
+" style="stroke: #42949e"/>
+    </defs>
+    <g clip-path="url(#akt-matrix-p22ff8ca7da)">
+     <use xlink:href="#akt-matrix-m0499e0287b" x="254.783499" y="211.570909" style="fill: #42949e; stroke: #42949e"/>
+    </g>
+   </g>
+   <g id="akt-matrix-text_19">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #42949e" x="262.783499" y="214.168565" transform="rotate(-0 262.783499 214.168565)">+0.0000829</text>
+   </g>
+   <g id="akt-matrix-PathCollection_4">
+    <defs>
+     <path id="akt-matrix-m8658f9ca22" d="M 0 3.807887
+C 1.009863 3.807887 1.978501 3.406664 2.692582 2.692582
+C 3.406664 1.978501 3.807887 1.009863 3.807887 0
+C 3.807887 -1.009863 3.406664 -1.978501 2.692582 -2.692582
+C 1.978501 -3.406664 1.009863 -3.807887 0 -3.807887
+C -1.009863 -3.807887 -1.978501 -3.406664 -2.692582 -2.692582
+C -3.406664 -1.978501 -3.807887 -1.009863 -3.807887 0
+C -3.807887 1.009863 -3.406664 1.978501 -2.692582 2.692582
+C -1.978501 3.406664 -1.009863 3.807887 0 3.807887
+z
+" style="stroke: #9a4d8e"/>
+    </defs>
+    <g clip-path="url(#akt-matrix-p22ff8ca7da)">
+     <use xlink:href="#akt-matrix-m8658f9ca22" x="199.111754" y="251.28" style="fill: #9a4d8e; stroke: #9a4d8e"/>
+    </g>
+   </g>
+   <g id="akt-matrix-text_20">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #9a4d8e" x="207.111754" y="253.877656" transform="rotate(-0 207.111754 253.877656)">+0.0000241</text>
+   </g>
+   <g id="akt-matrix-PathCollection_5">
+    <defs>
+     <path id="akt-matrix-m48b3251377" d="M 0 5.385165
+L 5.385165 0
+L 0 -5.385165
+L -5.385165 0
+z
+" style="stroke: #9a4d8e"/>
+    </defs>
+    <g clip-path="url(#akt-matrix-p22ff8ca7da)">
+     <use xlink:href="#akt-matrix-m48b3251377" x="176.06583" y="290.989091" style="fill: #9a4d8e; stroke: #9a4d8e"/>
+    </g>
+   </g>
+   <g id="akt-matrix-text_21">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #9a4d8e" x="184.06583" y="293.586747" transform="rotate(-0 184.06583 293.586747)">-0.0000003</text>
+   </g>
+   <g id="akt-matrix-PathCollection_6">
+    <defs>
+     <path id="akt-matrix-me3cb1c2b57" d="M 0 3.807887
+C 1.009863 3.807887 1.978501 3.406664 2.692582 2.692582
+C 3.406664 1.978501 3.807887 1.009863 3.807887 0
+C 3.807887 -1.009863 3.406664 -1.978501 2.692582 -2.692582
+C 1.978501 -3.406664 1.009863 -3.807887 0 -3.807887
+C -1.009863 -3.807887 -1.978501 -3.406664 -2.692582 -2.692582
+C -3.406664 -1.978501 -3.807887 -1.009863 -3.807887 0
+C -3.807887 1.009863 -3.406664 1.978501 -2.692582 2.692582
+C -1.978501 3.406664 -1.009863 3.807887 0 3.807887
+z
+" style="stroke: #0f4d92"/>
+    </defs>
+    <g clip-path="url(#akt-matrix-p22ff8ca7da)">
+     <use xlink:href="#akt-matrix-me3cb1c2b57" x="256.735659" y="330.698182" style="fill: #0f4d92; stroke: #0f4d92"/>
+    </g>
+   </g>
+   <g id="akt-matrix-text_22">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0f4d92" x="264.735659" y="333.295838" transform="rotate(-0 264.735659 333.295838)">+0.0000850</text>
+   </g>
+   <g id="akt-matrix-PathCollection_7">
+    <defs>
+     <path id="akt-matrix-m32631dc00e" d="M 0 5.385165
+L 5.385165 0
+L 0 -5.385165
+L -5.385165 0
+z
+" style="stroke: #0f4d92"/>
+    </defs>
+    <g clip-path="url(#akt-matrix-p22ff8ca7da)">
+     <use xlink:href="#akt-matrix-m32631dc00e" x="352.594978" y="370.407273" style="fill: #0f4d92; stroke: #0f4d92"/>
+    </g>
+   </g>
+   <g id="akt-matrix-text_23">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0f4d92" x="360.594978" y="373.004929" transform="rotate(-0 360.594978 373.004929)">+0.0001864</text>
+   </g>
+   <g id="akt-matrix-text_24">
+    <text style="font-size: 14.4px; font-family: 'DejaVu Sans'; text-anchor: middle" x="317.289148" y="114.24" transform="rotate(-0 317.289148 114.24)">Sai số dự báo theo Log Loss</text>
+   </g>
+  </g>
+  <g id="akt-matrix-axes_2">
+   <g id="akt-matrix-patch_5">
+    <path d="M 575.021704 382.32
+L 928.08 382.32
+L 928.08 120.24
+L 575.021704 120.24
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="akt-matrix-matplotlib.axis_3">
+    <g id="akt-matrix-xtick_8">
+     <g id="akt-matrix-line2d_23">
+      <g>
+       <use xlink:href="#akt-matrix-ma28248e470" x="610.327534" y="382.32" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_25">
+      <!-- $\mathdefault{0.0}$ -->
+      <g transform="translate(600.727534 398.437187)">
+       <text>
+        <tspan x="0" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">0</tspan>
+        <tspan x="7.634766" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">.</tspan>
+        <tspan x="11.449219" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-xtick_9">
+     <g id="akt-matrix-line2d_24">
+      <g>
+       <use xlink:href="#akt-matrix-ma28248e470" x="665.796811" y="382.32" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_26">
+      <!-- $\mathdefault{0.5}$ -->
+      <g transform="translate(656.196811 398.437187)">
+       <text>
+        <tspan x="0" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">0</tspan>
+        <tspan x="7.634766" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">.</tspan>
+        <tspan x="11.449219" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">5</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-xtick_10">
+     <g id="akt-matrix-line2d_25">
+      <g>
+       <use xlink:href="#akt-matrix-ma28248e470" x="721.266088" y="382.32" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_27">
+      <!-- $\mathdefault{1.0}$ -->
+      <g transform="translate(711.666088 398.437187)">
+       <text>
+        <tspan x="0" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">1</tspan>
+        <tspan x="7.634766" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">.</tspan>
+        <tspan x="11.449219" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-xtick_11">
+     <g id="akt-matrix-line2d_26">
+      <g>
+       <use xlink:href="#akt-matrix-ma28248e470" x="776.735366" y="382.32" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_28">
+      <!-- $\mathdefault{1.5}$ -->
+      <g transform="translate(767.135366 398.437187)">
+       <text>
+        <tspan x="0" y="-0.25" style="font-size: 12px; font-family: 'DejaVu Sans'">1</tspan>
+        <tspan x="7.634766" y="-0.25" style="font-size: 12px; font-family: 'DejaVu Sans'">.</tspan>
+        <tspan x="11.449219" y="-0.25" style="font-size: 12px; font-family: 'DejaVu Sans'">5</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-xtick_12">
+     <g id="akt-matrix-line2d_27">
+      <g>
+       <use xlink:href="#akt-matrix-ma28248e470" x="832.204643" y="382.32" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_29">
+      <!-- $\mathdefault{2.0}$ -->
+      <g transform="translate(822.604643 398.437187)">
+       <text>
+        <tspan x="0" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">2</tspan>
+        <tspan x="7.634766" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">.</tspan>
+        <tspan x="11.449219" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">0</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-xtick_13">
+     <g id="akt-matrix-line2d_28">
+      <g>
+       <use xlink:href="#akt-matrix-ma28248e470" x="887.67392" y="382.32" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="akt-matrix-text_30">
+      <!-- $\mathdefault{2.5}$ -->
+      <g transform="translate(878.07392 398.437187)">
+       <text>
+        <tspan x="0" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">2</tspan>
+        <tspan x="7.634766" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">.</tspan>
+        <tspan x="11.449219" y="-0.09375" style="font-size: 12px; font-family: 'DejaVu Sans'">5</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-text_31">
+     <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="751.550852" y="415.475" transform="rotate(-0 751.550852 415.475)">Chênh lệch so với A0 (thấp hơn là tốt hơn)</text>
+    </g>
+    <g id="akt-matrix-text_32">
+     <!-- $\times\mathdefault{10^{−4}}\mathdefault{}$ -->
+     <g transform="translate(889.92 415.48)">
+      <text>
+       <tspan x="0" y="-0.919" style="font-size: 12px; font-family: 'DejaVu Sans'">×</tspan>
+       <tspan x="10.054688" y="-0.919" style="font-size: 12px; font-family: 'DejaVu Sans'">1</tspan>
+       <tspan x="17.689453" y="-0.919" style="font-size: 12px; font-family: 'DejaVu Sans'">0</tspan>
+       <tspan x="25.439062" y="-5.875" style="font-size: 8.4px; font-family: 'DejaVu Sans'">−</tspan>
+       <tspan x="32.477344" y="-5.875" style="font-size: 8.4px; font-family: 'DejaVu Sans'">4</tspan>
+      </text>
+     </g>
+    </g>
+   </g>
+   <g id="akt-matrix-matplotlib.axis_4">
+    <g id="akt-matrix-ytick_8">
+     <g id="akt-matrix-line2d_29">
+      <path d="M 575.021704 132.152727
+L 928.08 132.152727
+" clip-path="url(#akt-matrix-p555ca1ae5e)" style="fill: none; stroke: #eeeeee; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="akt-matrix-line2d_30">
+      <g>
+       <use xlink:href="#akt-matrix-m8baa87a2ed" x="575.021704" y="132.152727" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-ytick_9">
+     <g id="akt-matrix-line2d_31">
+      <path d="M 575.021704 171.861818
+L 928.08 171.861818
+" clip-path="url(#akt-matrix-p555ca1ae5e)" style="fill: none; stroke: #eeeeee; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="akt-matrix-line2d_32">
+      <g>
+       <use xlink:href="#akt-matrix-m8baa87a2ed" x="575.021704" y="171.861818" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-ytick_10">
+     <g id="akt-matrix-line2d_33">
+      <path d="M 575.021704 211.570909
+L 928.08 211.570909
+" clip-path="url(#akt-matrix-p555ca1ae5e)" style="fill: none; stroke: #eeeeee; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="akt-matrix-line2d_34">
+      <g>
+       <use xlink:href="#akt-matrix-m8baa87a2ed" x="575.021704" y="211.570909" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-ytick_11">
+     <g id="akt-matrix-line2d_35">
+      <path d="M 575.021704 251.28
+L 928.08 251.28
+" clip-path="url(#akt-matrix-p555ca1ae5e)" style="fill: none; stroke: #eeeeee; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="akt-matrix-line2d_36">
+      <g>
+       <use xlink:href="#akt-matrix-m8baa87a2ed" x="575.021704" y="251.28" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-ytick_12">
+     <g id="akt-matrix-line2d_37">
+      <path d="M 575.021704 290.989091
+L 928.08 290.989091
+" clip-path="url(#akt-matrix-p555ca1ae5e)" style="fill: none; stroke: #eeeeee; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="akt-matrix-line2d_38">
+      <g>
+       <use xlink:href="#akt-matrix-m8baa87a2ed" x="575.021704" y="290.989091" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-ytick_13">
+     <g id="akt-matrix-line2d_39">
+      <path d="M 575.021704 330.698182
+L 928.08 330.698182
+" clip-path="url(#akt-matrix-p555ca1ae5e)" style="fill: none; stroke: #eeeeee; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="akt-matrix-line2d_40">
+      <g>
+       <use xlink:href="#akt-matrix-m8baa87a2ed" x="575.021704" y="330.698182" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+    </g>
+    <g id="akt-matrix-ytick_14">
+     <g id="akt-matrix-line2d_41">
+      <path d="M 575.021704 370.407273
+L 928.08 370.407273
+" clip-path="url(#akt-matrix-p555ca1ae5e)" style="fill: none; stroke: #eeeeee; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="akt-matrix-line2d_42">
+      <g>
+       <use xlink:href="#akt-matrix-m8baa87a2ed" x="575.021704" y="370.407273" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+    </g>
+   </g>
+   <g id="akt-matrix-line2d_43">
+    <path d="M 610.327534 382.32
+L 610.327534 120.24
+" clip-path="url(#akt-matrix-p555ca1ae5e)" style="fill: none; stroke-dasharray: 3.7,1.6; stroke-dashoffset: 0; stroke: #767676"/>
+   </g>
+   <g id="akt-matrix-patch_6">
+    <path d="M 575.021704 382.32
+L 575.021704 120.24
+" style="fill: none; stroke: #000000; stroke-width: 1.3; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="akt-matrix-patch_7">
+    <path d="M 575.021704 382.32
+L 928.08 382.32
+" style="fill: none; stroke: #000000; stroke-width: 1.3; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="akt-matrix-PathCollection_8">
+    <g clip-path="url(#akt-matrix-p555ca1ae5e)">
+     <use xlink:href="#akt-matrix-md9c9792a7d" x="610.327534" y="132.152727" style="fill: #767676; stroke: #767676"/>
+    </g>
+   </g>
+   <g id="akt-matrix-text_33">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #767676" x="618.327534" y="134.750384" transform="rotate(-0 618.327534 134.750384)">+0.0000000</text>
+   </g>
+   <g id="akt-matrix-PathCollection_9">
+    <g clip-path="url(#akt-matrix-p555ca1ae5e)">
+     <use xlink:href="#akt-matrix-mb7f551b005" x="630.128266" y="171.861818" style="fill: #42949e; stroke: #42949e"/>
+    </g>
+   </g>
+   <g id="akt-matrix-text_34">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #42949e" x="638.128266" y="174.459474" transform="rotate(-0 638.128266 174.459474)">+0.0000178</text>
+   </g>
+   <g id="akt-matrix-PathCollection_10">
+    <g clip-path="url(#akt-matrix-p555ca1ae5e)">
+     <use xlink:href="#akt-matrix-m0499e0287b" x="746.410092" y="211.570909" style="fill: #42949e; stroke: #42949e"/>
+    </g>
+   </g>
+   <g id="akt-matrix-text_35">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #42949e" x="754.410092" y="214.168565" transform="rotate(-0 754.410092 214.168565)">+0.0001227</text>
+   </g>
+   <g id="akt-matrix-PathCollection_11">
+    <g clip-path="url(#akt-matrix-p555ca1ae5e)">
+     <use xlink:href="#akt-matrix-m8658f9ca22" x="708.460262" y="251.28" style="fill: #9a4d8e; stroke: #9a4d8e"/>
+    </g>
+   </g>
+   <g id="akt-matrix-text_36">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #9a4d8e" x="716.460262" y="253.877656" transform="rotate(-0 716.460262 253.877656)">+0.0000885</text>
+   </g>
+   <g id="akt-matrix-PathCollection_12">
+    <g clip-path="url(#akt-matrix-p555ca1ae5e)">
+     <use xlink:href="#akt-matrix-m48b3251377" x="698.290956" y="290.989091" style="fill: #9a4d8e; stroke: #9a4d8e"/>
+    </g>
+   </g>
+   <g id="akt-matrix-text_37">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #9a4d8e" x="706.290956" y="293.586747" transform="rotate(-0 706.290956 293.586747)">+0.0000793</text>
+   </g>
+   <g id="akt-matrix-PathCollection_13">
+    <g clip-path="url(#akt-matrix-p555ca1ae5e)">
+     <use xlink:href="#akt-matrix-me3cb1c2b57" x="743.297143" y="330.698182" style="fill: #0f4d92; stroke: #0f4d92"/>
+    </g>
+   </g>
+   <g id="akt-matrix-text_38">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0f4d92" x="751.297143" y="333.295838" transform="rotate(-0 751.297143 333.295838)">+0.0001199</text>
+   </g>
+   <g id="akt-matrix-PathCollection_14">
+    <g clip-path="url(#akt-matrix-p555ca1ae5e)">
+     <use xlink:href="#akt-matrix-m32631dc00e" x="786.856682" y="370.407273" style="fill: #0f4d92; stroke: #0f4d92"/>
+    </g>
+   </g>
+   <g id="akt-matrix-text_39">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0f4d92" x="794.856682" y="373.004929" transform="rotate(-0 794.856682 373.004929)">+0.0001591</text>
+   </g>
+   <g id="akt-matrix-text_40">
+    <text style="font-size: 14.4px; font-family: 'DejaVu Sans'; text-anchor: middle" x="751.550852" y="114.24" transform="rotate(-0 751.550852 114.24)">Sai số xác suất theo Brier</text>
+   </g>
+  </g>
+  <g id="akt-matrix-text_41">
+   <text style="font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: start" x="14.4" y="27.997344" transform="rotate(-0 14.4 27.997344)">AKT A0–A3 — chênh lệch trên tập chọn epoch</text>
+  </g>
+  <g id="akt-matrix-text_42">
+   <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start" x="14.4" y="59.76" transform="rotate(-0 14.4 59.76)">Grade 10 · cùng 6 học viên selection và 1.260 target · cùng backbone khởi tạo · seed 42</text>
+  </g>
+  <g id="akt-matrix-text_43">
+   <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start" x="14.4" y="452.88" transform="rotate(-0 14.4 452.88)">Mỗi biến thể dùng checkpoint đã chọn bằng tập này. Chưa là đánh giá độc lập.</text>
+  </g>
+  <g id="akt-matrix-text_44">
+   <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start" x="14.4" y="475.56" transform="rotate(-0 14.4 475.56)">Cần refit, calibration và đối chứng đánh giá riêng trước khi kết luận về hiệu quả CG-AKT.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="akt-matrix-p22ff8ca7da">
+   <rect x="140.76" y="120.24" width="353.058296" height="262.08"/>
+  </clipPath>
+  <clipPath id="akt-matrix-p555ca1ae5e">
+   <rect x="575.021704" y="120.24" width="353.058296" height="262.08"/>
+  </clipPath>
+ </defs>
+</svg><figcaption>Chênh lệch so với A0 trên tập chọn epoch. Số liệu mô tả, chưa là kết quả đánh giá độc lập.</figcaption></figure><p>Junyi đang được chuẩn bị riêng. Metadata xác nhận có 198.084 học viên Development. Giữ outer fold4 với 39.616 học viên đánh giá, phần còn lại đã được chia thành 126.774 train, 15.847 chọn epoch và 15.847 calibration. Bảy kiểm local của bộ chia đạt, không sửa fold lịch sử và chưa đọc sự kiện để training trong bước này. Cần nối các role vào trainer, tạo vocabulary/graph phù hợp Junyi, nghiệm thu CUDA và đo chi phí trước lượt huấn luyện Junyi. Những checkpoint Grade 10 ở trên chưa là kết quả Junyi.</p><p>Tổng Modal tại lần đọc sau đợt ghi nhận khoảng 0,641 USD, tăng khoảng 0,470 USD so với trước sáu lượt đồ thị. Credits và allowance bù chi phí ghi nhận, net billed bằng0. API có thể cập nhật trễ. Các App của đợt đã dừng, checkpoint giữ bản local và bản trên Volume.</p></section><h2>Đến ngày 10/11, nghiên cứu đã đi đến đâu?</h2><div class="measure"><p><strong>Tích hợp AKT vào mô phỏng.</strong> Đã nối thêm checkpoint nghiên cứu của AKT không đồ thị vào luồng dự báo tuần tự. Lượt kiểm trên Colab đạt 22 ca, gồm 12 ca mới và 10 ca hồi quy. Trên dữ liệu giả nhỏ, sáu dự báo khớp bản nghiên cứu trong sai số đã đặt và việc nạp mô hình giữ nguyên luồng ngẫu nhiên của mô phỏng. Lượt đầu dùng fixture thu nhỏ sai cấu hình đã chốt nên bị chặn; đã sửa fixture và giữ log lỗi. Mốc này hoàn thiện một phần tích hợp AKT, còn mô hình cuối sau refit, hiệu chỉnh và kết quả vòng kín chính cần tiếp tục.</p></div><div class="measure"><p><strong>Hoàn tất kiểm phần mềm AKT trên CPU.</strong> Môi trường Linux cô lập đã được nghiệm thu với 44 package đúng phiên bản và nguồn thư viện, giữ nguyên package hệ thống. Trên môi trường này, bộ kiểm đầy đủ đạt 1.993/1.993 ca, không lỗi, bỏ qua hoặc loại ca; ca kiểm cô lập trước đây phải tách riêng cũng đã đạt. Log, kết quả từng ca và hồ sơ nguồn đã tải về và kiểm độc lập. Đây là mốc hoàn tất kiểm phần mềm CPU trước training GPU. CUDA, phục hồi checkpoint trên GPU, tốc độ thực tế và các lượt huấn luyện nghiên cứu chính còn thiếu. Chưa có kết luận mới về ưu thế của CG-AKT.</p><p><strong>Bốn biến thể đã chạy CUDA.</strong> Đã kiểm trực tiếp cả bốn biến thể AKT trên GPU T4 miễn phí. AKT không đồ thị, đồ thị cố định, confidence và confidence kết hợp gate đều thực hiện được hai bước cập nhật trọng số trên 48 tương tác giả, rồi xuất sáu dự báo hợp lệ. Các backbone khởi tạo giống nhau, cấu hình mô hình giữ nguyên và không gặp lỗi số học. Mốc này xác nhận đường chạy CUDA của phần lõi. Việc lưu–phục hồi checkpoint trên GPU, đo tốc độ ở quy mô đại diện và training nghiên cứu chính còn thiếu; chưa có kết luận biến thể nào tốt hơn.</p></div><div class="finding"><p><strong>Đã xác định thêm một giới hạn của phép đo thành thạo.</strong> Khi quan sát đủ 28 khái niệm ở mọi bước, ba lịch sử cùng một khối làm lộ 215 công nhận đúng và 5 công nhận nhầm nằm ngoài câu đang hỏi. Chặng 17 giải thích vì sao nhật ký bài làm chưa phản ánh toàn bộ trạng thái và giới hạn của bằng chứng này.</p></div><div class="measure"><p><strong>Đã kiểm thêm độ bất định theo khối.</strong> Khoảng thăm dò ở mức 1150 nằm phía dương, nhưng so sánh trực tiếp với mức 1000 còn chưa phân biệt rõ với 0. Chặng 16 trình bày phép tính, cách đọc và giới hạn hậu nghiệm.</p></div><div class="finding"><p>Mốc cập nhật ngày 10/11, phép đối chứng nguồn đồ thị đã hoàn tất 120 ca trên mười khối mô phỏng mới. Kết quả cho thấy phần thay đổi do bật cơ chế phạt còn đổi dấu giữa các khối ở mức khởi tạo thấp và trung bình. Đối chứng năng lực cao tiếp tục tách được tác động ngoài riêng cơ chế phạt. Đây là bằng chứng chẩn đoán mới, chưa là kết luận mô hình nào tốt hơn một cách ổn định.</p></div>
 <p class="measure"><strong>Đã giải thích vì sao hai đường đi khác nhau cùng dừng ở 172 lượt trong ví dụ Paper 1. Khi giữ cùng trạng thái ban đầu và cùng số ngẫu nhiên ở từng lần luyện của mỗi khái niệm, nếu cả hai nhánh đều hoàn tất, tổng lượt và trạng thái cuối bằng nhau dù thứ tự chương có thể khác. Sáu tình huống dựng tay đã kiểm cả điều kiện này và giới hạn khi dừng sớm hoặc chạm trần trạng thái.</strong></p>
 <div class="finding"><strong>Đã có bằng chứng chẩn đoán mới cho RQ1–RQ2; đã đo trực tiếp hai điều kiện xét thành thạo, kiểm lõi CG-AKT và chạy thành công quy trình chọn checkpoint AKT không đồ thị trên corpus nhỏ. Chưa RQ nào hoàn tất.</strong> Chưa có phép so sánh các mô hình đã huấn luyện đủ để kết luận CG-AKT cải thiện dự báo, chọn bài hoặc kết quả học.</div><p class="measure"><strong>Chẩn đoán thành thạo trước đó.</strong> Đã giải thích đủ 30 thời điểm hai cấu hình có nhãn thành thạo khác nhau nhưng cùng tập sẵn sàng ban đầu. Có 18 trường hợp ở khái niệm không có con trực tiếp và 12 trường hợp có con mang nhãn thành thạo, trong đó 4 trường hợp đồng thời thỏa ngoại lệ đủ số lần luyện. Phép kiểm đã được tính lại từ trạng thái gốc; phần đánh giá kiến thức thật và tác động lên học tập tiếp tục còn thiếu.</p>
 <p class="measure"><strong>Mốc mới cho RQ2. Đã mở rộng đối chứng sang đồ thị học từ dữ liệu. Cả 18 cặp đổi chuỗi bài. Ở nhóm năng lực cao có cơ chế thiếu tiên quyết bất hoạt, đổi nguồn đồ thị vẫn làm kết quả học khác nhau, còn bật mức phạt giữ nguyên lịch sử và trạng thái cuối. Điều này tách được một chênh lệch ngoài cơ chế phạt thiếu nền tảng; khả năng khái quát và thứ hạng đồ thị còn phải kiểm tiếp.</strong></p>

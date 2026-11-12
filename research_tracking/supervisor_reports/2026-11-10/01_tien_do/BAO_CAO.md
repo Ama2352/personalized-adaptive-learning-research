@@ -14,6 +14,26 @@
 
 [Figure diễn tiến chọn checkpoint A0](../../../runs/figures4papers-akt-20261112-01/revision02/akt-a0-checkpoint-selection.svg). Đường cong A0 trên tập selection cho thấy sai số dự báo giảm tới epoch 5 rồi tăng ở ba epoch tiếp theo. Vì mục tiêu chọn checkpoint là Log Loss, pipeline giữ epoch 5 và dừng sau ba epoch không cải thiện đủ. AUC giúp theo dõi khả năng phân biệt câu đúng và sai. Các số liệu này mô tả quá trình chọn mô hình trên sáu học viên selection. Bước đánh giá độc lập và so sánh với các bản đồ thị vẫn còn cần thực hiện.
 
+## Từ A0 đến CG-AKT trên cùng corpus mô phỏng
+
+Tiếp tục ngày 12/11 — đã có checkpoint được chọn cho cả bốn biến thể AKT trên mô phỏng. Sau baseline A0, nhóm đã huấn luyện lần lượt đồ thị cố định (A1), trọng số cạnh theo độ tin cậy (A2), và độ tin cậy kết hợp gate điều tiết ảnh hưởng đồ thị (A3). Mỗi bản đồ thị được chạy với nguồn chuyên gia và nguồn học từ dữ liệu train. Cả bảy điều kiện dùng cùng 48 học viên train, 6 học viên chọn epoch và cùng backbone khởi tạo. Sáu lượt mới đều hoàn tất trên GPU, qua nạp lại checkpoint tốt nhất và xuất đủ 1.260 dự báo mỗi điều kiện. Đã lưu tổng cộng 30 checkpoint của bảy lượt, cùng cấu hình, log và dự báo. Đây là mốc hoàn tất bước chọn checkpoint trên corpus mô phỏng, còn refit, hiệu chỉnh và đánh giá độc lập cần tiếp tục.
+
+Để kiểm ảnh hưởng của từng cách dùng đồ thị lên dự báo, trước hết giữ chung người học và câu cần dự báo. Log Loss đo mức phù hợp của xác suất với đáp án và là tiêu chí chọn epoch. Brier bổ sung mức sai số của xác suất. Trên tập selection này, các sai khác rất nhỏ, với độ lệch Log Loss so với A0 lớn nhất khoảng 0,000186. Tập này đã được dùng chọn epoch, nên các con số mô tả quá trình phát triển mô hình. Chưa đủ cơ sở kết luận CG-AKT cải thiện dự báo độc lập hoặc kết quả học tập. Những lượt này có một seed, sáu học viên selection, và GPU T4/A10 tùy cấp phát.
+
+| Biến thể | Nguồn đồ thị | Epoch chọn | Log Loss selection | Brier selection |
+|---|---|---:|---:|---:|
+| A0 | Tắt đồ thị | 5 | 0.5993101 | 0.2064428 |
+| A1 | Chuyên gia | 5 | 0.5993439 | 0.2064606 |
+| A1 | Học từ dữ liệu | 4 | 0.5993931 | 0.2065655 |
+| A2 | Chuyên gia | 4 | 0.5993342 | 0.2065313 |
+| A2 | Học từ dữ liệu | 4 | 0.5993099 | 0.2065221 |
+| A3 | Chuyên gia | 4 | 0.5993952 | 0.2065627 |
+| A3 | Học từ dữ liệu | 4 | 0.5994965 | 0.2066019 |
+
+Junyi đang được chuẩn bị riêng. Metadata xác nhận có 198.084 học viên Development. Giữ outer fold4 với 39.616 học viên đánh giá, phần còn lại đã được chia thành 126.774 train, 15.847 chọn epoch và 15.847 calibration. Bảy kiểm local của bộ chia đạt, không sửa fold lịch sử và chưa đọc sự kiện để training trong bước này. Cần nối các role vào trainer, tạo vocabulary/graph phù hợp Junyi, nghiệm thu CUDA và đo chi phí trước lượt huấn luyện Junyi. Những checkpoint Grade 10 ở trên chưa là kết quả Junyi.
+
+Tổng Modal tại lần đọc sau đợt ghi nhận khoảng 0,641 USD, tăng khoảng 0,470 USD so với trước sáu lượt đồ thị. Credits và allowance bù chi phí ghi nhận, net billed bằng0. API có thể cập nhật trễ. Các App của đợt đã dừng, checkpoint giữ bản local và bản trên Volume.
+
 ## Điểm xuất phát và tiến độ hiện tại
 
 Paper 1 được kế thừa theo bản PDF phát triển dùng để nộp, là nguồn chuẩn về thiết kế và kết quả, còn notebook trong repository là bản tiền kỳ. Theo PDF, tính liên tục của lộ trình chịu ảnh hưởng của cách chọn bài, trong khi đồ thị mở rộng chưa cải thiện ổn định mức thành thạo. Paper 2 quan sát cải thiện dự báo nhỏ ở một số nhóm mô phỏng nhưng chưa phát hiện lợi ích rõ ở kết quả học tập chính. Khóa luận đi tiếp từ khoảng trống này: vì sao đồ thị chưa giúp ổn định, khi nào nó có ích và liệu CG-AKT sử dụng độ tin cậy cạnh có cải thiện được không?

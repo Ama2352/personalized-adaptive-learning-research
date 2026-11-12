@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 12/11 — đủ A0–A3 selected GPU trên Grade10
+
+[Đợt sáu graph fits](../research_tracking/runs/modal-akt-graph-selected-20261112-01/README.md) đã nghiệm thu cả expert/learned, cùng A0 thành7selectedcheckpoints và30epochcheckpoints đã lưu. TổngModal≈0,641USD, Appđãdừng. CófigureSVG/PDF/PNG vàdữ liệu. Junyi80/10/10 metadata đãtạo/7tests đạt, producerCUDA vàGate mới còn thiếu.
+
 ## 12/11 — Main60 A0 đã training CUDA và kiểm kết quả
 
 AKT không đồ thị hoàn tất8epoch/best5/288updates và1260dự báo selection trên corpus60học viên Grade10. Đã tải năm checkpoint/archive124MB và kiểm độc lập. Chưa so sánh graph, refit/calibration hoặc Junyi. Bằng chứng `research_tracking/runs/modal-akt-recovery-20261112-01/main60-a0-verification.json`.

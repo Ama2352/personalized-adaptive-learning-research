@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "roadmap_version": "1.0",
-  "as_of": "2026-11-10",
+  "as_of": "2026-11-12",
   "execution_authorized": false,
   "approval_rule": "Không tự approve methodology, data execution, cloud spend, full CV, Holdout hoặc final selection",
   "tasks": [
@@ -261,11 +261,11 @@
       "authorization_requirements": "SAFE_PREPARATION; CLOUD_APPROVAL_FOR_RUN",
       "status": "PARTIALLY_VERIFIED",
       "blockers": [
-        "Actual A0 GPU selected lifecycle chưa nghiệm thu; throughput đại diện và allocation Main60/Junyi còn thiếu",
-        "Grant hiện hành tổng0,50USD cho pilot; không tự chuyển thành fullCV/Holdout hoặc allocation nghiên cứu lớn"
+        "Main60 selectedA0 vàsáu graphconditions đã nghiệm thu GPU. Junyi producerCUDA/80-10-10phaseviews vàthroughput đại diệnJunyi còn thiếu.",
+        "Grant thêm2,50USD cho sáu graphfits đã thực thi. Không tự mở fullCV/Holdout hoặc paidJunyi từ grant này."
       ],
       "execution_owner": "Codex",
-      "verification_evidence": "research_tracking/runs/modal-akt-recovery-20261112-01/{cpu04-verification.json,checkpoint12-verification.json,checkpoint12-durable-verification.json,storage-probe-result.json}",
+      "verification_evidence": "research_tracking/runs/modal-akt-graph-selected-20261112-01/{batch-summary.json,checkpoint-index.json};modal-akt-recovery-20261112-01/main60-a0-verification.json",
       "verification_scope": "Modal image44package và Gate1994; checkpoint CUDA cuối epoch A0/A3, copy bền vững Volumev2 và tải về đã đạt; full lifecycle nghiên cứu còn thiếu",
       "evidence": [
         "research_tracking/runs/akt-colab-integration-20261110-01/README.md"
@@ -299,9 +299,9 @@
       "elapsed_duration": "Theo milestone trong08, queue/review tách khỏi effort",
       "compute_cost_category": "local",
       "authorization_requirements": "ARCHITECTURE_APPROVAL_THEN_SAFE",
-      "status": "PARTIALLY_VERIFIED_GRAPH_CORE_IMPLEMENTED_MAIN_COMPARISONS_PENDING",
+      "status": "PARTIALLY_VERIFIED_A0_A3_MAIN60_SELECTED_GPU_COMPLETE",
       "blockers": [
-        "Lõi A0–A3 đã có và kiểm CPU/CUDA; các actual selected/refit/calibration và so sánh nghiên cứu trên Main60/Junyi còn thiếu"
+        "Đã có7selectedfits A0/A1/A2/A3 expert/learned. Refit/calibration, đánhgiá độc lập/closedloop, graphdisabled ablations vàJunyi còn thiếu."
       ],
       "execution_owner": "Codex",
       "previous_status_before_reconciliation_20261110": "PLANNED",
@@ -311,7 +311,8 @@
         "research_tracking/runs/akt-current-gate183-20261110-01/README.md"
       ],
       "reconciliation_scope_vi": "Đối chiếu tiến độ component, không coi metadata/core là main fit hoặc hoàn tất RQ. Giữ mục tiêu và acceptance gốc.",
-      "modal_checkpoint_evidence_20261112": "research_tracking/runs/modal-akt-recovery-20261112-01/checkpoint12-verification.json"
+      "modal_checkpoint_evidence_20261112": "research_tracking/runs/modal-akt-recovery-20261112-01/checkpoint12-verification.json",
+      "verification_evidence": "research_tracking/runs/modal-akt-graph-selected-20261112-01/batch-summary.json"
     },
     {
       "id": "T10",
@@ -6102,6 +6103,60 @@
       "authorization_requirements": "User autonomous safe local engineering, no new generated worlds.",
       "status": "COMPLETED_SCOPED_THREE_HISTORY_DIAGNOSIS",
       "blockers": []
+    },
+    {
+      "research_objective": "Benchmark AKT trên Junyi với ranh giới train/selection/calibration riêng",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "AKT Junyi",
+      "priority": "P0",
+      "owner": "Engineering agent",
+      "dependencies": [
+        "T09"
+      ],
+      "required_inputs": "Protocol21, frozen Development assignments, canonical Junyi",
+      "files_components": "src/knowledge_tracing/akt/;scripts/akt/;artifacts/akt/junyi-roles/",
+      "estimated_effort": "Một gói engineering có kiểm riêng",
+      "compute_cost_category": "local metadata/tests",
+      "authorization_requirements": "Safe local engineering. Paid run cần allocation riêng.",
+      "id": "AKTJ01",
+      "implementation_objective": "Tạo derivative learner-role80/10/10 giữ outerfold4 và assignments lịch sử",
+      "acceptance_criteria": "Disjoint/exhaustive, stablehash/rounding, khôngđọc events/Holdoutlabels, 7unit tests",
+      "verification_steps": "unittest7 vàCLI metadata actual",
+      "required_artifacts": "junyi-roles-manifest.json, roles.json, tests.log",
+      "status": "COMPLETED_METADATA_ONLY",
+      "blockers": [],
+      "verification_evidence": "research_tracking/runs/modal-akt-graph-selected-20261112-01/junyi-roles-manifest.json"
+    },
+    {
+      "research_objective": "Benchmark AKT trên Junyi với ranh giới train/selection/calibration riêng",
+      "rq": [
+        "RQ3"
+      ],
+      "workstream": "AKT Junyi",
+      "priority": "P0",
+      "owner": "Engineering agent",
+      "dependencies": [
+        "AKTJ01",
+        "T08"
+      ],
+      "required_inputs": "Protocol21, frozen Development assignments, canonical Junyi",
+      "files_components": "src/knowledge_tracing/akt/;scripts/akt/;artifacts/akt/junyi-roles/",
+      "estimated_effort": "Một gói engineering có kiểm riêng",
+      "compute_cost_category": "local metadata/tests",
+      "authorization_requirements": "Safe local engineering. Paid run cần allocation riêng.",
+      "id": "AKTJ02",
+      "implementation_objective": "Nối Junyi role phaseviews và typedCUDA selected producer A0–A3, tái dùng core/windowing/metrics, chuẩn bị benchmark bounded riêng",
+      "acceptance_criteria": "Khôngdùng legacy90/10cho research;train-onlyvocab/graph/confidence;matchedtargetkeys;causalmask;checkpoint/export/coverage hợp lệ;newGate đúngnguồn trướcGPU",
+      "verification_steps": "Synthetic reader/boundary tests, sourceGate, boundedJunyiGPUbenchmark sauallocation",
+      "required_artifacts": "phase-role audit, source/runtimeGate, config/auth, throughput/cost estimate",
+      "status": "NOT_STARTED_JUNYI_PRODUCER_WIRING",
+      "blockers": [
+        "Mainproducer hiện chỉGrade10",
+        "Selected80/refit90/calibration10 cầnphase-specificJunyiadmission",
+        "ChưađoJunyithroughput hoặc duyệt fullfit"
+      ]
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",
