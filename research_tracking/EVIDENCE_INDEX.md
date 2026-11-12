@@ -483,3 +483,8 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 ## 10/11 — source producer và dữ liệu main đã kiểm rõ phạm vi
 
 [Cold62](runs/neural-selected-producer-metadata62-20261110-01/README.md) gồm35SAKT/27GKT,0FES, khôngNN. GKT đã có selected producer source, còn nativepositive. SAKT sửa mandatorypackageinit sau lỗi trướcconstructor, không thay toán học. [Corpus60](runs/simulator-main60-data-preflight-20261110-01/README.md) đạt learnerdisjoint48/6/6 vàwindowcoverage10080/1260, chưa throughputGPU. [F041](runs/rq1-f041-native-panel-20261110-01/README.md) có3360readouts toàn28concept, một lịch sử thấp đềuTN và0positiveclass, chưa đánh giá được nhận diện thành thạo. Không đóngRQ hoặc dùng Modal.
+
+
+## 12/11 — AKT Junyi CUDA một epoch
+
+[Run vàcheckpoint index](runs/junyi-akt-cuda-engineering-20261112-01/README.md),2.037Gate tests,79Adamupdates vàfreshreload exact; cófigureSVG/PDF/PNG/CSV. Mức bằngchứng là kiểm kỹthuật thực trên Junyi, chưa benchmark chính.

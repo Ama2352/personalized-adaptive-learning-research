@@ -1,0 +1,66 @@
+✓ Initialized. View run at 
+https://modal.com/apps/honguyenminhsang2005/main/ap-0vBf0M8dhXhFtmq6E8rCaW
+✓ Created objects.
+Building image im-nym7X1Hi1xrEBfHW9giKzP
+Building image im-nym7X1Hi1xrEBfHW9giKzP
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Saving image...
+Image saved, took 1.32s
+Image saved, took 1.32s
+
+Built image im-nym7X1Hi1xrEBfHW9giKzP in 2.33s
+
+
+
+Built image im-nym7X1Hi1xrEBfHW9giKzP in 2.33s
+
+
+Building image im-ZVsCAUrxEJwmjowB6dpHe0
+Building image im-ZVsCAUrxEJwmjowB6dpHe0
+
+=> Step 0: FROM base
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+
+=> Step 1: COPY . /
+Saving image...
+Saving image...
+Image saved, took 719.80ms
+Image saved, took 719.80ms
+
+Built image im-ZVsCAUrxEJwmjowB6dpHe0 in 2.74s
+
+
+
+Built image im-ZVsCAUrxEJwmjowB6dpHe0 in 2.74s
+
+
+{"status": "FAILED", "gpu_requested": false, "main_training": false, "error_type": "FileNotFoundError", "error": "[Errno 2] No such file or directory: '/opt/kltn/artifacts/akt/runtime/modal-linux-cuda.lock.txt'", "elapsed_seconds": 0.079985749, "download_inventory_verified": true, "runtime": "vm", "archive_sha256": "320b901f5f58758045a7b58f87d14443264b31f8129867769b4eb03286de549f"}
+Stopping app - uncaught exception raised locally: AssertionError().
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-akt-cuda-engineering-20261112-01\cpu_controller.py", line 72, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-akt-cuda-engineering-20261112-01\cpu_controller.py", line 65, in main
+    assert result['status'] == 'MODAL_CPU_GATE_VERIFIED'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

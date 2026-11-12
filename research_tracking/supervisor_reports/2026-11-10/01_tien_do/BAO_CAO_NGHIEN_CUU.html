@@ -1519,6 +1519,474 @@ L 928.08 382.32
 
 <section id="chang-16"><div class="label">Chặng 16</div><h2>Kiểm độ bất định của xu hướng giữa các khối mô phỏng</h2><div class="measure"><p>Sau khi hoàn tất mười khối mới, câu hỏi tiếp theo là trung bình dương có còn đủ rõ khi xét sự biến động giữa các khối hay không. Nhóm dùng lại đúng dữ liệu của Chặng 15, lấy mẫu lại toàn bộ khối để giữ các điều kiện so sánh đi cùng nhau. Có 10.000 lần lấy mẫu lại, nhưng số khối độc lập vẫn là mười và không có lượt mô phỏng mới.</p><p>Ba so sánh được xét cùng nhau gồm phần thay đổi khi bật cơ chế phạt ở mức khởi tạo 1000, ở mức 1150, và hiệu của hai phần thay đổi trong cùng khối. So sánh thứ ba là bước cần thiết để hỏi tác động có khác giữa hai mức khởi tạo hay không. Việc một khoảng chứa 0 còn khoảng kia không chứa 0 tự nó chưa trả lời được câu hỏi này.</p></div><div class="table-scroll" tabindex="0"><table><caption>Phần thay đổi của chênh lệch đồ thị khi bật cơ chế phạt, đơn vị Elo của simulator</caption><thead><tr><th>So sánh</th><th>Trung bình</th><th>Khoảng thăm dò đã điều chỉnh</th></tr></thead><tbody><tr><th scope="row">Mức khởi tạo 1000</th><td>+0.004496</td><td>-0.024649 đến +0.035327</td></tr><tr><th scope="row">Mức khởi tạo 1150</th><td>+0.024530</td><td>+0.005767 đến +0.047248</td></tr><tr><th scope="row">Chênh lệch 1150 trừ 1000 trong cùng khối</th><td>+0.020034</td><td>-0.021413 đến +0.058529</td></tr></tbody></table></div><div class="measure"><p>Ở mức 1000, khoảng thăm dò còn chứa cả giá trị âm và dương. Ở mức 1150, khoảng nằm phía dương trong phép phân tích này. Tuy nhiên, khoảng của chênh lệch giữa hai mức vẫn chứa 0. Vì vậy dữ liệu hiện có chưa phân biệt rõ tác động giữa hai mức khởi tạo, dù các trung bình khác nhau.</p><p>Phân tích được bổ sung sau khi đã xem kết quả nên giữ nhãn thăm dò. Các khoảng đã điều chỉnh cho ba so sánh, với mức danh nghĩa 98,33% cho từng khoảng và mức đồng thời danh nghĩa 95%. Đây là xấp xỉ bootstrap trên mười khối, không bảo đảm mức bao phủ chính xác. Lấy mẫu lại nhiều lần không khắc phục được số khối còn ít.</p><p>Đã lượng hóa thêm độ bất định và kiểm độc lập các phép tính. Phạm vi vẫn là một đồ thị học được cố định và các giả định của simulator. Đối chứng 1300 bằng 0 theo cơ chế tiếp tục được giữ riêng, không dùng làm bằng chứng thống kê về năng lực. Còn phải khảo sát đồ thị nhiễu, độ ổn định qua các nguồn đồ thị khác và các so sánh CG-AKT đã huấn luyện.</p></div></section>
 <section id="chang-17"><div class="label">Chặng 17</div><h2>Quan sát toàn bộ trạng thái để thấy điều nhật ký câu hỏi bỏ sót</h2><div class="measure"><p>Chặng 14 đã đặt ra giới hạn của việc chỉ đối chiếu khái niệm đang được giao bài. Một câu hỏi tiếp theo là mô hình có công nhận thành thạo ở những khái niệm không được hỏi lúc đó hay không, và các công nhận ấy có đúng với trạng thái thật của simulator hay không. Nếu thiếu phần quan sát này, nhật ký bài làm có thể che cả đánh giá đúng lẫn đánh giá sai của hệ thống.</p><p>Nhóm giữ cùng một cấu hình GAM kế thừa và đồ thị chuyên gia, tắt cơ chế phạt thiếu tiên quyết trong thế giới mô phỏng, rồi kiểm ba mức kiến thức nền 1000, 1150 và 1300 trong cùng một khối khởi tạo. Các lịch sử này khác quần thể của Chặng 14. Tại mỗi thời điểm trong 120 bước, nhóm ghi đủ 28 khái niệm từ các lần đọc trạng thái vốn có của bộ chọn bài. Lựa chọn, dự báo và trạng thái cuối phải khớp lịch sử gốc trước khi đối chiếu với trạng thái thật được dựng lại từ trạng thái khởi tạo và các cập nhật đã lưu.</p><p>Mỗi mức có 3360 lần đo khái niệm–thời điểm, trong đó 120 lần thuộc khái niệm đang được hỏi và 3240 lần thuộc các khái niệm còn lại. Ba lịch sử cùng thuộc một khối ngẫu nhiên. Số lần đo lặp không được xem là số người học hoặc số khối độc lập. Bảng dưới đối chiếu quyết định thành thạo với tiêu chí trạng thái ẩn ở ngưỡng 1250 của simulator.</p></div><div class="table-scroll" tabindex="0"><table><caption>Toàn bộ 28 khái niệm tại 120 thời điểm, 3360 lần đo mỗi mức</caption><thead><tr><th>Mức nền</th><th>Trạng thái thật đạt ngưỡng</th><th>Mô hình công nhận</th><th>Công nhận tại câu đang hỏi</th></tr></thead><tbody><tr><th scope="row">1000</th><td>0</td><td>0</td><td>0</td></tr><tr><th scope="row">1150</th><td>1</td><td>5</td><td>0</td></tr><tr><th scope="row">1300</th><td>3023</td><td>215</td><td>0</td></tr></tbody></table></div><div class="measure"><p>Ở mức 1300, mô hình công nhận đúng 215 lần đo trạng thái, toàn bộ ở các khái niệm không được hỏi lúc đó. Nhật ký chỉ gồm khái niệm đang được giao bài sẽ không cho thấy những công nhận đúng này. Ở mức 1150, năm lần công nhận thành thạo đều là công nhận nhầm và cũng nằm ngoài khái niệm đang được hỏi. Chỉ nhìn 120 lần hỏi của mức này sẽ thấy toàn trường hợp chưa đạt được đánh giá chưa đạt, nhưng bỏ sót cả năm công nhận nhầm trong trạng thái còn lại.</p></div><div class="table-scroll" tabindex="0"><table><caption>Các công nhận nằm ngoài khái niệm đang được hỏi tại cùng thời điểm</caption><thead><tr><th>Mức nền</th><th>Công nhận đúng ngoài câu đang hỏi</th><th>Công nhận nhầm ngoài câu đang hỏi</th></tr></thead><tbody><tr><th scope="row">1000</th><td>0</td><td>0</td></tr><tr><th scope="row">1150</th><td>0</td><td>5</td></tr><tr><th scope="row">1300</th><td>215</td><td>0</td></tr></tbody></table></div><div class="measure"><p>Phát hiện mới là phạm vi quan sát làm thay đổi điều có thể kết luận về mô hình. Không thể từ việc chưa thấy công nhận thành thạo ở câu được giao suy ra mô hình chưa công nhận bất kỳ khái niệm nào. Đồng thời, một bảng chỉ có các trường hợp chưa đạt cũng chưa kiểm được khả năng nhận diện trạng thái đã đạt. Kết quả phù hợp với quy tắc ưu tiên các khái niệm chưa được mô hình công nhận trong bộ chọn bài, nhưng chưa định lượng tác động của quy tắc đó lên kết quả học.</p><p>Nhóm còn kiểm được điều kiện bất định ở những thời điểm điểm kiến thức ước lượng đã đạt ngưỡng. Có 220 cơ hội như vậy trong cả ba lịch sử, nhưng điều kiện bất định không chặn công nhận thành thạo lần nào. Đây là quan sát có điều kiện trong cửa sổ 120 bước của cấu hình đang kiểm. Chưa thể suy điều kiện bất định luôn dư thừa ở mọi hồ sơ hoặc thời gian học.</p><p>Mô hình bắt đầu với điểm ước lượng 1200, còn trạng thái nền của simulator được thay giữa ba mức. Vì vậy, khởi tạo và độ dài lịch sử phải được đọc cùng các chênh lệch thành thạo. Phép kiểm mới tạo được phản ví dụ rõ về giới hạn của nhật ký câu hỏi và nối RQ1 với điều kiện người học trong RQ2. Nó chưa là so sánh đồ thị, bằng chứng CG-AKT cải thiện hoặc kết luận trên người học thật. Phần tiếp theo cần kiểm nhiều khối độc lập và nối các chẩn đoán với so sánh mô hình đã huấn luyện.</p></div></section>
+<section id="junyi-epoch-20261112"><h2>Chuyển AKT sang Junyi và kiểm toàn bộ một epoch</h2><div class="measure"><p>Sau các lượt chọn checkpoint trên mô phỏng, bước tiếp theo là kiểm AKT trên dữ liệu Junyi thực. Junyi có tên bài, độ dài lịch sử và các bài chưa gặp khi train riêng. Vì vậy, nhóm tạo vocabulary từ đúng người học train và kiểm lại từ bước tạo chuỗi đến lưu checkpoint, nạp lại rồi xuất dự đoán.</p><p>Đã hoàn tất một epoch trên NVIDIA A10 với 256 người học train, 11.833 tương tác và 79 lần cập nhật trọng số. Có 32 người học selection riêng, gồm 1.530 tương tác. Khi nạp checkpoint vào mô hình mới, toàn bộ dự đoán khớp chính xác. Bản checkpoint lưu trên Modal đã được đọc lại sau khi dừng GPU và đối chiếu với bản tải về. Bộ kiểm Linux trước lượt này đạt đủ 2.037 ca.</p></div><figure><div class="svg-frame"><svg role="img" aria-label="AKT Junyi hoàn tất một epoch và giữ đủ target selection" xmlns:xlink="http://www.w3.org/1999/xlink" width="842.756562pt" height="316.652344pt" viewBox="0 0 842.756562 316.652344" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-12T11:09:33.844990</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="junyi20261112_figure_1">
+  <g id="junyi20261112_patch_1">
+   <path d="M 0 316.652344
+L 842.756562 316.652344
+L 842.756562 0
+L 0 0
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="junyi20261112_axes_1">
+   <g id="junyi20261112_patch_2">
+    <path d="M 57.956563 250.026
+L 435.956562 250.026
+L 435.956562 25.386
+L 57.956563 25.386
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="junyi20261112_matplotlib.axis_1">
+    <g id="junyi20261112_xtick_1">
+     <g id="junyi20261112_line2d_1">
+      <defs>
+       <path id="junyi20261112_m21969dbabe" d="M 0 0
+L 0 3.5
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#junyi20261112_m21969dbabe" x="101.571947" y="250.026" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_1">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="101.571947" y="266.143187" transform="rotate(-0 101.571947 266.143187)">10</text>
+     </g>
+    </g>
+    <g id="junyi20261112_xtick_2">
+     <g id="junyi20261112_line2d_2">
+      <g>
+       <use xlink:href="#junyi20261112_m21969dbabe" x="150.033486" y="250.026" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_2">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="150.033486" y="266.143187" transform="rotate(-0 150.033486 266.143187)">20</text>
+     </g>
+    </g>
+    <g id="junyi20261112_xtick_3">
+     <g id="junyi20261112_line2d_3">
+      <g>
+       <use xlink:href="#junyi20261112_m21969dbabe" x="198.495024" y="250.026" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_3">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="198.495024" y="266.143187" transform="rotate(-0 198.495024 266.143187)">30</text>
+     </g>
+    </g>
+    <g id="junyi20261112_xtick_4">
+     <g id="junyi20261112_line2d_4">
+      <g>
+       <use xlink:href="#junyi20261112_m21969dbabe" x="246.956562" y="250.026" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_4">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="246.956562" y="266.143187" transform="rotate(-0 246.956562 266.143187)">40</text>
+     </g>
+    </g>
+    <g id="junyi20261112_xtick_5">
+     <g id="junyi20261112_line2d_5">
+      <g>
+       <use xlink:href="#junyi20261112_m21969dbabe" x="295.418101" y="250.026" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_5">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="295.418101" y="266.143187" transform="rotate(-0 295.418101 266.143187)">50</text>
+     </g>
+    </g>
+    <g id="junyi20261112_xtick_6">
+     <g id="junyi20261112_line2d_6">
+      <g>
+       <use xlink:href="#junyi20261112_m21969dbabe" x="343.879639" y="250.026" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_6">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="343.879639" y="266.143187" transform="rotate(-0 343.879639 266.143187)">60</text>
+     </g>
+    </g>
+    <g id="junyi20261112_xtick_7">
+     <g id="junyi20261112_line2d_7">
+      <g>
+       <use xlink:href="#junyi20261112_m21969dbabe" x="392.341178" y="250.026" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_7">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="392.341178" y="266.143187" transform="rotate(-0 392.341178 266.143187)">70</text>
+     </g>
+    </g>
+    <g id="junyi20261112_text_8">
+     <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="246.956562" y="283.186625" transform="rotate(-0 246.956562 283.186625)">Lần cập nhật trọng số</text>
+    </g>
+   </g>
+   <g id="junyi20261112_matplotlib.axis_2">
+    <g id="junyi20261112_ytick_1">
+     <g id="junyi20261112_line2d_8">
+      <path d="M 57.956563 221.118017
+L 435.956562 221.118017
+" clip-path="url(#junyi20261112_p57117973aa)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="junyi20261112_line2d_9">
+      <defs>
+       <path id="junyi20261112_mbac6d730c7" d="M 0 0
+L -3.5 0
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#junyi20261112_mbac6d730c7" x="57.956563" y="221.118017" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_9">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end" x="50.956563" y="225.67661" transform="rotate(-0 50.956563 225.67661)">0.45</text>
+     </g>
+    </g>
+    <g id="junyi20261112_ytick_2">
+     <g id="junyi20261112_line2d_10">
+      <path d="M 57.956563 182.93196
+L 435.956562 182.93196
+" clip-path="url(#junyi20261112_p57117973aa)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="junyi20261112_line2d_11">
+      <g>
+       <use xlink:href="#junyi20261112_mbac6d730c7" x="57.956563" y="182.93196" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_10">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end" x="50.956563" y="187.490554" transform="rotate(-0 50.956563 187.490554)">0.50</text>
+     </g>
+    </g>
+    <g id="junyi20261112_ytick_3">
+     <g id="junyi20261112_line2d_12">
+      <path d="M 57.956563 144.745904
+L 435.956562 144.745904
+" clip-path="url(#junyi20261112_p57117973aa)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="junyi20261112_line2d_13">
+      <g>
+       <use xlink:href="#junyi20261112_mbac6d730c7" x="57.956563" y="144.745904" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_11">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end" x="50.956563" y="149.304497" transform="rotate(-0 50.956563 149.304497)">0.55</text>
+     </g>
+    </g>
+    <g id="junyi20261112_ytick_4">
+     <g id="junyi20261112_line2d_14">
+      <path d="M 57.956563 106.559847
+L 435.956562 106.559847
+" clip-path="url(#junyi20261112_p57117973aa)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="junyi20261112_line2d_15">
+      <g>
+       <use xlink:href="#junyi20261112_mbac6d730c7" x="57.956563" y="106.559847" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_12">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end" x="50.956563" y="111.118441" transform="rotate(-0 50.956563 111.118441)">0.60</text>
+     </g>
+    </g>
+    <g id="junyi20261112_ytick_5">
+     <g id="junyi20261112_line2d_16">
+      <path d="M 57.956563 68.373791
+L 435.956562 68.373791
+" clip-path="url(#junyi20261112_p57117973aa)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="junyi20261112_line2d_17">
+      <g>
+       <use xlink:href="#junyi20261112_mbac6d730c7" x="57.956563" y="68.373791" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_13">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end" x="50.956563" y="72.932384" transform="rotate(-0 50.956563 72.932384)">0.65</text>
+     </g>
+    </g>
+    <g id="junyi20261112_ytick_6">
+     <g id="junyi20261112_line2d_18">
+      <path d="M 57.956563 30.187734
+L 435.956562 30.187734
+" clip-path="url(#junyi20261112_p57117973aa)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="junyi20261112_line2d_19">
+      <g>
+       <use xlink:href="#junyi20261112_mbac6d730c7" x="57.956563" y="30.187734" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_14">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end" x="50.956563" y="34.746328" transform="rotate(-0 50.956563 34.746328)">0.70</text>
+     </g>
+    </g>
+    <g id="junyi20261112_text_15">
+     <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="17.355" y="137.706" transform="rotate(-90 17.355 137.706)">Sai số train trung bình tích lũy</text>
+    </g>
+   </g>
+   <g id="junyi20261112_line2d_20">
+    <path d="M 57.956563 35.596909
+L 62.802716 44.47467
+L 67.64887 44.492864
+L 72.495024 45.602419
+L 77.341178 49.195154
+L 82.187332 76.504243
+L 87.033486 89.463881
+L 91.879639 102.282323
+L 96.725793 106.160926
+L 101.571947 117.431086
+L 106.418101 123.136849
+L 111.264255 124.600392
+L 116.110409 130.033451
+L 120.956562 128.511364
+L 125.802716 134.183461
+L 130.64887 142.326096
+L 135.495024 150.884259
+L 140.341178 143.88276
+L 145.187332 152.000974
+L 150.033486 162.091237
+L 154.879639 161.989121
+L 159.725793 165.28078
+L 164.571947 185.36059
+L 169.418101 191.273362
+L 174.264255 193.10932
+L 179.110409 197.609919
+L 183.956562 207.318434
+L 188.802716 207.95989
+L 193.64887 200.376033
+L 198.495024 199.357109
+L 203.341178 202.284448
+L 208.187332 206.498699
+L 213.033486 208.884335
+L 217.879639 212.181587
+L 222.725793 206.842298
+L 227.571947 205.349288
+L 232.418101 206.383971
+L 237.264255 209.399685
+L 242.110409 211.168485
+L 246.956562 213.770959
+L 251.802716 212.898869
+L 256.64887 218.147495
+L 261.495024 221.206135
+L 266.341178 224.810483
+L 271.187332 224.501299
+L 276.033486 223.691699
+L 280.879639 222.35902
+L 285.725793 221.887546
+L 290.571947 220.38146
+L 295.418101 220.556881
+L 300.264255 219.428951
+L 305.110409 220.661116
+L 309.956562 218.818888
+L 314.802716 218.557122
+L 319.64887 219.696546
+L 324.495024 219.387666
+L 329.341178 219.782002
+L 334.187332 219.091186
+L 339.033486 219.866356
+L 343.879639 219.70861
+L 348.725793 219.68694
+L 353.571947 223.210403
+L 358.418101 223.78119
+L 363.264255 226.731431
+L 368.110409 226.647173
+L 372.956562 227.477588
+L 377.802716 230.093542
+L 382.64887 231.200479
+L 387.495024 231.184989
+L 392.341178 230.051063
+L 397.187332 233.551332
+L 402.033486 234.537678
+L 406.879639 234.531583
+L 411.725793 235.999736
+L 416.571947 234.957774
+L 421.418101 235.01541
+L 426.264255 237.189805
+L 431.110409 237.717798
+L 435.956562 239.815091
+" clip-path="url(#junyi20261112_p57117973aa)" style="fill: none; stroke: #0f4d92; stroke-width: 2; stroke-linecap: square"/>
+   </g>
+   <g id="junyi20261112_patch_3">
+    <path d="M 57.956563 250.026
+L 57.956563 25.386
+" style="fill: none; stroke: #000000; stroke-width: 1.3; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="junyi20261112_patch_4">
+    <path d="M 57.956563 250.026
+L 435.956562 250.026
+" style="fill: none; stroke: #000000; stroke-width: 1.3; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="junyi20261112_text_16">
+    <text style="font-size: 14.4px; font-family: 'DejaVu Sans'; text-anchor: middle" x="246.956562" y="19.386" transform="rotate(-0 246.956562 19.386)">Một epoch đã hoàn tất</text>
+   </g>
+  </g>
+  <g id="junyi20261112_axes_2">
+   <g id="junyi20261112_patch_5">
+    <path d="M 565.556563 250.026
+L 835.556563 250.026
+L 835.556563 25.386
+L 565.556563 25.386
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="junyi20261112_patch_6">
+    <path d="M 565.556563 35.596909
+L 788.703621 35.596909
+L 788.703621 101.829833
+L 565.556563 101.829833
+z
+" clip-path="url(#junyi20261112_p1bb6c7ee91)" style="fill: #42949e"/>
+   </g>
+   <g id="junyi20261112_patch_7">
+    <path d="M 565.556563 173.582167
+L 585.409504 173.582167
+L 585.409504 239.815091
+L 565.556563 239.815091
+z
+" clip-path="url(#junyi20261112_p1bb6c7ee91)" style="fill: #9a4d8e"/>
+   </g>
+   <g id="junyi20261112_matplotlib.axis_3">
+    <g id="junyi20261112_xtick_8">
+     <g id="junyi20261112_line2d_21">
+      <g>
+       <use xlink:href="#junyi20261112_m21969dbabe" x="565.556563" y="250.026" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_17">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="565.556563" y="266.143187" transform="rotate(-0 565.556563 266.143187)">0</text>
+     </g>
+    </g>
+    <g id="junyi20261112_xtick_9">
+     <g id="junyi20261112_line2d_22">
+      <g>
+       <use xlink:href="#junyi20261112_m21969dbabe" x="605.262445" y="250.026" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_18">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="605.262445" y="266.143187" transform="rotate(-0 605.262445 266.143187)">250</text>
+     </g>
+    </g>
+    <g id="junyi20261112_xtick_10">
+     <g id="junyi20261112_line2d_23">
+      <g>
+       <use xlink:href="#junyi20261112_m21969dbabe" x="644.968327" y="250.026" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_19">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="644.968327" y="266.143187" transform="rotate(-0 644.968327 266.143187)">500</text>
+     </g>
+    </g>
+    <g id="junyi20261112_xtick_11">
+     <g id="junyi20261112_line2d_24">
+      <g>
+       <use xlink:href="#junyi20261112_m21969dbabe" x="684.67421" y="250.026" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_20">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="684.67421" y="266.143187" transform="rotate(-0 684.67421 266.143187)">750</text>
+     </g>
+    </g>
+    <g id="junyi20261112_xtick_12">
+     <g id="junyi20261112_line2d_25">
+      <g>
+       <use xlink:href="#junyi20261112_m21969dbabe" x="724.380092" y="250.026" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_21">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="724.380092" y="266.143187" transform="rotate(-0 724.380092 266.143187)">1000</text>
+     </g>
+    </g>
+    <g id="junyi20261112_xtick_13">
+     <g id="junyi20261112_line2d_26">
+      <g>
+       <use xlink:href="#junyi20261112_m21969dbabe" x="764.085974" y="250.026" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_22">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="764.085974" y="266.143187" transform="rotate(-0 764.085974 266.143187)">1250</text>
+     </g>
+    </g>
+    <g id="junyi20261112_xtick_14">
+     <g id="junyi20261112_line2d_27">
+      <g>
+       <use xlink:href="#junyi20261112_m21969dbabe" x="803.791857" y="250.026" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_23">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="803.791857" y="266.143187" transform="rotate(-0 803.791857 266.143187)">1500</text>
+     </g>
+    </g>
+    <g id="junyi20261112_text_24">
+     <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="700.556563" y="283.181" transform="rotate(-0 700.556563 283.181)">Số tương tác</text>
+    </g>
+   </g>
+   <g id="junyi20261112_matplotlib.axis_4">
+    <g id="junyi20261112_ytick_7">
+     <g id="junyi20261112_line2d_28">
+      <g>
+       <use xlink:href="#junyi20261112_mbac6d730c7" x="565.556563" y="68.713371" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_25">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end" x="558.556563" y="73.512434" transform="rotate(-0 558.556563 73.512434)">Có dự đoán</text>
+     </g>
+    </g>
+    <g id="junyi20261112_ytick_8">
+     <g id="junyi20261112_line2d_29">
+      <g>
+       <use xlink:href="#junyi20261112_mbac6d730c7" x="565.556563" y="206.698629" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="junyi20261112_text_26">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end" x="558.556563" y="211.497691" transform="rotate(-0 558.556563 211.497691)">Ngoài vocabulary</text>
+     </g>
+    </g>
+   </g>
+   <g id="junyi20261112_patch_8">
+    <path d="M 565.556563 250.026
+L 565.556563 25.386
+" style="fill: none; stroke: #000000; stroke-width: 1.3; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="junyi20261112_patch_9">
+    <path d="M 565.556563 250.026
+L 835.556563 250.026
+" style="fill: none; stroke: #000000; stroke-width: 1.3; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="junyi20261112_text_27">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start" x="795.056563" y="71.830559" transform="rotate(-0 795.056563 71.830559)">1.405</text>
+   </g>
+   <g id="junyi20261112_text_28">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start" x="591.762445" y="209.815816" transform="rotate(-0 591.762445 209.815816)">125</text>
+   </g>
+   <g id="junyi20261112_text_29">
+    <text style="font-size: 14.4px; font-family: 'DejaVu Sans'; text-anchor: middle" x="700.556563" y="19.386" transform="rotate(-0 700.556563 19.386)">Giữ đủ 1.530 target selection</text>
+   </g>
+  </g>
+  <g id="junyi20261112_text_30">
+   <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="57.956563" y="307.05" transform="rotate(-0 57.956563 307.05)">Cohort kỹ thuật 256 train / 32 selection. Chưa chọn epoch hoặc đánh giá độc lập.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="junyi20261112_p57117973aa">
+   <rect x="57.956563" y="25.386" width="378" height="224.64"/>
+  </clipPath>
+  <clipPath id="junyi20261112_p1bb6c7ee91">
+   <rect x="565.556563" y="25.386" width="270" height="224.64"/>
+  </clipPath>
+ </defs>
+</svg>
+</div><figcaption>Diễn tiến của lượt kiểm Junyi. Đường bên trái là sai số train tích lũy trong cùng epoch. Bên phải cho thấy toàn bộ target selection đã được giữ, kể cả 125 bài ngoài vocabulary train. Dữ liệu dựng hình lấy trực tiếp từ log cập nhật và bảng dự đoán đã đối chiếu với cohort.</figcaption></figure><div class="measure"><p>Trên 1.405 tương tác có dự đoán, Log Loss là 0,4031, Brier là 0,1214 và AUC là 0,7160. Các số này kiểm tra kết quả xuất từ pipeline trên nhóm nhỏ. So sánh với BKT và GAM-KT sẽ dùng cùng learner, target và quy tắc coverage của benchmark chính.</p><p><strong>Phần còn thiếu.</strong> Lượt này dùng nhóm chọn theo ID, mỗi người tối đa 300 tương tác và chỉ chạy một epoch. Chưa lựa epoch chính, refit, hiệu chỉnh xác suất hoặc đánh giá độc lập. Các phiên bản AKT có đồ thị trên Junyi cần nối đồ thị và độ tin cậy học từ train riêng. Tập train chính có 13.347.331 tương tác và selection có 1.600.343 tương tác. Dự toán tiếp theo phải tính cả chuỗi dài, tạo dữ liệu, validation và lưu checkpoint.</p></div></section>
 <section id="nguon"><h2>Tài liệu nền và giới hạn kế thừa</h2><div class="measure"><ol class="sources"><li>Phạm Triều Dương, Hồ Nguyễn Minh Sang. <em>Đề cương KLTN: Nghiên cứu và phát triển hệ thống học tập thích ứng cá nhân hóa dựa trên mô hình hóa tri thức và tối ưu hóa lộ trình</em> (2026), tr. 1–4.</li>
 <li>Phạm Triều Dương, Hồ Nguyễn Minh Sang, Lê Văn Tuấn. <em>Separating Graph and Policy Effects in Adaptive Mathematics Sequencing: A Simulation Study</em>. Bản nộp RIVF 2026, tr. 1 và 4–5.</li>
 <li>Phạm Triều Dương, Hồ Nguyễn Minh Sang, Lê Văn Tuấn. <em>Auditing Prerequisite Context in Online Knowledge Tracing: Shared-Stream Prediction, Development Gating, and Closed-Loop Simulation</em>. Bản nộp RIVF 2026, tr. 1 và 3–6.</li><li><strong>Nghiên cứu bổ sung ngày 09/11:</strong> phát lại đủ hai cấu hình trên chín lịch sử Paper 2, ghi trạng thái trước đáp án hiện tại; đối chiếu đầy đủ 2.160 thời điểm và kiểm độc lập phép đếm trên 18 trace hoàn chỉnh. Dữ liệu này giải thích quy tắc nội bộ, chưa đánh giá độ đúng của mastery hoặc kết quả học tập.</li></ol>

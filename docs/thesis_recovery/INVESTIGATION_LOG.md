@@ -1156,3 +1156,8 @@ Audit ngày12/11 — đã đối chiếu lại cấu hình và dữ liệu của
 Đã xác định các đầu ra cần bổ sung trước benchmark kết luận. Raw probabilities/nhãn hiện có đủ để tái tính các chỉ số dự báo vàdựng biểu đồ calibration. Để giải thích gate vàhiệu quả lộ trình cần thêm inference logs vềmức ảnh hưởnggraph, quyết định thành thạo, tập sẵn sàng, bài được chọn vàlatentlearning trong mô phỏng. Các kiểm tra này phục vụ ba bẫy đánhgiá củaRQ1/RQ2vàphương phápCG-AKT củaRQ3. Những kết quả trênselection hiện tại tiếp tục mang nhãn development.
 
 Đối chiếu đềcương chuẩn trang3–4 vàfeedback GVHD người dùng gửi lại. SourceJunyi sửa kiểm rawtypes trướcnormalization. Rolemanifest cũ không đổiidentity. Bước tiếp làJunyiphaseviews/producer vàbenchmark bounded, không thêm hướng bài báo.
+
+
+## 12/11 — nối Junyi và nghiệm thu một epoch CUDA
+
+Phase/cache52tests/81subtests, producer local14tests, Gate Linux2.037ca đạt. CPU lỗi thiếu thưmục runtime vàGPU lỗi đườngdẫn import đã sửa, giữ toànbộ log. A10 hoàn tất79updates/11.833targets; xuất1.530selection/125OOV, nạp lại checkpoint exact vàđọc lại3file từVolume. Đãcập nhật reportpair vàlưuSVG/PDF/PNG/CSV. Nội suy từpilot chưa đảm bảo30USD đủ toànmatrixJunyi. Tiếp theo selected/refit/calibration vàtypedJunyi graph/confidence, benchmark đại diện trướcfull allocation.

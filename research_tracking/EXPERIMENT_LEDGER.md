@@ -229,3 +229,8 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 - **CPU09 fullcached native mastery,09/11**, [bundle](runs/rq1-cpu09-native-mastery-20261109-01/README.md). Lượt allocation300s dừng sớm9,8049276s sau finalwrite vì freeRAM2104508416B dưới floor2147483648B. Native REJECTED, cleanup đạt, không retry. Đóng30outputs cùng nguồn và raw logs, chưa có kết quả nghiên cứu mới.
 
 - **CPU09 fullcached02,09/11**, [bundle28outputs](runs/rq1-cpu09-native-mastery-20261109-02/README.md). REJECTED sau3,1203712s, resource monitor sạch vàJob0. Giữ11raw files cùng source/postcheck; chưa retry hoặc kết luận mastery/graph.
+
+
+## 12/11 — Junyi A0 một epoch GPU
+
+NVIDIA A10,256train/32selection,11.833targets/79updates,1.530selection/1.405supported/125OOV. Checkpoint freshreload exact,3durablefiles kiểm lại. Engineering cohort300events/user, chưa epochselection/refit/calibration/outerevaluation. [Bundle](runs/junyi-akt-cuda-engineering-20261112-01/README.md). Hai lỗi trước training và cách sửa giữ nguyên.
