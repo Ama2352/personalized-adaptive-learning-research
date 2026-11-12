@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 12/11 — khép các phát hiện cốt lõi RQ1–RQ2
+
+[Bản trình bày kết quả](RQ12_CORE_FINDINGS_20261112.md) nối bối cảnh hai paper với năm phát hiện và giới hạn, kèm kiểm8aggregate. [Ma trận còn thiếu](RQ12_CLOSURE_MATRIX_20261112.md) phân biệt claim đã đủ nguồn và phép đo còn phải chạy. [Đo batch T4](../runs/junyi-batch-throughput-20261112-01/README.md) đã nghiệm thu bốn trường hợp, main A0 giữ protocol hiện hành.
+
 ## 12/11 — mức bao phủ đề cương và tái hiện hai paper
 
 [Đối chiếu sáu mục tiêu cụ thể](PROPOSAL_COVERAGE_20261112.md) ghi rõ phần đã làm, bằng chứng còn thiếu và phạm vi tái hiện Paper1/Paper2. Cả sáu mục đã có công việc, chưa đóng nghiệm thu toàn phạm vi.

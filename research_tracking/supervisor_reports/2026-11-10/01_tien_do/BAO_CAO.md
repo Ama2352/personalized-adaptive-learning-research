@@ -6,6 +6,12 @@
 
 [Báo cáo chi tiết: diễn tiến nghiên cứu, số liệu và biểu đồ](BAO_CAO_NGHIEN_CUU.html).
 
+## Đợt tiếp tục12/11 — khép lập luận RQ1–RQ2 trong lúc huấn luyện AKT
+
+Đã hoàn thiện bản tổng hợp năm phát hiện từ artifact hiện có, đối chiếu lại tám JSON aggregate. Các phát hiện gồm điều kiện controller/retention, sự suy giảm thay đổi dự báo sang quyết định, ngoại lệ đủ số lần luyện, đối chứng nguồn đồ thị–cơ chế năng lực và giới hạn exposure của đối chứng Junyi. Đây là hoàn thiện lập luận và kiểm số liệu đã có. Các phép đo calibration/mastery, robustness và predictive order-controls còn mở. [Nội dung để đưa vào luận văn](../../../reports/RQ12_CORE_FINDINGS_20261112.md).
+
+Phép đo batch T4 đã nghiệm thu đủ4/8/16/32 trên cùng56.332target, checkpoint đều reload khớp. Thông lượng lần lượt khoảng7.328/13.649/17.025/18.769target mỗi giây. Khi bỏ batch đầu, speedup của batch16/32 khoảng2,11×/2,43× so batch4. Chưa đo số epoch để đạt chất lượng tương đương, nên dự toán toàn ma trận chưa giảm theo tỷ lệ này. Lượt A0 tiếp tục từ checkpoint epoch3 bước29 với source/split/batch4 giữ nguyên. [Bằng chứng và figure](../../../runs/junyi-batch-throughput-20261112-01/README.md).
+
 ## Mức đáp ứng đề cương đến hiện tại
 
 Đề cương có sáu mục tiêu cụ thể. Cả sáu đã có triển khai hoặc bằng chứng, chưa mục nào được nghiệm thu toàn phạm vi. RQ1/RQ2 đã có kết quả chẩn đoán về tác động dự báo tới lựa chọn, điều kiện controller, retention và đối chứng ability. RQ3 đã có bảy selected fits Grade10 và hai epoch A0 Junyi, còn so sánh độc lập và closed-loop của mô hình mới.

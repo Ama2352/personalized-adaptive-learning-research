@@ -1,0 +1,122 @@
+{
+  "status": "PASS_AGGREGATE_NUMERIC_RECONCILIATION",
+  "scope_vi": "Đối chiếu số trong JSON aggregate đã lưu, không chạy lại thí nghiệm hoặc xác nhận toàn bộ bundle.",
+  "execution": {
+    "stdlib_only": true,
+    "model_calls": 0,
+    "simulator_calls": 0,
+    "cloud_calls": 0,
+    "raw_junyi_or_holdout_reads": 0
+  },
+  "checks": {
+    "fixed_stream": {
+      "events": 1080,
+      "probability_changes": 964,
+      "mastery_changed_snapshots": 90,
+      "ready_changes": 60,
+      "preview_changes": 22,
+      "p_changed_preview_same": 944,
+      "score_changed_mastery_same": 990,
+      "score_changed_preview_same": 1058
+    },
+    "readiness": {
+      "served_events": 3240,
+      "roots": 500,
+      "with_parents": 2740,
+      "strict_with_parents": 699,
+      "exposure_exception": 2041
+    },
+    "retention": {
+      "days": 14,
+      "rate": 0.06,
+      "factor": 0.43171052342907973,
+      "fixture_absolute_error": 1.7053025658242404e-13
+    },
+    "reentry_fixtures": {
+      "accepted": true,
+      "tests": 4
+    },
+    "fresh120": {
+      "blocks": 10,
+      "worlds_by_design": 120,
+      "high_inactive_zero_blocks": 10,
+      "different_question_positions": 4936,
+      "paired_positions": 7200,
+      "K_by_initial_level": {
+        "1000": {
+          "mean": 0.004495940959900757,
+          "minimum": -0.0692500385952588,
+          "maximum": 0.0952944544395593,
+          "positive": 6,
+          "negative": 4,
+          "zero": 0
+        },
+        "1150": {
+          "mean": 0.024529647556337686,
+          "minimum": -0.004716493812258804,
+          "maximum": 0.07978984413502488,
+          "positive": 8,
+          "negative": 2,
+          "zero": 0
+        },
+        "1300": {
+          "mean": 0.0,
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "positive": 0,
+          "negative": 0,
+          "zero": 10
+        }
+      },
+      "ability_interaction_interval": [
+        -0.021413109431402642,
+        0.058528689525238126
+      ]
+    },
+    "junyi_order": {
+      "cohort_learners": 256,
+      "events": 12575,
+      "eligible": 239,
+      "opportunities": 1361,
+      "changed_prior_score_learners_by_seed": [
+        1,
+        7,
+        1
+      ]
+    }
+  },
+  "inputs": {
+    "research_tracking/runs/cpu-rq1-transitions-20261108-01/analysis.json": {
+      "sha256": "597d4ce320af4601665d206b7ffe1fe1250ebd96114893e87a53e70ff49d3d28",
+      "bytes": 199210
+    },
+    "research_tracking/runs/rq1-score-vector-20261108-01/analysis.json": {
+      "sha256": "48c952bccff1818d3814e6e4ecacb679dec78f04ae352dfe2dfa3224f13e7968",
+      "bytes": 28568
+    },
+    "research_tracking/runs/rq1-ready-set-exposure-20261108-01/summary.json": {
+      "sha256": "730b7b572213179a2d6db49190494569c478d753b057d5a147abf863de3e9846",
+      "bytes": 1123553
+    },
+    "research_tracking/runs/cpu-rq12-20261107-03/retention.json": {
+      "sha256": "bd952fb707f04712508aa50def877d21da9ff71b1b0a5e9c74b4692d10645b54",
+      "bytes": 704
+    },
+    "research_tracking/runs/paper1-reentry-mechanism-20261109-01/result.json": {
+      "sha256": "b59b4a1384ce8c97ebab03e0e27935788e11f8ba475cb63d6cafeda82c88deab",
+      "bytes": 1335
+    },
+    "research_tracking/runs/rq2-fresh-graph-source-analysis-20261110-01/descriptive_statistics.json": {
+      "sha256": "b991dad8e41fd8f65dd5e8df860dc66666c54a609cebd107d012c247f68e41e7",
+      "bytes": 946
+    },
+    "research_tracking/runs/rq2-fresh-block-uncertainty-20261110-01/summary.json": {
+      "sha256": "d51ed3a9e02b57b12ec8e7821f6d2a8b58b615634f704e442dea1891e461edcd",
+      "bytes": 2400
+    },
+    "research_tracking/runs/cpu-junyi-common-20261107-01/common_population.json": {
+      "sha256": "5550a07961cb155e43d0775bf8eeffe77bb8fe84966ba2f39cf5b66425f851c5",
+      "bytes": 17381
+    }
+  }
+}

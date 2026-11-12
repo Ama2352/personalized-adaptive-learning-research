@@ -517,3 +517,7 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 ## 12/11 — hai epoch Junyi A0 và bảng training theo phiên bản
 
 [Snapshot đã kiểm](runs/junyi-main-selected-20261112-01/training-status-20261112.json) đối chiếu archive và stop acknowledgment. [Bảng tổng hợp](reports/AKT_TRAINING_STATUS_20261112.md) tách số đo, epoch được chọn và dự toán có giả định. Chưa final selected/refit/calibration hoặc independent comparison.
+
+## 12/11 — RQ1/RQ2 và AKT chạy song song
+
+[Bản kết quả cốt lõi](reports/RQ12_CORE_FINDINGS_20261112.md) có kiểm8aggregate. [Ma trận khép](reports/RQ12_CLOSURE_MATRIX_20261112.md) phân biệt claim và RQ. [BatchprobeT4](runs/junyi-batch-throughput-20261112-01/README.md) đã giữ bốncheckpoint, archive, figurev1/v2 và nguồn. A0 continuation03 cùng source04/batch4 đang được theo dõi từ checkpoint epoch3 bước29.
