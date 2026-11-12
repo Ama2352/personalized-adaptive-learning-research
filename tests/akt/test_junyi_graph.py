@@ -8,7 +8,7 @@ from knowledge_tracing.shared_kt import PrerequisiteGraph, StableVocabulary
 from knowledge_tracing.akt.encoding import ExerciseEncoding
 from knowledge_tracing.akt.research_junyi_data import JunyiPhaseView, JunyiResearchEncoding
 from knowledge_tracing.akt.research_junyi_graph import (
-    JunyiGraphCondition, JunyiGraphPhaseSession, junyi_prefix_evidence)
+    AUDIT_SCHEMA, JunyiGraphCondition, JunyiGraphPhaseSession, junyi_prefix_evidence)
 from knowledge_tracing.akt.research_junyi_roles import JunyiResearchRoles, make_junyi_research_roles
 from knowledge_tracing.akt.types import KTEvent, LearnerEvents, UnseenTarget, WindowInputs
 from knowledge_tracing.akt.windows import iter_windows
@@ -219,3 +219,60 @@ def test_session_checks_graph_replacement_without_rehashing_full_roles(case):
     object.__setattr__(case[2].graph, 'edges', (('B', 'C'),))
     with pytest.raises(ValueError, match='header'):
         session.prefix_evidence(window)
+
+
+def test_observed_rows_only_include_declared_parent_support(case):
+    window = windows(case, ['A', 'C', 'B', 'C'], [1, 0, 1, 1])[0]
+    rows = evidence(case, window)
+    assert rows[2].audit.parents == ()
+    assert rows[2].audit.observed_rows == ()
+    assert rows[3].audit.observed_rows == (1, 3)
+    assert parent_at(rows[3], 'A').support == 1
+    assert parent_at(rows[3], 'B').support == 1
+    assert window.inputs.prior_responses.tolist() == [-1, 1, 0, 1]
+
+
+def test_observed_rows_merge_parent_streams_by_position(case):
+    window = windows(case, ['A', 'B', 'A', 'C'], [1, 0, 0, 1])[0]
+    window.inputs.source_rows[:] = [40, 10, 30, 20]
+    rows = evidence(case, window)
+    assert rows[3].audit.observed_rows == (40, 10, 30)
+    assert parent_at(rows[3], 'A').support == 2
+    assert parent_at(rows[3], 'A').mean_observed_correctness == .5
+
+
+def test_parent_and_gate_numeric_features_match_full_prefix_definition(case):
+    window = windows(case, ['A', 'C', 'B', 'A', 'C', 'B', 'C'], [1, 0, 1, 0, 1, 0, 1])[0]
+    rows = evidence(case, window)
+    vocabulary = case[0].native.vocabulary.values
+    for local, row in enumerate(rows):
+        child = vocabulary[int(window.inputs.item_ids[local])]
+        declared = [parent for parent, dependent in case[2].graph.edges if dependent == child]
+        expected = []
+        expected_rows = []
+        for parent in declared:
+            positions = [i for i in range(local) if vocabulary[int(window.inputs.item_ids[i])] == parent]
+            values = [int(window.inputs.prior_responses[i+1]) for i in positions]
+            expected.append(dict(parent=parent, support=len(positions), confidence=1.,
+                mean_observed_correctness=sum(values)/len(values) if values else None))
+            expected_rows.extend(positions)
+        assert [asdict(parent) for parent in row.audit.parents] == expected
+        assert row.audit.observed_rows == tuple(int(window.inputs.source_rows[i]) for i in sorted(expected_rows))
+        assert len(row.audit.observed_rows) == sum(parent.support for parent in row.audit.parents)
+        old_features = (sum(parent['support'] for parent in expected),
+                        tuple(parent['confidence'] for parent in expected),
+                        sum(parent['support'] > 0 for parent in expected))
+        new_features = (sum(parent.support for parent in row.audit.parents),
+                        tuple(parent.confidence for parent in row.audit.parents),
+                        sum(parent.support > 0 for parent in row.audit.parents))
+        assert old_features == new_features
+
+
+def test_parent_row_schema_changes_condition_identity(case):
+    import hashlib
+    import json
+    condition = case[2]
+    payload = condition._payload()
+    assert payload.pop('audit_schema') == AUDIT_SCHEMA
+    old_identity = hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+    assert old_identity != condition.identity

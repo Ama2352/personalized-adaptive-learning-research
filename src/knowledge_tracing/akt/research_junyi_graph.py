@@ -5,6 +5,7 @@ tại, full learner history, SimulatorBank hoặc nhãn cạnh đúng/sai.
 """
 from dataclasses import dataclass, field
 import hashlib
+import heapq
 import json
 from types import MappingProxyType
 
@@ -14,6 +15,8 @@ from ..edge_confidence_artifact import _acyclic
 from ..shared_kt import PrerequisiteGraph
 from .research_junyi_data import JunyiPhaseView, JunyiResearchEncoding
 from .types import WindowInputs
+
+AUDIT_SCHEMA = 'junyi_declared_parent_support_rows_v2'
 
 
 def _need(value, message):
@@ -63,7 +66,8 @@ class JunyiGraphCondition:
             topology_source_sha256=self.topology_source_sha256, encoding=self.encoding.identity,
             train_view=self.encoding.fit_view.identity, roles=self.encoding.fit_view.roles.identity,
             confidence='fixed_uniform_one', history='effective_native_window_prefix',
-            graph_pruning='none', role='junyi_condition_only_not_fitted_weights')
+            graph_pruning='none', audit_schema=AUDIT_SCHEMA,
+            role='junyi_condition_only_not_fitted_weights')
 
     def assert_integrity(self):
         self.encoding.assert_for(self.encoding.fit_view)
@@ -87,6 +91,7 @@ class JunyiParentEvidence:
 class JunyiGraphAudit:
     target_fitted: bool
     parents: tuple[JunyiParentEvidence, ...]
+    # Chỉ rows góp vào thống kê declared parents, theo thứ tự local prefix.
     observed_rows: tuple[int, ...]
     effective_start: int
     condition_sha256: str
@@ -233,20 +238,24 @@ def _prefix_evidence(window, *, vocabulary, parents_by_child, condition_sha, enc
 Tại vị trí j, câu trả lời của item j-1 nằm ở prior_responses[j]. Cập nhật
 đúng item quá khứ trước khi dựng evidence của j. Không đọc response của j.
 """
-    counts, successes = {}, {}
+    counts, successes, rows_by_item = {}, {}, {}
     result = []
     for local, item_id in enumerate(window.inputs.item_ids):
         if local:
             previous = vocabulary[int(window.inputs.item_ids[local-1])]
             counts[previous] = counts.get(previous, 0)+1
             successes[previous] = successes.get(previous, 0)+int(window.inputs.prior_responses[local])
+            rows_by_item.setdefault(previous, []).append((local-1, int(window.inputs.source_rows[local-1])))
         evidence = None
         if window.target_mask[local]:
+            declared_parents = parents_by_child.get(vocabulary[int(item_id)], ())
             parents = tuple(JunyiParentEvidence(parent, counts.get(parent, 0), 1.,
                 successes[parent]/counts[parent] if counts.get(parent, 0) else None)
-                for parent in parents_by_child.get(vocabulary[int(item_id)], ()))
+                for parent in declared_parents)
+            observed_rows = tuple(source_row for _, source_row in heapq.merge(
+                *(rows_by_item.get(parent, ()) for parent in declared_parents)))
             audit = JunyiGraphAudit(True, parents,
-                tuple(int(row) for row in window.inputs.source_rows[:local]),
+                observed_rows,
                 int(window.global_ranks[0]), condition_sha, encoding_sha)
             evidence = JunyiGraphQueryEvidence(window.inputs.user_ids[0],
                 int(window.inputs.source_rows[local]), int(window.global_ranks[local]),
