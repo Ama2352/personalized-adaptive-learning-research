@@ -1173,3 +1173,7 @@ Phase/cache52tests/81subtests, producer local14tests, Gate Linux2.037ca đạt. 
 ### Bổ sung RQ2 fullTRAIN trong lúc A0epoch3
 
 Sau metadata vàadmission16shards0,389s, Rootreviewvàchạy fullTRAIN80label-free21,35s/RSS49,9MB, đủ13.347.331targets/126.774learners.876/976edges cóparentpriorpresence;100còn lại tách58childunfitted/28parentunfitted/14bothfittedneverexposed. Checker64windows vàCSVcountsPASS. Giữ18.061.909edge-targetopportunities riêng13.347.331targetdenom. Khôngprediction/gain/edge-truthclaim. Reportpairvàbacklogcậpnhật. A0đãcóvalidatedepoch3, đangpartialepoch4, chờreceipt đểđọcmetric vàartifact.
+
+### Execution03 verified, sửa lỗi nối04 trước GPU
+
+03đãhoàntấtvalidatedepoch3LL0,355650902, train1753,718s/val266,045s; partialepoch4step15016/3.431.632targets. Archive2.129.675.285byteverified vàAppstopack. Lần04đầulocalfaildosaireviewflag, chưabilling/App/GPU. Đãgiữfailedlog/request/state, sửa đúngdrivercontractvàkiểmASTcùng3dryplans. 04-reviewedthựcthiđãcócheckpointmới4/16000. Bộnốisau04chỉ05/06preallocated1,70USD, nguồn/configkhôngđổi. Reportpair/bảngtrainingcậpnhật3epoch.

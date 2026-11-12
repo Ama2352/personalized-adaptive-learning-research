@@ -1,9 +1,11 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
-## Hiện hành 12/11 — A0 Junyi đã hoàn tất hai epoch
+## Hiện hành 12/11 — A0 Junyi có ba epoch hoàn tất, RQ1/RQ2 có phân tích mới
 
-[A0 full TRAIN80](../research_tracking/runs/junyi-main-selected-20261112-01/README.md) đã giữ checkpoint46000 sau Modal preemption, tiếp tục cùng logical run và hoàn tất hai epoch. Archive đã đối chiếu SHA và App đã dừng. [Bảng training](../research_tracking/reports/AKT_TRAINING_STATUS_20261112.md) ghi số epoch, thời gian và phần còn lại. [Throughput/cache](../research_tracking/runs/junyi-throughput-20261112-01/README.md) có số đo thực và figure. [Producer A1](../research_tracking/runs/junyi-a1-selection-20261112-01/README.md) đã qua Gate CPU2.226, còn GPU fit. Nguồn A0 source04 và nhánh A1 source07 được ghim riêng.
+[A0 full TRAIN80](../research_tracking/runs/junyi-main-selected-20261112-01/README.md) đã giữ checkpoint46000 sau Modal preemption, tiếp tục cùng logical run và hoàn tất ba epoch. Archive execution03 đã đối chiếu SHA và App đã dừng. Execution04 đang tiếp tục từ epoch4 bước15.016, giữ nguyên source04 và batch4. Bộ tiếp tục hữu hạn sau04 ở `research_tracking/runs/junyi-main-selected-20261112-01/bounded-continuation-after04-state.json`, chỉ gồm05/06, tổng dự phòng1,70USD đã phân bổ. Đọc state trước mọi launch để tránh chạy trùng. [Bảng training](../research_tracking/reports/AKT_TRAINING_STATUS_20261112.md) ghi số epoch, thời gian và phần còn lại. [Throughput/cache](../research_tracking/runs/junyi-throughput-20261112-01/README.md) có số đo thực và figure. [Producer A1](../research_tracking/runs/junyi-a1-selection-20261112-01/README.md) đã qua Gate CPU2.226, còn GPU fit. Nguồn A0 source04 và nhánh A1 source07 được ghim riêng.
 
+
+[Phát hiện RQ1/RQ2](../research_tracking/reports/RQ12_CORE_FINDINGS_20261112.md) đã bổ sung đối chứng mở bài trên3.240trạng thái và phân tích exposure không dùng nhãn trên13.347.331target TRAIN. Có source, CSV, figure và kiểm độc lập. Calibration, đối chứng dự báo và closed-loop chính còn mở.
 
 ## 12/11 — dữ liệu chính và context A1 Junyi
 

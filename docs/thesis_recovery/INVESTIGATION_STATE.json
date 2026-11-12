@@ -7033,9 +7033,9 @@
     "gpu_selected_fit_complete": false
   },
   "akt_training_status_20261112_verified": {
-    "completed_junyi_a0_epochs": 2,
-    "partial_epoch": 3,
-    "partial_epoch_steps": 29,
+    "completed_junyi_a0_epochs": 3,
+    "partial_epoch": 4,
+    "partial_epoch_steps": 15016,
     "selected_epoch_final": null,
     "refit_complete": false,
     "app_stopped": true,
@@ -7043,17 +7043,17 @@
     "grade10_selected_epochs_total": 51,
     "remaining_junyi_gpu_hours_optimistic": [
       18,
-      27
+      28
     ],
     "estimate_assumptions": "Sáu graph conditions có tốc độ gần A0, selected4–5/refit1–2 epoch. Không gồm full5fold/seed thêm/closedloop hoặc giờ hoàn thiện mã.",
-    "evidence": "research_tracking/runs/junyi-main-selected-20261112-01/training-status-20261112.json",
+    "evidence": "research_tracking/runs/junyi-main-selected-20261112-01/execution03-verification.json",
     "report": "research_tracking/reports/AKT_TRAINING_STATUS_20261112.md",
     "next": "Đo batch probe, hoàn tất confidence/topology và producer Junyi graph, tiếp tục A0 từ checkpoint."
   },
   "parallel_akt_rq12_20261112": {
-    "akt_execution": "modal-junyi-main-selected-t4-20261112-03",
-    "resume_checkpoint": "epoch3-step29",
-    "status": "DISPATCHED_CHECKPOINT_MONITOR_ACTIVE",
+    "akt_execution": "modal-junyi-main-selected-t4-20261112-04",
+    "resume_checkpoint": "epoch4-step15016",
+    "status": "CONTINUATION04_DISPATCHED_AFTER03_VERIFIED",
     "source": "source04",
     "batch_size": 4,
     "allocation_cap_usd": 0.85,
@@ -7062,11 +7062,11 @@
     "rq12_core_findings": "research_tracking/reports/RQ12_CORE_FINDINGS_20261112.md",
     "rq12_closure_matrix": "research_tracking/reports/RQ12_CLOSURE_MATRIX_20261112.md",
     "rq12_extra_analysis": "COMPLETED_ROOT_ACCEPTED_SAME_STATE_STRICT_ELIGIBILITY_3240_SNAPSHOTS",
-    "next": "Theo dõi continuation03 đến receipt/stop, nghiệm thu artifact và cập nhật report. Không đổi batch main chỉ từ throughput.",
+    "next": "Đọc bounded-continuation-after04-state.json và native04/05/06 trước launch. Theo dõi đến verifiedreceipt/stop. Giữ nguồn04 cho A0, source07A1CPU. Hoàn tất confidence/topology vàJunyiA2/A3 producer làworkcònthiếu.",
     "rq12_extra_evidence": "research_tracking/runs/rq1-strict-readiness-shadow-20261112-01/manifest.json",
     "latest_observed_durable_epoch_step": [
       4,
-      4000
+      16000
     ],
     "report_static_check": {
       "unique_ids": true,
@@ -7075,17 +7075,17 @@
       "browser_ui_test": false
     },
     "bounded_same_a0_continuation": {
-      "status": "ARMED_WAITING_FOR_VERIFIED_EXECUTION03",
+      "status": "WAITING_FOR_VERIFIED_EXECUTION04",
       "controller": "research_tracking/runs/junyi-main-selected-20261112-01/continue_a0_bounded.py",
-      "state": "research_tracking/runs/junyi-main-selected-20261112-01/bounded-continuation-state.json",
+      "state": "research_tracking/runs/junyi-main-selected-20261112-01/bounded-continuation-after04-state.json",
       "following_executions": [
-        "04",
         "05",
         "06"
       ],
-      "max_additional_reserved_usd": 2.55,
+      "max_additional_reserved_usd": 1.7,
       "scope": "Chỉ cùngA0selected, nguồn04 vàprotocolgiữnguyên, khôngrefit/graph/Holdout",
-      "on_failure": "STOP_REVIEW_REQUIRED"
+      "on_failure": "STOP_REVIEW_REQUIRED",
+      "local_failure_evidence": "research_tracking/runs/junyi-main-selected-20261112-01/bounded-continuation-remediation.json"
     },
     "rq2_full_train_exposure": {
       "status": "ROOT_ACCEPTED",

@@ -17,7 +17,8 @@ Các bảng chưa bao gồm full 5-fold CV, thêm seed, SAKT/GKT, các perturbat
 | Kiểm cache Junyi đầy đủ | 87,08 giây CPU local | Đọc 232.662 cửa sổ, đủ 13.347.331 target của 126.774 người học |
 | Đo tốc độ T4 trên packet đại diện | 256 cập nhật, 56.332 target trong 7,85 giây train | Có checkpoint và reload khớp. Phép đo toàn epoch bên dưới là cơ sở dự toán mới hơn |
 | Phục hồi A0 sau Modal preemption | Giữ checkpoint epoch1 bước46.000 và tiếp tục cùng logical run | Trọng số, Adam, RNG và sampler lấy từ checkpoint. Hai file metadata khởi tạo được tái dựng từ nguồn ghim và checkpoint, có ghi rõ giới hạn |
-| Lưu artifact đợt tiếp tục | Archive 2.080.202.385 byte đã đối chiếu SHA, App có stop acknowledgment | Giữ epoch1, epoch2 và trạng thái epoch3 dở dang, không cần bắt đầu lại từ đầu |
+| Lưu artifact execution02 | Archive 2.080.202.385 byte đã đối chiếu SHA, App có stop acknowledgment | Giữ epoch1, epoch2 và trạng thái epoch3 dở dang |
+| Lưu artifact execution03 | Archive 2.129.675.285 byte đã kiểm toàn vẹn, App có stop acknowledgment | Đã hoàn tất epoch3 và giữ epoch4 bước15.016, tiếp tục bằng execution04 |
 
 Nguồn kỹ thuật ở các bundle `junyi-throughput-20261112-01`, `junyi-a1-selection-20261112-01` và `junyi-main-selected-20261112-01`. Tất cả là kiểm kỹ thuật hoặc tiến độ fit, chưa thay thế bằng chứng so sánh độc lập cho RQ3.
 
@@ -49,21 +50,22 @@ Train80 có126.774 người học,13.347.331 target. Selection10 có15.847 ngư�
 |---|---:|---:|---:|---:|---:|---|
 | 1 | 13.347.331 target | 58.166 | 26 phút47,6 giây | 4 phút08,4 giây | 0,359648 | Hoàn tất, có checkpoint |
 | 2 | 13.347.331 target | 58.166 | 26 phút35,8 giây | 4 phút23,4 giây | 0,356651 | Hoàn tất, tốt hơn epoch1 |
-| 3 | 6.432 target | 29 | 1,15 giây | Chưa chạy | Chưa có | Dở dang do hết giới hạn đợt chạy, đã giữ trạng thái |
+| 3 | 13.347.331 target | 58.166 | 29 phút13,7 giây | 4 phút26,0 giây | 0,355651 | Hoàn tất, tốt hơn epoch2 |
+| 4 | 3.431.632 target ở cuối execution03 | 15.016 | 7 phút34,4 giây | Chưa chạy | Chưa có | Đã giữ checkpoint, execution04 đang tiếp tục |
 
-Mỗi epoch hoàn tất gồm232.662 cửa sổ. Hai epoch cộng validation mất khoảng61 phút55 giây theo bộ đếm pha. Thời gian khởi động, gián đoạn, tải artifact và vận hành nằm ngoài con số này. Thời gian epoch1 được ghép từ các đoạn phục hồi đã ghi nhận. Không cộng lại các counter cumulative của hai execution.
+Mỗi epoch hoàn tất gồm232.662 cửa sổ. Ba epoch cộng validation mất khoảng95 phút35 giây theo bộ đếm pha. Thời gian khởi động, gián đoạn, tải artifact và vận hành nằm ngoài con số này. Thời gian epoch1 được ghép từ các đoạn phục hồi đã ghi nhận. Không cộng lại các counter cumulative của hai execution.
 
-Log Loss giảm khoảng0,002997 từ epoch1 sang2, cho thấy mô hình tiếp tục cải thiện trên tập chọn epoch. Chưa có checkpoint cuối quá trình hoặc kết quả đánh giá độc lập. Epoch3 dở dang không được tính là một epoch hoàn tất.
+Log Loss lần lượt0,359648→0,356651→0,355651. Epoch3 cải thiện khoảng0,001000 so epoch2. Chưa có checkpoint cuối quá trình hoặc kết quả đánh giá độc lập. Epoch4 dở dang không được tính là một epoch hoàn tất.
 
-Nguồn số liệu đã kiểm tại [snapshot tiến độ](../runs/junyi-main-selected-20261112-01/training-status-20261112.json). Mã [đối chiếu artifact](../runs/junyi-main-selected-20261112-01/build_training_status.py) kiểm SHA archive, số target, history validation và stop acknowledgment.
+Bổ sung [nghiệm thu execution03](../runs/junyi-main-selected-20261112-01/execution03-verification.json) và [mã kiểm](../runs/junyi-main-selected-20261112-01/verify_execution03.py). Snapshot trước execution03 được giữ nguyên tại [snapshot tiến độ](../runs/junyi-main-selected-20261112-01/training-status-20261112.json). Mã [đối chiếu artifact](../runs/junyi-main-selected-20261112-01/build_training_status.py) kiểm SHA archive, số target, history validation và stop acknowledgment.
 
 ## Vì sao chưa chốt số epoch còn lại
 
 Giới hạn hiện hành là20 epoch, patience3 và min_delta0,0001. Số20 là trần an toàn. Sau mỗi epoch, mô hình được theo dõi trên selection và dừng khi ba epoch liên tiếp không cải thiện đủ. Nếu epoch tiếp tục tốt lên thì điểm dừng lùi lại.
 
-A0 vừa cải thiện ở epoch2. Vì vậy thời điểm dừng sớm nhất hiện tại là sau epoch5, nếu epoch3–5 đều không cải thiện đủ. Trong trường hợp đó chọn epoch2 và refit đúng2 epoch. Từ mốc hiện tại còn gần3 epoch selected và2 epoch refit, tương đương khoảng2,5–3 giờ GPU/vận hành theo tốc độ A0. Refit train90 lớn hơn train80 khoảng12,5% theo tỷ lệ người học, số target thực tế cần đếm trước khi dự báo chính xác.
+A0 vừa cải thiện ở epoch3. Vì vậy thời điểm dừng sớm nhất hiện tại là sau epoch6, nếu epoch4–6 đều không cải thiện đủ. Trong trường hợp đó chọn epoch3 và refit đúng3 epoch. Từ mốc hiện tại còn phần còn lại của epoch4, epoch5–6 và3 epoch refit, dự phòng khoảng3–4 giờ GPU/vận hành theo tốc độ đã đo. Refit train90 lớn hơn train80 khoảng12,5% theo tỷ lệ người học, số target thực tế cần đếm trước khi dự báo chính xác.
 
-Nếu epoch3 hoặc các epoch sau cải thiện, cần nhiều thời gian hơn và refit cũng có thể dài hơn. Không cố định trước7 epoch còn lại hoặc áp epoch tốt nhất Grade10 sang Junyi.
+Nếu epoch4 hoặc các epoch sau cải thiện, cần nhiều thời gian hơn và refit cũng có thể dài hơn. Không cố định trước7 epoch còn lại hoặc áp epoch tốt nhất Grade10 sang Junyi.
 
 ## Ước lượng còn lại theo từng phiên bản Junyi
 
@@ -71,7 +73,7 @@ Các khoảng dưới đây là kịch bản lập ngân sách. Sáu bản đồ
 
 | Điều kiện | Đã hoàn tất trên toàn Junyi | Epoch còn lại trong kịch bản thuận lợi | GPU còn lại ước lượng | Việc cần trước training |
 |---|---|---|---:|---|
-| A0 | 2 epoch selected, một phần epoch3 | Gần3 selected +2 refit nếu best giữ ở2 | 2,5–3 giờ | Tiếp tục checkpoint, hoàn tất selection, chờ freeze trước refit |
+| A0 | 3 epoch selected, một phần epoch4 | Gần3 selected +3 refit nếu best giữ ở3 | 3–4 giờ | Tiếp tục checkpoint, hoàn tất selection, chờ freeze trước refit |
 | A1 expert | 0 epoch | 4–5 selected +1–2 refit | 2,5–4 giờ | Admission graph và kiểm CUDA producer |
 | A1 learned | 0 epoch | 4–5 selected +1–2 refit | 2,5–4 giờ | Hoàn tất topology learned train-only, admission và CUDA |
 | A2 expert | 0 epoch | 4–5 selected +1–2 refit | 2,5–4 giờ | Confidence train-only, nối producer và kiểm CUDA |
@@ -79,16 +81,16 @@ Các khoảng dưới đây là kịch bản lập ngân sách. Sáu bản đồ
 | A3 expert | 0 epoch | 4–5 selected +1–2 refit | 2,5–4 giờ | Cùng confidence A2, thêm gate, kiểm fallback và CUDA |
 | A3 learned | 0 epoch | 4–5 selected +1–2 refit | 2,5–4 giờ | Cùng topology/confidence A2, thêm gate và kiểm CUDA |
 
-Tổng Junyi còn lại làm tròn khoảng18–27 giờ GPU trong kịch bản thuận lợi, bao gồm khoảng dự phòng nhỏ. Đây là bản cập nhật khoảng18–24 giờ đã trao đổi, có xét A0 vẫn cải thiện ở epoch2 và refit train90. Dự phòng24–48 giờ khi cần thêm epoch hoặc graph chậm hơn. Nếu phải chạm20 epoch ở nhiều điều kiện thì có thể vượt cả khoảng dự phòng, phải dự toán lại trước khi chạy tiếp.
+Tổng Junyi còn lại làm tròn khoảng18–28 giờ GPU trong kịch bản thuận lợi, bao gồm khoảng dự phòng nhỏ. Đây là bản cập nhật khoảng18–24 giờ đã trao đổi, có xét A0 vẫn cải thiện ở epoch3 và refit train90. Dự phòng24–48 giờ khi cần thêm epoch hoặc graph chậm hơn. Nếu phải chạm20 epoch ở nhiều điều kiện thì có thể vượt cả khoảng dự phòng, phải dự toán lại trước khi chạy tiếp.
 
 Khoảng2–3 ngày hoàn tất toàn bộ là mục tiêu thuận lợi, phụ thuộc mã Junyi A2/A3, confidence/topology và producer refit sẵn sàng song song. Đây chưa là cam kết tiến độ. Calibration, xuất dự báo và đánh giá cuối cần thêm thời gian đo riêng. Full5-fold, thêmseed và closed-loop không nằm trong tổng giờ này.
 
 ## Việc tiếp theo để giảm thời gian và bảo vệ30USD
 
-1. Đo batch4/8/16/32 trên cùng packet đã được duyệt. Probe đã chuẩn bị, chưa chạy. Giữ kết quả theo target/giây, padding, VRAM và chi phí, kèm kiểm checkpoint.
+1. Đã đo batch4/8/16/32 trên cùng packet đã được duyệt. Bốn trường hợp đều được nghiệm thu, số đo và figure ở bundle `junyi-batch-throughput-20261112-01`. Giữ kết quả theo target/giây, padding, VRAM và chi phí, kèm kiểm checkpoint.
 2. Nếu tăng batch, cập nhật quyết định protocol và kiểm tính so sánh trước khi áp dụng. Batch lớn hơn làm thay đổi số cập nhật Adam mỗi epoch, nên tốc độ cao hơn chưa xác định được tổng số epoch cần học.
 3. Hoàn tất confidence/topology Junyi và producer A2/A3 trong lúc A0 tiếp tục. Reuse cache và phần lifecycle đã nghiệm thu.
 4. Hoàn tất toàn bộ selected candidates, freeze quyết định, sau đó refit theo epoch đã chọn. Giữ tập calibration và independent evaluation đúng vai trò.
 5. Chỉ dispatch trong ngân sách dự án30USD còn khả dụng theo ledger. Chưa có bảo đảm toàn ma trận vừa ngân sách với tốc độ batch4 hiện tại.
 
-Các artifact lớn giữ tại `experiments/akt/results/<run-id>/`, bằng chứng và chỉ mục nhỏ tại `research_tracking/runs/`. App đợt A0 vừa rồi đã dừng. Bảng này không phát sinh lượt GPU mới.
+Các artifact lớn giữ tại `experiments/akt/results/<run-id>/`, bằng chứng và chỉ mục nhỏ tại `research_tracking/runs/`. App execution03 đã dừng, archive2.129.675.285byte đã được kiểm. Execution04 tiếp tục cùng A0 từ checkpoint epoch4 bước15.016. Bộ điều khiển hữu hạn có thể nối05/06, mỗi lượttrần0,85USD, tổngba lượt04–06tốiđa2,55USD đã preallocate trongtrần30USD. Lần nối04đầu dừng local do nhãnreview sai trướcbilling/GPU, đã giữfailurelog/request và sửa đúng hợpđồng, cóASTcontractcheck. Khôngrefit, graphfit hoặcHoldout trongbộđiềukhiển này.

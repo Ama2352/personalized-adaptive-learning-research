@@ -529,3 +529,7 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 ## 12/11 — toàn TRAIN80 Junyi native-window exposure
 
 [Bundleđãđóng](runs/rq2-junyi-window-exposure-preflight-20261112-01/FINDINGS.md) đo13.347.331targets/232.662windows/126.774learners trong21,35s, label-free.976edges chia876/58/28/14. Checker64windowsvàCSV/SHA/figuređượcnghiệmthu. Đây là potentialexposure, chưa predictivebenefit.
+
+## 12/11 — nghiệm thu A0 execution03, tiếp tục04
+
+[Verification03](runs/junyi-main-selected-20261112-01/execution03-verification.json) xácnhận3validatedepochs, partialepoch4step15016 vàarchive2,13GB/stopack. Cófailureprebillingreviewflagtronglầnnối04đầu, đãgiữlogs/requestvàsửa đúnghợpđồng vớiASTregressioncheck, khôngcấpGPUởlầnlỗi. Currentboundedstate sau04 ở cùngbundle, nguồn/split/configA0giữnguyên.

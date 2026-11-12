@@ -58,15 +58,20 @@ def validate_frozen_request(previous, prepared, execution):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run', action='store_true')
+    parser.add_argument('--after-execution', choices=('03', '04', '05'), default='03')
     args = parser.parse_args()
-    plan = dict(scope='same_a0_selected_only', wait_for=FIRST, following=FOLLOWING,
-                max_additional_runs=3, reserved_upper_usd=2.55,
+    first = FIRST[:-2] + args.after_execution
+    following = tuple(execution for execution in FOLLOWING
+                      if int(execution[-2:]) > int(args.after_execution))
+    suffix = '' if args.after_execution == '03' else '-after' + args.after_execution
+    plan = dict(scope='same_a0_selected_only', wait_for=first, following=following,
+                max_additional_runs=len(following), reserved_upper_usd=round(.85 * len(following), 2),
                 refit_allowed=False, graph_fit_allowed=False, protocol_change_allowed=False)
     print(json.dumps(plan), flush=True)
     if not args.run:
         return
-    state_path = BUNDLE / 'bounded-continuation-state.json'
-    with (BUNDLE / 'bounded-continuation.lock').open('x') as stream:
+    state_path = BUNDLE / ('bounded-continuation' + suffix + '-state.json')
+    with (BUNDLE / ('bounded-continuation' + suffix + '.lock')).open('x') as stream:
         json.dump(plan, stream)
     state = dict(plan, status='WAITING_FOR_EXECUTION03', events=[])
 
@@ -77,17 +82,18 @@ def main():
         print(json.dumps(state['events'][-1], ensure_ascii=False), flush=True)
 
     try:
+        record('WAITING_FOR_VERIFIED_EXECUTION', execution=first)
         waiting_started = time.monotonic()
-        first_native = ROOT / 'experiments/akt/results' / FIRST
+        first_native = ROOT / 'experiments/akt/results' / first
         while not (first_native / 'receipt.json').exists():
             if (first_native / 'preemption-receipt.json').exists():
-                raise ValueError('Execution03 preempted, manual recovery required')
+                raise ValueError('Previous execution preempted, manual recovery required')
             if time.monotonic() - waiting_started > 3700:
-                raise TimeoutError('Execution03 receipt wait exhausted')
+                raise TimeoutError('Previous execution receipt wait exhausted')
             time.sleep(5)
-        previous_id = FIRST
-        previous_path = BUNDLE / 'request03.json'
-        for execution in FOLLOWING:
+        previous_id = first
+        previous_path = BUNDLE / ('request' + args.after_execution + '.json')
+        for execution in following:
             receipt, guard = read_receipt(previous_id)
             if disposition(receipt, guard) == 'complete':
                 record('A0_SELECTED_ONLY_COMPLETE', execution=previous_id)
@@ -105,7 +111,7 @@ def main():
             previous = json.loads(previous_path.read_text(encoding='utf-8'))
             prepared = json.loads(output.read_text(encoding='utf-8'))
             validate_frozen_request(previous, prepared, execution)
-            prepared['root_review_status'] = 'ROOT_PREAPPROVED_IDENTICAL_PROTOCOL_BOUNDED_CONTINUATION'
+            prepared['root_review_status'] = 'ROOT_REVIEWED_BOUNDED_DISPATCH'
             output.write_text(json.dumps(prepared, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
             record('DISPATCHING_SAME_A0', execution=execution, checkpoint=prepared['resume_checkpoint_name'])
             run_command([str(ROOT / 'experiments/akt/modal_junyi_main_resume.py'),

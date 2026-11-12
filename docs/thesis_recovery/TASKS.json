@@ -6151,14 +6151,14 @@
       "acceptance_criteria": "Khôngdùng legacy90/10cho research;train-onlyvocab/graph/confidence;matchedtargetkeys;causalmask;checkpoint/export/coverage hợp lệ;newGate đúngnguồn trướcGPU",
       "verification_steps": "Source04Gate2218; A0Junyi2full epochs/train13.347.331+selection1.600.343 mỗi epoch; A1source07Gate2226CPU; batch4/8/16/32probe480updates/reloadverified",
       "required_artifacts": "phase-role audit, source/runtimeGate, config/auth, throughput/cost estimate",
-      "status": "PARTIALLY_VERIFIED_A0_TWO_FULL_EPOCHS_CONTINUATION03_ACTIVE",
+      "status": "PARTIALLY_VERIFIED_A0_THREE_FULL_EPOCHS_CONTINUATION04_ACTIVE",
       "blockers": [
         "A0 chưa finalselected/refit/calibration",
         "A1Junyi chưafitGPU; A2/A3 vàlearnedgraph/confidenceTRAIN80 cònthiếu",
         "Externalfreeze, đủbaseline vàindependentevaluation cònthiếu"
       ],
       "benchmark_contract": "research_tracking/reports/AKT_BENCHMARK_CONTRACT_20261112.md",
-      "verification_evidence": "research_tracking/runs/junyi-main-selected-20261112-01/training-status-20261112.json"
+      "verification_evidence": "research_tracking/runs/junyi-main-selected-20261112-01/execution03-verification.json"
     },
     {
       "id": "RQDIAG33",
@@ -6182,7 +6182,10 @@
       "blockers": [
         "Counterfactualaction cầnfullscorevector hoặc replaysource đã duyệt",
         "Learningoutcome cầnrollout riêng"
-      ]
+      ],
+      "required_inputs": "Trace reconstruction M28/ready/served prefix, graph31edges và exposureflags đã đóng",
+      "files_components": "research_tracking/runs/rq1-strict-readiness-shadow-20261112-01/",
+      "estimated_effort": "Một gói phân tích, kiểm và figure đã hoàn tất, CPU0,387s"
     },
     {
       "id": "RQDIAG34",
@@ -6193,8 +6196,7 @@
       "priority": "P0",
       "owner": "Engineering agent",
       "dependencies": [
-        "AKTJ01",
-        "AKTJ02"
+        "AKTJ01"
       ],
       "research_objective": "Đo điều kiện quan sát parent trong đúng native window trước negativecontrols",
       "implementation_objective": "Label-free streaming toàn TRAIN80 bằng bitset, kiểm source/splits/coverage và sampledseen-set",
@@ -6207,7 +6209,10 @@
       "blockers": [
         "T3predictivecontrols chưa có",
         "Controlsouter0không tự đủlineage cho benchmarkouter4"
-      ]
+      ],
+      "required_inputs": "Cache TRAIN80 COMPLETE, encoding717, catalogDAG976, root-full-review và admission16shards",
+      "files_components": "research_tracking/runs/rq2-junyi-window-exposure-preflight-20261112-01/",
+      "estimated_effort": "Một gói reader/analysis/checker/figure đã hoàn tất, fullscan21,35s"
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

@@ -6,6 +6,10 @@
 
 [Báo cáo chi tiết: diễn tiến nghiên cứu, số liệu và biểu đồ](BAO_CAO_NGHIEN_CUU.html).
 
+## Mốc training mới lúc 17:50 ngày 12/11
+
+A0 Junyi đã hoàn tất ba epoch trên cùng tập train, mỗi epoch 13.347.331 tương tác. Log Loss selection lần lượt 0,359648 → 0,356651 → 0,355651. Epoch 3 mất khoảng 29 phút 14 giây train và 4 phút 26 giây validation. Cả ba lượt validation cùng 1.600.343 target, không có OOV. Archive execution03 khoảng 2,13 GB đã được tải về, kiểm toàn vẹn và xác nhận App dừng. Epoch 4 tiếp tục từ checkpoint bước 15.016 với cùng nguồn, dữ liệu và cấu hình. Đây là tiến độ chọn epoch, còn refit, calibration và đánh giá độc lập.
+
 ## Phát hiện bổ sung RQ2 ngày 12/11 — điều kiện để mô hình nhận tín hiệu tiên quyết
 
 Đã kiểm toàn bộ 13.347.331 tương tác cần dự báo trong232.662 cửa sổ của126.774 người học TRAIN80 Junyi. Trong 976 cạnh catalog, 876 cạnh có ít nhất một lần tiên quyết xuất hiện trước bài phụ thuộc trong đúng cửa sổAKT. Có 100 cạnh thiếu cơ hội đó, gồm 58 cạnh có bài phụ thuộc ngoài tập bài của dữ liệu huấn luyện,28 cạnh có tiên quyết ngoài tập bài của dữ liệu huấn luyện và14 cạnh có cả hai bài trong tập huấn luyện nhưng chưa gặp đúng thứ tự trong cửa sổ. Phân tích CPU mất 21,35 giây và dùng khoảng 49,9 MB RAM, chỉ đọc các array không chứa nhãn đáp án. Đã kiểm độc lập trên 64 cửa sổ và tổngCSV. Đây là bằng chứng về cơ hội quan sát thông tin trước so sánh đồ thị. Chưa đo ảnh hưởng thực lên dự báo, gate hoặc lợi ích học tập. [Bằng chứng vàfigure](../../../runs/rq2-junyi-window-exposure-preflight-20261112-01/FINDINGS.md).
@@ -22,7 +26,7 @@ Phép đo batch T4 đã nghiệm thu đủ4/8/16/32 trên cùng56.332 target, ch
 
 ## Mức đáp ứng đề cương đến hiện tại
 
-Đề cương có sáu mục tiêu cụ thể. Cả sáu đã có triển khai hoặc bằng chứng, chưa mục nào được nghiệm thu toàn phạm vi. RQ1/RQ2 đã có kết quả chẩn đoán về tác động dự báo tới lựa chọn, điều kiện controller, retention và đối chứng ability. RQ3 đã có bảy selected fits Grade10 và hai epoch A0 Junyi, còn so sánh độc lập và closed-loop của mô hình mới.
+Đề cương có sáu mục tiêu cụ thể. Cả sáu đã có triển khai hoặc bằng chứng, chưa mục nào được nghiệm thu toàn phạm vi. RQ1/RQ2 đã có kết quả chẩn đoán về tác động dự báo tới lựa chọn, điều kiện controller, retention và đối chứng ability. RQ3 đã có bảy selected fits Grade10 và ba epoch A0 Junyi, còn so sánh độc lập và closed-loop của mô hình mới.
 
 Paper1 được kế thừa theo PDF. Phiên bản theo đặc tả đã có kiểm tích hợp hai episode trên domain28, cùng172feedback trong coupling đã khai báo, và chứng minh cơ chế có điều kiện. Paper2 có frozen artifact và tái hiện chính xác pilot fixed-stream chẩn đoán. Chưa hoàn tất tái chạy toàn bộ các bảng chính của hai paper. [Đối chiếu chi tiết theo sáu mục tiêu](../../../reports/PROPOSAL_COVERAGE_20261112.md).
 
@@ -31,14 +35,14 @@ Paper1 được kế thừa theo PDF. Phiên bản theo đặc tả đã có ki�
 | Môi trường | Đã hoàn tất | Số epoch và thời gian | Còn thiếu |
 |---|---|---|---|
 | Grade10 | Bảy điều kiện A0–A3 đã chọn checkpoint, giữ30 checkpoint và1.260 dự báo mỗi điều kiện | A0/A1 expert chạy8, chọn5. Năm điều kiện còn lại chạy7, chọn4. Tổng51 epoch, controller khoảng30 phút | Refit tổng30 epoch, calibration, đánh giá độc lập và closed-loop |
-| Junyi A0 | Hai epoch đầy đủ, mỗi epoch13.347.331 target, validation1.600.343 target | Epoch1 train26m48s +validation4m08s. Epoch2 train26m36s +validation4m23s | Tiếp tục từ epoch3 dở dang, chốt epoch, refit và đánh giá |
+| Junyi A0 | Ba epoch đầy đủ, mỗi epoch13.347.331 target, validation1.600.343 target | Epoch1 khoảng31phút, epoch2 khoảng31phút, epoch3 khoảng34phút gồmvalidation | Tiếp tục từ epoch4 dở dang, chốt epoch, refit và đánh giá |
 | Junyi A1/A2/A3 | A1 đã có producer và kiểm CPU. Sáu điều kiện chưa fit toàn Junyi | Chưa có epoch train chính | Confidence/topology train-only, kiểm CUDA, selected và refit |
 
 Log Loss selection A0 Junyi từ0,359648 xuống0,356651. Đây là kết quả theo dõi chọn epoch, chưa là so sánh độc lập. Nếu epoch3–5 không cải thiện đủ, A0 có thể dừng sau epoch5 và refit2 epoch. Nếu tiếp tục cải thiện, thời điểm dừng thay đổi.
 
-Kịch bản thuận lợi cho toàn bộ training Junyi còn khoảng18–27 giờ GPU, giả định sáu điều kiện graph có tốc độ gần A0, mỗi điều kiện4–5 epoch selected và1–2 epoch refit. Chưa bao gồm thời gian hoàn thiện mã, full5-fold hoặc closed-loop. Mục tiêu2–3 ngày phụ thuộc các điều kiện này và ngân sách30USD. [Bảng chi tiết và nguồn bằng chứng](../../../reports/AKT_TRAINING_STATUS_20261112.md).
+Kịch bản thuận lợi cho toàn bộ training Junyi còn khoảng18–28 giờ GPU, giả định sáu điều kiện graph có tốc độ gần A0, mỗi điều kiện4–5 epoch selected và1–2 epoch refit. Chưa bao gồm thời gian hoàn thiện mã, full5-fold hoặc closed-loop. Mục tiêu2–3 ngày phụ thuộc các điều kiện này và ngân sách30USD. [Bảng chi tiết và nguồn bằng chứng](../../../reports/AKT_TRAINING_STATUS_20261112.md).
 
-**Mốc hiện tại ngày 12/11.** Để chuẩn bị đối chứng cho CG-AKT, AKT không đồ thị đã hoàn tất hai epoch trên toàn tập train Junyi đã cố định, gồm 126.774 người học và 13.347.331 tương tác. Validation trên 15.847 người học riêng biệt, gồm 1.600.343 tương tác, đã hoàn tất. Epoch 2 tiếp tục cải thiện trên tập selection. Epoch 3 đã giữ trạng thái dở dang khi hết giới hạn đợt chạy, App đã dừng. Mô hình chưa hoàn tất quy tắc dừng sớm, tối đa 20 epoch. Checkpoint tốt nhất cuối quá trình, refit, calibration và so sánh độc lập còn phải thực hiện.
+**Mốc hiện tại ngày 12/11.** Để chuẩn bị đối chứng cho CG-AKT, AKT không đồ thị đã hoàn tất ba epoch trên toàn tập train Junyi đã cố định, gồm 126.774 người học và 13.347.331 tương tác. Validation trên 15.847 người học riêng biệt, gồm 1.600.343 tương tác, đã hoàn tất. Epoch 3 tiếp tục cải thiện trên tập selection. Đã lưu trạng thái epoch 4 dở dang và tiếp tục qua execution04. Mô hình chưa hoàn tất quy tắc dừng sớm, tối đa 20 epoch. Checkpoint tốt nhất cuối quá trình, refit, calibration và so sánh độc lập còn phải thực hiện.
 
 Lượt chạy đầu bị Modal thu hồi giữa epoch. Checkpoint bước 46.000 đã giữ trạng thái sau 10.598.159 tương tác. Nhóm tiếp tục từ checkpoint đó và hoàn tất đúng quần thể epoch đầu. Kiểm độc lập số cửa sổ và padding cũng khớp kế hoạch đã tạo trước training. Hai file metadata khởi tạo bị mất được tái dựng có ghi rõ nguồn gốc. Các checkpoint và nhật ký phục hồi đã được lưu để truy vết.
 

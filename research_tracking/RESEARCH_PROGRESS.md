@@ -1,5 +1,11 @@
 # Tiến độ nghiên cứu
 
+## Mốc 12/11 lúc 17:50 — AKT và RQ1/RQ2 chạy song song
+
+A0 Junyi đã hoàn tất 3 epoch, mỗi epoch gồm 13.347.331 target train và 1.600.343 target selection, không OOV. Log Loss selection giảm 0,359648 → 0,356651 → 0,355651. Archive execution03 đã được kiểm và App đã dừng. Execution04 tiếp tục epoch4. Bộ nối hữu hạn sau04 chỉ gồm05/06 với dự phòng1,70USD đã phân bổ, chưa refit hoặc dùng Holdout. [Nghiệm thu execution03](runs/junyi-main-selected-20261112-01/execution03-verification.json).
+
+RQ1 có phân tích điều kiện mở bài trên cùng3.240trạng thái. Tập sơ bộ thay đổi2.557lần nhưng vẫn có bài thỏa mastery nghiêm ngặt trước các bộ lọc tiếp theo, chưa tính hành động hoặc kết quả học thay thế. RQ2 có phân tích không dùng nhãn trên toàn cache TRAIN, mất21,35giây và dùng49,9MBRAM.976cạnh chia bốn nhóm876/58/28/14 theo cơ hội nhìn thấy tiên quyết. Đã giữ CSV, kiểm độc lập và figure, đồng thời cập nhật cặp báo cáo. Các RQ còn phần nghiệm thu toàn phạm vi. Những mốc bên dưới giữ vai trò lịch sử. [Các phát hiện và giới hạn](reports/RQ12_CORE_FINDINGS_20261112.md).
+
 ## 10/11 — đã kiểm tích hợp trên Colab CPU
 
 Colab CPU đã đạt1.992ca trên92module trong294,935giây,0failure/error/skip; tách riêng1ca kiểm môi trường cô lập. Đã sửa gói thiếu cấu hình, bỏ phụ thuộc snapshot chưa tracked và làm kiểm timestamp xác định. Reader/model production giữ nguyên; inventory198file, chưa full Gate/CUDA/training chính. [Bằng chứng](runs/akt-colab-integration-20261110-01/README.md).
