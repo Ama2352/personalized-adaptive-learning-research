@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 import zipfile
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parent.parent.parent
 BUNDLE = ROOT / 'research_tracking/runs/modal-akt-graph-selected-20261112-01'
 os.environ['MODAL_CONFIG_PATH'] = str(ROOT / 'artifacts/akt/private/modal.toml')
 os.environ['MODAL_PROFILE'] = 'kltn'
@@ -56,6 +56,8 @@ def prepare(candidate_id):
 
 
 def main():
+    from modal_budget_guard import (ModalAppBudgetGuard, ModalRunDeadline,
+                                    PendingOwnedModalApp, stop_owned_app_cli)
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--candidate', required=True,
                         choices=('A1_EXPERT', 'A1_LEARNED', 'A2_EXPERT', 'A2_LEARNED', 'A3_EXPERT', 'A3_LEARNED'))
@@ -93,6 +95,7 @@ def main():
         json.dump(dict(run_id=run_id, candidate_id=args.candidate,
                        reserved_usd=allocation['reserved_usd_per_run'], inputs=pins,
                        created_at_utc=datetime.now(timezone.utc).isoformat()), stream, indent=2)
+    deadline = ModalRunDeadline(800)
     image = modal.Image.from_id('im-ldjZsYO21pzaupmQXGLhnS')
     for name, path in inputs.items():
         image = image.add_local_file(path, name, copy=True)
@@ -101,11 +104,15 @@ def main():
     function = app.function(image=image, gpu=allocation['gpu_options'], cpu=(0.25, 2), memory=(4096, 8192),
                             timeout=840, startup_timeout=60, retries=0, max_containers=1,
                             volumes={'/durable': volume})(remote_train)
-    with modal.enable_output(), app.run(environment_name='main'):
-        call = function.spawn(pins, run_id, True, args.candidate)
-        (native / 'dispatch.json').write_text(json.dumps(dict(call_id=call.object_id)) + '\n')
-        receipt = call.get(timeout=3600)
-        (native / 'remote-receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
+    binding = PendingOwnedModalApp(run_id, app.name, lambda: app.app_id)
+    with ModalAppBudgetGuard(binding, deadline, stop_app=stop_owned_app_cli,
+                             diagnostic_path=native/'app-budget-guard.json') as guard:
+        with modal.enable_output(), app.run(environment_name='main'):
+            guard.remaining()
+            call = function.spawn(pins, run_id, True, args.candidate)
+            (native / 'dispatch.json').write_text(json.dumps(dict(call_id=call.object_id)) + '\n')
+            receipt = call.get(timeout=guard.remaining())
+            (native / 'remote-receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
     archive = native / 'artifacts.zip'
     with archive.open('xb') as stream:
         for block in volume.read_file(run_id + '/artifacts.zip'):

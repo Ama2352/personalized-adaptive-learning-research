@@ -101,6 +101,8 @@ def remote_epoch(pins):
 
 def main():
     from modal_graph_selected import read_billing
+    from modal_budget_guard import (ModalAppBudgetGuard, ModalRunDeadline,
+                                    PendingOwnedModalApp, stop_owned_app_cli)
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run', action='store_true')
     args = parser.parse_args()
@@ -127,6 +129,7 @@ def main():
     (native/'billing-before.json').write_text(json.dumps(billing, indent=2))
     with (BUNDLE/'gpu-reservation02.json').open('x') as stream:
         json.dump(dict(run_id=RUN, reserved_usd=0.4, pins=pins), stream)
+    deadline = ModalRunDeadline(800)
     app = modal.App('kltn-akt-'+RUN)
     volume = modal.Volume.from_name('kltn-akt-'+RUN, create_if_missing=True, version=2)
     image = modal.Image.from_id('im-ldjZsYO21pzaupmQXGLhnS')
@@ -135,11 +138,15 @@ def main():
     function = app.function(image=image, gpu=allocation['gpu_options'], cpu=(0.25,2), memory=(4096,8192),
         timeout=840, startup_timeout=60, retries=0, max_containers=1, scaledown_window=60,
         volumes={'/durable':volume})(remote_epoch)
-    with modal.enable_output(), app.run(environment_name='main'):
-        call = function.spawn(pins)
-        (native/'dispatch.json').write_text(json.dumps(dict(call_id=call.object_id)))
-        receipt = call.get(timeout=1800)
-        (native/'remote-receipt.json').write_text(json.dumps(receipt, indent=2))
+    binding = PendingOwnedModalApp(RUN, app.name, lambda: app.app_id)
+    with ModalAppBudgetGuard(binding, deadline, stop_app=stop_owned_app_cli,
+                             diagnostic_path=native/'app-budget-guard.json') as guard:
+        with modal.enable_output(), app.run(environment_name='main'):
+            guard.remaining()
+            call = function.spawn(pins)
+            (native/'dispatch.json').write_text(json.dumps(dict(call_id=call.object_id)))
+            receipt = call.get(timeout=guard.remaining())
+            (native/'remote-receipt.json').write_text(json.dumps(receipt, indent=2))
     archive = native/'artifacts.zip'
     with archive.open('xb') as stream:
         for block in volume.read_file(RUN+'/artifacts.zip'):

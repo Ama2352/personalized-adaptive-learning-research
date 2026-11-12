@@ -112,6 +112,8 @@ def remote_train(expected_inputs, run_id, research_main, candidate_id='A0'):
 
 if __name__ == '__main__':
     import argparse
+    from modal_budget_guard import (ModalAppBudgetGuard, ModalRunDeadline,
+                                    PendingOwnedModalApp, stop_owned_app_cli)
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run', action='store_true')
     parser.add_argument('--main60', action='store_true', help='A0 selected-only trên corpus48/6/6, giữ recipe frozen')
@@ -121,6 +123,7 @@ if __name__ == '__main__':
         RUN = 'modal-main60-a0-selected-20261112-01'
         allocation = json.loads((bundle/'main60-a0-allocation.json').read_text())
         assert allocation['aggregate_compute_envelope_usd'] <= allocation['authorized_total_pilot_usd']
+    deadline = ModalRunDeadline(800 if args.main60 else 380)
     app = modal.App('kltn-akt-'+RUN)
     volume = modal.Volume.from_name('kltn-akt-'+RUN, create_if_missing=True, version=2)
     inputs = {
@@ -137,7 +140,7 @@ if __name__ == '__main__':
         max_optimizer_steps=720 if args.main60 else 40,
         max_optimized_targets=201600 if args.main60 else 13440, max_containers=1,
         function_timeout_seconds=840 if args.main60 else 420,
-        client_wait_seconds=3600 if args.main60 else 1800, inputs=pins)), flush=True)
+        client_wait_seconds=800 if args.main60 else 380, inputs=pins)), flush=True)
     if not args.run:
         raise SystemExit(0)
     recovery = json.loads((ROOT/'experiments/akt/results/modal-checkpoint-pilot-20261112-12/receipt.json').read_text())
@@ -157,11 +160,15 @@ if __name__ == '__main__':
         retries=0, max_containers=1,
         volumes={'/durable': volume})(remote_train)
     native.mkdir(exist_ok=True)
-    with modal.enable_output(), app.run(environment_name='main'):
-        call = function.spawn(pins, RUN, args.main60)
-        (native/'dispatch.json').write_text(json.dumps(dict(call_id=call.object_id))+'\n')
-        receipt = call.get(timeout=3600 if args.main60 else 1800)
-        (native/'remote-receipt.json').write_text(json.dumps(receipt, indent=2)+'\n')
+    binding = PendingOwnedModalApp(RUN, app.name, lambda: app.app_id)
+    with ModalAppBudgetGuard(binding, deadline, stop_app=stop_owned_app_cli,
+                             diagnostic_path=native/'app-budget-guard.json') as guard:
+        with modal.enable_output(), app.run(environment_name='main'):
+            guard.remaining()
+            call = function.spawn(pins, RUN, args.main60)
+            (native/'dispatch.json').write_text(json.dumps(dict(call_id=call.object_id))+'\n')
+            receipt = call.get(timeout=guard.remaining())
+            (native/'remote-receipt.json').write_text(json.dumps(receipt, indent=2)+'\n')
     # GPU đã dừng trước download/CRC/SHA trên máy người dùng.
     volume = modal.Volume.from_name('kltn-akt-'+RUN)
     archive = native/'artifacts.zip'

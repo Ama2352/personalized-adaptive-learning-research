@@ -13,6 +13,7 @@ def test_bundle_contains_current_test_dependencies_and_source_only_notebooks():
     collect = runpy.run_path('scripts/akt/build_colab_bundle.py')['bundle_contents']
     contents, transforms = collect()
     for name in ('scripts/akt/refresh_gate2.py','scripts/research/run_cpu_diagnostics.py',
+                 'experiments/akt/modal_budget_guard.py',
                  'src/knowledge_tracing/paper2_reference.py',
                  'experiments/akt/configs/simulator-research-corpus01.json',
                  'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt'):
@@ -74,6 +75,7 @@ def synthetic_collector(tmp_path, monkeypatch, missing=None):
     names = [*contracts, 'requirements-akt.in', 'requirements-akt.lock.txt',
         'tests/akt/fixtures/legacy_config_before_simulator_research.py.txt',
         *(f'experiments/akt/configs/{n}.json' for n in ('smoke','pilot','fold0','simulator-research-corpus01')),
+        'experiments/akt/modal_budget_guard.py',
         'paper1/AdaptiveEngineSimulation_Enhanced.ipynb',
         *(paper+'/source/'+n+'.ipynb' for n in ('adaptive_lms_bkt_gam_graph_gam_kt_research_ready_v2_1',
                                                'junyi_cycle_corrected_ablation_confirmation')),
