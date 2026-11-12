@@ -6149,16 +6149,40 @@
       "id": "AKTJ02",
       "implementation_objective": "Nối Junyi role phaseviews và typedCUDA selected producer A0–A3, tái dùng core/windowing/metrics, chuẩn bị benchmark bounded riêng",
       "acceptance_criteria": "Khôngdùng legacy90/10cho research;train-onlyvocab/graph/confidence;matchedtargetkeys;causalmask;checkpoint/export/coverage hợp lệ;newGate đúngnguồn trướcGPU",
-      "verification_steps": "Phase/cache52tests; pilotGate2037; JunyiA0 oneepoch79updates vàcheckpointdurability; latestJunyi74localtests/11subtests",
+      "verification_steps": "Source04Gate2218; A0Junyi2full epochs/train13.347.331+selection1.600.343 mỗi epoch; A1source07Gate2226CPU; batch4/8/16/32probe480updates/reloadverified",
       "required_artifacts": "phase-role audit, source/runtimeGate, config/auth, throughput/cost estimate",
-      "status": "PARTIALLY_VERIFIED_A0_ONE_EPOCH_CUDA",
+      "status": "PARTIALLY_VERIFIED_A0_TWO_FULL_EPOCHS_CONTINUATION03_ACTIVE",
       "blockers": [
-        "MainJunyi selected/refit/calibration vàexternalfreeze chưa nối",
-        "A1prefixđãkiểm, nativeadapterchưa nối;A2/A3cầnJunyi confidenceTRAIN80",
-        "Cachefull140MBđãkiểm, cầnbenchmarkđại diện vàallocation/cloudtransfer trướcmaintraining"
+        "A0 chưa finalselected/refit/calibration",
+        "A1Junyi chưafitGPU; A2/A3 vàlearnedgraph/confidenceTRAIN80 cònthiếu",
+        "Externalfreeze, đủbaseline vàindependentevaluation cònthiếu"
       ],
       "benchmark_contract": "research_tracking/reports/AKT_BENCHMARK_CONTRACT_20261112.md",
-      "verification_evidence": "research_tracking/runs/junyi-akt-cuda-engineering-20261112-01/verification.json"
+      "verification_evidence": "research_tracking/runs/junyi-main-selected-20261112-01/training-status-20261112.json"
+    },
+    {
+      "id": "RQDIAG33",
+      "rq": [
+        "RQ1"
+      ],
+      "workstream": "Chẩn đoán controller",
+      "priority": "P0",
+      "owner": "Engineering agent",
+      "dependencies": [
+        "RQDIAG05"
+      ],
+      "research_objective": "Định lượng ảnh hưởng ngoại lệ exposure tới readiness trên cùng trạng thái",
+      "implementation_objective": "Streamingartifact dựng strictfrontier, baselineparity vàCSVchecker, không suy action khi thiếu fullscores",
+      "status": "COMPLETED_SCOPED_SAME_STATE_ELIGIBILITY_NOT_RQ_COMPLETE",
+      "acceptance_criteria": "3.240baselinefrontier/order khớp; exposureflags khớp; inputsSHA; boundedCPU;0model/worldcalls; giới hạn action/outcome rõ",
+      "verification_steps": "Rootverified18filesSHA và3240CSVkeys/counters; agentindependentCSV40groups; PNGđãview",
+      "required_artifacts": "research_tracking/runs/rq1-strict-readiness-shadow-20261112-01/manifest.json",
+      "compute_cost_category": "CPUartifactanalysis0,387s/RSS28MB",
+      "authorization_requirements": "Đã được phép phân tích artifact local",
+      "blockers": [
+        "Counterfactualaction cầnfullscorevector hoặc replaysource đã duyệt",
+        "Learningoutcome cầnrollout riêng"
+      ]
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

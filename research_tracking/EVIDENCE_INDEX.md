@@ -521,3 +521,7 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 ## 12/11 — RQ1/RQ2 và AKT chạy song song
 
 [Bản kết quả cốt lõi](reports/RQ12_CORE_FINDINGS_20261112.md) có kiểm8aggregate. [Ma trận khép](reports/RQ12_CLOSURE_MATRIX_20261112.md) phân biệt claim và RQ. [BatchprobeT4](runs/junyi-batch-throughput-20261112-01/README.md) đã giữ bốncheckpoint, archive, figurev1/v2 và nguồn. A0 continuation03 cùng source04/batch4 đang được theo dõi từ checkpoint epoch3 bước29.
+
+## 12/11 — strict readiness trên cùng trạng thái
+
+[Bundleđãđóng](runs/rq1-strict-readiness-shadow-20261112-01/README.md) giữ3.240snapshot,2.557frontierchanges,strictnonempty3.240/3.240. RootđãkiểmCSV/SHA/figure, reportpaircậpnhật. Khôngsuyactionhoặcoutcome.

@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 12/11 — đối chứng readiness trên cùng trạng thái
+
+[Phân tích strict-frontier](../runs/rq1-strict-readiness-shadow-20261112-01/README.md) đã nghiệm thu3.240snapshots, không chạy lại mô hình. Tập bài đổi ở2.557thời điểm, nhưng luôn còn bài thỏa mastery nghiêm ngặt. Có figure nguồn và giới hạn chưa suy hành động/kết quả học.
+
 ## 12/11 — khép các phát hiện cốt lõi RQ1–RQ2
 
 [Bản trình bày kết quả](RQ12_CORE_FINDINGS_20261112.md) nối bối cảnh hai paper với năm phát hiện và giới hạn, kèm kiểm8aggregate. [Ma trận còn thiếu](RQ12_CLOSURE_MATRIX_20261112.md) phân biệt claim đã đủ nguồn và phép đo còn phải chạy. [Đo batch T4](../runs/junyi-batch-throughput-20261112-01/README.md) đã nghiệm thu bốn trường hợp, main A0 giữ protocol hiện hành.
