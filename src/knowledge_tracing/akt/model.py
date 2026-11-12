@@ -57,14 +57,15 @@ class AKTAdapter:
         probe = None
         for parameter in self.native.parameters():
             if parameter.grad is not None and torch.any(parameter.grad != 0):
-                index = parameter.grad.detach().abs().reshape(-1).argmax()
+                index = parameter.grad.detach().abs().reshape(-1).argmax().reshape(1)
                 flat_parameter = parameter.detach().reshape(-1)
-                probe = (flat_parameter, index, flat_parameter[index].clone())
+                probe = (flat_parameter, index, flat_parameter.gather(0, index))
                 break
         optimizer_started = time.perf_counter()
         optimizer.step()
         optimizer_seconds = time.perf_counter() - optimizer_started
-        changed = (probe[0][probe[1]] != probe[2]) if probe is not None else loss.new_tensor(False)
+        changed = ((probe[0].gather(0, probe[1]) != probe[2]).squeeze(0)
+                   if probe is not None else loss.new_tensor(False))
         # Gom số liệu chẩn đoán vào một lần đọc về CPU, giữ nguyên phép cập nhật.
         loss_sum, mean, pre_clip, updated = torch.stack((
             loss.detach(), mean_loss.detach(), norm.detach(), changed.to(loss.dtype)

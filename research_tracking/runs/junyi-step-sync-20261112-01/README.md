@@ -29,3 +29,7 @@ Thu nvidia-smi mỗi khoảng0,25giây và ghi pha thực thi. Đo thời gian g
 `cpu-equivalence.log` giữ lỗi quyền sở hữu Git ban đầu. Đã xử lý bằng safe.directory riêng trong biến môi trường của tiến trình, không sửa Git global. `regression-tests.log` giữ lỗi thư mục tạm của pytest cùng8ca đạt. Lượt sau dùng vùng tạm riêng dưới `artifacts/akt/tmp/`, đạt15ca trong11,18giây. Các log tiếp theo phải gắn với phiên bản candidate tương ứng.
 
 Không sử dụng Holdout, calibration, outer validation hoặc nhãn thật/nhiễu của cạnh. Phép đo kỹ thuật này chưa tạo kết luận RQ mới.
+
+## Rà soát candidate trước CUDA
+
+Bản đo dùng gather với chỉ số dạng vector trên GPU để đọc probe trước/sau Adam. Bảnv1/v2 và kết quả CPU tương ứng được giữ riêng. Bản cuối đã khớp CPU qua8updates mỗi phía, log ở `cpu-equivalence04.log`. Các primitive loss/backward/clipping/Adam và mọi phương thức ngoài step giữ nguyên AST. Việc giảm đồng bộ phù hợp hướng dẫn PyTorch, tốc độ thực phải xác nhận bằng profile. [Hướng dẫn PyTorch](https://docs.pytorch.org/tutorials/recipes/recipes/tuning_guide.html#avoid-unnecessary-cpu-gpu-synchronization).
