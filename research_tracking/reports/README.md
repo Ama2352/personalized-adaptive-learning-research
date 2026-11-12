@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 12/11 — exposure đồ thị trên toàn TRAIN80 Junyi
+
+[Phân tích toàn cache](../runs/rq2-junyi-window-exposure-preflight-20261112-01/FINDINGS.md) kiểm13.347.331target trong21,35giây/RAM49,9MB. Trong976cạnh,876cópriorparent exposure,100còn lại tách theo vocabulary và lịch sử. Cóchecker64windows vàfigure. Chưa kếtluận predictivebenefit.
+
 ## 12/11 — đối chứng readiness trên cùng trạng thái
 
 [Phân tích strict-frontier](../runs/rq1-strict-readiness-shadow-20261112-01/README.md) đã nghiệm thu3.240snapshots, không chạy lại mô hình. Tập bài đổi ở2.557thời điểm, nhưng luôn còn bài thỏa mastery nghiêm ngặt. Có figure nguồn và giới hạn chưa suy hành động/kết quả học.

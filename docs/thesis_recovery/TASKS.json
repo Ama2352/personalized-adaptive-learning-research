@@ -6183,6 +6183,31 @@
         "Counterfactualaction cầnfullscorevector hoặc replaysource đã duyệt",
         "Learningoutcome cầnrollout riêng"
       ]
+    },
+    {
+      "id": "RQDIAG34",
+      "rq": [
+        "RQ2"
+      ],
+      "workstream": "Junyi order/exposure controls",
+      "priority": "P0",
+      "owner": "Engineering agent",
+      "dependencies": [
+        "AKTJ01",
+        "AKTJ02"
+      ],
+      "research_objective": "Đo điều kiện quan sát parent trong đúng native window trước negativecontrols",
+      "implementation_objective": "Label-free streaming toàn TRAIN80 bằng bitset, kiểm source/splits/coverage và sampledseen-set",
+      "status": "COMPLETED_FULL_TRAIN80_EXPOSURE_NOT_PREDICTIVE_BENEFIT",
+      "acceptance_criteria": "Đủ909shards232662windows13347331targets126774learners; khôngcorrectness/selection/Holdout; inputSHA;64windowsemanticparity; disjoint976edges",
+      "verification_steps": "Full21,35s/RSS49,9MB; checker64windows3827targets; RootCSV/SHA/PNG review",
+      "required_artifacts": "research_tracking\\runs\\rq2-junyi-window-exposure-preflight-20261112-01\\manifest.json",
+      "compute_cost_category": "CPUlocal đọc cache21,35s/49,9MB,0cloud",
+      "authorization_requirements": "Read-onlyTRAINcache đã được duyệt, root-full-review.json",
+      "blockers": [
+        "T3predictivecontrols chưa có",
+        "Controlsouter0không tự đủlineage cho benchmarkouter4"
+      ]
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

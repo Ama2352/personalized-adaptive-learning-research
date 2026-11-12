@@ -525,3 +525,7 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 ## 12/11 — strict readiness trên cùng trạng thái
 
 [Bundleđãđóng](runs/rq1-strict-readiness-shadow-20261112-01/README.md) giữ3.240snapshot,2.557frontierchanges,strictnonempty3.240/3.240. RootđãkiểmCSV/SHA/figure, reportpaircậpnhật. Khôngsuyactionhoặcoutcome.
+
+## 12/11 — toàn TRAIN80 Junyi native-window exposure
+
+[Bundleđãđóng](runs/rq2-junyi-window-exposure-preflight-20261112-01/FINDINGS.md) đo13.347.331targets/232.662windows/126.774learners trong21,35s, label-free.976edges chia876/58/28/14. Checker64windowsvàCSV/SHA/figuređượcnghiệmthu. Đây là potentialexposure, chưa predictivebenefit.

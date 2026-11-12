@@ -45,7 +45,226 @@ a{color:#155c88;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{
 <text x="480" y="215" font-size="17">Đánh giá riêng: dự báo · quyết định · kết quả học trong mô phỏng</text></g></svg></div><figcaption>Ba thành phần có vai trò khác nhau. Đây là sơ đồ tổ chức hệ thống, không phải chuỗi nhân quả đã được các kết quả bên dưới chứng minh.</figcaption></figure>
 <div class="measure"><p><strong>Paper 1</strong> được kế thừa theo bản PDF phát triển dùng để nộp, là nguồn chuẩn về thiết kế và kết quả. Notebook trong repository là bản tiền kỳ. Bản PDF đã tách vai trò của đồ thị với vai trò của cách chọn đường đi. Ưu tiên học liên tục trong chương giúp giảm chuyển chương và quay lại chương, nhưng đồ thị mở rộng chưa cải thiện ổn định mức thành thạo. Phương án mở rộng thay cả quan hệ nội chương và liên chương, nên chưa tách riêng hiệu quả của cạnh liên chương. Paper đã gắn tính liên tục của lộ trình với chính sách lựa chọn; khóa luận không coi nhận định đó là phát hiện mới.</p>
 <p><strong>Paper 2</strong> đi tiếp vào mô hình ước lượng tri thức. Phần bổ sung có đồ thị cải thiện nhẹ dự báo ở một số nhóm mô phỏng, nhưng chưa phát hiện cải thiện rõ ở hai kết quả học tập chính sau hiệu chỉnh thống kê. Trên Junyi, bước chọn cấu hình phát triển ưu tiên tắt các cơ chế đồ thị đã thử. Paper cũng thừa nhận phép bật/tắt còn gộp nhiều cơ chế, nên chưa tách được phần đóng góp của riêng các cạnh.</p>
-<p>Khoảng trống cần giải quyết vì vậy không chỉ là cài một mô hình mạnh hơn. Khóa luận giữ ba câu hỏi trong đề cương: <strong>RQ1</strong> tìm nguyên nhân lợi ích chưa ổn định; <strong>RQ2</strong> xác định khi nào thông tin tiên quyết hữu ích, trung tính hoặc bất lợi; <strong>RQ3</strong> kiểm tra CG-AKT, một cách điều chỉnh ảnh hưởng của đồ thị theo độ tin cậy trên nền AKT.</p></div></section><section id="strict-shadow-20261112"><h2>Phát hiện bổ sung12/11 — khi yêu cầu tiên quyết thực sự được đánh dấu thành thạo</h2><p>Phân tích trước cho thấy controller sử dụng ngoại lệ đủ6lần luyện. Để hiểu rõ vai trò của ngoại lệ, nhóm giữ nguyên trạng thái mô hình tại từng thời điểm rồi yêu cầu mọi tiên quyết được đánh dấu thành thạo. Quy tắc mới chỉ được tính trên dữ liệu đã lưu.</p><p>Tập bài đủ điều kiện thay đổi ở2.557/3.240thời điểm, loại18.520trong30.572lượt thành viên. Tuy vậy, ở cả3.240thời điểm vẫn còn ít nhất một bài thỏa điều kiện nghiêm ngặt. Các bài còn lại thuộc tập sơ bộ trước bộ lọc chống lặp, phủ nội dung và xếp hạng. Chưa biết chúng còn được giữ sau các bộ lọc này hoặc có giúp tiến sang nội dung mới. Số2.041hành động nằm ngoài tập nghiêm ngặt khớp footprint đã báo cáo trước.</p><figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="792pt" height="460.8pt" viewBox="0 0 792 460.8" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<p>Khoảng trống cần giải quyết vì vậy không chỉ là cài một mô hình mạnh hơn. Khóa luận giữ ba câu hỏi trong đề cương: <strong>RQ1</strong> tìm nguyên nhân lợi ích chưa ổn định; <strong>RQ2</strong> xác định khi nào thông tin tiên quyết hữu ích, trung tính hoặc bất lợi; <strong>RQ3</strong> kiểm tra CG-AKT, một cách điều chỉnh ảnh hưởng của đồ thị theo độ tin cậy trên nền AKT.</p></div></section><section id="junyi-exposure-20261112"><h2>Phát hiện bổ sung 12/11 — thông tin tiên quyết có xuất hiện trong lịch sử mô hình?</h2><p>Trước khi so đồ thị thật với đồ thị gây nhiễu trên Junyi, cần kiểm mô hình có cơ hội nhìn thấy thông tin của cạnh đó hay không. Nhóm đã đọc toàn232.662 cửa sổ và13.347.331 tương tác train, giữ đúng phần lịch sử trước câu hỏi mà AKT nhận. Phân tích dùng ID bài và metadata, giữ riêng đáp án và các tập lựa chọn, hiệu chỉnh, đánh giá.</p><p>Trong 976 cạnh catalog, 876 cạnh có ít nhất một câu hỏi với tiên quyết đã xuất hiện trước trong cửa sổ. Có 58 cạnh mà bài phụ thuộc nằm ngoài tập bài train,28 cạnh mà tiên quyết nằm ngoài tập bài train và14 cạnh có cả hai bài trong tập huấn luyện nhưng chưa xuất hiện đúng thứ tự trong cửa sổ. Các nhóm này không chồng nhau.</p><figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="864pt" height="489.6pt" viewBox="0 0 864 489.6" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-12T17:30:57.249233</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="jexposure20261112_figure_1">
+  <g id="jexposure20261112_patch_1">
+   <path d="M 0 489.6
+L 864 489.6
+L 864 0
+L 0 0
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="jexposure20261112_axes_1">
+   <g id="jexposure20261112_patch_2">
+    <path d="M 345.6 347.616
+L 838.08 347.616
+L 838.08 112.608
+L 345.6 112.608
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="jexposure20261112_matplotlib.axis_1">
+    <g id="jexposure20261112_xtick_1">
+     <g id="jexposure20261112_line2d_1">
+      <path d="M 345.6 347.616
+L 345.6 112.608
+" clip-path="url(#jexposure20261112_pa390785e65)" style="fill: none; stroke: #e9e9e9; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="jexposure20261112_line2d_2">
+      <defs>
+       <path id="jexposure20261112_m54d7e6af6e" d="M 0 0
+L 0 3.5
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#jexposure20261112_m54d7e6af6e" x="345.6" y="347.616" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="jexposure20261112_text_1">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="345.6" y="362.973422" transform="rotate(-0 345.6 362.973422)">0</text>
+     </g>
+    </g>
+    <g id="jexposure20261112_xtick_2">
+     <g id="jexposure20261112_line2d_3">
+      <path d="M 446.106122 347.616
+L 446.106122 112.608
+" clip-path="url(#jexposure20261112_pa390785e65)" style="fill: none; stroke: #e9e9e9; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="jexposure20261112_line2d_4">
+      <g>
+       <use xlink:href="#jexposure20261112_m54d7e6af6e" x="446.106122" y="347.616" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="jexposure20261112_text_2">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="446.106122" y="362.973422" transform="rotate(-0 446.106122 362.973422)">200</text>
+     </g>
+    </g>
+    <g id="jexposure20261112_xtick_3">
+     <g id="jexposure20261112_line2d_5">
+      <path d="M 546.612245 347.616
+L 546.612245 112.608
+" clip-path="url(#jexposure20261112_pa390785e65)" style="fill: none; stroke: #e9e9e9; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="jexposure20261112_line2d_6">
+      <g>
+       <use xlink:href="#jexposure20261112_m54d7e6af6e" x="546.612245" y="347.616" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="jexposure20261112_text_3">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="546.612245" y="362.973422" transform="rotate(-0 546.612245 362.973422)">400</text>
+     </g>
+    </g>
+    <g id="jexposure20261112_xtick_4">
+     <g id="jexposure20261112_line2d_7">
+      <path d="M 647.118367 347.616
+L 647.118367 112.608
+" clip-path="url(#jexposure20261112_pa390785e65)" style="fill: none; stroke: #e9e9e9; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="jexposure20261112_line2d_8">
+      <g>
+       <use xlink:href="#jexposure20261112_m54d7e6af6e" x="647.118367" y="347.616" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="jexposure20261112_text_4">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="647.118367" y="362.973422" transform="rotate(-0 647.118367 362.973422)">600</text>
+     </g>
+    </g>
+    <g id="jexposure20261112_xtick_5">
+     <g id="jexposure20261112_line2d_9">
+      <path d="M 747.62449 347.616
+L 747.62449 112.608
+" clip-path="url(#jexposure20261112_pa390785e65)" style="fill: none; stroke: #e9e9e9; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="jexposure20261112_line2d_10">
+      <g>
+       <use xlink:href="#jexposure20261112_m54d7e6af6e" x="747.62449" y="347.616" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="jexposure20261112_text_5">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="747.62449" y="362.973422" transform="rotate(-0 747.62449 362.973422)">800</text>
+     </g>
+    </g>
+    <g id="jexposure20261112_text_6">
+     <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="591.84" y="384.929906" transform="rotate(-0 591.84 384.929906)">Số cạnh trong đồ thị catalog</text>
+    </g>
+   </g>
+   <g id="jexposure20261112_matplotlib.axis_2">
+    <g id="jexposure20261112_ytick_1">
+     <g id="jexposure20261112_line2d_11"/>
+     <g id="jexposure20261112_text_7">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="333.6" y="142.54966" transform="rotate(-0 333.6 142.54966)">Có parent trước target trong native prefix</text>
+     </g>
+    </g>
+    <g id="jexposure20261112_ytick_2">
+     <g id="jexposure20261112_line2d_12"/>
+     <g id="jexposure20261112_text_8">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="333.6" y="203.590699" transform="rotate(-0 333.6 203.590699)">Child không có trong vocabulary TRAIN</text>
+     </g>
+    </g>
+    <g id="jexposure20261112_ytick_3">
+     <g id="jexposure20261112_line2d_13"/>
+     <g id="jexposure20261112_text_9">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="333.6" y="264.631738" transform="rotate(-0 333.6 264.631738)">Child fitted, parent ngoài vocabulary TRAIN</text>
+     </g>
+    </g>
+    <g id="jexposure20261112_ytick_4">
+     <g id="jexposure20261112_line2d_14"/>
+     <g id="jexposure20261112_text_10">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="333.6" y="325.723558" transform="rotate(-0 333.6 325.723558)">Cả hai fitted, chưa có parent trước target</text>
+     </g>
+    </g>
+   </g>
+   <g id="jexposure20261112_patch_3">
+    <path d="M 345.6 123.290182
+L 785.816816 123.290182
+L 785.816816 153.810701
+L 345.6 153.810701
+z
+" clip-path="url(#jexposure20261112_pa390785e65)" style="fill: #3c6e82"/>
+   </g>
+   <g id="jexposure20261112_patch_4">
+    <path d="M 345.6 184.331221
+L 374.746776 184.331221
+L 374.746776 214.85174
+L 345.6 214.85174
+z
+" clip-path="url(#jexposure20261112_pa390785e65)" style="fill: #8f3d3d"/>
+   </g>
+   <g id="jexposure20261112_patch_5">
+    <path d="M 345.6 245.37226
+L 359.670857 245.37226
+L 359.670857 275.892779
+L 345.6 275.892779
+z
+" clip-path="url(#jexposure20261112_pa390785e65)" style="fill: #71619b"/>
+   </g>
+   <g id="jexposure20261112_patch_6">
+    <path d="M 345.6 306.413299
+L 352.635429 306.413299
+L 352.635429 336.933818
+L 345.6 336.933818
+z
+" clip-path="url(#jexposure20261112_pa390785e65)" style="fill: #777777"/>
+   </g>
+   <g id="jexposure20261112_patch_7">
+    <path d="M 345.6 347.616
+L 838.08 347.616
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="jexposure20261112_text_11">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start" x="791.847184" y="141.667629" transform="rotate(-0 791.847184 141.667629)">876</text>
+   </g>
+   <g id="jexposure20261112_text_12">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start" x="380.777143" y="202.708668" transform="rotate(-0 380.777143 202.708668)">58</text>
+   </g>
+   <g id="jexposure20261112_text_13">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start" x="365.701224" y="263.749707" transform="rotate(-0 365.701224 263.749707)">28</text>
+   </g>
+   <g id="jexposure20261112_text_14">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start" x="358.665796" y="324.790746" transform="rotate(-0 358.665796 324.790746)">14</text>
+   </g>
+  </g>
+  <g id="jexposure20261112_text_15">
+   <text style="font-weight: 700; font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: start" x="38.88" y="29.376" transform="rotate(-0 38.88 29.376)">Junyi — cạnh nào có cơ hội cung cấp thông tin quá khứ?</text>
+  </g>
+  <g id="jexposure20261112_text_16">
+   <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start" x="38.88" y="58.752" transform="rotate(-0 38.88 58.752)">976 cạnh catalog · bốn nhóm tách biệt · chỉ TRAIN80 outer-fold 4</text>
+  </g>
+  <g id="jexposure20261112_text_17">
+   <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="38.88" y="413.712" transform="rotate(-0 38.88 413.712)">Đã kiểm 232.662 cửa sổ, 13.347.331 target từ 126.774 learner. Prefix đặt lại ở mỗi native window.</text>
+  </g>
+  <g id="jexposure20261112_text_18">
+   <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="38.88" y="438.192" transform="rotate(-0 38.88 438.192)">876 cạnh có ít nhất một target quan sát parent trước đó. Các con số này mô tả cơ hội exposure.</text>
+  </g>
+  <g id="jexposure20261112_text_19">
+   <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="38.88" y="462.672" transform="rotate(-0 38.88 462.672)">Chưa đo ảnh hưởng lên dự báo, lợi ích học tập hoặc độ đúng của cạnh tiên quyết.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="jexposure20261112_pa390785e65">
+   <rect x="345.6" y="112.608" width="492.48" height="235.008"/>
+  </clipPath>
+ </defs>
+</svg>
+<figcaption>Cạnh nối bài tiên quyết với bài phụ thuộc. “Có trong vocabulary TRAIN” nghĩa là bài có mặt trong tập bài đã dùng tạo encoding. Phân tích bao phủ126.774 người học train. Có exposure mới chỉ xác nhận cơ hội nhận thông tin quá khứ.</figcaption></figure><p>Lượt CPU hoàn tất21,35 giây, dùng khoảng48 MiB RAM. Đã kiểm lại số liệuCSV và đối chiếu thuật toán trên64 cửa sổ. Chưa xác định cạnh nào đúng, cải thiện dự báo hoặc giúp học tốt hơn. Các cạnh thiếu exposure vẫn có thể ảnh hưởng đặc trưng cấu trúc của một kiến trúc cụ thể. Bước tiếp theo là tạo controls theo đúngTRAIN80 hiện hành, kiểm mức tiếp xúc của những cạnh bị thay rồi so dự báo trên cùng câu hỏi. Các controls pilot cũ thuộc một fold khác được giữ đúng phạm vi kế thừa.</p></section><section id="strict-shadow-20261112"><h2>Phát hiện bổ sung 12/11 — khi yêu cầu tiên quyết thực sự được đánh dấu thành thạo</h2><p>Phân tích trước cho thấy controller sử dụng ngoại lệ đủ6 lần luyện. Để hiểu rõ vai trò của ngoại lệ, nhóm giữ nguyên trạng thái mô hình tại từng thời điểm rồi yêu cầu mọi tiên quyết được đánh dấu thành thạo. Quy tắc mới chỉ được tính trên dữ liệu đã lưu.</p><p>Tập bài đủ điều kiện thay đổi ở2.557/3.240 thời điểm, loại18.520trong30.572lượt thành viên. Tuy vậy, ở cả3.240 thời điểm vẫn còn ít nhất một bài thỏa điều kiện nghiêm ngặt. Các bài còn lại thuộc tập sơ bộ trước bộ lọc chống lặp, phủ nội dung và xếp hạng. Chưa biết chúng còn được giữ sau các bộ lọc này hoặc có giúp tiến sang nội dung mới. Số2.041 hành động nằm ngoài tập nghiêm ngặt khớp footprint đã báo cáo trước.</p><figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="792pt" height="460.8pt" viewBox="0 0 792 460.8" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
@@ -328,14 +547,14 @@ z
   </clipPath>
  </defs>
 </svg>
-<figcaption>Mỗi lượt concept–snapshot là một khái niệm thuộc tập đủ điều kiện tại một thời điểm. Các cột mô tả lịch sử của từng cấu hình, có thể đã phân kỳ. Phân tích giữ3seedfamilies cũ và không tạo thêm mẫu độc lập.</figcaption></figure><p>Trace thiếu điểm xếp hạng đầy đủ của các ứng viên có thể xuất hiện sau khi đổi bộ lọc. Vì vậy, chưa tính hành động thay thế hoặc mức tăng kiến thức. Phát hiện làm rõ mắt xích thành thạo–mở bài trongRQ1. Đánh giá controller qua nhiều bước vẫn cần thí nghiệm riêng.</p></section><section id="parallel-rq12-20261112"><h2>Đợt tiếp tục12/11 — từ bằng chứng đã lưu đến lập luận nghiên cứu</h2>
+<figcaption>Mỗi lượt concept–snapshot là một khái niệm thuộc tập đủ điều kiện tại một thời điểm. Các cột mô tả lịch sử của từng cấu hình, có thể đã phân kỳ. Phân tích giữ3 seed families cũ và không tạo thêm mẫu độc lập.</figcaption></figure><p>Trace thiếu điểm xếp hạng đầy đủ của các ứng viên có thể xuất hiện sau khi đổi bộ lọc. Vì vậy, chưa tính hành động thay thế hoặc mức tăng kiến thức. Phát hiện làm rõ mắt xích thành thạo–mở bài trongRQ1. Đánh giá controller qua nhiều bước vẫn cần thí nghiệm riêng.</p></section><section id="parallel-rq12-20261112"><h2>Đợt tiếp tục12/11 — từ bằng chứng đã lưu đến lập luận nghiên cứu</h2>
 <p>Trong lúc AKT tiếp tục được huấn luyện, nhóm hoàn thiện năm phát hiện cốt lõi RQ1–RQ2 và đối chiếu số liệu từ tám bảng kết quả đã lưu. Phần này khép các phát biểu có điều kiện, đồng thời xác định phép đo còn thiếu để hoàn tất hai câu hỏi nghiên cứu.</p>
 <p>Thứ nhất, có những chỉ tiêu chịu chi phối trực tiếp bởi quy tắc mô phỏng. Với DAG nội chương và các điều kiện controller đã kiểm, không quay lại chương là hệ quả cấu trúc. Với luật quên đồng nhất đang xét, retained net gain sau14ngày bằng0,43171lần final net gain và giữ cùng thứ hạng. Phạm vi áp dụng của hai kết luận được giữ rõ.</p>
 <p>Thứ hai, thay đổi dự báo thường chưa chuyển thành lựa chọn khác. Trong1.080cặp thời điểm của pilot fixed-stream,964cặp đổi dự báo nhưng944trong số đó giữ nguyên lựa chọn thăm dò. Phân tích hành động đã phục vụ còn cho thấy2.041/2.740lượt có tiên quyết sử dụng ngoại lệ đủ số lần luyện. Vì vậy, cần đo cả trạng thái và quy tắc mở bài để giải thích ảnh hưởng đồ thị.</p>
 <p>Thứ ba, đối chứng120world trên10khối mới cho thấy cần tách nguồn đồ thị khỏi cơ chế năng lực. Chênh lệch còn có thể đi qua các đường khác khi cơ chế phạt thiếu tiên quyết bất hoạt. Với Junyi, các đối chứng topology hiện có chỉ đổi exposure ở1–7trong239người học đủ điều kiện. Chúng chưa xác nhận dương tính giả của chỉ số dự báo. Đánh giá predictive order-controls vẫn còn thiếu.</p>
 <p>RQ1 còn cần calibration/mastery và kết quả học chính. RQ2 còn cần các điều kiện nhiễu, lịch sử và mức hỗ trợ của dữ liệu. Các đầu ra được dùng chung với thí nghiệm CG-AKT để giảm số lượt huấn luyện.</p>
 <h3>Đo khả năng tăng tốc trước các lượt Junyi tiếp theo</h3>
-<p>Cùng packet56.332target được chạy với batch4/8/16/32. Cả bốn lượt đều lưu và nạp lại checkpoint khớp. Batch lớn có thông lượng cao hơn, đồng thời giảm số cập nhật Adam trên cùng lượt dữ liệu. Mỗi trường hợp chỉ đo một lần, chưa xác định số epoch cần để đạt chất lượng. Main A0 tiếp tục từ checkpoint epoch3 với batch4 theo protocol hiện hành.</p>
+<p>Cùng packet56.332 target được chạy với batch 4/8/16/32. Cả bốn lượt đều lưu và nạp lại checkpoint khớp. Batch lớn có thông lượng cao hơn, đồng thời giảm số cập nhật Adam trên cùng lượt dữ liệu. Mỗi trường hợp chỉ đo một lần, chưa xác định số epoch cần để đạt chất lượng. Main A0 tiếp tục từ checkpoint epoch 3 với batch 4 theo protocol hiện hành.</p>
 <figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="590.4pt" height="374.4pt" viewBox="0 0 590.4 374.4" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
