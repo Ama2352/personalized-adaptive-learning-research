@@ -106,14 +106,18 @@ def stop_owned_app_cli(app, *, timeout_seconds=15):
             check=True, timeout=remaining(), capture_output=True, text=True)
     except subprocess.CalledProcessError as stop_error:
         # CLI có thể trả code1 khi App đã kết thúc. Không suy trạng thái từ stderr.
-        result = subprocess.run([sys.executable,'-B','-m','modal','app','list','--json'],
-            check=True,timeout=remaining(),capture_output=True,text=True)
-        records = json.loads(result.stdout)
-        matches = [row for row in records if type(row) is dict and row.get('app_id')==app.app_id] if type(records) is list else []
-        if (len(matches)!=1 or matches[0].get('state')!='stopped'
-                or type(matches[0].get('tasks')) not in (int,str)
-                or matches[0]['tasks'] not in (0,'0')):
-            raise RuntimeError('Owned App was not independently confirmed stopped with zero tasks') from stop_error
+        for attempt in range(3):
+            result = subprocess.run([sys.executable,'-B','-m','modal','app','list','--json'],
+                check=True,timeout=remaining(),capture_output=True,text=True)
+            records = json.loads(result.stdout)
+            matches = [row for row in records if type(row) is dict and row.get('app_id')==app.app_id] if type(records) is list else []
+            if (len(matches)==1 and matches[0].get('state')=='stopped'
+                    and type(matches[0].get('tasks')) in (int,str)
+                    and matches[0]['tasks'] in (0,'0')):
+                return
+            if attempt < 2:
+                time.sleep(min(.5, remaining()))
+        raise RuntimeError('Owned App was not independently confirmed stopped with zero tasks') from stop_error
 
 
 class ModalAppBudgetGuard:

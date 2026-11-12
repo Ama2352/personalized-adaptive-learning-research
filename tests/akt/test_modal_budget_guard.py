@@ -239,6 +239,21 @@ def test_stop_cli_state_query_failure_remains_failure(monkeypatch):
         guard_module.stop_owned_app_cli(owned())
 
 
+def test_stop_cli_waits_for_bounded_state_propagation(monkeypatch):
+    states = iter(['ephemeral', 'stopped'])
+    queries = []
+    monkeypatch.setattr(guard_module.time, 'sleep', lambda seconds: None)
+    def execute(args, **kwargs):
+        if args[-2] == 'stop':
+            raise subprocess.CalledProcessError(1, args)
+        queries.append(args)
+        return subprocess.CompletedProcess(args, 0, stdout=json.dumps([
+            dict(app_id=owned().app_id, state=next(states), tasks='0')]))
+    monkeypatch.setattr(guard_module.subprocess, 'run', execute)
+    guard_module.stop_owned_app_cli(owned())
+    assert len(queries) == 2
+
+
 def test_import_does_not_load_torch():
     program = """
 import importlib.util,sys
