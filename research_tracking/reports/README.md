@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## Chốt 13/11 — A0 H100 hoàn tất chọn checkpoint
+
+[A0 H100](../supervisor_reports/2026-11-13/BAO_CAO_A0_H100.html) đã hoàn tất chọn checkpoint epoch 9 sau 12 epoch, model và dự báo đã lưu trên D. [Bằng chứng](../runs/junyi-a0-h100-batch128-20261112-01/README.md). Refit/calibration/đánh giá độc lập còn chờ.
+
+
 ## 12/11 — tiến độ A0 H100 batch128
 
 [Bằng chứng](../runs/junyi-a0-h100-batch128-20261112-01/README.md) có5epoch đã nghiệm thu, LLselection0,360011→0,354815 và thời gian từng pha. [Thống kê training](AKT_TRAINING_STATUS_20261112.md) đã cập nhật, đánh giá độc lập còn chờ.

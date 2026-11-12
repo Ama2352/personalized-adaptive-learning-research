@@ -11,7 +11,7 @@ BUNDLE = Path(__file__).resolve().parent
 LOGICAL = 'modal-junyi-a0-b128-h100-20261112-01'
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--previous',required=True)
-parser.add_argument('--sequence',type=int,choices=(2,3),required=True)
+parser.add_argument('--sequence',type=int,choices=(2,3,4),required=True)
 args = parser.parse_args()
 assert re.fullmatch(r'modal-junyi-a0-b128-h100-20261112-[0-9]{2}',args.previous)
 execution = f'modal-junyi-a0-b128-h100-20261112-{args.sequence:02d}'

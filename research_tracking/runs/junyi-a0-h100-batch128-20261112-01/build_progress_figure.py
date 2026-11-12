@@ -45,9 +45,24 @@ axes[0].set_xlim(min(epochs)-.4,max(epochs)+.4)
 axes[0].set_xlabel('Epoch')
 axes[0].set_ylabel('Log Loss trên tập chọn epoch')
 axes[0].set_ylim(.345,.365)
+label_epochs = set(epochs if len(epochs)<=5 else (epochs[0],epochs[-1]))
 for row in rows:
+    if row['epoch'] not in label_epochs:
+        continue
+    alignment = 'center'
+    horizontal_offset = 0
+    if len(epochs)>5:
+        alignment = 'left' if row['epoch']==epochs[0] else 'right'
+        horizontal_offset = 8 if row['epoch']==epochs[0] else -8
     axes[0].annotate(f"{row['selection_log_loss']:.4f}",
-        (row['epoch'],row['selection_log_loss']),xytext=(0,9),textcoords='offset points',ha='center')
+        (row['epoch'],row['selection_log_loss']),xytext=(horizontal_offset,9),
+        textcoords='offset points',ha=alignment)
+selected_epoch=snapshot.get('selected_epoch')
+if selected_epoch is not None:
+    chosen=next(row for row in rows if row['epoch']==selected_epoch)
+    axes[0].scatter([selected_epoch],[chosen['selection_log_loss']],marker='*',s=150,
+        color='#8c4143',zorder=5,label=f'Checkpoint được chọn, epoch {selected_epoch}')
+    axes[0].legend(loc='lower left',frameon=False,fontsize=9)
 train=[row['training_seconds']/60 for row in rows]
 validation=[row['validation_seconds']/60 for row in rows]
 axes[1].bar(epochs,train,label='Training',color='#3b7085',width=.55)
@@ -58,6 +73,8 @@ axes[1].set_ylabel('Thời gian (phút)')
 axes[1].set_ylim(0,7)
 axes[1].legend(loc='upper right',frameon=False)
 for epoch,t,v in zip(epochs,train,validation):
+    if len(epochs)>5 or epoch not in label_epochs:
+        continue
     axes[1].text(epoch,t/2,f'{t:.2f}',ha='center',va='center',color='white')
     axes[1].text(epoch,t+v/2,f'{v:.2f}',ha='center',va='center',color='white')
 fig.suptitle('A0 không đồ thị trên Junyi — H100, batch128',fontsize=13)

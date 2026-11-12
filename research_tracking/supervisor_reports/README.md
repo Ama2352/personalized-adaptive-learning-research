@@ -1,5 +1,10 @@
 # Báo cáo tiến độ theo ngày
 
+## Chốt 13/11 — A0 H100 hoàn tất chọn checkpoint
+
+[Báo cáo riêng A0 H100](2026-11-13/BAO_CAO_A0_H100.html) là một HTML tự chứa, trình bày cấu hình, ba phiên H100, 12 epoch, checkpoint epoch 9, metrics selection, tài nguyên, chi phí và bước còn thiếu. Báo cáo tiến độ tổng thể tiếp tục ở đợt 10/11 và đã cập nhật kết quả này.
+
+
 ## Cập nhật10/11 — đối chứng đủ120ca và nghiệm thu CPU
 
 [Báo cáo hiện hành10/11](2026-11-10/01_tien_do/BAO_CAO_NGHIEN_CUU.html) có Chặng15 và bảng fresh10blocks, giữ đợt09/11. [Recovery](../runs/rq2-fresh-graph-recovery-20261110-01/README.md) đã đủprimary120/14400, physical121/14430 gồm replay30. K1000 có6dương/4âm, K1150 có8dương/2âm, K1300zero10 là đối chứngbất hoạt. [AKT native18](../runs/akt-cpu-checkpoint-current-20261110-01/README.md) và [GKT model11/trainer8](../runs/gkt-research-model-trainer-20261110-01/README.md) đều0FES/Job0. Publicproducerresume/CGAKTresearchfit/CUDA và suy luận thống kê vẫn còn riêng. Không chiModal.

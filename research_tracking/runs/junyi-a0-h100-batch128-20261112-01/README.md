@@ -23,3 +23,29 @@ Nguồn epoch01-snapshot.json vàepoch02-snapshot.json đọc CPU từcheckpoint
 ## Đợt1 đã nghiệm thu, tiếp tụcđợt2
 
 Đã hoàn tất5epoch/9.090updates/66.736.655targetexposures. Có20checkpoint, archive531.888.179byte SHA361b76fb3f242455fcc4767a6450a96be7bfa2b903ad130205b9c10198e39589 trênD. H100 đãdừng,0container được xác nhận độc lập. Credits snapshot còn24,74USD, tăng1,98USD so trướcH100. LogLoss selection1–5 là0,360011/0,356920/0,355758/0,355607/0,354815. Besttạm5,stale0, chưachốtselected. Đợt2 giữsource/data/config/profile/identity, phục hồi đúngepoch5 rồi bắtđầu6. DùngH100! đểgiữ kiếntrúcGPU, tránh auto-upgrade ảnhhưởng kiểm probability SHA giữa cácđợt. Trần3USD đợt2, không benchmark.
+
+## Đợt2 đã nghiệm thu, tiếp tụcđợt3
+
+Đã hoàn tất10epoch/18.180updates/133.473.310targetexposures,25checkpoint trongarchive664.386.641byte SHA5416e45fe827bf45787a678694029da539aeaa92c1032202c3a914d8eb8f4cf4 trênD. App02đãstopped và0container được xác nhận. Tổngcredits snapshot7,45USD, còn22,55USD. Epoch7 tăngloss nhưng8/9 lại giảm, besttheomin_deltaở9/LL0,353580;10LL0,353560 chỉgiảm0,000020nênstale1. Đợt3nối10vàbắtđầu11, trần3USD, chưađổiđiềukiệndừng.
+
+Giới hạn kế hoạch nối được cập nhật theo số đo thực tế5epoch/tranche. Đểbao hết trần20epochcần tốiđa4execution thaycho dự tính3banđầu. Chỉnối khi chưaearlystop, archive/stop đãkiểm vàledger trong30USDchophép. Không mở sẵn cácGPUtiếp theo. Đây là sửa dự tính vận hành, không đổi20/patience3/min_delta hay dữliệu.
+
+
+## Nghiệm thu cuối và báo cáo riêng ngày 13/11
+
+A0 không đồ thị trên Junyi đã hoàn tất 12 epoch H100 batch128 và chọn checkpoint epoch 9 theo patience 3, min_delta 0,0001. Mỗi epoch có 13.347.331 target train và 1.600.343 target selection, 0 OOV. Đã tải và kiểm ba archive, nạp lại checkpoint được chọn, xuất đủ dự báo và model chính về D. Cả ba App đã dừng, snapshot server ghi 0 container.
+
+Log Loss selection của checkpoint được chọn là 0,353580, AUC 0,805990, Brier 0,107700 và ECE 0,004270. Đây là tập dùng chọn epoch, đánh giá độc lập và so sánh chính thức với BKT/GAM-KT còn ở bước tiếp theo. Refit90 và calibration chưa thực hiện. Training trung bình 2 phút 03 giây và validation 3 phút 18 giây/epoch. Telemetry toàn quá trình xử lý ghi GPU trung bình 26,49%, cao nhất 74%, VRAM cao nhất 5.793 MiB. Còn dư địa tối ưu validation.
+
+Ba phiên H100 ghi credits tăng khoảng 5,39 USD, tổng KLTN đã dùng 8,67 USD và còn 21,33 USD tại snapshot cuối, billed 0 USD. Mọi lần tiếp tục cần dự toán trong phần ngân sách còn lại.
+
+Model chính ở `experiments/akt/results/model-export-a0-batch128-20261112-01/`, có một `.pt` cùng SUPPORT, MODEL_INDEX và README. Báo cáo tự chứa ở `research_tracking/supervisor_reports/2026-11-13/BAO_CAO_A0_H100.html`. Dựng lại bằng `build_training_report.py`, số liệu từ epoch12-analysis-input/selection-metrics/resource-summary và các verification/billing/stop-confirmation. Figure cuối final012v2 giữ SVG/PDF/PNG/CSV cùng script.
+
+Đối soát ledger giữ bản trước thay đổi và toàn bộ reservation lịch sử trong closed_reservations, giải phóng cap đã đóng để tránh tính trùng với metered usage. Không thay đổi trần 30 USD, cấm trả thêm và dự phòng 3 USD. Cận trên kế toán 9,002 USD giữ lớn hơn snapshot meter 8,679 USD. Không cấp job mới trong gói làm báo cáo.
+
+
+## Kiểm báo cáo và đóng bundle
+
+Đã kiểm tự động số liệu, model SHA, số dự báo, 12 epoch, App stopped và bố cục ngữ cảnh trước cập nhật. Đã xem figure cuối cùng, screenshot desktop 1440px và khung hẹp 600px. Chrome kiểm thử đã kết thúc, không tạo preview server. Lượt Chrome đầu trong môi trường hạn chế lỗi Crashpad; chạy lại với quyền mở Chrome cục bộ thành công. Screenshot 390px bị giới hạn viewport tối thiểu của Chrome headless nên không dùng làm kiểm mobile đạt, ảnh gốc vẫn giữ. Không xác nhận kiểm thiết bị di động thực. report-check.json ghi hai viewport đã nghiệm thu. Các script Python trong bundle đã parse cú pháp. Không chạy thêm training hoặc đọc Holdout.
+
+Bundle đóng sau FINAL_MANIFEST.json. Mọi cập nhật tiếp theo dùng bundle mới và tham chiếu hồ sơ này, không sửa bằng chứng đã đóng.

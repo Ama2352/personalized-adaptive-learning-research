@@ -1,14 +1,17 @@
 # Báo cáo tiến độ khóa luận — cập nhật 12/11/2026
 
-## Cập nhật12/11 lúc23giờ00 — A0 batch128 đã hoàn tất 5 epoch
 
-A0 không đồ thị trên H100 batch128 đã hoàn tất 5 epoch, tương ứng 66,74 triệu lượt target và 9.090 cập nhật optimizer. Mỗi epoch dùng cùng 13,35 triệu lượt train và 1,60 triệu lượt selection, 0 OOV. Lượt batch128 được khởi tạo từ seed 42, lịch sử batch4 trước đó được lưu riêng.
+## Chốt 13/11 — A0 H100 đã chọn checkpoint epoch 9
 
-Theo dõi sai lệch giữa xác suất dự báo và đáp án để chọn thời điểm dừng. LogLoss selection giảm từ 0,360011 xuống 0,354815 qua 5 epoch. Mô hình còn cải thiện nên chưa chốt epoch cuối. Refit, calibration và đánh giá độc lập còn ở bước tiếp theo, kết quả này phục vụ chọn checkpoint.
+A0 không đồ thị trên Junyi đã hoàn tất 12 epoch H100 batch128 và chọn checkpoint epoch 9 theo patience 3, min_delta 0,0001. Mỗi epoch có 13.347.331 target train và 1.600.343 target selection, 0 OOV. Đã tải và kiểm ba archive, nạp lại checkpoint được chọn, xuất đủ dự báo và model chính về D. Cả ba App đã dừng, snapshot server ghi 0 container.
 
-Training khoảng 2 phút/epoch và validation khoảng 3 phút 12 giây, tổng khoảng 5 phút 10 giây. Đợt giới hạn đầu đã xuất 20 checkpoint cùng archive 532 MB về D, kiểm toàn vẹn và xác nhận tắtGPU. Credits snapshot sau đợt còn 24,74 USD, mức sử dụng tăng 1,98 USD so trước H100. Đợt nối tiếp phục hồi nguyên trạng thái epoch 5 và tiếp tục từ 6, có trần 3 USD riêng trong giới hạn toàn KLTN 30 USD.
+Log Loss selection của checkpoint được chọn là 0,353580, AUC 0,805990, Brier 0,107700 và ECE 0,004270. Đây là tập dùng chọn epoch, đánh giá độc lập và so sánh chính thức với BKT/GAM-KT còn ở bước tiếp theo. Refit90 và calibration chưa thực hiện. Training trung bình 2 phút 03 giây và validation 3 phút 18 giây/epoch. Telemetry toàn quá trình xử lý ghi GPU trung bình 26,49%, cao nhất 74%, VRAM cao nhất 5.793 MiB. Còn dư địa tối ưu validation.
 
-![Tiến độ A0 H100](../../../runs/junyi-a0-h100-batch128-20261112-01/a0-h100-progress-epoch005.svg)
+Ba phiên H100 ghi credits tăng khoảng 5,39 USD, tổng KLTN đã dùng 8,67 USD và còn 21,33 USD tại snapshot cuối, billed 0 USD. Mọi lần tiếp tục cần dự toán trong phần ngân sách còn lại.
+
+[Báo cáo riêng quá trình training](../../2026-11-13/BAO_CAO_A0_H100.html).
+
+![Diễn tiến 12 epoch](../../../runs/junyi-a0-h100-batch128-20261112-01/a0-h100-progress-final012v2.svg)
 
 
 ## Cập nhật12/11 — đã kiểm ý tưởng chạy đồng thời hai model

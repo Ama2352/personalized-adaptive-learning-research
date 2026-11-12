@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## Chốt 13/11 — A0 H100 hoàn tất chọn checkpoint
+
+[A0 H100 hoàn tất](../research_tracking/runs/junyi-a0-h100-batch128-20261112-01/README.md) có 12 epoch, selected 9, 1.600.343 dự báo đã kiểm, model xuất về D và cả ba App đã dừng. [Báo cáo training riêng](../research_tracking/supervisor_reports/2026-11-13/BAO_CAO_A0_H100.html). Các mốc bên dưới giữ theo thời điểm lịch sử.
+
+
 ## 12/11 lúc23giờ00 — A0 H100 batch128 có5epoch
 
 [Bundle đang hoạt động](../research_tracking/runs/junyi-a0-h100-batch128-20261112-01/README.md) đã nghiệm thu5epoch,20checkpoint, archive532MB và0GPU cuối đợt1. Đợt2 nối từepoch6, không benchmark riêng. Source mới đạt2.234caCPU, batch128 cóprotocol riêng.
