@@ -81,12 +81,24 @@ def harness(tmp_path, monkeypatch):
         def forward(self, values):
             return self.linear(values)
 
+        @property
+        def backbone(self):
+            return self
+
     class TinyAdapter:
         def __init__(self, actual_config, actual_encoding):
             self.config = actual_config
             self.encoding = actual_encoding
             self.native = TinyNative()
             control['models'].append(self)
+
+    class TinyGraphAdapter(TinyAdapter):
+        def set_phase(self,phase):
+            self.phase=phase
+            control.setdefault('graph_phases',[]).append(phase.view.scope)
+
+        def collate_training(self,entries):
+            raise AssertionError('Orchestration fixture replaces the training loop')
 
     native_load = checkpoint.load_checkpoint
     native_snapshot = checkpoint.load_training_snapshot
@@ -114,8 +126,13 @@ def harness(tmp_path, monkeypatch):
             nonzero_gradient_steps=steps,parameter_update_steps=steps,
             stop_reason='epoch_complete' if complete else 'time_budget')
 
-    def train_epoch(adapter, windows_factory, *, optimizer, epoch, budget, progress_callback, recovery):
+    def train_epoch(adapter, windows_factory, *, optimizer, epoch, budget, progress_callback, recovery,
+                    batch_factory=None):
         control['train_calls'].append(epoch)
+        if batch_factory is not None:
+            assert batch_factory.__self__ is adapter
+            assert adapter.phase.view.scope=='select_train80'
+            assert recovery['identity']['batch_factory']['condition_sha256']==adapter.phase.condition.identity
         assert recovery['checkpoint_every_steps']==1000
         assert callable(recovery['checkpoint_callback'])
         assert recovery['selection_state']['optimizer_steps']>=0
@@ -149,6 +166,8 @@ def harness(tmp_path, monkeypatch):
     losses = {1:.5,2:.4,3:.40001,4:.40002,5:.40003}
 
     def evaluate(adapter, actual_learners, target_count, *, output=None):
+        if isinstance(adapter,TinyGraphAdapter):
+            assert adapter.phase.view.scope=='raw_selection10'
         assert target_count==2 and sum(len(learner.events) for learner in actual_learners)==2
         epoch = int(adapter.native.epoch_marker.item())
         control['evaluate_calls'].append((epoch,output is not None))
@@ -165,23 +184,81 @@ def harness(tmp_path, monkeypatch):
 
     monkeypatch.setattr(selected,'_evaluate',evaluate)
 
-    def run(*, epochs=20,resume=None):
+    def run(*, epochs=20,resume=None,graph_condition=None,wrong_graph_grant=False):
         control['grants'] += 1
         prepared = {} if resume is None else dict(resume_checkpoint_sha256=selected.file_sha(resume))
-        grant = dict(status='USER_APPROVED',binding=dict(candidate_id='A0',phase='junyi_selected_only',
+        candidate_id='A0'
+        if graph_condition is not None:
+            from knowledge_tracing.akt.research_junyi_graph import JunyiGraphPhaseSession
+
+            def make(config,profile,encoding,view,condition):
+                assert encoding is condition.encoding
+                adapter=TinyGraphAdapter(config,encoding.native)
+                adapter.set_phase(JunyiGraphPhaseSession(condition,view))
+                return adapter
+
+            monkeypatch.setattr(selected,'_make_selected_adapter',make)
+            if not wrong_graph_grant:
+                prepared['graph_condition_sha256']=graph_condition.identity
+                candidate_id='A1_EXPERT'
+        grant = dict(status='USER_APPROVED',binding=dict(candidate_id=candidate_id,phase='junyi_selected_only',
             config_sha256=authorization.config_hash(config),inputs_identity=inputs.identity,
             gate_sha256=gate['report_sha256'],runtime_sha256=selected.file_sha(runtime)),
             prepared_inputs=prepared,approval_reference='unit-test-fixture-only',
             workload_epochs=epochs,purpose='bounded_engineering')
         authorization_file = tmp_path/f'authorization-{control["grants"]:02d}.json'
         authorization_file.write_text(json.dumps(grant))
-        return selected.run_a0_junyi_selected(config,profile,inputs,
+        runner=selected.run_a0_junyi_selected if graph_condition is None else selected.run_junyi_selected
+        extra={} if graph_condition is None else dict(graph_condition=graph_condition)
+        return runner(config,profile,inputs,
             authorization_file=authorization_file,expected_authorization_sha256=selected.file_sha(authorization_file),
             runtime_report=runtime,lock_file=lock,resume_checkpoint=resume,
-            expected_resume_sha256=None if resume is None else selected.file_sha(resume))
+            expected_resume_sha256=None if resume is None else selected.file_sha(resume),**extra)
 
     return SimpleNamespace(run=run,control=control,config=config,inputs=inputs,
-                           native_load=native_load,native_snapshot=native_snapshot)
+                           native_load=native_load,native_snapshot=native_snapshot,encoding=encoding)
+
+
+def graph_condition(harness):
+    from knowledge_tracing.akt.research_junyi_graph import JunyiGraphCondition
+    from knowledge_tracing.shared_kt import PrerequisiteGraph
+    return JunyiGraphCondition(harness.encoding,PrerequisiteGraph.from_edges(('A',),()),'a'*64)
+
+
+def test_graph_selection_shares_stopping_checkpoint_and_export_protocol(harness):
+    condition=graph_condition(harness)
+    result=harness.run(graph_condition=condition)
+    assert result['status']=='JUNYI_A1_SELECTED_ONLY_COMPLETE'
+    assert result['complete_epochs']==5 and result['selected_epoch']==2
+    assert harness.control['graph_phases'].count('raw_selection10')==6
+    assert harness.control['evaluate_calls'][-1]==(2,True)
+    identity=json.loads((harness.config.output_dir/'run-manifest.json').read_text())
+    assert identity['candidate_id']=='A1_EXPERT'
+    allocation=json.loads((selected.PROJECT_ROOT/'docs/thesis_recovery/EXPERIMENT_ALLOCATION_V1.json').read_text())
+    assert identity['candidate_id'] in {entry['id'] for entry in allocation['conditions_per_environment']}
+    assert result['candidate_id']==identity['candidate_id']
+    assert result['graph_condition_sha256']==condition.identity
+    assert identity['batch_factory']['condition_sha256']==condition.identity
+    assert identity['batch_factory']['phase_sha256']==harness.inputs.train.identity
+
+
+def test_graph_selection_resumes_before_validation_without_retraining(harness):
+    condition=graph_condition(harness)
+    harness.control['fail_validation_epoch']=1
+    with pytest.raises(RuntimeError,match='validation interruption'):
+        harness.run(graph_condition=condition)
+    harness.control['fail_validation_epoch']=None
+    path=harness.config.output_dir/'checkpoints/train-epoch-001/state.pt'
+    result=harness.run(epochs=1,resume=path,graph_condition=condition)
+    assert result['status']=='PARTIAL_SELECTED_ONLY_NOT_FINAL'
+    assert harness.control['train_calls']==[1]
+    assert result['history'][0]['epoch']==1
+
+
+def test_graph_selection_rejects_a0_authorization(harness):
+    with pytest.raises(PermissionError,match='grant mismatch'):
+        harness.run(graph_condition=graph_condition(harness),wrong_graph_grant=True)
+    assert harness.control['models']==[]
 
 
 def test_early_stopping_reloads_best_complete_checkpoint(harness):

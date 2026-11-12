@@ -88,8 +88,10 @@ def load_full_selected_cache(cache_root, roles_path, *, expected_manifest_sha256
 
 
 def validate_selected_grant(config, inputs, grant, *, config_sha256, gate_sha256, runtime_sha256,
-                            prepared_inputs=None):
-    expected = dict(candidate_id='A0',phase='junyi_selected_only',config_sha256=config_sha256,
+                            prepared_inputs=None, candidate_id='A0'):
+    if candidate_id not in ('A0','A1_EXPERT'):
+        raise PermissionError('Supported Junyi selected candidate required')
+    expected = dict(candidate_id=candidate_id,phase='junyi_selected_only',config_sha256=config_sha256,
                     inputs_identity=inputs.identity,gate_sha256=gate_sha256,runtime_sha256=runtime_sha256)
     if (grant.get('status') != 'USER_APPROVED' or grant.get('binding') != expected
             or grant.get('prepared_inputs',{}) != (prepared_inputs or {})
@@ -138,13 +140,23 @@ def _evaluate(adapter, learners, target_count, *, output=None):
                 native_bce=loss,probability_sha256=hashlib.sha256(p.tobytes()).hexdigest())
 
 
-def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
+def _make_selected_adapter(config, profile, encoding, view, condition):
+    if condition is None:
+        from .model import AKTAdapter
+        return AKTAdapter(config,encoding.native)
+    from .research_junyi_graph import JunyiGraphPhaseSession
+    from .research_junyi_graph_model import JunyiGraphAKTAdapter
+    return JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=condition,
+        phase=JunyiGraphPhaseSession(condition,view),cuda_profile=profile)
+
+
+def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         inputs: JunyiSelectedInputs, *, authorization_file, expected_authorization_sha256,
         runtime_report, lock_file, encoding_file=None, expected_encoding_sha256=None,
         train_window_cache=None, expected_train_window_manifest_sha256=None,
         resume_checkpoint=None, expected_resume_sha256=None,
-        encoding_receipt=None, expected_encoding_receipt_sha256=None):
-    """Selected fit80/rawbest10; không tự mở refit hoặc calibration."""
+        encoding_receipt=None, expected_encoding_receipt_sha256=None, graph_condition=None):
+    """A0 hoặc A1 expert, selected fit80/rawbest10 với cùng state machine."""
     validate_config(config,cuda_profile=profile)
     if config.phase!='junyi-research' or config.execution_enabled is not True:
         raise PermissionError('Explicit Junyi CUDA execution config required')
@@ -155,6 +167,16 @@ def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfi
         raise PermissionError('Authorization file changed')
     grant = json.loads(Path(authorization_file).read_text(encoding='utf-8'))
     prepared = {}
+    candidate_id = 'A0'
+    if graph_condition is not None:
+        from .research_junyi_graph import JunyiGraphCondition
+        if type(graph_condition) is not JunyiGraphCondition:
+            raise ValueError('Typed Junyi graph condition required')
+        graph_condition.assert_integrity()
+        if graph_condition.encoding.fit_view.identity != inputs.train.identity:
+            raise ValueError('Junyi graph condition belongs to a different TRAIN80 cohort')
+        candidate_id = 'A1_EXPERT'
+        prepared['graph_condition_sha256'] = graph_condition.identity
     if (encoding_file is None)!=(expected_encoding_sha256 is None):
         raise ValueError('Encoding path and pin required together')
     if (train_window_cache is None)!=(expected_train_window_manifest_sha256 is None):
@@ -180,10 +202,10 @@ def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfi
     gate = require_gate2_evidence(config,lock_file=lock_file)
     preflight(config,runtime_report_path=runtime_report,lock_file=lock_file,cuda_profile=profile)
     validate_selected_grant(config,inputs,grant,config_sha256=config_hash(config),
-        gate_sha256=gate['report_sha256'],runtime_sha256=file_sha(runtime_report),prepared_inputs=prepared)
+        gate_sha256=gate['report_sha256'],runtime_sha256=file_sha(runtime_report),prepared_inputs=prepared,
+        candidate_id=candidate_id)
     import torch
     from .training import EarlyStopping, EpochStats, train_epoch, _seed
-    from .model import AKTAdapter
     from .checkpoint import save_checkpoint, load_checkpoint, load_training_snapshot, restore_checkpoint
     from .research_graph_model import _cuda_execution_check
     from .research_runner import _state_hash
@@ -199,6 +221,10 @@ def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfi
         encoding=load_prepared_junyi_encoding(encoding_file,encoding_receipt,view=inputs.train,
             source_data_sha256=inputs.source_identity,expected_file_sha256=expected_encoding_sha256,
             expected_receipt_sha256=expected_encoding_receipt_sha256)
+    if graph_condition is not None:
+        if graph_condition.encoding.identity != encoding.identity:
+            raise ValueError('Junyi graph condition encoding differs from admitted training vocabulary')
+        encoding = graph_condition.encoding
     if train_window_cache is None:
         windows_factory=lambda:iter_junyi_research_windows(inputs.paths,inputs.train,encoding,**reader_options)
     else:
@@ -211,6 +237,10 @@ def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfi
         prediction_implementation='legacy_single_window_v1',
         config=json.loads(json.dumps(asdict(config),default=str)),profile=asdict(profile),
         source_build_sha256=_identity(json.loads(Path(gate['evidence_path']).read_text())['build_hashes']))
+    if graph_condition is not None:
+        identity.update(kind='junyi_a1_selected_v1',candidate_id=candidate_id,
+            batch_factory=dict(condition_sha256=graph_condition.identity,encoding_sha256=encoding.identity,
+                phase_sha256=inputs.train.identity,graph_enabled=True))
     if resume_checkpoint is None:
         write_json(output/'run-manifest.json',identity)
     elif json.loads((output/'run-manifest.json').read_text())!=identity or (output/'COMPLETE.json').exists():
@@ -220,8 +250,12 @@ def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfi
         resume_sha256=expected_resume_sha256,prepared_inputs=prepared))
     _seed(42)
     with torch.device('cpu'):
-        adapter = AKTAdapter(config,encoding.native)
-    initial_backbone=_state_hash(adapter)
+        adapter = _make_selected_adapter(config,profile,encoding,inputs.train,graph_condition)
+    if graph_condition is not None:
+        from types import SimpleNamespace
+        initial_backbone=_state_hash(SimpleNamespace(native=adapter.native.backbone))
+    else:
+        initial_backbone=_state_hash(adapter)
     initial_path=output/'initial-backbone.json'
     if resume_checkpoint is None:
         write_json(initial_path,dict(sha256=initial_backbone,seed=42,encoding_identity=encoding.identity))
@@ -274,6 +308,11 @@ def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfi
         remaining = config.max_wall_seconds-(time.monotonic()-started)
         if remaining <= 0 or steps >= config.max_steps or targets >= config.max_total_targets:
             break
+        batch_options = {}
+        if graph_condition is not None:
+            from .research_junyi_graph import JunyiGraphPhaseSession
+            adapter.set_phase(JunyiGraphPhaseSession(graph_condition,inputs.train))
+            batch_options['batch_factory'] = adapter.collate_training
         with (output/f'epoch-{epoch:03d}-{attempt_id}-progress.jsonl').open('x',encoding='utf-8') as log:
             def progress(event):
                 if event['training']['optimizer_steps']%100==0 or event['complete_epoch']:
@@ -294,7 +333,7 @@ def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfi
                     progress_callback=progress,recovery=dict(checkpoint_dir=recovery_root,identity=identity,
                         checkpoint_every_steps=1000,resume_checkpoint=epoch_resume,checkpoint_callback=publish_batch,
                         selection_state=dict(stopper=asdict(stopper),history=history,
-                                             optimizer_steps=steps,valid_targets=targets)))
+                                             optimizer_steps=steps,valid_targets=targets)),**batch_options)
             else:
                 stats=pending_stats
         pending_stats=None
@@ -322,6 +361,8 @@ def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfi
             write_json(before_validation/'COMPLETE.json',dict(checkpoint_sha256=cp_sha,
                 metadata_sha256=file_sha(before_validation/'metadata.json')))
         adapter.checkpoint_id = f'{config.run_id}-epoch-{epoch}'
+        if graph_condition is not None:
+            adapter.set_phase(JunyiGraphPhaseSession(graph_condition,inputs.selection))
         validation_started=time.monotonic()
         validation = _evaluate(adapter,
             iter_junyi_phase_learners(inputs.paths,inputs.selection,**reader_options),inputs.selection_targets)
@@ -347,6 +388,8 @@ def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfi
     if not finished:
         terminal = dict(status='PARTIAL_SELECTED_ONLY_NOT_FINAL',history=history,optimizer_steps=steps,
             trained_targets=targets,selected_epoch=None,external_freeze=False)
+        if graph_condition is not None:
+            terminal.update(candidate_id=candidate_id,graph_condition_sha256=graph_condition.identity)
         write_json(output/f'partial-terminal-{attempt_id}.json',terminal)
         return terminal
     best = output/'checkpoints'/f'epoch-{stopper.best_epoch:03d}'/'state.pt'
@@ -355,7 +398,7 @@ def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfi
     torch.cuda.empty_cache()
     payload = load_checkpoint(best,expected_identity=identity,device='cuda')
     with torch.device('cpu'):
-        adapter = AKTAdapter(config,encoding.native)
+        adapter = _make_selected_adapter(config,profile,encoding,inputs.selection,graph_condition)
     adapter.native.load_state_dict(payload['model_state_dict'])
     del payload
     adapter.checkpoint_id = file_sha(best)
@@ -366,13 +409,32 @@ def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfi
     expected = history[stopper.best_epoch-1]['validation']
     if validation!=expected:
         raise ValueError('Best checkpoint reload changed target population or predictions')
-    terminal = dict(status='JUNYI_A0_SELECTED_ONLY_COMPLETE',selected_epoch=stopper.best_epoch,
+    status = 'JUNYI_A0_SELECTED_ONLY_COMPLETE' if graph_condition is None else 'JUNYI_A1_SELECTED_ONLY_COMPLETE'
+    terminal = dict(status=status,selected_epoch=stopper.best_epoch,
         complete_epochs=stopper.last_epoch,history=history,optimizer_steps=steps,trained_targets=targets,
         checkpoint_sha256=file_sha(best),encoding_identity=encoding.identity,validation=validation,
         initial_backbone_sha256=initial_backbone,predictions_file=predictions_file.name,
         predictions_sha256=file_sha(predictions_file),
         full_role_coverage=inputs.train.full_role_coverage and inputs.selection.full_role_coverage,
         external_freeze=False,refit_completed=False,calibration_completed=False)
+    if graph_condition is not None:
+        terminal.update(candidate_id=candidate_id,graph_condition_sha256=graph_condition.identity)
     write_json(output/'selected-terminal.json',terminal)
     write_json(output/'COMPLETE.json',dict(status=terminal['status'],terminal_sha256=file_sha(output/'selected-terminal.json')))
     return terminal
+
+
+def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
+        inputs: JunyiSelectedInputs, *, authorization_file, expected_authorization_sha256,
+        runtime_report, lock_file, encoding_file=None, expected_encoding_sha256=None,
+        train_window_cache=None, expected_train_window_manifest_sha256=None,
+        resume_checkpoint=None, expected_resume_sha256=None,
+        encoding_receipt=None, expected_encoding_receipt_sha256=None):
+    """Giữ entrypoint và hợp đồng A0 hiện có."""
+    return run_junyi_selected(config,profile,inputs,authorization_file=authorization_file,
+        expected_authorization_sha256=expected_authorization_sha256,runtime_report=runtime_report,
+        lock_file=lock_file,encoding_file=encoding_file,expected_encoding_sha256=expected_encoding_sha256,
+        train_window_cache=train_window_cache,
+        expected_train_window_manifest_sha256=expected_train_window_manifest_sha256,
+        resume_checkpoint=resume_checkpoint,expected_resume_sha256=expected_resume_sha256,
+        encoding_receipt=encoding_receipt,expected_encoding_receipt_sha256=expected_encoding_receipt_sha256)
