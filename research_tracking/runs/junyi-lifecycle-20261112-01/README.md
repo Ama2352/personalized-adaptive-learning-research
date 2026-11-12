@@ -35,3 +35,7 @@ Các file này là bằng chứng tại snapshot tương ứng. Gate Linux CPU02
 Nhánh chính cần giải quyết parity legacy/batched bằng checkpoint đã giữ, hoàn tất recovery thực và đối chiếu throughput/resource trên workload phù hợp trước full selected fit. Full train-window cache giúp tái sử dụng preprocessing; chi phí và kết quả neural fit vẫn cần được đo riêng. Các điều kiện AKT graph-free/fixed/confidence/gated, refit/calibration và đánh giá độc lập tiếp tục giữ trong backlog KLTN.
 
 Checkpoint/GPU artifacts lớn nằm ở native output của run; hồ sơ này giữ logs, counters, nguồn và tham chiếu. Bundle tiếp tục mở trong thời gian chẩn đoán, chưa có quyết định nghiệm thu final.
+
+## Đề xuất đo throughput dài hơn
+
+[Packet proposal](REPRESENTATIVE_PACKET_PROPOSAL.md) và `representative-packet-selection.json` xác định1.024windows/56.332targets từ16shards, giữ encoding717 cùng original geometry. Có333windows dài200. Histogram được đối chiếu full232.662windows bằng offsets/masks, không đọc responses hoặc chạy model. Packet được ghi rõ partial TRAIN80 engineering. Full strict Session admission time còn cần đo CPU trước khi dự toán một worker GPU watchdog400giây. Chưa tạo payload hoặc dispatch từ đề xuất này.
