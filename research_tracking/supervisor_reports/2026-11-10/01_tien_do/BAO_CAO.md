@@ -1,10 +1,26 @@
-# Báo cáo tiến độ khóa luận — 10/11/2026
+# Báo cáo tiến độ khóa luận — cập nhật 12/11/2026
 
 **Đề tài:** Nghiên cứu và phát triển hệ thống học tập thích ứng cá nhân hóa dựa trên mô hình hóa tri thức và tối ưu hóa lộ trình.
 
 **GVHD:** TS. Lê Văn Tuấn. **Sinh viên:** Phạm Triều Dương và Hồ Nguyễn Minh Sang.
 
 [Báo cáo chi tiết: diễn tiến nghiên cứu, số liệu và biểu đồ](BAO_CAO_NGHIEN_CUU.html).
+
+## Bảng tiến độ training AKT được đối chiếu ngày 12/11
+
+| Môi trường | Đã hoàn tất | Số epoch và thời gian | Còn thiếu |
+|---|---|---|---|
+| Grade10 | Bảy điều kiện A0–A3 đã chọn checkpoint, giữ30 checkpoint và1.260 dự báo mỗi điều kiện | A0/A1 expert chạy8, chọn5. Năm điều kiện còn lại chạy7, chọn4. Tổng51 epoch, controller khoảng30 phút | Refit tổng30 epoch, calibration, đánh giá độc lập và closed-loop |
+| Junyi A0 | Hai epoch đầy đủ, mỗi epoch13.347.331 target, validation1.600.343 target | Epoch1 train26m48s +validation4m08s. Epoch2 train26m36s +validation4m23s | Tiếp tục từ epoch3 dở dang, chốt epoch, refit và đánh giá |
+| Junyi A1/A2/A3 | A1 đã có producer và kiểm CPU. Sáu điều kiện chưa fit toàn Junyi | Chưa có epoch train chính | Confidence/topology train-only, kiểm CUDA, selected và refit |
+
+Log Loss selection A0 Junyi từ0,359648 xuống0,356651. Đây là kết quả theo dõi chọn epoch, chưa là so sánh độc lập. Nếu epoch3–5 không cải thiện đủ, A0 có thể dừng sau epoch5 và refit2 epoch. Nếu tiếp tục cải thiện, thời điểm dừng thay đổi.
+
+Kịch bản thuận lợi cho toàn bộ training Junyi còn khoảng18–27 giờ GPU, giả định sáu điều kiện graph có tốc độ gần A0, mỗi điều kiện4–5 epoch selected và1–2 epoch refit. Chưa bao gồm thời gian hoàn thiện mã, full5-fold hoặc closed-loop. Mục tiêu2–3 ngày phụ thuộc các điều kiện này và ngân sách30USD. [Bảng chi tiết và nguồn bằng chứng](../../../reports/AKT_TRAINING_STATUS_20261112.md).
+
+**Mốc hiện tại ngày 12/11.** Để chuẩn bị đối chứng cho CG-AKT, AKT không đồ thị đã hoàn tất hai epoch trên toàn tập train Junyi đã cố định, gồm 126.774 người học và 13.347.331 tương tác. Validation trên 15.847 người học riêng biệt, gồm 1.600.343 tương tác, đã hoàn tất. Epoch 2 tiếp tục cải thiện trên tập selection. Epoch 3 đã giữ trạng thái dở dang khi hết giới hạn đợt chạy, App đã dừng. Mô hình chưa hoàn tất quy tắc dừng sớm, tối đa 20 epoch. Checkpoint tốt nhất cuối quá trình, refit, calibration và so sánh độc lập còn phải thực hiện.
+
+Lượt chạy đầu bị Modal thu hồi giữa epoch. Checkpoint bước 46.000 đã giữ trạng thái sau 10.598.159 tương tác. Nhóm tiếp tục từ checkpoint đó và hoàn tất đúng quần thể epoch đầu. Kiểm độc lập số cửa sổ và padding cũng khớp kế hoạch đã tạo trước training. Hai file metadata khởi tạo bị mất được tái dựng có ghi rõ nguồn gốc. Các checkpoint và nhật ký phục hồi đã được lưu để truy vết.
 
 **Ngày 12/11 — AKT đã chạy trên dữ liệu Junyi thực.** Sau bảy lượt chọn checkpoint trên mô phỏng, nhóm chuyển sang kiểm riêng môi trường dữ liệu thực. Nhóm256 học viên train và32 học viên selection được chọn theo ID, độc lập đáp án, giữ learner-disjoint và vocabulary chỉ học từ train. Một epoch trên NVIDIA A10 đã xử lý11.833 tương tác/79 lần cập nhật. Đã lưu checkpoint, nạp vào mô hình mới và xác nhận toàn bộ dự đoán khớp chính xác; bản lưu bền vững trên Modal cũng đã được đọc lại để đối chiếu. Xuất đủ1.530 tương tác selection, gồm1.405 có dự đoán và125 bài ngoài vocabulary được ghi rõ. Bộ kiểm Linux của nguồn này đạt2.037 ca. Đây là bước nghiệm thu kỹ thuật trên cohort giới hạn300 tương tác/người. Training Junyi chính, chọn epoch, refit, hiệu chỉnh xác suất, đánh giá độc lập và các biến thể đồ thị Junyi còn phải thực hiện. Tập train chính đã đếm có 13.347.331tương tác, selection 1.600.343tương tác. Ngân sách full cần dự toán từ phép đo có xét chuỗi dài và I/O.
 
@@ -291,3 +307,15 @@ Sau lượt một epoch đầu tiên, nhóm bổ sung cơ chế tái sử dụng
 Một phép kiểm tối ưu tốc độ đã phát hiện cách gom nhiều cửa sổ khi xuất dự đoán làm xác suất lệch tối đa khoảng 0,000067 so với cách tuần tự. Vì vượt ngưỡng đã đặt, pipeline chính được đưa về cách dự đoán tuần tự. Kiểm thay đổi đáp án hiện tại và dữ liệu tương lai tại 20 truy vấn vẫn giữ dự báo tại thời điểm đang xét trong ngưỡng đã đặt. Phép kiểm này có phạm vi trên cohort và checkpoint đã kiểm.
 
 Nguồn hiện hành đã qua 2.218 ca kiểm trên Linux, gồm kiểm adapter đồ thị cố định A1 trên CPU. Song song, dữ liệu TRAIN80 chính đã được mã hóa thành 232.662 cửa sổ, giữ đủ 13.347.331 tương tác của 126.774 người học. Bước này giúp dùng lại preprocessing giữa các lượt chạy. Training Junyi chính, refit, calibration và so sánh độc lập giữa các biến thể vẫn còn phải thực hiện. Các mốc trên bổ sung bằng chứng về khả năng vận hành và phục hồi của AKT. Bằng chứng so sánh chất lượng để trả lời RQ3 còn đang thiếu.
+
+### Ngày 12/11 — chuyển sang training A0 trên toàn tập train Junyi
+
+Sau khi kiểm phục hồi, nhóm kiểm thêm khả năng chạy với lịch sử dài. Mẫu đo có 1.024 cửa sổ của 755 người học, gồm cả cửa sổ 200 bước. AKT xử lý 56.332 tương tác qua 256 lần cập nhật trên T4 trong 7,85 giây. Checkpoint lưu lại và nạp lại cho dự đoán khớp. Hình dưới đối chiếu độ dài cửa sổ trong mẫu đo với tập train chính để làm rõ giới hạn khi ngoại suy thời gian.
+
+Toàn bộ cache train đã được đọc và kiểm lại, giữ đủ 232.662 cửa sổ và 13.347.331 tương tác của 126.774 người học. Từ đó, nhóm bắt đầu lượt A0 chính trên toàn TRAIN80, dùng riêng 15.847 người học selection với 1.600.343 tương tác để theo dõi epoch. Vocabulary 717 bài chỉ được tạo từ train. Tham số, quy tắc chia tập và cách dự đoán tuần tự được giữ theo cấu hình đã chốt.
+
+Lượt chính đã tạo checkpoint trong epoch và đang được theo dõi đến giới hạn của đợt chạy. Checkpoint tốt nhất cuối quá trình, refit, calibration và bảng so sánh độc lập còn phải thực hiện. Số đo tốc độ là cơ sở phân bổ tài nguyên. Kết luận chất lượng A0 và các biến thể đồ thị cần kết quả đánh giá tương ứng.
+
+Song song, adapter đồ thị cố định A1 đã có kiểm phục hồi trên CPU. Chạy liên tục và ngắt rồi chạy tiếp cho cùng trạng thái mô hình, bộ tối ưu và luồng ngẫu nhiên ở fixture đã kiểm. Bộ kiểm nguồn mới đạt 2.223 ca. Kiểm CUDA và training A1 Junyi còn nằm ở bước tiếp theo.
+
+**Mốc epoch đầy đủ.** Đã nghiệm thu 232.662 cửa sổ và 58.166 lần cập nhật cho epoch đầu. Thời gian train được cộng từ các đoạn đã phục hồi là 1.607,62 giây, chưa bao gồm toàn bộ thời gian khởi động và gián đoạn. Nhánh producer A1 dùng chung protocol hiện đã qua 2.226 ca kiểm CPU. CUDA và selected fit A1 Junyi còn cần thực thi.

@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 12/11 — bảng training AKT theo từng phiên bản
+
+[Bảng tiến độ, số epoch và thời gian còn lại](AKT_TRAINING_STATUS_20261112.md) đối chiếu bảy selected fits Grade10, hai epoch A0 Junyi và các bước refit/đánh giá chưa hoàn tất. Dự toán được ghi cùng giả định, tách thời gian GPU và hoàn thiện mã.
+
 ## 12/11 — hợp đồng benchmark và audit leakage AKT
 
 [Hợp đồng benchmark](AKT_BENCHMARK_CONTRACT_20261112.md) ghi các metric, quần thể, artifact vàfigure cần choKLTN. [Audit](../runs/akt-protocol-audit-20261112-01/README.md) xácnhận bảyselectedfits hợp lệ trong phạmvi đãkiểm,182tests hiện hành đạt, Junyiroleidentity khớp sau sửa kiểm kiểu. Finalpipeline còn cácgap đãghi cụthể.
@@ -521,3 +525,9 @@ Gate21 chỉ chạy `tests/akt tests/shared_kt`; các số139SAKT và38Graph-GAM
 ## 12/11 — nghiệm thu phục hồi Junyi và đường dự đoán chính
 
 [Hồ sơ chẩn đoán](../runs/junyi-numerical-diagnostic-20261112-01/README.md) giữ checkpoint và đối chiếu CUDA liên tục/phục hồi đạt, nguồn CPU04 đạt 2.218 ca. Batch prediction vượt ngưỡng nên producer chính dùng đường tuần tự. Full cache TRAIN80 đã tạo, full neural fit Junyi còn phải thực hiện. Ledger COMPUTE_BUDGET.json ghi trần 30 USD cho toàn KLTN.
+
+## 12/11 — A0 Junyi chính và producer A1
+
+- [A0 trên toàn TRAIN80 và phục hồi sau preemption](../runs/junyi-main-selected-20261112-01/README.md), giữ điểm46000 và các execution nối tiếp.
+- [Đo throughput và kiểm toàn cache](../runs/junyi-throughput-20261112-01/README.md), có SVG/PDF/PNG/CSV và forecast có giả định.
+- [Recovery A1 typed](../runs/junyi-a1-recovery-20261112-01/README.md) và [producer A1 chung protocol](../runs/junyi-a1-selection-20261112-01/README.md), nguồn hiện hành2.226ca CPU đạt, chưa selected fit A1 Junyi.

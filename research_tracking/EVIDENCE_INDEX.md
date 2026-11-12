@@ -507,3 +507,13 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 ## 12/11 — nghiệm thu phục hồi Junyi và đường dự đoán chính
 
 [Hồ sơ chẩn đoán](runs/junyi-numerical-diagnostic-20261112-01/README.md) giữ checkpoint và đối chiếu CUDA liên tục/phục hồi đạt, nguồn CPU04 đạt 2.218 ca. Batch prediction vượt ngưỡng nên producer chính dùng đường tuần tự. Full cache TRAIN80 đã tạo, full neural fit Junyi còn phải thực hiện. Ledger COMPUTE_BUDGET.json ghi trần 30 USD cho toàn KLTN.
+
+## 12/11 — A0 Junyi chính và producer A1
+
+- [A0 trên toàn TRAIN80 và phục hồi sau preemption](runs/junyi-main-selected-20261112-01/README.md), giữ điểm46000 và các execution nối tiếp.
+- [Đo throughput và kiểm toàn cache](runs/junyi-throughput-20261112-01/README.md), có SVG/PDF/PNG/CSV và forecast có giả định.
+- [Recovery A1 typed](runs/junyi-a1-recovery-20261112-01/README.md) và [producer A1 chung protocol](runs/junyi-a1-selection-20261112-01/README.md), nguồn hiện hành2.226ca CPU đạt, chưa selected fit A1 Junyi.
+
+## 12/11 — hai epoch Junyi A0 và bảng training theo phiên bản
+
+[Snapshot đã kiểm](runs/junyi-main-selected-20261112-01/training-status-20261112.json) đối chiếu archive và stop acknowledgment. [Bảng tổng hợp](reports/AKT_TRAINING_STATUS_20261112.md) tách số đo, epoch được chọn và dự toán có giả định. Chưa final selected/refit/calibration hoặc independent comparison.

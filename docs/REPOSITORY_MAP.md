@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## Hiện hành 12/11 — A0 Junyi đã hoàn tất hai epoch
+
+[A0 full TRAIN80](../research_tracking/runs/junyi-main-selected-20261112-01/README.md) đã giữ checkpoint46000 sau Modal preemption, tiếp tục cùng logical run và hoàn tất hai epoch. Archive đã đối chiếu SHA và App đã dừng. [Bảng training](../research_tracking/reports/AKT_TRAINING_STATUS_20261112.md) ghi số epoch, thời gian và phần còn lại. [Throughput/cache](../research_tracking/runs/junyi-throughput-20261112-01/README.md) có số đo thực và figure. [Producer A1](../research_tracking/runs/junyi-a1-selection-20261112-01/README.md) đã qua Gate CPU2.226, còn GPU fit. Nguồn A0 source04 và nhánh A1 source07 được ghim riêng.
+
+
 ## 12/11 — dữ liệu chính và context A1 Junyi
 
 [Cachefull](../research_tracking/runs/junyi-selected-cache-20261112-01/README.md) đãkiểm đủ13.347.331train/1.600.343selection,717exercise/0selectionOOV. [A1prefix](../research_tracking/runs/junyi-graph-prefix-20261112-01/README.md) chỉ dùngpastwindow,74tests/11subtests đạt. Mainproducer/refit/calibration/nativegraphadapter vẫn đang chờ nối; chưa uploadcachefull.
