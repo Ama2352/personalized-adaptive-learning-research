@@ -109,9 +109,10 @@ def remote_probe(pins, run_id):
         summary['returncode'] = process.returncode
         actual = json.loads((results/(run_id+'-operation')/'result.json').read_text())
         summary['worker_result'] = actual
-        assert process.returncode==0 and actual['status'] in ('JUNYI_BATCH_PROFILE_COMPLETE','PARTIAL_JUNYI_BATCH_PROFILE_OOM'),actual
-        if actual['status']=='JUNYI_BATCH_PROFILE_COMPLETE':
-            assert len(summary['checkpoint_transfers'])==4,'Four completed case checkpoints required'
+        assert process.returncode==0 and actual['status'] in ('JUNYI_BATCH_PROFILE_COMPLETE','JUNYI_STEP_SYNC_PROFILE_COMPLETE','PARTIAL_JUNYI_BATCH_PROFILE_OOM'),actual
+        if actual['status'] in ('JUNYI_BATCH_PROFILE_COMPLETE','JUNYI_STEP_SYNC_PROFILE_COMPLETE'):
+            expected_checkpoints = 6 if actual['status']=='JUNYI_STEP_SYNC_PROFILE_COMPLETE' else 4
+            assert len(summary['checkpoint_transfers'])==expected_checkpoints,'Completed case checkpoints required'
         else:
             assert len(summary['checkpoint_transfers'])>=len(actual['cases'])
         summary['status'] = actual['status']
@@ -169,13 +170,23 @@ def main():
     parser.add_argument('--run',action='store_true')
     args = parser.parse_args()
     request = json.loads(args.request.read_text(encoding='utf-8'))
+    step_profile = request.get('scope') == 'engineering_step_sync_profile_only'
+    bundle = BUNDLE
+    if step_profile:
+        bundle = args.request.resolve().parent
+        assert bundle == ROOT/'research_tracking/runs/junyi-step-sync-20261112-01'
     assert args.gpu==request.get('gpu','T4')=='T4'
     run_id = request['run_id']
-    assert re.fullmatch(r'modal-junyi-batch-throughput-t4-[0-9]{8}-[0-9]{2}',run_id)
+    prefix = 'step-sync' if step_profile else 'batch-throughput'
+    assert re.fullmatch(r'modal-junyi-'+prefix+r'-t4-[0-9]{8}-[0-9]{2}',run_id)
     print(json.dumps(dict(run_id=run_id,gpu=args.gpu,status=request['status'],execution_requested=args.run)),flush=True)
     if not args.run:
         return
     assert request['status']=='USER_APPROVED' and request['approval_reference'].strip()
+    if step_profile:
+        previous_guard = (ROOT/request['prior_a0_stop_evidence']).resolve()
+        assert previous_guard.is_relative_to(ROOT/'experiments/akt/results')
+        assert json.loads(previous_guard.read_text())['stop_acknowledged'] is True
     billing = asyncio.run(read_billing())
     metered = float(billing['billing']['metered_cost'])
     assert request['project_budget_file']=='research_tracking/COMPUTE_BUDGET.json'
@@ -191,10 +202,14 @@ def main():
     worker_request = dict(request,run_id=run_id,gpu=args.gpu)
     worker_request_path = native/'worker-request.json'
     worker_request_path.write_text(json.dumps(worker_request,indent=2))
-    paths = {'/opt/junyi-numerical-worker.py':BUNDLE/'gpu_worker.py',
+    paths = {'/opt/junyi-numerical-worker.py':bundle/'gpu_worker.py',
              '/opt/checkpoint-sync.py':ROOT/'experiments/akt/modal_artifact_sync.py',
              '/opt/probe-request.json':worker_request_path,
              '/opt/packet_reader.py':ROOT/'research_tracking/runs/junyi-throughput-20261112-01/packet_reader.py'}
+    if step_profile:
+        paths.update({'/opt/model-candidate.py':bundle/'model-candidate.py',
+                      '/opt/model-before.py':bundle/'model-before.py',
+                      '/opt/verify_equivalence.py':bundle/'verify_equivalence.py'})
     for key,target in (('source','/opt/kltn-input.zip'),('cpu_gate','/opt/cpu-gate.zip'),('data','/opt/junyi-data.zip')):
         relative = Path(request['archives'][key]['path'])
         assert not relative.is_absolute() and '..' not in relative.parts
@@ -205,7 +220,7 @@ def main():
     pins = {name:sha(path) for name,path in paths.items()}
     assert pins['/opt/packet_reader.py']==request['reader_sha256'],'Frozen packet reader changed'
     assert sha(ledger_path)==ledger_sha256,'Project budget changed before reservation'
-    with (BUNDLE/'reservation.json').open('x') as stream:
+    with (bundle/'reservation.json').open('x') as stream:
         json.dump(dict(run_id=run_id,gpu=args.gpu,reserved_usd=reserve,inputs=pins,
             allocation_id=request['allocation_id'],project_budget_sha256=ledger_sha256,
             budget_admission=budget),stream,indent=2)
@@ -252,7 +267,7 @@ def main():
     receipt['download_inventory_verified'] = True
     (native/'receipt.json').write_text(json.dumps(receipt,indent=2))
     print(json.dumps(receipt),flush=True)
-    assert receipt['status'] in ('JUNYI_BATCH_PROFILE_COMPLETE','PARTIAL_JUNYI_BATCH_PROFILE_OOM')
+    assert receipt['status'] in ('JUNYI_BATCH_PROFILE_COMPLETE','JUNYI_STEP_SYNC_PROFILE_COMPLETE','PARTIAL_JUNYI_BATCH_PROFILE_OOM')
 
 
 if __name__=='__main__':

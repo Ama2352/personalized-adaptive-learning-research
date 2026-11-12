@@ -1,0 +1,35 @@
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-step-sync-20261112-01\verify_equivalence.py", line 102, in <module>
+    result = verify(folder / 'model-before.py', folder / 'model-candidate.py')
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-step-sync-20261112-01\verify_equivalence.py", line 54, in verify
+    adapter = AKTAdapter(config, encoding)
+  File "D:\Dev\KLTN\src\knowledge_tracing\akt\model.py", line 22, in __init__
+    self.native = build_native(config, n_items=len(encoding.vocabulary.values))
+                  ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\src\knowledge_tracing\akt\upstream.py", line 47, in build_native
+    module = load_upstream(config.source_root, device=config.device)
+  File "D:\Dev\KLTN\src\knowledge_tracing\akt\upstream.py", line 27, in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\src\knowledge_tracing\akt\provenance.py", line 30, in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+  File "D:\Dev\KLTN\src\knowledge_tracing\akt\provenance.py", line 25, in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py", line 472, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               **kwargs).stdout
+               ^^^^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.

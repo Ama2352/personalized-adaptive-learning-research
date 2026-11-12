@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 12/11 — ưu tiên xác nhận tối ưu GPU
+
+[Bundle kiểm đồng bộ CPU–GPU](../research_tracking/runs/junyi-step-sync-20261112-01/README.md) giữ bản trước/candidate, đối chiếu CPU chính xác và thiết kế ba cặp đo T4. Đợi A0 execution06 có archive đã kiểm và App đã dừng mới chạy một profile tối đa0,20USD. Candidate chưa nghiệm thu CUDA, chưa áp dụng vào source04 hiện hành. [Số đo nền GPU](../research_tracking/reports/AKT_GPU_UTILIZATION_AUDIT_20261112.md) cho thấy GPU43,9%, chưa đủ kết luận tối ưu.
+
+
 ## Hiện hành 12/11 — A0 Junyi có ba epoch hoàn tất, RQ1/RQ2 có phân tích mới
 
 [A0 full TRAIN80](../research_tracking/runs/junyi-main-selected-20261112-01/README.md) đã giữ checkpoint46000 sau Modal preemption, tiếp tục cùng logical run và hoàn tất ba epoch. Archive execution03 đã đối chiếu SHA và App đã dừng. Execution04 đang tiếp tục từ epoch4 bước15.016, giữ nguyên source04 và batch4. Bộ tiếp tục hữu hạn sau04 ở `research_tracking/runs/junyi-main-selected-20261112-01/bounded-continuation-after04-state.json`, chỉ gồm05/06, tổng dự phòng1,70USD đã phân bổ. Đọc state trước mọi launch để tránh chạy trùng. [Bảng training](../research_tracking/reports/AKT_TRAINING_STATUS_20261112.md) ghi số epoch, thời gian và phần còn lại. [Throughput/cache](../research_tracking/runs/junyi-throughput-20261112-01/README.md) có số đo thực và figure. [Producer A1](../research_tracking/runs/junyi-a1-selection-20261112-01/README.md) đã qua Gate CPU2.226, còn GPU fit. Nguồn A0 source04 và nhánh A1 source07 được ghim riêng.
