@@ -7108,19 +7108,22 @@
   },
   "active_gpu_optimization_20261112": {
     "priority": "USER_REQUEST_GPU_OPTIMIZATION_AND_MEASURED_CONFIRMATION_FIRST",
-    "bundle": "research_tracking/runs/junyi-step-sync-20261112-01",
-    "status": "TWO_MEASURED_CANDIDATES_NOT_ADOPTED_CACHE_PROFILE_TIMEOUT_ALL_APPS_STOPPED",
+    "bundle": "research_tracking\\runs\\junyi-batch32-utilization-20261112-01",
+    "status": "BATCH32_RESOURCE_GOAL_VERIFIED_GPU87P5_PERCENT",
     "active_main_run": null,
     "active_main_source": "source04 unchanged",
     "profile_budget_cap_usd": 0.2,
     "total_project_cap_usd": 30,
     "profile_gpu_count": 1,
-    "unresolved": "GPU optimization not accepted. Cache CUDA measurement missing after deadline. Whole experiment matrix requires new cost forecast before long training.",
+    "unresolved": "Batch32 main selected/refit protocol and convergence validation pending. CPU/RAM side observer missed finished task. H100 held by explicit user request.",
     "main_a0_full_epochs_verified": 6,
     "main_temporary_best_epoch": 5,
     "final_epoch_not_selected": true,
     "production_step_restored": true,
-    "main_checkpoint_artifacts_verified": true
+    "main_checkpoint_artifacts_verified": true,
+    "actual_gpu_util_mean": 87.51304347826087,
+    "main_training_protocol_changed": false,
+    "H100_status": "USER_REQUESTED_WAIT_NOT_STARTED"
   },
   "historical_planning_expensive_execution_authorized": false,
   "current_execution_authorization_scope": {
@@ -7131,5 +7134,13 @@
     "full_Kfold_CV": false,
     "unapproved_methodology_changes": false,
     "reference": "User preapproved bounded allocations within30USD. Current long-run dispatch pending optimization and whole-matrix cost review."
+  },
+  "model_export_20261112": {
+    "status": "EIGHT_REPRESENTATIVE_CHECKPOINTS_EXPORTED_AND_CPU_READ_VERIFIED",
+    "directory": "D:/Dev/KLTN/experiments/akt/results/model-export-20261112-01",
+    "evidence": "research_tracking/runs/akt-model-export-20261112-01/verification.json",
+    "Grade10_models": 7,
+    "Junyi_model": "A0_BEST_SO_FAR epoch5, selected stage incomplete",
+    "H100": "USER_REQUESTED_WAIT"
   }
 }

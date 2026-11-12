@@ -1,5 +1,15 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 12/11 — bộ model xuất gọn trênD
+
+[Bộ model](../experiments/akt/results/model-export-20261112-01/README.md) có8file.pt đại diện, MODEL_INDEX và SUPPORT.zip, khoảng221MB. [Kiểm xuất](../research_tracking/runs/akt-model-export-20261112-01/README.md) đạt8/8SHA/schema/vocabulary trênCPU. H100 đang chờ. Grade10 selected-fit80 và Junyi best-so-far được ghi riêng.
+
+
+## 12/11 lúc20giờ59 — batch32 đã đo GPU87,5%, H100 đang chờ
+
+[Bundle batch32](../research_tracking/runs/junyi-batch32-utilization-20261112-01/README.md) giữ115mẫu GPU/VRAM,CSV,SVG và checkpoint. GPU-Util87,5%,19.792target/giây, checkpoint/resume khớp. Main A0 chưa đổi batch, H100 chưa chạy và được người dùng yêu cầu chờ.
+
+
 ## 12/11 lúc20giờ07 — đóng đợt đo GPU và đối soát ngân sách
 
 [A0 đã nghiệm thu sáu epoch](../research_tracking/runs/junyi-main-selected-20261112-01/execution06-verification.json), archive đã kiểm và dừng App được xác nhận độc lập. [Đợt tối ưu](../research_tracking/runs/junyi-step-sync-20261112-01/README.md) có hai phương án đo CUDA chưa đạt tiêu chí tiếp nhận, một cache candidate chỉ đạt CPU trước timeout. Step chính đã khôi phục. [Đối soát và dự toán](../research_tracking/reports/AKT_GPU_UTILIZATION_AUDIT_20261112.md) ghi credits3,24USD, billed0USD, snapshot container rỗng. Chưa xác nhận tối ưu toàn GPU, cần tính lại chi phí cả ma trận trước training dài.

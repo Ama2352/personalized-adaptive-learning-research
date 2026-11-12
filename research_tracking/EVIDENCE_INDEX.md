@@ -1,5 +1,15 @@
 # Chỉ mục bằng chứng
 
+## 12/11 — xuất model đại diện trênD
+
+[Bundle xuất model](runs/akt-model-export-20261112-01/README.md) ghi inventory trước chuyển,8file.pt và kiểm CPU/SHA. Bộ đọc cho người dùng ở experiments/akt/results/model-export-20261112-01/README.md.
+
+
+## 12/11 — bằng chứng batch32 và lưu checkpoint
+
+[Bundle batch32](runs/junyi-batch32-utilization-20261112-01/README.md) có115mẫu GPU,CSV,SVG,archive và kiểm exact resume. Đã dừng App. Tham chiếu Grade10 và A0 Junyi được giữ riêng theo môi trường.
+
+
 ## 12/11 — đối soát GPU và sáu epoch A0
 
 - [Bundle tối ưu kỹ thuật đã đóng](runs/junyi-step-sync-20261112-01/README.md) giữ hai phép đo CUDA, một timeout, CSV/SVG/log, snapshot credits và quyết định chưa tiếp nhận candidate.
