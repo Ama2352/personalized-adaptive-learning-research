@@ -1,15 +1,21 @@
 """Đọc tiến độ đúng container A0, không nạp Torch trên máy local."""
 import json
+import argparse
 import os
 from pathlib import Path
 import subprocess
 import sys
 import time
+import re
 
 ROOT = Path(__file__).resolve().parents[3]
 BUNDLE = Path(__file__).resolve().parent
 RUN = 'modal-junyi-a0-b128-h100-20261112-01'
-NATIVE = ROOT/'experiments/akt/results'/RUN
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--execution',default=RUN)
+args = parser.parse_args()
+assert re.fullmatch(r'modal-junyi-a0-b128-h100-20261112-[0-9]{2}',args.execution)
+NATIVE = ROOT/'experiments/akt/results'/args.execution
 os.environ['MODAL_CONFIG_PATH'] = str(ROOT/'artifacts/akt/private/modal.toml')
 os.environ['MODAL_PROFILE'] = 'kltn'
 os.environ['TEMP'] = os.environ['TMP'] = str(ROOT/'artifacts/akt/runtime/modal-client-temp')
@@ -54,7 +60,8 @@ def command(arguments,timeout=25):
 
 
 started = time.monotonic()
-with (BUNDLE/'monitor.jsonl').open('a',encoding='utf-8') as log:
+monitor_name = 'monitor.jsonl' if args.execution==RUN else 'monitor'+args.execution[-2:]+'.jsonl'
+with (BUNDLE/monitor_name).open('a',encoding='utf-8') as log:
     while time.monotonic()-started<2100:
         guard = json.loads((NATIVE/'app-budget-guard.json').read_text())
         if guard.get('stop_acknowledged'):

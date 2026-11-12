@@ -1,12 +1,12 @@
 # Thống kê triển khai và training AKT — 12/11/2026
 
-## Lượt batch128 mới trênH100
+## A0 batch128 đã hoàn tất 5 epoch, đang nối từ6
 
-A0 không đồ thị đã được đưa lên H100 với batch128, khởi tạo từ seed42 và dùng toàn bộ tập train Junyi đã chốt. Hai epoch đầu đã hoàn tất training, validation và lưu checkpoint. Mỗi epoch học 13,35 triệu lượt và kiểm dự báo trên 1,60 triệu lượt selection, đủ toàn bộ đối tượng dự kiến và 0 OOV.
+A0 không đồ thị trên H100 batch128 đã hoàn tất 5 epoch, tương ứng 66,74 triệu lượt target và 9.090 cập nhật optimizer. Mỗi epoch dùng cùng 13,35 triệu lượt train và 1,60 triệu lượt selection, 0 OOV. Lượt batch128 được khởi tạo từ seed 42, lịch sử batch4 trước đó được lưu riêng.
 
-Để chọn thời điểm dừng, theo dõi mức sai lệch giữa xác suất dự báo và đáp án trên tập selection. Log Loss giảm từ0,3600 xuống0,3569 sau hai epoch, cho thấy mô hình đang học được trên cấu hình mới. Kết quả này phục vụ chọn checkpoint. Đánh giá độc lập, refit và calibration còn ở các bước tiếp theo.
+Theo dõi sai lệch giữa xác suất dự báo và đáp án để chọn thời điểm dừng. LogLoss selection giảm từ 0,360011 xuống 0,354815 qua 5 epoch. Mô hình còn cải thiện nên chưa chốt epoch cuối. Refit, calibration và đánh giá độc lập còn ở bước tiếp theo, kết quả này phục vụ chọn checkpoint.
 
-Training mất khoảng2phút mỗi epoch, validation thêm khoảng3phút12giây. So với lịch sửT4 batch4 khoảng31phút cho cả chu kỳ, lượtH100 batch128 hiện khoảng5phút10giây. Đây là thay đổi đồng thời phần cứng vàbatch. Lịch sử sáu epoch batch4 được lưu riêng, bảng mới đếm từ epoch1 của lượtbatch128. GPU tiếp tục chạy các epoch theo early stopping và được dừng sau khi xuất bằng chứng bền vững.
+Training khoảng 2 phút/epoch và validation khoảng 3 phút 12 giây, tổng khoảng 5 phút 10 giây. Đợt giới hạn đầu đã xuất 20 checkpoint cùng archive 532 MB về D, kiểm toàn vẹn và xác nhận tắtGPU. Credits snapshot sau đợt còn 24,74 USD, mức sử dụng tăng 1,98 USD so trước H100. Đợt nối tiếp phục hồi nguyên trạng thái epoch 5 và tiếp tục từ 6, có trần 3 USD riêng trong giới hạn toàn KLTN 30 USD.
 
 [Bằng chứng](../runs/junyi-a0-h100-batch128-20261112-01/README.md).
 

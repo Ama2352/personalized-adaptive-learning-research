@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 12/11 lúc23giờ00 — A0 H100 batch128 có5epoch
+
+[Bundle đang hoạt động](../research_tracking/runs/junyi-a0-h100-batch128-20261112-01/README.md) đã nghiệm thu5epoch,20checkpoint, archive532MB và0GPU cuối đợt1. Đợt2 nối từepoch6, không benchmark riêng. Source mới đạt2.234caCPU, batch128 cóprotocol riêng.
+
+
 ## 12/11 — hai tiến trìnhT4 chưa tăng tổng thông lượng
 
 [Kiểm song song](../research_tracking/runs/junyi-concurrent-gpu-20261112-01/README.md) đã nghiệm thu45,49giây lần lượt và45,74giây đồng thời, GPU87,9%→99,9%, bốn checkpoint khớp. Không tiếp nhận chạy hai tiến trình làm tăng tốcT4. H100 chưa chạy.

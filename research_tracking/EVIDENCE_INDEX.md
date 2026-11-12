@@ -1,5 +1,10 @@
 # Chỉ mục bằng chứng
 
+## 12/11 — A0 H100 batch128 đang training
+
+[Bundle](runs/junyi-a0-h100-batch128-20261112-01/README.md) giữ CPUgate2234, inputs/source,20checkpoint inventory trongreceipt, telemetry, figureSVG/PDF/PNG/CSV, nămepoch đã kiểm và hồ sơ nối từ6. Bundle chưa đóng.
+
+
 ## 12/11 — phép kiểm concurrencyT4
 
 [Bundle](runs/junyi-concurrent-gpu-20261112-01/README.md) giữ source/request/reservation, bốn checkpoint inventory, telemetryCSV/JSONL, SVG/PDF/PNG, đối chiếu exact và billing. Kết quả âm về tốc độ trênT4, chưa suy sangH100.

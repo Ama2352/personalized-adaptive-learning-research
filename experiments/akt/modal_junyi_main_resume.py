@@ -269,7 +269,8 @@ def main():
         image = image.add_local_file(path,name,copy=not h100_batch128)
     cpu_limit = (.25,4) if h100_batch128 else (.25,2)
     memory_limit = (4096,12288) if h100_batch128 else (4096,8192)
-    function = app.function(image=image,gpu=args.gpu,cpu=cpu_limit,memory=memory_limit,
+    gpu_specification = 'H100!' if h100_batch128 else args.gpu
+    function = app.function(image=image,gpu=gpu_specification,cpu=cpu_limit,memory=memory_limit,
         timeout=2100 if h100_batch128 else 3300,startup_timeout=60,retries=0,max_containers=1,scaledown_window=60,
         volumes={'/durable':volume})(remote_probe)
     try:

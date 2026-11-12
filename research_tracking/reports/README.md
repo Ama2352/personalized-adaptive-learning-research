@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 12/11 — tiến độ A0 H100 batch128
+
+[Bằng chứng](../runs/junyi-a0-h100-batch128-20261112-01/README.md) có5epoch đã nghiệm thu, LLselection0,360011→0,354815 và thời gian từng pha. [Thống kê training](AKT_TRAINING_STATUS_20261112.md) đã cập nhật, đánh giá độc lập còn chờ.
+
+
 ## 12/11 — kiểm hai tiến trình dùng chungT4
 
 [Bằng chứng, số liệu vàfigure](../runs/junyi-concurrent-gpu-20261112-01/README.md) cho tổng thời gian gần ngang nhau. Chưa tiếp nhận chạy đồng thời. Có checkpoint, log lỗi và xác nhận dừng App.

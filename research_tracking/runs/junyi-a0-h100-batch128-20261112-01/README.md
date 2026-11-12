@@ -19,3 +19,7 @@ A0 không đồ thị đã được đưa lên H100 với batch128, khởi tạo
 Training mất khoảng2phút mỗi epoch, validation thêm khoảng3phút12giây. So với lịch sửT4 batch4 khoảng31phút cho cả chu kỳ, lượtH100 batch128 hiện khoảng5phút10giây. Đây là thay đổi đồng thời phần cứng vàbatch. Lịch sử sáu epoch batch4 được lưu riêng, bảng mới đếm từ epoch1 của lượtbatch128. GPU tiếp tục chạy các epoch theo early stopping và được dừng sau khi xuất bằng chứng bền vững.
 
 Nguồn epoch01-snapshot.json vàepoch02-snapshot.json đọc CPU từcheckpoint đãcomplete trongcontainer. Figurea0-h100-progress-epoch002v2 cóSVG/PDF/PNG/CSV, dựng bằngbuild_progress_figure.py. Bản đầu của hình được giữ, v2 nới khoảngtrụcX để tránh nhãn đè. Chưa đóngbundle vìGPU còntrain.
+
+## Đợt1 đã nghiệm thu, tiếp tụcđợt2
+
+Đã hoàn tất5epoch/9.090updates/66.736.655targetexposures. Có20checkpoint, archive531.888.179byte SHA361b76fb3f242455fcc4767a6450a96be7bfa2b903ad130205b9c10198e39589 trênD. H100 đãdừng,0container được xác nhận độc lập. Credits snapshot còn24,74USD, tăng1,98USD so trướcH100. LogLoss selection1–5 là0,360011/0,356920/0,355758/0,355607/0,354815. Besttạm5,stale0, chưachốtselected. Đợt2 giữsource/data/config/profile/identity, phục hồi đúngepoch5 rồi bắtđầu6. DùngH100! đểgiữ kiếntrúcGPU, tránh auto-upgrade ảnhhưởng kiểm probability SHA giữa cácđợt. Trần3USD đợt2, không benchmark.
