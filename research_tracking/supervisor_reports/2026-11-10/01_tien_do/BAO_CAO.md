@@ -8,7 +8,7 @@
 
 ## Phát hiện bổ sung RQ1 ngày12/11
 
-Sau footprint ngoại lệ đủ6lần luyện, nhóm đã kiểm điều kiện mở bài trên cùng3.240trạng thái đã lưu. Khi chỉ chấp nhận tiên quyết được mô hình đánh dấu thành thạo, tập bài thay đổi ở2.557thời điểm. Có18.520/30.572lượt thành viên bị loại, còn12.052. Tuy vậy, cả3.240thời điểm vẫn còn ít nhất một bài thỏa điều kiện nghiêm ngặt. Điều này xác nhận tại những trạng thái đang quan sát có sẵn bài thỏa mastery dù hành động thực tế có thể dùng ngoại lệ. Chưa xác định hành động thay thế hoặc lợi ích học tập vì thiếu toàn bộ điểm xếp hạng và chưa rollout quy tắc mới. Có CSV, kiểm độc lập, figureSVG/PDF/PNG và nguồn dựng lại. [Bằng chứng](../../../runs/rq1-strict-readiness-shadow-20261112-01/README.md).
+Sau footprint ngoại lệ đủ6lần luyện, nhóm đã kiểm điều kiện mở bài trên cùng3.240trạng thái đã lưu. Khi chỉ chấp nhận tiên quyết được mô hình đánh dấu thành thạo, tập bài thay đổi ở2.557thời điểm. Có18.520/30.572lượt thành viên bị loại, còn12.052. Tuy vậy, cả3.240thời điểm vẫn còn ít nhất một bài thỏa điều kiện nghiêm ngặt. Các bài này thuộc tập sơ bộ trước các bộ lọc chống lặp, phủ nội dung và xếp hạng. Chưa xác định chúng có còn được giữ sau các bộ lọc đó hoặc giúp tiến sang nội dung mới. Chưa xác định hành động thay thế hoặc lợi ích học tập vì thiếu toàn bộ điểm xếp hạng và chưa rollout quy tắc mới. Có CSV, kiểm độc lập, figureSVG/PDF/PNG và nguồn dựng lại. [Bằng chứng](../../../runs/rq1-strict-readiness-shadow-20261112-01/README.md).
 
 ## Đợt tiếp tục12/11 — khép lập luận RQ1–RQ2 trong lúc huấn luyện AKT
 

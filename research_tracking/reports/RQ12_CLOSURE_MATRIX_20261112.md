@@ -75,3 +75,5 @@ Các tài liệu cũ có trạng thái trước tiến độ mới. Ví dụ syn
 ## Cập nhật sau khi thực hiện đối chứng readiness12/11
 
 C05 đã có thêm same-state strict-frontier analysis được Root nghiệm thu. Bỏ ngoại lệ exposure làm đổi2.557/3.240frontiers và loại18.520/30.572memberships, strictfrontier vẫn không rỗng ở3.240/3.240snapshot. Baselinefrontier/order khớp trace và2.041servedoutside strict khớp cờ cũ. [Bundle](../runs/rq1-strict-readiness-shadow-20261112-01/README.md) có script, inputs, CSV, checker, figure và failure được giữ. Phép đo này đã thực hiện phần shadoweligibility đề xuất ởC05. Shadowaction còn thiếu vì fullscorevector không có trongtrace và rebalancing có thể lộcandidatechưađượcscore. C07outcome, C04calibration và T3predictivecontrols vẫn mở.
+
+Diễn giải strictfrontier không rỗng chỉ áp dụng trước anti-repeat/coverage/ranking. Không kết luận ngoại lệ exposure dư thừa hoặc không cần cho việc tiến sang nội dung mới. Các quyết định sau lọc và learningoutcome chưa được tính. Phạm vi này cũng là giới hạn khi đọc câu “còn bài strict” trongREADMEbundle.

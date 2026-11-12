@@ -33,3 +33,9 @@ Execution01 chưa kịp tạo archive, hai control files ở filesystem tạm ch
 ## Đối chiếu sau execution02 — 12/11
 
 Đã tải archive2.080.202.385byte, kiểmSHA và xác nhận stop acknowledgment. Epoch1/2 hoàn tất, mỗi epoch13.347.331targets/58.166updates. Epoch3 dở dang29updates/6.432targets, không tính là epoch hoàn tất. Thời gian train lần lượt1607,621s và1595,808s. Validation lần lượt248,421s và263,354s, mỗi lần1.600.343targets/0OOV. Log Loss selection0,359648→0,356651. Chưa selected cuối/refit/calibration. `training-status-20261112.json` và `build_training_status.py` giữ đối chiếu có thể chạy lại. Bảng tổng hợp hiện hành tại `research_tracking/reports/AKT_TRAINING_STATUS_20261112.md`.
+
+## Tiếp tục hữu hạn sau execution03
+
+`continue_a0_bounded.py` chỉ tiếp tục cùng logicalA0/source04/data/split/seed/hyperparameter. Đã kiểm3positive/7negative cases bằng stdlib. Chờ execution03 córeceiptinventoryverified vàstopack, rồi tối đa baexecution04/05/06, mỗi lượttrần0,85USD, tổngthêm2,55USD đã đượcRootpreallocate trongledger30USD. Mỗi lượt tự kiểm projectbudget, requestđượcso với lượttrước ở các trườngnguồn/dữliệu/giới hạn/GPU. Partial hợp lệ đượcresume từlatestcheckpoint, complete thìdừng. Lỗi/preemption/thiếuartifact/stop chưa xác nhận đều dừng đểreview. Khôngrefit, graphfit, Holdout hoặc đổi protocol trong bộđiềukhiển này. Cácallocationchưa dùng tiếp tục là dự phòng, không được báo thành chi phí thực.
+
+Tiến độ ở `bounded-continuation-state.json`, log `bounded-continuation.log`. Filelockexclusive chặn khởi độngtrùng, cácchươngtrìnhkhông tự xóaoutputcũ. ROOT vẫn cần nghiệmthu kếtquả cuốivàcậpnhật báo cáo.
