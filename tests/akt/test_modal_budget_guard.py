@@ -183,7 +183,7 @@ def test_stop_cli_uses_exact_id_argv_and_bounded_subprocess(monkeypatch):
     monkeypatch.setattr(guard_module.subprocess, 'run', lambda args, **kwargs:calls.append((args,kwargs)))
     guard_module.stop_owned_app_cli(owned(), timeout_seconds=12)
     args, kwargs = calls[0]
-    assert args == [sys.executable,'-B','-m','modal','app','stop','ap-UnitRun123']
+    assert args == [sys.executable,'-B','-m','modal','app','stop','--yes','ap-UnitRun123']
     assert 0<kwargs['timeout']<=12 and kwargs['check'] is True
     assert kwargs.get('shell',False) is False
 
@@ -204,7 +204,7 @@ def test_stop_cli_accepts_already_stopped_only_after_owned_state_check(monkeypat
     monkeypatch.setattr(guard_module.time,'monotonic',lambda:now[0])
     def execute(args, **kwargs):
         calls.append((args,kwargs))
-        if args[-2]=='stop':
+        if 'stop' in args:
             now[0] += 6
             raise subprocess.CalledProcessError(1,args,stderr='App is already stopped.')
         return subprocess.CompletedProcess(args,0,stdout=json.dumps([
@@ -223,7 +223,7 @@ def test_stop_cli_accepts_already_stopped_only_after_owned_state_check(monkeypat
 ])
 def test_stop_cli_rejects_running_missing_or_busy_owned_app(monkeypatch,records):
     def execute(args, **kwargs):
-        if args[-2]=='stop':
+        if 'stop' in args:
             raise subprocess.CalledProcessError(1,args,stderr='App is already stopped.')
         return subprocess.CompletedProcess(args,0,stdout=json.dumps(records))
     monkeypatch.setattr(guard_module.subprocess,'run',execute)
@@ -244,7 +244,7 @@ def test_stop_cli_waits_for_bounded_state_propagation(monkeypatch):
     queries = []
     monkeypatch.setattr(guard_module.time, 'sleep', lambda seconds: None)
     def execute(args, **kwargs):
-        if args[-2] == 'stop':
+        if 'stop' in args:
             raise subprocess.CalledProcessError(1, args)
         queries.append(args)
         return subprocess.CompletedProcess(args, 0, stdout=json.dumps([

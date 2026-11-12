@@ -102,7 +102,7 @@ def stop_owned_app_cli(app, *, timeout_seconds=15):
             raise subprocess.TimeoutExpired('modal app stop/state confirmation',timeout_seconds)
         return value
     try:
-        subprocess.run([sys.executable, '-B', '-m', 'modal', 'app', 'stop', app.app_id],
+        subprocess.run([sys.executable, '-B', '-m', 'modal', 'app', 'stop', '--yes', app.app_id],
             check=True, timeout=remaining(), capture_output=True, text=True)
     except subprocess.CalledProcessError as stop_error:
         # CLI có thể trả code1 khi App đã kết thúc. Không suy trạng thái từ stderr.
