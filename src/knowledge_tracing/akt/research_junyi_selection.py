@@ -1,0 +1,378 @@
+"""A0 Junyi selected-only trên role cố định, có checkpoint cuối epoch.
+
+Refit90 và calibration cần external freeze của allocation theo Recipe26.
+Module này không cấp quyền các phase đó hoặc truy cập Holdout.
+"""
+from dataclasses import asdict, dataclass
+import gc
+import hashlib
+import json
+from pathlib import Path
+import time
+import uuid
+
+from .config import AKTConfig, DataPaths, PROJECT_ROOT, ResearchCUDAExecutionProfile, validate_config
+from .research_junyi_data import (JunyiPhaseView, fit_junyi_research_encoding,
+                                iter_junyi_phase_learners, iter_junyi_research_windows)
+from .research_junyi_engineering import file_sha, write_json
+from .research_junyi_roles import JunyiResearchRoles
+
+
+def _identity(payload):
+    return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(',', ':'), default=str).encode()).hexdigest()
+
+
+@dataclass(frozen=True)
+class JunyiSelectedInputs:
+    paths: DataPaths
+    train: JunyiPhaseView
+    selection: JunyiPhaseView
+    train_targets: int
+    selection_targets: int
+    source_identity: str
+
+    def __post_init__(self):
+        if (type(self.paths) is not DataPaths or type(self.train) is not JunyiPhaseView
+                or type(self.selection) is not JunyiPhaseView):
+            raise ValueError('Typed Junyi paths and phase views required')
+        if (self.train.scope != 'select_train80' or self.selection.scope != 'raw_selection10'
+                or self.train.roles.identity != self.selection.roles.identity
+                or set(self.train.users) & set(self.selection.users)
+                or any(type(n) is not int or n <= 0 for n in (self.train_targets,self.selection_targets))
+                or type(self.source_identity) is not str or len(self.source_identity)!=64
+                or any(c not in '0123456789abcdef' for c in self.source_identity)):
+            raise ValueError('Separate fixed train80/selection10 inputs required')
+
+    @property
+    def identity(self):
+        return _identity(dict(source=self.source_identity,train=self.train.identity,
+            selection=self.selection.identity,train_targets=self.train_targets,
+            selection_targets=self.selection_targets))
+
+
+def load_full_selected_cache(cache_root, roles_path, *, expected_manifest_sha256, expected_roles_sha256):
+    root = Path(cache_root).resolve()
+    allowed = (PROJECT_ROOT/'artifacts/akt/junyi-cohorts').resolve()
+    if root == allowed or not root.is_relative_to(allowed):
+        raise ValueError('Owned Junyi data cache required')
+    manifest_path = root/'manifest.json'
+    if file_sha(manifest_path) != expected_manifest_sha256 or file_sha(roles_path) != expected_roles_sha256:
+        raise ValueError('Pinned Junyi source changed')
+    manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+    if (manifest.get('status') != 'FULL_TRAIN_SELECTION_CACHE_VERIFIED_NOT_TRAINED'
+            or manifest.get('purpose') != 'FULL_JUNYI_TRAIN80_SELECTION10_CACHE'
+            or manifest.get('full_role_coverage') is not True
+            or any(manifest.get(name) is not False for name in ('calibration_events_included',
+                'outer_validation_events_included','holdout_events_included'))):
+        raise ValueError('Verified selected-only cache required')
+    for name in ('canonical.parquet','assignments.parquet'):
+        path = root/name
+        entry = manifest['outputs'][name]
+        if path.is_symlink() or path.stat().st_size != entry['bytes'] or file_sha(path) != entry['sha256']:
+            raise ValueError('Junyi cache output changed')
+    payload = json.loads(Path(roles_path).read_text(encoding='utf-8'))
+    for name in ('train_users','selection_users','calibration_users','outer_validation_users'):
+        payload[name] = tuple(payload[name])
+    roles = JunyiResearchRoles(**payload)
+    if roles.identity != manifest['roles_identity']:
+        raise ValueError('Cache/roles mismatch')
+    train = JunyiPhaseView(roles,'select_train80',roles.train_users,roles.identity)
+    selection = JunyiPhaseView(roles,'raw_selection10',roles.selection_users,roles.identity)
+    counts = {row['role']:row for row in manifest['counts']}
+    if counts['train']['learners'] != len(train.users) or counts['selection']['learners'] != len(selection.users):
+        raise ValueError('Cache learner count mismatch')
+    # Đường dẫn được tạo theo mount hiện tại; không dùng path Windows trong manifest.
+    paths = DataPaths(root/'canonical.parquet',root/'assignments.parquet',manifest_path,Path(roles_path))
+    return JunyiSelectedInputs(paths,train,selection,int(counts['train']['targets']),
+        int(counts['selection']['targets']),_identity(dict(cache=expected_manifest_sha256,roles=expected_roles_sha256)))
+
+
+def validate_selected_grant(config, inputs, grant, *, config_sha256, gate_sha256, runtime_sha256,
+                            prepared_inputs=None):
+    expected = dict(candidate_id='A0',phase='junyi_selected_only',config_sha256=config_sha256,
+                    inputs_identity=inputs.identity,gate_sha256=gate_sha256,runtime_sha256=runtime_sha256)
+    if (grant.get('status') != 'USER_APPROVED' or grant.get('binding') != expected
+            or grant.get('prepared_inputs',{}) != (prepared_inputs or {})
+            or type(grant.get('approval_reference')) is not str or not grant['approval_reference'].strip()
+            or type(grant.get('workload_epochs')) is not int
+            or not 1 <= grant['workload_epochs'] <= config.max_epochs
+            or grant.get('purpose') not in ('bounded_engineering','main_selected')):
+        raise PermissionError('Bounded Junyi selected grant mismatch')
+    if grant['purpose']=='main_selected' and (grant['workload_epochs']!=20
+            or not inputs.train.full_role_coverage or not inputs.selection.full_role_coverage):
+        raise PermissionError('Main selected requires full frozen roles and early-stopping envelope')
+
+
+def _evaluate(adapter, learners, target_count, *, output=None):
+    """Giữ hai vector số bounded, stream identity/output thay vì giữ hàng triệu dict."""
+    import numpy as np
+    import torch
+    from .prediction import iter_predictions
+    probabilities = np.empty(target_count,dtype=np.float32)
+    labels = np.empty(target_count,dtype=np.float32)
+    supported = total = 0
+    population = hashlib.sha256()
+    previous_user=None
+    global_rank=-1
+    for record in iter_predictions(adapter,learners):
+        total += 1
+        if total > target_count:
+            raise ValueError('Prediction target count exceeds frozen input')
+        key = (record.source_row,record.user_id,record.exercise,record.time_done,record.correct,record.suggested,record.fold)
+        population.update(json.dumps(key,separators=(',', ':')).encode()+b'\n')
+        if record.prediction is not None:
+            probabilities[supported] = record.prediction
+            labels[supported] = record.correct
+            supported += 1
+        if output is not None:
+            global_rank=global_rank+1 if record.user_id==previous_user else 0
+            previous_user=record.user_id
+            exported=asdict(record)
+            exported['global_rank']=global_rank
+            output.write(json.dumps(exported,allow_nan=False)+'\n')
+    if total != target_count or supported == 0:
+        raise ValueError('Prediction target population incomplete or unsupported')
+    p,y = probabilities[:supported],labels[:supported]
+    loss = float(torch.nn.functional.binary_cross_entropy(torch.from_numpy(p),torch.from_numpy(y)).item())
+    return dict(targets=total,supported=supported,oov=total-supported,population_sha256=population.hexdigest(),
+                native_bce=loss,probability_sha256=hashlib.sha256(p.tobytes()).hexdigest())
+
+
+def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
+        inputs: JunyiSelectedInputs, *, authorization_file, expected_authorization_sha256,
+        runtime_report, lock_file, encoding_file=None, expected_encoding_sha256=None,
+        train_window_cache=None, expected_train_window_manifest_sha256=None,
+        resume_checkpoint=None, expected_resume_sha256=None,
+        encoding_receipt=None, expected_encoding_receipt_sha256=None):
+    """Selected fit80/rawbest10; không tự mở refit hoặc calibration."""
+    validate_config(config,cuda_profile=profile)
+    if config.phase!='junyi-research' or config.execution_enabled is not True:
+        raise PermissionError('Explicit Junyi CUDA execution config required')
+    if (config.max_train_users<len(inputs.train.users) or config.max_val_users<len(inputs.selection.users)
+            or config.max_targets_per_side<max(inputs.train_targets,inputs.selection_targets)):
+        raise ValueError('Junyi population exceeds explicit caps')
+    if file_sha(authorization_file)!=expected_authorization_sha256:
+        raise PermissionError('Authorization file changed')
+    grant = json.loads(Path(authorization_file).read_text(encoding='utf-8'))
+    prepared = {}
+    if (encoding_file is None)!=(expected_encoding_sha256 is None):
+        raise ValueError('Encoding path and pin required together')
+    if (train_window_cache is None)!=(expected_train_window_manifest_sha256 is None):
+        raise ValueError('Window-cache path and pin required together')
+    if encoding_file is not None:
+        if (encoding_receipt is None or expected_encoding_receipt_sha256 is None
+                or file_sha(encoding_file)!=expected_encoding_sha256
+                or file_sha(encoding_receipt)!=expected_encoding_receipt_sha256):
+            raise ValueError('Prepared encoding changed')
+        prepared['encoding_sha256']=expected_encoding_sha256
+        prepared['encoding_receipt_sha256']=expected_encoding_receipt_sha256
+    if train_window_cache is not None:
+        if encoding_file is None or file_sha(Path(train_window_cache)/'manifest.json')!=expected_train_window_manifest_sha256:
+            raise ValueError('Prepared window cache requires pinned training encoding')
+        prepared['train_window_manifest_sha256']=expected_train_window_manifest_sha256
+    if (resume_checkpoint is None)!=(expected_resume_sha256 is None):
+        raise ValueError('Resume checkpoint and external pin required together')
+    if resume_checkpoint is not None:
+        if file_sha(resume_checkpoint)!=expected_resume_sha256:
+            raise ValueError('Resume checkpoint changed')
+        prepared['resume_checkpoint_sha256']=expected_resume_sha256
+    from .authorization import preflight, require_gate2_evidence, config_hash
+    gate = require_gate2_evidence(config,lock_file=lock_file)
+    preflight(config,runtime_report_path=runtime_report,lock_file=lock_file,cuda_profile=profile)
+    validate_selected_grant(config,inputs,grant,config_sha256=config_hash(config),
+        gate_sha256=gate['report_sha256'],runtime_sha256=file_sha(runtime_report),prepared_inputs=prepared)
+    import torch
+    from .training import EarlyStopping, EpochStats, train_epoch, _seed
+    from .model import AKTAdapter
+    from .checkpoint import save_checkpoint, load_checkpoint, load_training_snapshot, restore_checkpoint
+    from .research_graph_model import _cuda_execution_check
+    from .research_runner import _state_hash
+    _cuda_execution_check(profile,synchronize=True)
+    output = config.output_dir
+    output.mkdir(exist_ok=resume_checkpoint is not None)
+    started = time.monotonic()
+    reader_options=dict(temp_dir=PROJECT_ROOT/'artifacts/akt/tmp'/config.run_id)
+    if encoding_file is None:
+        encoding = fit_junyi_research_encoding(inputs.paths,inputs.train,**reader_options)
+    else:
+        from .research_junyi_data import load_prepared_junyi_encoding
+        encoding=load_prepared_junyi_encoding(encoding_file,encoding_receipt,view=inputs.train,
+            source_data_sha256=inputs.source_identity,expected_file_sha256=expected_encoding_sha256,
+            expected_receipt_sha256=expected_encoding_receipt_sha256)
+    if train_window_cache is None:
+        windows_factory=lambda:iter_junyi_research_windows(inputs.paths,inputs.train,encoding,**reader_options)
+    else:
+        from .research_junyi_window_cache import JunyiWindowCacheSession
+        cache_session=JunyiWindowCacheSession(train_window_cache,view=inputs.train,
+            encoding=encoding,source_data_sha256=inputs.source_identity,expected_target_rows=inputs.train_targets,
+            expected_manifest_sha256=expected_train_window_manifest_sha256)
+        windows_factory=cache_session.iter_windows
+    identity = dict(kind='junyi_a0_selected_v1',inputs=inputs.identity,encoding=encoding.identity,
+        prediction_implementation='legacy_single_window_v1',
+        config=json.loads(json.dumps(asdict(config),default=str)),profile=asdict(profile),
+        source_build_sha256=_identity(json.loads(Path(gate['evidence_path']).read_text())['build_hashes']))
+    if resume_checkpoint is None:
+        write_json(output/'run-manifest.json',identity)
+    elif json.loads((output/'run-manifest.json').read_text())!=identity or (output/'COMPLETE.json').exists():
+        raise ValueError('Resume requires identical unfinished logical run')
+    attempt_id=uuid.uuid4().hex
+    write_json(output/f'attempt-{attempt_id}.json',dict(authorization_sha256=expected_authorization_sha256,
+        resume_sha256=expected_resume_sha256,prepared_inputs=prepared))
+    _seed(42)
+    with torch.device('cpu'):
+        adapter = AKTAdapter(config,encoding.native)
+    initial_backbone=_state_hash(adapter)
+    initial_path=output/'initial-backbone.json'
+    if resume_checkpoint is None:
+        write_json(initial_path,dict(sha256=initial_backbone,seed=42,encoding_identity=encoding.identity))
+    elif json.loads(initial_path.read_text())['sha256']!=initial_backbone:
+        raise ValueError('Resume backbone initialization differs from frozen run')
+    optimizer = torch.optim.Adam(adapter.native.parameters(),lr=config.lr,betas=config.betas,eps=config.eps,
+        weight_decay=config.weight_decay,foreach=False,fused=False,capturable=False,differentiable=False,
+        amsgrad=False,maximize=False,decoupled_weight_decay=False)
+    stopper = EarlyStopping(config.patience,config.min_delta)
+    steps = targets = 0
+    history = []
+    population = None
+    first_epoch=1
+    pending_stats=None
+    epoch_resume=None
+    if resume_checkpoint is not None:
+        payload=load_training_snapshot(resume_checkpoint,expected_identity=identity,device='cuda')
+        if payload.get('checkpoint_kind')=='training_recovery_v1':
+            state=payload['resume_state']['trainer_state']['selection_state']
+            first_epoch=payload['resume_state']['epoch']
+            epoch_resume=Path(resume_checkpoint)
+        else:
+            restore_checkpoint(adapter,optimizer,payload)
+            state=payload['progress']
+            first_epoch=state['epoch']+1
+            if state.get('validation_complete') is False:
+                first_epoch=state['epoch']
+                pending_stats=EpochStats(**state['epoch_stats'])
+        stopper=EarlyStopping(**state['stopper'])
+        history=list(state['history'])
+        steps=state['optimizer_steps']
+        targets=state['valid_targets']
+        population=None if not history else history[-1]['validation']['population_sha256']
+        del payload
+    recovery_root=output/'batch-recovery'
+    recovery_root.mkdir(exist_ok=True)
+    def publish_batch(path):
+        import os
+        directory=output/'checkpoints'/path.stem
+        directory.mkdir(parents=True)
+        os.link(path,directory/'state.pt')
+        cp_sha=file_sha(path)
+        write_json(directory/'metadata.json',dict(checkpoint_sha256=cp_sha,
+            checkpoint_bytes=path.stat().st_size,identity=identity,scope='partial_epoch_recovery'))
+        write_json(directory/'COMPLETE.json',dict(checkpoint_sha256=cp_sha,
+            metadata_sha256=file_sha(directory/'metadata.json')))
+    for epoch in range(first_epoch,grant['workload_epochs']+1):
+        if stopper.stale_epochs>=config.patience:
+            break
+        remaining = config.max_wall_seconds-(time.monotonic()-started)
+        if remaining <= 0 or steps >= config.max_steps or targets >= config.max_total_targets:
+            break
+        with (output/f'epoch-{epoch:03d}-{attempt_id}-progress.jsonl').open('x',encoding='utf-8') as log:
+            def progress(event):
+                if event['training']['optimizer_steps']%100==0 or event['complete_epoch']:
+                    log.write(json.dumps(event,allow_nan=False)+'\n')
+                    log.flush()
+            if pending_stats is None:
+                previous_epoch_wall=0.
+                if epoch_resume is not None:
+                    snapshot=load_training_snapshot(epoch_resume,expected_identity=identity,device='cpu')
+                    previous_epoch_wall=snapshot['resume_state']['trainer_state']['stats']['resource']['wall_seconds']
+                    del snapshot
+                stats = train_epoch(adapter,windows_factory,
+                    optimizer=optimizer,epoch=epoch,budget=dict(max_steps=config.max_steps-steps,
+                    max_targets=config.max_total_targets-targets,
+                    max_seconds=previous_epoch_wall+min(config.max_seconds,max(1.,remaining-30)),
+                    max_rss_bytes=config.max_rss_bytes,min_available_ram_bytes=config.min_available_ram_bytes,
+                    run_id=config.run_id,phase=config.phase,resource_sample_limit=128,progress_resource_samples=False),
+                    progress_callback=progress,recovery=dict(checkpoint_dir=recovery_root,identity=identity,
+                        checkpoint_every_steps=1000,resume_checkpoint=epoch_resume,checkpoint_callback=publish_batch,
+                        selection_state=dict(stopper=asdict(stopper),history=history,
+                                             optimizer_steps=steps,valid_targets=targets)))
+            else:
+                stats=pending_stats
+        pending_stats=None
+        epoch_resume=None
+        prior_steps,prior_targets=steps,targets
+        steps += stats.optimizer_steps
+        targets += stats.valid_targets
+        write_json(output/f'epoch-{epoch:03d}-{attempt_id}-training.json',asdict(stats))
+        if not stats.complete:
+            break
+        if stats.valid_targets != inputs.train_targets:
+            raise ValueError('Complete epoch population differs from frozen train')
+        _cuda_execution_check(profile,synchronize=True)
+        # Công bố state trước validation để timeout sau train không mất epoch.
+        before_validation=output/'checkpoints'/f'train-epoch-{epoch:03d}'
+        if not before_validation.exists():
+            before_validation.mkdir(parents=True)
+            save_checkpoint(before_validation/'state.pt',adapter,optimizer,identity=identity,
+                progress=dict(complete=True,epoch=epoch,validation_complete=False,epoch_stats=asdict(stats),
+                    stopper=asdict(stopper),history=history,optimizer_steps=prior_steps,valid_targets=prior_targets))
+            cp_sha=file_sha(before_validation/'state.pt')
+            write_json(before_validation/'metadata.json',dict(checkpoint_sha256=cp_sha,
+                checkpoint_bytes=(before_validation/'state.pt').stat().st_size,identity=identity,
+                scope='complete_epoch_before_validation'))
+            write_json(before_validation/'COMPLETE.json',dict(checkpoint_sha256=cp_sha,
+                metadata_sha256=file_sha(before_validation/'metadata.json')))
+        adapter.checkpoint_id = f'{config.run_id}-epoch-{epoch}'
+        validation_started=time.monotonic()
+        validation = _evaluate(adapter,
+            iter_junyi_phase_learners(inputs.paths,inputs.selection,**reader_options),inputs.selection_targets)
+        if population is not None and validation['population_sha256'] != population:
+            raise ValueError('Selection population changed across epochs')
+        population = validation['population_sha256']
+        stop = stopper.observe(epoch,validation['native_bce'])
+        history.append(dict(epoch=epoch,validation=validation,validation_seconds=time.monotonic()-validation_started,
+                            cuda_resource=_cuda_execution_check(profile,synchronize=True)))
+        checkpoint = output/'checkpoints'/f'epoch-{epoch:03d}'
+        checkpoint.mkdir(parents=True)
+        save_checkpoint(checkpoint/'state.pt',adapter,optimizer,identity=identity,
+            progress=dict(complete=True,epoch=epoch,optimizer_steps=steps,valid_targets=targets,
+                          stopper=asdict(stopper),history=history,validation_complete=True))
+        cp_sha = file_sha(checkpoint/'state.pt')
+        write_json(checkpoint/'metadata.json',dict(checkpoint_sha256=cp_sha,
+            checkpoint_bytes=(checkpoint/'state.pt').stat().st_size,epoch=epoch,identity=identity))
+        write_json(checkpoint/'COMPLETE.json',dict(checkpoint_sha256=cp_sha,
+            metadata_sha256=file_sha(checkpoint/'metadata.json')))
+        if stop:
+            break
+    finished = bool(history) and (stopper.stale_epochs>=config.patience or stopper.last_epoch==config.max_epochs)
+    if not finished:
+        terminal = dict(status='PARTIAL_SELECTED_ONLY_NOT_FINAL',history=history,optimizer_steps=steps,
+            trained_targets=targets,selected_epoch=None,external_freeze=False)
+        write_json(output/f'partial-terminal-{attempt_id}.json',terminal)
+        return terminal
+    best = output/'checkpoints'/f'epoch-{stopper.best_epoch:03d}'/'state.pt'
+    del adapter,optimizer
+    gc.collect()
+    torch.cuda.empty_cache()
+    payload = load_checkpoint(best,expected_identity=identity,device='cuda')
+    with torch.device('cpu'):
+        adapter = AKTAdapter(config,encoding.native)
+    adapter.native.load_state_dict(payload['model_state_dict'])
+    del payload
+    adapter.checkpoint_id = file_sha(best)
+    predictions_file=output/f'raw-best-selection-{attempt_id}.jsonl'
+    with predictions_file.open('x',encoding='utf-8') as stream:
+        validation = _evaluate(adapter,
+            iter_junyi_phase_learners(inputs.paths,inputs.selection,**reader_options),inputs.selection_targets,output=stream)
+    expected = history[stopper.best_epoch-1]['validation']
+    if validation!=expected:
+        raise ValueError('Best checkpoint reload changed target population or predictions')
+    terminal = dict(status='JUNYI_A0_SELECTED_ONLY_COMPLETE',selected_epoch=stopper.best_epoch,
+        complete_epochs=stopper.last_epoch,history=history,optimizer_steps=steps,trained_targets=targets,
+        checkpoint_sha256=file_sha(best),encoding_identity=encoding.identity,validation=validation,
+        initial_backbone_sha256=initial_backbone,predictions_file=predictions_file.name,
+        predictions_sha256=file_sha(predictions_file),
+        full_role_coverage=inputs.train.full_role_coverage and inputs.selection.full_role_coverage,
+        external_freeze=False,refit_completed=False,calibration_completed=False)
+    write_json(output/'selected-terminal.json',terminal)
+    write_json(output/'COMPLETE.json',dict(status=terminal['status'],terminal_sha256=file_sha(output/'selected-terminal.json')))
+    return terminal

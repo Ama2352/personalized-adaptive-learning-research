@@ -233,7 +233,7 @@ def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionPro
         raise ValueError('completed run cannot be overwritten')
 
 
-def load_config(path: Path) -> AKTConfig:
+def load_config(path: Path, *, cuda_profile: ResearchCUDAExecutionProfile | None = None) -> AKTConfig:
     data = json.loads(path.read_text(encoding='utf-8'))
     for key in ('project_root', 'output_dir', 'source_root'):
         if key in data:
@@ -253,5 +253,5 @@ def load_config(path: Path) -> AKTConfig:
                 options['source_envelope'] = PROJECT_ROOT / options['source_envelope']
         data['recovery'] = RecoveryOptions(**options)
     config = AKTConfig(**data)
-    validate_config(config)
+    validate_config(config, cuda_profile=cuda_profile)
     return config

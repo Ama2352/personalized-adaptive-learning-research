@@ -20,8 +20,9 @@ from .config import AKTConfig
 from .encoding import ExerciseEncoding, fit_vocabulary
 from .model import AKTAdapter
 from .resources import memory_snapshot
-from .recovery import training_config_hash, training_budget, preserve_checkpoint
+from .recovery import training_config_hash, training_budget, preserve_checkpoint, checkpoint_cadence
 from .sampler import ReplayableWindowCursor
+from .telemetry_policy import resource_sample_policy
 from .splits import InnerSplit
 from .tensors import AKTBatch, collate_windows
 from .types import LearnerEvents, TrainingWindow, UnseenTarget
@@ -135,13 +136,14 @@ def train_epoch(adapter: AKTAdapter, windows_factory: Callable[[], Iterator[Trai
     stop_reason = 'training_in_progress'
     sequence_length_counts: dict[int, int] = {}
     batch_shape_counts: dict[str, int] = {}
-    resource_samples: list[dict] = []
+    resource_samples, progress_resource_samples = resource_sample_policy(budget)
     pending: list[TrainingWindow] = []
 
     cursor = None
     saved_steps = 0
     last_checkpoint = None
     committed_state = None
+    recovery_cadence = None if recovery is None else checkpoint_cadence(adapter.config,recovery)
     if recovery is not None:
         payload = None
         sampler_state = None
@@ -165,7 +167,7 @@ def train_epoch(adapter: AKTAdapter, windows_factory: Callable[[], Iterator[Trai
             windows_processed, processed_target_rows = saved.windows_processed, saved.processed_target_rows
             max_pre_clip_grad_norm, max_post_clip_grad_norm = saved.max_pre_clip_grad_norm, saved.max_post_clip_grad_norm
             max_rss = saved.resource['peak_rss_bytes']
-            resource_samples = list(saved.resource['samples'])
+            resource_samples.extend(saved.resource['samples'])
             batches, collated_windows = saved.batches, saved.collated_windows
             valid_tokens, target_tokens = saved.valid_tokens, saved.target_tokens
             context_tokens, padding_tokens = saved.context_tokens, saved.padding_tokens
@@ -241,7 +243,7 @@ def train_epoch(adapter: AKTAdapter, windows_factory: Callable[[], Iterator[Trai
                 'optimizer_seconds': optimizer_seconds,
                 'resource': {'wall_seconds': time.perf_counter() - started,
                              'peak_rss_bytes': max_rss,
-                             'samples': list(resource_samples)},
+                             'samples': list(resource_samples) if progress_resource_samples else []},
             },
         })
 
@@ -309,7 +311,7 @@ def train_epoch(adapter: AKTAdapter, windows_factory: Callable[[], Iterator[Trai
                 'sampler_state': cursor.state_dict(),
                 'trainer_state': {'role': 'epoch_accounting_v1', 'stats': asdict(snapshot_stats()),
                                   'selection_state': recovery.get('selection_state')}}
-        if recovery is not None and steps % adapter.config.recovery.checkpoint_every_steps == 0:
+        if recovery is not None and steps % recovery_cadence == 0:
             save_batch()
         # Record a completed optimizer step before checking its post-update memory use.
         # If the cap is crossed here, the bounded run still persists the work just done.

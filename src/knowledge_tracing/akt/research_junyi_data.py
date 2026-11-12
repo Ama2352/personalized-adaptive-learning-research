@@ -115,6 +115,27 @@ def fit_junyi_research_encoding(paths: DataPaths, view: JunyiPhaseView, **reader
     return JunyiResearchEncoding(native,view)
 
 
+def load_prepared_junyi_encoding(path, receipt_path, *, view, source_data_sha256,
+                                 expected_file_sha256, expected_receipt_sha256):
+    """Giữ lineage của encoding đã fit, từ chối relabel file khác thành TRAIN80."""
+    from pathlib import Path
+    from .encoding import load_encoding
+    path,receipt_path=Path(path),Path(receipt_path)
+    digest=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+    _need(digest(path)==expected_file_sha256 and digest(receipt_path)==expected_receipt_sha256,
+          'Prepared encoding/receipt changed')
+    receipt=json.loads(receipt_path.read_text(encoding='utf-8'))
+    _need(receipt.get('status')=='JUNYI_TRAIN_ENCODING_FITTED'
+          and receipt.get('fit_view_identity')==view.identity
+          and receipt.get('phase_scope')==view.scope
+          and receipt.get('source_data_sha256')==source_data_sha256
+          and receipt.get('encoding_file_sha256')==expected_file_sha256,
+          'Prepared encoding fit phase/source mismatch')
+    encoding=JunyiResearchEncoding(load_encoding(path),view)
+    _need(receipt.get('encoding_identity')==encoding.identity,'Prepared encoding content mismatch')
+    return encoding
+
+
 def iter_junyi_research_windows(paths: DataPaths, view: JunyiPhaseView,
                                encoding: JunyiResearchEncoding, **reader_options) -> Iterator[WindowRecord]:
     encoding.assert_for(view)

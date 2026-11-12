@@ -44,6 +44,17 @@ def training_budget(config: AKTConfig, budget: dict) -> dict:
             if config.recovery is None or key != 'run_id'}
 
 
+def checkpoint_cadence(config: AKTConfig, recovery: dict) -> int:
+    """Cho caller typed-phase mới tái dùng sampler recovery mà giữ config cũ."""
+    declared = recovery.get('checkpoint_every_steps')
+    configured = None if config.recovery is None else config.recovery.checkpoint_every_steps
+    cadence = configured if declared is None else declared
+    if (type(cadence) is not int or not 1 <= cadence <= 100000
+            or (configured is not None and cadence != configured)):
+        raise ValueError('Explicit compatible recovery checkpoint cadence required')
+    return cadence
+
+
 def preserve_checkpoint(source: Path, destination: Path) -> Path:
     """Copy byte-identical vào attempt mới, không thay checkpoint/identity nguồn."""
     if source.resolve() == destination.resolve():
