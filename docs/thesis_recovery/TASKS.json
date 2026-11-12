@@ -6123,11 +6123,11 @@
       "id": "AKTJ01",
       "implementation_objective": "Tạo derivative learner-role80/10/10 giữ outerfold4 và assignments lịch sử",
       "acceptance_criteria": "Disjoint/exhaustive, stablehash/rounding, khôngđọc events/Holdoutlabels, 7unit tests",
-      "verification_steps": "unittest7 vàCLI metadata actual",
+      "verification_steps": "9type-safetytests, actual metadata membership unchanged, combinedscope182tests",
       "required_artifacts": "junyi-roles-manifest.json, roles.json, tests.log",
-      "status": "COMPLETED_METADATA_ONLY",
+      "status": "COMPLETED_METADATA_ONLY_RAW_TYPE_GUARD_REVIEWED",
       "blockers": [],
-      "verification_evidence": "research_tracking/runs/modal-akt-graph-selected-20261112-01/junyi-roles-manifest.json"
+      "verification_evidence": "research_tracking/runs/akt-protocol-audit-20261112-01/junyi-role-audit.json"
     },
     {
       "research_objective": "Benchmark AKT trên Junyi với ranh giới train/selection/calibration riêng",
@@ -6153,10 +6153,11 @@
       "required_artifacts": "phase-role audit, source/runtimeGate, config/auth, throughput/cost estimate",
       "status": "NOT_STARTED_JUNYI_PRODUCER_WIRING",
       "blockers": [
-        "Mainproducer hiện chỉGrade10",
-        "Selected80/refit90/calibration10 cầnphase-specificJunyiadmission",
-        "ChưađoJunyithroughput hoặc duyệt fullfit"
-      ]
+        "Phaseviews Junyi chưa nối legacy reader/windowing vào protocol80/10/10",
+        "Main refit cần externalfreeze verifier, graph-off/noise/gate telemetry cần inference wrapper",
+        "Cần benchmarkJunyi riêng vàcurrent-sourceGate trước GPU"
+      ],
+      "benchmark_contract": "research_tracking/reports/AKT_BENCHMARK_CONTRACT_20261112.md"
     }
   ],
   "local_engineering_authorization": "User07/11 yêu cầu Codex thực hiện toàn bộ phần có thể làm trước cloud",

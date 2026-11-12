@@ -34,6 +34,12 @@ Junyi đang được chuẩn bị riêng. Metadata xác nhận có 198.084 học
 
 Tổng Modal tại lần đọc sau đợt ghi nhận khoảng 0,641 USD, tăng khoảng 0,470 USD so với trước sáu lượt đồ thị. Credits và allowance bù chi phí ghi nhận, net billed bằng0. API có thể cập nhật trễ. Các App của đợt đã dừng, checkpoint giữ bản local và bản trên Volume.
 
+## Kiểm cấu hình và độ đầy đủ của benchmark
+
+Audit ngày 12/11 — đã đối chiếu lại cấu hình và dữ liệu của bảy lượt AKT. Kiểm độc lập từ archive xác nhận cùng backbone khởi tạo, cùng cách chia 48/6/6, bộ mã hóa bài tập chỉ fit từ 48 người train, đúng câu cần dự báo và nhãn của 1.260 dự báo mỗi model và đúng quy tắc chọn epoch. Cả năm chỉ số Log Loss, Brier, AUC, ECE và Accuracy đã được tính lại. Các kiểm dữ liệu, cửa sổ, ngữ cảnh đồ thị và gài lỗi cấu hình trên nguồn hiện hành đạt 182 ca. Chưa phát hiện rò rỉ dữ liệu trong phạm vi các lượt đã kiểm. Junyi đã tái dựng đúng danh sách người học theo vai trò, còn pipeline huấn luyện, huấn luyện lại và hiệu chỉnh xác suất và đánh giá độc lập cần tiếp tục.
+
+Đã xác định các đầu ra cần bổ sung trước benchmark kết luận. Xác suất dự báo gốc và nhãn hiện có đủ để tái tính các chỉ số dự báo và dựng biểu đồ hiệu chỉnh xác suất. Để giải thích gate vàhiệu quả lộ trình cần thêm nhật ký suy luận về mức ảnh hưởng của đồ thị, quyết định thành thạo, tập sẵn sàng, bài được chọn và mức tăng năng lực ẩn trong mô phỏng. Các kiểm tra này phục vụ ba bẫy đánh giá của RQ1/RQ2 và phương pháp CG-AKT của RQ3. Những kết quả trên tập chọn epoch hiện tại tiếp tục mang nhãn phát triển.
+
 ## Điểm xuất phát và tiến độ hiện tại
 
 Paper 1 được kế thừa theo bản PDF phát triển dùng để nộp, là nguồn chuẩn về thiết kế và kết quả, còn notebook trong repository là bản tiền kỳ. Theo PDF, tính liên tục của lộ trình chịu ảnh hưởng của cách chọn bài, trong khi đồ thị mở rộng chưa cải thiện ổn định mức thành thạo. Paper 2 quan sát cải thiện dự báo nhỏ ở một số nhóm mô phỏng nhưng chưa phát hiện lợi ích rõ ở kết quả học tập chính. Khóa luận đi tiếp từ khoảng trống này: vì sao đồ thị chưa giúp ổn định, khi nào nó có ích và liệu CG-AKT sử dụng độ tin cậy cạnh có cải thiện được không?

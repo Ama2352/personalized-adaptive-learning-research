@@ -47,6 +47,21 @@ class JunyiResearchRoleTests(unittest.TestCase):
             with self.subTest(invalid=invalid), self.assertRaises(ValueError):
                 make_junyi_research_roles(self.rows() + [invalid])
 
+    def test_reject_invalid_fields_before_normalization(self):
+        invalid_rows = [(None, 0, 'development'), (True, 0, 'development'),
+                        (1.25, 0, 'development'), ('u', 0.5, 'development'),
+                        ('u', True, 'development')]
+        for invalid in invalid_rows:
+            with self.subTest(invalid=invalid), self.assertRaises(ValueError):
+                make_junyi_research_roles(self.rows() + [invalid])
+
+    def test_integer_identifiers_share_the_canonical_string_namespace(self):
+        rows = [(index, index % 5, 'development') for index in range(40)]
+        strings = [(str(user), fold, partition) for user, fold, partition in rows]
+        self.assertEqual(make_junyi_research_roles(rows), make_junyi_research_roles(strings))
+        with self.assertRaises(ValueError):
+            make_junyi_research_roles(rows + [('0', 0, 'development')])
+
     def test_reject_small_or_missing_validation(self):
         for rows in [[], self.rows(10), [('u'+str(i), 0, 'development') for i in range(20)]]:
             with self.subTest(count=len(rows)), self.assertRaises(ValueError):

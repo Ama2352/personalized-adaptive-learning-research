@@ -22,14 +22,16 @@ class JunyiResearchRoles:
         return hashlib.sha256(raw).hexdigest()
 
 
-def make_junyi_research_roles(assignments: Iterable[tuple[str, int, str]]) -> JunyiResearchRoles:
+def make_junyi_research_roles(assignments: Iterable[tuple[str | int, int, str]]) -> JunyiResearchRoles:
     """Nhận metadata (user_id, fold, partition), không nhận events/correctness."""
     seen = set()
     outer_train, outer_validation = [], []
     for user, fold, partition in assignments:
-        if (type(user) is not str or not user or '\x00' in user
-                or type(fold) is not int or fold not in range(5)
-                or partition != 'development' or user in seen):
+        if (type(user) not in (str, int) or type(fold) is not int or fold not in range(5)
+                or type(partition) is not str or partition != 'development'):
+            raise ValueError('Unique Development learner identities and frozen folds required')
+        user = str(user)
+        if not user or '\x00' in user or user in seen:
             raise ValueError('Unique Development learner identities and frozen folds required')
         seen.add(user)
         if fold == 4:

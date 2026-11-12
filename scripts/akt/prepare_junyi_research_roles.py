@@ -35,7 +35,7 @@ def main():
         rows = connection.execute(
             "SELECT user_id, fold, partition FROM read_parquet(?) WHERE partition='development'",
             [str(assignments)]).fetchall()
-    roles = make_junyi_research_roles((str(user), int(fold), partition) for user, fold, partition in rows)
+    roles = make_junyi_research_roles(rows)
     original = json.loads(split_manifest.read_text(encoding='utf-8'))
     counts = {name: len(getattr(roles, name)) for name in
               ('train_users', 'selection_users', 'calibration_users', 'outer_validation_users')}

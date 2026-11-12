@@ -1,0 +1,113 @@
+{
+  "version": "KLTN_BENCHMARK_REQUIREMENTS_20261112",
+  "method_sources": [
+    "docs/thesis_recovery/evidence/user_documents_20261108_proposal.txt",
+    "docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md",
+    "docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md"
+  ],
+  "purpose": "KLTN",
+  "scope": "Requirement reconciliation, not permission to run",
+  "environments": [
+    "grade10_simulator",
+    "junyi_development_outer_fold4"
+  ],
+  "primary_prediction_metrics": [
+    "log_loss",
+    "brier"
+  ],
+  "secondary_prediction_metrics": [
+    "auc",
+    "ece_15_equal_width",
+    "accuracy_0.5",
+    "coverage",
+    "oov"
+  ],
+  "required_prediction_columns": [
+    "probability",
+    "correct",
+    "learner_id",
+    "item_id",
+    "timestamp",
+    "source_row",
+    "global_rank",
+    "origin_role",
+    "phase_scope",
+    "support_reason",
+    "history_available",
+    "history_used"
+  ],
+  "prediction_forbidden_fit_roles": [
+    "outer_evaluation",
+    "holdout"
+  ],
+  "graph_and_confidence_fit_scope": "TRAIN80_frozen_through_neural_refit90",
+  "expected_phase_order": [
+    "selected_fit80",
+    "raw_best_selection10",
+    "external_selector_freeze",
+    "fresh_refit90",
+    "calibration_predict10",
+    "temperature_fit10",
+    "independent_evaluation"
+  ],
+  "bootstrap_replicates": 2000,
+  "junyi_inference_unit": "learner",
+  "simulator_inference_unit": "paired_seed_block",
+  "multiple_comparisons": "Holm on frozen contrasts x conditions x primary endpoints",
+  "required_gate_columns": [
+    "graph_enabled",
+    "alpha",
+    "gate",
+    "message",
+    "delta_logit",
+    "bypass_reason",
+    "observed_parent_confidence_mass"
+  ],
+  "required_closed_loop_columns": [
+    "seed_block",
+    "profile",
+    "world_condition",
+    "initial_latent_state",
+    "final_latent_state",
+    "action",
+    "served_item",
+    "response",
+    "mastery_reference_score",
+    "mastery_decision",
+    "ready_set",
+    "candidate_set",
+    "horizon",
+    "stop_reason"
+  ],
+  "figures": [
+    "F01_independent_prediction",
+    "F02_calibration",
+    "F03_graph_noise",
+    "F04_mechanism_chain",
+    "F05_closed_loop_gain",
+    "F06_effect_conditions",
+    "F07_gate_influence"
+  ],
+  "current_acceptance": {
+    "grade10_selected_7": true,
+    "junyi_research_training": false,
+    "final_refit_calibration": false,
+    "matched_independent_benchmark": false,
+    "closed_loop": false
+  },
+  "missing_outputs_recoverable_by_inference": [
+    "calibration_diagrams",
+    "graph_off_predictions",
+    "gate_telemetry",
+    "graph_noise_sensitivity"
+  ],
+  "next": "Wire Junyi role views and typed CUDA producer before bounded GPU benchmark",
+  "required_artifact_bindings": [
+    "checkpoint_id_or_sha256_in_sidecar",
+    "environment_id",
+    "split_and_role_identity",
+    "vocabulary_identity",
+    "raw_or_calibrated_phase"
+  ],
+  "truth_sidecar_allowed_when_exact_keys_match": true
+}

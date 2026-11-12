@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 12/11 — hợp đồng benchmark và audit leakage AKT
+
+[Hợp đồng benchmark](AKT_BENCHMARK_CONTRACT_20261112.md) ghi các metric, quần thể, artifact vàfigure cần choKLTN. [Audit](../runs/akt-protocol-audit-20261112-01/README.md) xácnhận bảyselectedfits hợp lệ trong phạmvi đãkiểm,182tests hiện hành đạt, Junyiroleidentity khớp sau sửa kiểm kiểu. Finalpipeline còn cácgap đãghi cụthể.
+
 ## 12/11 — đủ A0–A3 selected GPU trên Grade10
 
 [Đợt sáu graph fits](../runs/modal-akt-graph-selected-20261112-01/README.md) đã nghiệm thu cả expert/learned, cùng A0 thành7selectedcheckpoints và30epochcheckpoints đã lưu. TổngModal≈0,641USD, Appđãdừng. CófigureSVG/PDF/PNG vàdữ liệu. Junyi80/10/10 metadata đãtạo/7tests đạt, producerCUDA vàGate mới còn thiếu.

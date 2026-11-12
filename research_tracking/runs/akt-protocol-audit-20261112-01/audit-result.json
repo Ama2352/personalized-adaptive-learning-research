@@ -1,0 +1,176 @@
+{
+  "status": "PAST_SELECTED_RUNS_PASS_FUTURE_FULL_EXPERIMENT_NOT_READY",
+  "frozen_recipe": {
+    "device": "cuda",
+    "seed": 42,
+    "context": 100,
+    "target_block": 100,
+    "max_length": 200,
+    "d_model": 256,
+    "heads": 8,
+    "blocks": 1,
+    "d_ff": 1024,
+    "final_fc": 512,
+    "dropout": 0.05,
+    "kq_same": 1,
+    "separate_qa": false,
+    "n_pid": 0,
+    "graph": false,
+    "batch_size": 4,
+    "lr": 0.0001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.0,
+    "max_grad_norm": 1.0,
+    "max_epochs": 20,
+    "patience": 3,
+    "min_delta": 0.0001,
+    "source_commit": "01b7e8d7d7c862cabc9467108e3e7f2555653a88",
+    "phase": "simulator-research"
+  },
+  "roles": {
+    "train": 48,
+    "selection": 6,
+    "calibration": 6
+  },
+  "seed_families_disjoint": true,
+  "stream_seeds_disjoint": true,
+  "train_vocabulary_recomputed": 84,
+  "selection_queries_checked_per_model": 1260,
+  "actual_effective_history_range": [
+    0,
+    199
+  ],
+  "results": [
+    {
+      "candidate_id": "A0",
+      "status": "PASS_SELECTED_ONLY",
+      "epochs": 8,
+      "selected_epoch": 5,
+      "calibration_leak_evidence": false,
+      "reused_for": "Đánh giá selected-fit80 của Grade10 theo recipe26",
+      "config_outer_fold_ignored_for_simulator": 0,
+      "metrics_recomputed": {
+        "log_loss": 0.5993101394228546,
+        "brier": 0.20644279649630515,
+        "accuracy": 0.676984126984127,
+        "ece": 0.02938200275576304,
+        "auc": 0.7368774878372402
+      }
+    },
+    {
+      "candidate_id": "A1_EXPERT",
+      "status": "PASS_SELECTED_ONLY",
+      "epochs": 8,
+      "selected_epoch": 5,
+      "calibration_leak_evidence": false,
+      "reused_for": "Đánh giá selected-fit80 của Grade10 theo recipe26",
+      "config_outer_fold_ignored_for_simulator": 0,
+      "metrics_recomputed": {
+        "log_loss": 0.5993438521778934,
+        "brier": 0.20646064487380592,
+        "accuracy": 0.6777777777777778,
+        "ece": 0.029780225704113643,
+        "auc": 0.7368673785303596
+      }
+    },
+    {
+      "candidate_id": "A1_LEARNED",
+      "status": "PASS_SELECTED_ONLY",
+      "epochs": 7,
+      "selected_epoch": 4,
+      "calibration_leak_evidence": false,
+      "reused_for": "Đánh giá selected-fit80 của Grade10 theo recipe26",
+      "config_outer_fold_ignored_for_simulator": 0,
+      "metrics_recomputed": {
+        "log_loss": 0.5993930882576586,
+        "brier": 0.20656546129796938,
+        "accuracy": 0.6801587301587302,
+        "ece": 0.04297481502095858,
+        "auc": 0.7389044038668099
+      }
+    },
+    {
+      "candidate_id": "A2_EXPERT",
+      "status": "PASS_SELECTED_ONLY",
+      "epochs": 7,
+      "selected_epoch": 4,
+      "calibration_leak_evidence": false,
+      "reused_for": "Đánh giá selected-fit80 của Grade10 theo recipe26",
+      "config_outer_fold_ignored_for_simulator": 0,
+      "metrics_recomputed": {
+        "log_loss": 0.5993342252184473,
+        "brier": 0.20653125332628924,
+        "accuracy": 0.680952380952381,
+        "ece": 0.04175804347272903,
+        "auc": 0.7389448410943324
+      }
+    },
+    {
+      "candidate_id": "A2_LEARNED",
+      "status": "PASS_SELECTED_ONLY",
+      "epochs": 7,
+      "selected_epoch": 4,
+      "calibration_leak_evidence": false,
+      "reused_for": "Đánh giá selected-fit80 của Grade10 theo recipe26",
+      "config_outer_fold_ignored_for_simulator": 0,
+      "metrics_recomputed": {
+        "log_loss": 0.5993098582231805,
+        "brier": 0.2065220867143299,
+        "accuracy": 0.6801587301587302,
+        "ece": 0.04306472681817554,
+        "auc": 0.7389776963416945
+      }
+    },
+    {
+      "candidate_id": "A3_EXPERT",
+      "status": "PASS_SELECTED_ONLY",
+      "epochs": 7,
+      "selected_epoch": 4,
+      "calibration_leak_evidence": false,
+      "reused_for": "Đánh giá selected-fit80 của Grade10 theo recipe26",
+      "config_outer_fold_ignored_for_simulator": 0,
+      "metrics_recomputed": {
+        "log_loss": 0.5993951523220598,
+        "brier": 0.2065626552865597,
+        "accuracy": 0.6793650793650794,
+        "ece": 0.04271718003447094,
+        "auc": 0.738795728817843
+      }
+    },
+    {
+      "candidate_id": "A3_LEARNED",
+      "status": "PASS_SELECTED_ONLY",
+      "epochs": 7,
+      "selected_epoch": 4,
+      "calibration_leak_evidence": false,
+      "reused_for": "Đánh giá selected-fit80 của Grade10 theo recipe26",
+      "config_outer_fold_ignored_for_simulator": 0,
+      "metrics_recomputed": {
+        "log_loss": 0.5994965066230528,
+        "brier": 0.20660191984932727,
+        "accuracy": 0.680952380952381,
+        "ece": 0.038704775593110495,
+        "auc": 0.7388311113919251
+      }
+    }
+  ],
+  "source_refs": {
+    "artifacts\\simulator\\corpora\\grade10-development-lifecycle01-20261108\\train.manifest.json": "37101c7d6d1d1a74310c58179455cd844c47d5d4cba9d4878ac6316127bf6f49",
+    "artifacts\\simulator\\corpora\\grade10-development-lifecycle01-20261108\\selection.manifest.json": "444bf3d2edd74073a8605bd4458b0d60edcbbf159bdb7ab3660dc71d4e08e0fa",
+    "artifacts\\simulator\\corpora\\grade10-development-lifecycle01-20261108\\calibration.manifest.json": "c68dc065c5a326cae14c62d673b0feaab48998fea0b216b6f1458c87c2479328"
+  },
+  "pending": [
+    "Junyi typed producer và role views chưa nối",
+    "Full Gate cho nguồn Junyi mới chưa nghiệm thu",
+    "SAKT/GKT Main selected và external-freeze/refit/calibration còn thiếu",
+    "Matched Junyi GAM/Graph-GAM khác phạm vi train của historical5fold",
+    "Chưa có đánh giá độc lập/closed-loop để kết luận hiệu quả"
+  ],
+  "gpu_allocated": false,
+  "training_performed": false,
+  "holdout_events_read": false
+}

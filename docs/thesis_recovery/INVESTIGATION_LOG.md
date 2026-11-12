@@ -1147,3 +1147,12 @@ Tiếp tục ngày 12/11 — đã có checkpoint được chọn cho cả bốn 
 Junyi đang được chuẩn bị riêng. Metadata xác nhận có 198.084 học viên Development. Giữ outer fold4 với 39.616 học viên đánh giá, phần còn lại đã được chia thành 126.774 train, 15.847 chọn epoch và 15.847 calibration. Bảy kiểm local của bộ chia đạt, không sửa fold lịch sử và chưa đọc sự kiện để training trong bước này. Cần nối các role vào trainer, tạo vocabulary/graph phù hợp Junyi, nghiệm thu CUDA và đo chi phí trước lượt huấn luyện Junyi. Những checkpoint Grade 10 ở trên chưa là kết quả Junyi.
 
 Tổng Modal tại lần đọc sau đợt ghi nhận khoảng 0,641 USD, tăng khoảng 0,470 USD so với trước sáu lượt đồ thị. Credits và allowance bù chi phí ghi nhận, net billed bằng0. API có thể cập nhật trễ. Các App của đợt đã dừng, checkpoint giữ bản local và bản trên Volume.
+
+
+## 12/11 — audit leakage vàhợpđồng benchmark phục vụKLTN
+
+Audit ngày12/11 — đã đối chiếu lại cấu hình và dữ liệu của bảy lượt AKT. Kiểm độc lập từ archive xác nhận cùng backbone khởi tạo, cùng split48/6/6, vocabulary chỉ fit từ48người train, đúng target/nhãn của1260dự báo mỗi model và đúng quy tắc chọn epoch. Cả năm chỉ số LogLoss, Brier, AUC, ECE vàaccuracy đã được tính lại. Các kiểm dữ liệu, cửa sổ, graphcontext vàgài lỗi cấu hình trên nguồn hiện hành đạt182tests. Chưa phát hiện leakage trong phạm vi các lượt đã kiểm. Junyi đã tái dựng đúng role memberships, còn producer training, refit/calibration vàđánhgiá độc lập cần tiếp tục.
+
+Đã xác định các đầu ra cần bổ sung trước benchmark kết luận. Raw probabilities/nhãn hiện có đủ để tái tính các chỉ số dự báo vàdựng biểu đồ calibration. Để giải thích gate vàhiệu quả lộ trình cần thêm inference logs vềmức ảnh hưởnggraph, quyết định thành thạo, tập sẵn sàng, bài được chọn vàlatentlearning trong mô phỏng. Các kiểm tra này phục vụ ba bẫy đánhgiá củaRQ1/RQ2vàphương phápCG-AKT củaRQ3. Những kết quả trênselection hiện tại tiếp tục mang nhãn development.
+
+Đối chiếu đềcương chuẩn trang3–4 vàfeedback GVHD người dùng gửi lại. SourceJunyi sửa kiểm rawtypes trướcnormalization. Rolemanifest cũ không đổiidentity. Bước tiếp làJunyiphaseviews/producer vàbenchmark bounded, không thêm hướng bài báo.
