@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 12/11 — figure A0 theo figures4papers
+
+Đã dựng và kiểm figure chọn checkpoint A0 từ số liệu GPU đã nghiệm thu. SVG/PDF/PNG, CSV và cách dựng lại ở [bundle figure](../runs/figures4papers-akt-20261112-01/README.md). Bản sửa nhãn đã nhúng trong báo cáo GVHD.
+
 ## 12/11 — Main60 A0 đã training CUDA và kiểm kết quả
 
 AKT không đồ thị hoàn tất8epoch/best5/288updates và1260dự báo selection trên corpus60học viên Grade10. Đã tải năm checkpoint/archive124MB và kiểm độc lập. Chưa so sánh graph, refit/calibration hoặc Junyi. Bằng chứng `research_tracking/runs/modal-akt-recovery-20261112-01/main60-a0-verification.json`.
