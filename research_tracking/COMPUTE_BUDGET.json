@@ -1,0 +1,32 @@
+{
+  "status": "USER_PREAPPROVED_BOUNDED_TRANCHES_TOTAL_PROJECT_CAP",
+  "total_project_credit_ceiling_usd": 30,
+  "extra_payment_allowed": false,
+  "automatic_monthly_budget_reset": false,
+  "authorization_reference": "Người dùng ngày 12/11/2026 cho phép tự phân bổ các khoản chi nhỏ, tổng toàn KLTN tối đa 30 USD free credits.",
+  "historical_usage_reserved_upper_usd": 2,
+  "safety_and_final_inference_reserve_usd": 3,
+  "new_allocations": [
+    {
+      "id": "numerical-diagnostic-20261112-01",
+      "cap_usd": 0.2,
+      "status": "COMPLETE_STOP_ACKNOWLEDGED_ARTIFACT_VERIFIED",
+      "receipt": "experiments/akt/results/modal-junyi-numerical-t4-20261112-01/receipt.json"
+    },
+    {
+      "id": "numerical-cpu03-20261112-01",
+      "cap_usd": 0.15,
+      "status": "COMPLETE_RESULTS_REVIEW_REQUIRED_STOP_ACKNOWLEDGED",
+      "receipt": "experiments/akt/results/modal-junyi-numerical-cpu-20261112-03/receipt.json"
+    },
+    {
+      "id": "numerical-cpu04-20261112-01",
+      "cap_usd": 0.15,
+      "status": "COMPLETE_GATE2218_PASS_STOP_ACKNOWLEDGED",
+      "receipt": "experiments/akt/results/modal-junyi-numerical-cpu-20261112-04/receipt.json"
+    }
+  ],
+  "stop_rule": "Không mở lượt chạy nếu cận chi phí lịch sử, tổng allocation và dự phòng vượt 30 USD. Nếu chưa xác nhận dừng App thì kiểm trạng thái server trước lượt mới.",
+  "historical_upper_note": "2 USD là dự phòng bảo thủ cho các lượt đã chạy trước ledger, không phải số chi phí đã đối soát cuối kỳ.",
+  "provider_metering_note": "Snapshot có thể trễ hoặc được điều chỉnh. Không dùng billing alert làm giới hạn cứng. Mỗi lượt có watchdog, timeout và tối đa một GPU."
+}

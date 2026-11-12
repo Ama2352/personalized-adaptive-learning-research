@@ -512,3 +512,12 @@ Gate21 chỉ chạy `tests/akt tests/shared_kt`; các số139SAKT và38Graph-GAM
 ## 10/11 — IO artifact canonical đã kiểm
 
 [Bundle IO](../runs/selection-artifact-io-integration-20261110-01/README.md) giữ diagnostic, 10tests và8CSV khớp84K/y. Còn metadata adapters và nine-file admission. Build187 chưa refresh Gate.
+
+## 12/11 — hồ sơ Junyi đang chờ chẩn đoán và nghiệm thu
+
+- [Junyi optimization — CPU02 2.197 tests đạt, T4 5epoch partial và parity failure được giữ](../runs/junyi-gpu-optimization-20261112-01/README.md).
+- [Junyi lifecycle — full TRAIN80 window cache và các kiểm hợp đồng](../runs/junyi-lifecycle-20261112-01/README.md).
+
+## 12/11 — nghiệm thu phục hồi Junyi và đường dự đoán chính
+
+[Hồ sơ chẩn đoán](../runs/junyi-numerical-diagnostic-20261112-01/README.md) giữ checkpoint và đối chiếu CUDA liên tục/phục hồi đạt, nguồn CPU04 đạt 2.218 ca. Batch prediction vượt ngưỡng nên producer chính dùng đường tuần tự. Full cache TRAIN80 đã tạo, full neural fit Junyi còn phải thực hiện. Ledger COMPUTE_BUDGET.json ghi trần 30 USD cho toàn KLTN.

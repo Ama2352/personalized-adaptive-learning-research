@@ -498,3 +498,12 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 ## 12/11 — A1 Junyi prefix
 
 [Contextpast-only](runs/junyi-graph-prefix-20261112-01/README.md),74localtests/11subtests,50window thực cùng835nodes/976edges. Chưa nativegraphforward/training.
+
+## 12/11 — hồ sơ Junyi đang chờ chẩn đoán và nghiệm thu
+
+- [Junyi optimization — CPU02 2.197 tests đạt, T4 5epoch partial và parity failure được giữ](runs/junyi-gpu-optimization-20261112-01/README.md).
+- [Junyi lifecycle — full TRAIN80 window cache và các kiểm hợp đồng](runs/junyi-lifecycle-20261112-01/README.md).
+
+## 12/11 — nghiệm thu phục hồi Junyi và đường dự đoán chính
+
+[Hồ sơ chẩn đoán](runs/junyi-numerical-diagnostic-20261112-01/README.md) giữ checkpoint và đối chiếu CUDA liên tục/phục hồi đạt, nguồn CPU04 đạt 2.218 ca. Batch prediction vượt ngưỡng nên producer chính dùng đường tuần tự. Full cache TRAIN80 đã tạo, full neural fit Junyi còn phải thực hiện. Ledger COMPUTE_BUDGET.json ghi trần 30 USD cho toàn KLTN.

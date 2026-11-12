@@ -281,3 +281,13 @@ Lượt chuẩn bị đầu bị chặn do khác phiên bản Python giữa runt
 
 
 **Tiếp bước Junyi ngày 12/11 — đã chuẩn bị dữ liệu cho tập chính.** Cache train và selection đầy đủ đã được tạo, giữ nguyên 13.347.331 và 1.600.343 tương tác. Phép đọc đối chiếu trên 288 học viên, 18.678 tương tác khớp dữ liệu gốc và thứ tự thời gian. Tập train có 717 bài, bao phủ toàn bộ bài xuất hiện ở selection. Bước này giảm công việc tiền xử lý trước các lượt GPU tiếp theo. Cache chính chưa được upload hoặc dùng training.
+
+### Ngày 12/11 — kiểm độ tin cậy trước training Junyi chính
+
+Sau lượt một epoch đầu tiên, nhóm bổ sung cơ chế tái sử dụng dữ liệu đã mã hóa và tiếp tục kiểm AKT trên T4. Đã hoàn tất năm epoch trên cùng cohort 256 người học train, tổng 395 lần cập nhật và 59.165 lượt xử lý tương tác. Đã lưu 15 snapshot để giữ cả trạng thái trong epoch, trước validation và sau validation. Lượt này có giới hạn công việc nên chưa chốt epoch tốt nhất cho mô hình nghiên cứu chính.
+
+Để kiểm khả năng tiếp tục khi gián đoạn, nhóm chạy hai đường trên cùng dữ liệu. Đường thứ nhất chạy liền 79 bước. Đường thứ hai dừng sau 40 bước, nạp checkpoint rồi chạy 39 bước còn lại. Hai đường cho cùng trọng số, trạng thái tối ưu, luồng ngẫu nhiên, tổng loss và thứ tự 315 cửa sổ đã xử lý. Checkpoint và log đã tải về, kiểm toàn vẹn, đồng thời giữ bản lưu trên Modal.
+
+Một phép kiểm tối ưu tốc độ đã phát hiện cách gom nhiều cửa sổ khi xuất dự đoán làm xác suất lệch tối đa khoảng 0,000067 so với cách tuần tự. Vì vượt ngưỡng đã đặt, pipeline chính được đưa về cách dự đoán tuần tự. Kiểm thay đổi đáp án hiện tại và dữ liệu tương lai tại 20 truy vấn vẫn giữ dự báo tại thời điểm đang xét trong ngưỡng đã đặt. Phép kiểm này có phạm vi trên cohort và checkpoint đã kiểm.
+
+Song song, dữ liệu TRAIN80 chính đã được mã hóa thành 232.662 cửa sổ, giữ đủ 13.347.331 tương tác của 126.774 người học. Bước này giúp dùng lại preprocessing giữa các lượt chạy. Training Junyi chính, refit, calibration và so sánh độc lập giữa các biến thể vẫn còn phải thực hiện. Các mốc trên bổ sung bằng chứng về khả năng vận hành và phục hồi của AKT. Bằng chứng so sánh chất lượng để trả lời RQ3 còn đang thiếu.

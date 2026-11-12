@@ -1,0 +1,19 @@
+{
+  "status": "PROJECT_LEDGER_ADMISSION_RECONCILED",
+  "controller_sha256": "a5514056e27c8c1fb0cabe5c2872bbbff884cf3acd7e5c8194b9804934100b67",
+  "request_sha256": "e04c9ba56715d75469d222299e74b9398b9027550c506842ab7ecfbb62673923",
+  "removed_inherited_fields": [
+    "reserved_cpu_usd",
+    "monthly_free_credit_ceiling_usd",
+    "cpu_recovery_rationale",
+    "baseline_metered_usd"
+  ],
+  "allocation_id": "numerical-diagnostic-20261112-01",
+  "project_budget_file": "research_tracking/COMPUTE_BUDGET.json",
+  "actual_max_technical_optimizer_updates": 158,
+  "actual_max_scored_target_exposures": 23666,
+  "selected_retraining_updates": 0,
+  "pure_tests_passed": 8,
+  "rule": "max(historical_usage_reserved_upper_usd,provider_metered_usd)+safety_and_final_inference_reserve_usd+sum(allocation.cap_usd)<=total_project_credit_ceiling_usd; perrun<=0.20USD",
+  "cloud_execution_by_this_patch": false
+}

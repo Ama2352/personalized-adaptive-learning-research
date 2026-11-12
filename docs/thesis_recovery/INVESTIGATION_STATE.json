@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "as_of": "2026-11-10",
+  "as_of": "2026-11-12",
   "roadmap_version": "1.0",
   "current_pass": 4,
   "passes_completed": [
@@ -6944,5 +6944,31 @@
     "subtests": 11,
     "native_graph_training": false,
     "next": "Nối adapter A1 vàoResearchGraphNative; benchmarkđại diện; A2/A3 cần confidenceTRAIN80riêng. Gate2037 chứngnhận nguồn pilot trướcgói mới, cầnrefresh khi chốtbatch tiếp."
+  },
+  "junyi_optimization_20261112": {
+    "status": "RECOVERY_VERIFIED_BATCH_PREDICTION_REJECTED",
+    "bundle": "research_tracking/runs/junyi-numerical-diagnostic-20261112-01",
+    "cpu_gate_passed": 2197,
+    "full_cache_windows": 232662,
+    "full_cache_train_targets": 13347331,
+    "t4_epochs_completed": 5,
+    "t4_training_updates": 395,
+    "t4_training_target_exposures": 59165,
+    "full_junyi_training_complete": false,
+    "selected_epoch": null,
+    "numerical_max_delta": 6.699562072753906e-05,
+    "recovery_status": "EXACT_NATIVE_CUDA_MODEL_ADAM_RNG_SAMPLER_RECOVERY_PASS",
+    "recovery_updates": 158,
+    "prediction_decision": "legacy_single_window_v1",
+    "next": "CPU04 Gate nguồn hiện hành gồm A1, regression legacy. Sau đó đo workload chuỗi dài đại diện, lập dự toán Junyi trước main training.",
+    "cpu_current_gate_passed": 2218,
+    "current_source_archive": "artifacts/akt/modal/junyi-optimization-20261112-01/source04.zip",
+    "current_cpu_run": "modal-junyi-numerical-cpu-20261112-04"
+  },
+  "project_compute_authorization_20261112": {
+    "policy": "Small bounded allocations preapproved within TOTAL30USD for whole thesis",
+    "ledger": "research_tracking/COMPUTE_BUDGET.json",
+    "extra_payment": false,
+    "monthly_reset": false
   }
 }

@@ -349,3 +349,7 @@ Module src/knowledge_tracing/research_population.py đã tích hợp và kiểm 
 ## 10/11 — đọc artifact cho selector
 
 src/knowledge_tracing/research_selection_io.py cung cấp FileRef, giới hạn đọc, JSON/CSV nghiêm ngặt và offset index.10tests cùng8CSV đã đạt, xem research_tracking/runs/selection-artifact-io-integration-20261110-01. Đây chưa là external freeze; build187 cần refresh Gate.
+
+## 12/11 — nghiệm thu phục hồi Junyi và đường dự đoán chính
+
+[Hồ sơ chẩn đoán](../research_tracking/runs/junyi-numerical-diagnostic-20261112-01/README.md) giữ checkpoint và đối chiếu CUDA liên tục/phục hồi đạt, nguồn CPU04 đạt 2.218 ca. Batch prediction vượt ngưỡng nên producer chính dùng đường tuần tự. Full cache TRAIN80 đã tạo, full neural fit Junyi còn phải thực hiện. Ledger COMPUTE_BUDGET.json ghi trần 30 USD cho toàn KLTN.
