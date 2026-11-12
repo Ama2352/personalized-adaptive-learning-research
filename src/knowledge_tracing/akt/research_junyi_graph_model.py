@@ -133,6 +133,11 @@ class JunyiGraphAKTAdapter:
         self.phase.assert_boundary()
         self.research_encoding.assert_for(self.phase.view)
         _need(_source_inventory()==self._sources, 'Junyi graph model source changed')
+        return self.recovery_signature()
+
+    def recovery_signature(self):
+        """Danh tính graph/collator nhẹ để kiểm tại mỗi batch boundary."""
+        self._integrity()
         return dict(condition_sha256=self._condition_sha,encoding_sha256=self._encoding_sha,
                     phase_sha256=self._phase_identity,graph_enabled=self._graph_enabled)
 

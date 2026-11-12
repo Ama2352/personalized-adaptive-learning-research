@@ -118,11 +118,19 @@ def train_epoch(adapter: AKTAdapter, windows_factory: Callable[[], Iterator[Trai
                 batch_factory: Callable[[tuple[TrainingWindow, ...]], AKTBatch] | None = None) -> EpochStats:
     if epoch < 1:
         raise ValueError('invalid epoch')
+    batch_recovery_signature = None
     if batch_factory is not None:
         if not callable(batch_factory):
             raise ValueError('batch_factory must be callable')
         if recovery is not None:
-            raise ValueError('custom batch factory has no recovery contract')
+            from .research_junyi_graph_model import JunyiGraphAKTAdapter
+            if (type(adapter) is not JunyiGraphAKTAdapter
+                    or getattr(batch_factory,'__self__',None) is not adapter
+                    or getattr(batch_factory,'__func__',None) is not JunyiGraphAKTAdapter.collate_training):
+                raise ValueError('custom batch factory has no recovery contract')
+            batch_recovery_signature = adapter.audit_context_boundary()
+            if recovery['identity'].get('batch_factory') != batch_recovery_signature:
+                raise ValueError('Junyi graph recovery identity must bind the exact collator context')
     adapter.native.train()
     started = time.perf_counter()
     loss_sum, valid_targets, steps, complete = 0.0, 0, 0, True
@@ -274,6 +282,9 @@ def train_epoch(adapter: AKTAdapter, windows_factory: Callable[[], Iterator[Trai
                                     device=adapter.config.device, targets=[entry.targets for entry in pending])
         else:
             # Preserve learner/window/global identities until the owned adapter seals the batch.
+            if (batch_recovery_signature is not None
+                    and adapter.recovery_signature()!=batch_recovery_signature):
+                raise ValueError('Junyi graph recovery context changed during training')
             batch = batch_factory(tuple(pending))
             if type(batch) is not AKTBatch or batch.q_data.shape[0] != len(pending):
                 raise ValueError('custom factory must return an AKTBatch for every pending window')

@@ -8,6 +8,7 @@ from dataclasses import replace
 import numpy as np
 import pytest
 import torch
+import random
 
 from knowledge_tracing.akt import research_graph_model as native_graph
 from knowledge_tracing.akt import research_junyi_graph_model as model
@@ -20,6 +21,91 @@ from knowledge_tracing.akt.tensors import collate_windows
 from knowledge_tracing.akt.types import KTEvent, LearnerEvents
 from knowledge_tracing.akt.windows import iter_windows
 from knowledge_tracing.shared_kt import PrerequisiteGraph, StableVocabulary
+
+
+def _assert_tree_equal(left,right):
+    if torch.is_tensor(left):
+        assert torch.equal(left,right)
+    elif isinstance(left,np.ndarray):
+        assert np.array_equal(left,right)
+    elif isinstance(left,dict):
+        assert left.keys()==right.keys()
+        for key in left:
+            _assert_tree_equal(left[key],right[key])
+    elif isinstance(left,(list,tuple)):
+        assert len(left)==len(right)
+        for first,second in zip(left,right):
+            _assert_tree_equal(first,second)
+    else:
+        assert left==right
+
+
+@pytest.mark.parametrize('enabled',[True,False])
+def test_native_graph_checkpoint_resume_matches_continuous(setup,tmp_path,enabled):
+    from knowledge_tracing.akt.training import train_epoch,_seed
+    entries=windows(setup,setup['train'],training=True,
+        labels=(1,0)*550,items=('A','C')*550)
+    budget=dict(max_steps=10,max_targets=1100,max_seconds=60.,
+        max_rss_bytes=2*1024**3,min_available_ram_bytes=1)
+
+    def make(label):
+        _seed(42)
+        adapter=setup['adapter'](enabled=enabled)
+        optimizer=adam(adapter)
+        directory=tmp_path/label
+        directory.mkdir()
+        recovery=dict(checkpoint_dir=directory,checkpoint_every_steps=1,
+            identity=dict(batch_factory=adapter.audit_context_boundary(),scope='unit_graph_recovery'))
+        return adapter,optimizer,recovery
+
+    continuous,continuous_optimizer,recovery=make('continuous')
+    first=train_epoch(continuous,lambda:iter(entries),optimizer=continuous_optimizer,epoch=1,
+        budget=budget,recovery=recovery,batch_factory=continuous.collate_training)
+    model_state={key:value.clone() for key,value in continuous.native.state_dict().items()}
+    optimizer_state=continuous_optimizer.state_dict()
+    rng_state=(random.getstate(),np.random.get_state(),torch.get_rng_state())
+
+    partial,partial_optimizer,recovery=make('partial')
+    interrupted=train_epoch(partial,lambda:iter(entries),optimizer=partial_optimizer,epoch=1,
+        budget=dict(budget,max_steps=1),recovery=recovery,batch_factory=partial.collate_training)
+    assert not interrupted.complete and interrupted.optimizer_steps==1
+    checkpoint=next((tmp_path/'partial').glob('*.pt'))
+    resumed,resumed_optimizer,recovery=make('resumed')
+    recovery['resume_checkpoint']=checkpoint
+    final=train_epoch(resumed,lambda:iter(entries),optimizer=resumed_optimizer,epoch=1,
+        budget=budget,recovery=recovery,batch_factory=resumed.collate_training)
+    assert first.complete and final.complete
+    assert first.optimizer_steps==final.optimizer_steps==3
+    assert first.valid_targets==final.valid_targets==1100
+    assert first.loss_sum==final.loss_sum
+    _assert_tree_equal(model_state,resumed.native.state_dict())
+    _assert_tree_equal(optimizer_state,resumed_optimizer.state_dict())
+    _assert_tree_equal(rng_state,(random.getstate(),np.random.get_state(),torch.get_rng_state()))
+
+
+@pytest.mark.parametrize('mode',['missing_identity','wrapped_factory','changed_gate'])
+def test_graph_recovery_rejects_unbound_or_mutated_context(setup,tmp_path,mode):
+    from knowledge_tracing.akt.training import train_epoch
+    adapter=setup['adapter']()
+    entries=windows(setup,setup['train'],training=True,
+        labels=(1,0)*550,items=('A','C')*550)
+    recovery=dict(checkpoint_dir=tmp_path,checkpoint_every_steps=1,
+        identity=dict(batch_factory=adapter.audit_context_boundary()))
+    factory=adapter.collate_training
+    if mode=='missing_identity':
+        recovery['identity']={}
+    if mode=='wrapped_factory':
+        factory=lambda batch:adapter.collate_training(batch)
+
+    def progress(_record):
+        if mode=='changed_gate':
+            adapter.set_graph_enabled(False)
+
+    with pytest.raises(ValueError,match='recovery|context'):
+        train_epoch(adapter,lambda:iter(entries),optimizer=adam(adapter),epoch=1,
+            budget=dict(max_steps=10,max_targets=1100,max_seconds=60.,
+                max_rss_bytes=2*1024**3,min_available_ram_bytes=1),
+            recovery=recovery,batch_factory=factory,progress_callback=progress)
 
 
 @pytest.fixture
