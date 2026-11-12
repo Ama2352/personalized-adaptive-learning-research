@@ -488,3 +488,8 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 ## 12/11 — AKT Junyi CUDA một epoch
 
 [Run vàcheckpoint index](runs/junyi-akt-cuda-engineering-20261112-01/README.md),2.037Gate tests,79Adamupdates vàfreshreload exact; cófigureSVG/PDF/PNG/CSV. Mức bằngchứng là kiểm kỹthuật thực trên Junyi, chưa benchmark chính.
+
+
+## 12/11 — cache Junyi train/selection chính
+
+[Cache đãkiểm](runs/junyi-selected-cache-20261112-01/README.md),13.347.331train/1.600.343selection events,717trainexercise,0selectionOOV; native reader khớp18.678events. Chưa training/uploadcloud.

@@ -278,3 +278,6 @@ Môi trường Linux cô lập đã được nghiệm thu với 44 package đún
 Đã kiểm trực tiếp cả bốn biến thể AKT trên GPU T4 miễn phí. AKT không đồ thị, đồ thị cố định, confidence và confidence kết hợp gate đều thực hiện được hai bước cập nhật trọng số trên 48 tương tác giả, rồi xuất sáu dự báo hợp lệ. Các backbone khởi tạo giống nhau, cấu hình mô hình giữ nguyên và không gặp lỗi số học. Mốc này xác nhận đường chạy CUDA của phần lõi. Việc lưu–phục hồi checkpoint trên GPU, đo tốc độ ở quy mô đại diện và training nghiên cứu chính còn thiếu; chưa có kết luận biến thể nào tốt hơn.
 
 Lượt chuẩn bị đầu bị chặn do khác phiên bản Python giữa runtime CPU và T4. Đã giữ log lỗi, sửa phần nhận diện môi trường và kiểm lại 44 package trước chạy. Các lượt này chỉ dùng Colab miễn phí.
+
+
+**Tiếp bước Junyi ngày 12/11 — đã chuẩn bị dữ liệu cho tập chính.** Cache train và selection đầy đủ đã được tạo, giữ nguyên 13.347.331 và 1.600.343 tương tác. Phép đọc đối chiếu trên 288 học viên, 18.678 tương tác khớp dữ liệu gốc và thứ tự thời gian. Tập train có 717 bài, bao phủ toàn bộ bài xuất hiện ở selection. Bước này giảm công việc tiền xử lý trước các lượt GPU tiếp theo. Cache chính chưa được upload hoặc dùng training.

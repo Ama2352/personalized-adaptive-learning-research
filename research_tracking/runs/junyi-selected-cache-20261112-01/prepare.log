@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\scripts\akt\prepare_junyi_selected_cache.py", line 113, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\scripts\akt\prepare_junyi_selected_cache.py", line 106, in main
+    manifest = prepare_cache(args.output,ROOT/'artifacts/akt/junyi-roles/outer4-research-v1-20261112-01',
+        canonical=root/'derived/canonical',assignments=root/'splits/assignments.parquet',
+        canonical_manifest=root/'derived/manifest.json',split_manifest=root/'splits/manifest.json')
+  File "D:\Dev\KLTN\scripts\akt\prepare_junyi_selected_cache.py", line 65, in prepare_cache
+    con.execute("""COPY (
+    ~~~~~~~~~~~^^^^^^^^^^
+        SELECT c.user_id,c.exercise,c.time_done,c.source_row,c.correct,c.suggested
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    ) TO ? (FORMAT PARQUET, COMPRESSION ZSTD, ROW_GROUP_SIZE 100000)""",
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        [str(canonical/'**/*.parquet'),str(target)])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_duckdb.IOException: IO Error: No files found that match the pattern "D:\Dev\KLTN\artifacts\akt\junyi-cohorts\outer4-selected-full-20261112-01\canonical.parquet"
+
+LINE 3:             FROM read_parquet(?,hive_partitioning=true) c
+                         ^

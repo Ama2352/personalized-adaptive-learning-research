@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\scripts\akt\prepare_junyi_selected_cache.py", line 114, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\scripts\akt\prepare_junyi_selected_cache.py", line 107, in main
+    manifest = prepare_cache(args.output,ROOT/'artifacts/akt/junyi-roles/outer4-research-v1-20261112-01',
+        canonical=root/'derived/canonical',assignments=root/'splits/assignments.parquet',
+        canonical_manifest=root/'derived/manifest.json',split_manifest=root/'splits/manifest.json')
+  File "D:\Dev\KLTN\scripts\akt\prepare_junyi_selected_cache.py", line 73, in prepare_cache
+    con.execute("""COPY (
+    ~~~~~~~~~~~^^^^^^^^^^
+        SELECT user_id,CAST(fold AS INTEGER) fold,'development' partition
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        FROM requested_development_users
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ) TO ? (FORMAT PARQUET, COMPRESSION ZSTD)""", [str(assignments_copy)])
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_duckdb.ParserException: Parser Error: syntax error at or near "partition"
+
+LINE 2: ...       SELECT user_id,CAST(fold AS INTEGER) fold,'development' partition
+                                                                          ^
