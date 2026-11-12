@@ -1,0 +1,51 @@
+{
+  "status": "USER_APPROVED",
+  "approval_reference": "Người dùng cho phép tiếp tục AKT và tự phân bổ các khoản nhỏ trong trần 30 USD toàn KLTN.",
+  "root_review_status": "ROOT_REVIEWED_BOUNDED_DISPATCH",
+  "authorized_batch_usd": 0.85,
+  "reserved_usd_per_run": 0.85,
+  "allocation_id": "junyi-main-selected-20261112-01",
+  "project_budget_file": "research_tracking/COMPUTE_BUDGET.json",
+  "gpu": "T4",
+  "run_id": "modal-junyi-main-selected-t4-20261112-01",
+  "archives": {
+    "source": {
+      "path": "artifacts/akt/modal/junyi-optimization-20261112-01/source04.zip",
+      "sha256": "a0b8eed2c10b5c1d8e0d88326a0670a447da9e4a9e9d977f8745dfb9e5502bf4"
+    },
+    "cpu_gate": {
+      "path": "experiments/akt/results/modal-junyi-numerical-cpu-20261112-04/artifacts.zip",
+      "sha256": "53815425cd827997f729589b2a002512407a5ce720fc1549c7359f7c473b152c"
+    },
+    "data": {
+      "path": "artifacts/akt/modal/junyi-throughput-20261112-01/full-selected-data.zip",
+      "sha256": "cfa8597cae89eba796f00a119748217ee1c61e20c7f6b4e7c5452d713931de96"
+    }
+  },
+  "inputs": {
+    "selected_cache_root": "artifacts/akt/junyi-cohorts/outer4-selected-full-20261112-03",
+    "roles_path": "artifacts/akt/junyi-roles/outer4-research-v1-20261112-01/roles.json",
+    "encoding_file": "artifacts/akt/window-cache/full-train80-20261112-02.encoding.json",
+    "encoding_receipt": "artifacts/akt/window-cache/full-train80-20261112-02.encoding.receipt.json",
+    "train_window_cache": "artifacts/akt/window-cache/full-train80-20261112-02",
+    "selected_cache_manifest_sha256": "f42afe12c9566ba334dec68c1ebb22a4bfc6b2e5b673b629c9a2724c8d74db14",
+    "roles_sha256": "b0ca8f6949edd226e48d1cdb24e34ea34a042a385467e1650755994e96567ba3",
+    "encoding_sha256": "4d5d7330d17f48b3b7d759bc331a99523093cfd249a0f9d7fd455480789c209f",
+    "encoding_receipt_sha256": "9d05015ef08e0b45bfc8e0a27d0ae0b459fcc0b79f1c4d75bfb6c362cba32845",
+    "train_window_manifest_sha256": "43f48045370b6811e537d7936ed307291e1dee88be313c111e4879198556a839"
+  },
+  "purpose": "main_selected",
+  "workload_epochs": 20,
+  "train_targets": 13347331,
+  "selection_targets": 1600343,
+  "max_optimizer_steps": 1163320,
+  "max_total_training_targets": 266946620,
+  "native_max_seconds": 2600,
+  "native_max_wall_seconds": 2700,
+  "worker_backup_seconds": 3000,
+  "remote_child_seconds": 3100,
+  "local_watchdog_seconds": 3200,
+  "function_timeout_seconds": 3300,
+  "checkpoint_every_steps": "native source04 unchanged1000",
+  "scope": "A0 fullJunyiTRAIN80selected-only; outer4; refit/calibration/CV/Holdout nằm ngoài lượt này."
+}
