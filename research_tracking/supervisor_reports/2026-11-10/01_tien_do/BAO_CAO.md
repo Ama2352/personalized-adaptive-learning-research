@@ -1,5 +1,12 @@
 # Báo cáo tiến độ khóa luận — cập nhật 12/11/2026
 
+## Cập nhật12/11 lúc20giờ59 — batch32 đạt mục tiêu tài nguyên GPU
+
+Đã hoàn tất lượt kiểm batch32 trên T4 bằng source AKT hiện có. Trong 115 mẫu nvidia-smi qua khoảng65giây training ổn định, GPU-Util trung bình87,5%, thấp nhất76% và cao nhất90%. VRAM đang dùng1.541/15.360MiB, công suất trung bình67,7W và tốc độ khoảng19.792target/giây. Mục tiêu sử dụng GPU trên50% đã đạt trong khoảng đo.
+
+Checkpoint đã tải về, kiểm toàn vẹn, nạp lại và cập nhật Adam tiếp theo khớp model, optimizer, RNG và metric. Lượt kiểm lặp một packet TRAIN80 để đo tài nguyên. Chất lượng trên toàn Junyi và thời gian hội tụ còn cần đánh giá trước khi tiếp nhận batch32 cho các so sánh nghiên cứu. A0 chính vẫn giữ6epoch batch4 đã lưu, chưa thay cấu hình giữa lượt.
+
+
 ## Cập nhật 12/11 lúc 20 giờ 07 — sáu epoch A0 và kết quả kiểm tăng tốc
 
 Bản AKT không đồ thị trên Junyi đã hoàn tất sáu lượt học toàn tập TRAIN80 đã cố định và sáu lần kiểm trên tập selection riêng biệt. Mỗi lượt gồm 13.347.331 tương tác train và 1.600.343 tương tác selection. Checkpoint và archive đã được tải về, kiểm tính toàn vẹn và xác nhận dừng App. Bước chọn epoch cuối, refit, calibration và đánh giá độc lập còn phải thực hiện.

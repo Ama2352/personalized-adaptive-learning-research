@@ -1,5 +1,14 @@
 # Kiểm mức sử dụng GPU của AKT ngày 12/11/2026
 
+## Cập nhật20giờ59 — lượt batch32 đã nghiệm thu
+
+Đã hoàn tất lượt kiểm batch32 trên T4 bằng source AKT hiện có. Trong 115 mẫu nvidia-smi qua khoảng65giây training ổn định, GPU-Util trung bình87,5%, thấp nhất76% và cao nhất90%. VRAM đang dùng1.541/15.360MiB, công suất trung bình67,7W và tốc độ khoảng19.792target/giây. Mục tiêu sử dụng GPU trên50% đã đạt trong khoảng đo.
+
+Checkpoint đã tải về, kiểm toàn vẹn, nạp lại và cập nhật Adam tiếp theo khớp model, optimizer, RNG và metric. Lượt kiểm lặp một packet TRAIN80 để đo tài nguyên. Chất lượng trên toàn Junyi và thời gian hội tụ còn cần đánh giá trước khi tiếp nhận batch32 cho các so sánh nghiên cứu. A0 chính vẫn giữ6epoch batch4 đã lưu, chưa thay cấu hình giữa lượt.
+
+Lượt remote gồm kiểm/đóng gói85,06giây, snapshot billing tăng khoảng0,02USD so ngay trước lượt. [Bằng chứng đầy đủ](../runs/junyi-batch32-utilization-20261112-01/README.md). Hai phương án tối ưu nhỏ phía dưới vẫn giữ quyết định cũ. Người dùng yêu cầu chờ H100, chưa chạy H100.
+
+
 ## Đối soát cuối đợt lúc 20 giờ 07
 
 API Modal ghi nhận 3,24858233USD tài nguyên được đo, trong đó 3,24USD đã trừ credits, các khoản miễn trừ được ghi riêng. `billed_cost` hiện bằng0USD. Quy đổi từ30USD credits ban đầu còn khoảng26,76USD. Đây là snapshot lúc20giờ07, chưa phải hóa đơn phân bổ cuối cùng cho từng App. Danh sách container lúc kiểm cuối rỗng.

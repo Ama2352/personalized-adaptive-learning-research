@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 12/11 — batch32 đạt mục tiêu sử dụng GPU
+
+[Bằng chứng tài nguyên](../runs/junyi-batch32-utilization-20261112-01/README.md) đã nghiệm thu GPU87,5%/VRAM1.541MiB và checkpoint/resume. Có SVG, CSV và ghi rõ giới hạn lặp packet. Chưa là đánh giá chất lượng độc lập.
+
+
 ## 12/11 lúc20giờ07 — kết quả thử tối ưu và ngân sách
 
 [Kiểm GPU và đối soát](AKT_GPU_UTILIZATION_AUDIT_20261112.md) đã bổ sung hai phép đo chưa đạt ngưỡng tiếp nhận, một lượt cache timeout, chi phí và rủi ro vượt30USD của ma trận cũ. Có SVG/CSV/log trong bundle. Không có candidate tăng tốc nào được áp dụng vào training chính.

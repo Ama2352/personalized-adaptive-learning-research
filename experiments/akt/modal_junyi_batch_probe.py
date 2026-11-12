@@ -109,9 +109,11 @@ def remote_probe(pins, run_id):
         summary['returncode'] = process.returncode
         actual = json.loads((results/(run_id+'-operation')/'result.json').read_text())
         summary['worker_result'] = actual
-        assert process.returncode==0 and actual['status'] in ('JUNYI_BATCH_PROFILE_COMPLETE','JUNYI_STEP_SYNC_PROFILE_COMPLETE','PARTIAL_JUNYI_BATCH_PROFILE_OOM'),actual
-        if actual['status'] in ('JUNYI_BATCH_PROFILE_COMPLETE','JUNYI_STEP_SYNC_PROFILE_COMPLETE'):
-            expected_checkpoints = 6 if actual['status']=='JUNYI_STEP_SYNC_PROFILE_COMPLETE' else 4
+        assert process.returncode==0 and actual['status'] in ('JUNYI_BATCH_PROFILE_COMPLETE','JUNYI_STEP_SYNC_PROFILE_COMPLETE','JUNYI_BATCH_UTILIZATION_COMPLETE','PARTIAL_JUNYI_BATCH_PROFILE_OOM'),actual
+        if actual['status'] in ('JUNYI_BATCH_PROFILE_COMPLETE','JUNYI_STEP_SYNC_PROFILE_COMPLETE','JUNYI_BATCH_UTILIZATION_COMPLETE'):
+            expected_checkpoints = {'JUNYI_BATCH_PROFILE_COMPLETE':4,
+                                    'JUNYI_STEP_SYNC_PROFILE_COMPLETE':6,
+                                    'JUNYI_BATCH_UTILIZATION_COMPLETE':1}[actual['status']]
             assert len(summary['checkpoint_transfers'])==expected_checkpoints,'Completed case checkpoints required'
         else:
             assert len(summary['checkpoint_transfers'])>=len(actual['cases'])
@@ -177,18 +179,24 @@ def main():
             ('gpu_worker02.py', 'model-attention-candidate.py', 'attention_candidate.py', 'reservation02.json'),
         'engineering_attention_cache_profile_only':
             ('gpu_worker03.py', 'model-attention-cache-candidate.py', 'attention_cache_candidate.py', 'reservation03.json'),
+        'engineering_batch32_utilization_only':
+            ('gpu_worker.py', None, None, 'reservation.json'),
     }
     profile = profiles.get(request.get('scope'))
     step_profile = profile is not None
     worker_name, candidate_name, module_name, reservation_name = profile or (
         'gpu_worker.py', None, None, 'reservation.json')
     bundle = BUNDLE
+    batch_utilization = request.get('scope') == 'engineering_batch32_utilization_only'
     if step_profile:
         bundle = args.request.resolve().parent
-        assert bundle == ROOT/'research_tracking/runs/junyi-step-sync-20261112-01'
+        expected_bundle = 'junyi-batch32-utilization-20261112-01' if batch_utilization else 'junyi-step-sync-20261112-01'
+        assert bundle == ROOT/'research_tracking/runs'/expected_bundle
     assert args.gpu==request.get('gpu','T4')=='T4'
     run_id = request['run_id']
     prefix = 'step-sync' if step_profile else 'batch-throughput'
+    if batch_utilization:
+        prefix = 'batch-utilization'
     assert re.fullmatch(r'modal-junyi-'+prefix+r'-t4-[0-9]{8}-[0-9]{2}',run_id)
     print(json.dumps(dict(run_id=run_id,gpu=args.gpu,status=request['status'],execution_requested=args.run)),flush=True)
     if not args.run:
@@ -217,7 +225,7 @@ def main():
              '/opt/checkpoint-sync.py':ROOT/'experiments/akt/modal_artifact_sync.py',
              '/opt/probe-request.json':worker_request_path,
              '/opt/packet_reader.py':ROOT/'research_tracking/runs/junyi-throughput-20261112-01/packet_reader.py'}
-    if step_profile:
+    if candidate_name is not None:
         paths.update({'/opt/model-candidate.py':bundle/candidate_name,
                       '/opt/model-before.py':bundle/'model-before.py',
                       '/opt/verify_equivalence.py':bundle/'verify_equivalence.py'})
@@ -242,7 +250,7 @@ def main():
     volume = modal.Volume.from_name('kltn-akt-'+run_id,create_if_missing=True,version=2)
     image = modal.Image.from_id('im-ldjZsYO21pzaupmQXGLhnS')
     for name,path in paths.items():
-        image = image.add_local_file(path,name,copy=True)
+        image = image.add_local_file(path,name,copy=not batch_utilization)
     function = app.function(image=image,gpu=args.gpu,cpu=(.25,2),memory=(4096,8192),
         timeout=420,startup_timeout=60,retries=0,max_containers=1,scaledown_window=60,
         volumes={'/durable':volume})(remote_probe)
@@ -280,7 +288,7 @@ def main():
     receipt['download_inventory_verified'] = True
     (native/'receipt.json').write_text(json.dumps(receipt,indent=2))
     print(json.dumps(receipt),flush=True)
-    assert receipt['status'] in ('JUNYI_BATCH_PROFILE_COMPLETE','JUNYI_STEP_SYNC_PROFILE_COMPLETE','PARTIAL_JUNYI_BATCH_PROFILE_OOM')
+    assert receipt['status'] in ('JUNYI_BATCH_PROFILE_COMPLETE','JUNYI_STEP_SYNC_PROFILE_COMPLETE','JUNYI_BATCH_UTILIZATION_COMPLETE','PARTIAL_JUNYI_BATCH_PROFILE_OOM')
 
 
 if __name__=='__main__':

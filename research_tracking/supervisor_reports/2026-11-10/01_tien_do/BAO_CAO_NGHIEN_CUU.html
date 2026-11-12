@@ -19,7 +19,654 @@ a{color:#155c88;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{
 .mastery-outcome{font-weight:650;color:#17324d}.mastery-case-count{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums}
 @media(max-width:760px){.mastery-cases{grid-template-columns:1fr}.mastery-case{padding:1rem}}
 @media(max-width:700px){#chang-17 table{table-layout:fixed}#chang-17 th,#chang-17 td{min-width:0;overflow-wrap:anywhere;padding:.6rem .4rem}#chang-17 thead th:first-child{width:18%}}
-</style></head><body><a class="skip" href="#noi-dung">Đến nội dung</a><main class="page" id="noi-dung"><section id="gpu-audit-outcomes-20261112"><h2>Cập nhật 12/11 lúc 20 giờ 07</h2><p>Bản AKT không đồ thị trên Junyi đã hoàn tất sáu lượt học toàn tập TRAIN80 đã cố định và sáu lần kiểm trên tập selection riêng biệt. Mỗi lượt gồm 13.347.331 tương tác train và 1.600.343 tương tác selection. Checkpoint và archive đã được tải về, kiểm tính toàn vẹn và xác nhận dừng App. Bước chọn epoch cuối, refit, calibration và đánh giá độc lập còn phải thực hiện.</p><p>Log Loss selection ở epoch5 là0,354982644 và epoch6 là0,354906797. Mức giảm ở epoch6 nhỏ hơn ngưỡng cải thiện tối thiểu0,0001 đã đặt, nên checkpoint tốt nhất tạm thời theo quy tắc dừng vẫn ở epoch5. Nếu epoch7–8 tiếp tục thiếu cải thiện đủ, mô hình sẽ dừng ở8 và refit5 epoch. Đây là điều kiện dự kiến, số epoch cuối chưa được chốt.</p><p>Đã đo GPU trực tiếp và thực hiện hai đối chiếu tăng tốc trên cùng dữ liệu, batch và khởi tạo. Cả hai giữ nguyên model, Adam và RNG, nhưng chưa đạt tiêu chí tăng tốc đã đặt nên chưa đưa vào training chính. Một candidate cache đã khớp CPU, lượt đo cloud hết giới hạn thời gian và đã dừng. Cần xác nhận hiệu quả trên GPU và tính lại dự toán toàn ma trận trước lượt training dài tiếp theo.</p></section><section id="gpu-audit-20261112"><h2>Cập nhật 12/11 lúc 18 giờ 53</h2><p>A0 Junyi đã hoàn tất bốn epoch trên cùng tập train. Log Loss selection lần lượt là 0,359648, 0,356651, 0,355651 và 0,356488. Epoch4 kém epoch3, checkpoint tốt nhất tạm thời vẫn ở epoch3. Chưa chốt epoch cuối, refit, calibration hoặc đánh giá độc lập. Execution05 hết thời gian kiểm runtime trước training. Sau khi tăng riêng thời gian chờ kiểm môi trường, execution06 tiếp tục từ checkpoint epoch5 đã lưu.</p><p>Đã kiểm trực tiếp GPU trong 30 mẫu gần một phút ở epoch5. GPU-Util trung bình43,9% (39–49%), VRAM459/15.360MiB, thông lượng khoảng8.519 tương tác được chấm mỗi giây. Cấu hình hiện tại còn dư VRAM và thời gian GPU chưa chạy kernel. Chưa đủ bằng chứng khẳng định đã tối ưu. Cần so thời gian và chi phí để đạt cùng chất lượng trước khi chọn cấu hình nhanh hơn.</p></section>
+</style></head><body><a class="skip" href="#noi-dung">Đến nội dung</a><main class="page" id="noi-dung"><section id="batch32-usage-20261112"><h2>Batch32 đã đạt mục tiêu tài nguyên GPU</h2><p>Đã hoàn tất lượt kiểm batch32 trên T4 bằng source AKT hiện có. Trong 115 mẫu nvidia-smi qua khoảng65giây training ổn định, GPU-Util trung bình87,5%, thấp nhất76% và cao nhất90%. VRAM đang dùng1.541/15.360MiB, công suất trung bình67,7W và tốc độ khoảng19.792target/giây. Mục tiêu sử dụng GPU trên50% đã đạt trong khoảng đo.</p><p>Checkpoint đã tải về, kiểm toàn vẹn, nạp lại và cập nhật Adam tiếp theo khớp model, optimizer, RNG và metric. Lượt kiểm lặp một packet TRAIN80 để đo tài nguyên. Chất lượng trên toàn Junyi và thời gian hội tụ còn cần đánh giá trước khi tiếp nhận batch32 cho các so sánh nghiên cứu. A0 chính vẫn giữ6epoch batch4 đã lưu, chưa thay cấu hình giữa lượt.</p><figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="720pt" height="345.6pt" viewBox="0 0 720 345.6" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-12T21:03:35.843575</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="b32u_figure_1">
+  <g id="b32u_patch_1">
+   <path d="M 0 345.6 
+L 720 345.6 
+L 720 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="b32u_axes_1">
+   <g id="b32u_patch_2">
+    <path d="M 57.6 259.2 
+L 341.810526 259.2 
+L 341.810526 69.12 
+L 57.6 69.12 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="b32u_matplotlib.axis_1">
+    <g id="b32u_xtick_1">
+     <g id="b32u_line2d_1">
+      <defs>
+       <path id="b32u_ma3018b580a" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#b32u_ma3018b580a" x="57.6" y="259.2" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_1">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="57.6" y="273.797656" transform="rotate(-0 57.6 273.797656)">0</text>
+     </g>
+    </g>
+    <g id="b32u_xtick_2">
+     <g id="b32u_line2d_2">
+      <g>
+       <use xlink:href="#b32u_ma3018b580a" x="123.210595" y="259.2" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_2">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="123.210595" y="273.797656" transform="rotate(-0 123.210595 273.797656)">15</text>
+     </g>
+    </g>
+    <g id="b32u_xtick_3">
+     <g id="b32u_line2d_3">
+      <g>
+       <use xlink:href="#b32u_ma3018b580a" x="188.82119" y="259.2" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_3">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="188.82119" y="273.797656" transform="rotate(-0 188.82119 273.797656)">30</text>
+     </g>
+    </g>
+    <g id="b32u_xtick_4">
+     <g id="b32u_line2d_4">
+      <g>
+       <use xlink:href="#b32u_ma3018b580a" x="254.431785" y="259.2" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_4">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="254.431785" y="273.797656" transform="rotate(-0 254.431785 273.797656)">45</text>
+     </g>
+    </g>
+    <g id="b32u_xtick_5">
+     <g id="b32u_line2d_5">
+      <g>
+       <use xlink:href="#b32u_ma3018b580a" x="320.04238" y="259.2" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_5">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="320.04238" y="273.797656" transform="rotate(-0 320.04238 273.797656)">60</text>
+     </g>
+    </g>
+    <g id="b32u_text_6">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="199.705263" y="288.821875" transform="rotate(-0 199.705263 288.821875)">Giây trong khoảng đo ổn định</text>
+    </g>
+   </g>
+   <g id="b32u_matplotlib.axis_2">
+    <g id="b32u_ytick_1">
+     <g id="b32u_line2d_6">
+      <defs>
+       <path id="b32u_mb1bf5fb7a8" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#b32u_mb1bf5fb7a8" x="57.6" y="259.2" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_7">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="50.6" y="262.998828" transform="rotate(-0 50.6 262.998828)">0</text>
+     </g>
+    </g>
+    <g id="b32u_ytick_2">
+     <g id="b32u_line2d_7">
+      <g>
+       <use xlink:href="#b32u_mb1bf5fb7a8" x="57.6" y="221.184" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_8">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="50.6" y="224.982828" transform="rotate(-0 50.6 224.982828)">20</text>
+     </g>
+    </g>
+    <g id="b32u_ytick_3">
+     <g id="b32u_line2d_8">
+      <g>
+       <use xlink:href="#b32u_mb1bf5fb7a8" x="57.6" y="183.168" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_9">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="50.6" y="186.966828" transform="rotate(-0 50.6 186.966828)">40</text>
+     </g>
+    </g>
+    <g id="b32u_ytick_4">
+     <g id="b32u_line2d_9">
+      <g>
+       <use xlink:href="#b32u_mb1bf5fb7a8" x="57.6" y="145.152" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_10">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="50.6" y="148.950828" transform="rotate(-0 50.6 148.950828)">60</text>
+     </g>
+    </g>
+    <g id="b32u_ytick_5">
+     <g id="b32u_line2d_10">
+      <g>
+       <use xlink:href="#b32u_mb1bf5fb7a8" x="57.6" y="107.136" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_11">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="50.6" y="110.934828" transform="rotate(-0 50.6 110.934828)">80</text>
+     </g>
+    </g>
+    <g id="b32u_ytick_6">
+     <g id="b32u_line2d_11">
+      <g>
+       <use xlink:href="#b32u_mb1bf5fb7a8" x="57.6" y="69.12" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_12">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="50.6" y="72.918828" transform="rotate(-0 50.6 72.918828)">100</text>
+     </g>
+    </g>
+    <g id="b32u_text_13">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="25.110156" y="164.16" transform="rotate(-90 25.110156 164.16)">GPU-Util (%)</text>
+    </g>
+   </g>
+   <g id="b32u_line2d_12">
+    <path d="M 57.6 90.0288 
+L 60.200464 97.632 
+L 62.706193 97.632 
+L 65.321846 88.128 
+L 67.840887 88.128 
+L 70.306665 91.9296 
+L 72.692651 88.128 
+L 75.160552 93.8304 
+L 77.785788 93.8304 
+L 80.179524 90.0288 
+L 82.673244 90.0288 
+L 85.229942 90.0288 
+L 87.876031 99.5328 
+L 90.473035 101.4336 
+L 92.849705 91.9296 
+L 95.378917 91.9296 
+L 97.790946 91.9296 
+L 100.318025 97.632 
+L 102.714203 88.128 
+L 105.226696 90.0288 
+L 107.646445 90.0288 
+L 110.110521 91.9296 
+L 112.512639 97.632 
+L 115.238102 97.632 
+L 117.693441 88.128 
+L 120.213747 91.9296 
+L 122.797011 90.0288 
+L 125.197153 90.0288 
+L 127.565451 95.7312 
+L 129.944104 97.632 
+L 132.771275 90.0288 
+L 135.261343 90.0288 
+L 137.69421 95.7312 
+L 140.177042 97.632 
+L 142.708983 93.8304 
+L 145.090042 90.0288 
+L 147.71582 90.0288 
+L 150.11519 95.7312 
+L 152.547131 95.7312 
+L 155.279605 103.3344 
+L 157.887353 90.0288 
+L 160.272723 90.0288 
+L 162.657829 97.632 
+L 165.346479 95.7312 
+L 167.738791 90.0288 
+L 170.60371 88.128 
+L 173.080269 90.0288 
+L 175.914417 90.0288 
+L 178.30103 91.9296 
+L 180.818755 97.632 
+L 183.35195 90.0288 
+L 185.877703 90.0288 
+L 188.259333 90.0288 
+L 190.622309 90.0288 
+L 193.154748 97.632 
+L 195.518505 90.0288 
+L 197.947665 88.128 
+L 200.564032 90.0288 
+L 203.005257 90.0288 
+L 205.39216 95.7312 
+L 207.952699 90.0288 
+L 210.424797 90.0288 
+L 212.801262 88.128 
+L 215.185668 90.0288 
+L 217.610602 95.7312 
+L 220.149334 95.7312 
+L 222.622401 93.8304 
+L 225.117816 88.128 
+L 228.133801 88.128 
+L 230.508449 88.128 
+L 232.944098 90.0288 
+L 235.47047 97.632 
+L 238.004894 91.9296 
+L 240.709499 114.7392 
+L 243.068139 114.7392 
+L 245.753655 101.4336 
+L 248.152717 95.7312 
+L 250.515195 91.9296 
+L 253.031768 91.9296 
+L 255.76941 95.7312 
+L 258.130882 95.7312 
+L 260.57983 91.9296 
+L 263.136282 91.9296 
+L 265.487085 93.8304 
+L 267.834356 97.632 
+L 270.354149 90.0288 
+L 272.787529 91.9296 
+L 275.467601 97.632 
+L 277.881079 88.128 
+L 280.457908 90.0288 
+L 282.80594 91.9296 
+L 285.147133 90.0288 
+L 287.715486 88.128 
+L 290.253665 90.0288 
+L 292.684948 90.0288 
+L 295.186542 90.0288 
+L 297.577384 93.8304 
+L 300.053445 90.0288 
+L 302.438183 90.0288 
+L 304.85135 90.0288 
+L 307.325952 99.5328 
+L 309.72333 93.8304 
+L 312.110154 90.0288 
+L 314.805656 90.0288 
+L 317.385048 91.9296 
+L 319.795928 95.7312 
+L 322.174391 95.7312 
+L 324.667904 88.128 
+L 327.225271 90.0288 
+L 329.618588 90.0288 
+L 332.157063 95.7312 
+L 334.544288 95.7312 
+L 336.956164 95.7312 
+L 339.34074 91.9296 
+L 341.810526 90.0288 
+" clip-path="url(#b32u_pd2d7e6f6b6)" style="fill: none; stroke: #3c6e82; stroke-width: 1.5; stroke-linecap: square"/>
+   </g>
+   <g id="b32u_line2d_13">
+    <path d="M 57.6 164.16 
+L 341.810526 164.16 
+" clip-path="url(#b32u_pd2d7e6f6b6)" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #8f3d3d; stroke-width: 1.5"/>
+   </g>
+   <g id="b32u_patch_3">
+    <path d="M 57.6 259.2 
+L 57.6 69.12 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="b32u_patch_4">
+    <path d="M 57.6 259.2 
+L 341.810526 259.2 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="b32u_text_14">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start" x="57.6" y="63.12" transform="rotate(-0 57.6 63.12)">Trung bình87,5%, khoảng76–90%</text>
+   </g>
+   <g id="b32u_legend_1">
+    <g id="b32u_line2d_14">
+     <path d="M 66.6 244.297656 
+L 76.6 244.297656 
+L 86.6 244.297656 
+" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #8f3d3d; stroke-width: 1.5"/>
+    </g>
+    <g id="b32u_text_15">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="94.6" y="247.797656" transform="rotate(-0 94.6 247.797656)">Mục tiêu50%</text>
+    </g>
+   </g>
+  </g>
+  <g id="b32u_axes_2">
+   <g id="b32u_patch_5">
+    <path d="M 421.389474 259.2 
+L 705.6 259.2 
+L 705.6 69.12 
+L 421.389474 69.12 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="b32u_matplotlib.axis_3">
+    <g id="b32u_xtick_6">
+     <g id="b32u_line2d_15">
+      <g>
+       <use xlink:href="#b32u_ma3018b580a" x="421.389474" y="259.2" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_16">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="421.389474" y="273.797656" transform="rotate(-0 421.389474 273.797656)">0</text>
+     </g>
+    </g>
+    <g id="b32u_xtick_7">
+     <g id="b32u_line2d_16">
+      <g>
+       <use xlink:href="#b32u_ma3018b580a" x="487.000069" y="259.2" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_17">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="487.000069" y="273.797656" transform="rotate(-0 487.000069 273.797656)">15</text>
+     </g>
+    </g>
+    <g id="b32u_xtick_8">
+     <g id="b32u_line2d_17">
+      <g>
+       <use xlink:href="#b32u_ma3018b580a" x="552.610664" y="259.2" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_18">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="552.610664" y="273.797656" transform="rotate(-0 552.610664 273.797656)">30</text>
+     </g>
+    </g>
+    <g id="b32u_xtick_9">
+     <g id="b32u_line2d_18">
+      <g>
+       <use xlink:href="#b32u_ma3018b580a" x="618.221259" y="259.2" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_19">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="618.221259" y="273.797656" transform="rotate(-0 618.221259 273.797656)">45</text>
+     </g>
+    </g>
+    <g id="b32u_xtick_10">
+     <g id="b32u_line2d_19">
+      <g>
+       <use xlink:href="#b32u_ma3018b580a" x="683.831854" y="259.2" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_20">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="683.831854" y="273.797656" transform="rotate(-0 683.831854 273.797656)">60</text>
+     </g>
+    </g>
+    <g id="b32u_text_21">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="563.494737" y="288.821875" transform="rotate(-0 563.494737 288.821875)">Giây trong khoảng đo ổn định</text>
+    </g>
+   </g>
+   <g id="b32u_matplotlib.axis_4">
+    <g id="b32u_ytick_7">
+     <g id="b32u_line2d_20">
+      <g>
+       <use xlink:href="#b32u_mb1bf5fb7a8" x="421.389474" y="259.2" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_22">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="414.389474" y="262.998828" transform="rotate(-0 414.389474 262.998828)">0</text>
+     </g>
+    </g>
+    <g id="b32u_ytick_8">
+     <g id="b32u_line2d_21">
+      <g>
+       <use xlink:href="#b32u_mb1bf5fb7a8" x="421.389474" y="235.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_23">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="414.389474" y="239.238828" transform="rotate(-0 414.389474 239.238828)">2</text>
+     </g>
+    </g>
+    <g id="b32u_ytick_9">
+     <g id="b32u_line2d_22">
+      <g>
+       <use xlink:href="#b32u_mb1bf5fb7a8" x="421.389474" y="211.68" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_24">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="414.389474" y="215.478828" transform="rotate(-0 414.389474 215.478828)">4</text>
+     </g>
+    </g>
+    <g id="b32u_ytick_10">
+     <g id="b32u_line2d_23">
+      <g>
+       <use xlink:href="#b32u_mb1bf5fb7a8" x="421.389474" y="187.92" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_25">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="414.389474" y="191.718828" transform="rotate(-0 414.389474 191.718828)">6</text>
+     </g>
+    </g>
+    <g id="b32u_ytick_11">
+     <g id="b32u_line2d_24">
+      <g>
+       <use xlink:href="#b32u_mb1bf5fb7a8" x="421.389474" y="164.16" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_26">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="414.389474" y="167.958828" transform="rotate(-0 414.389474 167.958828)">8</text>
+     </g>
+    </g>
+    <g id="b32u_ytick_12">
+     <g id="b32u_line2d_25">
+      <g>
+       <use xlink:href="#b32u_mb1bf5fb7a8" x="421.389474" y="140.4" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_27">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="414.389474" y="144.198828" transform="rotate(-0 414.389474 144.198828)">10</text>
+     </g>
+    </g>
+    <g id="b32u_ytick_13">
+     <g id="b32u_line2d_26">
+      <g>
+       <use xlink:href="#b32u_mb1bf5fb7a8" x="421.389474" y="116.64" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_28">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="414.389474" y="120.438828" transform="rotate(-0 414.389474 120.438828)">12</text>
+     </g>
+    </g>
+    <g id="b32u_ytick_14">
+     <g id="b32u_line2d_27">
+      <g>
+       <use xlink:href="#b32u_mb1bf5fb7a8" x="421.389474" y="92.88" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_29">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="414.389474" y="96.678828" transform="rotate(-0 414.389474 96.678828)">14</text>
+     </g>
+    </g>
+    <g id="b32u_ytick_15">
+     <g id="b32u_line2d_28">
+      <g>
+       <use xlink:href="#b32u_mb1bf5fb7a8" x="421.389474" y="69.12" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="b32u_text_30">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="414.389474" y="72.918828" transform="rotate(-0 414.389474 72.918828)">16</text>
+     </g>
+    </g>
+    <g id="b32u_text_31">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="395.26213" y="164.16" transform="rotate(-90 395.26213 164.16)">VRAM (GiB)</text>
+    </g>
+   </g>
+   <g id="b32u_line2d_29">
+    <path d="M 421.389474 241.321992 
+L 423.989937 241.321992 
+L 426.495667 241.321992 
+L 429.11132 241.321992 
+L 431.63036 241.321992 
+L 434.096138 241.321992 
+L 436.482124 241.321992 
+L 438.950025 241.321992 
+L 441.575262 241.321992 
+L 443.968998 241.321992 
+L 446.462718 241.321992 
+L 449.019416 241.321992 
+L 451.665505 241.321992 
+L 454.262509 241.321992 
+L 456.639179 241.321992 
+L 459.168391 241.321992 
+L 461.580419 241.321992 
+L 464.107499 241.321992 
+L 466.503677 241.321992 
+L 469.016169 241.321992 
+L 471.435919 241.321992 
+L 473.899994 241.321992 
+L 476.302113 241.321992 
+L 479.027575 241.321992 
+L 481.482915 241.321992 
+L 484.003221 241.321992 
+L 486.586484 241.321992 
+L 488.986626 241.321992 
+L 491.354925 241.321992 
+L 493.733577 241.321992 
+L 496.560749 241.321992 
+L 499.050817 241.321992 
+L 501.483684 241.321992 
+L 503.966516 241.321992 
+L 506.498456 241.321992 
+L 508.879515 241.321992 
+L 511.505293 241.321992 
+L 513.904663 241.321992 
+L 516.336605 241.321992 
+L 519.069079 241.321992 
+L 521.676827 241.321992 
+L 524.062197 241.321992 
+L 526.447303 241.321992 
+L 529.135952 241.321992 
+L 531.528265 241.321992 
+L 534.393183 241.321992 
+L 536.869742 241.321992 
+L 539.70389 241.321992 
+L 542.090504 241.321992 
+L 544.608228 241.321992 
+L 547.141424 241.321992 
+L 549.667176 241.321992 
+L 552.048807 241.321992 
+L 554.411782 241.321992 
+L 556.944222 241.321992 
+L 559.307978 241.321992 
+L 561.737138 241.321992 
+L 564.353506 241.321992 
+L 566.79473 241.321992 
+L 569.181634 241.321992 
+L 571.742173 241.321992 
+L 574.214271 241.321992 
+L 576.590735 241.321992 
+L 578.975142 241.321992 
+L 581.400076 241.321992 
+L 583.938807 241.321992 
+L 586.411874 241.321992 
+L 588.90729 241.321992 
+L 591.923275 241.321992 
+L 594.297922 241.321992 
+L 596.733572 241.321992 
+L 599.259943 241.321992 
+L 601.794367 241.321992 
+L 604.498972 241.321992 
+L 606.857612 241.321992 
+L 609.543129 241.321992 
+L 611.942191 241.321992 
+L 614.304669 241.321992 
+L 616.821241 241.321992 
+L 619.558884 241.321992 
+L 621.920355 241.321992 
+L 624.369303 241.321992 
+L 626.925755 241.321992 
+L 629.276559 241.321992 
+L 631.62383 241.321992 
+L 634.143622 241.321992 
+L 636.577003 241.321992 
+L 639.257074 241.321992 
+L 641.670553 241.321992 
+L 644.247382 241.321992 
+L 646.595414 241.321992 
+L 648.936607 241.321992 
+L 651.504959 241.321992 
+L 654.043139 241.321992 
+L 656.474422 241.321992 
+L 658.976016 241.321992 
+L 661.366858 241.321992 
+L 663.842918 241.321992 
+L 666.227657 241.321992 
+L 668.640823 241.321992 
+L 671.115426 241.321992 
+L 673.512804 241.321992 
+L 675.899628 241.321992 
+L 678.59513 241.321992 
+L 681.174522 241.321992 
+L 683.585402 241.321992 
+L 685.963864 241.321992 
+L 688.457378 241.321992 
+L 691.014745 241.321992 
+L 693.408062 241.321992 
+L 695.946537 241.321992 
+L 698.333761 241.321992 
+L 700.745638 241.321992 
+L 703.130214 241.321992 
+L 705.6 241.321992 
+" clip-path="url(#b32u_p549d96b91d)" style="fill: none; stroke: #3c6e82; stroke-width: 1.5; stroke-linecap: square"/>
+   </g>
+   <g id="b32u_line2d_30">
+    <path d="M 421.389474 81 
+L 705.6 81 
+" clip-path="url(#b32u_p549d96b91d)" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #8f3d3d; stroke-width: 1.5"/>
+   </g>
+   <g id="b32u_patch_6">
+    <path d="M 421.389474 259.2 
+L 421.389474 69.12 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="b32u_patch_7">
+    <path d="M 421.389474 259.2 
+L 705.6 259.2 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="b32u_text_32">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start" x="421.389474" y="63.12" transform="rotate(-0 421.389474 63.12)">Khoảng10% dung lượng VRAM</text>
+   </g>
+   <g id="b32u_legend_2">
+    <g id="b32u_line2d_31">
+     <path d="M 573.834375 155.445938 
+L 583.834375 155.445938 
+L 593.834375 155.445938 
+" style="fill: none; stroke: #3c6e82; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="b32u_text_33">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="601.834375" y="158.945938" transform="rotate(-0 601.834375 158.945938)">Đang dùng1,50GiB</text>
+    </g>
+    <g id="b32u_line2d_32">
+     <path d="M 573.834375 171.470156 
+L 583.834375 171.470156 
+L 593.834375 171.470156 
+" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #8f3d3d; stroke-width: 1.5"/>
+    </g>
+    <g id="b32u_text_34">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="601.834375" y="174.970156" transform="rotate(-0 601.834375 174.970156)">Tổng15GiB</text>
+    </g>
+   </g>
+  </g>
+  <g id="b32u_text_35">
+   <text style="font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: start" x="57.6" y="18.287" transform="rotate(-0 57.6 18.287)">AKT batch32 trên T4 — 115 mẫu tài nguyên trong65giây</text>
+  </g>
+  <g id="b32u_text_36">
+   <text style="font-size: 9px; font-family: 'DejaVu Sans'" transform="translate(57.6 313.279664)">Lặp packet TRAIN80 để kiểm tải GPU. Các số đo lấy sau lượt làm nóng.</text>
+   <text style="font-size: 9px; font-family: 'DejaVu Sans'" transform="translate(57.6 324.864)">Chất lượng trên toàn Junyi và thời gian hội tụ còn cần đánh giá.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="b32u_pd2d7e6f6b6">
+   <rect x="57.6" y="69.12" width="284.210526" height="190.08"/>
+  </clipPath>
+  <clipPath id="b32u_p549d96b91d">
+   <rect x="421.389474" y="69.12" width="284.210526" height="190.08"/>
+  </clipPath>
+ </defs>
+</svg>
+<figcaption>Nguồn đo T4 ngày12/11. Packet TRAIN80 được lặp để giữ tải đủ lâu,115mẫu sau làm nóng. Đây là bằng chứng kỹ thuật về tài nguyên.</figcaption></figure></section><section id="gpu-audit-outcomes-20261112"><h2>Cập nhật 12/11 lúc 20 giờ 07</h2><p>Bản AKT không đồ thị trên Junyi đã hoàn tất sáu lượt học toàn tập TRAIN80 đã cố định và sáu lần kiểm trên tập selection riêng biệt. Mỗi lượt gồm 13.347.331 tương tác train và 1.600.343 tương tác selection. Checkpoint và archive đã được tải về, kiểm tính toàn vẹn và xác nhận dừng App. Bước chọn epoch cuối, refit, calibration và đánh giá độc lập còn phải thực hiện.</p><p>Log Loss selection ở epoch5 là0,354982644 và epoch6 là0,354906797. Mức giảm ở epoch6 nhỏ hơn ngưỡng cải thiện tối thiểu0,0001 đã đặt, nên checkpoint tốt nhất tạm thời theo quy tắc dừng vẫn ở epoch5. Nếu epoch7–8 tiếp tục thiếu cải thiện đủ, mô hình sẽ dừng ở8 và refit5 epoch. Đây là điều kiện dự kiến, số epoch cuối chưa được chốt.</p><p>Đã đo GPU trực tiếp và thực hiện hai đối chiếu tăng tốc trên cùng dữ liệu, batch và khởi tạo. Cả hai giữ nguyên model, Adam và RNG, nhưng chưa đạt tiêu chí tăng tốc đã đặt nên chưa đưa vào training chính. Một candidate cache đã khớp CPU, lượt đo cloud hết giới hạn thời gian và đã dừng. Cần xác nhận hiệu quả trên GPU và tính lại dự toán toàn ma trận trước lượt training dài tiếp theo.</p></section><section id="gpu-audit-20261112"><h2>Cập nhật 12/11 lúc 18 giờ 53</h2><p>A0 Junyi đã hoàn tất bốn epoch trên cùng tập train. Log Loss selection lần lượt là 0,359648, 0,356651, 0,355651 và 0,356488. Epoch4 kém epoch3, checkpoint tốt nhất tạm thời vẫn ở epoch3. Chưa chốt epoch cuối, refit, calibration hoặc đánh giá độc lập. Execution05 hết thời gian kiểm runtime trước training. Sau khi tăng riêng thời gian chờ kiểm môi trường, execution06 tiếp tục từ checkpoint epoch5 đã lưu.</p><p>Đã kiểm trực tiếp GPU trong 30 mẫu gần một phút ở epoch5. GPU-Util trung bình43,9% (39–49%), VRAM459/15.360MiB, thông lượng khoảng8.519 tương tác được chấm mỗi giây. Cấu hình hiện tại còn dư VRAM và thời gian GPU chưa chạy kernel. Chưa đủ bằng chứng khẳng định đã tối ưu. Cần so thời gian và chi phí để đạt cùng chất lượng trước khi chọn cấu hình nhanh hơn.</p></section>
 <header class="masthead"><div class="byline">Báo cáo tiến độ nghiên cứu · cập nhật 12/11/2026</div>
 <h1>Khi nào thông tin tiên quyết thực sự giúp chọn bài và học tốt hơn?</h1>
 <p class="lead">Báo cáo quá trình đi từ kết quả của hai paper đến các chẩn đoán mới, những điều đã làm rõ và các phép kiểm còn thiếu để kết luận khóa luận.</p>
