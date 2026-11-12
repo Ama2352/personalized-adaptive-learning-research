@@ -27,6 +27,23 @@ def checkpoint_rank(name):
     raise ValueError('Unknown native checkpoint name')
 
 
+def verified_stop_proof(path,native):
+    if path is None:
+        return False
+    proof=json.loads(path.read_text())
+    dispatch=json.loads((native/'dispatch.json').read_text())
+    source=path.parent/proof['source_file']
+    if (proof['status']!='STOP_INDEPENDENTLY_RECONCILED'
+            or proof['app']['app_id']!=dispatch['app_id']
+            or proof['app']['state']!='stopped' or str(proof['app']['tasks'])!='0'
+            or sha(source)!=proof['source_sha256']):
+        raise ValueError('Independent stop proof must bind the previous owned App')
+    row=next(item for item in json.loads(source.read_text()) if item['app_id']==dispatch['app_id'])
+    if row!=proof['app']:
+        raise ValueError('Stop proof differs from provider snapshot')
+    return True
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--previous-execution',required=True)
@@ -42,24 +59,30 @@ def main():
     if args.execution==args.previous_execution:
         raise ValueError('Fresh execution ID required')
     native = ROOT/'experiments/akt/results'/args.previous_execution
+    independent_stop=verified_stop_proof(args.stop_proof,native)
     recovery = None
     if args.preemption_recovery is not None:
         recovery = json.loads(args.preemption_recovery.read_text())
-        proof = json.loads(args.stop_proof.read_text())
         if (recovery['status']!='PREEMPTION_CHECKPOINT_RECOVERED_VERIFIED_NOT_FINAL'
-                or proof['status']!='STOP_INDEPENDENTLY_RECONCILED'
-                or proof['app']['state']!='stopped' or str(proof['app']['tasks'])!='0'):
+                or not independent_stop):
             raise ValueError('Verified preemption checkpoint and independent stop proof required')
         checkpoint = ROOT/recovery['local_checkpoint']
         if sha(checkpoint)!=recovery['files']['state.pt']['sha256']:
             raise ValueError('Recovered preemption checkpoint changed')
-        transfers = json.loads((BUNDLE/'preemption-checkpoint-index.json').read_text())
+        index_path=ROOT/recovery.get('checkpoint_index_path',
+            str((BUNDLE/'preemption-checkpoint-index.json').relative_to(ROOT)))
+        if not index_path.resolve().is_relative_to(BUNDLE.resolve()):
+            raise ValueError('Owned checkpoint index evidence required')
+        transfers = json.loads(index_path.read_text())
+        if (recovery['latest'] not in transfers
+                or transfers[recovery['latest']]['files']!=recovery['files']):
+            raise ValueError('Recovery checkpoint evidence differs from its Volume index')
     else:
         receipt = json.loads((native/'receipt.json').read_text())
         guard = json.loads((native/'app-budget-guard.json').read_text())
         if (receipt['status']!='PARTIAL_SELECTED_ONLY_NOT_FINAL'
                 or receipt.get('download_inventory_verified') is not True
-                or guard.get('stop_acknowledged') is not True):
+                or not (guard.get('stop_acknowledged') is True or independent_stop)):
             raise ValueError('Verified partial execution and acknowledged stop required')
         archive = native/'artifacts.zip'
         if sha(archive)!=receipt['archive_sha256']:
@@ -68,6 +91,8 @@ def main():
     request = json.loads(args.previous_request.read_text(encoding='utf-8'))
     logical = request.get('logical_run_id',request['run_id'])
     latest = max(transfers,key=checkpoint_rank)
+    if recovery is not None and latest!=recovery['latest']:
+        raise ValueError('Forensic recovery evidence is not the latest indexed checkpoint')
     retained = sorted({latest}|{name for name in transfers if re.fullmatch(r'epoch-\d{3}',name)},key=checkpoint_rank)
     envelopes = [dict(name=name,files=transfers[name]['files']) for name in retained]
     output = ROOT/'artifacts/akt/modal'/args.execution

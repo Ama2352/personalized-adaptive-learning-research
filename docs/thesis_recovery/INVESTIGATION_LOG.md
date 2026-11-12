@@ -1161,3 +1161,11 @@ Audit ngày12/11 — đã đối chiếu lại cấu hình và dữ liệu của
 ## 12/11 — nối Junyi và nghiệm thu một epoch CUDA
 
 Phase/cache52tests/81subtests, producer local14tests, Gate Linux2.037ca đạt. CPU lỗi thiếu thưmục runtime vàGPU lỗi đườngdẫn import đã sửa, giữ toànbộ log. A10 hoàn tất79updates/11.833targets; xuất1.530selection/125OOV, nạp lại checkpoint exact vàđọc lại3file từVolume. Đãcập nhật reportpair vàlưuSVG/PDF/PNG/CSV. Nội suy từpilot chưa đảm bảo30USD đủ toànmatrixJunyi. Tiếp theo selected/refit/calibration vàtypedJunyi graph/confidence, benchmark đại diện trướcfull allocation.
+
+## 12/11 — thực hiện song song AKT và khép bằng chứng RQ1/RQ2
+
+Đã hoàn tất phép đo4batchT4 trên packet đã duyệt, lưucheckpoint/reload/SHA vàstopack. Số đo bỏbatchđầu cho batch16/32 khoảng2,11×/2,43×, chưa áp protocol mới. A0 continuation03 giữ nguồn/split/batch4, resumeepoch3step29, allocation0,85USD. Một agent độc lập đã hoàn thiện closurematrix và corefindings, kiểm8aggregate, còn shadoweligibility đang xét đủtrường. Không tăng researchN từ hậukiểm.
+
+### Bổ sung RQ1 trong lúc continuation03
+
+Đã nghiệm thu shadowstrictfrontier trên3.240storedstates, đổi2.557frontiers, loại18.520/30.572memberships, frontierstrictluônkhôngrỗng. Baseline/order/exposureflags khớp,0world/modelcalls,0newN. Thiếufullscorevector nên dừngởeligibility, khôngbịa action. Rootđãxemfigure, kiểm18fileSHA vàCSV, giữfailureBOM. BáocáoMarkdown/HTMLvàbacklogcậpnhật.

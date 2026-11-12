@@ -1,0 +1,139 @@
+{"run_id": "modal-junyi-main-selected-t4-20261112-01", "gpu": "T4", "status": "USER_APPROVED", "execution_requested": true}
+✓ Initialized. View run at 
+https://modal.com/apps/honguyenminhsang2005/main/ap-jKaejb9ydxyiqgffp6vNZR
+Building image im-r50B26NRA2rCJmDyJp3hEa
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 929.09ms
+
+Built image im-r50B26NRA2rCJmDyJp3hEa in 2.56s
+
+
+Building image im-99DFE1cx41784XKsM9em1r
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 1.35s
+
+Built image im-99DFE1cx41784XKsM9em1r in 2.90s
+
+
+Building image im-FiILRAPFYneEuq520TTONs
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 581.72ms
+
+Built image im-FiILRAPFYneEuq520TTONs in 1.63s
+
+
+Building image im-ElG2QOX1QPAvl20zWdcFV2
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 2.64s
+
+Built image im-ElG2QOX1QPAvl20zWdcFV2 in 3.95s
+
+
+Building image im-mDdhPo5iFDRGB0nMcmS79z
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 1.95s
+
+Built image im-mDdhPo5iFDRGB0nMcmS79z in 4.60s
+
+
+Building image im-F6Ik0qG2yeIed7wNmYIaAd
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Image saved, took 2.05s
+
+Built image im-F6Ik0qG2yeIed7wNmYIaAd in 16.06s
+
+
+✓ Created objects.
+├── ✓ Uploaded D:\Dev\KLTN\experiments\akt\modal_junyi_main_selected.py
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\research_tracking\runs\junyi-main-selected-20261112-01\gpu_work
+│   er.py
+├── ✓ Uploaded D:\Dev\KLTN\experiments\akt\modal_artifact_sync.py
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\experiments\akt\results\modal-junyi-main-selected-t4-20261112-0
+│   1\worker-request.json
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\artifacts\akt\modal\junyi-optimization-20261112-01\source04.zip
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\experiments\akt\results\modal-junyi-numerical-cpu-20261112-04\a
+│   rtifacts.zip
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\artifacts\akt\modal\junyi-throughput-20261112-01\full-selected-
+│   data.zip
+└── ✓ Created Function remote_probe.
+Container terminated due to preemption. Your Function will be restarted with the same input. For more details, see https://modal.com/docs/guide/preemption
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+  File "/root/modal_junyi_main_selected.py", line 73, in remote_probe
+    durable.mkdir(exist_ok=False)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/pathlib/_local.py", line 722, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+FileExistsError: [Errno 17] File exists: '/durable/modal-junyi-main-selected-t4-20261112-01'
+Stopping app - uncaught exception raised in remote container: FileExistsError(17, 'File exists').
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\experiments\akt\modal_junyi_main_selected.py", line 225, in main
+    receipt = call.get(timeout=guard.remaining())
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_object.py", line 49, in wrapped
+    return await method(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 2424, in get
+    return await self._invocation().poll_function(timeout=timeout, index=index)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 350, in poll_function
+    return await _process_result(
+           ^^^^^^^^^^^^^^^^^^^^^^
+        response.outputs[0].result, response.outputs[0].data_format, self.stub, self.client
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_utils\function_utils.py", line 572, in _process_result
+    raise exc_with_hints(exc)
+  File "<ta-01M77BQ2WGBBTF82HJCAGPNNCR>:/root/modal_junyi_main_selected.py", line 73, in remote_probe
+  File "<ta-01M77BQ2WGBBTF82HJCAGPNNCR>:/usr/local/lib/python3.13/pathlib/_local.py", line 722, in mkdir
+FileExistsError: [Errno 17] File exists: '/durable/modal-junyi-main-selected-t4-20261112-01'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\experiments\akt\modal_junyi_main_selected.py", line 255, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\experiments\akt\modal_junyi_main_selected.py", line 219, in main
+    with ModalAppBudgetGuard(binding,deadline,stop_app=stop_owned_app_cli,
+         ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             diagnostic_path=native/'app-budget-guard.json') as guard:
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\experiments\akt\modal_budget_guard.py", line 221, in __exit__
+    raise ModalStopUnconfirmed('App stop unconfirmed; inspect diagnostics before any new paid run') from error
+modal_budget_guard.ModalStopUnconfirmed: App stop unconfirmed; inspect diagnostics before any new paid run

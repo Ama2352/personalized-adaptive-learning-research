@@ -1,0 +1,120 @@
+{
+  "status": "USER_APPROVED",
+  "approval_reference": "Người dùng cho phép tiếp tục AKT và tự phân bổ các khoản nhỏ trong trần30USD toànKLTN. Tiếp tục cùng source04/logicalrun từ checkpoint epoch3 bước29.",
+  "root_review_status": "ROOT_REVIEWED_BOUNDED_DISPATCH",
+  "authorized_batch_usd": 0.85,
+  "reserved_usd_per_run": 0.85,
+  "allocation_id": "junyi-main-selected-t4-20261112-03",
+  "project_budget_file": "research_tracking/COMPUTE_BUDGET.json",
+  "gpu": "T4",
+  "run_id": "modal-junyi-main-selected-t4-20261112-03",
+  "archives": {
+    "source": {
+      "path": "artifacts/akt/modal/junyi-optimization-20261112-01/source04.zip",
+      "sha256": "a0b8eed2c10b5c1d8e0d88326a0670a447da9e4a9e9d977f8745dfb9e5502bf4"
+    },
+    "cpu_gate": {
+      "path": "experiments/akt/results/modal-junyi-numerical-cpu-20261112-04/artifacts.zip",
+      "sha256": "53815425cd827997f729589b2a002512407a5ce720fc1549c7359f7c473b152c"
+    },
+    "data": {
+      "path": "artifacts/akt/modal/junyi-throughput-20261112-01/full-selected-data.zip",
+      "sha256": "cfa8597cae89eba796f00a119748217ee1c61e20c7f6b4e7c5452d713931de96"
+    },
+    "resume_control": {
+      "path": "artifacts/akt/modal/modal-junyi-main-selected-t4-20261112-03/resume-control.zip",
+      "sha256": "8173b153eac4b185fb246a6c1927edb83d71abfadd3e7b2e935609c2a374895f"
+    }
+  },
+  "inputs": {
+    "selected_cache_root": "artifacts/akt/junyi-cohorts/outer4-selected-full-20261112-03",
+    "roles_path": "artifacts/akt/junyi-roles/outer4-research-v1-20261112-01/roles.json",
+    "encoding_file": "artifacts/akt/window-cache/full-train80-20261112-02.encoding.json",
+    "encoding_receipt": "artifacts/akt/window-cache/full-train80-20261112-02.encoding.receipt.json",
+    "train_window_cache": "artifacts/akt/window-cache/full-train80-20261112-02",
+    "selected_cache_manifest_sha256": "f42afe12c9566ba334dec68c1ebb22a4bfc6b2e5b673b629c9a2724c8d74db14",
+    "roles_sha256": "b0ca8f6949edd226e48d1cdb24e34ea34a042a385467e1650755994e96567ba3",
+    "encoding_sha256": "4d5d7330d17f48b3b7d759bc331a99523093cfd249a0f9d7fd455480789c209f",
+    "encoding_receipt_sha256": "9d05015ef08e0b45bfc8e0a27d0ae0b459fcc0b79f1c4d75bfb6c362cba32845",
+    "train_window_manifest_sha256": "43f48045370b6811e537d7936ed307291e1dee88be313c111e4879198556a839"
+  },
+  "purpose": "main_selected",
+  "workload_epochs": 20,
+  "train_targets": 13347331,
+  "selection_targets": 1600343,
+  "max_optimizer_steps": 1163320,
+  "max_total_training_targets": 266946620,
+  "native_max_seconds": 2600,
+  "native_max_wall_seconds": 2700,
+  "worker_backup_seconds": 3000,
+  "remote_child_seconds": 3100,
+  "local_watchdog_seconds": 3200,
+  "function_timeout_seconds": 3300,
+  "checkpoint_every_steps": "native source04 unchanged1000",
+  "scope": "A0 fullJunyiTRAIN80selected-only; outer4; refit/calibration/CV/Holdout nằm ngoài lượt này.",
+  "logical_run_id": "modal-junyi-main-selected-t4-20261112-01",
+  "resume_from_execution_id": "modal-junyi-main-selected-t4-20261112-02",
+  "resume_checkpoints": [
+    {
+      "name": "epoch-001",
+      "files": {
+        "state.pt": {
+          "bytes": 28903543,
+          "sha256": "a380cd2f3995f8c727dfbdfe9a0b67fd1a140ed642b6f4e184f0d6adf05dfe61"
+        },
+        "metadata.json": {
+          "bytes": 2778,
+          "sha256": "e8f43d16b195706618794ee46e26cce533f5414c1a8e55a10579c98b436e5ce6"
+        },
+        "COMPLETE.json": {
+          "bytes": 183,
+          "sha256": "85b35100a553d1801f346b71c97a7c2c6ba5437ffdbe5c56d9d3f1223d8e7e17"
+        }
+      }
+    },
+    {
+      "name": "epoch-002",
+      "files": {
+        "state.pt": {
+          "bytes": 28903863,
+          "sha256": "b1e780638f30a3a50e97c4d659853199a0fd48f09de3d8abf2aa7ac882a96903"
+        },
+        "metadata.json": {
+          "bytes": 2778,
+          "sha256": "3a9be26e019785df9b1bcbfee8c0fd74ab776c545391ee527209543c0fd0b7a7"
+        },
+        "COMPLETE.json": {
+          "bytes": 183,
+          "sha256": "f9d2eeec0ca0607f045908f08aaea52a1c5dfd7f5459d3bc8f0ed4f2ab57f570"
+        }
+      }
+    },
+    {
+      "name": "inner-batch-epoch-3-step-29-7e97c59ccd00453d8caa1349c8f876a8",
+      "files": {
+        "state.pt": {
+          "bytes": 28908791,
+          "sha256": "dda5c9134fa67cfd2ff87a4e4067d6bba909d92ae8560b8eeda54aacbaff54a8"
+        },
+        "metadata.json": {
+          "bytes": 2801,
+          "sha256": "e19019f1792833615ec15530a23ec302ef2e11a0040537af34bd57a20e44dedb"
+        },
+        "COMPLETE.json": {
+          "bytes": 183,
+          "sha256": "36ccb9e01e1d358b4ee7e7830a9ccf499937cab8f5da0b2de936fe5a9f9711b8"
+        }
+      }
+    }
+  ],
+  "resume_checkpoint_name": "inner-batch-epoch-3-step-29-7e97c59ccd00453d8caa1349c8f876a8",
+  "resume_checkpoint_sha256": "dda5c9134fa67cfd2ff87a4e4067d6bba909d92ae8560b8eeda54aacbaff54a8",
+  "control_reconstruction": {
+    "kind": "RECONSTRUCTED_FROM_PINNED_SOURCE_AND_CHECKPOINT",
+    "initial_backbone_missing": true,
+    "checkpoint_sha256": "2d2e454b9fa8a3170aee9550a18aa58d4c7d7693d35b944620507c18e2ef6b18",
+    "recovery_evidence_sha256": "e3265c63de0475546c367341838630792bde0ade925111ecd4d712da25652f62",
+    "stop_proof_sha256": "b5ab2cf0797f8a83728feacd28bf48c1b4053bf1a7b47b1ace3054a9d26228ff",
+    "historical_control_file_bytes_recovered": false
+  }
+}
