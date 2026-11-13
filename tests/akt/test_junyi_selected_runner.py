@@ -101,7 +101,7 @@ def harness(tmp_path, monkeypatch):
         def audit_context_boundary(self):
             return dict(condition_sha256=self.phase.condition.identity,
                 encoding_sha256=self.phase.condition.encoding.identity,phase_sha256=self.phase.view.identity,
-                graph_enabled=True,context_backend='compact-a1-v1' if self.phase.condition.variant=='A1' else 'reference',
+                graph_enabled=True,context_backend='compact-'+self.phase.condition.variant.lower()+'-v1',
                 graph_context_cache=None if self.context_cache is None else self.context_cache.identity)
 
         def collate_training(self,entries):

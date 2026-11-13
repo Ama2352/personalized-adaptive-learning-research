@@ -2,9 +2,9 @@
 
 ## 13/11 — Chuẩn bị A2/A3 và chuyển kiểm dữ liệu sang CPU
 
-A2 và A3 đã nối được độ tin cậy từng cạnh vào nhánh Junyi và dùng chung quy trình chọn checkpoint với A0/A1. Bộ hồi quy CPU đạt 299 ca, gồm kiểm A1 cũ, tắt đồ thị, confidence bằng 0, checkpoint và tiếp nối. Chưa có confidence fit trên Junyi thật hoặc training A2/A3.
+A2 và A3 đã nối được độ tin cậy từng cạnh, có đường tính message và gate theo batch trên nhánh Junyi. Bộ hồi quy CPU gộp đạt 339 ca, gồm kiểm A1 cũ, tắt đồ thị, confidence bằng 0, đối chiếu dự đoán/gradient/Adam với đường tham chiếu và checkpoint/resume. Chưa có confidence fit trên Junyi thật hoặc training A2/A3.
 
-Toàn bộ cache train gồm 13.347.331 lượt trả lời đã được kiểm trên CPU trước phiên GPU, mất khoảng 348 giây. Nhận lại cache bằng hồ sơ đã ghim và kiểm toàn SHA các shard mất 3,82 giây trên Windows. Phép đo này xác nhận cơ chế chuyển phần kiểm nặng ra trước training; thời gian trên GPU/Linux còn chờ kiểm. Đóng gói sau GPU và đường tính weighted graph/gate hiệu quả tiếp tục được hoàn thiện. Đợt chuẩn bị này dùng 0 USD Modal.
+Toàn bộ cache train gồm 13.347.331 lượt trả lời đã được kiểm trên CPU trước phiên GPU, lượt cuối mất khoảng 285 giây. Nhận lại cache bằng hồ sơ đã ghim và kiểm toàn SHA các shard mất 3,13 giây trên Windows. Các kiểm bổ sung phát hiện nguồn validator thay đổi trong hoặc sau bước chuẩn bị đều đạt. Thời gian và tính tương đương trên GPU/Linux còn chờ kiểm. Quy trình Modal tách CPU chuẩn bị, GPU tính toán, CPU đóng gói đang ở bước tích hợp tiếp theo. Đợt chuẩn bị này dùng 0 USD Modal.
 
 ## 13/11 — A1 hoàn tất chọn checkpoint Junyi với dữ liệu so sánh đã kiểm
 

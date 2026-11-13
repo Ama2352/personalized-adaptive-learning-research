@@ -2,7 +2,7 @@
 
 ## 13/11 — Chuẩn bị A2/A3 và chuyển kiểm dữ liệu sang CPU
 
-[Hồ sơ](../research_tracking/runs/junyi-a2-a3-preparation-20261113-01/README.md) giữ299ca CPU, A2/A3 reference có confidence/gate, handoff toàn TRAIN80 kiểm347,65giây CPU/nhận3,82giây. Chưa training A2/A3,0USD Modal. Compact và orchestration staged còn tiếp tục.
+[Hồ sơ](../research_tracking/runs/junyi-a2-a3-preparation-20261113-01/README.md) giữ339ca CPU, A2/A3 compact có confidence/gate, handoff toàn TRAIN80 lượt cuối kiểm285,31giây CPU/nhận3,13giây. Chưa training A2/A3,0USD Modal. Orchestration staged, confidence thật và CUDA còn chờ.
 
 
 ## 13/11 — Xuất gọn A1 Junyi và giới hạn so sánh A0

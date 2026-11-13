@@ -344,10 +344,12 @@ Hot iterator giữ nguyên record, kiểm key/encoding và SHA/bytes từng shar
     _shards: tuple = field(init=False, repr=False)
     _limits: tuple = field(init=False, repr=False)
     _summary: tuple = field(init=False, repr=False)
+    _validator_sources: tuple = field(init=False, repr=False)
 
     def __post_init__(self):
         _need(type(self.prefetch) is bool, 'Boolean shard prefetch control required')
         started = time.monotonic()
+        validator_sources=tuple(sorted(_admission_sources().items()))
         root = _owned_root(self.cache_root)
         self._check_control_files(root)
         key = window_cache_key(self.view, self.encoding, self.source_data_sha256,
@@ -364,6 +366,8 @@ Hot iterator giữ nguyên record, kiểm key/encoding và SHA/bytes từng shar
             verified = _verify_cpu_admission(self, root, key)
         self._check_control_files(root)
         manifest = json.loads((root/'manifest.json').read_text())
+        _need(tuple(sorted(_admission_sources().items()))==validator_sources,
+              'Validator source changed during CPU admission')
         _need(manifest['summary']['records'] == verified and manifest['key'] == key,
               'Window-cache admission population/key changed')
         roots = [self.view, self.encoding, self.encoding.native, self.encoding.native.vocabulary,
@@ -380,6 +384,7 @@ Hot iterator giữ nguyên record, kiểm key/encoding và SHA/bytes từng shar
             ('name', 'sha256', 'bytes', 'records', 'tokens')) for entry in manifest['shards']))
         object.__setattr__(self, '_limits', (manifest['shard_records'], manifest['max_shard_tokens']))
         object.__setattr__(self, '_summary', tuple(sorted(manifest['summary'].items())))
+        object.__setattr__(self, '_validator_sources', validator_sources)
         object.__setattr__(self, 'strict_records_verified', verified)
         object.__setattr__(self, 'strict_seconds', time.monotonic()-started)
 
@@ -456,6 +461,8 @@ def write_cpu_admission(session, path):
     _need(type(session) is JunyiWindowCacheSession and session.admission_receipt is None,
           'Fresh full strict session required to produce CPU admission')
     session.assert_boundary()
+    _need(tuple(sorted(_admission_sources().items()))==session._validator_sources,
+          'Validator source changed after CPU admission')
     manifest=json.loads((session._root/'manifest.json').read_text())
     for pin in manifest['shards']:
         shard=session._root/pin['name']
@@ -463,7 +470,7 @@ def write_cpu_admission(session, path):
               'Shard changed after strict CPU admission')
     payload=dict(kind='JUNYI_CPU_WINDOW_ADMISSION_V1',key=json.loads(session._key_bytes),
         manifest_sha256=session.expected_manifest_sha256,summary=dict(session._summary),
-        shards=manifest['shards'],validator_sources=_admission_sources(),
+        shards=manifest['shards'],validator_sources=dict(session._validator_sources),
         strict_records_verified=session.strict_records_verified)
     with Path(path).open('x',encoding='utf-8') as stream:
         json.dump(payload,stream,sort_keys=True,indent=2)

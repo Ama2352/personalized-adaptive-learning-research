@@ -30,7 +30,7 @@ from . import research_simulator_data as data
 from .tensors import AKTBatch, collate_windows
 from .types import TrainingWindow, WindowInputs
 from .upstream import build_native
-from .research_junyi_compact import CompactA1Context
+from .research_junyi_compact import CompactA1Context, CompactConfidenceContext
 
 ROOT = Path(__file__).resolve().parents[3]
 RECIPE = conditions.RECIPE
@@ -129,7 +129,7 @@ def _cuda_execution_check(profile, *, synchronize=False):
 
 
 def _evidence_sha(evidence):
-    if type(evidence) is CompactA1Context:
+    if type(evidence) in (CompactA1Context,CompactConfidenceContext):
         return evidence.identity
     _need(type(evidence) is tuple and all(type(row) is tuple for row in evidence), 'immutable evidence rows required')
     _need(all(item is None or (is_dataclass(item) and not isinstance(item, type))
@@ -159,7 +159,7 @@ def _features(audit):
 class _Call:
     batch: AKTBatch
     payload_sha256: str
-    evidence: tuple | CompactA1Context
+    evidence: tuple | CompactA1Context | CompactConfidenceContext
     evidence_sha256: str
     enabled: bool
 
@@ -209,6 +209,9 @@ class ResearchGraphNative(nn.Module):
         if type(evidence) is CompactA1Context:
             _need(self.variant=='A1', 'compact context requires A1')
             evidence.assert_for(batch,self.condition_sha256)
+        elif type(evidence) is CompactConfidenceContext:
+            _need(self.variant==evidence.variant, 'Weighted compact variant mismatch')
+            evidence.assert_for(batch,self.condition_sha256)
         else:
             _need(len(evidence) == batch.q_data.shape[0], 'context/batch row mismatch')
             _need(all(len(row) <= batch.q_data.shape[1] for row in evidence), 'context/batch length mismatch')
@@ -251,11 +254,18 @@ class ResearchGraphNative(nn.Module):
               'FP32 parameters on the explicit execution device required')
         active = []
         compact_values = None
+        compact_features = None
         if call.enabled and type(call.evidence) is CompactA1Context:
             _need(self.variant=='A1', 'compact context requires A1')
             message,applied,_,_=call.evidence.arrays()
             rows,positions=np.nonzero(applied)
             compact_values=(rows,positions,message[applied])
+        elif call.enabled and type(call.evidence) is CompactConfidenceContext:
+            _need(self.variant==call.evidence.variant, 'Weighted compact variant mismatch')
+            message,applied,_,_,features=call.evidence.arrays()
+            rows,positions=np.nonzero(applied)
+            compact_values=(rows,positions,message[applied])
+            compact_features=features[applied]
         elif call.enabled and self.variant != 'A0':
             for row, items in enumerate(call.evidence):
                 for local, item in enumerate(items):
@@ -290,6 +300,14 @@ class ResearchGraphNative(nn.Module):
             # Một phép ghi giữ gradient alpha=0, tránh chuỗi scalar CopySlices.
             residual[rows, positions] = self.alpha * base_logits.new_ones(()) * messages
             applied[rows, positions] = True
+        elif compact_values is not None:
+            rows=torch.tensor(compact_values[0],dtype=torch.long,device=base_logits.device)
+            positions=torch.tensor(compact_values[1],dtype=torch.long,device=base_logits.device)
+            messages=base_logits.new_tensor(compact_values[2])
+            gates=(torch.sigmoid(self.gate(base_logits.new_tensor(compact_features))).reshape(-1)
+                   if self.gate is not None else torch.ones_like(messages))
+            residual[rows,positions]=self.alpha*gates*messages
+            applied[rows,positions]=True
         else:
             for row, local, message, features in active:
                 gate = (torch.sigmoid(self.gate(base_logits.new_tensor(features))).reshape(())

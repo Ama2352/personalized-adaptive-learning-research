@@ -180,6 +180,39 @@ def test_confidence_variants_zero_confidence_and_trainable_parameters(setup,vari
     if variant=='A3':assert adapter.native.gate.weight.grad.abs().sum()>0
 
 
+@pytest.mark.parametrize('variant',['A2','A3'])
+@pytest.mark.parametrize('alpha',[0.,.7])
+@pytest.mark.parametrize('confidence',[0.,.25])
+def test_compact_confidence_matches_reference_predictions_gradients_and_adam(setup,variant,alpha,confidence):
+    reference=setup['adapter'](variant=variant,confidence_value=confidence)
+    compact=setup['adapter'](variant=variant,confidence_value=confidence,compact=True)
+    for adapter in (reference,compact):
+        with torch.no_grad():
+            adapter.native.alpha.fill_(alpha)
+            if variant=='A3':
+                adapter.native.gate.weight.copy_(torch.tensor([[.2,-.3,.4,.1]]))
+                adapter.native.gate.bias.fill_(.15)
+    _assert_tree_equal(reference.native.state_dict(),compact.native.state_dict())
+    entries=windows(setup,setup['train'],training=True,items=('A','B','C')*5,labels=(1,0,1)*5)
+    prediction_windows=tuple(entry.window for entry in entries)
+    for left,right in zip(reference.predict_windows(prediction_windows),compact.predict_windows(prediction_windows)):
+        np.testing.assert_allclose(left,right,rtol=1e-6,atol=1e-7)
+    optimizers=[adam(reference),adam(compact)]
+    for adapter,optimizer in zip((reference,compact),optimizers):
+        torch.manual_seed(177)
+        adapter.step(adapter.collate_training(entries),optimizer)
+    for name,left in reference.native.state_dict().items():
+        torch.testing.assert_close(left,compact.native.state_dict()[name],rtol=1e-5,atol=1e-6)
+    for left,right in zip(reference.native.parameters(),compact.native.parameters()):
+        if left.grad is None:
+            assert right.grad is None
+        else:
+            torch.testing.assert_close(left.grad,right.grad,rtol=1e-5,atol=1e-6)
+    for left,right in zip(optimizers[0].state.values(),optimizers[1].state.values()):
+        for key in left:
+            torch.testing.assert_close(left[key],right[key],rtol=1e-5,atol=1e-6)
+
+
 def windows(setup,view,*,training=False,**kwargs):
     learner = setup['student'](view.users[0],**kwargs)
     return tuple(iter_windows(learner,setup['encoding'].native,training=training))

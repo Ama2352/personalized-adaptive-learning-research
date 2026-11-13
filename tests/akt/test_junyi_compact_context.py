@@ -12,6 +12,37 @@ from knowledge_tracing.akt.research_junyi_graph import JunyiGraphPhaseSession
 from knowledge_tracing.akt.windows import iter_windows
 
 
+@pytest.mark.parametrize('variant',['A2','A3'])
+def test_weighted_compact_messages_and_gate_features_use_only_native_prefix(setup,variant):
+    from knowledge_tracing.akt.research_junyi_confidence_binding import JunyiConfidenceBinding
+    from knowledge_tracing.akt.research_graph_condition import OperationalEdgeWeight
+    from knowledge_tracing.akt.research_junyi_compact import build_compact_confidence_context
+    original=setup['condition']((('A','C'),('B','C')))
+    binding=JunyiConfidenceBinding(setup['train'].identity,setup['encoding'].identity,'a'*64,'b'*64,'c'*64,
+        (OperationalEdgeWeight('A','C',True,.25,None,.25),OperationalEdgeWeight('B','C',True,.75,None,.75)))
+    condition=replace(original,variant=variant,confidence=binding)
+    phase=JunyiGraphPhaseSession(condition,setup['train'])
+    entries=windows(setup,setup['train'],items=('A','B','C','A','C'),labels=(1,0,1,0,1),training=True)
+    context=build_compact_confidence_context(tuple(row.window for row in entries),phase)
+    message,active,_,_,features=context.arrays()
+    assert message[0,2]==-.25 and active[0,2]
+    np.testing.assert_array_equal(features[0,2],np.asarray((2/3,.5,.0625,1.),dtype=np.float32))
+    changed=windows(setup,setup['train'],items=('A','B','C','A','C'),labels=(1,0,1,1,0),training=True)
+    alternate=build_compact_confidence_context(tuple(row.window for row in changed),phase)
+    assert np.array_equal(message[:,:4],alternate.arrays()[0][:,:4])
+    assert np.array_equal(features[:,:4],alternate.arrays()[4][:,:4])
+    with pytest.raises(ValueError,match='geometry'):
+        replace(context,features=b'').arrays()
+
+
+@pytest.mark.parametrize('variant',['A2','A3'])
+@pytest.mark.parametrize('enabled',[True,False])
+def test_weighted_compact_checkpoint_resume_exact(setup,tmp_path,variant,enabled):
+    factory=setup['adapter']
+    patched=dict(setup,adapter=lambda **kwargs:factory(variant=variant,compact=True,**kwargs))
+    base_resume(patched,tmp_path,enabled)
+
+
 def case(setup,mode):
     edges=(('B','C'),) if mode=='unsupported' else (('A','C'),)
     old=setup['adapter'](edges=edges,enabled=mode!='off')

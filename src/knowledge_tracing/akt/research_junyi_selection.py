@@ -165,7 +165,7 @@ def _make_selected_adapter(config, profile, encoding, view, condition, *, contex
     from .research_junyi_graph import JunyiGraphPhaseSession
     from .research_junyi_graph_model import JunyiGraphAKTAdapter
     return JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=condition,
-        phase=JunyiGraphPhaseSession(condition,view),cuda_profile=profile,compact_context=condition.variant=='A1',
+        phase=JunyiGraphPhaseSession(condition,view),cuda_profile=profile,compact_context=True,
         context_cache=context_cache)
 
 
@@ -390,7 +390,7 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         identity.update(kind='junyi_'+graph_condition.variant.lower()+'_selected_v1',candidate_id=candidate_id,
             batch_factory=dict(condition_sha256=graph_condition.identity,encoding_sha256=encoding.identity,
                 phase_sha256=inputs.train.identity,graph_enabled=True,
-                context_backend='compact-a1-v1' if graph_condition.variant=='A1' else 'reference',
+                context_backend='compact-'+graph_condition.variant.lower()+'-v1',
                 graph_context_cache=None if graph_cache is None else graph_cache.identity))
     if train_cache_admission_receipt is not None:
         identity['train_cache_admission_sha256']=expected_train_cache_admission_sha256

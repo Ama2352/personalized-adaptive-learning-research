@@ -16,7 +16,8 @@ from .research_graph_model import (ResearchGraphNative, _batch_sha, _config_sha,
     _cuda_execution_check, _cuda_profile_sha, _evidence_sha, source_inventory)
 from .research_junyi_data import JunyiResearchEncoding
 from .research_junyi_graph import JunyiGraphCondition, JunyiGraphPhaseSession
-from .research_junyi_compact import CompactA1Context, build_compact_context
+from .research_junyi_compact import (CompactA1Context, CompactConfidenceContext,
+    build_compact_context, build_compact_confidence_context)
 from .research_junyi_graph_cache import GraphContextCache
 from .tensors import AKTBatch, collate_windows
 from .types import TrainingWindow, WindowInputs
@@ -40,7 +41,7 @@ def _source_inventory():
 class _TrainingTicket:
     batch: AKTBatch
     batch_sha256: str
-    evidence: tuple | CompactA1Context
+    evidence: tuple | CompactA1Context | CompactConfidenceContext
     evidence_sha256: str
     phase_identity: str
     graph_enabled: bool
@@ -62,7 +63,6 @@ class JunyiGraphAKTAdapter:
         _need(type(graph_enabled) is bool and condition.variant in ('A1','A2','A3'),
               'A1/A2/A3 condition and explicit Boolean graph control required')
         _need(type(compact_context) is bool, 'Boolean compact context control required')
-        _need(not compact_context or condition.variant=='A1', 'Compact A2/A3 context is pending')
         self._compact_context = compact_context
         self._context_backend = compact_context
         _need(config.source_root==PROJECT_ROOT/'artifacts/akt/dependencies/upstream'
@@ -115,6 +115,7 @@ class JunyiGraphAKTAdapter:
               'Phase/native vocabulary mismatch')
         _need(context_cache is None or (type(context_cache) is GraphContextCache and self._compact_context),
               'Typed graph cache requires compact context')
+        _need(context_cache is None or self.condition.variant=='A1', 'Disk graph cache currently requires A1')
         if context_cache is not None:
             context_cache.assert_for(phase)
         self._context_cache = context_cache
@@ -162,16 +163,20 @@ class JunyiGraphAKTAdapter:
         self._integrity()
         return dict(condition_sha256=self._condition_sha,encoding_sha256=self._encoding_sha,
                     phase_sha256=self._phase_identity,graph_enabled=self._graph_enabled,
-                    context_backend='compact-a1-v1' if self._compact_context else 'reference',
+                    context_backend='compact-'+self.condition.variant.lower()+'-v1' if self._compact_context else 'reference',
                     graph_context_cache=self._cache_identity)
 
     def _collate(self, windows, targets=None):
         _need(1<=len(windows)<=self.config.batch_size
               and all(type(window) is WindowInputs for window in windows), 'Bounded typed windows required')
         _need(len({window.window_id for window in windows})==len(windows), 'Duplicate native window IDs')
-        evidence = (self._context_cache.batch(tuple(windows),self.phase) if self._context_cache is not None
-                    else build_compact_context(tuple(windows),self.phase) if self._compact_context
-                    else tuple(self.phase.prefix_evidence(window) for window in windows))
+        if self._context_cache is not None:
+            evidence=self._context_cache.batch(tuple(windows),self.phase)
+        elif self._compact_context:
+            builder=build_compact_context if self.condition.variant=='A1' else build_compact_confidence_context
+            evidence=builder(tuple(windows),self.phase)
+        else:
+            evidence=tuple(self.phase.prefix_evidence(window) for window in windows)
         batch = collate_windows(windows,n_items=len(self.encoding.vocabulary.values),
                                 device=self._device,targets=targets)
         return batch,evidence

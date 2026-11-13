@@ -1,5 +1,5 @@
 {
-  "status": "CPU_REFERENCE_AND_HANDOFF_VERIFIED_COMPACT_AND_MODAL_STAGES_PENDING",
+  "status": "LOCAL_PREPARATION_VERIFIED_MODAL_NOT_READY",
   "tests06_passed": 299,
   "cpu_strict_targets": 13347331,
   "cpu_strict_records": 232662,
@@ -8,9 +8,57 @@
   "modal_spent_usd": 0,
   "gpu_started": false,
   "next": [
-    "vectorize_compact_weighted_context_and_gate",
-    "fit_real_train80_confidence_cpu",
+    "fit_real_train80_confidence_cpu_with_spool_and_resume",
     "stage_modal_cpu_prepare_gpu_compute_cpu_finalize",
-    "linux_cuda_parity_and_resume_before_training"
+    "linux_cuda_parity_and_resume",
+    "measure_remaining_fit_refit_matrix_cost_before_GPU_training"
+  ],
+  "tests08_passed": 339,
+  "compact_confidence_cpu_parity": "PASS_probabilities_atol1e-7_gradients_and_Adam_atol1e-6",
+  "compact_checkpoint_resume": "PASS_EXACT_CPU_A2_A3_GRAPH_ON_OFF",
+  "cpu_strict_seconds_latest": 285.3071655,
+  "handoff_cpu_seconds_latest": 3.1258199000003515,
+  "cpu_admission_current": "artifacts/akt/window-cache/full-train80-cpu-admission-20261113-02.json",
+  "source_guard_tests09_passed": 41,
+  "learned_topology_conditions_pending": true,
+  "tasks": [
+    {
+      "id": "A23",
+      "objective": "Spool và fit confidence TRAIN80 thật, checkpoint theo child để resume",
+      "dependencies": [
+        "native_window_recipe",
+        "frozen_roles_encoding_topology"
+      ],
+      "acceptance": "Đủ cạnh có score hoặc unsupported/reason; OOF learner-disjoint, provenance và nguồn pinned; không dùng selection để fit",
+      "status": "PENDING"
+    },
+    {
+      "id": "A24",
+      "objective": "Nối CPU prepare, GPU compute và CPU finalize vào Modal",
+      "dependencies": [
+        "A23"
+      ],
+      "acceptance": "GPU chỉ khởi động sau CPU receipt; xác nhận GPU App dừng trước đóng zip; lỗi mỗi stage giữ artifact và không chạy lại epoch đã đóng",
+      "status": "PENDING"
+    },
+    {
+      "id": "A25",
+      "objective": "Gate Linux và bounded CUDA parity/resume cho compact A2/A3",
+      "dependencies": [
+        "A24"
+      ],
+      "acceptance": "Cùng seed/tensor/targets/profile; xác minh logits/loss/gradient/Adam/RNG và resume trên CUDA; có telemetry/cost",
+      "status": "PENDING"
+    },
+    {
+      "id": "A26",
+      "objective": "Dự toán toàn fit/refit/evaluation rồi phân bổ lượt train A2/A3",
+      "dependencies": [
+        "A23",
+        "A25"
+      ],
+      "acceptance": "Không vượt tổng30USD và giữ dự phòng, chọn GPU theo chi phí mỗi target đo thật; mỗi lượt có caps và checkpoint",
+      "status": "PENDING"
+    }
   ]
 }

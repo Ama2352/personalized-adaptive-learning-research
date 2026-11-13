@@ -115,3 +115,83 @@ def build_compact_context(windows,phase):
     return CompactA1Context(shape,tuple(window.window_id for window in windows),
         phase._condition_identity,phase._encoding_identity,phase.view.identity,
         messages.tobytes(),applied.tobytes(),target.tobytes(),valid.tobytes(),sources.tobytes())
+
+
+@dataclass(frozen=True)
+class CompactConfidenceContext:
+    """Weighted message và bốn gate features đã dựng CPU, giữ A1 riêng."""
+    base: CompactA1Context
+    variant: str
+    features: bytes
+
+    @property
+    def identity(self):
+        _need(type(self.base) is CompactA1Context and self.variant in ('A2','A3') and type(self.features) is bytes,
+              'Typed weighted compact context required')
+        return hashlib.sha256((self.base.identity+self.variant).encode()+self.features).hexdigest()
+
+    def arrays(self):
+        _need(type(self.base) is CompactA1Context, 'Typed compact base required')
+        message,active,target,valid=self.base.arrays()
+        _need(self.variant in ('A2','A3') and type(self.features) is bytes
+              and len(self.features)==int(np.prod(self.base.shape))*16,
+              'Weighted compact feature geometry mismatch')
+        features=np.frombuffer(self.features,dtype='<f4').reshape((*self.base.shape,4))
+        _need(np.isfinite(features).all() and ((features>=0)&(features<=1)).all()
+              and np.all(features[~active]==0), 'Invalid compact gate features')
+        return message,active,target,valid,features
+
+    def assert_for(self,batch,condition_sha256):
+        self.base.assert_for(batch,condition_sha256)
+        message,active,_,_,features=self.arrays()
+        return message,active,features
+
+
+def build_compact_confidence_context(windows,phase):
+    _need(type(phase) is JunyiGraphPhaseSession and type(windows) is tuple and windows
+          and phase.condition.variant in ('A2','A3'), 'Weighted Junyi phase and windows required')
+    phase._light_check()
+    vocabulary=phase.condition.encoding.native.vocabulary.values
+    indices={name:index for index,name in enumerate(vocabulary)}
+    parents=tuple(tuple((indices.get(parent),phase._weights_by_edge[(parent,child)])
+                        for parent in phase._parents_by_child.get(child,())) for child in vocabulary)
+    for window in windows:
+        _validate_window(window,phase)
+    shape=(len(windows),max(len(window.inputs.item_ids) for window in windows))
+    messages=np.zeros(shape,dtype='<f4')
+    active=np.zeros(shape,dtype=np.bool_)
+    target=np.zeros(shape,dtype=np.bool_)
+    valid=np.zeros(shape,dtype=np.bool_)
+    sources=np.full(shape,-1,dtype='<i8')
+    features=np.zeros((*shape,4),dtype='<f4')
+    for row,window in enumerate(windows):
+        counts,successes={},{}
+        ids=window.inputs.item_ids
+        for local,item_id in enumerate(ids):
+            if local:
+                previous=int(ids[local-1])
+                counts[previous]=counts.get(previous,0)+1
+                successes[previous]=successes.get(previous,0)+int(window.inputs.prior_responses[local])
+            if not window.target_mask[local]:
+                continue
+            declared=parents[int(item_id)]
+            observed=tuple((parent,weight) for parent,weight in declared if counts.get(parent,0)>0)
+            mass=sum(weight for _,weight in observed)
+            if mass<=0:
+                continue
+            messages[row,local]=sum(weight*(successes[parent]/counts[parent]-.5)
+                                    for parent,weight in observed)/max(1.,mass)
+            support=sum(counts[parent] for parent,_ in observed)
+            mean=sum(weight for _,weight in declared)/len(declared)
+            variance=sum((weight-mean)**2 for _,weight in declared)/len(declared)
+            features[row,local]=(support/(1.+support),mean,variance,len(observed)/len(declared))
+            active[row,local]=True
+        size=len(ids)
+        target[row,:size]=window.target_mask
+        valid[row,:size]=True
+        sources[row,:size]=window.inputs.source_rows
+    phase._light_check()
+    base=CompactA1Context(shape,tuple(window.window_id for window in windows),phase._condition_identity,
+        phase._encoding_identity,phase.view.identity,messages.tobytes(),active.tobytes(),target.tobytes(),
+        valid.tobytes(),sources.tobytes())
+    return CompactConfidenceContext(base,phase.condition.variant,features.tobytes())

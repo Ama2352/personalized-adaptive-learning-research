@@ -296,6 +296,28 @@ def test_cpu_admission_handoff_reuses_strict_pass_with_byte_verification(case,tm
         cache.write_cpu_admission(handed,tmp_path/'recursive.json')
 
 
+@pytest.mark.parametrize('when',['during','after'])
+def test_cpu_admission_rejects_validator_source_change(case,tmp_path,monkeypatch,when):
+    _,train,_,encoding=case
+    receipt=build(case,train,records(train,encoding,['A'],[1]))
+    original=cache._admission_sources
+    old=original()
+    changed=dict(old,**{'windows.py':'f'*64})
+    if when=='during':
+        calls=[]
+        def changing():
+            calls.append(1)
+            return old if len(calls)==1 else changed
+        monkeypatch.setattr(cache,'_admission_sources',changing)
+        with pytest.raises(ValueError,match='during CPU admission'):
+            session(case,train,receipt)
+    else:
+        admitted=session(case,train,receipt)
+        monkeypatch.setattr(cache,'_admission_sources',lambda:changed)
+        with pytest.raises(ValueError,match='after CPU admission'):
+            cache.write_cpu_admission(admitted,tmp_path/'invalid.json')
+
+
 @pytest.mark.parametrize('mutation',['shard','validator','count','key','pin'])
 def test_cpu_admission_handoff_rejects_changed_inputs(case,tmp_path,mutation):
     root,train,_,encoding=case

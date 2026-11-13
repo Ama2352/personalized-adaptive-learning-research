@@ -1,12 +1,12 @@
 {
-  "status": "PREPARATION_ONLY_CONFIDENCE_AND_GPU_PIPELINE_PENDING",
+  "status": "CPU_IMPLEMENTATION_VERIFIED_CLOUD_STAGES_PENDING",
   "candidate_id": "A2_EXPERT",
   "training_config": {
     "project_root": "/opt/kltn",
-    "output_dir": "/opt/kltn/experiments/akt/results/modal-junyi-a1-b128-h100-20261113-07",
+    "output_dir": "/opt/kltn/experiments/akt/results/junyi-a2-expert-selected-20261113-planned",
     "phase": "junyi-research",
-    "run_id": "modal-junyi-a1-b128-h100-20261113-07",
-    "execution_enabled": true,
+    "run_id": "junyi-a2-expert-selected-20261113-planned",
+    "execution_enabled": false,
     "partition": "development",
     "graph": false,
     "source_commit": "01b7e8d7d7c862cabc9467108e3e7f2555653a88",
@@ -119,8 +119,14 @@
   "gpu_dispatch_enabled": false,
   "blockers": [
     "real_train80_confidence_missing",
-    "compact_weighted_context_and_gate_not_optimized",
     "staged_modal_orchestration_and_resume_not_verified",
-    "new_linux_gate_and_cuda_checks_pending"
-  ]
+    "new_linux_gate_and_cuda_checks_pending",
+    "complete_fit_refit_matrix_cost_not_yet_measured"
+  ],
+  "context_backend": "compact-a2-v1",
+  "graph_augmentation_enabled": true,
+  "train_cpu_admission": {
+    "path": "artifacts/akt/window-cache/full-train80-cpu-admission-20261113-02.json",
+    "sha256": "1cf4c2b1b5b77383ab8a12cf73dfd16c2f03d7b563bc960d67a95fccabe56560"
+  }
 }
