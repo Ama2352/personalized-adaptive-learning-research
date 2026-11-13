@@ -1,0 +1,456 @@
+{
+  "status": "PASS_ACTUAL_TRAIN80_SHARD_CPU_PROFILE",
+  "scope": "CPU_GRAPH_CONTEXT_SINGLE_SHARD_DIAGNOSTIC",
+  "requested_windows": 128,
+  "seed": 43,
+  "max_rss_bytes": 2147483648,
+  "max_wall_seconds": 120,
+  "max_cpu_seconds": 120,
+  "gpu_used": false,
+  "model_constructed": false,
+  "model_trained": false,
+  "full_cache_verified": false,
+  "source_run": "modal-junyi-a1-b128-h100-20261113-05",
+  "peak_rss_bytes": 233873408,
+  "resource_failure": null,
+  "input_pins": {
+    "artifacts/akt/junyi-roles/outer4-research-v1-20261112-01/roles.json": "b0ca8f6949edd226e48d1cdb24e34ea34a042a385467e1650755994e96567ba3",
+    "artifacts/akt/window-cache/full-train80-20261112-02.encoding.json": "4d5d7330d17f48b3b7d759bc331a99523093cfd249a0f9d7fd455480789c209f",
+    "artifacts/akt/window-cache/full-train80-20261112-02.encoding.receipt.json": "9d05015ef08e0b45bfc8e0a27d0ae0b459fcc0b79f1c4d75bfb6c362cba32845",
+    "research_tracking/runs/cpu-junyi-graph-reconstruction-20261107-01/graph.json": "df7595b1437c46421cd7fea8cc2f3234ff9a69207961c4c34df4a78cae7f80b1",
+    "artifacts/akt/window-cache/full-train80-20261112-02/manifest.json": "43f48045370b6811e537d7936ed307291e1dee88be313c111e4879198556a839",
+    "src/knowledge_tracing/akt/research_graph_model.py": "3a3a45634ba7ea84520472f57c1828b28a705b9d2a8a10f8476510cf682507e5",
+    "src/knowledge_tracing/akt/research_junyi_graph.py": "82397157252650c12a5e51fa22000afb767ae823b4bb57645440139b19c66571",
+    "src/knowledge_tracing/akt/research_junyi_data.py": "81bfb2a0be967e60c46fe72a4cfcd0395f39c6a0c53fca5b885269c5aaba70dd",
+    "src/knowledge_tracing/akt/research_junyi_window_cache.py": "4b637976a05f972b8e114b1abfe7ddd040560dd14fa4bbc9aa1e4591a5da3152",
+    "src/knowledge_tracing/akt/research_junyi_roles.py": "4a267a649871b919707a0dd3a8b6248d4844d0f5121480504e175fedd4c41126",
+    "artifacts/akt/window-cache/full-train80-20261112-02/shard-000000.npz": "72ae5f113e2e2aea950fc032881f266bc2825b54cf59941bd4c7771475b787e9"
+  },
+  "encoding_identity": "0555833f58150121f1149ac7d3c4d0f0cad057b2dc530331e5ffbe83fc040ba1",
+  "condition_identity": "849023ee3224dbfbddeaf3bc5ed2e98fd342a7daaa8b40a747de6a84a9933ef8",
+  "role_identity": "7c9a8102e399bdbc6569fc5a929faae525480c86fe0c60d2d805244a80b8e45a",
+  "phase_identity": "d0131b7f05170cc447ba19c2b3deb6f0129107507b0cd47d90caa8988704b809",
+  "graph_edges": 976,
+  "vocabulary": 717,
+  "shard": "shard-000000.npz",
+  "shard_records": 256,
+  "selected_windows": 128,
+  "targets": 5527,
+  "window_tokens": 9327,
+  "unique_learners": 102,
+  "setup_seconds": 2.7068116999980703,
+  "unprofiled": {
+    "prefix_seconds": 0.1346254999989469,
+    "four_hashes_seconds": 0.18809429999964777,
+    "combined_seconds": 0.3227197999985947,
+    "evidence_sha256": "72319e33d222b7d6a1a221d43b69185dfd800b432dc13876522acf532090f2da"
+  },
+  "evidence_statistics": {
+    "queries": 5527,
+    "parent_records": 7019,
+    "active_queries": 2246,
+    "observed_rows_sum": 32681,
+    "observed_rows_max": 81,
+    "observed_rows_median": 0
+  },
+  "profiled": {
+    "prefix_seconds": 0.1529627999989316,
+    "four_hashes_seconds": 0.530848700000206,
+    "combined_seconds": 0.6838114999991376,
+    "evidence_sha256": "72319e33d222b7d6a1a221d43b69185dfd800b432dc13876522acf532090f2da"
+  },
+  "top_cumulative": [
+    {
+      "file": "profile_actual_graph_cpu.py",
+      "line": 122,
+      "function": "operation",
+      "primitive_calls": 1,
+      "calls": 2,
+      "self_seconds": 7.960000000000001e-05,
+      "cumulative_seconds": 0.5842167
+    },
+    {
+      "file": "research_graph_model.py",
+      "line": 131,
+      "function": "<genexpr>",
+      "primitive_calls": 516,
+      "calls": 516,
+      "self_seconds": 0.0049734,
+      "cumulative_seconds": 0.4459038
+    },
+    {
+      "file": "dataclasses.py",
+      "line": 1338,
+      "function": "asdict",
+      "primitive_calls": 22108,
+      "calls": 22108,
+      "self_seconds": 0.0086133,
+      "cumulative_seconds": 0.4343579
+    },
+    {
+      "file": "dataclasses.py",
+      "line": 1362,
+      "function": "_asdict_inner",
+      "primitive_calls": 22108,
+      "calls": 558508,
+      "self_seconds": 0.2418922,
+      "cumulative_seconds": 0.4185416
+    },
+    {
+      "file": "research_graph_model.py",
+      "line": 129,
+      "function": "_evidence_sha",
+      "primitive_calls": 4,
+      "calls": 4,
+      "self_seconds": 0.0028618000000000003,
+      "cumulative_seconds": 0.3999688
+    },
+    {
+      "file": "profile_actual_graph_cpu.py",
+      "line": 124,
+      "function": "<genexpr>",
+      "primitive_calls": 129,
+      "calls": 129,
+      "self_seconds": 8.05e-05,
+      "cumulative_seconds": 0.1529249
+    },
+    {
+      "file": "research_junyi_graph.py",
+      "line": 190,
+      "function": "prefix_evidence",
+      "primitive_calls": 128,
+      "calls": 128,
+      "self_seconds": 0.0009223,
+      "cumulative_seconds": 0.15178080000000002
+    },
+    {
+      "file": "threading.py",
+      "line": 641,
+      "function": "wait",
+      "primitive_calls": 5,
+      "calls": 5,
+      "self_seconds": 6.8e-05,
+      "cumulative_seconds": 0.14941790000000002
+    },
+    {
+      "file": "dataclasses.py",
+      "line": 1308,
+      "function": "fields",
+      "primitive_calls": 72292,
+      "calls": 72292,
+      "self_seconds": 0.0895335,
+      "cumulative_seconds": 0.13723760000000002
+    },
+    {
+      "file": "__init__.py",
+      "line": 183,
+      "function": "dumps",
+      "primitive_calls": 260,
+      "calls": 260,
+      "self_seconds": 0.0004962,
+      "cumulative_seconds": 0.097503
+    },
+    {
+      "file": "encoder.py",
+      "line": 183,
+      "function": "encode",
+      "primitive_calls": 260,
+      "calls": 260,
+      "self_seconds": 0.00041840000000000003,
+      "cumulative_seconds": 0.0969059
+    },
+    {
+      "file": "encoder.py",
+      "line": 205,
+      "function": "iterencode",
+      "primitive_calls": 260,
+      "calls": 260,
+      "self_seconds": 0.0963141,
+      "cumulative_seconds": 0.0963141
+    },
+    {
+      "file": "research_junyi_graph.py",
+      "line": 235,
+      "function": "_prefix_evidence",
+      "primitive_calls": 128,
+      "calls": 128,
+      "self_seconds": 0.0336947,
+      "cumulative_seconds": 0.07984780000000001
+    },
+    {
+      "file": "simulator_bridge.py",
+      "line": 16,
+      "function": "identity_hash",
+      "primitive_calls": 4,
+      "calls": 4,
+      "self_seconds": 0.0007698000000000001,
+      "cumulative_seconds": 0.0631858
+    },
+    {
+      "file": "research_junyi_graph.py",
+      "line": 180,
+      "function": "_light_check",
+      "primitive_calls": 256,
+      "calls": 256,
+      "self_seconds": 0.0006168,
+      "cumulative_seconds": 0.0528502
+    },
+    {
+      "file": "research_junyi_graph.py",
+      "line": 27,
+      "function": "_identity",
+      "primitive_calls": 256,
+      "calls": 256,
+      "self_seconds": 0.0005366,
+      "cumulative_seconds": 0.049202100000000006
+    },
+    {
+      "file": "threading.py",
+      "line": 327,
+      "function": "wait",
+      "primitive_calls": 5,
+      "calls": 5,
+      "self_seconds": 0.0001375,
+      "cumulative_seconds": 0.0372061
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.getattr>",
+      "primitive_calls": 452068,
+      "calls": 452068,
+      "self_seconds": 0.0355742,
+      "cumulative_seconds": 0.0355742
+    },
+    {
+      "file": "dataclasses.py",
+      "line": 1323,
+      "function": "<genexpr>",
+      "primitive_calls": 449892,
+      "calls": 449892,
+      "self_seconds": 0.0340958,
+      "cumulative_seconds": 0.0340958
+    },
+    {
+      "file": "research_junyi_graph.py",
+      "line": 200,
+      "function": "_validate_window",
+      "primitive_calls": 128,
+      "calls": 128,
+      "self_seconds": 0.0047564,
+      "cumulative_seconds": 0.019125800000000002
+    },
+    {
+      "file": "research_junyi_graph.py",
+      "line": 255,
+      "function": "<genexpr>",
+      "primitive_calls": 38208,
+      "calls": 38208,
+      "self_seconds": 0.0062732000000000005,
+      "cumulative_seconds": 0.0189975
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'acquire' of '_thread.lock' objects>",
+      "primitive_calls": 23,
+      "calls": 23,
+      "self_seconds": 0.018672400000000002,
+      "cumulative_seconds": 0.0186755
+    },
+    {
+      "file": "heapq.py",
+      "line": 316,
+      "function": "merge",
+      "primitive_calls": 38208,
+      "calls": 38208,
+      "self_seconds": 0.010751700000000001,
+      "cumulative_seconds": 0.012724300000000001
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.hasattr>",
+      "primitive_calls": 138616,
+      "calls": 138616,
+      "self_seconds": 0.0114885,
+      "cumulative_seconds": 0.0114885
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method _hashlib.openssl_sha256>",
+      "primitive_calls": 260,
+      "calls": 260,
+      "self_seconds": 0.010652,
+      "cumulative_seconds": 0.010652
+    },
+    {
+      "file": "research_junyi_graph.py",
+      "line": 252,
+      "function": "<genexpr>",
+      "primitive_calls": 12546,
+      "calls": 12546,
+      "self_seconds": 0.0051948,
+      "cumulative_seconds": 0.0102279
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'values' of 'dict' objects>",
+      "primitive_calls": 72292,
+      "calls": 72292,
+      "self_seconds": 0.0078094,
+      "cumulative_seconds": 0.0078094
+    },
+    {
+      "file": "dataclasses.py",
+      "line": 1326,
+      "function": "_is_dataclass_instance",
+      "primitive_calls": 22108,
+      "calls": 22108,
+      "self_seconds": 0.0052874,
+      "cumulative_seconds": 0.0070879
+    },
+    {
+      "file": "_arraysetops_impl.py",
+      "line": 958,
+      "function": "isin",
+      "primitive_calls": 128,
+      "calls": 128,
+      "self_seconds": 0.00021920000000000002,
+      "cumulative_seconds": 0.0043807
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'get' of 'dict' objects>",
+      "primitive_calls": 39455,
+      "calls": 39455,
+      "self_seconds": 0.0042202,
+      "cumulative_seconds": 0.0042202
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.all>",
+      "primitive_calls": 388,
+      "calls": 388,
+      "self_seconds": 0.0011622000000000002,
+      "cumulative_seconds": 0.0041694
+    },
+    {
+      "file": "_arraysetops_impl.py",
+      "line": 806,
+      "function": "_isin",
+      "primitive_calls": 128,
+      "calls": 128,
+      "self_seconds": 0.0022132000000000002,
+      "cumulative_seconds": 0.0040528000000000005
+    },
+    {
+      "file": "<string>",
+      "line": 2,
+      "function": "__init__",
+      "primitive_calls": 7019,
+      "calls": 7019,
+      "self_seconds": 0.0036383,
+      "cumulative_seconds": 0.0036383
+    },
+    {
+      "file": "research_junyi_graph.py",
+      "line": 167,
+      "function": "_current_headers",
+      "primitive_calls": 256,
+      "calls": 256,
+      "self_seconds": 0.00036920000000000003,
+      "cumulative_seconds": 0.0028482000000000004
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'encode' of 'str' objects>",
+      "primitive_calls": 260,
+      "calls": 260,
+      "self_seconds": 0.0026566000000000003,
+      "cumulative_seconds": 0.0026566000000000003
+    }
+  ],
+  "hot_functions": [
+    {
+      "file": "__init__.py",
+      "line": 183,
+      "function": "dumps",
+      "primitive_calls": 260,
+      "calls": 260,
+      "self_seconds": 0.0004962,
+      "cumulative_seconds": 0.097503
+    },
+    {
+      "file": "dataclasses.py",
+      "line": 1362,
+      "function": "_asdict_inner",
+      "primitive_calls": 22108,
+      "calls": 558508,
+      "self_seconds": 0.2418922,
+      "cumulative_seconds": 0.4185416
+    },
+    {
+      "file": "research_junyi_graph.py",
+      "line": 200,
+      "function": "_validate_window",
+      "primitive_calls": 128,
+      "calls": 128,
+      "self_seconds": 0.0047564,
+      "cumulative_seconds": 0.019125800000000002
+    },
+    {
+      "file": "dataclasses.py",
+      "line": 1338,
+      "function": "asdict",
+      "primitive_calls": 22108,
+      "calls": 22108,
+      "self_seconds": 0.0086133,
+      "cumulative_seconds": 0.4343579
+    },
+    {
+      "file": "research_junyi_graph.py",
+      "line": 180,
+      "function": "_light_check",
+      "primitive_calls": 256,
+      "calls": 256,
+      "self_seconds": 0.0006168,
+      "cumulative_seconds": 0.0528502
+    },
+    {
+      "file": "research_junyi_graph.py",
+      "line": 190,
+      "function": "prefix_evidence",
+      "primitive_calls": 128,
+      "calls": 128,
+      "self_seconds": 0.0009223,
+      "cumulative_seconds": 0.15178080000000002
+    },
+    {
+      "file": "research_junyi_graph.py",
+      "line": 235,
+      "function": "_prefix_evidence",
+      "primitive_calls": 128,
+      "calls": 128,
+      "self_seconds": 0.0336947,
+      "cumulative_seconds": 0.07984780000000001
+    },
+    {
+      "file": "research_graph_model.py",
+      "line": 129,
+      "function": "_evidence_sha",
+      "primitive_calls": 4,
+      "calls": 4,
+      "self_seconds": 0.0028618000000000003,
+      "cumulative_seconds": 0.3999688
+    }
+  ],
+  "wall_seconds": 3.8799296999968647,
+  "process_cpu_seconds": 3.28125,
+  "limits_vi": "128 cửa sổ lấy mẫu seed43 trong shard đầu tiên, không là thứ tự shuffle toàn epoch. Chỉ kiểm pin manifest, shard đã đọc và geometry mẫu, chưa kiểm toàn cache/whole-dataset reproducibility. Không model, tensor CUDA, forward/backward hoặc optimizer. Profile chỉ CPU prefix/evidence/hash, không gồm GPU transfers, batch hashes, checkpoint hoặc các integrity checks của adapter ngoài phạm vi. cProfile có overhead, đối chiếu thêm số đo unprofiled. Metadata roles được đọc để dựng đúng TRAIN80, không đọc events calibration/Holdout."
+}

@@ -1177,3 +1177,8 @@ Sau metadata vàadmission16shards0,389s, Rootreviewvàchạy fullTRAIN80label-fr
 ### Execution03 verified, sửa lỗi nối04 trước GPU
 
 03đãhoàntấtvalidatedepoch3LL0,355650902, train1753,718s/val266,045s; partialepoch4step15016/3.431.632targets. Archive2.129.675.285byteverified vàAppstopack. Lần04đầulocalfaildosaireviewflag, chưabilling/App/GPU. Đãgiữfailedlog/request/state, sửa đúngdrivercontractvàkiểmASTcùng3dryplans. 04-reviewedthựcthiđãcócheckpointmới4/16000. Bộnốisau04chỉ05/06preallocated1,70USD, nguồn/configkhôngđổi. Reportpair/bảngtrainingcậpnhật3epoch.
+
+
+## 13/11/2026 — A1 epoch1 và kiểm sử dụng H100
+
+A0 checkpoint9 full selection validation batch128 giữ Log Loss0,3535801768. A1 source2 đã train đủ13.347.331target/1818step, checkpoint trước validation và archive đủ3checkpoint đã tải D/kiểm SHA. GPU sample training trung bình4,98%, CPU gần1core, user yêu cầu ít nhất50%. Đã dừng H100,0container. CPUprofile thực định vị context/hash/dataclass, cache chưa triển khai. Root chọn restartsource2 từseed42 sau sourcecũpartial, giữ riêng1000step cũ. Tiếp tục cần tối ưu CPU/cached graph, kiểm tương đương và resume-validation; chưa hoàn tất selected fit hoặc có kết luận A1 tốt hơnA0. Nguồn research_tracking/runs/junyi-a1-selected-20261113-01/.

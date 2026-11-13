@@ -1,0 +1,58 @@
+{"run_id": "modal-junyi-a1-b128-h100-20261113-05", "gpu": "H100", "status": "USER_APPROVED", "execution_requested": true}
+✓ Initialized. View run at 
+https://modal.com/apps/honguyenminhsang2005/main/ap-qFawMRQPjMlc4xvoRbtie0
+✓ Created objects.
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\gpu_contro
+│   ller.py
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\artifacts\akt\modal\junyi-throughput-20261112-01\full-selected-
+│   data.zip
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\experiments\akt\results\modal-junyi-a1-selected-cpu-20261113-02
+│   \artifacts.zip
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\artifacts\akt\modal\junyi-a1-selected-20261113-01\source02.zip
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\a0-validat
+│   ion-replay03.json
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\a0-batched
+│   -comparison-reference03.json
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\a0-validat
+│   ion-replay-plan.json
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\replay_a0_
+│   validation.py
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\experiments\akt\results\modal-junyi-a1-b128-h100-20261113-05\wo
+│   rker-request.json
+├── ✓ Uploaded D:\Dev\KLTN\experiments\akt\modal_artifact_sync.py
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\gpu_worker
+│   .py
+└── ✓ Created Function remote_probe.
+Stopping app - user stopped from CLI.
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\gpu_controller.py", line 309, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\gpu_controller.py", line 279, in main
+    receipt = call.get(timeout=guard.remaining())
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_object.py", line 49, in wrapped
+    return await method(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 2424, in get
+    return await self._invocation().poll_function(timeout=timeout, index=index)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 350, in poll_function
+    return await _process_result(
+           ^^^^^^^^^^^^^^^^^^^^^^
+        response.outputs[0].result, response.outputs[0].data_format, self.stub, self.client
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_utils\function_utils.py", line 574, in _process_result
+    raise RemoteError(result.exception)
+modal.exception.RemoteError

@@ -4,15 +4,9 @@
   "extra_payment_allowed": false,
   "automatic_monthly_budget_reset": false,
   "authorization_reference": "Người dùng ngày 12/11/2026 cho phép tự phân bổ các khoản chi nhỏ, tổng toàn KLTN tối đa 30 USD free credits.",
-  "historical_usage_reserved_upper_usd": 12.151990764299184,
+  "historical_usage_reserved_upper_usd": 15.151990764299184,
   "safety_and_final_inference_reserve_usd": 3,
-  "new_allocations": [
-    {
-      "id": "junyi-a1-vector-h100-20261113-01",
-      "cap_usd": 3,
-      "status": "AUTHORIZED_PENDING_DISPATCH"
-    }
-  ],
+  "new_allocations": [],
   "stop_rule": "Không mở lượt chạy nếu cận chi phí lịch sử, tổng allocation và dự phòng vượt 30 USD. Nếu chưa xác nhận dừng App thì kiểm trạng thái server trước lượt mới.",
   "historical_upper_note": "2 USD là dự phòng bảo thủ cho các lượt đã chạy trước ledger, không phải số chi phí đã đối soát cuối kỳ.",
   "provider_metering_note": "Snapshot có thể trễ hoặc được điều chỉnh. Không dùng billing alert làm giới hạn cứng. Mỗi lượt có watchdog, timeout và tối đa một GPU.",
@@ -27,9 +21,9 @@
   },
   "gpu_specific_holds": {
     "H100": {
-      "status": "RELEASED_BY_USER_FOR_A1_BOUNDED",
+      "status": "HELD_PENDING_GRAPH_PIPELINE_CPU_OPTIMIZATION",
       "authorization_reference": "Người dùng yêu cầu tiếp tục training A1, đã cho phép tự phân bổ chi nhỏ trong trần toàn dự án30USD.",
-      "scope": "A1 expert selected batch128, same legacy validation as A0, total project cap30USD"
+      "scope": "Người dùng yêu cầu ít nhất50%GPUutilization trongtraining. Checkpoint train-epoch1 đã giữ; cache/fastpath chưa triển khai; chỉ mở boundedcheck sau sửa CPUbottleneck, tổng30USD."
     }
   },
   "concurrency_final_billing_snapshot": {
@@ -242,6 +236,13 @@
       "settled_status": "STOPPED_CHECKPOINT_VERIFIED_OR_CPU_GATE_VERIFIED",
       "settlement_vi": "Bao gồm các lần thử trong cùng đợt, phần dự phòng được đưa vào cận lịch sử bảo thủ.",
       "evidence": "research_tracking/runs/junyi-a1-selected-20261113-01/"
+    },
+    {
+      "id": "junyi-a1-vector-h100-20261113-01",
+      "cap_usd": 3,
+      "status": "AUTHORIZED_PENDING_DISPATCH",
+      "settled_status": "STOPPED_TRAIN_EPOCH1_VALIDATION_PENDING_CHECKPOINT_VERIFIED",
+      "evidence": "research_tracking/runs/junyi-a1-selected-20261113-01/archive-verification05.json"
     }
   ],
   "a0_h100_settlement": {
@@ -276,21 +277,21 @@
     "evidence": "research_tracking/runs/junyi-a0-h100-batch128-20261112-01/stop-confirmation-final.json"
   },
   "last_a1_accounting_snapshot": {
-    "observed_at_utc": "2026-11-13T07:55:28.334365+00:00",
+    "observed_at_utc": "2026-11-13T08:34:20.387194+00:00",
     "billing": {
       "start_timestamp": "2026-11-01T00:00:00Z",
       "end_timestamp": "2026-12-01T00:00:00Z",
-      "metered_cost": "10.40858422",
+      "metered_cost": "12.21801168",
       "billed_cost": "0.00000000",
       "metered_cost_breakdown": {
         "Network Egress": "0.00057608",
         "LLM Tokens": "0.00000000",
-        "Ephemeral Apps": "10.39685032",
-        "Volumes": "0.00800814"
+        "Ephemeral Apps": "12.12906472",
+        "Volumes": "0.08743561"
       },
       "adjustments": {
-        "Credits": "-10.40000000",
-        "Free Storage": "-0.00800814",
+        "Credits": "-12.13000000",
+        "Free Storage": "-0.08743561",
         "Network Egress Allowance": "-0.00057608",
         "Plan Cost": "0.00000000",
         "Reservation Adjustment": "-0.00000000"

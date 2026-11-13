@@ -20,6 +20,7 @@ paragraph = (
 run = 'modal-junyi-a1-b128-h100-20261113-05'
 native = ROOT/'experiments/akt/results'/run
 receipt_path = native/'receipt.json'
+stopped_epoch = BUNDLE/'archive-verification05.json'
 proof = None
 monitor = BUNDLE/'monitor05.jsonl'
 if monitor.exists():
@@ -32,6 +33,9 @@ if receipt_path.exists():
     status = receipt['status']
 else:
     status = 'TRAINING_CONFIRMED_PARTIAL_EPOCH' if proof else 'DISPATCHED_AWAITING_TRAINING_CONFIRMATION'
+if stopped_epoch.exists():
+    status = 'STOPPED_TRAIN_EPOCH1_COMPLETE_VALIDATION_PENDING_GPU_UTILIZATION_BLOCKED'
+    proof = json.loads((BUNDLE/'epoch1-training-stats05.json').read_text())
 training = ('Bản A1 cũ đã học 1.000 bước/7.365.262 target, checkpoint cùng optimizer/RNG/sampler đã lưu trên D và H100 đã dừng. Bản tối ưu đạt 2.336 ca Linux và đối chiếu H100 trên fixture, đã mở lượt mới từ seed42 với cùng cấu hình. Chưa có bằng chứng chọn lại epoch A0 trên đủ12checkpoint. Đã chuẩn bị A1 đồ thị cố định với batch128 cho train và validation, cùng split, backbone, '
     'seed và quy tắc chọn epoch của A0. Linux CPU Gate đạt 2.328 ca. Các lỗi launcher và gọi entrypoint '
     'được giữ log và đã sửa. Yêu cầu H100 hiện đã dispatch, chưa xác nhận bước học A1 thực tế. '
@@ -45,6 +49,13 @@ if proof:
         'Chưa hoàn tất epoch hoặc có kết quả validation A1. Tốc độ đang chậm hơn A0, '
         'cần kiểm chi phí xử lý đồ thị. Giữ checkpoint/resume và trần H100 3 USD của đợt này. '
         'Bản cũ đã lưu checkpoint1000 riêng. Lượt bản tối ưu khởi tạo lại seed42, source đã qua 2.336 ca Linux và đối chiếu H100 fixture; chưa nghiệm thu toàn trajectory. Các lỗi thiết lập trước được giữ log.')
+if stopped_epoch.exists():
+    training = ('A1 bản tối ưu đã hoàn tất phần training epoch 1 trên toàn bộ13.347.331target,1.818bước optimizer, '
+        'mất22phút24giây. Checkpoint trước validation cùng optimizer, RNG và trạng thái sampler đã tải về D, kiểm toàn vẹn. '
+        'Validation bị ngắt khi dừng H100, chưa có kết quả lựa chọn epoch hoặc dự báo A1 để kết luận so sánh mô hình. '
+        'Đã phục hồi archive đầy đủ ba checkpoint và logs. H100 đã dừng, server xác nhận0container. '
+        'Số đo trong giai đoạn training ghi GPU trung bình4,98%, VRAM cao nhất5.789/81.559MiB, tiến trình chiếm gần một lõi CPU. '
+        'Mức sử dụng này chưa đạt mục tiêu ít nhất50% do người dùng đặt. Cache mới chưa triển khai; việc sửa pipeline CPU/graph và kiểm lại hiệu năng là bước tiếp theo.')
 report = ROOT/'research_tracking/supervisor_reports/2026-11-10/01_tien_do'
 technical = ('Bản tối ưu đã kiểm trên H100 với dữ liệu tổng hợp. Loss, xác suất và tham số sau một bước Adam khớp bản cũ trong hai điều kiện đã kiểm; sai lệch gradient lớn nhất khoảng6,52×10⁻⁹. '
     'Phép kiểm kéo dài9,02giây, chưa chứng minh cả quỹ đạo training giống từng bit. '
@@ -79,7 +90,7 @@ path = ROOT/'docs/thesis_recovery/INVESTIGATION_STATE.json'
 state = json.loads(path.read_text(encoding='utf-8-sig'))
 state['junyi_a1_selected_20261113'] = dict(status=status,
     evidence=BUNDLE.relative_to(ROOT).as_posix(), active_run=run,
-    controller_session_id=47599, app_id=json.loads((native/'dispatch.json').read_text())['app_id'],
+    controller_session_id=None, app_id=json.loads((native/'dispatch.json').read_text())['app_id'],
     previous_partial_checkpoint='checkpoint1000-inspection.json',previous_run_stopped=True,
     initialization='seed42_fresh_vector_implementation',
     latest_training_proof=proof,
@@ -87,14 +98,19 @@ state['junyi_a1_selected_20261113'] = dict(status=status,
     a0_log_loss_delta=0, a0_epoch_choice_replayed=False,
     validation_implementation='batched_windows_v1_batch128',
     tranche_cap_usd=3, project_cap_usd=30,
-    next_vi='Đọc receipt/guard/monitor của run04, theo dõi đến checkpoint và dừng App, kiểm archive và đối soát tổng chi trước lượt mới. Không coi dispatch là training.')
+    train_epoch1_complete=stopped_epoch.exists(),validation_complete=False,
+    all_owned_apps_stopped=stopped_epoch.exists(), gpu_utilization_goal_percent=50,
+    observed_training_gpu_utilization_percent=4.9809688581314875,
+    cached_graph_pipeline_implemented=False,
+    next_vi='Giữ source2/checkpoint train-epoch-001, resume validation trước khi train thêm. Thiết kế cache/fast path đồ thị, đối chiếu causal/output/gradient và checkpoint compatibility trên CPU. GPU hiện đã tắt, chỉ cấp bounded run tiếp sau khi xử lý CPU bottleneck và dự toán trong30USD.')
 path.write_text(json.dumps(state,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 for name, link in [('docs/REPOSITORY_MAP.md','../research_tracking/runs/junyi-a1-selected-20261113-01/README.md'),
                    ('research_tracking/reports/README.md','../runs/junyi-a1-selected-20261113-01/README.md')]:
     path = ROOT/name
     text = path.read_text(encoding='utf-8')
     title = '\n## 13/11 — A1 H100 và validation A0 thực\n'
-    body = title+'\n[Hồ sơ]('+link+') có Gate Linux 2.328 ca, A0 checkpoint9 full-selection batch128 đạt Log Loss bằng giá trị cũ; '+('A1 đã cập nhật trọng số trên H100, epoch còn đang chạy.' if proof else 'A1 batch128 đã dispatch, chưa xác nhận học.')+'\n'
+    current = ('A1 đã train đủ epoch1, validation còn chờ; checkpoint/logs đã lưu D, H100 dừng. GPU training trung bình4,98%, cần xử lý nút thắt CPU trước chạy tiếp.' if stopped_epoch.exists() else ('A1 đã cập nhật trọng số trên H100, epoch còn đang chạy.' if proof else 'A1 batch128 đã dispatch, chưa xác nhận học.'))
+    body = title+'\n[Hồ sơ]('+link+') có Gate Linux 2.336 ca, A0 checkpoint9 full-selection batch128 đạt Log Loss bằng giá trị cũ; '+current+'\n'
     if title in text:
         text = re.sub(re.escape(title)+r'.*?(?=\n## |\Z)',lambda _:body,text,count=1,flags=re.S)
     else:

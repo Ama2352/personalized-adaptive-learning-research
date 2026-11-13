@@ -1,6 +1,6 @@
 # A1 Junyi trên H100, batch128 cho train và validation
 
-Ngày 13/11/2026. Bundle đang mở. Mục tiêu là fit A1 expert trên cùng TRAIN80/selection10 của A0, chỉ thêm thông tin đồ thị. Chưa refit, calibration hoặc đánh giá độc lập. Không truy cập Holdout.
+Ngày 13/11/2026. Bundle đóng theo manifest-final.json với trạng thái TRAIN_EPOCH1_COMPLETE / VALIDATION_PENDING / GPU_UTILIZATION_TARGET_NOT_MET. Mục tiêu là fit A1 expert trên cùng TRAIN80/selection10 của A0, chỉ thêm thông tin đồ thị. Chưa refit, calibration hoặc đánh giá độc lập. Không truy cập Holdout. Công việc tiếp theo dùng bundle mới và dẫn về checkpoint/source2 tại đây.
 
 ## Quyết định thực thi
 
@@ -56,3 +56,19 @@ Root chọn khởi tạo lại A1 từ seed42 để fit bằng source2 đã ki�
 Worker mới giới hạn thời gian còn lại theo deadline cả lượt, chừa khoảng lưu artifact. Giữ source2 của run05 để tiếp tục cùng trajectory sau checkpoint, không tự restart theo mỗi thay đổi tối ưu.
 
 Prototype projector evidence được DEFER. Benchmark CPUstdlib1,81giây cho1,067lần ởfixture sparse,1,325lần ởfixture dense. Chưa đủ bằng chứng lợi ích trên payload Junyi thực để mở một source/trajectory mới. `evidence-projector-benchmark.json` giữ dữ liệu và hash tương đương trong fixture, chưa áp dụng vào production.
+
+## Trạng thái sau khi dừng run05
+
+Training epoch1 đã hoàn tất13.347.331target/1.818optimizer step trong1.343,56giây, khoảng22phút24giây. Chưa hoàn tất validation. Đã tải checkpoint `experiments/akt/results/modal-junyi-a1-b128-h100-20261113-05/checkpoints/train-epoch-001/state.pt` cùng metadata và COMPLETE về D, kiểm SHA. Đây là trạng thái sau toàn bộ bước học epoch1, trước validation. Khi tiếp tục source tương thích, producer hỗ trợ nạp checkpoint này rồi xử lý validation còn chờ.
+
+Đã dừng H100 theo yêu cầu mức sử dụng GPU tối thiểu50%. App stopped15:27:32ngày13/11/2026, kiểm server0container. `stop-confirmation05.json` giữ xác nhận. Không còn job GPU của đợt này đang chạy.
+
+`resource-audit05-training.json` giữ578mẫu trong khoảng19phút train trước khi epoch kết thúc. GPU utilization trung bình4,98%, median0%, max39%, VRAM peak5.789/81.559MiB. Đây là mức thời gian GPU bận do nvidia-smi báo, không phải phần trăm FLOPs/SM đạt trần. Tiến trình dùng gần một lõi CPU. Mức đo này chưa đạt mục tiêu50% và không cho phép gọi pipeline đã tối ưu toàn bộ.
+
+`actual-graph-cpu-profile.md/.json`, pstats và script đi kèm định vị CPU trên128window TRAIN80 thật,5.527target. Hai phần prefix/session và4lần evidence hash lần lượt0,13463/0,18809giây không profiler. cProfile ghi nhiều lời gọi asdict/fields và đệ quy. Không cộng cumulative time cha/con hoặc suy tỷ lệ toàn bộ epoch từ mẫu shard đầu. Phần tensor hash/copy GPU→CPU và guards khác còn cần phân bổ thêm.
+
+Đã phục hồi archive05đầy đủ79.849.316byte/26file/3checkpoint sau khi dừng GPU, xác minh SHA từ receipt, ZIP CRC và hash từng file. `archive-verification05.json` giữ kết quả. Remote status FAILED phản ánh việc chủ động ngắt App trong validation; không gọi đây là selected fit hoàn tất. `training-epoch1-retrieval05.json` và `epoch1-training-stats05.json` giữ bằng chứng train đã hoàn tất.
+
+Snapshot billing sau khi dừng ghi metered12,218USD, credits applied12,13USD và billed0USD. Free storage/egress được nhà cung cấp bù. Với30USDcredits ban đầu, số dư từ snapshot credits khoảng17,87USD. Ledger vẫn dùng cận dự phòng bảo thủ, không coi mọi reservation là khoản đã chi.
+
+Cache hoặc đường xử lý graph đã chuẩn bị sẵn chưa được triển khai. Bước tiếp theo là giảm việc dựng/chuyển đổi/hash context trên CPU, giữ đúng causal window, nguồn cạnh, target và loss; kiểm tương đương cùng checkpoint và cơ chế resume trước lượt GPU nhỏ có tiêu chí ít nhất50% GPU utilization trong training. Giá trị50% là mục tiêu nghiệm thu, chưa có bằng chứng đạt. Tất cả checkpoint cũ và source2 được giữ nguyên.

@@ -2,7 +2,7 @@
 
 ## 13/11 — A1 H100 và validation A0 thực
 
-[Hồ sơ](../research_tracking/runs/junyi-a1-selected-20261113-01/README.md) có Gate Linux 2.328 ca, A0 checkpoint9 full-selection batch128 đạt Log Loss bằng giá trị cũ; A1 đã cập nhật trọng số trên H100, epoch còn đang chạy.
+[Hồ sơ](../research_tracking/runs/junyi-a1-selected-20261113-01/README.md) có Gate Linux 2.336 ca, A0 checkpoint9 full-selection batch128 đạt Log Loss bằng giá trị cũ; A1 đã train đủ epoch1, validation còn chờ; checkpoint/logs đã lưu D, H100 dừng. GPU training trung bình4,98%, cần xử lý nút thắt CPU trước chạy tiếp.
 
 ## 13/11 — kiểm checkpoint A0 thật
 
