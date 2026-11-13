@@ -46,6 +46,186 @@ a{color:#155c88;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{
 <div class="measure"><p><strong>Paper 1</strong> được kế thừa theo bản PDF phát triển dùng để nộp, là nguồn chuẩn về thiết kế và kết quả. Notebook trong repository là bản tiền kỳ. Bản PDF đã tách vai trò của đồ thị với vai trò của cách chọn đường đi. Ưu tiên học liên tục trong chương giúp giảm chuyển chương và quay lại chương, nhưng đồ thị mở rộng chưa cải thiện ổn định mức thành thạo. Phương án mở rộng thay cả quan hệ nội chương và liên chương, nên chưa tách riêng hiệu quả của cạnh liên chương. Paper đã gắn tính liên tục của lộ trình với chính sách lựa chọn; khóa luận không coi nhận định đó là phát hiện mới.</p>
 <p><strong>Paper 2</strong> đi tiếp vào mô hình ước lượng tri thức. Phần bổ sung có đồ thị cải thiện nhẹ dự báo ở một số nhóm mô phỏng, nhưng chưa phát hiện cải thiện rõ ở hai kết quả học tập chính sau hiệu chỉnh thống kê. Trên Junyi, bước chọn cấu hình phát triển ưu tiên tắt các cơ chế đồ thị đã thử. Paper cũng thừa nhận phép bật/tắt còn gộp nhiều cơ chế, nên chưa tách được phần đóng góp của riêng các cạnh.</p>
 <p>Khoảng trống cần giải quyết vì vậy không chỉ là cài một mô hình mạnh hơn. Khóa luận giữ ba câu hỏi trong đề cương: <strong>RQ1</strong> tìm nguyên nhân lợi ích chưa ổn định; <strong>RQ2</strong> xác định khi nào thông tin tiên quyết hữu ích, trung tính hoặc bất lợi; <strong>RQ3</strong> kiểm tra CG-AKT, một cách điều chỉnh ảnh hưởng của đồ thị theo độ tin cậy trên nền AKT.</p></div></section>
+<section id="a1-compact-context-cpu-20261113"><h2>13/11 — kiểm hướng biểu diễn ngữ cảnh đồ thị gọn</h2><p>Sau cải tiến nhỏ đã kiểm trên T4, nhóm thử giảm phần dựng dữ liệu đồ thị trước khi GPU tính toán. Trên 128 cửa sổ Junyi TRAIN80 thật, gồm 5.527 target, prototype chuyển thông tin quá khứ thành message dạng mảng số và mặt nạ áp dụng. Cả hai khớp hoàn toàn với cách tính A1 hiện hành sau chuyển FP32. Giữ kiểm vai người học, cấu trúc cửa sổ và biên thời gian. Thay đáp án ở phía sau giữ nguyên thông tin cho các target phía trước.</p><p>Thời gian chuẩn bị context và bốn lần kiểm tính toàn vẹn giảm từ 0,826 xuống 0,251 giây, tương ứng tăng tốc 3,29 lần cho riêng thành phần CPU đã đo. Có hai lượt mỗi bản trong cùng tiến trình. Lượt kiểm mất khoảng 8 giây, dùng khoảng 221 MiB RAM và 0 USD Modal. Đây là hướng triển khai tiếp theo để giảm CPU chờ trước GPU.</p><p>Prototype còn tách khỏi trainer và chưa tạo cache trên đĩa. Cần nối adapter/model, kiểm gradient và phục hồi checkpoint, rồi đo toàn pipeline trên T4. Chưa có số tăng tốc toàn epoch Junyi hoặc bằng chứng GPU đạt 50%. Các checkpoint nghiên cứu hiện có được giữ nguyên. Mức hoàn tất bằng chứng RQ3 chưa thay đổi từ phép kiểm kỹ thuật này.</p><figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="576pt" height="338.4pt" viewBox="0 0 576 338.4" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-13T16:35:07.819154</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="a1compact_figure_1">
+  <g id="a1compact_patch_1">
+   <path d="M 0 338.4
+L 576 338.4
+L 576 0
+L 0 0
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="a1compact_axes_1">
+   <g id="a1compact_patch_2">
+    <path d="M 52.882578 264.245422
+L 564.12 264.245422
+L 564.12 42.68
+L 52.882578 42.68
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="a1compact_patch_3">
+    <path d="M 76.120643 264.245422
+L 241.03594 264.245422
+L 241.03594 89.99998
+L 76.120643 89.99998
+z
+" clip-path="url(#a1compact_p185436c0c9)" style="fill: #b74040"/>
+   </g>
+   <g id="a1compact_patch_4">
+    <path d="M 375.966638 264.245422
+L 540.881935 264.245422
+L 540.881935 211.327834
+L 375.966638 211.327834
+z
+" clip-path="url(#a1compact_p185436c0c9)" style="fill: #134f95"/>
+   </g>
+   <g id="a1compact_matplotlib.axis_1">
+    <g id="a1compact_xtick_1">
+     <g id="a1compact_line2d_1">
+      <defs>
+       <path id="a1compact_m2a704eb4f7" d="M 0 0
+L 0 3.5
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#a1compact_m2a704eb4f7" x="158.578291" y="264.245422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1compact_text_1">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="158.578291" y="280.043703" transform="rotate(-0 158.578291 280.043703)">Evidence hiện hành</text>
+     </g>
+    </g>
+    <g id="a1compact_xtick_2">
+     <g id="a1compact_line2d_2">
+      <g>
+       <use xlink:href="#a1compact_m2a704eb4f7" x="458.424287" y="264.245422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1compact_text_2">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="458.424287" y="280.155422" transform="rotate(-0 458.424287 280.155422)">Mảng gọn thử nghiệm</text>
+     </g>
+    </g>
+   </g>
+   <g id="a1compact_matplotlib.axis_2">
+    <g id="a1compact_ytick_1">
+     <g id="a1compact_line2d_3">
+      <defs>
+       <path id="a1compact_m8f104882b2" d="M 0 0
+L -3.5 0
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#a1compact_m8f104882b2" x="52.882578" y="264.245422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1compact_text_3">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="45.882578" y="268.424133" transform="rotate(-0 45.882578 268.424133)">0.0</text>
+     </g>
+    </g>
+    <g id="a1compact_ytick_2">
+     <g id="a1compact_line2d_4">
+      <g>
+       <use xlink:href="#a1compact_m8f104882b2" x="52.882578" y="222.042484" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1compact_text_4">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="45.882578" y="226.221195" transform="rotate(-0 45.882578 226.221195)">0.2</text>
+     </g>
+    </g>
+    <g id="a1compact_ytick_3">
+     <g id="a1compact_line2d_5">
+      <g>
+       <use xlink:href="#a1compact_m8f104882b2" x="52.882578" y="179.839547" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1compact_text_5">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="45.882578" y="184.018258" transform="rotate(-0 45.882578 184.018258)">0.4</text>
+     </g>
+    </g>
+    <g id="a1compact_ytick_4">
+     <g id="a1compact_line2d_6">
+      <g>
+       <use xlink:href="#a1compact_m8f104882b2" x="52.882578" y="137.636609" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1compact_text_6">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="45.882578" y="141.81532" transform="rotate(-0 45.882578 141.81532)">0.6</text>
+     </g>
+    </g>
+    <g id="a1compact_ytick_5">
+     <g id="a1compact_line2d_7">
+      <g>
+       <use xlink:href="#a1compact_m8f104882b2" x="52.882578" y="95.433672" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1compact_text_7">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="45.882578" y="99.612383" transform="rotate(-0 45.882578 99.612383)">0.8</text>
+     </g>
+    </g>
+    <g id="a1compact_ytick_6">
+     <g id="a1compact_line2d_8">
+      <g>
+       <use xlink:href="#a1compact_m8f104882b2" x="52.882578" y="53.230734" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1compact_text_8">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="45.882578" y="57.409445" transform="rotate(-0 45.882578 57.409445)">1.0</text>
+     </g>
+    </g>
+    <g id="a1compact_text_9">
+     <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="21.746563" y="153.462711" transform="rotate(-90 21.746563 153.462711)">Giây chuẩn bị context và 4 checksum</text>
+    </g>
+   </g>
+   <g id="a1compact_patch_5">
+    <path d="M 52.882578 264.245422
+L 52.882578 42.68
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="a1compact_patch_6">
+    <path d="M 52.882578 264.245422
+L 564.12 264.245422
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="a1compact_text_10">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="158.578291" y="81.357402" transform="rotate(-0 158.578291 81.357402)">0.826 s</text>
+   </g>
+   <g id="a1compact_text_11">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="458.424287" y="202.685256" transform="rotate(-0 458.424287 202.685256)">0.251 s</text>
+   </g>
+   <g id="a1compact_text_12">
+    <text style="font-size: 13.2px; font-family: 'DejaVu Sans'; text-anchor: middle" x="308.501289" y="22.68" transform="rotate(-0 308.501289 22.68)">A1 trên CPU · cùng 128 cửa sổ Junyi TRAIN80</text>
+   </g>
+  </g>
+  <g id="a1compact_text_13">
+   <text style="font-size: 9px; font-family: 'DejaVu Sans'" transform="translate(149.248125 313.279664)">5.527 target · message FP32 và mask khớp · hai lượt mỗi bản</text>
+   <text style="font-size: 9px; font-family: 'DejaVu Sans'" transform="translate(121.844531 324.864)">Chỉ đo thành phần CPU · chưa nối trainer, chưa đo tốc độ toàn epoch/GPU</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="a1compact_p185436c0c9">
+   <rect x="52.882578" y="42.68" width="511.237422" height="221.565422"/>
+  </clipPath>
+ </defs>
+</svg><figcaption>Nguồn đo CPU ngày 13/11. Mẫu thuộc shard đầu TRAIN80, seed43. Phạm vi gồm chuẩn bị context và checksum. Prototype chưa nối trainer.</figcaption></figure></section>
 <section id="a1-fastpath-t4-20261113"><h2>13/11 — kiểm nhanh giảm xử lý CPU của A1 trên T4</h2><p>Sau khi đối chiếu cơ sở thiết kế, nhóm giữ công thức A1 và sửa riêng cách tạo mã kiểm tra tính toàn vẹn của dữ liệu đồ thị. Mục tiêu là giảm chuyển đổi dữ liệu Python lặp trước khi GPU tính toán. Phép kiểm Tesla T4 miễn phí kéo dài 28,62 giây. Loss, xác suất, gradient, trọng số sau một bước Adam và trạng thái optimizer khớp hoàn toàn ở hai điều kiện đã kiểm. Bộ kiểm helper trên Colab đạt 19 ca, kiểm hồi quy local đạt 74 ca, có cả adapter Junyi và Grade10.</p><p>Chuỗi đo gồm sáu bước mỗi bản trên dữ liệu tổng hợp, prefix được dựng trước. Thông lượng tăng 1,26 lần và thời gian giảm 20,5%. GPU-Util trung bình đo được tăng từ 26,5% lên 37,8%, vẫn dưới mục tiêu 50% trong lượt ngắn này. Cần kiểm toàn pipeline và tính tương thích khi nối checkpoint trước khi dùng nguồn mới cho lượt H100 tiếp theo. Kết quả này bổ sung bằng chứng kỹ thuật chuẩn bị AKT. Thực nghiệm kết luận RQ3, validation A1 epoch1 và selected fit còn đang chờ.</p><p>Logs, số liệu, hình SVG/PDF/PNG và archive đã được tải về ổ D, kiểm tính toàn vẹn. Đã gửi lệnh trả runtime Colab và đóng bridge sau khi lấy bằng chứng. Đợt này dùng 0 USD Modal.</p><figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="720pt" height="338.4pt" viewBox="0 0 720 338.4" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">

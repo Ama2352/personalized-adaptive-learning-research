@@ -1191,3 +1191,12 @@ Sau khi đối chiếu cơ sở thiết kế, nhóm giữ công thức A1 và s�
 Chuỗi đo gồm sáu bước mỗi bản trên dữ liệu tổng hợp, prefix được dựng trước. Thông lượng tăng 1,26 lần và thời gian giảm 20,5%. GPU-Util trung bình đo được tăng từ 26,5% lên 37,8%, vẫn dưới mục tiêu 50% trong lượt ngắn này. Cần kiểm toàn pipeline và tính tương thích khi nối checkpoint trước khi dùng nguồn mới cho lượt H100 tiếp theo. Kết quả này bổ sung bằng chứng kỹ thuật chuẩn bị AKT. Thực nghiệm kết luận RQ3, validation A1 epoch1 và selected fit còn đang chờ.
 
 Logs, số liệu, hình SVG/PDF/PNG và archive đã được tải về ổ D, kiểm tính toàn vẹn. Đã gửi lệnh trả runtime Colab và đóng bridge sau khi lấy bằng chứng. Đợt này dùng 0 USD Modal.
+
+
+## 13/11 — kiểm hướng biểu diễn ngữ cảnh đồ thị gọn
+
+Sau cải tiến nhỏ đã kiểm trên T4, nhóm thử giảm phần dựng dữ liệu đồ thị trước khi GPU tính toán. Trên 128 cửa sổ Junyi TRAIN80 thật, gồm 5.527 target, prototype chuyển thông tin quá khứ thành message dạng mảng số và mặt nạ áp dụng. Cả hai khớp hoàn toàn với cách tính A1 hiện hành sau chuyển FP32. Giữ kiểm vai người học, cấu trúc cửa sổ và biên thời gian. Thay đáp án ở phía sau giữ nguyên thông tin cho các target phía trước.
+
+Thời gian chuẩn bị context và bốn lần kiểm tính toàn vẹn giảm từ 0,826 xuống 0,251 giây, tương ứng tăng tốc 3,29 lần cho riêng thành phần CPU đã đo. Có hai lượt mỗi bản trong cùng tiến trình. Lượt kiểm mất khoảng 8 giây, dùng khoảng 221 MiB RAM và 0 USD Modal. Đây là hướng triển khai tiếp theo để giảm CPU chờ trước GPU.
+
+Prototype còn tách khỏi trainer và chưa tạo cache trên đĩa. Cần nối adapter/model, kiểm gradient và phục hồi checkpoint, rồi đo toàn pipeline trên T4. Chưa có số tăng tốc toàn epoch Junyi hoặc bằng chứng GPU đạt 50%. Các checkpoint nghiên cứu hiện có được giữ nguyên. Mức hoàn tất bằng chứng RQ3 chưa thay đổi từ phép kiểm kỹ thuật này.

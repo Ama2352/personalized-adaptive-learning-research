@@ -1,5 +1,15 @@
 # Báo cáo tiến độ khóa luận — cập nhật 13/11/2026
 
+## 13/11 — kiểm hướng biểu diễn ngữ cảnh đồ thị gọn
+
+Sau cải tiến nhỏ đã kiểm trên T4, nhóm thử giảm phần dựng dữ liệu đồ thị trước khi GPU tính toán. Trên 128 cửa sổ Junyi TRAIN80 thật, gồm 5.527 target, prototype chuyển thông tin quá khứ thành message dạng mảng số và mặt nạ áp dụng. Cả hai khớp hoàn toàn với cách tính A1 hiện hành sau chuyển FP32. Giữ kiểm vai người học, cấu trúc cửa sổ và biên thời gian. Thay đáp án ở phía sau giữ nguyên thông tin cho các target phía trước.
+
+Thời gian chuẩn bị context và bốn lần kiểm tính toàn vẹn giảm từ 0,826 xuống 0,251 giây, tương ứng tăng tốc 3,29 lần cho riêng thành phần CPU đã đo. Có hai lượt mỗi bản trong cùng tiến trình. Lượt kiểm mất khoảng 8 giây, dùng khoảng 221 MiB RAM và 0 USD Modal. Đây là hướng triển khai tiếp theo để giảm CPU chờ trước GPU.
+
+Prototype còn tách khỏi trainer và chưa tạo cache trên đĩa. Cần nối adapter/model, kiểm gradient và phục hồi checkpoint, rồi đo toàn pipeline trên T4. Chưa có số tăng tốc toàn epoch Junyi hoặc bằng chứng GPU đạt 50%. Các checkpoint nghiên cứu hiện có được giữ nguyên. Mức hoàn tất bằng chứng RQ3 chưa thay đổi từ phép kiểm kỹ thuật này.
+
+[Hồ sơ và hình đo CPU](../../../runs/junyi-a1-compact-context-20261113-01/README.md)
+
 ## 13/11 — kiểm nhanh giảm xử lý CPU của A1 trên T4
 
 Sau khi đối chiếu cơ sở thiết kế, nhóm giữ công thức A1 và sửa riêng cách tạo mã kiểm tra tính toàn vẹn của dữ liệu đồ thị. Mục tiêu là giảm chuyển đổi dữ liệu Python lặp trước khi GPU tính toán. Phép kiểm Tesla T4 miễn phí kéo dài 28,62 giây. Loss, xác suất, gradient, trọng số sau một bước Adam và trạng thái optimizer khớp hoàn toàn ở hai điều kiện đã kiểm. Bộ kiểm helper trên Colab đạt 19 ca, kiểm hồi quy local đạt 74 ca, có cả adapter Junyi và Grade10.

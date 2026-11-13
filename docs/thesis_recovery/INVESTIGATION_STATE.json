@@ -8519,5 +8519,27 @@
     "cloud_training_started": false,
     "runtime_release": "research_tracking/runs/junyi-a1-fastpath-t4-20261113-01/runtime-release.json",
     "next_vi": "Tối ưu prefix/message cố định với provenance, kiểm full producer gồm adapter và data prep. Kiểm resume-validation từ checkpoint source2 theo nguồn mới trước khi cấp H100. Giữ checkpoint cũ và hạn mức 30 USD toàn KLTN."
+  },
+  "a1_compact_context_cpu_20261113": {
+    "status": "PROTOTYPE_CPU_COMPONENT_VERIFIED",
+    "bundle": "research_tracking/runs/junyi-a1-compact-context-20261113-01",
+    "windows": 128,
+    "targets": 5527,
+    "active_targets": 2246,
+    "messages_fp32_exact": true,
+    "mask_exact": true,
+    "role_and_future_controls_pass": true,
+    "component_speedup": 3.2927699053334023,
+    "mean_seconds": {
+      "reference": 0.8257503000004363,
+      "compact": 0.2507768000014039
+    },
+    "cache_written": false,
+    "trainer_integrated": false,
+    "production_source_changed": false,
+    "checkpoint_migration_applied": false,
+    "gpu_tested": false,
+    "modal_spent_usd": 0,
+    "next_vi": "Nối representation có version và input/source binding vào adapter/native, kiểm loss/gradient/Adam/RNG/resume từ source2. Sau đó đo full producer T4 trước H100; giữ mục tiêu GPU50% và cap30USD."
   }
 }

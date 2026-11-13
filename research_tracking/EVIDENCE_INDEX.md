@@ -1,5 +1,9 @@
 # Chỉ mục bằng chứng
 
+## 13/11 — thử context A1 dạng mảng trên CPU
+
+[Hồ sơ](runs/junyi-a1-compact-context-20261113-01/README.md) giữ đối chiếu 128 window TRAIN80/5.527 target, message FP32 và mask khớp, kiểm future response và role đạt. Riêng context/checksum giảm 0,826→0,251 giây, 3,29 lần. Prototype chưa nối trainer/cache/GPU.
+
 ## 13/11 — A1 giảm chuyển đổi evidence và kiểm T4
 
 [Hồ sơ](runs/junyi-a1-fastpath-t4-20261113-01/README.md) giữ phép kiểm GPU 28,62 giây, drift0 ở hai alpha, 19 ca Colab và 74 ca local. Chuỗi sáu bước giảm 6,20→4,93 giây, GPU mẫu 26,5→37,8%. Full producer/resume còn chờ, 0 USD Modal.
