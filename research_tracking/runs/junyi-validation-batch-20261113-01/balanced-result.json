@@ -1,0 +1,102 @@
+{
+  "status": "PASS_SYNTHETIC_VALIDATION_BATCH128_PARITY",
+  "scope": "SYNTHETIC_IN_MEMORY_LEARNERS",
+  "torch": "2.14.1+cu130",
+  "cuda": "13.0",
+  "gpu": "Tesla T4",
+  "vocabulary": 717,
+  "results": [
+    {
+      "variant": "A0",
+      "targets": 12800,
+      "learners": 64,
+      "windows": 128,
+      "legacy_seconds": [
+        1.3314722740000207,
+        2.8817144010000675,
+        1.3451896139999917
+      ],
+      "batch128_seconds": [
+        0.47711367800002336,
+        0.4416558039999927,
+        0.35902956399991126
+      ],
+      "legacy_mean_seconds": 1.85279209633336,
+      "batch128_mean_seconds": 0.42593301533330913,
+      "speedup": 4.349961213698069,
+      "legacy_peak_vram_bytes": 54534656,
+      "batch128_peak_vram_bytes": 1221686784,
+      "max_abs_probability_delta": 1.7881393432617188e-07,
+      "mean_abs_probability_delta": 2.7641654014587402e-08,
+      "log_loss_delta": 5.960464477539063e-08,
+      "population_sha256": "c0cfe0ea3deee18683af744f4799c17cfbebd7668f373d5f0b93601d1ca831fe",
+      "targets_metadata_exact": true,
+      "metrics": {
+        "1": {
+          "targets": 12800,
+          "supported": 12800,
+          "oov": 0,
+          "population_sha256": "c0cfe0ea3deee18683af744f4799c17cfbebd7668f373d5f0b93601d1ca831fe",
+          "native_bce": 0.6931226253509521,
+          "probability_sha256": "ad6d8f11be21442f45b02bb88ea6e965df12ca397492027df2f635683428f2d1"
+        },
+        "128": {
+          "targets": 12800,
+          "supported": 12800,
+          "oov": 0,
+          "population_sha256": "c0cfe0ea3deee18683af744f4799c17cfbebd7668f373d5f0b93601d1ca831fe",
+          "native_bce": 0.6931226849555969,
+          "probability_sha256": "a59383c92c58dc5613b4226466598eef759d71a2d4a0dfa3acea5d1c5f35f74a"
+        }
+      }
+    },
+    {
+      "variant": "A1",
+      "targets": 12800,
+      "learners": 64,
+      "windows": 128,
+      "legacy_seconds": [
+        4.611570353000047,
+        4.699966348000089,
+        6.405924050999943
+      ],
+      "batch128_seconds": [
+        3.3379943229999753,
+        2.899986199000068,
+        2.7322491720000244
+      ],
+      "legacy_mean_seconds": 5.239153584000026,
+      "batch128_mean_seconds": 2.990076564666689,
+      "speedup": 1.7521804110002939,
+      "legacy_peak_vram_bytes": 54535168,
+      "batch128_peak_vram_bytes": 1221687296,
+      "max_abs_probability_delta": 1.7881393432617188e-07,
+      "mean_abs_probability_delta": 2.7641654014587402e-08,
+      "log_loss_delta": 5.960464477539063e-08,
+      "population_sha256": "c0cfe0ea3deee18683af744f4799c17cfbebd7668f373d5f0b93601d1ca831fe",
+      "targets_metadata_exact": true,
+      "metrics": {
+        "1": {
+          "targets": 12800,
+          "supported": 12800,
+          "oov": 0,
+          "population_sha256": "c0cfe0ea3deee18683af744f4799c17cfbebd7668f373d5f0b93601d1ca831fe",
+          "native_bce": 0.6931226253509521,
+          "probability_sha256": "ad6d8f11be21442f45b02bb88ea6e965df12ca397492027df2f635683428f2d1"
+        },
+        "128": {
+          "targets": 12800,
+          "supported": 12800,
+          "oov": 0,
+          "population_sha256": "c0cfe0ea3deee18683af744f4799c17cfbebd7668f373d5f0b93601d1ca831fe",
+          "native_bce": 0.6931226849555969,
+          "probability_sha256": "a59383c92c58dc5613b4226466598eef759d71a2d4a0dfa3acea5d1c5f35f74a"
+        }
+      }
+    }
+  ],
+  "seconds": 42.30803802599996,
+  "model_training": false,
+  "a0_checkpoint_epoch_selection_replayed": false,
+  "limits_vi": "Đo trên dữ liệu giả đã có trong RAM, chưa gồm SQL Junyi/I/O toàn tập. Chưa kiểm lại chọn epoch A0 từ12checkpoint thật."
+}

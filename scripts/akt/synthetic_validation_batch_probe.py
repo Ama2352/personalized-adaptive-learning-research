@@ -17,6 +17,7 @@ sys.path.insert(0,str(ROOT/'src'))
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output',required=True,type=Path)
+    parser.add_argument('--signal',choices=('balanced','positive'),default='balanced')
     args=parser.parse_args()
     output=args.output.resolve()
     if not output.is_relative_to(ROOT/'experiments/akt/results') or output.exists():
@@ -59,7 +60,8 @@ def main():
     encoding=JunyiResearchEncoding(ExerciseEncoding(StableVocabulary(values),{item:1 for item in values}),train)
     condition=JunyiGraphCondition(encoding,PrerequisiteGraph.from_edges(values,(('A','C'),('B','C'))),'f'*64)
     learners=tuple(LearnerEvents(user,0,tuple(KTEvent(user,('A','B','C')[rank%3],rank+1,
-        index*200+rank+1,(index+rank)%2,0,0) for rank in range(200)))
+        index*200+rank+1,1 if args.signal=='positive' and rank%3!=2 else (index+rank)%2,0,0)
+        for rank in range(200)))
         for index,user in enumerate(selection.users))
     results=[]
     started=time.monotonic()
@@ -104,6 +106,13 @@ def main():
         np.testing.assert_allclose(q,p,atol=1e-6,rtol=1e-6)
         maximum=float(np.max(np.abs(p-q)))
         mean=float(np.mean(np.abs(p-q)))
+        graph_delta=None
+        if variant=='A0':
+            a0_probabilities=p.copy()
+        else:
+            graph_delta=float(np.max(np.abs(p-a0_probabilities)))
+            if args.signal=='positive' and graph_delta<.01:
+                raise ValueError('Fixture must exercise nonzero graph residual')
         ll_delta=metrics[128]['native_bce']-metrics[1]['native_bce']
         if abs(ll_delta)>1e-6:
             raise ValueError('Log Loss parity tolerance exceeded')
@@ -113,12 +122,14 @@ def main():
             speedup=statistics.mean(timings[1])/statistics.mean(timings[128]),
             legacy_peak_vram_bytes=max(peaks[1]),batch128_peak_vram_bytes=max(peaks[128]),
             max_abs_probability_delta=maximum,mean_abs_probability_delta=mean,
+            graph_residual_vs_a0_max_abs=graph_delta,
             log_loss_delta=ll_delta,population_sha256=metrics[1]['population_sha256'],
             targets_metadata_exact=True,metrics=metrics))
         del adapter,legacy,batched
         gc.collect()
         torch.cuda.empty_cache()
     report=dict(status='PASS_SYNTHETIC_VALIDATION_BATCH128_PARITY',scope='SYNTHETIC_IN_MEMORY_LEARNERS',
+        fixture_signal=args.signal,
         torch=torch.__version__,cuda=torch.version.cuda,gpu=torch.cuda.get_device_name(0),
         vocabulary=717,results=results,seconds=time.monotonic()-started,model_training=False,
         a0_checkpoint_epoch_selection_replayed=False,

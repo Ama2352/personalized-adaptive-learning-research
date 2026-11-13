@@ -2,7 +2,7 @@
 
 ## 13/11 — validation theo batch
 
-[Hồ sơ](../runs/junyi-validation-batch-20261113-01/README.md) có126ca CPU đạt, probe và notebook T4 đã chuẩn bị. Chưa có GPU speedup hoặc A0 full-selection parity.
+[Hồ sơ](../runs/junyi-validation-batch-20261113-01/README.md) giữ 126 ca Linux đạt, hai phép kiểm T4, log và figure. Trên 12.800 target tổng hợp có tín hiệu đồ thị, A0 tăng tốc 3,88 lần, A1 2,01 lần. Chưa kiểm lại toàn selection bằng checkpoint A0. Không train epoch, không dùng Modal.
 
 ## Đính chính số mẫu fixture confidence ngày13/11
 

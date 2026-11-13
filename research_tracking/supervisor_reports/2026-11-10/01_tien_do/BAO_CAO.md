@@ -2,7 +2,18 @@
 
 ## 13/11 — chuẩn bị tối ưu validation
 
-Đã nối validation và xuất dự báo theo batch tối đa128cửa sổ, giữ ranh giới lịch sử từng learner và các target/OOV. Bộ kiểm local đạt126ca, gồm native AKT/A1 trên CPU và kiểm trạng thái mô hình, thứ tự dữ liệu, grant và resume. Mode chạy mới có định danh riêng để tránh trộn với validation từng cửa sổ của A0 trước đây. Chưa có số đo tăng tốc T4 hoặc kết quả kiểm lại toàn selection bằng checkpoint A0, nên chưa nghiệm thu tối ưu cho training chính.
+Validation trước đây xử lý lần lượt từng cửa sổ lịch sử, khiến GPU phải nhận nhiều lượt nhỏ. Đã nối cách gom tối đa 128 cửa sổ độc lập và kiểm trên T4 miễn phí của Colab. Bộ kiểm Linux đạt 126 ca. Phép đo dùng 64 người học tổng hợp, 12.800 lượt dự báo, mỗi mô hình đo ba cặp để đối chiếu thời gian và kết quả. Đây là kiểm dự đoán, không cập nhật trọng số.
+
+| Mô hình | Từng cửa sổ | Batch128 | Tăng tốc |
+|---|---:|---:|---:|
+| A0 — AKT không đồ thị | 1,32 giây | 0,34 giây | 3,88 lần |
+| A1 — AKT đồ thị cố định | 5,07 giây | 2,52 giây | 2,01 lần |
+
+Trung bình ba lượt trên bộ tổng hợp có tín hiệu đồ thị.
+
+Target, nhãn và thứ tự khớp hoàn toàn. Sai lệch xác suất lớn nhất khoảng 1,2×10⁻⁷. VRAM do PyTorch cấp phát cao nhất khoảng 1,14 GiB. Đã giữ cả phép kiểm tín hiệu đồ thị triệt tiêu và phép kiểm có tín hiệu khác 0. Hai chương trình kiểm GPU chạy tổng khoảng 84 giây. Chưa kiểm lại toàn selection bằng checkpoint A0 đã train hoặc đo chi phí đọc dữ liệu Junyi. Vì vậy, số đo này xác nhận tăng tốc dự đoán trên dữ liệu tổng hợp, còn việc giữ nguyên chọn epoch A0 và mức tăng tốc toàn pipeline cần kiểm tiếp. Artifact đã tải về ổ D, kiểm toàn vẹn, gửi lệnh giải phóng runtime và đóng cầu nối. Lượt này dùng 0 USD Modal.
+
+![Thời gian và bộ nhớ validation T4](../../../runs/junyi-validation-batch-20261113-01/validation-batch-t4-v2.svg)
 
 ## 13/11 — lõi confidence Junyi đã kiểm CPU
 

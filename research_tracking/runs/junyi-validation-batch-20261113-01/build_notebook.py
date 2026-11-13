@@ -4,13 +4,13 @@ import json
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[3]
-source=ROOT/'artifacts/akt/colab/junyi-validation-batch-20261113-02.zip'
+source=ROOT/'artifacts/akt/colab/junyi-validation-batch-20261113-03.zip'
 digest=hashlib.sha256(source.read_bytes()).hexdigest()
 notebook=json.loads((ROOT/'notebooks/akt_colab_junyi_comparison.ipynb').read_text(encoding='utf-8'))
 for cell in notebook['cells']:
     text=''.join(cell['source'])
     text=text.replace('KLTN-junyi-comparison-20261113-01','KLTN-validation-batch-20261113-01')
-    text=text.replace('junyi-comparison-preflight-20261113-03.zip','junyi-validation-batch-20261113-02.zip')
+    text=text.replace('junyi-comparison-preflight-20261113-03.zip','junyi-validation-batch-20261113-03.zip')
     text=text.replace('f6722ca4a130ec5c1f40d30e9a55016d80dcaf619ed74c948f15975aac9716c4',digest)
     text=text.replace('colab-comparison-20261113-01','colab-validation-batch-20261113-01')
     cell['source']=text.splitlines(keepends=True)
@@ -32,7 +32,7 @@ notebook['cells'][5]['source']='''assert globals().get('TESTS_ACCEPTED') is True
 GPU_OUTPUT = PROJECT/'experiments/akt/results/colab-validation-batch-probe-20261113-01'
 with (OUTPUT/'gpu-validation.log').open('x') as log:
     result = subprocess.run([str(PYTHON),'-B','scripts/akt/synthetic_validation_batch_probe.py',
-        '--output',str(GPU_OUTPUT)],cwd=PROJECT,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=300)
+        '--signal','positive','--output',str(GPU_OUTPUT)],cwd=PROJECT,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=300)
 print((OUTPUT/'gpu-validation.log').read_text()[-7000:])
 assert result.returncode == 0, 'Giữ failure và tải bằng chứng trước khi xử lý tiếp'
 receipt = json.loads((GPU_OUTPUT/'result.json').read_text())
