@@ -1,0 +1,1108 @@
+FFFFFFFFFFFFFFFFFFFFFFFFF.FF.FF.....F..                                  [100%]
+================================== FAILURES ===================================
+_______________________ test_rebatch_and_shuffle_exact ________________________
+tests\akt\test_junyi_graph_cache.py:31: in test_rebatch_and_shuffle_exact
+    adapter,entries,reader,_=prepared(setup,tmp_path,monkeypatch,entries)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+__________ test_cached_training_predictions_and_optimizer_match[0.0] __________
+tests\akt\test_junyi_graph_cache.py:39: in test_cached_training_predictions_and_optimizer_match
+    direct,entries,reader,_=prepared(setup,tmp_path,monkeypatch)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+_________ test_cached_training_predictions_and_optimizer_match[0.75] __________
+tests\akt\test_junyi_graph_cache.py:39: in test_cached_training_predictions_and_optimizer_match
+    direct,entries,reader,_=prepared(setup,tmp_path,monkeypatch)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+__________ test_prior_change_misses_and_current_labels_are_excluded ___________
+tests\akt\test_junyi_graph_cache.py:67: in test_prior_change_misses_and_current_labels_are_excluded
+    adapter,entries,reader,_=prepared(setup,tmp_path,monkeypatch)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+_____________________ test_stale_or_corrupt_rejected[sha] _____________________
+tests\akt\test_junyi_graph_cache.py:80: in test_stale_or_corrupt_rejected
+    adapter,entries,reader,receipt=prepared(setup,tmp_path,monkeypatch)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+____________________ test_stale_or_corrupt_rejected[phase] ____________________
+tests\akt\test_junyi_graph_cache.py:80: in test_stale_or_corrupt_rejected
+    adapter,entries,reader,receipt=prepared(setup,tmp_path,monkeypatch)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+____________________ test_stale_or_corrupt_rejected[graph] ____________________
+tests\akt\test_junyi_graph_cache.py:80: in test_stale_or_corrupt_rejected
+    adapter,entries,reader,receipt=prepared(setup,tmp_path,monkeypatch)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+___________________ test_stale_or_corrupt_rejected[dataset] ___________________
+tests\akt\test_junyi_graph_cache.py:80: in test_stale_or_corrupt_rejected
+    adapter,entries,reader,receipt=prepared(setup,tmp_path,monkeypatch)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+__________________ test_stale_or_corrupt_rejected[manifest] ___________________
+tests\akt\test_junyi_graph_cache.py:80: in test_stale_or_corrupt_rejected
+    adapter,entries,reader,receipt=prepared(setup,tmp_path,monkeypatch)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+___________________ test_stale_or_corrupt_rejected[payload] ___________________
+tests\akt\test_junyi_graph_cache.py:80: in test_stale_or_corrupt_rejected
+    adapter,entries,reader,receipt=prepared(setup,tmp_path,monkeypatch)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+_________________ test_stale_or_corrupt_rejected[replacement] _________________
+tests\akt\test_junyi_graph_cache.py:80: in test_stale_or_corrupt_rejected
+    adapter,entries,reader,receipt=prepared(setup,tmp_path,monkeypatch)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+________________ test_failed_build_never_publishes[incomplete] ________________
+tests\akt\test_junyi_graph_cache.py:105: in test_failed_build_never_publishes
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+________________ test_failed_build_never_publishes[duplicate] _________________
+tests\akt\test_junyi_graph_cache.py:105: in test_failed_build_never_publishes
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+__________________ test_failed_build_never_publishes[budget] __________________
+tests\akt\test_junyi_graph_cache.py:105: in test_failed_build_never_publishes
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+_______________ test_two_adapter_steps_match_reference[on-0.0] ________________
+tests\akt\test_junyi_compact_context.py:28: in test_two_adapter_steps_match_reference
+    old,new,entries=case(setup,mode)
+                    ^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:17: in case
+    old=setup['adapter'](edges=edges,enabled=mode!='off')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+_______________ test_two_adapter_steps_match_reference[on-0.75] _______________
+tests\akt\test_junyi_compact_context.py:28: in test_two_adapter_steps_match_reference
+    old,new,entries=case(setup,mode)
+                    ^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:17: in case
+    old=setup['adapter'](edges=edges,enabled=mode!='off')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+_______________ test_two_adapter_steps_match_reference[off-0.0] _______________
+tests\akt\test_junyi_compact_context.py:28: in test_two_adapter_steps_match_reference
+    old,new,entries=case(setup,mode)
+                    ^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:17: in case
+    old=setup['adapter'](edges=edges,enabled=mode!='off')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+______________ test_two_adapter_steps_match_reference[off-0.75] _______________
+tests\akt\test_junyi_compact_context.py:28: in test_two_adapter_steps_match_reference
+    old,new,entries=case(setup,mode)
+                    ^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:17: in case
+    old=setup['adapter'](edges=edges,enabled=mode!='off')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+___________ test_two_adapter_steps_match_reference[unsupported-0.0] ___________
+tests\akt\test_junyi_compact_context.py:28: in test_two_adapter_steps_match_reference
+    old,new,entries=case(setup,mode)
+                    ^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:17: in case
+    old=setup['adapter'](edges=edges,enabled=mode!='off')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+__________ test_two_adapter_steps_match_reference[unsupported-0.75] ___________
+tests\akt\test_junyi_compact_context.py:28: in test_two_adapter_steps_match_reference
+    old,new,entries=case(setup,mode)
+                    ^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:17: in case
+    old=setup['adapter'](edges=edges,enabled=mode!='off')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+___________ test_compact_context_detects_batch_and_payload_changes ____________
+tests\akt\test_junyi_compact_context.py:59: in test_compact_context_detects_batch_and_payload_changes
+    _,adapter,entries=case(setup,'on')
+                      ^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:17: in case
+    old=setup['adapter'](edges=edges,enabled=mode!='off')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+___________ test_compact_keeps_future_boundary_and_encoding_checks ____________
+tests\akt\test_junyi_compact_context.py:77: in test_compact_keeps_future_boundary_and_encoding_checks
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+_________________ test_mid_batch_encoding_change_is_detected __________________
+tests\akt\test_junyi_compact_context.py:92: in test_mid_batch_encoding_change_is_detected
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+____________________ test_zero_message_keeps_active_target ____________________
+tests\akt\test_junyi_compact_context.py:104: in test_zero_message_keeps_active_target
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+__________________ test_context_backend_mutation_is_rejected __________________
+tests\akt\test_junyi_compact_context.py:111: in test_context_backend_mutation_is_rejected
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+___________ test_compact_checkpoint_resume_matches_continuous[True] ___________
+tests\akt\test_junyi_compact_context.py:133: in test_compact_checkpoint_resume_matches_continuous
+    base_resume(bound,tmp_path,enabled)
+tests\akt\test_junyi_graph_model.py:61: in test_native_graph_checkpoint_resume_matches_continuous
+    continuous,continuous_optimizer,recovery=make('continuous')
+                                             ^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:53: in make
+    adapter=setup['adapter'](enabled=enabled)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:131: in compact_adapter
+    return original(compact=True,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+__________ test_compact_checkpoint_resume_matches_continuous[False] ___________
+tests\akt\test_junyi_compact_context.py:133: in test_compact_checkpoint_resume_matches_continuous
+    base_resume(bound,tmp_path,enabled)
+tests\akt\test_junyi_graph_model.py:61: in test_native_graph_checkpoint_resume_matches_continuous
+    continuous,continuous_optimizer,recovery=make('continuous')
+                                             ^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:53: in make
+    adapter=setup['adapter'](enabled=enabled)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:131: in compact_adapter
+    return original(compact=True,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+_____ test_graph_selection_shares_stopping_checkpoint_and_export_protocol _____
+tests\akt\test_junyi_selected_runner.py:247: in test_graph_selection_shares_stopping_checkpoint_and_export_protocol
+    result=harness.run(graph_condition=condition)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_selected_runner.py:226: in run
+    return runner(config,profile,inputs,
+src\knowledge_tracing\akt\research_junyi_selection.py:345: in run_junyi_selected
+    adapter = _make_selected_adapter(config,profile,encoding,inputs.train,graph_condition,
+E   TypeError: harness.<locals>.run.<locals>.make() got an unexpected keyword argument 'context_cache'
+______ test_graph_selection_resumes_before_validation_without_retraining ______
+tests\akt\test_junyi_selected_runner.py:266: in test_graph_selection_resumes_before_validation_without_retraining
+    harness.run(graph_condition=condition)
+tests\akt\test_junyi_selected_runner.py:226: in run
+    return runner(config,profile,inputs,
+src\knowledge_tracing\akt\research_junyi_selection.py:345: in run_junyi_selected
+    adapter = _make_selected_adapter(config,profile,encoding,inputs.train,graph_condition,
+E   TypeError: harness.<locals>.run.<locals>.make() got an unexpected keyword argument 'context_cache'
+_________ test_partial_epoch_is_recoverable_and_never_selected_final __________
+tests\akt\test_junyi_selected_runner.py:334: in test_partial_epoch_is_recoverable_and_never_selected_final
+    result = harness.run(epochs=1)
+             ^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_selected_runner.py:226: in run
+    return runner(config,profile,inputs,
+src\knowledge_tracing\akt\research_junyi_selection.py:555: in run_a0_junyi_selected
+    return run_junyi_selected(config,profile,inputs,authorization_file=authorization_file,
+src\knowledge_tracing\akt\research_junyi_selection.py:435: in run_junyi_selected
+    stats = train_epoch(adapter,windows_factory,
+tests\akt\test_junyi_selected_runner.py:161: in train_epoch
+    recovery['checkpoint_callback'](path)
+src\knowledge_tracing\akt\research_junyi_selection.py:407: in publish_batch
+    os.link(path,directory/'state.pt')
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{d5b2cf81-ca88-4d02-a2e9-c99fe828dc1d}\\AC\\Temp\\pytest-of-AmaDev\\pytest-0\\test_partial_epoch_is_recovera0\\run\\batch-recovery\\unit-epoch001-step001.pt' -> 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{d5b2cf81-ca88-4d02-a2e9-c99fe828dc1d}\\AC\\Temp\\pytest-of-AmaDev\\pytest-0\\test_partial_epoch_is_recovera0\\run\\checkpoints\\unit-epoch001-step001\\state.pt'
+=========================== short test summary info ===========================
+FAILED tests/akt/test_junyi_graph_cache.py::test_rebatch_and_shuffle_exact - ...
+FAILED tests/akt/test_junyi_graph_cache.py::test_cached_training_predictions_and_optimizer_match[0.0]
+FAILED tests/akt/test_junyi_graph_cache.py::test_cached_training_predictions_and_optimizer_match[0.75]
+FAILED tests/akt/test_junyi_graph_cache.py::test_prior_change_misses_and_current_labels_are_excluded
+FAILED tests/akt/test_junyi_graph_cache.py::test_stale_or_corrupt_rejected[sha]
+FAILED tests/akt/test_junyi_graph_cache.py::test_stale_or_corrupt_rejected[phase]
+FAILED tests/akt/test_junyi_graph_cache.py::test_stale_or_corrupt_rejected[graph]
+FAILED tests/akt/test_junyi_graph_cache.py::test_stale_or_corrupt_rejected[dataset]
+FAILED tests/akt/test_junyi_graph_cache.py::test_stale_or_corrupt_rejected[manifest]
+FAILED tests/akt/test_junyi_graph_cache.py::test_stale_or_corrupt_rejected[payload]
+FAILED tests/akt/test_junyi_graph_cache.py::test_stale_or_corrupt_rejected[replacement]
+FAILED tests/akt/test_junyi_graph_cache.py::test_failed_build_never_publishes[incomplete]
+FAILED tests/akt/test_junyi_graph_cache.py::test_failed_build_never_publishes[duplicate]
+FAILED tests/akt/test_junyi_graph_cache.py::test_failed_build_never_publishes[budget]
+FAILED tests/akt/test_junyi_compact_context.py::test_two_adapter_steps_match_reference[on-0.0]
+FAILED tests/akt/test_junyi_compact_context.py::test_two_adapter_steps_match_reference[on-0.75]
+FAILED tests/akt/test_junyi_compact_context.py::test_two_adapter_steps_match_reference[off-0.0]
+FAILED tests/akt/test_junyi_compact_context.py::test_two_adapter_steps_match_reference[off-0.75]
+FAILED tests/akt/test_junyi_compact_context.py::test_two_adapter_steps_match_reference[unsupported-0.0]
+FAILED tests/akt/test_junyi_compact_context.py::test_two_adapter_steps_match_reference[unsupported-0.75]
+FAILED tests/akt/test_junyi_compact_context.py::test_compact_context_detects_batch_and_payload_changes
+FAILED tests/akt/test_junyi_compact_context.py::test_compact_keeps_future_boundary_and_encoding_checks
+FAILED tests/akt/test_junyi_compact_context.py::test_mid_batch_encoding_change_is_detected
+FAILED tests/akt/test_junyi_compact_context.py::test_zero_message_keeps_active_target
+FAILED tests/akt/test_junyi_compact_context.py::test_context_backend_mutation_is_rejected
+FAILED tests/akt/test_junyi_compact_context.py::test_compact_checkpoint_resume_matches_continuous[True]
+FAILED tests/akt/test_junyi_compact_context.py::test_compact_checkpoint_resume_matches_continuous[False]
+FAILED tests/akt/test_junyi_selected_runner.py::test_graph_selection_shares_stopping_checkpoint_and_export_protocol
+FAILED tests/akt/test_junyi_selected_runner.py::test_graph_selection_resumes_before_validation_without_retraining
+FAILED tests/akt/test_junyi_selected_runner.py::test_partial_epoch_is_recoverable_and_never_selected_final
+30 failed, 9 passed in 52.78s

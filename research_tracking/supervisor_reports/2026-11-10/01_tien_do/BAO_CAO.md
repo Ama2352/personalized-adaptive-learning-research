@@ -1,5 +1,19 @@
 # Báo cáo tiến độ khóa luận — cập nhật 13/11/2026
 
+## 13/11 — cache A1 đã khớp trên T4, tiếp tục ưu tiên phần tốn thời gian thực
+
+Từ kết quả A1 dạng gọn trên Junyi thật, nhóm kiểm tiếp việc tính trước thông tin đồ thị để giảm thời gian GPU chờ CPU. Cache đã nối vào đường training A1, kèm kiểm dữ liệu thay đổi và phục hồi checkpoint. Phép chia người học, batch128 và phép tính FP32 được giữ theo cấu hình đã chốt.
+
+Bộ kiểm local đạt 62 ca. Trên T4 miễn phí, hai mức ảnh hưởng đồ thị cho loss, gradient, Adam và RNG khớp hoàn toàn giữa bản có cache và bản dựng trực tiếp. Dự đoán trên 4.440 target selection và kiểm nạp lại file trạng thái cũng có sai lệch bằng 0. Đây là kiểm kỹ thuật trên mẫu Junyi, chưa hoàn tất training A1 hoặc trả lời kết quả học tập của RQ3.
+
+Trong hai block khoảng10giây mỗi phương án, thông lượng tăng từ khoảng14.957 lên15.232 target/giây, tương ứng1,84%. GPU-Util theo mẫu là67,3% và70,8%, gồm cả hai bước làm nóng mỗi block. Chênh lệch thời gian còn nhỏ so với dao động giữa các block, nên cache giữ ở chế độ tùy chọn. Chưa kết luận cache giúp rút ngắn đáng kể một epoch H100.
+
+Nhóm đã rà14bước trong một epoch. Hai hướng cần ưu tiên đo tiếp là đọc/giải mã dữ liệu lặp lại và dựng lại dữ liệu selection mỗi epoch. Các phần phụ thuộc trọng số đang học vẫn phải tính theo từng bước. Bộ nhớ RAM, thứ tự shuffle, OOV và biên dữ liệu được ghi thành điều kiện kiểm trước khi thay pipeline.
+
+Checkpoint benchmark, cache và log đã tải về ổ D và kiểm toàn vẹn. Figure cùng số liệu nguồn được lưu riêng để trích dẫn. Runtime T4 đã trả sau khi lưu xong artifact. Chi phí Modal của đợt này là0USD. Trước khi chạy tiếp H100 còn cần kiểm source/runtime cho producer cuối và hồ sơ chuyển tiếp checkpoint A1 epoch1 cũ.
+
+[Hồ sơ cache A1 và rà toàn epoch](../../../runs/junyi-a1-graph-cache-20261113-01/README.md)
+
 ## 13/11 — đo Junyi thật, xác nhận tải GPU và thử cache
 
 Sau phép kiểm dữ liệu tổng hợp, nhóm kiểm tiếp trên Junyi thật để tránh suy ra tốc độ training từ một mẫu đơn giản. Mẫu được lấy bằng seed cố định từ tám shard TRAIN80, gồm 256 cửa sổ của 204 người học; phần selection riêng có 88 cửa sổ của 64 người học. Vocabulary 717 exercise và đồ thị 976 cạnh được giữ theo nguồn hiện hành. Người học được đổi mã trước khi chuyển sang Colab, membership theo phép chia đã có. Không dùng Holdout hoặc chọn cấu hình mô hình trong lượt này.

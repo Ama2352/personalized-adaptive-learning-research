@@ -17,6 +17,7 @@ from .research_graph_model import (ResearchGraphNative, _batch_sha, _config_sha,
 from .research_junyi_data import JunyiResearchEncoding
 from .research_junyi_graph import JunyiGraphCondition, JunyiGraphPhaseSession
 from .research_junyi_compact import CompactA1Context, build_compact_context
+from .research_junyi_graph_cache import GraphContextCache
 from .tensors import AKTBatch, collate_windows
 from .types import TrainingWindow, WindowInputs
 
@@ -29,7 +30,8 @@ def _need(value, message):
 def _source_inventory():
     paths = ('src/knowledge_tracing/akt/research_junyi_graph_model.py',
              'src/knowledge_tracing/akt/research_junyi_graph.py',
-             'src/knowledge_tracing/akt/research_junyi_data.py')
+             'src/knowledge_tracing/akt/research_junyi_data.py',
+             'src/knowledge_tracing/akt/research_junyi_graph_cache.py')
     return (*source_inventory(),*((name,hashlib.sha256((PROJECT_ROOT/name).read_bytes()).hexdigest())
                                   for name in paths))
 
@@ -50,7 +52,8 @@ class JunyiGraphAKTAdapter:
     def __init__(self, *, config: AKTConfig, encoding: JunyiResearchEncoding,
                  condition: JunyiGraphCondition, phase: JunyiGraphPhaseSession,
                  cuda_profile: ResearchCUDAExecutionProfile | None = None,
-                 graph_enabled: bool = True, compact_context: bool = False):
+                 graph_enabled: bool = True, compact_context: bool = False,
+                 context_cache: GraphContextCache | None = None):
         _need(type(config) is AKTConfig and config.phase=='junyi-research',
               'Explicit Junyi research config required')
         validate_config(config,cuda_profile=cuda_profile)
@@ -81,7 +84,7 @@ class JunyiGraphAKTAdapter:
         self._optimizer = None
         self._failed = False
         self._graph_enabled = graph_enabled
-        self.set_phase(phase)
+        self.set_phase(phase, context_cache=context_cache)
         # Không gọi AKTAdapter.__init__: native sau đây tạo đúng một backbone.
         self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
                                          condition=condition,cuda_profile=cuda_profile)
@@ -98,7 +101,7 @@ class JunyiGraphAKTAdapter:
               'Boolean graph control requires no pending training batch')
         self._graph_enabled = enabled
 
-    def set_phase(self, phase: JunyiGraphPhaseSession):
+    def set_phase(self, phase: JunyiGraphPhaseSession, *, context_cache=None):
         _need(self._ticket is None and not self._failed, 'Consume pending batch before changing phase')
         _need(type(phase) is JunyiGraphPhaseSession, 'Typed Junyi graph phase session required')
         phase.assert_boundary()
@@ -109,6 +112,12 @@ class JunyiGraphAKTAdapter:
               'A1 Junyi adapter currently supports train80 and selection only')
         _need(phase.condition.encoding.native.vocabulary.values==self.encoding.vocabulary.values,
               'Phase/native vocabulary mismatch')
+        _need(context_cache is None or (type(context_cache) is GraphContextCache and self._compact_context),
+              'Typed graph cache requires compact context')
+        if context_cache is not None:
+            context_cache.assert_for(phase)
+        self._context_cache = context_cache
+        self._cache_identity = None if context_cache is None else context_cache.identity
         self.phase = phase
         self._phase_identity = phase.view.identity
 
@@ -121,6 +130,12 @@ class JunyiGraphAKTAdapter:
               'Junyi context backend changed')
         # Session kiểm header frozen và hash support nhỏ; full role audit ở boundary.
         self.phase._light_check()
+        if self._context_cache is not None:
+            _need(type(self._context_cache) is GraphContextCache
+                  and self._context_cache.identity == self._cache_identity, 'Graph cache binding changed')
+            self._context_cache.assert_for(self.phase)
+        else:
+            _need(self._cache_identity is None, 'Graph cache binding removed')
         _need(self.phase.view.identity==self._phase_identity
               and self.phase.condition.content_sha256==self._condition_sha
               and self.research_encoding.identity==self._encoding_sha,
@@ -146,13 +161,15 @@ class JunyiGraphAKTAdapter:
         self._integrity()
         return dict(condition_sha256=self._condition_sha,encoding_sha256=self._encoding_sha,
                     phase_sha256=self._phase_identity,graph_enabled=self._graph_enabled,
-                    context_backend='compact-a1-v1' if self._compact_context else 'reference')
+                    context_backend='compact-a1-v1' if self._compact_context else 'reference',
+                    graph_context_cache=self._cache_identity)
 
     def _collate(self, windows, targets=None):
         _need(1<=len(windows)<=self.config.batch_size
               and all(type(window) is WindowInputs for window in windows), 'Bounded typed windows required')
         _need(len({window.window_id for window in windows})==len(windows), 'Duplicate native window IDs')
-        evidence = (build_compact_context(tuple(windows),self.phase) if self._compact_context
+        evidence = (self._context_cache.batch(tuple(windows),self.phase) if self._context_cache is not None
+                    else build_compact_context(tuple(windows),self.phase) if self._compact_context
                     else tuple(self.phase.prefix_evidence(window) for window in windows))
         batch = collate_windows(windows,n_items=len(self.encoding.vocabulary.values),
                                 device=self._device,targets=targets)

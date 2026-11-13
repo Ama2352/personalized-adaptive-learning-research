@@ -1,0 +1,72 @@
+{
+  "status": "PASS_CACHE_PARITY_PERFORMANCE_NOT_CONCLUSIVE",
+  "methods": [
+    {
+      "method": "A1 compact trực tiếp",
+      "steps": 44,
+      "seconds": 20.989890212999967,
+      "targets": 313940,
+      "targets_per_second": 14956.724252209908,
+      "gpu_mean_percent": 67.33783783783784,
+      "gpu_samples": 74,
+      "peak_memory_mib": 5305.0,
+      "min_block_targets_per_second": 14445.750537623177,
+      "max_block_targets_per_second": 15505.171711846782
+    },
+    {
+      "method": "A1 compact cache SQLite",
+      "steps": 44,
+      "seconds": 20.610099579999996,
+      "targets": 313940,
+      "targets_per_second": 15232.3378536534,
+      "gpu_mean_percent": 70.83561643835617,
+      "gpu_samples": 73,
+      "peak_memory_mib": 5305.0,
+      "min_block_targets_per_second": 15154.720624731073,
+      "max_block_targets_per_second": 15310.754232660121
+    }
+  ],
+  "speedup": 1.0184274040756465,
+  "throughput_change_percent": 1.842740407564647,
+  "cache_build_seconds": 0.6711890469999844,
+  "cache_bytes": 266240,
+  "cache_windows": 256,
+  "population": {
+    "train_windows": 256,
+    "selection_windows": 88,
+    "train_targets": 14270,
+    "selection_targets": 4440,
+    "train_users": 204,
+    "selection_users": 64,
+    "graph_edges": 976,
+    "vocabulary": 717,
+    "learner_ids_aliased": true
+  },
+  "parity": [
+    {
+      "alpha": 0.0,
+      "status": "PASS",
+      "max_absolute_drift": 0.0,
+      "loss": 5289.15771484375,
+      "targets": 7628
+    },
+    {
+      "alpha": 0.75,
+      "status": "PASS",
+      "max_absolute_drift": 0.0,
+      "loss": 4969.732421875,
+      "targets": 7628
+    }
+  ],
+  "prediction_drift": 0,
+  "checkpoint_reload_drift": 0,
+  "optimizer_steps": 100,
+  "local_tests_passed": 62,
+  "elapsed_gpu_probe_seconds": 71.827154189,
+  "modal_spent_usd": 0,
+  "benchmark_checkpoint_downloaded": true,
+  "full_train_cache_built": false,
+  "h100_measured": false,
+  "cache_default_enabled": false,
+  "limits_vi": "Hai block10giây mỗi phương án theo ABBA, lặp cohort nhỏ. GPU sample gồm warmup2step mỗi block. Hai model cùng tồn tại trên GPU. Prediction so sau reset về cùng weights. Checkpoint terminal giữ state train trước reset. Chưa đo cả epoch, source2migration hoặc fullproducer CUDA."
+}

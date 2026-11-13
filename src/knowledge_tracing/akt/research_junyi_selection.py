@@ -149,14 +149,17 @@ def _evaluate(adapter, learners, target_count, *, output=None, batch_size=None):
                 native_bce=loss,probability_sha256=hashlib.sha256(p.tobytes()).hexdigest())
 
 
-def _make_selected_adapter(config, profile, encoding, view, condition):
+def _make_selected_adapter(config, profile, encoding, view, condition, *, context_cache=None):
     if condition is None:
+        if context_cache is not None:
+            raise ValueError('A0 cannot consume graph context cache')
         from .model import AKTAdapter
         return AKTAdapter(config,encoding.native)
     from .research_junyi_graph import JunyiGraphPhaseSession
     from .research_junyi_graph_model import JunyiGraphAKTAdapter
     return JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=condition,
-        phase=JunyiGraphPhaseSession(condition,view),cuda_profile=profile,compact_context=True)
+        phase=JunyiGraphPhaseSession(condition,view),cuda_profile=profile,compact_context=True,
+        context_cache=context_cache)
 
 
 def _comparison_candidate(config, profile, inputs, encoding, initial_backbone, *,
@@ -193,7 +196,8 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         resume_checkpoint=None, expected_resume_sha256=None,
         encoding_receipt=None, expected_encoding_receipt_sha256=None, graph_condition=None,
         comparison_reference_file=None, expected_comparison_reference_sha256=None,
-        validation_batch_size=None):
+        validation_batch_size=None, train_graph_context_cache=None,
+        expected_train_graph_context_cache_sha256=None):
     """A0 hoặc A1 expert, selected fit80/rawbest10 với cùng state machine."""
     validate_config(config,cuda_profile=profile)
     if validation_batch_size is not None and (type(validation_batch_size) is not int
@@ -213,6 +217,14 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
             and comparison_reference_file is None):
         raise PermissionError('Main graph training requires a pinned A0 comparison reference')
     prepared = {}
+    if (train_graph_context_cache is None)!=(expected_train_graph_context_cache_sha256 is None):
+        raise ValueError('Graph context cache path and pin required together')
+    if train_graph_context_cache is not None:
+        if graph_condition is None or train_window_cache is None:
+            raise ValueError('Graph context cache requires A1 and pinned native window cache')
+        if file_sha(train_graph_context_cache)!=expected_train_graph_context_cache_sha256:
+            raise ValueError('Prepared graph context cache changed')
+        prepared['train_graph_context_cache_sha256']=expected_train_graph_context_cache_sha256
     if validation_batch_size is not None:
         prepared['validation_batch_size']=validation_batch_size
     comparison_reference = None
@@ -298,6 +310,16 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
             encoding=encoding,source_data_sha256=inputs.source_identity,expected_target_rows=inputs.train_targets,
             expected_manifest_sha256=expected_train_window_manifest_sha256)
         windows_factory=cache_session.iter_windows
+    graph_cache = None
+    if train_graph_context_cache is not None:
+        from .research_junyi_graph import JunyiGraphPhaseSession
+        from .research_junyi_graph_cache import GraphContextCache
+        graph_cache = GraphContextCache.open(train_graph_context_cache,
+            expected_train_graph_context_cache_sha256,JunyiGraphPhaseSession(graph_condition,inputs.train),
+            dataset_sha256=inputs.source_identity,
+            window_manifest_sha256=expected_train_window_manifest_sha256)
+        if graph_cache.targets!=inputs.train_targets:
+            raise ValueError('Graph context cache target population differs')
     identity = dict(kind='junyi_a0_selected_v1',inputs=inputs.identity,encoding=encoding.identity,
         prediction_implementation=_prediction_implementation(validation_batch_size),
         config=json.loads(json.dumps(asdict(config),default=str)),profile=asdict(profile),
@@ -305,7 +327,8 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
     if graph_condition is not None:
         identity.update(kind='junyi_a1_selected_v1',candidate_id=candidate_id,
             batch_factory=dict(condition_sha256=graph_condition.identity,encoding_sha256=encoding.identity,
-                phase_sha256=inputs.train.identity,graph_enabled=True))
+                phase_sha256=inputs.train.identity,graph_enabled=True,context_backend='compact-a1-v1',
+                graph_context_cache=None if graph_cache is None else graph_cache.identity))
     if comparison_reference is not None:
         identity['comparison_reference_sha256']=expected_comparison_reference_sha256
     if validation_batch_size is not None:
@@ -319,7 +342,10 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         resume_sha256=expected_resume_sha256,prepared_inputs=prepared))
     _seed(42)
     with torch.device('cpu'):
-        adapter = _make_selected_adapter(config,profile,encoding,inputs.train,graph_condition)
+        adapter = _make_selected_adapter(config,profile,encoding,inputs.train,graph_condition,
+            context_cache=graph_cache)
+    if graph_condition is not None and identity['batch_factory']!=adapter.audit_context_boundary():
+        raise ValueError('Producer batch factory identity differs from bound adapter')
     if graph_condition is not None:
         from types import SimpleNamespace
         initial_backbone=_state_hash(SimpleNamespace(native=adapter.native.backbone))
@@ -393,7 +419,7 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         batch_options = {}
         if graph_condition is not None:
             from .research_junyi_graph import JunyiGraphPhaseSession
-            adapter.set_phase(JunyiGraphPhaseSession(graph_condition,inputs.train))
+            adapter.set_phase(JunyiGraphPhaseSession(graph_condition,inputs.train),context_cache=graph_cache)
             batch_options['batch_factory'] = adapter.collate_training
         with (output/f'epoch-{epoch:03d}-{attempt_id}-progress.jsonl').open('x',encoding='utf-8') as log:
             def progress(event):

@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 13/11 — cache A1 đã tích hợp và kiểm T4
+
+[Hồ sơ cache A1](../research_tracking/runs/junyi-a1-graph-cache-20261113-01/README.md) giữ 62 ca local đạt, parity T4 drift 0, 100 bước kiểm kỹ thuật, throughput tăng 1,84% và GPU 70,8% trong đoạn đo. Cache giữ tùy chọn vì chênh lệch thời gian còn nhỏ. Có rà 14 bước cache của epoch, artifact đã tải về D và T4 đã trả, 0 USD Modal. Cache toàn TRAIN80, migration source2 và producer CUDA còn chờ.
+
+
 ## 13/11 — Junyi thật trênT4, chuỗi dài và cache
 
 [Hồ sơ](../research_tracking/runs/junyi-a1-real-t4-20261113-01/README.md) giữ parity dữ liệu thật,32step A1 sauwarmup GPU69,7%, input preloaded75,4%, traceCPU/CUDA và prototypecachecontext1,65×. Mức48,5% đoạn ngắn được giữ. Modelbenchmark28,9MB đã tảiD/kiểm799chunk vànạpCPU. T4đãtrả,0USDModal. Full training/source2migration/cacheproduction cònchờ.

@@ -1,0 +1,30 @@
+.FF....................................                                  [100%]
+================================== FAILURES ===================================
+__________ test_cached_training_predictions_and_optimizer_match[0.0] __________
+tests\akt\test_junyi_graph_cache.py:52: in test_cached_training_predictions_and_optimizer_match
+    assert results[0]==results[1]
+E   AssertionError: assert {'stepped': T...70869446, ...} == {'stepped': T...70869446, ...}
+E     
+E     Omitting 7 identical items, use -vv to show
+E     Differing items:
+E     {'forward_seconds': 0.8305319999999483} != {'forward_seconds': 0.025000299996463582}
+E     {'optimizer_seconds': 0.06520440000167582} != {'optimizer_seconds': 0.06855270000232849}
+E     {'gradient_clip_seconds': 0.03514849999919534} != {'gradient_clip_seconds': 0.01142719999916153}
+E     {'backward_seconds': 0.08474450000358047} != {'backward_seconds': 0.023049700001138262}
+E     Use -v to get more diff
+_________ test_cached_training_predictions_and_optimizer_match[0.75] __________
+tests\akt\test_junyi_graph_cache.py:52: in test_cached_training_predictions_and_optimizer_match
+    assert results[0]==results[1]
+E   AssertionError: assert {'stepped': T...56048584, ...} == {'stepped': T...56048584, ...}
+E     
+E     Omitting 7 identical items, use -vv to show
+E     Differing items:
+E     {'forward_seconds': 0.03126759999577189} != {'forward_seconds': 0.049084600002970546}
+E     {'optimizer_seconds': 0.07651199999963865} != {'optimizer_seconds': 0.08547070000349777}
+E     {'gradient_clip_seconds': 0.008988000001409091} != {'gradient_clip_seconds': 0.00956420000147773}
+E     {'backward_seconds': 0.022063800002797507} != {'backward_seconds': 0.03336760000092909}
+E     Use -v to get more diff
+=========================== short test summary info ===========================
+FAILED tests/akt/test_junyi_graph_cache.py::test_cached_training_predictions_and_optimizer_match[0.0]
+FAILED tests/akt/test_junyi_graph_cache.py::test_cached_training_predictions_and_optimizer_match[0.75]
+2 failed, 37 passed in 71.12s (0:01:11)

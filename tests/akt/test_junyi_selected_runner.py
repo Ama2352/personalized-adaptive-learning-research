@@ -93,9 +93,16 @@ def harness(tmp_path, monkeypatch):
             control['models'].append(self)
 
     class TinyGraphAdapter(TinyAdapter):
-        def set_phase(self,phase):
+        def set_phase(self,phase,*,context_cache=None):
             self.phase=phase
+            self.context_cache=context_cache
             control.setdefault('graph_phases',[]).append(phase.view.scope)
+
+        def audit_context_boundary(self):
+            return dict(condition_sha256=self.phase.condition.identity,
+                encoding_sha256=self.phase.condition.encoding.identity,phase_sha256=self.phase.view.identity,
+                graph_enabled=True,context_backend='compact-a1-v1',
+                graph_context_cache=None if self.context_cache is None else self.context_cache.identity)
 
         def collate_training(self,entries):
             raise AssertionError('Orchestration fixture replaces the training loop')
@@ -131,6 +138,7 @@ def harness(tmp_path, monkeypatch):
         control['train_calls'].append(epoch)
         if batch_factory is not None:
             assert batch_factory.__self__ is adapter
+            assert recovery['identity']['batch_factory']==adapter.audit_context_boundary()
             assert adapter.phase.view.scope=='select_train80'
             assert recovery['identity']['batch_factory']['condition_sha256']==adapter.phase.condition.identity
         assert recovery['checkpoint_every_steps']==1000
@@ -203,10 +211,10 @@ def harness(tmp_path, monkeypatch):
         if graph_condition is not None:
             from knowledge_tracing.akt.research_junyi_graph import JunyiGraphPhaseSession
 
-            def make(config,profile,encoding,view,condition):
+            def make(config,profile,encoding,view,condition,*,context_cache=None):
                 assert encoding is condition.encoding
                 adapter=TinyGraphAdapter(config,encoding.native)
-                adapter.set_phase(JunyiGraphPhaseSession(condition,view))
+                adapter.set_phase(JunyiGraphPhaseSession(condition,view),context_cache=context_cache)
                 return adapter
 
             monkeypatch.setattr(selected,'_make_selected_adapter',make)

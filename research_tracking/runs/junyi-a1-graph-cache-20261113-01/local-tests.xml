@@ -1,0 +1,772 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="30" skipped="0" tests="39" time="52.699" timestamp="2026-11-13T19:45:48.640015+07:00" hostname="Ama"><testcase classname="tests.akt.test_junyi_graph_cache" name="test_rebatch_and_shuffle_exact" time="0.312"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_graph_cache.py:31: in test_rebatch_and_shuffle_exact
+    adapter,entries,reader,_=prepared(setup,tmp_path,monkeypatch,entries)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_graph_cache" name="test_cached_training_predictions_and_optimizer_match[0.0]" time="0.191"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_graph_cache.py:39: in test_cached_training_predictions_and_optimizer_match
+    direct,entries,reader,_=prepared(setup,tmp_path,monkeypatch)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_graph_cache" name="test_cached_training_predictions_and_optimizer_match[0.75]" time="0.178"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_graph_cache.py:39: in test_cached_training_predictions_and_optimizer_match
+    direct,entries,reader,_=prepared(setup,tmp_path,monkeypatch)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_graph_cache" name="test_prior_change_misses_and_current_labels_are_excluded" time="0.175"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_graph_cache.py:67: in test_prior_change_misses_and_current_labels_are_excluded
+    adapter,entries,reader,_=prepared(setup,tmp_path,monkeypatch)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_graph_cache" name="test_stale_or_corrupt_rejected[sha]" time="0.153"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_graph_cache.py:80: in test_stale_or_corrupt_rejected
+    adapter,entries,reader,receipt=prepared(setup,tmp_path,monkeypatch)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_graph_cache" name="test_stale_or_corrupt_rejected[phase]" time="0.120"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_graph_cache.py:80: in test_stale_or_corrupt_rejected
+    adapter,entries,reader,receipt=prepared(setup,tmp_path,monkeypatch)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_graph_cache" name="test_stale_or_corrupt_rejected[graph]" time="0.189"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_graph_cache.py:80: in test_stale_or_corrupt_rejected
+    adapter,entries,reader,receipt=prepared(setup,tmp_path,monkeypatch)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_graph_cache" name="test_stale_or_corrupt_rejected[dataset]" time="0.205"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_graph_cache.py:80: in test_stale_or_corrupt_rejected
+    adapter,entries,reader,receipt=prepared(setup,tmp_path,monkeypatch)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_graph_cache" name="test_stale_or_corrupt_rejected[manifest]" time="0.204"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_graph_cache.py:80: in test_stale_or_corrupt_rejected
+    adapter,entries,reader,receipt=prepared(setup,tmp_path,monkeypatch)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_graph_cache" name="test_stale_or_corrupt_rejected[payload]" time="0.169"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_graph_cache.py:80: in test_stale_or_corrupt_rejected
+    adapter,entries,reader,receipt=prepared(setup,tmp_path,monkeypatch)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_graph_cache" name="test_stale_or_corrupt_rejected[replacement]" time="0.174"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_graph_cache.py:80: in test_stale_or_corrupt_rejected
+    adapter,entries,reader,receipt=prepared(setup,tmp_path,monkeypatch)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_cache.py:18: in prepared
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_graph_cache" name="test_failed_build_never_publishes[incomplete]" time="0.164"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_graph_cache.py:105: in test_failed_build_never_publishes
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_graph_cache" name="test_failed_build_never_publishes[duplicate]" time="0.080"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_graph_cache.py:105: in test_failed_build_never_publishes
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_graph_cache" name="test_failed_build_never_publishes[budget]" time="0.149"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_graph_cache.py:105: in test_failed_build_never_publishes
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_compact_context" name="test_two_adapter_steps_match_reference[on-0.0]" time="0.139"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_compact_context.py:28: in test_two_adapter_steps_match_reference
+    old,new,entries=case(setup,mode)
+                    ^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:17: in case
+    old=setup['adapter'](edges=edges,enabled=mode!='off')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_compact_context" name="test_two_adapter_steps_match_reference[on-0.75]" time="0.147"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_compact_context.py:28: in test_two_adapter_steps_match_reference
+    old,new,entries=case(setup,mode)
+                    ^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:17: in case
+    old=setup['adapter'](edges=edges,enabled=mode!='off')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_compact_context" name="test_two_adapter_steps_match_reference[off-0.0]" time="0.181"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_compact_context.py:28: in test_two_adapter_steps_match_reference
+    old,new,entries=case(setup,mode)
+                    ^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:17: in case
+    old=setup['adapter'](edges=edges,enabled=mode!='off')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_compact_context" name="test_two_adapter_steps_match_reference[off-0.75]" time="0.220"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_compact_context.py:28: in test_two_adapter_steps_match_reference
+    old,new,entries=case(setup,mode)
+                    ^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:17: in case
+    old=setup['adapter'](edges=edges,enabled=mode!='off')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_compact_context" name="test_two_adapter_steps_match_reference[unsupported-0.0]" time="0.277"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_compact_context.py:28: in test_two_adapter_steps_match_reference
+    old,new,entries=case(setup,mode)
+                    ^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:17: in case
+    old=setup['adapter'](edges=edges,enabled=mode!='off')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_compact_context" name="test_two_adapter_steps_match_reference[unsupported-0.75]" time="0.308"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_compact_context.py:28: in test_two_adapter_steps_match_reference
+    old,new,entries=case(setup,mode)
+                    ^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:17: in case
+    old=setup['adapter'](edges=edges,enabled=mode!='off')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_compact_context" name="test_compact_context_detects_batch_and_payload_changes" time="0.184"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_compact_context.py:59: in test_compact_context_detects_batch_and_payload_changes
+    _,adapter,entries=case(setup,'on')
+                      ^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:17: in case
+    old=setup['adapter'](edges=edges,enabled=mode!='off')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_compact_context" name="test_compact_keeps_future_boundary_and_encoding_checks" time="0.155"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_compact_context.py:77: in test_compact_keeps_future_boundary_and_encoding_checks
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_compact_context" name="test_mid_batch_encoding_change_is_detected" time="0.143"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_compact_context.py:92: in test_mid_batch_encoding_change_is_detected
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_compact_context" name="test_zero_message_keeps_active_target" time="0.172"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_compact_context.py:104: in test_zero_message_keeps_active_target
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_compact_context" name="test_context_backend_mutation_is_rejected" time="0.210"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_compact_context.py:111: in test_context_backend_mutation_is_rejected
+    adapter=setup['adapter'](compact=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_compact_context" name="test_selected_factory_enables_compact_a1" time="0.018" /><testcase classname="tests.akt.test_junyi_compact_context" name="test_compact_checkpoint_resume_matches_continuous[True]" time="0.202"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_compact_context.py:133: in test_compact_checkpoint_resume_matches_continuous
+    base_resume(bound,tmp_path,enabled)
+tests\akt\test_junyi_graph_model.py:61: in test_native_graph_checkpoint_resume_matches_continuous
+    continuous,continuous_optimizer,recovery=make('continuous')
+                                             ^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:53: in make
+    adapter=setup['adapter'](enabled=enabled)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:131: in compact_adapter
+    return original(compact=True,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_compact_context" name="test_compact_checkpoint_resume_matches_continuous[False]" time="0.252"><failure message="subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.">tests\akt\test_junyi_compact_context.py:133: in test_compact_checkpoint_resume_matches_continuous
+    base_resume(bound,tmp_path,enabled)
+tests\akt\test_junyi_graph_model.py:61: in test_native_graph_checkpoint_resume_matches_continuous
+    continuous,continuous_optimizer,recovery=make('continuous')
+                                             ^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:53: in make
+    adapter=setup['adapter'](enabled=enabled)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_compact_context.py:131: in compact_adapter
+    return original(compact=True,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_graph_model.py:139: in adapter
+    return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:89: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.</failure></testcase><testcase classname="tests.akt.test_junyi_selected_runner" name="test_selection_uses_legacy_prediction_path" time="0.623" /><testcase classname="tests.akt.test_junyi_selected_runner" name="test_graph_selection_shares_stopping_checkpoint_and_export_protocol" time="0.140"><failure message="TypeError: harness.&lt;locals&gt;.run.&lt;locals&gt;.make() got an unexpected keyword argument 'context_cache'">tests\akt\test_junyi_selected_runner.py:247: in test_graph_selection_shares_stopping_checkpoint_and_export_protocol
+    result=harness.run(graph_condition=condition)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_selected_runner.py:226: in run
+    return runner(config,profile,inputs,
+src\knowledge_tracing\akt\research_junyi_selection.py:345: in run_junyi_selected
+    adapter = _make_selected_adapter(config,profile,encoding,inputs.train,graph_condition,
+E   TypeError: harness.&lt;locals&gt;.run.&lt;locals&gt;.make() got an unexpected keyword argument 'context_cache'</failure></testcase><testcase classname="tests.akt.test_junyi_selected_runner" name="test_graph_selection_resumes_before_validation_without_retraining" time="0.118"><failure message="TypeError: harness.&lt;locals&gt;.run.&lt;locals&gt;.make() got an unexpected keyword argument 'context_cache'">tests\akt\test_junyi_selected_runner.py:266: in test_graph_selection_resumes_before_validation_without_retraining
+    harness.run(graph_condition=condition)
+tests\akt\test_junyi_selected_runner.py:226: in run
+    return runner(config,profile,inputs,
+src\knowledge_tracing\akt\research_junyi_selection.py:345: in run_junyi_selected
+    adapter = _make_selected_adapter(config,profile,encoding,inputs.train,graph_condition,
+E   TypeError: harness.&lt;locals&gt;.run.&lt;locals&gt;.make() got an unexpected keyword argument 'context_cache'</failure></testcase><testcase classname="tests.akt.test_junyi_selected_runner" name="test_graph_selection_rejects_a0_authorization" time="0.069" /><testcase classname="tests.akt.test_junyi_selected_runner" name="test_early_stopping_reloads_best_complete_checkpoint" time="17.277" /><testcase classname="tests.akt.test_junyi_selected_runner" name="test_epoch_checkpoint_published_before_validation_failure" time="0.310" /><testcase classname="tests.akt.test_junyi_selected_runner" name="test_resume_prevalidation_checkpoint_skips_completed_training" time="0.480" /><testcase classname="tests.akt.test_junyi_selected_runner" name="test_resume_postvalidation_restores_history_and_stopper" time="1.291" /><testcase classname="tests.akt.test_junyi_selected_runner" name="test_partial_epoch_is_recoverable_and_never_selected_final" time="0.124"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{d5b2cf81-ca88-4d02-a2e9-c99fe828dc1d}\\AC\\Temp\\pytest-of-AmaDev\\pytest-0\\test_partial_epoch_is_recovera0\\run\\batch-recovery\\unit-epoch001-step001.pt' -&gt; 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{d5b2cf81-ca88-4d02-a2e9-c99fe828dc1d}\\AC\\Temp\\pytest-of-AmaDev\\pytest-0\\test_partial_epoch_is_recovera0\\run\\checkpoints\\unit-epoch001-step001\\state.pt'">tests\akt\test_junyi_selected_runner.py:334: in test_partial_epoch_is_recoverable_and_never_selected_final
+    result = harness.run(epochs=1)
+             ^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_selected_runner.py:226: in run
+    return runner(config,profile,inputs,
+src\knowledge_tracing\akt\research_junyi_selection.py:555: in run_a0_junyi_selected
+    return run_junyi_selected(config,profile,inputs,authorization_file=authorization_file,
+src\knowledge_tracing\akt\research_junyi_selection.py:435: in run_junyi_selected
+    stats = train_epoch(adapter,windows_factory,
+tests\akt\test_junyi_selected_runner.py:161: in train_epoch
+    recovery['checkpoint_callback'](path)
+src\knowledge_tracing\akt\research_junyi_selection.py:407: in publish_batch
+    os.link(path,directory/'state.pt')
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{d5b2cf81-ca88-4d02-a2e9-c99fe828dc1d}\\AC\\Temp\\pytest-of-AmaDev\\pytest-0\\test_partial_epoch_is_recovera0\\run\\batch-recovery\\unit-epoch001-step001.pt' -&gt; 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{d5b2cf81-ca88-4d02-a2e9-c99fe828dc1d}\\AC\\Temp\\pytest-of-AmaDev\\pytest-0\\test_partial_epoch_is_recovera0\\run\\checkpoints\\unit-epoch001-step001\\state.pt'</failure></testcase><testcase classname="tests.akt.test_junyi_selected_runner" name="test_selection_population_drift_fails_before_final" time="0.316" /><testcase classname="tests.akt.test_junyi_selected_runner" name="test_completed_logical_run_cannot_resume" time="1.310" /></testsuite></testsuites>
