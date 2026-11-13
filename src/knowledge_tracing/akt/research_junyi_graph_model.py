@@ -59,9 +59,10 @@ class JunyiGraphAKTAdapter:
         validate_config(config,cuda_profile=cuda_profile)
         _need(type(encoding) is JunyiResearchEncoding and type(condition) is JunyiGraphCondition,
               'Typed Junyi encoding and graph condition required')
-        _need(type(graph_enabled) is bool and condition.variant=='A1',
-              'A1 condition and explicit Boolean graph control required')
+        _need(type(graph_enabled) is bool and condition.variant in ('A1','A2','A3'),
+              'A1/A2/A3 condition and explicit Boolean graph control required')
         _need(type(compact_context) is bool, 'Boolean compact context control required')
+        _need(not compact_context or condition.variant=='A1', 'Compact A2/A3 context is pending')
         self._compact_context = compact_context
         self._context_backend = compact_context
         _need(config.source_root==PROJECT_ROOT/'artifacts/akt/dependencies/upstream'
@@ -143,7 +144,7 @@ class JunyiGraphAKTAdapter:
         _need(self.encoding is self.research_encoding.native
               and self.condition is self.phase.condition, 'Owned encoding and condition required')
         if hasattr(self,'native'):
-            _need(self.native.condition_sha256==self._condition_sha and self.native.variant=='A1'
+            _need(self.native.condition_sha256==self._condition_sha and self.native.variant==self.condition.variant
                   and self.native.cuda_profile is self.cuda_profile and self.native._device==self._device,
                   'Native Junyi graph binding changed')
             _need(tuple(id(p) for p in self.native.parameters())==tuple(id(p) for p in self._parameters),

@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 13/11 — Chuẩn bị A2/A3 và chuyển kiểm dữ liệu sang CPU
+
+[Hồ sơ](../runs/junyi-a2-a3-preparation-20261113-01/README.md) giữ299ca CPU, A2/A3 reference có confidence/gate, handoff toàn TRAIN80 kiểm347,65giây CPU/nhận3,82giây. Chưa training A2/A3,0USD Modal. Compact và orchestration staged còn tiếp tục.
+
+
 ## 13/11 — Xuất gọn A1 Junyi và giới hạn so sánh A0
 
 [Hồ sơ xuất model](../runs/akt-model-export-20261113-01/README.md) giữ gói bốn file trên D, một .pt epoch 9, kiểm CPU load/Adam/RNG/SHA đạt. Cấu hình học và tập target A0–A1 khớp. A0 chọn epoch bằng validation batch 1, chỉ epoch 9 đã replay batch 128; ranking toàn 12 epoch còn chờ. Refit/calibration/đánh giá độc lập còn chờ.

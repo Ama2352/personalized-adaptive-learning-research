@@ -1,7 +1,7 @@
-"""Condition A1 Junyi và evidence từ đúng prefix của native window.
+"""Condition A1/A2/A3 Junyi và evidence từ đúng prefix của native window.
 
-Chưa có estimator confidence Junyi hoặc quyền training. Không nhận labels hiện
-tại, full learner history, SimulatorBank hoặc nhãn cạnh đúng/sai.
+Điểm confidence từ fitter TRAIN80 được ghim riêng. Không nhận labels hiện tại,
+full learner history, SimulatorBank hoặc nhãn cạnh đúng/sai.
 """
 from dataclasses import dataclass, field
 import hashlib
@@ -15,6 +15,7 @@ from ..edge_confidence_artifact import _acyclic
 from ..shared_kt import PrerequisiteGraph
 from .research_junyi_data import JunyiPhaseView, JunyiResearchEncoding
 from .types import WindowInputs
+from .research_junyi_confidence_binding import JunyiConfidenceBinding
 
 AUDIT_SCHEMA = 'junyi_declared_parent_support_rows_v2'
 
@@ -35,11 +36,15 @@ class JunyiGraphCondition:
     topology_source_sha256: str
     variant: str = 'A1'
     graph_mode: str = 'expert_declared'
+    confidence: JunyiConfidenceBinding | None = None
     content_sha256: str = field(init=False)
 
     def __post_init__(self):
-        _need(self.variant == 'A1' and self.graph_mode == 'expert_declared',
-              'Only A1 expert is supported; fitted Junyi confidence binding is pending')
+        _need(self.variant in ('A1', 'A2', 'A3') and self.graph_mode == 'expert_declared',
+              'Only A1/A2/A3 expert conditions are supported')
+        _need((self.variant == 'A1' and self.confidence is None)
+              or (self.variant in ('A2', 'A3') and type(self.confidence) is JunyiConfidenceBinding),
+              'Only A1 permits absent fitted confidence; A2/A3 require TRAIN80 binding')
         _need(type(self.encoding) is JunyiResearchEncoding
               and self.encoding.fit_view.scope == 'select_train80', 'TRAIN80 Junyi encoding required')
         self.encoding.assert_for(self.encoding.fit_view)
@@ -58,19 +63,35 @@ class JunyiGraphCondition:
         _need(canonical == self.graph and _acyclic(nodes, edges), 'Canonical acyclic graph required')
         _need(set(self.encoding.native.vocabulary.values) <= set(nodes),
               'Fitted vocabulary exercise missing from graph nodes')
+        self._check_confidence()
         object.__setattr__(self, 'content_sha256', _identity(self._payload()))
+
+    def _check_confidence(self):
+        if self.confidence is None:
+            _need(self.variant == 'A1', 'Fitted confidence required')
+            return
+        self.confidence.assert_integrity()
+        _need(self.variant in ('A2', 'A3')
+              and self.confidence.train_view_identity == self.encoding.fit_view.identity
+              and self.confidence.encoding_identity == self.encoding.identity
+              and self.confidence.topology_source_sha256 == self.topology_source_sha256,
+              'Confidence must bind exact TRAIN80, encoding and topology')
+        _need(tuple((row.parent_id, row.child_id) for row in self.confidence.weights) == self.graph.edges,
+              'Confidence edge coverage mismatch')
 
     def _payload(self):
         return dict(variant=self.variant, graph_mode=self.graph_mode, nodes=self.graph.nodes,
             edges=self.graph.edges, direction=self.graph.edge_direction,
             topology_source_sha256=self.topology_source_sha256, encoding=self.encoding.identity,
             train_view=self.encoding.fit_view.identity, roles=self.encoding.fit_view.roles.identity,
-            confidence='fixed_uniform_one', history='effective_native_window_prefix',
+            confidence='fixed_uniform_one' if self.confidence is None else self.confidence.identity,
+            history='effective_native_window_prefix',
             graph_pruning='none', audit_schema=AUDIT_SCHEMA,
             role='junyi_condition_only_not_fitted_weights')
 
     def assert_integrity(self):
         self.encoding.assert_for(self.encoding.fit_view)
+        self._check_confidence()
         _need(self.content_sha256 == _identity(self._payload()), 'Junyi graph condition changed')
 
     @property
@@ -123,7 +144,8 @@ def _view_header(view):
 def _condition_header(condition):
     return (id(condition.encoding), id(condition.graph), id(condition.graph.nodes),
             id(condition.graph.edges), condition.graph.edge_direction, condition.variant,
-            condition.graph_mode, condition.topology_source_sha256, condition.content_sha256)
+            condition.graph_mode, condition.topology_source_sha256, condition.content_sha256,
+            id(condition.confidence), None if condition.confidence is None else id(condition.confidence.weights))
 
 
 @dataclass(frozen=True)
@@ -142,6 +164,7 @@ header kiểm O(1), không hash lại gần198nghìn learner IDs mỗi window.
     _parents_by_child: object = field(init=False, repr=False)
     _encoding_identity: str = field(init=False, repr=False)
     _condition_identity: str = field(init=False, repr=False)
+    _weights_by_edge: object = field(init=False, repr=False)
 
     def __post_init__(self):
         _need(type(self.condition) is JunyiGraphCondition and type(self.view) is JunyiPhaseView,
@@ -161,6 +184,9 @@ header kiểm O(1), không hash lại gần198nghìn learner IDs mỗi window.
             parents.setdefault(child, []).append(parent)
         object.__setattr__(self, '_parents_by_child', MappingProxyType(
             {child: tuple(values) for child, values in parents.items()}))
+        weights = ({edge: 1. for edge in self.condition.graph.edges} if self.condition.confidence is None
+                   else {(row.parent_id, row.child_id): row.operational_weight for row in self.condition.confidence.weights})
+        object.__setattr__(self, '_weights_by_edge', MappingProxyType(weights))
         object.__setattr__(self, '_encoding_identity', self.condition.encoding.identity)
         object.__setattr__(self, '_condition_identity', self.condition.content_sha256)
 
@@ -192,7 +218,7 @@ header kiểm O(1), không hash lại gần198nghìn learner IDs mỗi window.
         _validate_window(window, self)
         result = _prefix_evidence(window, vocabulary=self.condition.encoding.native.vocabulary.values,
             parents_by_child=self._parents_by_child, condition_sha=self._condition_identity,
-            encoding_sha=self._encoding_identity)
+            encoding_sha=self._encoding_identity, weights_by_edge=self._weights_by_edge)
         self._light_check()
         return result
 
@@ -232,7 +258,7 @@ def junyi_prefix_evidence(window, *, condition, view):
     return JunyiGraphPhaseSession(condition, view).prefix_evidence(window)
 
 
-def _prefix_evidence(window, *, vocabulary, parents_by_child, condition_sha, encoding_sha):
+def _prefix_evidence(window, *, vocabulary, parents_by_child, condition_sha, encoding_sha, weights_by_edge):
     """Trả một tuple cho native.bind; context positions giữ None.
 
 Tại vị trí j, câu trả lời của item j-1 nằm ở prior_responses[j]. Cập nhật
@@ -249,7 +275,8 @@ Tại vị trí j, câu trả lời của item j-1 nằm ở prior_responses[j].
         evidence = None
         if window.target_mask[local]:
             declared_parents = parents_by_child.get(vocabulary[int(item_id)], ())
-            parents = tuple(JunyiParentEvidence(parent, counts.get(parent, 0), 1.,
+            child = vocabulary[int(item_id)]
+            parents = tuple(JunyiParentEvidence(parent, counts.get(parent, 0), weights_by_edge[(parent, child)],
                 successes[parent]/counts[parent] if counts.get(parent, 0) else None)
                 for parent in declared_parents)
             observed_rows = tuple(source_row for _, source_row in heapq.merge(

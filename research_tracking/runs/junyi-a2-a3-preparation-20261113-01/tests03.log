@@ -1,0 +1,169 @@
+.......................FFFFF...................F........................ [ 39%]
+........................................................................ [ 79%]
+.....................................                                    [100%]
+================================== FAILURES ===================================
+____ test_cpu_admission_handoff_reuses_strict_pass_with_byte_verification _____
+
+case = (WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{4bd72f64-011c-493c-b608-276795f893a4}/AC/Temp/pytest-of-...21bb6ec7f9718177aac6bba94cc6a8a89b0773'), identity='af5184bc6fe567372cf22695ebc60a79b49c5176e18d51bf847391748d818f70'))
+tmp_path = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{4bd72f64-011c-493c-b608-276795f893a4}/AC/Temp/pytest-of-AmaDev/pytest-0/test_cpu_admission_handoff_reu0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000222EB7A23C0>
+
+    def test_cpu_admission_handoff_reuses_strict_pass_with_byte_verification(case,tmp_path,monkeypatch):
+        root,train,_,encoding=case
+        source=records(train,encoding,['A','C']*105,[1,0]*105)
+        receipt=build(case,train,source)
+        admitted=session(case,train,receipt)
+        path=tmp_path/'cpu-admission.json'
+        cache.write_cpu_admission(admitted,path)
+        def forbidden(*args,**kwargs):
+            raise AssertionError('Strict decoding repeated inside GPU handoff')
+        monkeypatch.setattr(cache,'iter_junyi_window_cache',forbidden)
+        handed=cache.JunyiWindowCacheSession(root,train,encoding,SOURCE,210,receipt['manifest_sha256'],
+>           admission_receipt=path,expected_admission_sha256=hashlib.sha256(path.read_bytes()).hexdigest())
+                                                             ^^^^^^^
+E       NameError: name 'hashlib' is not defined. Did you forget to import 'hashlib'?
+
+tests\akt\test_junyi_window_cache.py:292: NameError
+__________ test_cpu_admission_handoff_rejects_changed_inputs[shard] ___________
+
+case = (WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{4bd72f64-011c-493c-b608-276795f893a4}/AC/Temp/pytest-of-...21bb6ec7f9718177aac6bba94cc6a8a89b0773'), identity='af5184bc6fe567372cf22695ebc60a79b49c5176e18d51bf847391748d818f70'))
+tmp_path = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{4bd72f64-011c-493c-b608-276795f893a4}/AC/Temp/pytest-of-AmaDev/pytest-0/test_cpu_admission_handoff_rej0')
+mutation = 'shard'
+
+    @pytest.mark.parametrize('mutation',['shard','validator','count','key','pin'])
+    def test_cpu_admission_handoff_rejects_changed_inputs(case,tmp_path,mutation):
+        root,train,_,encoding=case
+        receipt=build(case,train,records(train,encoding,['A'],[1]))
+        path=tmp_path/'cpu-admission.json'
+        cache.write_cpu_admission(session(case,train,receipt),path)
+        if mutation=='shard':
+            shard=next(root.glob('shard-*.npz'))
+            raw=bytearray(shard.read_bytes());raw[-1]^=1;shard.write_bytes(raw)
+        elif mutation!='pin':
+            value=json.loads(path.read_text())
+            if mutation=='validator':value['validator_sources']['windows.py']='f'*64
+            if mutation=='count':value['strict_records_verified']+=1
+            if mutation=='key':value['key']={}
+            path.write_text(json.dumps(value))
+>       pin='0'*64 if mutation=='pin' else hashlib.sha256(path.read_bytes()).hexdigest()
+                                           ^^^^^^^
+E       NameError: name 'hashlib' is not defined. Did you forget to import 'hashlib'?
+
+tests\akt\test_junyi_window_cache.py:313: NameError
+________ test_cpu_admission_handoff_rejects_changed_inputs[validator] _________
+
+case = (WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{4bd72f64-011c-493c-b608-276795f893a4}/AC/Temp/pytest-of-...21bb6ec7f9718177aac6bba94cc6a8a89b0773'), identity='af5184bc6fe567372cf22695ebc60a79b49c5176e18d51bf847391748d818f70'))
+tmp_path = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{4bd72f64-011c-493c-b608-276795f893a4}/AC/Temp/pytest-of-AmaDev/pytest-0/test_cpu_admission_handoff_rej1')
+mutation = 'validator'
+
+    @pytest.mark.parametrize('mutation',['shard','validator','count','key','pin'])
+    def test_cpu_admission_handoff_rejects_changed_inputs(case,tmp_path,mutation):
+        root,train,_,encoding=case
+        receipt=build(case,train,records(train,encoding,['A'],[1]))
+        path=tmp_path/'cpu-admission.json'
+        cache.write_cpu_admission(session(case,train,receipt),path)
+        if mutation=='shard':
+            shard=next(root.glob('shard-*.npz'))
+            raw=bytearray(shard.read_bytes());raw[-1]^=1;shard.write_bytes(raw)
+        elif mutation!='pin':
+            value=json.loads(path.read_text())
+            if mutation=='validator':value['validator_sources']['windows.py']='f'*64
+            if mutation=='count':value['strict_records_verified']+=1
+            if mutation=='key':value['key']={}
+            path.write_text(json.dumps(value))
+>       pin='0'*64 if mutation=='pin' else hashlib.sha256(path.read_bytes()).hexdigest()
+                                           ^^^^^^^
+E       NameError: name 'hashlib' is not defined. Did you forget to import 'hashlib'?
+
+tests\akt\test_junyi_window_cache.py:313: NameError
+__________ test_cpu_admission_handoff_rejects_changed_inputs[count] ___________
+
+case = (WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{4bd72f64-011c-493c-b608-276795f893a4}/AC/Temp/pytest-of-...21bb6ec7f9718177aac6bba94cc6a8a89b0773'), identity='af5184bc6fe567372cf22695ebc60a79b49c5176e18d51bf847391748d818f70'))
+tmp_path = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{4bd72f64-011c-493c-b608-276795f893a4}/AC/Temp/pytest-of-AmaDev/pytest-0/test_cpu_admission_handoff_rej2')
+mutation = 'count'
+
+    @pytest.mark.parametrize('mutation',['shard','validator','count','key','pin'])
+    def test_cpu_admission_handoff_rejects_changed_inputs(case,tmp_path,mutation):
+        root,train,_,encoding=case
+        receipt=build(case,train,records(train,encoding,['A'],[1]))
+        path=tmp_path/'cpu-admission.json'
+        cache.write_cpu_admission(session(case,train,receipt),path)
+        if mutation=='shard':
+            shard=next(root.glob('shard-*.npz'))
+            raw=bytearray(shard.read_bytes());raw[-1]^=1;shard.write_bytes(raw)
+        elif mutation!='pin':
+            value=json.loads(path.read_text())
+            if mutation=='validator':value['validator_sources']['windows.py']='f'*64
+            if mutation=='count':value['strict_records_verified']+=1
+            if mutation=='key':value['key']={}
+            path.write_text(json.dumps(value))
+>       pin='0'*64 if mutation=='pin' else hashlib.sha256(path.read_bytes()).hexdigest()
+                                           ^^^^^^^
+E       NameError: name 'hashlib' is not defined. Did you forget to import 'hashlib'?
+
+tests\akt\test_junyi_window_cache.py:313: NameError
+___________ test_cpu_admission_handoff_rejects_changed_inputs[key] ____________
+
+case = (WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{4bd72f64-011c-493c-b608-276795f893a4}/AC/Temp/pytest-of-...21bb6ec7f9718177aac6bba94cc6a8a89b0773'), identity='af5184bc6fe567372cf22695ebc60a79b49c5176e18d51bf847391748d818f70'))
+tmp_path = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{4bd72f64-011c-493c-b608-276795f893a4}/AC/Temp/pytest-of-AmaDev/pytest-0/test_cpu_admission_handoff_rej3')
+mutation = 'key'
+
+    @pytest.mark.parametrize('mutation',['shard','validator','count','key','pin'])
+    def test_cpu_admission_handoff_rejects_changed_inputs(case,tmp_path,mutation):
+        root,train,_,encoding=case
+        receipt=build(case,train,records(train,encoding,['A'],[1]))
+        path=tmp_path/'cpu-admission.json'
+        cache.write_cpu_admission(session(case,train,receipt),path)
+        if mutation=='shard':
+            shard=next(root.glob('shard-*.npz'))
+            raw=bytearray(shard.read_bytes());raw[-1]^=1;shard.write_bytes(raw)
+        elif mutation!='pin':
+            value=json.loads(path.read_text())
+            if mutation=='validator':value['validator_sources']['windows.py']='f'*64
+            if mutation=='count':value['strict_records_verified']+=1
+            if mutation=='key':value['key']={}
+            path.write_text(json.dumps(value))
+>       pin='0'*64 if mutation=='pin' else hashlib.sha256(path.read_bytes()).hexdigest()
+                                           ^^^^^^^
+E       NameError: name 'hashlib' is not defined. Did you forget to import 'hashlib'?
+
+tests\akt\test_junyi_window_cache.py:313: NameError
+_________ test_partial_epoch_is_recoverable_and_never_selected_final __________
+
+harness = namespace(run=<function harness.<locals>.run at 0x00000222F04B9EE0>, control={'train_calls': [1], 'evaluate_calls': []...2=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8'))
+
+    def test_partial_epoch_is_recoverable_and_never_selected_final(harness):
+        harness.control['partial_epoch']=1
+>       result = harness.run(epochs=1)
+                 ^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_selected_runner.py:348: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_selected_runner.py:240: in run
+    return runner(actual_config,profile,inputs,
+src\knowledge_tracing\akt\research_junyi_selection.py:649: in run_a0_junyi_selected
+    return run_junyi_selected(config,profile,inputs,authorization_file=authorization_file,
+src\knowledge_tracing\akt\research_junyi_selection.py:528: in run_junyi_selected
+    stats = train_epoch(adapter,windows_factory,
+tests\akt\test_junyi_selected_runner.py:169: in train_epoch
+    recovery['checkpoint_callback'](path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/sandbox.{4bd72f64-011c-493c-b608-276795f893a4}/AC/Temp/pytest-of-AmaDev/pytest-0/test_partial_epoch_is_recovera0/run/batch-recovery/unit-epoch001-step001.pt')
+
+    def publish_batch(path):
+        import os
+        directory=output/'checkpoints'/path.stem
+        directory.mkdir(parents=True)
+>       os.link(path,directory/'state.pt')
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{4bd72f64-011c-493c-b608-276795f893a4}\\AC\\Temp\\pytest-of-AmaDev\\pytest-0\\test_partial_epoch_is_recovera0\\run\\batch-recovery\\unit-epoch001-step001.pt' -> 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\sandbox.{4bd72f64-011c-493c-b608-276795f893a4}\\AC\\Temp\\pytest-of-AmaDev\\pytest-0\\test_partial_epoch_is_recovera0\\run\\checkpoints\\unit-epoch001-step001\\state.pt'
+
+src\knowledge_tracing\akt\research_junyi_selection.py:500: PermissionError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_junyi_window_cache.py::test_cpu_admission_handoff_reuses_strict_pass_with_byte_verification
+FAILED tests/akt/test_junyi_window_cache.py::test_cpu_admission_handoff_rejects_changed_inputs[shard]
+FAILED tests/akt/test_junyi_window_cache.py::test_cpu_admission_handoff_rejects_changed_inputs[validator]
+FAILED tests/akt/test_junyi_window_cache.py::test_cpu_admission_handoff_rejects_changed_inputs[count]
+FAILED tests/akt/test_junyi_window_cache.py::test_cpu_admission_handoff_rejects_changed_inputs[key]
+FAILED tests/akt/test_junyi_selected_runner.py::test_partial_epoch_is_recoverable_and_never_selected_final
+6 failed, 175 passed in 29.84s

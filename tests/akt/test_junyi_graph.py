@@ -59,6 +59,29 @@ def test_unimplemented_variants_do_not_fake_fitted_confidence(case, variant):
         JunyiGraphCondition(encoding, condition.graph, 'a'*64, variant=variant)
 
 
+@pytest.mark.parametrize('variant',['A2','A3'])
+def test_fitted_confidence_changes_edge_weights_preserving_past_support(case,variant):
+    from knowledge_tracing.akt.research_junyi_confidence_binding import JunyiConfidenceBinding
+    from knowledge_tracing.akt.research_graph_condition import OperationalEdgeWeight
+    encoding,selection,original=case
+    binding=JunyiConfidenceBinding(encoding.fit_view.identity,encoding.identity,'a'*64,'b'*64,'c'*64,
+        tuple(OperationalEdgeWeight(parent,child,True,.25,None,.25) for parent,child in original.graph.edges))
+    condition=replace(original,variant=variant,confidence=binding)
+    window=windows(case,['A','C'],[1,0])[0]
+    row=junyi_prefix_evidence(window,condition=condition,view=selection)[1]
+    assert parent_at(row,'A').confidence==.25
+    assert parent_at(row,'A').support==1 and parent_at(row,'A').mean_observed_correctness==1.
+    assert condition.identity!=original.identity
+    assert original._payload()['confidence']=='fixed_uniform_one'
+    for change in ({'train_view_identity':'d'*64},{'encoding_identity':'d'*64},
+                   {'topology_source_sha256':'d'*64},{'weights':()}):
+        with pytest.raises(ValueError,match='Confidence'):
+            replace(original,variant=variant,confidence=replace(binding,**change))
+    from knowledge_tracing.akt.research_junyi_compact import build_compact_context
+    with pytest.raises(ValueError,match='Weighted A2/A3'):
+        build_compact_context((window,),JunyiGraphPhaseSession(condition,selection))
+
+
 @pytest.mark.parametrize('graph', [
     PrerequisiteGraph(('A', 'B', 'C'), (('A', 'C'), ('A', 'C'))),
     PrerequisiteGraph(('A', 'B', 'C'), (('A', 'A'),)),

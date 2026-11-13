@@ -101,7 +101,7 @@ def harness(tmp_path, monkeypatch):
         def audit_context_boundary(self):
             return dict(condition_sha256=self.phase.condition.identity,
                 encoding_sha256=self.phase.condition.encoding.identity,phase_sha256=self.phase.view.identity,
-                graph_enabled=True,context_backend='compact-a1-v1',
+                graph_enabled=True,context_backend='compact-a1-v1' if self.phase.condition.variant=='A1' else 'reference',
                 graph_context_cache=None if self.context_cache is None else self.context_cache.identity)
 
         def collate_training(self,entries):
@@ -223,7 +223,10 @@ def harness(tmp_path, monkeypatch):
             monkeypatch.setattr(selected,'_make_selected_adapter',make)
             if not wrong_graph_grant:
                 prepared['graph_condition_sha256']=graph_condition.identity
-                candidate_id='A1_EXPERT'
+                candidate_id=graph_condition.variant+'_EXPERT'
+                if graph_condition.confidence is not None:
+                    prepared['edge_confidence_identity']=graph_condition.confidence.identity
+                    prepared['edge_confidence_sha256']=graph_condition.confidence.fit_artifact_sha256
         grant = dict(status='USER_APPROVED',binding=dict(candidate_id=candidate_id,phase='junyi_selected_only',
             config_sha256=authorization.config_hash(actual_config),inputs_identity=inputs.identity,
             gate_sha256=gate['report_sha256'],runtime_sha256=selected.file_sha(runtime)),
@@ -271,6 +274,20 @@ def test_graph_selection_shares_stopping_checkpoint_and_export_protocol(harness)
     assert result['graph_condition_sha256']==condition.identity
     assert identity['batch_factory']['condition_sha256']==condition.identity
     assert identity['batch_factory']['phase_sha256']==harness.inputs.train.identity
+
+
+@pytest.mark.parametrize('variant',['A2','A3'])
+def test_confidence_selection_uses_same_checkpoint_state_machine(harness,variant):
+    from dataclasses import replace
+    from knowledge_tracing.akt.research_junyi_confidence_binding import JunyiConfidenceBinding
+    condition=graph_condition(harness)
+    binding=JunyiConfidenceBinding(harness.inputs.train.identity,harness.encoding.identity,
+        'a'*64,'b'*64,'c'*64,())
+    condition=replace(condition,variant=variant,confidence=binding)
+    result=harness.run(graph_condition=condition)
+    assert result['status']=='JUNYI_'+variant+'_SELECTED_ONLY_COMPLETE'
+    assert result['complete_epochs']==5 and result['selected_epoch']==2
+    assert result['candidate_id']==variant+'_EXPERT'
 
 
 def test_graph_selection_resumes_before_validation_without_retraining(harness):

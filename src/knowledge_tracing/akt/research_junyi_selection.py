@@ -89,7 +89,7 @@ def load_full_selected_cache(cache_root, roles_path, *, expected_manifest_sha256
 
 def validate_selected_grant(config, inputs, grant, *, config_sha256, gate_sha256, runtime_sha256,
                             prepared_inputs=None, candidate_id='A0'):
-    if candidate_id not in ('A0','A1_EXPERT'):
+    if candidate_id not in ('A0','A1_EXPERT','A2_EXPERT','A3_EXPERT'):
         raise PermissionError('Supported Junyi selected candidate required')
     expected = dict(candidate_id=candidate_id,phase='junyi_selected_only',config_sha256=config_sha256,
                     inputs_identity=inputs.identity,gate_sha256=gate_sha256,runtime_sha256=runtime_sha256)
@@ -165,7 +165,7 @@ def _make_selected_adapter(config, profile, encoding, view, condition, *, contex
     from .research_junyi_graph import JunyiGraphPhaseSession
     from .research_junyi_graph_model import JunyiGraphAKTAdapter
     return JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=condition,
-        phase=JunyiGraphPhaseSession(condition,view),cuda_profile=profile,compact_context=True,
+        phase=JunyiGraphPhaseSession(condition,view),cuda_profile=profile,compact_context=condition.variant=='A1',
         context_cache=context_cache)
 
 
@@ -193,6 +193,10 @@ def _comparison_candidate(config, profile, inputs, encoding, initial_backbone, *
             encoding_identity=graph_condition.encoding.identity,
             history_scope='effective_native_window_prefix',artifact_sha256=graph_condition.identity,
             topology_source_sha256=graph_condition.topology_source_sha256,uses_oracle_labels=False)
+        if graph_condition.confidence is not None:
+            candidate['graph_provenance'].update(
+                confidence_fit_view_identity=graph_condition.confidence.train_view_identity,
+                confidence_artifact_sha256=graph_condition.confidence.fit_artifact_sha256)
     return candidate
 
 
@@ -207,7 +211,8 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         expected_train_graph_context_cache_sha256=None,
         selection_window_cache=None, expected_selection_cache_manifest_sha256=None,
         prefetch_train_windows=False, source_transition_file=None,
-        expected_source_transition_sha256=None, prefetch_selection_windows=False):
+        expected_source_transition_sha256=None, prefetch_selection_windows=False,
+        train_cache_admission_receipt=None, expected_train_cache_admission_sha256=None):
     """A0 hoặc A1 expert, selected fit80/rawbest10 với cùng state machine."""
     validate_config(config,cuda_profile=profile)
     if validation_batch_size is not None and (type(validation_batch_size) is not int
@@ -227,6 +232,12 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
             and comparison_reference_file is None):
         raise PermissionError('Main graph training requires a pinned A0 comparison reference')
     prepared = {}
+    if (train_cache_admission_receipt is None)!=(expected_train_cache_admission_sha256 is None):
+        raise ValueError('Train CPU admission receipt and external pin required together')
+    if train_cache_admission_receipt is not None:
+        if train_window_cache is None or file_sha(train_cache_admission_receipt)!=expected_train_cache_admission_sha256:
+            raise ValueError('Train CPU admission must bind a pinned window cache')
+        prepared['train_cache_admission_sha256']=expected_train_cache_admission_sha256
     if type(prefetch_selection_windows) is not bool or (prefetch_selection_windows and validation_batch_size is None):
         raise ValueError('Boolean selection prefetch requires admitted batching')
     if prefetch_selection_windows:
@@ -235,7 +246,7 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         raise ValueError('Source transition receipt and external pin required together')
     transition = None
     if source_transition_file is not None:
-        if resume_checkpoint is None or graph_condition is None:
+        if resume_checkpoint is None or graph_condition is None or graph_condition.variant!='A1':
             raise ValueError('Source transition requires A1 checkpoint resume')
         if file_sha(source_transition_file)!=expected_source_transition_sha256:
             raise ValueError('Source transition receipt changed')
@@ -258,7 +269,7 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
     if (train_graph_context_cache is None)!=(expected_train_graph_context_cache_sha256 is None):
         raise ValueError('Graph context cache path and pin required together')
     if train_graph_context_cache is not None:
-        if graph_condition is None or train_window_cache is None:
+        if graph_condition is None or graph_condition.variant!='A1' or train_window_cache is None:
             raise ValueError('Graph context cache requires A1 and pinned native window cache')
         if file_sha(train_graph_context_cache)!=expected_train_graph_context_cache_sha256:
             raise ValueError('Prepared graph context cache changed')
@@ -290,8 +301,11 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         graph_condition.assert_integrity()
         if graph_condition.encoding.fit_view.identity != inputs.train.identity:
             raise ValueError('Junyi graph condition belongs to a different TRAIN80 cohort')
-        candidate_id = 'A1_EXPERT'
+        candidate_id = graph_condition.variant+'_EXPERT'
         prepared['graph_condition_sha256'] = graph_condition.identity
+        if graph_condition.confidence is not None:
+            prepared['edge_confidence_identity']=graph_condition.confidence.identity
+            prepared['edge_confidence_sha256']=graph_condition.confidence.fit_artifact_sha256
     if (encoding_file is None)!=(expected_encoding_sha256 is None):
         raise ValueError('Encoding path and pin required together')
     if (train_window_cache is None)!=(expected_train_window_manifest_sha256 is None):
@@ -346,7 +360,9 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         from .research_junyi_window_cache import JunyiWindowCacheSession
         cache_session=JunyiWindowCacheSession(train_window_cache,view=inputs.train,
             encoding=encoding,source_data_sha256=inputs.source_identity,expected_target_rows=inputs.train_targets,
-            expected_manifest_sha256=expected_train_window_manifest_sha256,prefetch=prefetch_train_windows)
+            expected_manifest_sha256=expected_train_window_manifest_sha256,prefetch=prefetch_train_windows,
+            admission_receipt=train_cache_admission_receipt,
+            expected_admission_sha256=expected_train_cache_admission_sha256)
         windows_factory=cache_session.iter_windows
     graph_cache = None
     if train_graph_context_cache is not None:
@@ -371,10 +387,13 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         config=json.loads(json.dumps(asdict(config),default=str)),profile=asdict(profile),
         source_build_sha256=_identity(json.loads(Path(gate['evidence_path']).read_text())['build_hashes']))
     if graph_condition is not None:
-        identity.update(kind='junyi_a1_selected_v1',candidate_id=candidate_id,
+        identity.update(kind='junyi_'+graph_condition.variant.lower()+'_selected_v1',candidate_id=candidate_id,
             batch_factory=dict(condition_sha256=graph_condition.identity,encoding_sha256=encoding.identity,
-                phase_sha256=inputs.train.identity,graph_enabled=True,context_backend='compact-a1-v1',
+                phase_sha256=inputs.train.identity,graph_enabled=True,
+                context_backend='compact-a1-v1' if graph_condition.variant=='A1' else 'reference',
                 graph_context_cache=None if graph_cache is None else graph_cache.identity))
+    if train_cache_admission_receipt is not None:
+        identity['train_cache_admission_sha256']=expected_train_cache_admission_sha256
     if comparison_reference is not None:
         identity['comparison_reference_sha256']=expected_comparison_reference_sha256
     if validation_batch_size is not None:
@@ -596,7 +615,8 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
     expected = history[stopper.best_epoch-1]['validation']
     if validation!=expected:
         raise ValueError('Best checkpoint reload changed target population or predictions')
-    status = 'JUNYI_A0_SELECTED_ONLY_COMPLETE' if graph_condition is None else 'JUNYI_A1_SELECTED_ONLY_COMPLETE'
+    status = ('JUNYI_A0_SELECTED_ONLY_COMPLETE' if graph_condition is None
+              else 'JUNYI_'+graph_condition.variant+'_SELECTED_ONLY_COMPLETE')
     terminal = dict(status=status,selected_epoch=stopper.best_epoch,
         complete_epochs=stopper.last_epoch,history=history,optimizer_steps=steps,trained_targets=targets,
         checkpoint_sha256=file_sha(best),encoding_identity=encoding.identity,validation=validation,

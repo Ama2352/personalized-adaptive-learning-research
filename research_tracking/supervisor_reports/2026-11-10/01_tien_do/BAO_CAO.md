@@ -1,5 +1,11 @@
 # Báo cáo tiến độ khóa luận — cập nhật 13/11/2026
 
+## 13/11 — Chuẩn bị A2/A3 và chuyển kiểm dữ liệu sang CPU
+
+A2 và A3 đã nối được độ tin cậy từng cạnh vào nhánh Junyi và dùng chung quy trình chọn checkpoint với A0/A1. Bộ hồi quy CPU đạt 299 ca, gồm kiểm A1 cũ, tắt đồ thị, confidence bằng 0, checkpoint và tiếp nối. Chưa có confidence fit trên Junyi thật hoặc training A2/A3.
+
+Toàn bộ cache train gồm 13.347.331 lượt trả lời đã được kiểm trên CPU trước phiên GPU, mất khoảng 348 giây. Nhận lại cache bằng hồ sơ đã ghim và kiểm toàn SHA các shard mất 3,82 giây trên Windows. Phép đo này xác nhận cơ chế chuyển phần kiểm nặng ra trước training; thời gian trên GPU/Linux còn chờ kiểm. Đóng gói sau GPU và đường tính weighted graph/gate hiệu quả tiếp tục được hoàn thiện. Đợt chuẩn bị này dùng 0 USD Modal.
+
 ## 13/11 — A1 hoàn tất chọn checkpoint Junyi với dữ liệu so sánh đã kiểm
 
 Điểm còn thiếu trước đợt này là checkpoint A1 đã học đủ một epoch nhưng chưa hoàn tất validation. Đường chuẩn bị thông tin đồ thị làm H100 chờ CPU nhiều. Nhóm tập trung giảm thời gian đọc và chuẩn bị dữ liệu, đồng thời kiểm khả năng giữ lại epoch đã học để tiếp tục thí nghiệm.

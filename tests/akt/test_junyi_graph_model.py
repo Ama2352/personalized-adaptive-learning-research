@@ -132,8 +132,15 @@ def setup(tmp_path,monkeypatch):
         graph = PrerequisiteGraph.from_edges(('A','B','C'),edges)
         return JunyiGraphCondition(encoding,graph,'a'*64)
 
-    def adapter(*,edges=(('A','C'),),phase=train,enabled=True,compact=False):
+    def adapter(*,edges=(('A','C'),),phase=train,enabled=True,compact=False,variant='A1',confidence_value=.75):
         cond = condition(edges)
+        if variant != 'A1':
+            from knowledge_tracing.akt.research_junyi_confidence_binding import JunyiConfidenceBinding
+            from knowledge_tracing.akt.research_graph_condition import OperationalEdgeWeight
+            binding=JunyiConfidenceBinding(train.identity,encoding.identity,'a'*64,'b'*64,'c'*64,
+                tuple(OperationalEdgeWeight(parent,child,True,confidence_value,None,confidence_value)
+                      for parent,child in cond.graph.edges))
+            cond=replace(cond,variant=variant,confidence=binding)
         session = JunyiGraphPhaseSession(cond,phase)
         torch.manual_seed(42)
         return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
@@ -141,6 +148,36 @@ def setup(tmp_path,monkeypatch):
 
     return dict(config=config,encoding=encoding,train=train,selection=selection,
                 student=student,condition=condition,adapter=adapter)
+
+
+@pytest.mark.parametrize('variant', ['A2','A3'])
+def test_confidence_variants_share_backbone_and_have_graph_off_fallback(setup,variant):
+    baseline=setup['adapter']()
+    adapter=setup['adapter'](variant=variant,phase=setup['selection'])
+    _assert_tree_equal(baseline.native.backbone.state_dict(),adapter.native.backbone.state_dict())
+    assert (adapter.native.gate is not None)==(variant=='A3')
+    with torch.no_grad():adapter.native.alpha.fill_(.7)
+    entries=windows(setup,setup['selection'])
+    adapter.set_graph_enabled(False)
+    actual=adapter.predict_windows(entries)
+    expected=raw_backbone_predictions(adapter,entries)
+    for a,b in zip(actual,expected):assert np.array_equal(a,b)
+
+
+@pytest.mark.parametrize('variant', ['A2','A3'])
+def test_confidence_variants_zero_confidence_and_trainable_parameters(setup,variant):
+    adapter=setup['adapter'](variant=variant,confidence_value=0.,phase=setup['selection'])
+    with torch.no_grad():adapter.native.alpha.fill_(.7)
+    entries=windows(setup,setup['selection'])
+    for a,b in zip(adapter.predict_windows(entries),raw_backbone_predictions(adapter,entries)):
+        assert np.array_equal(a,b)
+    adapter=setup['adapter'](variant=variant)
+    with torch.no_grad():adapter.native.alpha.fill_(.7)
+    training=windows(setup,setup['train'],training=True)
+    optimizer=adam(adapter)
+    adapter.step(adapter.collate_training(training),optimizer)
+    assert adapter.native.alpha.grad is not None and adapter.native.alpha.grad.abs()>0
+    if variant=='A3':assert adapter.native.gate.weight.grad.abs().sum()>0
 
 
 def windows(setup,view,*,training=False,**kwargs):

@@ -80,6 +80,7 @@ class CompactA1Context:
 def build_compact_context(windows,phase):
     _need(type(phase) is JunyiGraphPhaseSession and type(windows) is tuple and windows,
           'typed phase and nonempty windows required')
+    _need(phase.condition.variant=='A1', 'Weighted A2/A3 compact context requires a separate implementation')
     phase._light_check()
     vocabulary=phase.condition.encoding.native.vocabulary.values
     indices={name:index for index,name in enumerate(vocabulary)}

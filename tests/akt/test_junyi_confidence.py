@@ -123,6 +123,19 @@ def test_actual_crossfit_keeps_unsupported_null_and_no_oracle(case,recipe,tmp_pa
     unseen=next(edge for edge in result['edges'] if edge.parent_id=='UNFIT')
     assert unseen.supported is False and unseen.confidence is None and unseen.reason
     assert unseen.eligible_targets==0
+    from knowledge_tracing.akt.research_junyi_confidence_binding import (
+        binding_from_child_results,save_binding,load_binding)
+    binding=binding_from_child_results((result,),condition=case[2],recipe=recipe,fit_artifact_sha256='d'*64)
+    artifact=tmp_path/'confidence.json'
+    save_binding(binding,artifact)
+    loaded=load_binding(artifact,expected_sha256=hashlib.sha256(artifact.read_bytes()).hexdigest())
+    assert loaded==binding
+    assert next(edge for edge in loaded.weights if edge.parent_id=='UNFIT').operational_weight==0.
+    with pytest.raises(ValueError,match='lineage'):
+        binding_from_child_results((dict(result,train_view_identity='e'*64),),condition=case[2],
+                                  recipe=recipe,fit_artifact_sha256='d'*64)
+    with pytest.raises(ValueError,match='exactly once'):
+        binding_from_child_results((),condition=case[2],recipe=recipe,fit_artifact_sha256='d'*64)
     folds=dict(surrogate_fold_assignments(case[0],recipe))
     for row in result['oof']:
         assert folds[row.learner_id]==row.heldout_fold

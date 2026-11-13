@@ -322,9 +322,9 @@ def _session_header(view, encoding):
 class JunyiWindowCacheSession:
     """Opt-in: strict admission đầy đủ một lần, rồi kiểm SHA mỗi epoch.
 
-Session chỉ tồn tại trong process đã duyệt đủ strict stream. Không nạp receipt
-PASS từ file hoặc bỏ qua admission. Hot iterator giữ nguyên decoded records,
-kiểm key/encoding ở đầu–cuối lượt và kiểm SHA/bytes từng shard trước khi dùng.
+Mặc định duyệt đủ strict stream. Handoff CPU có external SHA phải khớp nguồn
+validator, key, manifest và từng shard byte trước khi tái dùng kết quả kiểm.
+Hot iterator giữ nguyên record, kiểm key/encoding và SHA/bytes từng shard.
 """
     cache_root: Path
     view: JunyiPhaseView
@@ -333,6 +333,8 @@ kiểm key/encoding ở đầu–cuối lượt và kiểm SHA/bytes từng shar
     expected_target_rows: int
     expected_manifest_sha256: str
     prefetch: bool = False
+    admission_receipt: Path | None = None
+    expected_admission_sha256: str | None = None
     strict_records_verified: int = field(init=False)
     strict_seconds: float = field(init=False)
     _root: Path = field(init=False, repr=False)
@@ -350,11 +352,16 @@ kiểm key/encoding ở đầu–cuối lượt và kiểm SHA/bytes từng shar
         self._check_control_files(root)
         key = window_cache_key(self.view, self.encoding, self.source_data_sha256,
                                expected_target_rows=self.expected_target_rows)
-        verified = 0
-        for _ in iter_junyi_window_cache(root, view=self.view, encoding=self.encoding,
-                source_data_sha256=self.source_data_sha256, expected_target_rows=self.expected_target_rows,
-                expected_manifest_sha256=self.expected_manifest_sha256):
-            verified += 1
+        _need((self.admission_receipt is None)==(self.expected_admission_sha256 is None),
+              'CPU admission receipt and external SHA required together')
+        if self.admission_receipt is None:
+            verified = 0
+            for _ in iter_junyi_window_cache(root, view=self.view, encoding=self.encoding,
+                    source_data_sha256=self.source_data_sha256, expected_target_rows=self.expected_target_rows,
+                    expected_manifest_sha256=self.expected_manifest_sha256):
+                verified += 1
+        else:
+            verified = _verify_cpu_admission(self, root, key)
         self._check_control_files(root)
         manifest = json.loads((root/'manifest.json').read_text())
         _need(manifest['summary']['records'] == verified and manifest['key'] == key,
@@ -434,3 +441,56 @@ kiểm key/encoding ở đầu–cuối lượt và kiểm SHA/bytes từng shar
               and targets == summary['target_rows'] == self.expected_target_rows,
               'Admitted window-cache replay population changed')
         self.assert_boundary()
+
+
+
+def _admission_sources():
+    names=('research_junyi_window_cache.py','research_junyi_data.py','windows.py','types.py','encoding.py',
+           'config.py','../shared_kt.py')
+    return {name:hashlib.sha256((Path(__file__).parent/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest()
+            for name in names}
+
+
+def write_cpu_admission(session, path):
+    """Ghi sau full strict CPU pass, giữ pin từng byte để GPU chỉ kiểm SHA."""
+    _need(type(session) is JunyiWindowCacheSession and session.admission_receipt is None,
+          'Fresh full strict session required to produce CPU admission')
+    session.assert_boundary()
+    manifest=json.loads((session._root/'manifest.json').read_text())
+    for pin in manifest['shards']:
+        shard=session._root/pin['name']
+        _need(shard.stat().st_size==pin['bytes'] and _sha(shard)==pin['sha256'],
+              'Shard changed after strict CPU admission')
+    payload=dict(kind='JUNYI_CPU_WINDOW_ADMISSION_V1',key=json.loads(session._key_bytes),
+        manifest_sha256=session.expected_manifest_sha256,summary=dict(session._summary),
+        shards=manifest['shards'],validator_sources=_admission_sources(),
+        strict_records_verified=session.strict_records_verified)
+    with Path(path).open('x',encoding='utf-8') as stream:
+        json.dump(payload,stream,sort_keys=True,indent=2)
+        stream.write('\n')
+
+
+def _verify_cpu_admission(session, root, key):
+    path=Path(session.admission_receipt)
+    _need(not path.is_symlink() and not getattr(path,'is_junction',lambda:False)()
+          and path.stat().st_size<=4*1024**2, 'Bounded regular CPU admission required')
+    raw=path.read_bytes()
+    _need(hashlib.sha256(raw).hexdigest()==session.expected_admission_sha256,
+          'CPU admission external SHA mismatch')
+    value=json.loads(raw)
+    _need(set(value)=={'kind','key','manifest_sha256','summary','shards','validator_sources','strict_records_verified'}
+          and value['kind']=='JUNYI_CPU_WINDOW_ADMISSION_V1', 'CPU admission schema mismatch')
+    manifest=json.loads((root/'manifest.json').read_text())
+    _need(value['key']==key and value['manifest_sha256']==session.expected_manifest_sha256
+          and value['summary']==manifest['summary'] and value['shards']==manifest['shards']
+          and value['validator_sources']==_admission_sources(), 'CPU admission data/source binding mismatch')
+    _need(type(value['strict_records_verified']) is int
+          and value['strict_records_verified']==manifest['summary']['records'], 'CPU admission count mismatch')
+    for pin in value['shards']:
+        _need(type(pin['name']) is str and Path(pin['name']).name==pin['name']
+              and ':' not in pin['name'] and '\\' not in pin['name'], 'CPU admission shard path invalid')
+        shard=root/pin['name']
+        _need(not shard.is_symlink() and not getattr(shard,'is_junction',lambda:False)()
+              and shard.stat().st_size==pin['bytes'] and _sha(shard)==pin['sha256'],
+              'CPU admission shard bytes changed')
+    return value['strict_records_verified']

@@ -1,0 +1,178 @@
+...............................................FFFF................      [100%]
+================================== FAILURES ===================================
+___ test_confidence_variants_share_backbone_and_have_graph_off_fallback[A2] ___
+
+setup = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('C:/Users/AmaDev/AppData/Local/Pa...cc179564cdaed0ec1391ddd84aad55955e', identity='7f709edd43e0f973d54da108e5472d3b03930bce7e79919b76cc89cb74cba3a3'), ...}
+variant = 'A2'
+
+    @pytest.mark.parametrize('variant', ['A2','A3'])
+    def test_confidence_variants_share_backbone_and_have_graph_off_fallback(setup,variant):
+        baseline=setup['adapter']()
+        adapter=setup['adapter'](variant=variant)
+        _assert_tree_equal(baseline.native.backbone.state_dict(),adapter.native.backbone.state_dict())
+        assert (adapter.native.gate is not None)==(variant=='A3')
+        with torch.no_grad():adapter.native.alpha.fill_(.7)
+        entries=windows(setup,setup['selection'])
+        adapter.set_graph_enabled(False)
+>       actual=adapter.predict_windows(entries)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_graph_model.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_graph_model.py:244: in predict_windows
+    batch,evidence = self._collate(group)
+                     ^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph_model.py:174: in _collate
+    else tuple(self.phase.prefix_evidence(window) for window in windows))
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph_model.py:174: in <genexpr>
+    else tuple(self.phase.prefix_evidence(window) for window in windows))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph.py:218: in prefix_evidence
+    _validate_window(window, self)
+src\knowledge_tracing\akt\research_junyi_graph.py:231: in _validate_window
+    _need(1 <= size <= 200 and len(inputs.user_ids) == size
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = False, message = 'Bounded single-learner phase window required'
+
+    def _need(value, message):
+        if not value:
+>           raise ValueError(message)
+E           ValueError: Bounded single-learner phase window required
+
+src\knowledge_tracing\akt\research_junyi_graph.py:25: ValueError
+___ test_confidence_variants_share_backbone_and_have_graph_off_fallback[A3] ___
+
+setup = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('C:/Users/AmaDev/AppData/Local/Pa...cc179564cdaed0ec1391ddd84aad55955e', identity='7f709edd43e0f973d54da108e5472d3b03930bce7e79919b76cc89cb74cba3a3'), ...}
+variant = 'A3'
+
+    @pytest.mark.parametrize('variant', ['A2','A3'])
+    def test_confidence_variants_share_backbone_and_have_graph_off_fallback(setup,variant):
+        baseline=setup['adapter']()
+        adapter=setup['adapter'](variant=variant)
+        _assert_tree_equal(baseline.native.backbone.state_dict(),adapter.native.backbone.state_dict())
+        assert (adapter.native.gate is not None)==(variant=='A3')
+        with torch.no_grad():adapter.native.alpha.fill_(.7)
+        entries=windows(setup,setup['selection'])
+        adapter.set_graph_enabled(False)
+>       actual=adapter.predict_windows(entries)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_graph_model.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_graph_model.py:244: in predict_windows
+    batch,evidence = self._collate(group)
+                     ^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph_model.py:174: in _collate
+    else tuple(self.phase.prefix_evidence(window) for window in windows))
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph_model.py:174: in <genexpr>
+    else tuple(self.phase.prefix_evidence(window) for window in windows))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph.py:218: in prefix_evidence
+    _validate_window(window, self)
+src\knowledge_tracing\akt\research_junyi_graph.py:231: in _validate_window
+    _need(1 <= size <= 200 and len(inputs.user_ids) == size
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = False, message = 'Bounded single-learner phase window required'
+
+    def _need(value, message):
+        if not value:
+>           raise ValueError(message)
+E           ValueError: Bounded single-learner phase window required
+
+src\knowledge_tracing\akt\research_junyi_graph.py:25: ValueError
+____ test_confidence_variants_zero_confidence_and_trainable_parameters[A2] ____
+
+setup = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('C:/Users/AmaDev/AppData/Local/Pa...cc179564cdaed0ec1391ddd84aad55955e', identity='7f709edd43e0f973d54da108e5472d3b03930bce7e79919b76cc89cb74cba3a3'), ...}
+variant = 'A2'
+
+    @pytest.mark.parametrize('variant', ['A2','A3'])
+    def test_confidence_variants_zero_confidence_and_trainable_parameters(setup,variant):
+        adapter=setup['adapter'](variant=variant,confidence_value=0.)
+        with torch.no_grad():adapter.native.alpha.fill_(.7)
+        entries=windows(setup,setup['selection'])
+>       for a,b in zip(adapter.predict_windows(entries),raw_backbone_predictions(adapter,entries)):
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_graph_model.py:172: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_graph_model.py:244: in predict_windows
+    batch,evidence = self._collate(group)
+                     ^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph_model.py:174: in _collate
+    else tuple(self.phase.prefix_evidence(window) for window in windows))
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph_model.py:174: in <genexpr>
+    else tuple(self.phase.prefix_evidence(window) for window in windows))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph.py:218: in prefix_evidence
+    _validate_window(window, self)
+src\knowledge_tracing\akt\research_junyi_graph.py:231: in _validate_window
+    _need(1 <= size <= 200 and len(inputs.user_ids) == size
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = False, message = 'Bounded single-learner phase window required'
+
+    def _need(value, message):
+        if not value:
+>           raise ValueError(message)
+E           ValueError: Bounded single-learner phase window required
+
+src\knowledge_tracing\akt\research_junyi_graph.py:25: ValueError
+____ test_confidence_variants_zero_confidence_and_trainable_parameters[A3] ____
+
+setup = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('C:/Users/AmaDev/AppData/Local/Pa...cc179564cdaed0ec1391ddd84aad55955e', identity='7f709edd43e0f973d54da108e5472d3b03930bce7e79919b76cc89cb74cba3a3'), ...}
+variant = 'A3'
+
+    @pytest.mark.parametrize('variant', ['A2','A3'])
+    def test_confidence_variants_zero_confidence_and_trainable_parameters(setup,variant):
+        adapter=setup['adapter'](variant=variant,confidence_value=0.)
+        with torch.no_grad():adapter.native.alpha.fill_(.7)
+        entries=windows(setup,setup['selection'])
+>       for a,b in zip(adapter.predict_windows(entries),raw_backbone_predictions(adapter,entries)):
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_graph_model.py:172: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_graph_model.py:244: in predict_windows
+    batch,evidence = self._collate(group)
+                     ^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph_model.py:174: in _collate
+    else tuple(self.phase.prefix_evidence(window) for window in windows))
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph_model.py:174: in <genexpr>
+    else tuple(self.phase.prefix_evidence(window) for window in windows))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph.py:218: in prefix_evidence
+    _validate_window(window, self)
+src\knowledge_tracing\akt\research_junyi_graph.py:231: in _validate_window
+    _need(1 <= size <= 200 and len(inputs.user_ids) == size
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = False, message = 'Bounded single-learner phase window required'
+
+    def _need(value, message):
+        if not value:
+>           raise ValueError(message)
+E           ValueError: Bounded single-learner phase window required
+
+src\knowledge_tracing\akt\research_junyi_graph.py:25: ValueError
+============================== warnings summary ===============================
+.venv\Lib\site-packages\_pytest\cacheprovider.py:469
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:469: PytestCacheWarning: cache could not write path D:\Dev\KLTN\.pytest_cache\v\cache\nodeids: [Errno 13] Permission denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache\\nodeids'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+.venv\Lib\site-packages\_pytest\cacheprovider.py:423
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:423: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\lastfailed: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/lastfailed", self.lastfailed)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/akt/test_junyi_graph_model.py::test_confidence_variants_share_backbone_and_have_graph_off_fallback[A2]
+FAILED tests/akt/test_junyi_graph_model.py::test_confidence_variants_share_backbone_and_have_graph_off_fallback[A3]
+FAILED tests/akt/test_junyi_graph_model.py::test_confidence_variants_zero_confidence_and_trainable_parameters[A2]
+FAILED tests/akt/test_junyi_graph_model.py::test_confidence_variants_zero_confidence_and_trainable_parameters[A3]
+4 failed, 63 passed, 2 warnings in 58.07s

@@ -1,5 +1,6 @@
 """Roundtrip cache native windows, ranh giới phase và lỗi toàn vẹn."""
 import json
+import hashlib
 
 import numpy as np
 import pytest
@@ -276,6 +277,44 @@ def test_silent_final_learner_truncation_rejected_by_expected_source_count(case)
 def session(case, view, receipt):
     return cache.JunyiWindowCacheSession(case[0], view, case[3], SOURCE,
         receipt['summary']['target_rows'], receipt['manifest_sha256'])
+
+
+def test_cpu_admission_handoff_reuses_strict_pass_with_byte_verification(case,tmp_path,monkeypatch):
+    root,train,_,encoding=case
+    source=records(train,encoding,['A','C']*105,[1,0]*105)
+    receipt=build(case,train,source)
+    admitted=session(case,train,receipt)
+    path=tmp_path/'cpu-admission.json'
+    cache.write_cpu_admission(admitted,path)
+    def forbidden(*args,**kwargs):
+        raise AssertionError('Strict decoding repeated inside GPU handoff')
+    monkeypatch.setattr(cache,'iter_junyi_window_cache',forbidden)
+    handed=cache.JunyiWindowCacheSession(root,train,encoding,SOURCE,210,receipt['manifest_sha256'],
+        admission_receipt=path,expected_admission_sha256=hashlib.sha256(path.read_bytes()).hexdigest())
+    for left,right in zip(source,handed.iter_windows()):assert_record_equal(left,right)
+    with pytest.raises(ValueError,match='Fresh full strict'):
+        cache.write_cpu_admission(handed,tmp_path/'recursive.json')
+
+
+@pytest.mark.parametrize('mutation',['shard','validator','count','key','pin'])
+def test_cpu_admission_handoff_rejects_changed_inputs(case,tmp_path,mutation):
+    root,train,_,encoding=case
+    receipt=build(case,train,records(train,encoding,['A'],[1]))
+    path=tmp_path/'cpu-admission.json'
+    cache.write_cpu_admission(session(case,train,receipt),path)
+    if mutation=='shard':
+        shard=next(root.glob('shard-*.npz'))
+        raw=bytearray(shard.read_bytes());raw[-1]^=1;shard.write_bytes(raw)
+    elif mutation!='pin':
+        value=json.loads(path.read_text())
+        if mutation=='validator':value['validator_sources']['windows.py']='f'*64
+        if mutation=='count':value['strict_records_verified']+=1
+        if mutation=='key':value['key']={}
+        path.write_text(json.dumps(value))
+    pin='0'*64 if mutation=='pin' else hashlib.sha256(path.read_bytes()).hexdigest()
+    with pytest.raises(ValueError,match='CPU admission'):
+        cache.JunyiWindowCacheSession(root,train,encoding,SOURCE,1,receipt['manifest_sha256'],
+            admission_receipt=path,expected_admission_sha256=pin)
 
 
 def test_session_strict_admission_once_then_hot_exact_roundtrip(case, monkeypatch):
