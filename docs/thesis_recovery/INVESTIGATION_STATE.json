@@ -8604,5 +8604,154 @@
     "gpu_run_active": false,
     "cache_on_disk_implemented": false,
     "next_vi": "Đối chiếu source cuối/Gate Linux và nghiệm thu migration source2 epoch1 thật với manifest riêng. Giữ source/weights/optimizer/RNG/counters/population cũ, không bỏ kiểm identity. Sau đó workload đại diện tính cả I/O/validation/checkpoint trước dự toán full training. Tạm hoãn cache đĩa cho đến khi benchmark cho thấy còn cần."
+  },
+  "junyi_real_t4_active_20261113": {
+    "status": "COMPLETE_ARTIFACTS_VERIFIED_RUNTIME_RELEASED",
+    "bundle": "research_tracking/runs/junyi-a1-real-t4-20261113-01",
+    "bridge_session": null,
+    "bridge_private_directory": null,
+    "checkpoint_downloaded_and_sha_verified": true,
+    "benchmark_state": "experiments/akt/results/colab-a1-real-t4-20261113-attempt02/BENCHMARK_STATE.pt",
+    "full_training_started": false,
+    "modal_spent_usd": 0,
+    "next_vi": "Đọc bundle Junyi thật trước khi tiếp tục. Không chạy lại benchmark mặc định. Cache graph mới là CPU prototype; nếu triển khai cần sidecar/phase/source key và kiểm end-to-end. Ưu tiên nguồn cuối, migration source2epoch1 và boundedH100 cho training chính."
+  },
+  "junyi_real_t4_benchmark_20261113": {
+    "status": "BOUNDED_REAL_T4_PARITY_PROFILE_COMPLETE",
+    "bundle": "research_tracking/runs/junyi-a1-real-t4-20261113-01",
+    "summary": {
+      "status": "REAL_T4_BENCHMARK_PROFILE_AND_CACHE_PROTOTYPE_COMPLETE",
+      "population": {
+        "train_windows": 256,
+        "selection_windows": 88,
+        "train_targets": 14270,
+        "selection_targets": 4440,
+        "train_users": 204,
+        "selection_users": 64,
+        "graph_edges": 976,
+        "vocabulary": 717,
+        "learner_ids_aliased": true
+      },
+      "short": [
+        {
+          "method": "reference",
+          "steps": 8,
+          "seconds": 9.404805726999939,
+          "targets": 57080,
+          "targets_per_second": 6069.237542688516,
+          "gpu_samples": 31,
+          "gpu_util_mean_percent": 23.032258064516128,
+          "peak_memory_mib": 5305.0
+        },
+        {
+          "method": "compact",
+          "steps": 8,
+          "seconds": 4.398997116999908,
+          "targets": 57080,
+          "targets_per_second": 12975.684794021472,
+          "gpu_samples": 13,
+          "gpu_util_mean_percent": 48.46153846153846,
+          "peak_memory_mib": 5305.0
+        }
+      ],
+      "short_speedup": 2.137943144053244,
+      "validation": [
+        {
+          "method": "reference",
+          "seconds": 0.6868593030001193,
+          "targets": 4440,
+          "population_sha256": "7b46be94779771f0170d9ef780695543c18c734ed4496f0e1f1f0904c9bdcb6b",
+          "finite": true
+        },
+        {
+          "method": "compact",
+          "seconds": 0.20056350899994868,
+          "targets": 4440,
+          "population_sha256": "7b46be94779771f0170d9ef780695543c18c734ed4496f0e1f1f0904c9bdcb6b",
+          "finite": true
+        }
+      ],
+      "validation_probability_max_drift": 0.0,
+      "steady": [
+        {
+          "name": "A0_streaming",
+          "seconds": 15.277722016000098,
+          "steps": 38,
+          "targets": 271130,
+          "targets_per_second": 17746.755682296756,
+          "gpu_samples": 27,
+          "gpu_util_mean_percent": 80.03703703703704,
+          "peak_memory_mib": 5233.0,
+          "seconds_per_batch": 0.4020453162105289,
+          "read_seconds_per_batch": 0.056016577052607895,
+          "prepare_seconds_per_batch": 0.015501182210527986,
+          "step_seconds_per_batch": 0.3300930064210541,
+          "conditional_train_epoch_minutes": 12.534996291664553
+        },
+        {
+          "name": "A1_streaming",
+          "seconds": 15.383438945000307,
+          "steps": 32,
+          "targets": 228320,
+          "targets_per_second": 14841.93494161493,
+          "gpu_samples": 27,
+          "gpu_util_mean_percent": 69.66666666666667,
+          "peak_memory_mib": 5233.0,
+          "seconds_per_batch": 0.4807324670312596,
+          "read_seconds_per_batch": 0.05145824284373646,
+          "prepare_seconds_per_batch": 0.06653115093743622,
+          "step_seconds_per_batch": 0.3622897778438272,
+          "conditional_train_epoch_minutes": 14.988309647075004
+        },
+        {
+          "name": "A1_preloaded",
+          "seconds": 15.744409189999715,
+          "steps": 36,
+          "targets": 256860,
+          "targets_per_second": 16314.362571518293,
+          "gpu_samples": 28,
+          "gpu_util_mean_percent": 75.39285714285714,
+          "peak_memory_mib": 5247.0,
+          "seconds_per_batch": 0.4373446997222143,
+          "read_seconds_per_batch": 4.450597224250588e-05,
+          "prepare_seconds_per_batch": 0.06739495588888328,
+          "step_seconds_per_batch": 0.3694055237499596,
+          "conditional_train_epoch_minutes": 13.635562878505027
+        }
+      ],
+      "preloaded_speedup": 1.0992072553676853,
+      "cache_prototypes": [
+        {
+          "variant": "naive",
+          "direct_seconds": 0.13813675000346848,
+          "cached_seconds": 0.1489417999982834,
+          "warm_component_speedup": 0.927454549394868,
+          "build_once_seconds": 0.607245300001523
+        },
+        {
+          "variant": "validated_immutable",
+          "direct_seconds": 0.08903875000032713,
+          "cached_seconds": 0.05389574999935576,
+          "warm_component_speedup": 1.6520551249660957,
+          "build_once_seconds": 0.29728869999962626
+        }
+      ],
+      "benchmark_state_downloaded_and_verified": true,
+      "modal_spent_usd": 0,
+      "production_graph_cache": false,
+      "full_epoch_executed": false,
+      "h100_measured": false,
+      "limits_vi": "Chuỗi dài gồm warmup2batch và≥15giây mỗiđiềukiện, thứtựcốđịnh, khởitạomới vàcohortlặp. Cache input preloaded và cache graph là hai phép thử khác nhau. Ngoại suy T4 theo target/giây chưa gồm full admission/checkpoint/validation và không áp cho H100."
+    },
+    "code_changed_in_production": false,
+    "full_training_started": false,
+    "source2_checkpoint_migrated": false,
+    "production_graph_cache": false,
+    "runtime_released": true,
+    "modal_spent_usd": 0,
+    "benchmark_state": "experiments/akt/results/colab-a1-real-t4-20261113-attempt02/BENCHMARK_STATE.pt",
+    "benchmark_state_production_resume_supported": false,
+    "profile_trace": "experiments/akt/results/colab-a1-real-t4-20261113-attempt02/profile/torch-trace.json",
+    "next_vi": "Cache deterministic per-window context trước GPU với khóa dataset/graph/confidence/encoding/phase/source và kiểm tính toàn vẹn, chỉ triển khai khi lợi ích đo được. Nguồn và checkpoint/source2migration cần nghiệm thu trước paidH100; T4 không chứng minh thời gian H100."
   }
 }

@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 13/11 — Junyi thật trênT4, chuỗi dài và cache
+
+[Hồ sơ](../research_tracking/runs/junyi-a1-real-t4-20261113-01/README.md) giữ parity dữ liệu thật,32step A1 sauwarmup GPU69,7%, input preloaded75,4%, traceCPU/CUDA và prototypecachecontext1,65×. Mức48,5% đoạn ngắn được giữ. Modelbenchmark28,9MB đã tảiD/kiểm799chunk vànạpCPU. T4đãtrả,0USDModal. Full training/source2migration/cacheproduction cònchờ.
+
 ## 13/11 — A1 compact đã nối adapter và kiểm cả bước học T4
 
 [Hồ sơ](../research_tracking/runs/junyi-a1-compact-adapter-20261113-01/README.md) giữ 69 ca local, parity T4 drift0, collate+8step 13,79→3,39 giây và GPU mẫu 15→76%. Source cuối đã nối factory, migration checkpoint source2/full producer/H100 còn chờ. 0 USD Modal.

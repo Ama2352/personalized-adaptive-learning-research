@@ -1,0 +1,34 @@
+{
+  "attempt": 1,
+  "result": {
+    "status": "FAILED_PRESERVED",
+    "scope": "REAL_JUNYI_T4_BOUNDED_THROUGHPUT",
+    "max_seconds": 180,
+    "epochs": 0,
+    "modal_spent_usd": 0,
+    "parity": [],
+    "training": [],
+    "samples": [],
+    "gpu": "Tesla T4",
+    "torch": "2.14.1+cu130",
+    "cuda": "13.0",
+    "population": {
+      "train_windows": 256,
+      "selection_windows": 88,
+      "train_targets": 14270,
+      "selection_targets": 4440,
+      "train_users": 204,
+      "selection_users": 64,
+      "graph_edges": 976,
+      "vocabulary": 717,
+      "learner_ids_aliased": true
+    },
+    "error_type": "ValueError",
+    "error": "simulator research requires bounded time and exclusive named results path",
+    "traceback": "Traceback (most recent call last):\n  File \"/content/kltn-a1-real-t4/probe_real_t4.py\", line 116, in main\n    adapters[name]=JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=condition,\n                   ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        phase=session,cuda_profile=profile,compact_context=name=='compact')\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/content/kltn-a1-real-t4/src/knowledge_tracing/akt/research_junyi_graph_model.py\", line 56, in __init__\n    validate_config(config,cuda_profile=cuda_profile)\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/content/kltn-a1-real-t4/src/knowledge_tracing/akt/config.py\", line 240, in validate_config\n    raise ValueError('simulator research requires bounded time and exclusive named results path')\nValueError: simulator research requires bounded time and exclusive named results path\n",
+    "elapsed_seconds": 9.410212867000041,
+    "limits_vi": "Mẫu thật 256window từ8shard train,88window/64learner selection với tối đa300events mỗi người. Alias learner giữ membership đã frozen, không chia lại. Đo đọc/kiểm NPZ nhỏ, collate+step và prediction; chưa fullSQL/fullcache admission hoặc toàn epoch. Fresh seed42/alpha0,75 cho timing, không dùng checkpoint nghiên cứu. Không chọn epoch hoặc model. T4 không suy ra tốc độ H100. Terminal state chỉ là benchmark."
+  },
+  "log": "{\"status\": \"FAILED_PRESERVED\", \"scope\": \"REAL_JUNYI_T4_BOUNDED_THROUGHPUT\", \"max_seconds\": 180, \"epochs\": 0, \"modal_spent_usd\": 0, \"parity\": [], \"training\": [], \"gpu\": \"Tesla T4\", \"torch\": \"2.14.1+cu130\", \"cuda\": \"13.0\", \"population\": {\"train_windows\": 256, \"selection_windows\": 88, \"train_targets\": 14270, \"selection_targets\": 4440, \"train_users\": 204, \"selection_users\": 64, \"graph_edges\": 976, \"vocabulary\": 717, \"learner_ids_aliased\": true}, \"error_type\": \"ValueError\", \"error\": \"simulator research requires bounded time and exclusive named results path\", \"elapsed_seconds\": 9.410212867000041, \"limits_vi\": \"Mẫu thật 256window từ8shard train,88window/64learner selection với tối đa300events mỗi người. Alias learner giữ membership đã frozen, không chia lại. Đo đọc/kiểm NPZ nhỏ, collate+step và prediction; chưa fullSQL/fullcache admission hoặc toàn epoch. Fresh seed42/alpha0,75 cho timing, không dùng checkpoint nghiên cứu. Không chọn epoch hoặc model. T4 không suy ra tốc độ H100. Terminal state chỉ là benchmark.\"}\n",
+  "failed_script_sha256": "d801e507cb26ead374a80af1cbed60f680bc76b25bf2ea76ae533f57192e2dc7"
+}

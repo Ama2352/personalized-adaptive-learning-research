@@ -1211,3 +1211,20 @@ Trên T4 miễn phí, cùng mẫu tổng hợp và cấu hình FP32/batch128, t�
 CPU được kiểm thêm trên 128 cửa sổ Junyi TRAIN80 thật với 5.527 target. Riêng phần chuẩn bị context và kiểm tính toàn vẹn giảm từ 0,838 xuống 0,065 giây. Message FP32 và mặt nạ áp dụng khớp hoàn toàn. Hai phép đo CPU và T4 bổ sung bằng chứng rằng phần chuẩn bị dữ liệu đồ thị là một nút thắt có thể giảm bằng tổ chức lại thực thi.
 
 Phép đo T4 dùng dữ liệu tổng hợp, gồm hai đoạn bốn bước mỗi bản theo thứ tự đối chiếu đảo chiều. Chưa đo toàn producer với I/O, validation, checkpoint hoặc toàn epoch Junyi/H100. Mức 76% thuộc đoạn kiểm ngắn, chưa là mức GPU trung bình của training nghiên cứu. Bước tiếp theo là kiểm nguồn cuối và chuyển tiếp checkpoint A1 epoch1 thật có provenance, rồi đo workload đại diện. Checkpoint lịch sử đã được giữ nguyên. Đợt này dùng 0 USD Modal, artifacts và figure đã tải về D, runtime Colab đã được yêu cầu trả và bridge đã đóng.
+
+
+## 13/11 — đo Junyi thật, xác nhận tải GPU và thử cache
+
+Sau phép kiểm dữ liệu tổng hợp, nhóm kiểm tiếp trên Junyi thật để tránh suy ra tốc độ training từ một mẫu đơn giản. Mẫu được lấy bằng seed cố định từ tám shard TRAIN80, gồm 256 cửa sổ của 204 người học; phần selection riêng có 88 cửa sổ của 64 người học. Vocabulary 717 exercise và đồ thị 976 cạnh được giữ theo nguồn hiện hành. Người học được đổi mã trước khi chuyển sang Colab, membership theo phép chia đã có. Không dùng Holdout hoặc chọn cấu hình mô hình trong lượt này.
+
+Đối chiếu ngắn trên T4 cho thấy bản A1 gọn nhanh hơn bản tham chiếu 2,14 lần khi tính cả đọc mẫu, chuẩn bị batch và bước học. Loss, gradient, trạng thái sau Adam và xác suất selection khớp trong phạm vi đã kiểm. Mức sử dụng GPU trung bình của đoạn ngắn là 48,5%, thấp hơn kết quả đo trên dữ liệu tổng hợp. Nhóm giữ kết quả này và đo thêm chuỗi dài sau làm nóng để kiểm mức sử dụng trong khi optimizer chạy liên tục.
+
+Trong chuỗi khoảng 15 giây mỗi điều kiện, A1 đạt khoảng 14.842 target/giây và GPU trung bình 69,7% qua 27 mẫu. A0 đo trên cùng cohort đạt khoảng 17.747 target/giây và GPU 80,0%, giúp đối chiếu phần chi phí chung. Khi tái dùng dữ liệu đã giải mã trong RAM, A1 đạt khoảng 16.314 target/giây và GPU 75,4%, tăng thêm khoảng 9,9% throughput. Hai lượt ngắn và dài có warm-up, thời lượng lấy mẫu và cách khởi tạo optimizer khác nhau; mức GPU cao hơn ở lượt dài chưa được quy cho một sửa code mới.
+
+Trace CPU/CUDA đã được lưu để tách việc chuẩn bị dữ liệu khỏi phần GPU thực sự tính toán. Dựng thông tin đồ thị mất khoảng 36 ms/batch trong đoạn profiler. Có thể tính trước phần này khi lịch sử log và đồ thị đã cố định. Các đại lượng phụ thuộc trọng số đang học như alpha, gate output, dự đoán và gradient vẫn phải tính trong model. Trong mô phỏng vòng kín, cache chỉ được dùng thông tin đến lịch sử đã quan sát.
+
+Đã thử cache theo từng cửa sổ trên CPU. Bản kiểm lặp toàn bộ mỗi entry chưa tăng tốc. Bản kiểm dữ liệu khi tạo cache rồi xác minh bytes bất biến khi dùng lại nhanh hơn khoảng 1,65 lần ở riêng phần context, với digest khớp khi đổi thứ tự và cách ghép batch. Đây là prototype CPU; cache graph cho toàn TRAIN80 và tích hợp training chính còn chưa hoàn tất.
+
+Quy đổi riêng thông lượng chuỗi dài cho tập train hiện có cho khoảng 15 phút mỗi epoch T4 ở điều kiện giống mẫu, hoặc khoảng 13,6 phút khi input đã giải mã sẵn. Chưa chạy toàn epoch, chưa gồm full admission, checkpoint và validation đầy đủ; kết quả chưa dự báo thời gian H100. Model trạng thái benchmark, logs, dữ liệu dựng hình và trace đã tải về D, kiểm toàn vẹn. Runtime Colab đã trả và bridge đã đóng. Tổng Modal sử dụng trong đợt này là 0 USD.
+
+Phần chuẩn bị thực thi RQ3 đã tiến thêm bằng chứng về đúng số học và hiệu năng trên dữ liệu thật. So sánh khoa học giữa các mô hình vẫn cần hoàn tất training theo protocol, chuyển tiếp checkpoint A1 epoch1 thật có hồ sơ nguồn, refit, calibration và đánh giá độc lập. Các kết quả throughput này chưa là bằng chứng mô hình cải thiện kết quả học tập.

@@ -46,6 +46,578 @@ a{color:#155c88;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{
 <div class="measure"><p><strong>Paper 1</strong> được kế thừa theo bản PDF phát triển dùng để nộp, là nguồn chuẩn về thiết kế và kết quả. Notebook trong repository là bản tiền kỳ. Bản PDF đã tách vai trò của đồ thị với vai trò của cách chọn đường đi. Ưu tiên học liên tục trong chương giúp giảm chuyển chương và quay lại chương, nhưng đồ thị mở rộng chưa cải thiện ổn định mức thành thạo. Phương án mở rộng thay cả quan hệ nội chương và liên chương, nên chưa tách riêng hiệu quả của cạnh liên chương. Paper đã gắn tính liên tục của lộ trình với chính sách lựa chọn; khóa luận không coi nhận định đó là phát hiện mới.</p>
 <p><strong>Paper 2</strong> đi tiếp vào mô hình ước lượng tri thức. Phần bổ sung có đồ thị cải thiện nhẹ dự báo ở một số nhóm mô phỏng, nhưng chưa phát hiện cải thiện rõ ở hai kết quả học tập chính sau hiệu chỉnh thống kê. Trên Junyi, bước chọn cấu hình phát triển ưu tiên tắt các cơ chế đồ thị đã thử. Paper cũng thừa nhận phép bật/tắt còn gộp nhiều cơ chế, nên chưa tách được phần đóng góp của riêng các cạnh.</p>
 <p>Khoảng trống cần giải quyết vì vậy không chỉ là cài một mô hình mạnh hơn. Khóa luận giữ ba câu hỏi trong đề cương: <strong>RQ1</strong> tìm nguyên nhân lợi ích chưa ổn định; <strong>RQ2</strong> xác định khi nào thông tin tiên quyết hữu ích, trung tính hoặc bất lợi; <strong>RQ3</strong> kiểm tra CG-AKT, một cách điều chỉnh ảnh hưởng của đồ thị theo độ tin cậy trên nền AKT.</p></div></section>
+<section id="a1-real-junyi-t4-cache-20261113"><h2>13/11 — đo Junyi thật, xác nhận tải GPU và thử cache</h2><p>Sau phép kiểm dữ liệu tổng hợp, nhóm kiểm tiếp trên Junyi thật để tránh suy ra tốc độ training từ một mẫu đơn giản. Mẫu được lấy bằng seed cố định từ tám shard TRAIN80, gồm 256 cửa sổ của 204 người học; phần selection riêng có 88 cửa sổ của 64 người học. Vocabulary 717 exercise và đồ thị 976 cạnh được giữ theo nguồn hiện hành. Người học được đổi mã trước khi chuyển sang Colab, membership theo phép chia đã có. Không dùng Holdout hoặc chọn cấu hình mô hình trong lượt này.</p><p>Đối chiếu ngắn trên T4 cho thấy bản A1 gọn nhanh hơn bản tham chiếu 2,14 lần khi tính cả đọc mẫu, chuẩn bị batch và bước học. Loss, gradient, trạng thái sau Adam và xác suất selection khớp trong phạm vi đã kiểm. Mức sử dụng GPU trung bình của đoạn ngắn là 48,5%, thấp hơn kết quả đo trên dữ liệu tổng hợp. Nhóm giữ kết quả này và đo thêm chuỗi dài sau làm nóng để kiểm mức sử dụng trong khi optimizer chạy liên tục.</p><p>Trong chuỗi khoảng 15 giây mỗi điều kiện, A1 đạt khoảng 14.842 target/giây và GPU trung bình 69,7% qua 27 mẫu. A0 đo trên cùng cohort đạt khoảng 17.747 target/giây và GPU 80,0%, giúp đối chiếu phần chi phí chung. Khi tái dùng dữ liệu đã giải mã trong RAM, A1 đạt khoảng 16.314 target/giây và GPU 75,4%, tăng thêm khoảng 9,9% throughput. Hai lượt ngắn và dài có warm-up, thời lượng lấy mẫu và cách khởi tạo optimizer khác nhau; mức GPU cao hơn ở lượt dài chưa được quy cho một sửa code mới.</p><figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="792pt" height="345.6pt" viewBox="0 0 792 345.6" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-13T19:01:27.038156</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="a1real_figure_1">
+  <g id="a1real_patch_1">
+   <path d="M 0 345.6
+L 792 345.6
+L 792 0
+L 0 0
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="a1real_axes_1">
+   <g id="a1real_patch_2">
+    <path d="M 59.362578 262.157422
+L 391.5 262.157422
+L 391.5 93.411047
+L 59.362578 93.411047
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="a1real_patch_3">
+    <path d="M 74.459734 262.157422
+L 142.338417 262.157422
+L 142.338417 126.034663
+L 74.459734 126.034663
+z
+" clip-path="url(#a1real_p857f4fd330)" style="fill: #777777"/>
+   </g>
+   <g id="a1real_patch_4">
+    <path d="M 191.491947 262.157422
+L 259.370631 262.157422
+L 259.370631 148.31548
+L 191.491947 148.31548
+z
+" clip-path="url(#a1real_p857f4fd330)" style="fill: #b74040"/>
+   </g>
+   <g id="a1real_patch_5">
+    <path d="M 308.524161 262.157422
+L 376.402844 262.157422
+L 376.402844 137.021533
+L 308.524161 137.021533
+z
+" clip-path="url(#a1real_p857f4fd330)" style="fill: #134f95"/>
+   </g>
+   <g id="a1real_matplotlib.axis_1">
+    <g id="a1real_xtick_1">
+     <g id="a1real_line2d_1">
+      <defs>
+       <path id="a1real_m8f760af107" d="M 0 0
+L 0 3.5
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#a1real_m8f760af107" x="108.399076" y="262.157422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1real_text_1">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="108.399076" y="277.514844" transform="rotate(-0 108.399076 277.514844)">A0</text>
+     </g>
+    </g>
+    <g id="a1real_xtick_2">
+     <g id="a1real_line2d_2">
+      <g>
+       <use xlink:href="#a1real_m8f760af107" x="225.431289" y="262.157422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1real_text_2">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="225.431289" y="278.782422" transform="rotate(-0 225.431289 278.782422)">A1 đọc mẫu</text>
+     </g>
+    </g>
+    <g id="a1real_xtick_3">
+     <g id="a1real_line2d_3">
+      <g>
+       <use xlink:href="#a1real_m8f760af107" x="342.463503" y="262.157422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1real_text_3">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="342.463503" y="278.797891" transform="rotate(-0 342.463503 278.797891)">A1 sẵn input</text>
+     </g>
+    </g>
+   </g>
+   <g id="a1real_matplotlib.axis_2">
+    <g id="a1real_ytick_1">
+     <g id="a1real_line2d_4">
+      <defs>
+       <path id="a1real_mc56763b253" d="M 0 0
+L -3.5 0
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#a1real_mc56763b253" x="59.362578" y="262.157422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1real_text_4">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="52.362578" y="266.336133" transform="rotate(-0 52.362578 266.336133)">0</text>
+     </g>
+    </g>
+    <g id="a1real_ytick_2">
+     <g id="a1real_line2d_5">
+      <g>
+       <use xlink:href="#a1real_mc56763b253" x="59.362578" y="223.805973" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1real_text_5">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="52.362578" y="227.984684" transform="rotate(-0 52.362578 227.984684)">5</text>
+     </g>
+    </g>
+    <g id="a1real_ytick_3">
+     <g id="a1real_line2d_6">
+      <g>
+       <use xlink:href="#a1real_mc56763b253" x="59.362578" y="185.454524" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1real_text_6">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="52.362578" y="189.633235" transform="rotate(-0 52.362578 189.633235)">10</text>
+     </g>
+    </g>
+    <g id="a1real_ytick_4">
+     <g id="a1real_line2d_7">
+      <g>
+       <use xlink:href="#a1real_mc56763b253" x="59.362578" y="147.103075" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1real_text_7">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="52.362578" y="151.281786" transform="rotate(-0 52.362578 151.281786)">15</text>
+     </g>
+    </g>
+    <g id="a1real_ytick_5">
+     <g id="a1real_line2d_8">
+      <g>
+       <use xlink:href="#a1real_mc56763b253" x="59.362578" y="108.751626" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1real_text_8">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="52.362578" y="112.930337" transform="rotate(-0 52.362578 112.930337)">20</text>
+     </g>
+    </g>
+    <g id="a1real_text_9">
+     <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="31.7225" y="177.784234" transform="rotate(-90 31.7225 177.784234)">Nghìn target/giây</text>
+    </g>
+   </g>
+   <g id="a1real_patch_6">
+    <path d="M 59.362578 262.157422
+L 59.362578 93.411047
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="a1real_patch_7">
+    <path d="M 59.362578 262.157422
+L 391.5 262.157422
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="a1real_text_10">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="108.399076" y="118.392085" transform="rotate(-0 108.399076 118.392085)">17.75</text>
+   </g>
+   <g id="a1real_text_11">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="225.431289" y="140.672902" transform="rotate(-0 225.431289 140.672902)">14.84</text>
+   </g>
+   <g id="a1real_text_12">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="342.463503" y="129.378955" transform="rotate(-0 342.463503 129.378955)">16.31</text>
+   </g>
+   <g id="a1real_text_13">
+    <text style="font-size: 13.2px; font-family: 'DejaVu Sans'; text-anchor: middle" x="225.431289" y="75.411047" transform="rotate(-0 225.431289 75.411047)">Thông lượng sau làm nóng</text>
+   </g>
+  </g>
+  <g id="a1real_axes_2">
+   <g id="a1real_patch_8">
+    <path d="M 447.982578 262.157422
+L 780.12 262.157422
+L 780.12 93.411047
+L 447.982578 93.411047
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="a1real_patch_9">
+    <path d="M 463.079734 262.157422
+L 530.958417 262.157422
+L 530.958417 127.097823
+L 463.079734 127.097823
+z
+" clip-path="url(#a1real_pbf9baac609)" style="fill: #777777"/>
+   </g>
+   <g id="a1real_patch_10">
+    <path d="M 580.111947 262.157422
+L 647.990631 262.157422
+L 647.990631 144.597447
+L 580.111947 144.597447
+z
+" clip-path="url(#a1real_pbf9baac609)" style="fill: #b74040"/>
+   </g>
+   <g id="a1real_patch_11">
+    <path d="M 697.144161 262.157422
+L 765.022844 262.157422
+L 765.022844 134.934708
+L 697.144161 134.934708
+z
+" clip-path="url(#a1real_pbf9baac609)" style="fill: #134f95"/>
+   </g>
+   <g id="a1real_matplotlib.axis_3">
+    <g id="a1real_xtick_4">
+     <g id="a1real_line2d_9">
+      <g>
+       <use xlink:href="#a1real_m8f760af107" x="497.019076" y="262.157422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1real_text_14">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="497.019076" y="277.514844" transform="rotate(-0 497.019076 277.514844)">A0</text>
+     </g>
+    </g>
+    <g id="a1real_xtick_5">
+     <g id="a1real_line2d_10">
+      <g>
+       <use xlink:href="#a1real_m8f760af107" x="614.051289" y="262.157422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1real_text_15">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="614.051289" y="278.782422" transform="rotate(-0 614.051289 278.782422)">A1 đọc mẫu</text>
+     </g>
+    </g>
+    <g id="a1real_xtick_6">
+     <g id="a1real_line2d_11">
+      <g>
+       <use xlink:href="#a1real_m8f760af107" x="731.083503" y="262.157422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1real_text_16">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="731.083503" y="278.797891" transform="rotate(-0 731.083503 278.797891)">A1 sẵn input</text>
+     </g>
+    </g>
+   </g>
+   <g id="a1real_matplotlib.axis_4">
+    <g id="a1real_ytick_6">
+     <g id="a1real_line2d_12">
+      <g>
+       <use xlink:href="#a1real_mc56763b253" x="447.982578" y="262.157422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1real_text_17">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="440.982578" y="266.336133" transform="rotate(-0 440.982578 266.336133)">0</text>
+     </g>
+    </g>
+    <g id="a1real_ytick_7">
+     <g id="a1real_line2d_13">
+      <g>
+       <use xlink:href="#a1real_mc56763b253" x="447.982578" y="228.408147" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1real_text_18">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="440.982578" y="232.586858" transform="rotate(-0 440.982578 232.586858)">20</text>
+     </g>
+    </g>
+    <g id="a1real_ytick_8">
+     <g id="a1real_line2d_14">
+      <g>
+       <use xlink:href="#a1real_mc56763b253" x="447.982578" y="194.658872" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1real_text_19">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="440.982578" y="198.837583" transform="rotate(-0 440.982578 198.837583)">40</text>
+     </g>
+    </g>
+    <g id="a1real_ytick_9">
+     <g id="a1real_line2d_15">
+      <g>
+       <use xlink:href="#a1real_mc56763b253" x="447.982578" y="160.909597" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1real_text_20">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="440.982578" y="165.088308" transform="rotate(-0 440.982578 165.088308)">60</text>
+     </g>
+    </g>
+    <g id="a1real_ytick_10">
+     <g id="a1real_line2d_16">
+      <g>
+       <use xlink:href="#a1real_mc56763b253" x="447.982578" y="127.160322" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1real_text_21">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="440.982578" y="131.339033" transform="rotate(-0 440.982578 131.339033)">80</text>
+     </g>
+    </g>
+    <g id="a1real_ytick_11">
+     <g id="a1real_line2d_17">
+      <g>
+       <use xlink:href="#a1real_mc56763b253" x="447.982578" y="93.411047" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1real_text_22">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="440.982578" y="97.589758" transform="rotate(-0 440.982578 97.589758)">100</text>
+     </g>
+    </g>
+    <g id="a1real_text_23">
+     <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="413.34375" y="177.784234" transform="rotate(-90 413.34375 177.784234)">GPU-Util trung bình theo mẫu (%)</text>
+    </g>
+   </g>
+   <g id="a1real_line2d_18">
+    <path d="M 447.982578 177.784234
+L 780.12 177.784234
+" clip-path="url(#a1real_pbf9baac609)" style="fill: none; stroke-dasharray: 3.7,1.6; stroke-dashoffset: 0; stroke: #555555"/>
+   </g>
+   <g id="a1real_patch_12">
+    <path d="M 447.982578 262.157422
+L 447.982578 93.411047
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="a1real_patch_13">
+    <path d="M 447.982578 262.157422
+L 780.12 262.157422
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="a1real_text_24">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="497.019076" y="119.455245" transform="rotate(-0 497.019076 119.455245)">80.0%</text>
+   </g>
+   <g id="a1real_text_25">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="614.051289" y="136.954869" transform="rotate(-0 614.051289 136.954869)">69.7%</text>
+   </g>
+   <g id="a1real_text_26">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="731.083503" y="127.29213" transform="rotate(-0 731.083503 127.29213)">75.4%</text>
+   </g>
+   <g id="a1real_text_27">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: end" x="772.044777" y="174.409307" transform="rotate(-0 772.044777 174.409307)">Mục tiêu 50%</text>
+   </g>
+   <g id="a1real_text_28">
+    <text style="font-size: 13.2px; font-family: 'DejaVu Sans'; text-anchor: middle" x="614.051289" y="75.411047" transform="rotate(-0 614.051289 75.411047)">Tesla T4 · cùng cohort Junyi thật</text>
+   </g>
+  </g>
+  <g id="a1real_text_29">
+   <text style="font-size: 13px; font-family: 'DejaVu Sans'; text-anchor: middle" x="396" y="17.919344" transform="rotate(-0 396 17.919344)">Đo pipeline trên T4 · FP32 · batch128 · ba điều kiện khoảng15giây</text>
+  </g>
+  <g id="a1real_text_30">
+   <text style="font-size: 9px; font-family: 'DejaVu Sans'" transform="translate(208.863984 319.924477)">256 window train, lấy từ8shard · warmup2batch · giữ toàn bộ mẫu GPU từng phase</text>
+   <text style="font-size: 9px; font-family: 'DejaVu Sans'" transform="translate(172.190391 331.776)">A1 sẵn input dùng records đã giải mã trong RAM · chưa là cache graph production hoặc toàn epoch</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="a1real_p857f4fd330">
+   <rect x="59.362578" y="93.411047" width="332.137422" height="168.746375"/>
+  </clipPath>
+  <clipPath id="a1real_pbf9baac609">
+   <rect x="447.982578" y="93.411047" width="332.137422" height="168.746375"/>
+  </clipPath>
+ </defs>
+</svg><figcaption>Đo T4 với Junyi thật sau làm nóng. Mỗi điều kiện khoảng15giây, cùng batch128 và FP32. A1 sẵn input tái dùng records đã giải mã trong RAM, chưa là cache graph production.</figcaption></figure><p>Trace CPU/CUDA đã được lưu để tách việc chuẩn bị dữ liệu khỏi phần GPU thực sự tính toán. Dựng thông tin đồ thị mất khoảng 36 ms/batch trong đoạn profiler. Có thể tính trước phần này khi lịch sử log và đồ thị đã cố định. Các đại lượng phụ thuộc trọng số đang học như alpha, gate output, dự đoán và gradient vẫn phải tính trong model. Trong mô phỏng vòng kín, cache chỉ được dùng thông tin đến lịch sử đã quan sát.</p><p>Đã thử cache theo từng cửa sổ trên CPU. Bản kiểm lặp toàn bộ mỗi entry chưa tăng tốc. Bản kiểm dữ liệu khi tạo cache rồi xác minh bytes bất biến khi dùng lại nhanh hơn khoảng 1,65 lần ở riêng phần context, với digest khớp khi đổi thứ tự và cách ghép batch. Đây là prototype CPU; cache graph cho toàn TRAIN80 và tích hợp training chính còn chưa hoàn tất.</p><figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="576pt" height="324pt" viewBox="0 0 576 324" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-13T19:01:29.448828</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="a1cache_figure_1">
+  <g id="a1cache_patch_1">
+   <path d="M 0 324
+L 576 324
+L 576 0
+L 0 0
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="a1cache_axes_1">
+   <g id="a1cache_patch_2">
+    <path d="M 59.362578 241.277422
+L 564.12 241.277422
+L 564.12 41.96
+L 59.362578 41.96
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="a1cache_patch_3">
+    <path d="M 82.306097 241.277422
+L 245.131072 241.277422
+L 245.131072 153.249874
+L 82.306097 153.249874
+z
+" clip-path="url(#a1cache_p59d96143d2)" style="fill: #b74040"/>
+   </g>
+   <g id="a1cache_patch_4">
+    <path d="M 378.351506 241.277422
+L 541.176481 241.277422
+L 541.176481 84.475818
+L 378.351506 84.475818
+z
+" clip-path="url(#a1cache_p59d96143d2)" style="fill: #134f95"/>
+   </g>
+   <g id="a1cache_matplotlib.axis_1">
+    <g id="a1cache_xtick_1">
+     <g id="a1cache_line2d_1">
+      <defs>
+       <path id="a1cache_m4c9559ab35" d="M 0 0
+L 0 3.5
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#a1cache_m4c9559ab35" x="163.718585" y="241.277422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1cache_text_1">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="163.718585" y="257.761484" transform="rotate(-0 163.718585 257.761484)">Kiểm lặp từng entry</text>
+     </g>
+    </g>
+    <g id="a1cache_xtick_2">
+     <g id="a1cache_line2d_2">
+      <g>
+       <use xlink:href="#a1cache_m4c9559ab35" x="459.763993" y="241.277422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1cache_text_2">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="459.763993" y="257.761484" transform="rotate(-0 459.763993 257.761484)">Bytes bất biến đã kiểm</text>
+     </g>
+    </g>
+   </g>
+   <g id="a1cache_matplotlib.axis_2">
+    <g id="a1cache_ytick_1">
+     <g id="a1cache_line2d_3">
+      <defs>
+       <path id="a1cache_m0986a70e81" d="M 0 0
+L -3.5 0
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#a1cache_m0986a70e81" x="59.362578" y="241.277422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1cache_text_3">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="52.362578" y="245.456133" transform="rotate(-0 52.362578 245.456133)">0.00</text>
+     </g>
+    </g>
+    <g id="a1cache_ytick_2">
+     <g id="a1cache_line2d_4">
+      <g>
+       <use xlink:href="#a1cache_m0986a70e81" x="59.362578" y="217.549157" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1cache_text_4">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="52.362578" y="221.727868" transform="rotate(-0 52.362578 221.727868)">0.25</text>
+     </g>
+    </g>
+    <g id="a1cache_ytick_3">
+     <g id="a1cache_line2d_5">
+      <g>
+       <use xlink:href="#a1cache_m0986a70e81" x="59.362578" y="193.820893" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1cache_text_5">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="52.362578" y="197.999604" transform="rotate(-0 52.362578 197.999604)">0.50</text>
+     </g>
+    </g>
+    <g id="a1cache_ytick_4">
+     <g id="a1cache_line2d_6">
+      <g>
+       <use xlink:href="#a1cache_m0986a70e81" x="59.362578" y="170.092628" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1cache_text_6">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="52.362578" y="174.271339" transform="rotate(-0 52.362578 174.271339)">0.75</text>
+     </g>
+    </g>
+    <g id="a1cache_ytick_5">
+     <g id="a1cache_line2d_7">
+      <g>
+       <use xlink:href="#a1cache_m0986a70e81" x="59.362578" y="146.364364" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1cache_text_7">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="52.362578" y="150.543075" transform="rotate(-0 52.362578 150.543075)">1.00</text>
+     </g>
+    </g>
+    <g id="a1cache_ytick_6">
+     <g id="a1cache_line2d_8">
+      <g>
+       <use xlink:href="#a1cache_m0986a70e81" x="59.362578" y="122.636099" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1cache_text_8">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="52.362578" y="126.81481" transform="rotate(-0 52.362578 126.81481)">1.25</text>
+     </g>
+    </g>
+    <g id="a1cache_ytick_7">
+     <g id="a1cache_line2d_9">
+      <g>
+       <use xlink:href="#a1cache_m0986a70e81" x="59.362578" y="98.907835" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1cache_text_9">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="52.362578" y="103.086546" transform="rotate(-0 52.362578 103.086546)">1.50</text>
+     </g>
+    </g>
+    <g id="a1cache_ytick_8">
+     <g id="a1cache_line2d_10">
+      <g>
+       <use xlink:href="#a1cache_m0986a70e81" x="59.362578" y="75.17957" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1cache_text_10">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="52.362578" y="79.358281" transform="rotate(-0 52.362578 79.358281)">1.75</text>
+     </g>
+    </g>
+    <g id="a1cache_ytick_9">
+     <g id="a1cache_line2d_11">
+      <g>
+       <use xlink:href="#a1cache_m0986a70e81" x="59.362578" y="51.451306" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1cache_text_11">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="52.362578" y="55.630017" transform="rotate(-0 52.362578 55.630017)">2.00</text>
+     </g>
+    </g>
+    <g id="a1cache_text_12">
+     <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="21.227813" y="141.618711" transform="rotate(-90 21.227813 141.618711)">Tăng tốc phần context khi cache đã có</text>
+    </g>
+   </g>
+   <g id="a1cache_line2d_12">
+    <path d="M 59.362578 146.364364
+L 564.12 146.364364
+" clip-path="url(#a1cache_p59d96143d2)" style="fill: none; stroke-dasharray: 3.7,1.6; stroke-dashoffset: 0; stroke: #555555"/>
+   </g>
+   <g id="a1cache_patch_5">
+    <path d="M 59.362578 241.277422
+L 59.362578 41.96
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="a1cache_patch_6">
+    <path d="M 59.362578 241.277422
+L 564.12 241.277422
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="a1cache_text_13">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="163.718585" y="144.607296" transform="rotate(-0 163.718585 144.607296)">0.93×</text>
+   </g>
+   <g id="a1cache_text_14">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="459.763993" y="75.83324" transform="rotate(-0 459.763993 75.83324)">1.65×</text>
+   </g>
+   <g id="a1cache_text_15">
+    <text style="font-size: 13.2px; font-family: 'DejaVu Sans'; text-anchor: middle" x="311.741289" y="21.96" transform="rotate(-0 311.741289 21.96)">Thử cache graph theo window trên CPU</text>
+   </g>
+  </g>
+  <g id="a1cache_text_16">
+   <text style="font-size: 9px; font-family: 'DejaVu Sans'" transform="translate(121.876875 299.316445)">Mỗi prototype đối chiếu với builder trực tiếp trong cùng lượt · 256 window</text>
+   <text style="font-size: 9px; font-family: 'DejaVu Sans'" transform="translate(78.051797 311.04)">Dữ liệu và digest khớp khi đổi nhóm/shuffle · chưa đo cache graph trên GPU hoặc toàn epoch</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="a1cache_p59d96143d2">
+   <rect x="59.362578" y="41.96" width="504.757422" height="199.317422"/>
+  </clipPath>
+ </defs>
+</svg><figcaption>Hai prototype CPU đối chiếu riêng với builder trực tiếp trong từng lượt. Chỉ đo phần context trên256window, chưa đo tốc độ cache graph trong toàn pipeline GPU.</figcaption></figure><p>Quy đổi riêng thông lượng chuỗi dài cho tập train hiện có cho khoảng 15 phút mỗi epoch T4 ở điều kiện giống mẫu, hoặc khoảng 13,6 phút khi input đã giải mã sẵn. Chưa chạy toàn epoch, chưa gồm full admission, checkpoint và validation đầy đủ; kết quả chưa dự báo thời gian H100. Model trạng thái benchmark, logs, dữ liệu dựng hình và trace đã tải về D, kiểm toàn vẹn. Runtime Colab đã trả và bridge đã đóng. Tổng Modal sử dụng trong đợt này là 0 USD.</p><p>Phần chuẩn bị thực thi RQ3 đã tiến thêm bằng chứng về đúng số học và hiệu năng trên dữ liệu thật. So sánh khoa học giữa các mô hình vẫn cần hoàn tất training theo protocol, chuyển tiếp checkpoint A1 epoch1 thật có hồ sơ nguồn, refit, calibration và đánh giá độc lập. Các kết quả throughput này chưa là bằng chứng mô hình cải thiện kết quả học tập.</p></section>
 <section id="a1-compact-adapter-t4-20261113"><h2>13/11 — A1 đã giảm thời gian cả bước học trên T4</h2><p>Sau thí nghiệm biểu diễn gọn trên CPU, nhóm đã nối cách chuẩn bị dữ liệu này vào adapter và bước training A1. Phần dữ liệu đồ thị được giữ thành các mảng số và bytes bất biến, giúp giảm tạo lại nhiều đối tượng Python. Các kiểm về vai người học, thứ tự thời gian, target và dữ liệu thay đổi vẫn được duy trì. Bước gọi selected-fit A1 đã được nối với đường thực thi mới.</p><p>Trên T4 miễn phí, cùng mẫu tổng hợp và cấu hình FP32/batch128, tổng thời gian chuẩn bị batch và tám bước học giảm từ 13,79 xuống 3,39 giây, nhanh hơn 4,07 lần. Mức sử dụng GPU trung bình theo mẫu tăng từ 15,0% lên 76,0%, VRAM đỉnh khoảng 5.305 MiB. Lượt kiểm kéo dài 34 giây. Loss, gradient, trọng số sau bước Adam, trạng thái optimizer và RNG khớp ở hai điều kiện đã kiểm. Bộ kiểm local đạt tổng 69 ca, gồm dự đoán và chạy ngắt rồi phục hồi cùng backend.</p><p>CPU được kiểm thêm trên 128 cửa sổ Junyi TRAIN80 thật với 5.527 target. Riêng phần chuẩn bị context và kiểm tính toàn vẹn giảm từ 0,838 xuống 0,065 giây. Message FP32 và mặt nạ áp dụng khớp hoàn toàn. Hai phép đo CPU và T4 bổ sung bằng chứng rằng phần chuẩn bị dữ liệu đồ thị là một nút thắt có thể giảm bằng tổ chức lại thực thi.</p><p>Phép đo T4 dùng dữ liệu tổng hợp, gồm hai đoạn bốn bước mỗi bản theo thứ tự đối chiếu đảo chiều. Chưa đo toàn producer với I/O, validation, checkpoint hoặc toàn epoch Junyi/H100. Mức 76% thuộc đoạn kiểm ngắn, chưa là mức GPU trung bình của training nghiên cứu. Bước tiếp theo là kiểm nguồn cuối và chuyển tiếp checkpoint A1 epoch1 thật có provenance, rồi đo workload đại diện. Checkpoint lịch sử đã được giữ nguyên. Đợt này dùng 0 USD Modal, artifacts và figure đã tải về D, runtime Colab đã được yêu cầu trả và bridge đã đóng.</p><figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="936pt" height="338.4pt" viewBox="0 0 936 338.4" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
