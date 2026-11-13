@@ -1,8 +1,8 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
-## 13/11 — A1 đã nối epoch1, có validation toàn selection và training nhanh hơn
+## 13/11 — A1 hoàn tất chọn checkpoint Junyi với dữ liệu so sánh đã kiểm
 
-[Hồ sơ](../research_tracking/runs/junyi-a1-selection-cache-20261113-01/README.md) giữ source Gate 2.528 ca, toàn selection 1.600.343 target khớp, checkpoint epoch1 được giữ nguyên qua validation và nối H100. Hai epoch mới mất khoảng 202 giây, bản chụp đến epoch6. Checkpoint đã tải D, H100 đầu đã dừng. GPU 33–36%, đang nối gần cuối epoch7 cùng source.
+[Hồ sơ](../research_tracking/runs/junyi-a1-selection-cache-20261113-01/README.md) giữ Gate2.528ca, parity checkpoint thật CPU/CUDA, A1 Junyi selected-fit hoàn tất12epoch/chọn9 theo min_delta0,0001, reload/prediction khớp. Train mới182–206giây/epoch, GPU gần đây35–38%. Mọi checkpoint/predictions/logs đã tảiD, H100 dừng. Refit/calibration/đánh giá độc lập và A2/A3 Junyi còn chờ.
 
 ## 13/11 — cache A1 đã tích hợp và kiểm T4
 

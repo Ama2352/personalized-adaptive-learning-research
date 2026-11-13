@@ -18,19 +18,24 @@ def sha(path):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run-id',default='modal-junyi-a1-b128-h100-20261113-07')
+    parser.add_argument('--logical-run-id')
+    parser.add_argument('--receipt-name', default='checkpoint-download-receipt.json')
     parser.add_argument('--max-checkpoints',type=int,default=2)
     args=parser.parse_args()
     assert re.fullmatch(r'modal-junyi-a1-b128-h100-\d{8}-\d{2}',args.run_id)
+    logical = args.logical_run_id or args.run_id
+    assert re.fullmatch(r'modal-junyi-a1-b128-h100-\d{8}-\d{2}', logical)
+    assert Path(args.receipt_name).name == args.receipt_name and args.receipt_name.endswith('.json')
     assert 1<=args.max_checkpoints<=30
     os.environ['MODAL_CONFIG_PATH']=str(ROOT/'artifacts/akt/private/modal.toml')
     os.environ['MODAL_PROFILE']='kltn'
     import modal
-    volume=modal.Volume.from_name('kltn-akt-'+args.run_id,create_if_missing=False)
+    volume=modal.Volume.from_name('kltn-akt-'+logical,create_if_missing=False)
     index=json.loads(b''.join(volume.read_file(args.run_id+'/checkpoint-index.json')))
     selected=sorted(name for name in index if re.fullmatch(r'epoch-\d{3}',name))[-args.max_checkpoints:]
     results=[]
     for name in selected:
-        folder=ROOT/'experiments/akt/results'/args.run_id/'checkpoints'/name
+        folder=ROOT/'experiments/akt/results'/logical/'checkpoints'/name
         folder.mkdir(parents=True,exist_ok=True)
         files=index[name]['files']
         assert set(files)=={'state.pt','metadata.json','COMPLETE.json'}
@@ -49,8 +54,9 @@ def main():
         assert sha(folder/'metadata.json')==complete['metadata_sha256']
         assert sha(folder/'state.pt')==metadata['checkpoint_sha256']==complete['checkpoint_sha256']
         results.append(dict(checkpoint=name,sha256=sha(folder/'state.pt'),path=folder.relative_to(ROOT).as_posix()))
-    receipt=dict(status='VERIFIED_PUBLISHED_CHECKPOINT_DOWNLOADS',run_id=args.run_id,checkpoints=results)
-    (HERE/'checkpoint-download-receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
+    receipt=dict(status='VERIFIED_PUBLISHED_CHECKPOINT_DOWNLOADS',run_id=args.run_id,
+                 logical_run_id=logical,checkpoints=results)
+    (HERE/args.receipt_name).write_text(json.dumps(receipt,indent=2)+'\n')
     print(json.dumps(receipt))
 
 

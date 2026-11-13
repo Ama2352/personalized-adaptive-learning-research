@@ -17,13 +17,21 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--version',required=True)
     parser.add_argument('--history',default='live-history.json')
+    parser.add_argument('--training-epochs',default='1,2,3')
+    parser.add_argument('--include-resume09',action='store_true')
     args=parser.parse_args()
     assert args.version.isalnum()
     history=json.loads((HERE/args.history).read_text())
     records=[json.loads(line) for line in (HERE/'monitor.jsonl').read_text().splitlines()]
-    measured=next(row['train_epochs'] for row in reversed(records) if row.get('train_epochs'))
-    epochs={row['epoch']:row for row in measured if row['complete']}
-    selected=[epochs[i] for i in (1,2,3) if i in epochs]
+    if args.include_resume09:
+        records.extend(json.loads(line) for line in (HERE/'monitor09.jsonl').read_text().splitlines())
+    epochs={}
+    for record in records:
+        for row in record.get('train_epochs',[]):
+            if row['complete']:epochs[row['epoch']]=row
+    requested=tuple(int(value) for value in args.training_epochs.split(','))
+    assert len(requested)==3
+    selected=[epochs[i] for i in requested if i in epochs]
     assert len(selected)==3 and all(row['targets']==13347331 for row in selected)
     rows=[dict(epoch=row['epoch'],seconds=row['wall_seconds'],targets=row['targets'],
                targets_per_second=row['targets']/row['wall_seconds']) for row in selected]
@@ -40,7 +48,9 @@ def main():
     plt.rcParams.update({'font.family':'DejaVu Sans','font.size':11,'svg.fonttype':'none',
         'svg.hashsalt':'a1-resume-'+args.version,'axes.spines.top':False,'axes.spines.right':False})
     fig,axes=plt.subplots(1,2,figsize=(11.2,5.2))
-    bars=axes[0].bar(['Source2\nepoch1','Compact + đọc trước\nepoch2','Compact + đọc trước\nepoch3'],
+    bars=axes[0].bar(['Source2\nepoch'+str(rows[0]['epoch']),
+        'Compact + đọc trước\nepoch'+str(rows[1]['epoch']),
+        'Compact + đọc trước\nepoch'+str(rows[2]['epoch'])],
         [row['seconds']/60 for row in rows],color=['#777777','#134F95','#134F95'],width=.57)
     axes[0].bar_label(bars,fmt='%.2f',padding=5)
     axes[0].set_ylabel('Phút training / epoch')
@@ -49,7 +59,13 @@ def main():
     axes[0].tick_params(axis='x',labelsize=9)
     x=[row['epoch'] for row in validation];y=[row['selection_logloss'] for row in validation]
     axes[1].plot(x,y,marker='o',color='#134F95')
-    for a,b in zip(x,y):axes[1].annotate(f'{b:.5f}',(a,b),xytext=(0,9),textcoords='offset points',ha='center',fontsize=9)
+    selected_epoch=history.get('selected_epoch')
+    labels=set(x) if len(x)<=6 else {x[0],x[3],x[6],x[-1],selected_epoch}
+    for a,b in zip(x,y):
+        if a in labels:axes[1].annotate(f'{b:.5f}',(a,b),xytext=(0,9),textcoords='offset points',ha='center',fontsize=9)
+    if selected_epoch is not None:
+        axes[1].axvline(selected_epoch,color='#888888',linestyle='--',linewidth=1,label='Chọn epoch '+str(selected_epoch))
+        axes[1].legend(frameon=False,fontsize=9)
     axes[1].set_xticks(x)
     axes[1].set_xlabel('Epoch đã hoàn tất validation')
     axes[1].set_ylabel('Log Loss trên selection (thấp hơn tốt hơn)')

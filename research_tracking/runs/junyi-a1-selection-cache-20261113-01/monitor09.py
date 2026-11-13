@@ -35,6 +35,14 @@ root=Path('/opt/kltn/experiments/akt/results')
 output=root/LOGICAL
 operation=root/(RUN+'-operation')
 result=dict(observed_unix=time.time(),observed_monotonic=time.monotonic(),output_exists=output.exists())
+terminal=output/'selected-terminal.json'
+if terminal.exists():
+    value=json.loads(terminal.read_text())
+    result['selected_terminal']={key:value[key] for key in ('status','selected_epoch','complete_epochs','validation')}
+worker_result=operation/'result.json'
+if worker_result.exists():result['worker_status']=json.loads(worker_result.read_text()).get('status')
+exports=list(output.glob('raw-best-selection-*.jsonl'))
+if exports:result['prediction_export_bytes']=sum(path.stat().st_size for path in exports)
 proof=operation/'actual-checkpoint-gpu-parity.json'
 if proof.exists():
     raw_proof=proof.read_bytes()

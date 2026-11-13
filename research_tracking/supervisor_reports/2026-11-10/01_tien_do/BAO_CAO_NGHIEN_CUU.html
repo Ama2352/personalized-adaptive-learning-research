@@ -46,7 +46,7 @@ a{color:#155c88;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{
 <div class="measure"><p><strong>Paper 1</strong> được kế thừa theo bản PDF phát triển dùng để nộp, là nguồn chuẩn về thiết kế và kết quả. Notebook trong repository là bản tiền kỳ. Bản PDF đã tách vai trò của đồ thị với vai trò của cách chọn đường đi. Ưu tiên học liên tục trong chương giúp giảm chuyển chương và quay lại chương, nhưng đồ thị mở rộng chưa cải thiện ổn định mức thành thạo. Phương án mở rộng thay cả quan hệ nội chương và liên chương, nên chưa tách riêng hiệu quả của cạnh liên chương. Paper đã gắn tính liên tục của lộ trình với chính sách lựa chọn; khóa luận không coi nhận định đó là phát hiện mới.</p>
 <p><strong>Paper 2</strong> đi tiếp vào mô hình ước lượng tri thức. Phần bổ sung có đồ thị cải thiện nhẹ dự báo ở một số nhóm mô phỏng, nhưng chưa phát hiện cải thiện rõ ở hai kết quả học tập chính sau hiệu chỉnh thống kê. Trên Junyi, bước chọn cấu hình phát triển ưu tiên tắt các cơ chế đồ thị đã thử. Paper cũng thừa nhận phép bật/tắt còn gộp nhiều cơ chế, nên chưa tách được phần đóng góp của riêng các cạnh.</p>
 <p>Khoảng trống cần giải quyết vì vậy không chỉ là cài một mô hình mạnh hơn. Khóa luận giữ ba câu hỏi trong đề cương: <strong>RQ1</strong> tìm nguyên nhân lợi ích chưa ổn định; <strong>RQ2</strong> xác định khi nào thông tin tiên quyết hữu ích, trung tính hoặc bất lợi; <strong>RQ3</strong> kiểm tra CG-AKT, một cách điều chỉnh ảnh hưởng của đồ thị theo độ tin cậy trên nền AKT.</p></div></section>
-<section id="a1-continued-h100-20261113"><h2>13/11 — A1 đã nối epoch1, có validation toàn selection và training nhanh hơn</h2><p>Điểm còn thiếu trước đợt này là checkpoint A1 đã học đủ một epoch nhưng chưa hoàn tất validation. Đường chuẩn bị thông tin đồ thị làm H100 chờ CPU nhiều. Nhóm tập trung giảm thời gian đọc và chuẩn bị dữ liệu, đồng thời kiểm khả năng giữ lại epoch đã học để tiếp tục thí nghiệm.</p><p>Phần dữ liệu selection được đối chiếu trên toàn bộ 1.600.343 lượt trả lời của 15.847 người học, giữ nguyên input, nhãn, thứ tự và tập target so với tham chiếu A0. Cache selection trên đĩa vẫn chậm hơn đường raw trong phép kiểm CPU đầy đủ. Cấu hình H100 hiện dùng compact A1 và đọc trước dữ liệu có giới hạn. Cache trên đĩa được giữ ở mức thử nghiệm. Bộ kiểm nguồn Linux cuối đạt 2.528 ca.</p><p>Checkpoint A1 thật được đối chiếu giữa source2 và compact trên CPU, sau đó kiểm trực tiếp trên H100 với các window có thông tin đồ thị. Loss, gradient, trọng số, Adam và RNG khớp hoàn toàn trong phần kiểm. Sau khi chạy validation epoch1 trên đủ selection, toàn bộ model, optimizer và RNG vẫn bằng trạng thái checkpoint gốc. Bước học của epoch1 được giữ lại và counters ghi đúng 13.347.331 target, 1.818 bước.</p><p>Để chọn checkpoint, mô hình được chấm trên nhóm selection tách biệt với nhóm cập nhật trọng số. Log Loss được dùng theo quy tắc đã chốt vì phạt các dự đoán tự tin nhưng sai. Bản chụp đã kiểm đến epoch6 cho các giá trị lần lượt 0,36000; 0,35689; 0,35573; 0,35555; 0,35484; 0,35434. Đây là tiến trình chọn checkpoint trên Development. Refit, hiệu chỉnh xác suất và đánh giá độc lập còn chờ.</p><p>Epoch2 và epoch3 đều học đủ 13.347.331 target, mất lần lượt 202,10 và 202,64 giây. Epoch1 source2 trước đó mất 1.343,56 giây trên H100. Mức tăng thông lượng quan sát khoảng 6,65 lần, với các epoch khác nhau. Validation toàn selection mất khoảng 36,5–36,7 giây mỗi lượt. GPU-Util theo các cửa sổ đo gần đây khoảng 33–36%, còn dưới mục tiêu 50%, VRAM khoảng 5,8 GB.</p><figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="806.4pt" height="374.4pt" viewBox="0 0 806.4 374.4" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<section id="a1-continued-h100-20261113"><h2>13/11 — A1 hoàn tất chọn checkpoint Junyi với dữ liệu so sánh đã kiểm</h2><p>Điểm còn thiếu trước đợt này là checkpoint A1 đã học đủ một epoch nhưng chưa hoàn tất validation. Đường chuẩn bị thông tin đồ thị làm H100 chờ CPU nhiều. Nhóm tập trung giảm thời gian đọc và chuẩn bị dữ liệu, đồng thời kiểm khả năng giữ lại epoch đã học để tiếp tục thí nghiệm.</p><p>Phần dữ liệu selection được đối chiếu trên toàn bộ 1.600.343 lượt trả lời của 15.847 người học, giữ nguyên input, nhãn, thứ tự và tập target so với tham chiếu A0. Cache selection trên đĩa vẫn chậm hơn đường raw trong phép kiểm CPU đầy đủ. Cấu hình H100 hiện dùng compact A1 và đọc trước dữ liệu có giới hạn. Cache trên đĩa được giữ ở mức thử nghiệm. Bộ kiểm nguồn Linux cuối đạt 2.528 ca.</p><p>Checkpoint A1 thật được đối chiếu giữa source2 và compact trên CPU, sau đó kiểm trực tiếp trên H100 với các window có thông tin đồ thị. Loss, gradient, trọng số, Adam và RNG khớp hoàn toàn trong phần kiểm. Sau khi chạy validation epoch1 trên đủ selection, toàn bộ model, optimizer và RNG vẫn bằng trạng thái checkpoint gốc. Bước học của epoch1 được giữ lại và counters ghi đúng 13.347.331 target, 1.818 bước.</p><p>A1 dùng đồ thị cố định đã hoàn tất bước chọn checkpoint trên Junyi, học 12 epoch và chọn epoch 9. Mỗi epoch dùng đủ 13.347.331 lượt trả lời của 126.774 người học train; selection gồm 1.600.343 lượt của 15.847 người học tách biệt, cùng 717 mã bài tập. Split, input, target và cấu hình batch128 được giữ theo hợp đồng so sánh A0. Log Loss được dùng để chọn epoch vì phạt dự đoán tự tin nhưng sai. Epoch 9 đạt 0,35356185. Quy tắc cố định yêu cầu cải thiện ít nhất 0,0001 và dừng sau ba epoch liên tiếp không đạt mức này. Epoch 12 có giá trị số học thấp hơn một chút, 0,35352761, nhưng mức giảm 0,00003424 chưa đạt tiêu chí đổi checkpoint. Vì vậy checkpoint được giữ ở epoch 9.</p><p>Sau khi nối nguồn đã kiểm, các epoch 2–6 mất khoảng 202–206 giây train. Các epoch 8–12 mất 182–194 giây, cộng 32–34 giây validation toàn selection, tổng khoảng 3,6–3,8 phút. Epoch 1 của bản cài đặt trước tối ưu mất 1.343,56 giây. So sánh này dùng các epoch khác nhau trên H100. GPU-Util trong các cửa sổ đang training khoảng 35–38%, VRAM khoảng 5,8 GiB. Trung bình toàn khoảng lấy mẫu của hai lượt H100 khoảng 27,7%, gồm cả admission, validation và xuất dự đoán; số này thấp hơn trung bình các cửa sổ đang train. GPU còn chờ CPU ở một số bước. Kiểm đầu vào, chuyển tensor về CPU để kiểm lặp và đóng gói artifact là các phần cần tiếp tục tách khỏi thời gian giữ GPU. Việc tách này chưa áp dụng vào lượt vừa chạy.</p><figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="806.4pt" height="374.4pt" viewBox="0 0 806.4 374.4" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
@@ -88,7 +88,7 @@ L 130.818307 269.333422
 L 130.818307 127.7971
 L 63.694806 127.7971
 z
-" clip-path="url(#a1-resume-pf5b560e850)" style="fill: #777777"/>
+" clip-path="url(#a1-resume-p7ccd7a235e)" style="fill: #777777"/>
    </g>
    <g id="a1-resume-patch_4">
     <path d="M 181.455334 269.333422
@@ -96,26 +96,26 @@ L 248.578835 269.333422
 L 248.578835 248.04277
 L 181.455334 248.04277
 z
-" clip-path="url(#a1-resume-pf5b560e850)" style="fill: #134f95"/>
+" clip-path="url(#a1-resume-p7ccd7a235e)" style="fill: #134f95"/>
    </g>
    <g id="a1-resume-patch_5">
     <path d="M 299.215862 269.333422
 L 366.339364 269.333422
-L 366.339364 247.986205
-L 299.215862 247.986205
+L 366.339364 249.633496
+L 299.215862 249.633496
 z
-" clip-path="url(#a1-resume-pf5b560e850)" style="fill: #134f95"/>
+" clip-path="url(#a1-resume-p7ccd7a235e)" style="fill: #134f95"/>
    </g>
    <g id="a1-resume-matplotlib.axis_1">
     <g id="a1-resume-xtick_1">
      <g id="a1-resume-line2d_1">
       <defs>
-       <path id="a1-resume-m429cdee9dc" d="M 0 0
+       <path id="a1-resume-mf51b495ce7" d="M 0 0
 L 0 3.5
 " style="stroke: #000000; stroke-width: 0.8"/>
       </defs>
       <g>
-       <use xlink:href="#a1-resume-m429cdee9dc" x="97.256557" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-mf51b495ce7" x="97.256557" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a1-resume-text_1">
@@ -126,7 +126,7 @@ L 0 3.5
     <g id="a1-resume-xtick_2">
      <g id="a1-resume-line2d_2">
       <g>
-       <use xlink:href="#a1-resume-m429cdee9dc" x="215.017085" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-mf51b495ce7" x="215.017085" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a1-resume-text_2">
@@ -137,12 +137,12 @@ L 0 3.5
     <g id="a1-resume-xtick_3">
      <g id="a1-resume-line2d_3">
       <g>
-       <use xlink:href="#a1-resume-m429cdee9dc" x="332.777613" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-mf51b495ce7" x="332.777613" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a1-resume-text_3">
       <text style="font-size: 9px; font-family: 'DejaVu Sans'" transform="translate(284.806207 284.432895)">Compact + đọc trước</text>
-      <text style="font-size: 9px; font-family: 'DejaVu Sans'" transform="translate(316.209176 295.235355)">epoch3</text>
+      <text style="font-size: 9px; font-family: 'DejaVu Sans'" transform="translate(316.209176 295.235355)">epoch8</text>
      </g>
     </g>
    </g>
@@ -150,12 +150,12 @@ L 0 3.5
     <g id="a1-resume-ytick_1">
      <g id="a1-resume-line2d_4">
       <defs>
-       <path id="a1-resume-m14f2f2d062" d="M 0 0
+       <path id="a1-resume-m2a1b91e2e4" d="M 0 0
 L -3.5 0
 " style="stroke: #000000; stroke-width: 0.8"/>
       </defs>
       <g>
-       <use xlink:href="#a1-resume-m14f2f2d062" x="48.562578" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-m2a1b91e2e4" x="48.562578" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a1-resume-text_4">
@@ -165,7 +165,7 @@ L -3.5 0
     <g id="a1-resume-ytick_2">
      <g id="a1-resume-line2d_5">
       <g>
-       <use xlink:href="#a1-resume-m14f2f2d062" x="48.562578" y="237.730063" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-m2a1b91e2e4" x="48.562578" y="237.730063" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a1-resume-text_5">
@@ -175,7 +175,7 @@ L -3.5 0
     <g id="a1-resume-ytick_3">
      <g id="a1-resume-line2d_6">
       <g>
-       <use xlink:href="#a1-resume-m14f2f2d062" x="48.562578" y="206.126703" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-m2a1b91e2e4" x="48.562578" y="206.126703" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a1-resume-text_6">
@@ -185,7 +185,7 @@ L -3.5 0
     <g id="a1-resume-ytick_4">
      <g id="a1-resume-line2d_7">
       <g>
-       <use xlink:href="#a1-resume-m14f2f2d062" x="48.562578" y="174.523344" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-m2a1b91e2e4" x="48.562578" y="174.523344" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a1-resume-text_7">
@@ -195,7 +195,7 @@ L -3.5 0
     <g id="a1-resume-ytick_5">
      <g id="a1-resume-line2d_8">
       <g>
-       <use xlink:href="#a1-resume-m14f2f2d062" x="48.562578" y="142.919984" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-m2a1b91e2e4" x="48.562578" y="142.919984" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a1-resume-text_8">
@@ -205,7 +205,7 @@ L -3.5 0
     <g id="a1-resume-ytick_6">
      <g id="a1-resume-line2d_9">
       <g>
-       <use xlink:href="#a1-resume-m14f2f2d062" x="48.562578" y="111.316625" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-m2a1b91e2e4" x="48.562578" y="111.316625" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a1-resume-text_9">
@@ -233,7 +233,7 @@ L 381.471591 269.333422
     <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="215.017085" y="240.400192" transform="rotate(-0 215.017085 240.400192)">3.37</text>
    </g>
    <g id="a1-resume-text_13">
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="332.777613" y="240.343627" transform="rotate(-0 332.777613 240.343627)">3.38</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="332.777613" y="241.990917" transform="rotate(-0 332.777613 241.990917)">3.12</text>
    </g>
    <g id="a1-resume-text_14">
     <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="215.017085" y="78.675281" transform="rotate(-0 215.017085 78.675281)">Cùng 13.347.331 target / epoch</text>
@@ -252,7 +252,7 @@ z
     <g id="a1-resume-xtick_4">
      <g id="a1-resume-line2d_10">
       <g>
-       <use xlink:href="#a1-resume-m429cdee9dc" x="470.935611" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-mf51b495ce7" x="470.935611" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a1-resume-text_15">
@@ -262,122 +262,188 @@ z
     <g id="a1-resume-xtick_5">
      <g id="a1-resume-line2d_11">
       <g>
-       <use xlink:href="#a1-resume-m429cdee9dc" x="531.464523" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-mf51b495ce7" x="498.448753" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a1-resume-text_16">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="531.464523" y="284.690844" transform="rotate(-0 531.464523 284.690844)">2</text>
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="498.448753" y="284.690844" transform="rotate(-0 498.448753 284.690844)">2</text>
      </g>
     </g>
     <g id="a1-resume-xtick_6">
      <g id="a1-resume-line2d_12">
       <g>
-       <use xlink:href="#a1-resume-m429cdee9dc" x="591.993434" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-mf51b495ce7" x="525.961894" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a1-resume-text_17">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="591.993434" y="284.690844" transform="rotate(-0 591.993434 284.690844)">3</text>
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="525.961894" y="284.690844" transform="rotate(-0 525.961894 284.690844)">3</text>
      </g>
     </g>
     <g id="a1-resume-xtick_7">
      <g id="a1-resume-line2d_13">
       <g>
-       <use xlink:href="#a1-resume-m429cdee9dc" x="652.522346" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-mf51b495ce7" x="553.475036" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a1-resume-text_18">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="652.522346" y="284.690844" transform="rotate(-0 652.522346 284.690844)">4</text>
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="553.475036" y="284.690844" transform="rotate(-0 553.475036 284.690844)">4</text>
      </g>
     </g>
     <g id="a1-resume-xtick_8">
      <g id="a1-resume-line2d_14">
       <g>
-       <use xlink:href="#a1-resume-m429cdee9dc" x="713.051257" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-mf51b495ce7" x="580.988178" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a1-resume-text_19">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="713.051257" y="284.690844" transform="rotate(-0 713.051257 284.690844)">5</text>
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="580.988178" y="284.690844" transform="rotate(-0 580.988178 284.690844)">5</text>
      </g>
     </g>
     <g id="a1-resume-xtick_9">
      <g id="a1-resume-line2d_15">
       <g>
-       <use xlink:href="#a1-resume-m429cdee9dc" x="773.580169" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-mf51b495ce7" x="608.501319" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a1-resume-text_20">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="773.580169" y="284.690844" transform="rotate(-0 773.580169 284.690844)">6</text>
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="608.501319" y="284.690844" transform="rotate(-0 608.501319 284.690844)">6</text>
      </g>
     </g>
-    <g id="a1-resume-text_21">
+    <g id="a1-resume-xtick_10">
+     <g id="a1-resume-line2d_16">
+      <g>
+       <use xlink:href="#a1-resume-mf51b495ce7" x="636.014461" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1-resume-text_21">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="636.014461" y="284.690844" transform="rotate(-0 636.014461 284.690844)">7</text>
+     </g>
+    </g>
+    <g id="a1-resume-xtick_11">
+     <g id="a1-resume-line2d_17">
+      <g>
+       <use xlink:href="#a1-resume-mf51b495ce7" x="663.527602" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1-resume-text_22">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="663.527602" y="284.690844" transform="rotate(-0 663.527602 284.690844)">8</text>
+     </g>
+    </g>
+    <g id="a1-resume-xtick_12">
+     <g id="a1-resume-line2d_18">
+      <g>
+       <use xlink:href="#a1-resume-mf51b495ce7" x="691.040744" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1-resume-text_23">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="691.040744" y="284.690844" transform="rotate(-0 691.040744 284.690844)">9</text>
+     </g>
+    </g>
+    <g id="a1-resume-xtick_13">
+     <g id="a1-resume-line2d_19">
+      <g>
+       <use xlink:href="#a1-resume-mf51b495ce7" x="718.553886" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1-resume-text_24">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="718.553886" y="284.690844" transform="rotate(-0 718.553886 284.690844)">10</text>
+     </g>
+    </g>
+    <g id="a1-resume-xtick_14">
+     <g id="a1-resume-line2d_20">
+      <g>
+       <use xlink:href="#a1-resume-mf51b495ce7" x="746.067027" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1-resume-text_25">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="746.067027" y="284.690844" transform="rotate(-0 746.067027 284.690844)">11</text>
+     </g>
+    </g>
+    <g id="a1-resume-xtick_15">
+     <g id="a1-resume-line2d_21">
+      <g>
+       <use xlink:href="#a1-resume-mf51b495ce7" x="773.580169" y="269.333422" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a1-resume-text_26">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="773.580169" y="284.690844" transform="rotate(-0 773.580169 284.690844)">12</text>
+     </g>
+    </g>
+    <g id="a1-resume-text_27">
      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="622.25789" y="300.642172" transform="rotate(-0 622.25789 300.642172)">Epoch đã hoàn tất validation</text>
     </g>
    </g>
    <g id="a1-resume-matplotlib.axis_4">
     <g id="a1-resume-ytick_7">
-     <g id="a1-resume-line2d_16">
+     <g id="a1-resume-line2d_22">
       <g>
-       <use xlink:href="#a1-resume-m14f2f2d062" x="455.803383" y="248.809408" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-m2a1b91e2e4" x="455.803383" y="237.190888" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
-     <g id="a1-resume-text_22">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="448.803383" y="252.988119" transform="rotate(-0 448.803383 252.988119)">0.354</text>
+     <g id="a1-resume-text_28">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="448.803383" y="241.369599" transform="rotate(-0 448.803383 241.369599)">0.354</text>
      </g>
     </g>
     <g id="a1-resume-ytick_8">
-     <g id="a1-resume-line2d_17">
+     <g id="a1-resume-line2d_23">
       <g>
-       <use xlink:href="#a1-resume-m14f2f2d062" x="455.803383" y="213.488001" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-m2a1b91e2e4" x="455.803383" y="204.60292" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
-     <g id="a1-resume-text_23">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="448.803383" y="217.666712" transform="rotate(-0 448.803383 217.666712)">0.356</text>
+     <g id="a1-resume-text_29">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="448.803383" y="208.781631" transform="rotate(-0 448.803383 208.781631)">0.356</text>
      </g>
     </g>
     <g id="a1-resume-ytick_9">
-     <g id="a1-resume-line2d_18">
+     <g id="a1-resume-line2d_24">
       <g>
-       <use xlink:href="#a1-resume-m14f2f2d062" x="455.803383" y="178.166594" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-m2a1b91e2e4" x="455.803383" y="172.014952" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
-     <g id="a1-resume-text_24">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="448.803383" y="182.345305" transform="rotate(-0 448.803383 182.345305)">0.358</text>
+     <g id="a1-resume-text_30">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="448.803383" y="176.193663" transform="rotate(-0 448.803383 176.193663)">0.358</text>
      </g>
     </g>
     <g id="a1-resume-ytick_10">
-     <g id="a1-resume-line2d_19">
+     <g id="a1-resume-line2d_25">
       <g>
-       <use xlink:href="#a1-resume-m14f2f2d062" x="455.803383" y="142.845188" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-m2a1b91e2e4" x="455.803383" y="139.426984" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
-     <g id="a1-resume-text_25">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="448.803383" y="147.023898" transform="rotate(-0 448.803383 147.023898)">0.360</text>
+     <g id="a1-resume-text_31">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="448.803383" y="143.605695" transform="rotate(-0 448.803383 143.605695)">0.360</text>
      </g>
     </g>
     <g id="a1-resume-ytick_11">
-     <g id="a1-resume-line2d_20">
+     <g id="a1-resume-line2d_26">
       <g>
-       <use xlink:href="#a1-resume-m14f2f2d062" x="455.803383" y="107.523781" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a1-resume-m2a1b91e2e4" x="455.803383" y="106.839017" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
-     <g id="a1-resume-text_26">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="448.803383" y="111.702492" transform="rotate(-0 448.803383 111.702492)">0.362</text>
+     <g id="a1-resume-text_32">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="448.803383" y="111.017728" transform="rotate(-0 448.803383 111.017728)">0.362</text>
      </g>
     </g>
-    <g id="a1-resume-text_27">
+    <g id="a1-resume-text_33">
      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="410.669868" y="184.004352" transform="rotate(-90 410.669868 184.004352)">Log Loss trên selection (thấp hơn tốt hơn)</text>
     </g>
    </g>
-   <g id="a1-resume-line2d_21">
-    <path d="M 470.935611 142.82704
-L 531.464523 197.688518
-L 591.993434 218.256441
-L 652.522346 221.401789
-L 713.051257 234.04634
-L 773.580169 242.842367
-" clip-path="url(#a1-resume-p86edfb9716)" style="fill: none; stroke: #134f95; stroke-width: 1.5; stroke-linecap: square"/>
+   <g id="a1-resume-line2d_27">
+    <path d="M 470.935611 139.410241
+L 498.448753 190.026121
+L 525.961894 209.002342
+L 553.475036 211.904279
+L 580.988178 223.570299
+L 608.501319 231.685622
+L 636.014461 229.193045
+L 663.527602 236.039499
+L 691.040744 244.330123
+L 718.553886 244.892446
+L 746.067027 241.821521
+L 773.580169 244.888076
+" clip-path="url(#a1-resume-p74ebb2872f)" style="fill: none; stroke: #134f95; stroke-width: 1.5; stroke-linecap: square"/>
     <defs>
-     <path id="a1-resume-mdc2b5cb771" d="M 0 3
+     <path id="a1-resume-m7762efdcb6" d="M 0 3
 C 0.795609 3 1.55874 2.683901 2.12132 2.12132
 C 2.683901 1.55874 3 0.795609 3 0
 C 3 -0.795609 2.683901 -1.55874 2.12132 -2.12132
@@ -389,14 +455,25 @@ C -1.55874 2.683901 -0.795609 3 0 3
 z
 " style="stroke: #134f95"/>
     </defs>
-    <g clip-path="url(#a1-resume-p86edfb9716)">
-     <use xlink:href="#a1-resume-mdc2b5cb771" x="470.935611" y="142.82704" style="fill: #134f95; stroke: #134f95"/>
-     <use xlink:href="#a1-resume-mdc2b5cb771" x="531.464523" y="197.688518" style="fill: #134f95; stroke: #134f95"/>
-     <use xlink:href="#a1-resume-mdc2b5cb771" x="591.993434" y="218.256441" style="fill: #134f95; stroke: #134f95"/>
-     <use xlink:href="#a1-resume-mdc2b5cb771" x="652.522346" y="221.401789" style="fill: #134f95; stroke: #134f95"/>
-     <use xlink:href="#a1-resume-mdc2b5cb771" x="713.051257" y="234.04634" style="fill: #134f95; stroke: #134f95"/>
-     <use xlink:href="#a1-resume-mdc2b5cb771" x="773.580169" y="242.842367" style="fill: #134f95; stroke: #134f95"/>
+    <g clip-path="url(#a1-resume-p74ebb2872f)">
+     <use xlink:href="#a1-resume-m7762efdcb6" x="470.935611" y="139.410241" style="fill: #134f95; stroke: #134f95"/>
+     <use xlink:href="#a1-resume-m7762efdcb6" x="498.448753" y="190.026121" style="fill: #134f95; stroke: #134f95"/>
+     <use xlink:href="#a1-resume-m7762efdcb6" x="525.961894" y="209.002342" style="fill: #134f95; stroke: #134f95"/>
+     <use xlink:href="#a1-resume-m7762efdcb6" x="553.475036" y="211.904279" style="fill: #134f95; stroke: #134f95"/>
+     <use xlink:href="#a1-resume-m7762efdcb6" x="580.988178" y="223.570299" style="fill: #134f95; stroke: #134f95"/>
+     <use xlink:href="#a1-resume-m7762efdcb6" x="608.501319" y="231.685622" style="fill: #134f95; stroke: #134f95"/>
+     <use xlink:href="#a1-resume-m7762efdcb6" x="636.014461" y="229.193045" style="fill: #134f95; stroke: #134f95"/>
+     <use xlink:href="#a1-resume-m7762efdcb6" x="663.527602" y="236.039499" style="fill: #134f95; stroke: #134f95"/>
+     <use xlink:href="#a1-resume-m7762efdcb6" x="691.040744" y="244.330123" style="fill: #134f95; stroke: #134f95"/>
+     <use xlink:href="#a1-resume-m7762efdcb6" x="718.553886" y="244.892446" style="fill: #134f95; stroke: #134f95"/>
+     <use xlink:href="#a1-resume-m7762efdcb6" x="746.067027" y="241.821521" style="fill: #134f95; stroke: #134f95"/>
+     <use xlink:href="#a1-resume-m7762efdcb6" x="773.580169" y="244.888076" style="fill: #134f95; stroke: #134f95"/>
     </g>
+   </g>
+   <g id="a1-resume-line2d_28">
+    <path d="M 691.040744 269.333422
+L 691.040744 98.675281
+" clip-path="url(#a1-resume-p74ebb2872f)" style="fill: none; stroke-dasharray: 3.7,1.6; stroke-dashoffset: 0; stroke: #888888"/>
    </g>
    <g id="a1-resume-patch_9">
     <path d="M 455.803383 269.333422
@@ -408,46 +485,54 @@ L 455.803383 98.675281
 L 788.712397 269.333422
 " style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
-   <g id="a1-resume-text_28">
-    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="470.935611" y="133.82704" transform="rotate(-0 470.935611 133.82704)">0.36000</text>
-   </g>
-   <g id="a1-resume-text_29">
-    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="531.464523" y="188.688518" transform="rotate(-0 531.464523 188.688518)">0.35689</text>
-   </g>
-   <g id="a1-resume-text_30">
-    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="591.993434" y="209.256441" transform="rotate(-0 591.993434 209.256441)">0.35573</text>
-   </g>
-   <g id="a1-resume-text_31">
-    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="652.522346" y="212.401789" transform="rotate(-0 652.522346 212.401789)">0.35555</text>
-   </g>
-   <g id="a1-resume-text_32">
-    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="713.051257" y="225.04634" transform="rotate(-0 713.051257 225.04634)">0.35484</text>
-   </g>
-   <g id="a1-resume-text_33">
-    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="773.580169" y="233.842367" transform="rotate(-0 773.580169 233.842367)">0.35434</text>
-   </g>
    <g id="a1-resume-text_34">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="470.935611" y="130.410241" transform="rotate(-0 470.935611 130.410241)">0.36000</text>
+   </g>
+   <g id="a1-resume-text_35">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="553.475036" y="202.904279" transform="rotate(-0 553.475036 202.904279)">0.35555</text>
+   </g>
+   <g id="a1-resume-text_36">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="636.014461" y="220.193045" transform="rotate(-0 636.014461 220.193045)">0.35449</text>
+   </g>
+   <g id="a1-resume-text_37">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="691.040744" y="235.330123" transform="rotate(-0 691.040744 235.330123)">0.35356</text>
+   </g>
+   <g id="a1-resume-text_38">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="773.580169" y="235.888076" transform="rotate(-0 773.580169 235.888076)">0.35353</text>
+   </g>
+   <g id="a1-resume-text_39">
     <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="622.25789" y="78.675281" transform="rotate(-0 622.25789 78.675281)">1.600.343 target selection, 0 OOV</text>
    </g>
+   <g id="a1-resume-legend_1">
+    <g id="a1-resume-line2d_29">
+     <path d="M 463.903383 110.463875
+L 472.903383 110.463875
+L 481.903383 110.463875
+" style="fill: none; stroke-dasharray: 3.7,1.6; stroke-dashoffset: 0; stroke: #888888"/>
+    </g>
+    <g id="a1-resume-text_40">
+     <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="489.103383" y="113.613875" transform="rotate(-0 489.103383 113.613875)">Chọn epoch 9</text>
+    </g>
+   </g>
   </g>
-  <g id="a1-resume-text_35">
+  <g id="a1-resume-text_41">
    <text style="font-size: 14px; font-family: 'DejaVu Sans'; text-anchor: middle" x="403.2" y="19.3355" transform="rotate(-0 403.2 19.3355)">A1 đã nối checkpoint epoch1 và tiếp tục trên H100</text>
   </g>
-  <g id="a1-resume-text_36">
+  <g id="a1-resume-text_42">
    <text style="font-size: 9px; font-family: 'DejaVu Sans'" transform="translate(196.305469 350.133539)">H100 · FP32 · batch128 · thời gian ở các epoch khác nhau, chưa là benchmark lặp ghép cặp</text>
    <text style="font-size: 9px; font-family: 'DejaVu Sans'" transform="translate(241.125469 361.296)">Selection dùng chọn checkpoint · chưa refit/calibration/đánh giá độc lập</text>
   </g>
  </g>
  <defs>
-  <clipPath id="a1-resume-pf5b560e850">
+  <clipPath id="a1-resume-p7ccd7a235e">
    <rect x="48.562578" y="98.675281" width="332.909013" height="170.658141"/>
   </clipPath>
-  <clipPath id="a1-resume-p86edfb9716">
+  <clipPath id="a1-resume-p74ebb2872f">
    <rect x="455.803383" y="98.675281" width="332.909013" height="170.658141"/>
   </clipPath>
  </defs>
 </svg>
-<figcaption>Đo training H100 và quá trình chọn checkpoint. Thời gian dùng các epoch khác nhau; selection phục vụ lựa epoch theo quy tắc cố định.</figcaption></figure><p>Lượt H100 đầu đã dừng đúng giới hạn thời gian và giữ trạng thái gần cuối epoch7. Lượt nối tiếp có trần riêng 3 USD trong tổng ngân sách KLTN 30 USD. Lượt canary đầu dừng sớm do thiếu metadata chọn shard, đã sửa phụ thuộc và lưu lỗi. Lượt tiếp theo đạt canary CUDA trong 6,22 giây. Toàn bộ checkpoint hoàn tất đến epoch6 cùng checkpoint epoch7 còn 21 bước đã tải về ổ D và kiểm toàn vẹn. Kết quả hiện xác nhận training và tiếp nối checkpoint hoạt động trên dữ liệu đầy đủ. Kết luận RQ3 về tác dụng của đồ thị cần hoàn tất so sánh mô hình và đánh giá độc lập.</p></section>
+<figcaption>Đo training H100 và quá trình chọn checkpoint. Thời gian dùng các epoch khác nhau; selection phục vụ lựa epoch theo quy tắc cố định.</figcaption></figure><p>Checkpoint epoch 9 đã được nạp lại và chấm lại đủ selection. Tập target, xác suất và Log Loss khớp lượt validation đã dùng chọn checkpoint. Toàn bộ checkpoint, 1.600.343 dự đoán selection và logs đã tải về ổ D, kiểm toàn vẹn; H100 đã dừng. Một lượt nối gặp lỗi đường dẫn khi import bộ khởi chạy, được dừng và sửa trước lượt thành công. Bước chọn epoch A1 đã hoàn tất. Refit, hiệu chỉnh xác suất, đánh giá độc lập và các điều kiện Junyi A2/A3 còn chờ. Kết quả selection này chưa đủ kết luận đồ thị cải thiện RQ3.</p></section>
 <section id="a1-graph-cache-integrated-20261113"><h2>13/11 — cache A1 đã khớp trên T4, tiếp tục ưu tiên phần tốn thời gian thực</h2><p>Từ kết quả A1 dạng gọn trên Junyi thật, nhóm kiểm tiếp việc tính trước thông tin đồ thị để giảm thời gian GPU chờ CPU. Cache đã nối vào đường training A1, kèm kiểm dữ liệu thay đổi và phục hồi checkpoint. Phép chia người học, batch128 và phép tính FP32 được giữ theo cấu hình đã chốt.</p><p>Bộ kiểm local đạt 62 ca. Trên T4 miễn phí, hai mức ảnh hưởng đồ thị cho loss, gradient, Adam và RNG khớp hoàn toàn giữa bản có cache và bản dựng trực tiếp. Dự đoán trên 4.440 target selection và kiểm nạp lại file trạng thái cũng có sai lệch bằng 0. Đây là kiểm kỹ thuật trên mẫu Junyi, chưa hoàn tất training A1 hoặc trả lời kết quả học tập của RQ3.</p><p>Trong hai block khoảng10giây mỗi phương án, thông lượng tăng từ khoảng14.957 lên15.232 target/giây, tương ứng1,84%. GPU-Util theo mẫu là67,3% và70,8%, gồm cả hai bước làm nóng mỗi block. Chênh lệch thời gian còn nhỏ so với dao động giữa các block, nên cache giữ ở chế độ tùy chọn. Chưa kết luận cache giúp rút ngắn đáng kể một epoch H100.</p><figure><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="777.6pt" height="360pt" viewBox="0 0 777.6 360" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">

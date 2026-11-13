@@ -1,5 +1,7 @@
 # A1 — đọc dữ liệu, selection và nối checkpoint epoch1
 
+**Đã nghiệm thu.** A1 Junyi selected-fit hoàn tất 12 epoch, chọn epoch 9 theo quy tắc đã giữ nguyên. Checkpoint/predictions/logs đã kiểm và lưu D. H100 đã dừng. Xem phần Nghiệm thu cuối đợt và final-acceptance.json. Các phần dưới giữ diễn tiến điều tra trước và trong training.
+
 ## Trạng thái trước H100
 
 Nguồn đã đóng băng để chạy, Linux CPU Gate đạt **2.528 ca**, không fail/error/skip. Archive Gate đã tải về D và kiểm SHA/inventory. VM CPU đã dừng có acknowledgment. Dự phòng CPU tối đa0,15USD theo ledger toàn dự án30USD. Số chi thực cần đối soát meter sau lượt GPU.
@@ -47,3 +49,21 @@ H10007 dừng đúng bound gần cuối epoch7, còn21bước. Archive106file638
 Lượt08 lỗi import controller tại `/root/resume_controller.py` vì tính `parents[3]` trên đường dẫn ngắn, trước worker/training. Agent dừng App, có acknowledgment264,18giây kể từ guard, giữ log lỗi. Cận chi dự phòng0,40USD, chưa là hóa đơn thực. Bản sửa dùng chuỗi `.parent` chịu được đường dẫn root, giống controller07. Phép kiểm `check_controller_import.py` tái hiện lỗi08 và xác nhận bản sửa import được theo ngữ nghĩa POSIX, không gọi GPU.
 
 Lượt09 dùng cùng logical07, source/Gate/model/config và partial7, cap2,60USD cộng dự phòng lỗi08 tối đa0,40USD trong allocation3USD. Không lặp canary hoặc epoch1..6. Watchdog1700giây, function timeout1800giây, một H100, không auto retry. Khi kết thúc phải kiểm archive trênD và App dừng trước chốt kết quả. Refit/calibration/đánh giá độc lập và A2/A3 Junyi còn chờ.
+
+## Thiết kế sử dụng GPU cần cải thiện tiếp
+
+Góp ý của người dùng ngày13/11 yêu cầu hoàn tất CPU preparation trước khi nhận GPU và trả GPU ngay khi phần tính toán kết thúc. Lượt09 còn admission toàn dữ liệu/khôi phục sampler sau khi được cấp H100. Phần này cần chuyển ra bước CPU có artifact đã ghim trước các lượt mới, giữ đủ xác minh khi handoff. Trong vòng batch, `research_graph_model._batch_sha` gọi `detach().cpu().contiguous().numpy()` cho năm tensor và được gọi ở nhiều ranh giới ticket/bind/forward. Đây là cơ chế buộc đồng bộ và chuyển dữ liệu về CPU, là ứng viên bottleneck có bằng chứng mã nguồn. Chưa có phép đo cô lập để quy thời gian GPU chờ cho từng nguyên nhân.
+
+Gói tối ưu kế tiếp cần giữ nguyên tensor/nhãn/thứ tự/gradient/Adam/RNG, giảm roundtrip kiểm lặp bằng hợp đồng ownership được kiểm, và đo CUDA trên checkpoint thật trước khi áp dụng. Không xóa integrity guard để đạt utilization. Phần thống kê/đóng gói archive/tải artifact có thể chạy CPU sau khi checkpoint đã bền vững. GPU vẫn giữ model/optimizer qua các batch và thực hiện cả train/validation. Đóng job theo early stopping hoặc bound, scaledown2giây như hiện tại. Các điều chỉnh lifecycle này chưa triển khai vào lượt09 đang train.
+
+## Nghiệm thu cuối đợt
+
+**A1 expert Junyi selected-fit hoàn tất**,12epoch/chọn9. Đủ21.816optimizerstep/160.167.972target qua12epoch, mỗi epoch13.347.331target. Quy tắc min_delta0,0001/patience3 được giữ nguyên. Epoch9 LogLoss0,3535618484, epoch12 thấp hơn0,00003424 nên không thay checkpoint theo quy tắc đã chốt. Nạp lại epoch9, chấm và xuất1.600.343prediction,0OOV, population và xác suất khớp. Đây là selection-fit; refit/calibration/đánh giá độc lập, A2/A3 Junyi còn chờ.
+
+Archive09 có122file,874.666.382byte, tải đủ D và kiểm từng member trước giải nén.89file mới và33file đã có đều đúng SHA; không thay file cũ. `archive-extraction09.json`, `validated-history09.json` và native `selected-terminal.json` là chứng cứ. Checkpoint được chọn tại `experiments/akt/results/modal-junyi-a1-b128-h100-20261113-07/checkpoints/epoch-009/state.pt`; predictions cùng logical output07. Dòng lineage vẫn trỏ checkpoint epoch1 source2 gốc.
+
+H10009 đã dừng có acknowledgment, kiểm server không còn container của App. Epoch8–12 train182–194giây, validation32–34giây. `telemetry-summary.json` tổng hợp đủ1.427mẫu của07/09. Trung bình có trọng số theo khoảng mẫu27,77% và27,66%; các cửa sổ đang train thường35–38%. Mẫu toàn phiên gồm admission/validation/export, chưa bao mọi giây startup/packaging. Không dùng utilization để suy thẳng tỷ lệ thời gian lãng phí. GPU vẫn chưa đạt mục tiêu50%.
+
+Đã đối soát các allocation của đợt. Cận tài nguyên mới4,67737USD gồm CPU và H10006/07/08/09, khác số hóa đơn thực. Snapshot Modal15,90801318USD toàn workspace, billed0; snapshot có thể trễ. Cận chi lịch sử toàn KLTN19,82936USD; giữ dự phòng3USD, phần còn có thể phân bổ theo guard7,17064USD. Các allocation đợt này đã đóng, không tự mở lượt GPU mới. `budget-settlement.json` và ledger giữ chi tiết.
+
+Figure cuối `a1-resume-h100-v3.svg` có PNG/PDF và hai CSV. Dựng lại bằng `build_figure.py --version <mới> --history validated-history09.json --training-epochs 1,2,8 --include-resume09`. Hai báo cáo GVHD đã cập nhật đủ diễn tiến chọn checkpoint, thời gian, giới hạn GPU và phần nghiên cứu còn thiếu. Việc chuyển CPU preparation/kiểm lặp/đóng gói ra ngoài khoảng giữ GPU là gói tiếp theo, chưa nghiệm thu.

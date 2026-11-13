@@ -1,5 +1,6 @@
 """Cập nhật hai báo cáo từ checkpoint/figure đã kiểm, giữ các chặng cũ."""
 import argparse
+import json
 from pathlib import Path
 import re
 
@@ -10,6 +11,7 @@ HERE=Path(__file__).resolve().parent
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--version',required=True)
+    parser.add_argument('--final',action='store_true')
     args=parser.parse_args()
     assert args.version.isalnum()
     title='13/11 — A1 đã nối epoch1, có validation toàn selection và training nhanh hơn'
@@ -39,11 +41,43 @@ def main():
         'Kết quả hiện xác nhận training và tiếp nối checkpoint hoạt động trên dữ liệu đầy đủ. '
         'Kết luận RQ3 về tác dụng của đồ thị cần hoàn tất so sánh mô hình và đánh giá độc lập.'
     ]
+    if args.final:
+        title='13/11 — A1 hoàn tất chọn checkpoint Junyi với dữ liệu so sánh đã kiểm'
+        terminal=json.loads((HERE/'validated-history09.json').read_text())
+        assert terminal['status']=='JUNYI_A1_SELECTED_ONLY_COMPLETE'
+        assert terminal['complete_epochs']==12 and terminal['selected_epoch']==9
+        assert terminal['comparison_population_matched'] is True
+        paragraphs[3]=(
+            'A1 dùng đồ thị cố định đã hoàn tất bước chọn checkpoint trên Junyi, học 12 epoch và chọn epoch 9. '
+            'Mỗi epoch dùng đủ 13.347.331 lượt trả lời của 126.774 người học train; selection gồm 1.600.343 lượt '
+            'của 15.847 người học tách biệt, cùng 717 mã bài tập. Split, input, target và cấu hình batch128 được giữ '
+            'theo hợp đồng so sánh A0. Log Loss được dùng để chọn epoch vì phạt dự đoán tự tin nhưng sai. '
+            'Epoch 9 đạt 0,35356185. Quy tắc cố định yêu cầu cải thiện ít nhất 0,0001 và dừng sau ba epoch '
+            'liên tiếp không đạt mức này. Epoch 12 có giá trị số học thấp hơn một chút, 0,35352761, '
+            'nhưng mức giảm 0,00003424 chưa đạt tiêu chí đổi checkpoint. Vì vậy checkpoint được giữ ở epoch 9.')
+        paragraphs[4]=(
+            'Sau khi nối nguồn đã kiểm, các epoch 2–6 mất khoảng 202–206 giây train. Các epoch 8–12 mất '
+            '182–194 giây, cộng 32–34 giây validation toàn selection, tổng khoảng 3,6–3,8 phút. '
+            'Epoch 1 của bản cài đặt trước tối ưu mất 1.343,56 giây. So sánh này dùng các epoch khác nhau trên H100. '
+            'GPU-Util trong các cửa sổ đang training khoảng 35–38%, VRAM khoảng 5,8 GiB. '
+            'Trung bình toàn khoảng lấy mẫu của hai lượt H100 khoảng 27,7%, gồm cả admission, validation '
+            'và xuất dự đoán; số này thấp hơn trung bình các cửa sổ đang train. '
+            'GPU còn chờ CPU ở một số bước. Kiểm đầu vào, chuyển tensor về CPU để kiểm lặp và đóng gói '
+            'artifact là các phần cần tiếp tục tách khỏi thời gian giữ GPU. Việc tách này chưa áp dụng vào lượt vừa chạy.')
+        paragraphs[5]=(
+            'Checkpoint epoch 9 đã được nạp lại và chấm lại đủ selection. Tập target, xác suất và Log Loss '
+            'khớp lượt validation đã dùng chọn checkpoint. Toàn bộ checkpoint, 1.600.343 dự đoán selection '
+            'và logs đã tải về ổ D, kiểm toàn vẹn; H100 đã dừng. Một lượt nối gặp lỗi đường dẫn khi import '
+            'bộ khởi chạy, được dừng và sửa trước lượt thành công. Bước chọn epoch A1 đã hoàn tất. '
+            'Refit, hiệu chỉnh xác suất, đánh giá độc lập và các điều kiện Junyi A2/A3 còn chờ. '
+            'Kết quả selection này chưa đủ kết luận đồ thị cải thiện RQ3.')
     heading='## '+title
+    old_heading='## 13/11 — A1 đã nối epoch1, có validation toàn selection và training nhanh hơn'
     md=heading+'\n\n'+'\n\n'.join(paragraphs)+'\n\n[Hồ sơ nối A1 và số liệu nguồn](../../../runs/junyi-a1-selection-cache-20261113-01/README.md)\n\n'
     folder=ROOT/'research_tracking/supervisor_reports/2026-11-10/01_tien_do'
     path=folder/'BAO_CAO.md'
     with path.open(encoding='utf-8',newline='') as stream:text=stream.read()
+    if args.final:text=text.replace(old_heading,heading,1)
     if heading in text:
         start=text.index(heading);end=text.index('## ',start+len(heading))
     else:start=end=text.index('## 13/11 — cache A1')
@@ -67,9 +101,15 @@ def main():
     entry='## '+title+'\n\n[Hồ sơ](LINK) giữ source Gate 2.528 ca, toàn selection 1.600.343 target khớp, '
     entry+='checkpoint epoch1 được giữ nguyên qua validation và nối H100. Hai epoch mới mất khoảng 202 giây, '
     entry+='bản chụp đến epoch6. Checkpoint đã tải D, H100 đầu đã dừng. GPU 33–36%, đang nối gần cuối epoch7 cùng source.\n\n'
+    if args.final:
+        entry='## '+title+'\n\n[Hồ sơ](LINK) giữ Gate2.528ca, parity checkpoint thật CPU/CUDA, '
+        entry+='A1 Junyi selected-fit hoàn tất12epoch/chọn9 theo min_delta0,0001, reload/prediction khớp. '
+        entry+='Train mới182–206giây/epoch, GPU gần đây35–38%. Mọi checkpoint/predictions/logs đã tảiD, '
+        entry+='H100 dừng. Refit/calibration/đánh giá độc lập và A2/A3 Junyi còn chờ.\n\n'
     for path,link in [(ROOT/'docs/REPOSITORY_MAP.md','../research_tracking/runs/junyi-a1-selection-cache-20261113-01/README.md'),
                       (ROOT/'research_tracking/reports/README.md','../runs/junyi-a1-selection-cache-20261113-01/README.md')]:
         with path.open(encoding='utf-8',newline='') as stream:text=stream.read()
+        if args.final:text=text.replace(old_heading,heading,1)
         if heading in text:
             start=text.index(heading);end=text.index('## ',start+len(heading))
         else:start=end=text.index('## 13/11 — cache A1')

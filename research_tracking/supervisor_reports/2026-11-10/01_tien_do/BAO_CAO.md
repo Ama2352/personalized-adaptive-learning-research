@@ -1,6 +1,6 @@
 # Báo cáo tiến độ khóa luận — cập nhật 13/11/2026
 
-## 13/11 — A1 đã nối epoch1, có validation toàn selection và training nhanh hơn
+## 13/11 — A1 hoàn tất chọn checkpoint Junyi với dữ liệu so sánh đã kiểm
 
 Điểm còn thiếu trước đợt này là checkpoint A1 đã học đủ một epoch nhưng chưa hoàn tất validation. Đường chuẩn bị thông tin đồ thị làm H100 chờ CPU nhiều. Nhóm tập trung giảm thời gian đọc và chuẩn bị dữ liệu, đồng thời kiểm khả năng giữ lại epoch đã học để tiếp tục thí nghiệm.
 
@@ -8,11 +8,11 @@ Phần dữ liệu selection được đối chiếu trên toàn bộ 1.600.343 
 
 Checkpoint A1 thật được đối chiếu giữa source2 và compact trên CPU, sau đó kiểm trực tiếp trên H100 với các window có thông tin đồ thị. Loss, gradient, trọng số, Adam và RNG khớp hoàn toàn trong phần kiểm. Sau khi chạy validation epoch1 trên đủ selection, toàn bộ model, optimizer và RNG vẫn bằng trạng thái checkpoint gốc. Bước học của epoch1 được giữ lại và counters ghi đúng 13.347.331 target, 1.818 bước.
 
-Để chọn checkpoint, mô hình được chấm trên nhóm selection tách biệt với nhóm cập nhật trọng số. Log Loss được dùng theo quy tắc đã chốt vì phạt các dự đoán tự tin nhưng sai. Bản chụp đã kiểm đến epoch6 cho các giá trị lần lượt 0,36000; 0,35689; 0,35573; 0,35555; 0,35484; 0,35434. Đây là tiến trình chọn checkpoint trên Development. Refit, hiệu chỉnh xác suất và đánh giá độc lập còn chờ.
+A1 dùng đồ thị cố định đã hoàn tất bước chọn checkpoint trên Junyi, học 12 epoch và chọn epoch 9. Mỗi epoch dùng đủ 13.347.331 lượt trả lời của 126.774 người học train; selection gồm 1.600.343 lượt của 15.847 người học tách biệt, cùng 717 mã bài tập. Split, input, target và cấu hình batch128 được giữ theo hợp đồng so sánh A0. Log Loss được dùng để chọn epoch vì phạt dự đoán tự tin nhưng sai. Epoch 9 đạt 0,35356185. Quy tắc cố định yêu cầu cải thiện ít nhất 0,0001 và dừng sau ba epoch liên tiếp không đạt mức này. Epoch 12 có giá trị số học thấp hơn một chút, 0,35352761, nhưng mức giảm 0,00003424 chưa đạt tiêu chí đổi checkpoint. Vì vậy checkpoint được giữ ở epoch 9.
 
-Epoch2 và epoch3 đều học đủ 13.347.331 target, mất lần lượt 202,10 và 202,64 giây. Epoch1 source2 trước đó mất 1.343,56 giây trên H100. Mức tăng thông lượng quan sát khoảng 6,65 lần, với các epoch khác nhau. Validation toàn selection mất khoảng 36,5–36,7 giây mỗi lượt. GPU-Util theo các cửa sổ đo gần đây khoảng 33–36%, còn dưới mục tiêu 50%, VRAM khoảng 5,8 GB.
+Sau khi nối nguồn đã kiểm, các epoch 2–6 mất khoảng 202–206 giây train. Các epoch 8–12 mất 182–194 giây, cộng 32–34 giây validation toàn selection, tổng khoảng 3,6–3,8 phút. Epoch 1 của bản cài đặt trước tối ưu mất 1.343,56 giây. So sánh này dùng các epoch khác nhau trên H100. GPU-Util trong các cửa sổ đang training khoảng 35–38%, VRAM khoảng 5,8 GiB. Trung bình toàn khoảng lấy mẫu của hai lượt H100 khoảng 27,7%, gồm cả admission, validation và xuất dự đoán; số này thấp hơn trung bình các cửa sổ đang train. GPU còn chờ CPU ở một số bước. Kiểm đầu vào, chuyển tensor về CPU để kiểm lặp và đóng gói artifact là các phần cần tiếp tục tách khỏi thời gian giữ GPU. Việc tách này chưa áp dụng vào lượt vừa chạy.
 
-Lượt H100 đầu đã dừng đúng giới hạn thời gian và giữ trạng thái gần cuối epoch7. Lượt nối tiếp có trần riêng 3 USD trong tổng ngân sách KLTN 30 USD. Lượt canary đầu dừng sớm do thiếu metadata chọn shard, đã sửa phụ thuộc và lưu lỗi. Lượt tiếp theo đạt canary CUDA trong 6,22 giây. Toàn bộ checkpoint hoàn tất đến epoch6 cùng checkpoint epoch7 còn 21 bước đã tải về ổ D và kiểm toàn vẹn. Kết quả hiện xác nhận training và tiếp nối checkpoint hoạt động trên dữ liệu đầy đủ. Kết luận RQ3 về tác dụng của đồ thị cần hoàn tất so sánh mô hình và đánh giá độc lập.
+Checkpoint epoch 9 đã được nạp lại và chấm lại đủ selection. Tập target, xác suất và Log Loss khớp lượt validation đã dùng chọn checkpoint. Toàn bộ checkpoint, 1.600.343 dự đoán selection và logs đã tải về ổ D, kiểm toàn vẹn; H100 đã dừng. Một lượt nối gặp lỗi đường dẫn khi import bộ khởi chạy, được dừng và sửa trước lượt thành công. Bước chọn epoch A1 đã hoàn tất. Refit, hiệu chỉnh xác suất, đánh giá độc lập và các điều kiện Junyi A2/A3 còn chờ. Kết quả selection này chưa đủ kết luận đồ thị cải thiện RQ3.
 
 [Hồ sơ nối A1 và số liệu nguồn](../../../runs/junyi-a1-selection-cache-20261113-01/README.md)
 

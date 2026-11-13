@@ -1,6 +1,7 @@
 """Đọc checkpoint đã tải/kiểm SHA, xuất tiến độ và chứng nhận giữ epoch1."""
 import hashlib
 import json
+import argparse
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[3]
@@ -8,8 +9,14 @@ HERE=Path(__file__).resolve().parent
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--receipt', default='checkpoint-download-receipt.json')
+    parser.add_argument('--output', default='live-history.json')
+    args = parser.parse_args()
+    for name in (args.receipt, args.output):
+        assert Path(name).name == name and name.endswith('.json')
     import torch
-    receipt=json.loads((HERE/'checkpoint-download-receipt.json').read_text())
+    receipt=json.loads((HERE/args.receipt).read_text())
     rows=receipt['checkpoints']
     assert rows
     last=ROOT/rows[-1]['path']/'state.pt'
@@ -20,7 +27,7 @@ def main():
         checkpoint=rows[-1]['checkpoint'],history=progress['history'],stopper=progress['stopper'],
         optimizer_steps=progress['optimizer_steps'],trained_targets=progress['valid_targets'],
         alpha=float(payload['model_state_dict']['alpha']),refit_completed=False,calibration_completed=False)
-    (HERE/'live-history.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    (HERE/args.output).write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     del payload
     first=next((row for row in rows if row['checkpoint']=='epoch-001'),None)
     if first is not None and not (HERE/'epoch1-preservation.json').exists():
