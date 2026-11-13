@@ -212,7 +212,10 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         selection_window_cache=None, expected_selection_cache_manifest_sha256=None,
         prefetch_train_windows=False, source_transition_file=None,
         expected_source_transition_sha256=None, prefetch_selection_windows=False,
-        train_cache_admission_receipt=None, expected_train_cache_admission_sha256=None):
+        train_cache_admission_receipt=None, expected_train_cache_admission_sha256=None,
+        selection_graph_context_cache=None, expected_selection_graph_context_cache_sha256=None,
+        selection_cpu_admission_file=None, expected_selection_cpu_admission_sha256=None,
+        selection_window_admission_file=None, expected_selection_window_admission_sha256=None):
     """A0 hoặc A1 expert, selected fit80/rawbest10 với cùng state machine."""
     validate_config(config,cuda_profile=profile)
     if validation_batch_size is not None and (type(validation_batch_size) is not int
@@ -269,11 +272,21 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
     if (train_graph_context_cache is None)!=(expected_train_graph_context_cache_sha256 is None):
         raise ValueError('Graph context cache path and pin required together')
     if train_graph_context_cache is not None:
-        if graph_condition is None or graph_condition.variant!='A1' or train_window_cache is None:
-            raise ValueError('Graph context cache requires A1 and pinned native window cache')
+        if graph_condition is None or train_window_cache is None:
+            raise ValueError('Graph context cache requires graph condition and pinned native window cache')
         if file_sha(train_graph_context_cache)!=expected_train_graph_context_cache_sha256:
             raise ValueError('Prepared graph context cache changed')
         prepared['train_graph_context_cache_sha256']=expected_train_graph_context_cache_sha256
+    for name,path,pin in (
+        ('selection_graph_context_cache_sha256',selection_graph_context_cache,expected_selection_graph_context_cache_sha256),
+        ('selection_cpu_admission_sha256',selection_cpu_admission_file,expected_selection_cpu_admission_sha256),
+        ('selection_window_admission_sha256',selection_window_admission_file,expected_selection_window_admission_sha256)):
+        if (path is None)!=(pin is None):
+            raise ValueError('Selection prepared file and external SHA required together')
+        if path is not None:
+            if selection_window_cache is None or file_sha(path)!=pin:
+                raise ValueError('Selection prepared artifact changed or has no window cache')
+            prepared[name]=pin
     if validation_batch_size is not None:
         prepared['validation_batch_size']=validation_batch_size
     comparison_reference = None
@@ -379,9 +392,22 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         from .research_junyi_selection_cache import SelectionCacheSession
         selection_session=SelectionCacheSession(selection_window_cache,view=inputs.selection,
             encoding=encoding,source_sha256=inputs.source_identity,expected_targets=inputs.selection_targets,
-            expected_manifest_sha256=expected_selection_cache_manifest_sha256)
+            expected_manifest_sha256=expected_selection_cache_manifest_sha256,
+            admission_file=selection_cpu_admission_file,expected_admission_sha256=expected_selection_cpu_admission_sha256,
+            window_admission_file=selection_window_admission_file,
+            expected_window_admission_sha256=expected_selection_window_admission_sha256)
         if comparison_reference is not None and selection_session.manifest['population_sha256']!=comparison_reference['selection_population_sha256']:
             raise ValueError('Selection cache population differs from A0 reference')
+    selection_graph_cache=None
+    if selection_graph_context_cache is not None:
+        if graph_condition is None:
+            raise ValueError('Selection graph cache requires graph condition')
+        from .research_junyi_graph import JunyiGraphPhaseSession
+        from .research_junyi_graph_cache import GraphContextCache
+        selection_graph_cache=GraphContextCache.open(selection_graph_context_cache,
+            expected_selection_graph_context_cache_sha256,JunyiGraphPhaseSession(graph_condition,inputs.selection),
+            dataset_sha256=inputs.source_identity,
+            window_manifest_sha256=selection_session.manifest['window_manifest_sha256'])
     identity = dict(kind='junyi_a0_selected_v1',inputs=inputs.identity,encoding=encoding.identity,
         prediction_implementation=_prediction_implementation(validation_batch_size),
         config=json.loads(json.dumps(asdict(config),default=str)),profile=asdict(profile),
@@ -400,6 +426,10 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         identity['validation_batch_size']=validation_batch_size
     if selection_session is not None:
         identity['selection_cache_manifest_sha256']=expected_selection_cache_manifest_sha256
+    for name in ('selection_graph_context_cache_sha256','selection_cpu_admission_sha256',
+                 'selection_window_admission_sha256'):
+        if name in prepared:
+            identity[name]=prepared[name]
     if prefetch_train_windows:
         identity['prefetch_train_windows']=True
     if prefetch_selection_windows:
@@ -563,7 +593,7 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
                 metadata_sha256=file_sha(before_validation/'metadata.json')))
         adapter.checkpoint_id = f'{config.run_id}-epoch-{epoch}'
         if graph_condition is not None:
-            adapter.set_phase(JunyiGraphPhaseSession(graph_condition,inputs.selection))
+            adapter.set_phase(JunyiGraphPhaseSession(graph_condition,inputs.selection),context_cache=selection_graph_cache)
         validation_started=time.monotonic()
         validation = _evaluate(adapter,
             iter_junyi_phase_learners(inputs.paths,inputs.selection,**reader_options),inputs.selection_targets,
@@ -603,7 +633,8 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
     torch.cuda.empty_cache()
     payload = load_checkpoint(best,expected_identity=identity,device='cuda')
     with torch.device('cpu'):
-        adapter = _make_selected_adapter(config,profile,encoding,inputs.selection,graph_condition)
+        adapter = _make_selected_adapter(config,profile,encoding,inputs.selection,graph_condition,
+            context_cache=selection_graph_cache)
     adapter.native.load_state_dict(payload['model_state_dict'])
     del payload
     adapter.checkpoint_id = file_sha(best)

@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\scripts\akt\fit_junyi_confidence.py", line 149, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\scripts\akt\fit_junyi_confidence.py", line 134, in main
+    result = spool_windows(output, windows=session.iter_windows(),
+        session=JunyiGraphPhaseSession(condition, inputs.train), identity=identity,
+        expected_targets=inputs.train_targets, expected_records=session.strict_records_verified,
+        max_seconds=max(1, args.max_seconds - 20))
+  File "D:\Dev\KLTN\src\knowledge_tracing\akt\research_junyi_confidence_run.py", line 122, in spool_windows
+    for row in iter_surrogate_rows(remaining(), session, max_targets=expected_targets,
+               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            max_windows=expected_records, max_seconds=max_seconds + 120):
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\src\knowledge_tracing\akt\research_junyi_confidence.py", line 62, in iter_surrogate_rows
+    for entry in windows:
+                 ^^^^^^^
+  File "D:\Dev\KLTN\src\knowledge_tracing\akt\research_junyi_confidence_run.py", line 120, in remaining
+    raise TimeoutError('Hết tranche CPU spool, tiếp tục từ progress đã commit')
+TimeoutError: Hết tranche CPU spool, tiếp tục từ progress đã commit
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\scripts\akt\fit_junyi_confidence.py", line 149, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\scripts\akt\fit_junyi_confidence.py", line 82, in main
+    raise RuntimeError('CPU worker thất bại, xem log và checkpoint, exit=' + str(code))
+RuntimeError: CPU worker thất bại, xem log và checkpoint, exit=1

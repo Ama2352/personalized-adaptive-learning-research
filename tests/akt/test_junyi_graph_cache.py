@@ -14,9 +14,9 @@ from knowledge_tracing.akt.research_junyi_compact import build_compact_context
 from knowledge_tracing.akt.research_junyi_graph import JunyiGraphPhaseSession
 
 
-def prepared(setup, tmp_path, monkeypatch, entries=None):
+def prepared(setup, tmp_path, monkeypatch, entries=None, variant='A1'):
     monkeypatch.setattr(cache,'CACHE_ROOT',tmp_path/'cache')
-    adapter=setup['adapter'](compact=True)
+    adapter=setup['adapter'](compact=True,variant=variant)
     entries=entries or windows(setup,setup['train'],training=True)
     path=cache.CACHE_ROOT/'train.sqlite'
     binding=dict(dataset_sha256='a'*64,window_manifest_sha256='b'*64)
@@ -25,6 +25,32 @@ def prepared(setup, tmp_path, monkeypatch, entries=None):
         max_seconds=60,max_rss_bytes=2*1024**3)
     reader=cache.GraphContextCache.open(path,receipt['cache_sha256'],adapter.phase,**binding)
     return adapter,entries,reader,receipt
+
+
+@pytest.mark.parametrize('variant',['A2','A3'])
+def test_confidence_cache_matches_direct_features_and_adam(setup,tmp_path,monkeypatch,variant):
+    from knowledge_tracing.akt.research_junyi_compact import build_compact_confidence_context
+    direct,entries,reader,_=prepared(setup,tmp_path,monkeypatch,variant=variant)
+    for group in (tuple(row.window for row in entries),tuple(row.window for row in reversed(entries))):
+        assert reader.batch(group,direct.phase)==build_compact_confidence_context(group,direct.phase)
+    cached=setup['adapter'](compact=True,variant=variant)
+    cached.set_phase(cached.phase,context_cache=reader)
+    with torch.no_grad():
+        direct.native.alpha.fill_(.7)
+    cached.native.load_state_dict(direct.native.state_dict())
+    optimizers=[adam(adapter) for adapter in (direct,cached)]
+    for _ in range(2):
+        rng=torch.get_rng_state().clone()
+        results=[]
+        for adapter,optimizer in zip((direct,cached),optimizers):
+            torch.set_rng_state(rng)
+            results.append(adapter.step(adapter.collate_training(entries),optimizer))
+        assert results[0]['loss_sum']==results[1]['loss_sum']
+        _assert_tree_equal(direct.native.state_dict(),cached.native.state_dict())
+        _assert_tree_equal(optimizers[0].state_dict(),optimizers[1].state_dict())
+    assert all(np.array_equal(a,b) for a,b in zip(
+        direct.predict_windows(tuple(row.window for row in entries)),
+        cached.predict_windows(tuple(row.window for row in entries))))
 
 
 def test_rebatch_and_shuffle_exact(setup,tmp_path,monkeypatch):

@@ -5,6 +5,7 @@ Không cache xác suất hoặc logits của checkpoint khác.
 """
 import hashlib
 import json
+from pathlib import Path
 import sqlite3
 import time
 
@@ -18,6 +19,33 @@ from .types import KTEvent, UnseenTarget
 from .windows import iter_windows
 
 KIND='JUNYI_SELECTION_WINDOW_SIDECAR_V1'
+
+
+def _selection_admission_sources():
+    from pathlib import Path
+    from .research_junyi_window_cache import _admission_sources
+    return dict(**_admission_sources(),selection_join=hashlib.sha256(
+        Path(__file__).read_bytes().replace(b'\r\n',b'\n')).hexdigest())
+
+
+def write_selection_cpu_admission(session,path,window_receipt):
+    """Chỉ xuất sau strict join đầy đủ trên CPU, không nối tiếp quyền từ receipt cũ."""
+    from .research_junyi_window_cache import write_cpu_admission
+    _need(type(session) is SelectionCacheSession and session._strict_join_verified,
+          'Fresh full selection join required for CPU admission')
+    _need(session._validator_sources==_selection_admission_sources(),
+          'Selection validator changed after CPU join')
+    path,window_receipt=Path(path),Path(window_receipt)
+    session._check()
+    write_cpu_admission(session.windows,window_receipt)
+    payload=dict(status='CPU_SELECTION_JOIN_VERIFIED',manifest_sha256=session._pin,
+        binding=session._binding,events_sha256=session.manifest['events_sha256'],
+        population_sha256=session.manifest['population_sha256'],targets=session.manifest['targets'],
+        window_admission_sha256=file_sha(window_receipt),validator_sources=_selection_admission_sources())
+    with path.open('x',encoding='utf-8') as stream:
+        json.dump(payload,stream,sort_keys=True)
+        stream.write('\n')
+    return payload
 
 
 def _need(ok,message):
@@ -105,8 +133,11 @@ def build_selection_cache(root,learners,*,view,encoding,source_sha256,expected_t
 
 class SelectionCacheSession:
     """Strict admission một lần, replay từng shard và lookup metadata chỉ đọc."""
-    def __init__(self,root,*,view,encoding,source_sha256,expected_targets,expected_manifest_sha256):
+    def __init__(self,root,*,view,encoding,source_sha256,expected_targets,expected_manifest_sha256,
+                 admission_file=None,expected_admission_sha256=None,
+                 window_admission_file=None,expected_window_admission_sha256=None):
         self.root=_owned_root(root)
+        self._validator_sources=_selection_admission_sources()
         self.view=view
         self.encoding=encoding
         self._binding=_binding(view,encoding,source_sha256)
@@ -121,12 +152,29 @@ class SelectionCacheSession:
               'Selection metadata SHA mismatch')
         stat=self._events.stat()
         self._stat=(stat.st_size,stat.st_mtime_ns,stat.st_ino)
+        pins=(admission_file,expected_admission_sha256,window_admission_file,expected_window_admission_sha256)
+        _need(all(pin is None for pin in pins) or all(pin is not None for pin in pins),
+              'Selection CPU receipt and window receipt require complete external pins')
+        self._strict_join_verified=False
+        if admission_file is not None:
+            _need(file_sha(admission_file)==expected_admission_sha256,'Selection CPU receipt SHA mismatch')
+            admitted=json.loads(Path(admission_file).read_text(encoding='utf-8'))
+            _need(admitted==dict(status='CPU_SELECTION_JOIN_VERIFIED',manifest_sha256=self._pin,
+                binding=self._binding,events_sha256=self.manifest['events_sha256'],
+                population_sha256=self.manifest['population_sha256'],targets=expected_targets,
+                window_admission_sha256=expected_window_admission_sha256,
+                validator_sources=_selection_admission_sources()),'Selection CPU receipt binding/source mismatch')
         self.windows=JunyiWindowCacheSession(self.root/'windows',view=view,encoding=encoding,
             source_data_sha256=source_sha256,expected_target_rows=expected_targets,
-            expected_manifest_sha256=self.manifest['window_manifest_sha256'])
+            expected_manifest_sha256=self.manifest['window_manifest_sha256'],
+            admission_receipt=window_admission_file,expected_admission_sha256=expected_window_admission_sha256)
         # Kiểm join/coverage trước khi GPU dùng cache, không chỉ dựa COMPLETE marker.
-        for _ in self.iter_prepared():
-            pass
+        if admission_file is None:
+            for _ in self.iter_prepared():
+                pass
+            _need(self._validator_sources==_selection_admission_sources(),
+                  'Selection validator changed during CPU join')
+            self._strict_join_verified=True
 
     @property
     def identity(self):

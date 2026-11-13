@@ -115,7 +115,6 @@ class JunyiGraphAKTAdapter:
               'Phase/native vocabulary mismatch')
         _need(context_cache is None or (type(context_cache) is GraphContextCache and self._compact_context),
               'Typed graph cache requires compact context')
-        _need(context_cache is None or self.condition.variant=='A1', 'Disk graph cache currently requires A1')
         if context_cache is not None:
             context_cache.assert_for(phase)
         self._context_cache = context_cache

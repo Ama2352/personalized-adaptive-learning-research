@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 14/11 — Confidence TRAIN80, tạm dừng có lưu tiến độ
+
+[Hồ sơ](../runs/junyi-confidence-train80-20261114-01/README.md) giữ checkpoint đủ số record/target nhưng corpus chưa niêm phong, chưa fit child. Gate Linux2590ca trước cache mới, cache A2/A3 local38ca. Selection wiring mới chưa kiểm, chưa training A2/A3. STATE giữ đường dẫn tiếp tục và các blocker.
+
+
 ## 14/11 — Tách CPU local và GPU cho A2/A3
 
 [Hồ sơ](../runs/junyi-local-gpu-separation-20261113-01/README.md) giữ 71 ca local đạt, đối chiếu 27 trường với A0/A1 thật, stop barrier trước download/nén và checkpoint recovery. Chưa fit confidence thật, kiểm Linux/CUDA hay training A2/A3. Đợt này 0 USD Modal.

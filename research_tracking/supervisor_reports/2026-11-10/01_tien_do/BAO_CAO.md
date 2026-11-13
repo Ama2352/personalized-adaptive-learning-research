@@ -1,5 +1,12 @@
 # Báo cáo tiến độ khóa luận — cập nhật 13/11/2026
 
+## 14/11 — Chuẩn bị độ tin cậy từng cạnh cho A2/A3
+
+Đã cài đặt bước ước lượng confidence từ TRAIN80 để A2/A3 dùng chung, với kiểm chéo theo người học và lưu tiến độ trên ổ D. SQLite đã lưu đủ số target theo checkpoint duyệt dữ liệu, tương ứng 13.347.331 tương tác. Bước kiểm/niêm phong corpus còn thiếu và chưa fit các child, nên hiện chưa có bộ confidence hoàn chỉnh.
+
+Source trước thay đổi cache mới đã đạt 2.590 ca kiểm trên Linux CPU. Phần cache đặc trưng graph A2/A3 tiếp tục đạt 38 ca local, gồm so dự đoán và cập nhật Adam với cách tính trực tiếp. Phần nối cache selection mới còn dang dở và chưa kiểm. Cần hoàn thiện luồng CPU chuẩn bị, kiểm CUDA và xác nhận checkpoint/ranh giới CPU–GPU trên Modal thật trước training chính. Chưa có kết quả A2/A3 Junyi để kết luận hiệu quả RQ3.
+
+
 ## 14/11 — Chuẩn bị A2/A3 với chi phí GPU được tách khỏi xử lý ngoài training
 
 Sau khi A0 và A1 đã hoàn tất bước chọn checkpoint Junyi, bước tiếp theo là A2 dùng độ tin cậy từng cạnh và A3 có thêm cổng điều chỉnh ảnh hưởng đồ thị. Trước khi thuê GPU tiếp, đã triển khai luồng CPU local chuẩn bị dữ liệu và upload, function GPU chạy học và validation, sau đó CPU local nhận và đóng gói kết quả khi GPU đã dừng.

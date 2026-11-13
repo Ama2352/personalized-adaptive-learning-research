@@ -1,0 +1,27 @@
+.F..........                                                             [100%]
+================================== FAILURES ===================================
+____________ test_child_fit_complete_binding_and_corruption_guard _____________
+
+case = (JunyiPhaseView(roles=JunyiResearchRoles(train_users=('0', '10', '11', '12', '13', '16', '2', '20', '21', '22', '23', ...'expert_declared', confidence=None, content_sha256='499b84c2e33237538c4f059272ebfad236041cedea45a8691b94a4be96768081'))
+runtime = EdgeRuntimeBinding(sklearn_version='1.9.1', numpy_version='2.5.4', lock_sha256='bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', method_source_sha256='a91aec2558d1fa63c18212aadda265e2dd0e01f369756447022b21bacfc235e9')
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/confidence-bulk01/test_child_fit_complete_bindin0')
+
+    def test_child_fit_complete_binding_and_corruption_guard(case, runtime, tmp_path):
+        spool(case, runtime, tmp_path)
+        with pytest.raises(FileNotFoundError):
+            finalize(tmp_path, condition=case[2], runtime=runtime)
+        first = fit_one_child(tmp_path, condition=case[2], runtime=runtime, child='C', max_rows=10000, max_seconds=30)
+>       assert first == fit_one_child(tmp_path, condition=case[2], runtime=runtime, child='C', max_rows=10000, max_seconds=30)
+E       AssertionError: assert {'feature_rec...2113fd6', ...} == {'child': 'C'....}, ...], ...}
+E         
+E         Omitting 10 identical items, use -vv to show
+E         Differing items:
+E         {'edges': [{'parent_id': 'A', 'child_id': 'C', 'full_child_targets': 256, 'eligible_targets': 256, ...}, {'parent_id':...e_targets': 256, ...}, {'parent_id': 'UNFIT', 'child_id': 'C', 'full_child_targets': 256, 'eligible_targets': 0, ...}]} != {'edges': [{'bootstrap_positive': 200, 'bootstrap_replicates': 200, 'bootstrap_seed': 175734019690020339, 'child_id': ...bootstrap_positive': None, 'bootstrap_replicates': 200, 'bootstrap_seed': 10755873263944680770, 'child_id': 'C', ...}]}
+E         {'fit_ledger': ({'kind': 'baseli...
+E         
+E         ...Full output truncated (2 lines hidden), use '-vv' to show
+
+tests\akt\test_junyi_confidence_run.py:64: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_junyi_confidence_run.py::test_child_fit_complete_binding_and_corruption_guard
+1 failed, 11 passed in 32.56s
