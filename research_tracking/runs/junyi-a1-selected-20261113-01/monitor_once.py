@@ -7,7 +7,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[3]
 BUNDLE = Path(__file__).resolve().parent
-RUN = 'modal-junyi-a1-b128-h100-20261113-04'
+RUN = 'modal-junyi-a1-b128-h100-20261113-05'
 os.environ['MODAL_CONFIG_PATH'] = str(ROOT/'artifacts/akt/private/modal.toml')
 os.environ['MODAL_PROFILE'] = 'kltn'
 os.environ['TEMP'] = os.environ['TMP'] = str(ROOT/'artifacts/akt/runtime/modal-client-temp')
@@ -50,6 +50,6 @@ print(json.dumps(result))
 record = json.loads(command(['container','exec','--no-pty',owned[0]['container_id'],'--',
     '/opt/kltn/.venv/bin/python','-B','-c',source]))
 record['container_id'] = owned[0]['container_id']
-with (BUNDLE/'monitor.jsonl').open('a',encoding='utf-8') as stream:
+with (BUNDLE/'monitor05.jsonl').open('a',encoding='utf-8') as stream:
     stream.write(json.dumps(record,ensure_ascii=False)+'\n')
 print(json.dumps(record,ensure_ascii=False))

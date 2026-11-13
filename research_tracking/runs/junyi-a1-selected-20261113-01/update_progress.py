@@ -1,5 +1,6 @@
 """Cập nhật diễn tiến A0 validation và A1 từ evidence thực của đợt mở."""
 import hashlib
+import base64
 import json
 from pathlib import Path
 import re
@@ -16,25 +17,44 @@ paragraph = (
     'Checkpoint này vốn được train bằng batch128. Chưa kiểm lại cách chọn epoch trên đủ 12 checkpoint. '
     'Kết quả mới xác nhận validation batch128 cho checkpoint được chọn trên selection thật.'
 )
-run = 'modal-junyi-a1-b128-h100-20261113-04'
+run = 'modal-junyi-a1-b128-h100-20261113-05'
 native = ROOT/'experiments/akt/results'/run
 receipt_path = native/'receipt.json'
+proof = None
+monitor = BUNDLE/'monitor05.jsonl'
+if monitor.exists():
+    for line in monitor.read_text(encoding='utf-8').splitlines():
+        row = json.loads(line)
+        if row.get('training', {}).get('training', {}).get('parameter_update_steps', 0):
+            proof = row['training']['training']
 if receipt_path.exists():
     receipt = json.loads(receipt_path.read_text())
     status = receipt['status']
 else:
-    status = 'DISPATCHED_AWAITING_TRAINING_CONFIRMATION'
-training = ('Đã chuẩn bị A1 đồ thị cố định với batch128 cho train và validation, cùng split, backbone, '
+    status = 'TRAINING_CONFIRMED_PARTIAL_EPOCH' if proof else 'DISPATCHED_AWAITING_TRAINING_CONFIRMATION'
+training = ('Bản A1 cũ đã học 1.000 bước/7.365.262 target, checkpoint cùng optimizer/RNG/sampler đã lưu trên D và H100 đã dừng. Bản tối ưu đạt 2.336 ca Linux và đối chiếu H100 trên fixture, đã mở lượt mới từ seed42 với cùng cấu hình. Chưa có bằng chứng chọn lại epoch A0 trên đủ12checkpoint. Đã chuẩn bị A1 đồ thị cố định với batch128 cho train và validation, cùng split, backbone, '
     'seed và quy tắc chọn epoch của A0. Linux CPU Gate đạt 2.328 ca. Các lỗi launcher và gọi entrypoint '
     'được giữ log và đã sửa. Yêu cầu H100 hiện đã dispatch, chưa xác nhận bước học A1 thực tế. '
     'Trần đợt H100 3 USD trong tổng 30 USD toàn KLTN, checkpoint có sync bền vững và watchdog dừng GPU.')
 if status not in ('DISPATCHED_AWAITING_TRAINING_CONFIRMATION',):
     training += ' Trạng thái receipt mới nhất là ' + status + '.'
+if proof:
+    training = ('A1 đã bắt đầu training thật trên H100 với batch128 cho cả train và validation. '
+        f"Bằng chứng tiến độ gần nhất ghi {proof['optimizer_steps']} bước optimizer, "
+        f"{proof['valid_targets']:,} target đã học và {proof['parameter_update_steps']} bước cập nhật trọng số. "
+        'Chưa hoàn tất epoch hoặc có kết quả validation A1. Tốc độ đang chậm hơn A0, '
+        'cần kiểm chi phí xử lý đồ thị. Giữ checkpoint/resume và trần H100 3 USD của đợt này. '
+        'Bản cũ đã lưu checkpoint1000 riêng. Lượt bản tối ưu khởi tạo lại seed42, source đã qua 2.336 ca Linux và đối chiếu H100 fixture; chưa nghiệm thu toàn trajectory. Các lỗi thiết lập trước được giữ log.')
 report = ROOT/'research_tracking/supervisor_reports/2026-11-10/01_tien_do'
+technical = ('Bản tối ưu đã kiểm trên H100 với dữ liệu tổng hợp. Loss, xác suất và tham số sau một bước Adam khớp bản cũ trong hai điều kiện đã kiểm; sai lệch gradient lớn nhất khoảng6,52×10⁻⁹. '
+    'Phép kiểm kéo dài9,02giây, chưa chứng minh cả quỹ đạo training giống từng bit. '
+    'Trên Junyi thật,500bước đầu bản mới mất khoảng6phút07giây, bản cũ khoảng10phút03giây trên cùng số target. '
+    'Còn chờ nghiệm thu epoch đầy đủ. Checkpoint bản cũ đã được giữ; lượt chính mới bắt đầu lại từ cùng seed42 theo quyết định vận hành của agent.')
+technical_md = '\n\n'+technical+'\n\n![Đối chiếu phần xử lý A1 trên H100](../../../runs/junyi-a1-selected-20261113-01/a1-vector-h100-v1.svg)\n'
 path = report/'BAO_CAO.md'
 text = path.read_text(encoding='utf-8')
 heading = '13/11 — kiểm checkpoint A0 trên H100 và triển khai A1'
-section = '\n## '+heading+'\n\n'+paragraph+'\n\n'+training+'\n'
+section = '\n## '+heading+'\n\n'+paragraph+'\n\n'+training+technical_md
 pattern = r'\n## '+re.escape(heading)+r'\n.*?(?=\n## |\Z)'
 if re.search(pattern,text,re.S):
     text = re.sub(pattern,lambda _:section,text,count=1,flags=re.S)
@@ -45,7 +65,8 @@ else:
 path.write_text(text,encoding='utf-8')
 path = report/'BAO_CAO_NGHIEN_CUU.html'
 text = path.read_text(encoding='utf-8')
-section = '<section id="junyi-a1-training-20261113"><h2>'+heading+'</h2><p>'+paragraph+'</p><p>'+training+'</p></section>\n'
+figure = base64.b64encode((BUNDLE/'a1-vector-h100-v1.png').read_bytes()).decode()
+section = '<section id="junyi-a1-training-20261113"><h2>'+heading+'</h2><p>'+paragraph+'</p><p>'+training+'</p><p>'+technical+'</p><figure><img style="width:100%;height:auto" alt="Đối chiếu A1 scalar và vector trên H100 bằng dữ liệu tổng hợp" src="data:image/png;base64,'+figure+'"></figure></section>\n'
 pattern = r'<section id="junyi-a1-training-20261113">.*?</section>\n?'
 if re.search(pattern,text,re.S):
     text = re.sub(pattern,lambda _:section,text,count=1,flags=re.S)
@@ -58,7 +79,10 @@ path = ROOT/'docs/thesis_recovery/INVESTIGATION_STATE.json'
 state = json.loads(path.read_text(encoding='utf-8-sig'))
 state['junyi_a1_selected_20261113'] = dict(status=status,
     evidence=BUNDLE.relative_to(ROOT).as_posix(), active_run=run,
-    controller_session_id=6983, app_id='ap-FRKGoDvxn2ACYocsKlhinp',
+    controller_session_id=47599, app_id=json.loads((native/'dispatch.json').read_text())['app_id'],
+    previous_partial_checkpoint='checkpoint1000-inspection.json',previous_run_stopped=True,
+    initialization='seed42_fresh_vector_implementation',
+    latest_training_proof=proof,
     cpu_gate_tests=2328, a0_selected_checkpoint_cuda_batch128_verified=True,
     a0_log_loss_delta=0, a0_epoch_choice_replayed=False,
     validation_implementation='batched_windows_v1_batch128',
@@ -70,7 +94,7 @@ for name, link in [('docs/REPOSITORY_MAP.md','../research_tracking/runs/junyi-a1
     path = ROOT/name
     text = path.read_text(encoding='utf-8')
     title = '\n## 13/11 — A1 H100 và validation A0 thực\n'
-    body = title+'\n[Hồ sơ]('+link+') có Gate Linux 2.328 ca, A0 checkpoint9 full-selection batch128 đạt Log Loss bằng giá trị cũ; A1 batch128 đã dispatch, chưa xác nhận học.\n'
+    body = title+'\n[Hồ sơ]('+link+') có Gate Linux 2.328 ca, A0 checkpoint9 full-selection batch128 đạt Log Loss bằng giá trị cũ; '+('A1 đã cập nhật trọng số trên H100, epoch còn đang chạy.' if proof else 'A1 batch128 đã dispatch, chưa xác nhận học.')+'\n'
     if title in text:
         text = re.sub(re.escape(title)+r'.*?(?=\n## |\Z)',lambda _:body,text,count=1,flags=re.S)
     else:

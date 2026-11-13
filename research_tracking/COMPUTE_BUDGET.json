@@ -4,18 +4,13 @@
   "extra_payment_allowed": false,
   "automatic_monthly_budget_reset": false,
   "authorization_reference": "Người dùng ngày 12/11/2026 cho phép tự phân bổ các khoản chi nhỏ, tổng toàn KLTN tối đa 30 USD free credits.",
-  "historical_usage_reserved_upper_usd": 9.001990764299183,
+  "historical_usage_reserved_upper_usd": 12.151990764299184,
   "safety_and_final_inference_reserve_usd": 3,
   "new_allocations": [
     {
-      "id": "junyi-a1-selected-cpu-20261113-01",
-      "cap_usd": 0.15,
-      "status": "AUTHORIZED_NOT_DISPATCHED"
-    },
-    {
-      "id": "junyi-a1-selected-h100-20261113-01",
+      "id": "junyi-a1-vector-h100-20261113-01",
       "cap_usd": 3,
-      "status": "RESERVED_PENDING_SOURCE_GATE"
+      "status": "AUTHORIZED_PENDING_DISPATCH"
     }
   ],
   "stop_rule": "Không mở lượt chạy nếu cận chi phí lịch sử, tổng allocation và dự phòng vượt 30 USD. Nếu chưa xác nhận dừng App thì kiểm trạng thái server trước lượt mới.",
@@ -231,6 +226,22 @@
       "scope": "resume epoch10, continue11; no new benchmark",
       "financial_record_status": "CLOSED_AFTER_ALL_OWNED_APPS_STOPPED",
       "settlement_note_vi": "Mức dự phòng ban đầu được giữ trong hồ sơ. Chi đã phát sinh nằm trong anchor và cận H100; phần chưa dùng được giải phóng. Trạng thái nghiên cứu gốc giữ nguyên."
+    },
+    {
+      "id": "junyi-a1-selected-cpu-20261113-01",
+      "cap_usd": 0.15,
+      "status": "AUTHORIZED_NOT_DISPATCHED",
+      "settled_status": "STOPPED_CHECKPOINT_VERIFIED_OR_CPU_GATE_VERIFIED",
+      "settlement_vi": "Bao gồm các lần thử trong cùng đợt, phần dự phòng được đưa vào cận lịch sử bảo thủ.",
+      "evidence": "research_tracking/runs/junyi-a1-selected-20261113-01/"
+    },
+    {
+      "id": "junyi-a1-selected-h100-20261113-01",
+      "cap_usd": 3,
+      "status": "RESERVED_PENDING_SOURCE_GATE",
+      "settled_status": "STOPPED_CHECKPOINT_VERIFIED_OR_CPU_GATE_VERIFIED",
+      "settlement_vi": "Bao gồm các lần thử trong cùng đợt, phần dự phòng được đưa vào cận lịch sử bảo thủ.",
+      "evidence": "research_tracking/runs/junyi-a1-selected-20261113-01/"
     }
   ],
   "a0_h100_settlement": {
@@ -263,5 +274,28 @@
     "safety_reserve_usd": 3,
     "prior_ledger_sha256": "651d1b33af5381174ee5255afb1b4f829aa738c6749ed0dd1b0f13ac6e70d9ba",
     "evidence": "research_tracking/runs/junyi-a0-h100-batch128-20261112-01/stop-confirmation-final.json"
+  },
+  "last_a1_accounting_snapshot": {
+    "observed_at_utc": "2026-11-13T07:55:28.334365+00:00",
+    "billing": {
+      "start_timestamp": "2026-11-01T00:00:00Z",
+      "end_timestamp": "2026-12-01T00:00:00Z",
+      "metered_cost": "10.40858422",
+      "billed_cost": "0.00000000",
+      "metered_cost_breakdown": {
+        "Network Egress": "0.00057608",
+        "LLM Tokens": "0.00000000",
+        "Ephemeral Apps": "10.39685032",
+        "Volumes": "0.00800814"
+      },
+      "adjustments": {
+        "Credits": "-10.40000000",
+        "Free Storage": "-0.00800814",
+        "Network Egress Allowance": "-0.00057608",
+        "Plan Cost": "0.00000000",
+        "Reservation Adjustment": "-0.00000000"
+      }
+    },
+    "all_owned_stopped": true
   }
 }

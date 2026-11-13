@@ -96,10 +96,14 @@ try:
     profile=ResearchCUDAExecutionProfile(16*1024**3,recipe_id='cgakt-cuda-fp32-batch128-v2')
     torch.cuda.set_per_process_memory_fraction(profile.max_vram_bytes/torch.cuda.get_device_properties(0).total_memory,0)
     assert any(gpu in torch.cuda.get_device_name(0) for gpu in ('H100','H200'))
+    time_left=REQUEST['local_deadline_unix']-time.time()
+    assert time_left>240,'Chưa đủ thời gian cấp checkpoint an toàn, không bắt đầu fit'
+    actual_wall=min(1600,time_left-120)
+    actual_train=min(1500,actual_wall-60)
     config=AKTConfig(phase='junyi-research',run_id=RUN,output_dir=ROOT/'experiments/akt/results'/RUN,
         execution_enabled=True,device='cuda',outer_fold=4,batch_size=128,protocol_version='akt-nr-exercise-v2-batch128',max_train_users=126774,max_val_users=15847,
         max_targets_per_side=13347331,max_total_targets=266946620,max_steps=36360,
-        max_seconds=1500,max_wall_seconds=1600,max_rss_bytes=8*1024**3,min_available_ram_bytes=256*1024**2)
+        max_seconds=actual_train,max_wall_seconds=actual_wall,max_rss_bytes=8*1024**3,min_available_ram_bytes=256*1024**2)
     gate=require_gate2_evidence(config,lock_file=lock)
     preflight(config,runtime_report_path=runtime,lock_file=lock,cuda_profile=profile)
     data=REQUEST['inputs']

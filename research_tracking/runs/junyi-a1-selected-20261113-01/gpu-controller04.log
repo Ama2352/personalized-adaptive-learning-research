@@ -1,0 +1,64 @@
+{"run_id": "modal-junyi-a1-b128-h100-20261113-04", "gpu": "H100", "status": "USER_APPROVED", "execution_requested": true}
+✓ Initialized. View run at 
+https://modal.com/apps/honguyenminhsang2005/main/ap-FRKGoDvxn2ACYocsKlhinp
+✓ Created objects.
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\gpu_contro
+│   ller.py
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\artifacts\akt\modal\junyi-throughput-20261112-01\full-selected-
+│   data.zip
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\experiments\akt\results\modal-junyi-a1-selected-cpu-20261113-01
+│   \artifacts.zip
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\artifacts\akt\modal\junyi-a1-selected-20261113-01\source.zip
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\a0-validat
+│   ion-replay03.json
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\a0-validat
+│   ion-replay-plan.json
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\a0-batched
+│   -comparison-reference03.json
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\replay_a0_
+│   validation.py
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\experiments\akt\results\modal-junyi-a1-b128-h100-20261113-04\wo
+│   rker-request.json
+├── ✓ Uploaded D:\Dev\KLTN\experiments\akt\modal_artifact_sync.py
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\gpu_worker
+│   .py
+└── ✓ Created Function remote_probe.
+Stopping app - uncaught exception raised locally: TimeoutError().
+Stopping app - user stopped from CLI.
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\gpu_controller.py", line 277, in main
+    receipt = call.get(timeout=guard.remaining())
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_object.py", line 49, in wrapped
+    return await method(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 2424, in get
+    return await self._invocation().poll_function(timeout=timeout, index=index)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 348, in poll_function
+    raise TimeoutError()
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\gpu_controller.py", line 307, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\gpu_controller.py", line 271, in main
+    with ModalAppBudgetGuard(binding,deadline,stop_app=stop_owned_app_cli,
+         ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             diagnostic_path=native/'app-budget-guard.json') as guard:
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\experiments\akt\modal_budget_guard.py", line 227, in __exit__
+    raise ModalDeadlineExceeded('Total Modal startup/execution deadline reached; App stop acknowledged') from error
+modal_budget_guard.ModalDeadlineExceeded: Total Modal startup/execution deadline reached; App stop acknowledged

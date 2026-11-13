@@ -194,10 +194,12 @@ class ResearchGraphNative(nn.Module):
         _need(_cuda_profile_sha(self.cuda_profile) == self._cuda_profile_sha, 'native CUDA execution profile drift')
         _need(len(evidence) == batch.q_data.shape[0], 'context/batch row mismatch')
         _need(all(len(row) <= batch.q_data.shape[1] for row in evidence), 'context/batch length mismatch')
+        target_mask = batch.target_mask.detach().cpu().numpy()
+        valid_mask = batch.valid_mask.detach().cpu().numpy()
         for row, items in enumerate(evidence):
             for local, item in enumerate(items):
                 if item is not None:
-                    _need(bool(batch.target_mask[row, local]) and bool(batch.valid_mask[row, local]), 'context outside target mask')
+                    _need(bool(target_mask[row, local]) and bool(valid_mask[row, local]), 'context outside target mask')
                     _need(item.local_position == local and item.source_row == int(batch.source_rows[row, local]), 'context target identity mismatch')
         digest = _evidence_sha(evidence)
         _need(expected_evidence_sha256 is None or digest == expected_evidence_sha256,
@@ -241,7 +243,7 @@ class ResearchGraphNative(nn.Module):
                     mass = sum(p.confidence for p in observed)
                     if mass > 0:
                         message = sum(p.confidence * (p.mean_observed_correctness - .5) for p in observed) / max(1., mass)
-                        active.append((row, local, message, _features(audit)))
+                        active.append((row, local, message, None if self.variant == 'A1' else _features(audit)))
         if not active:
             # Includes A0, whole-off, empty graph and all-confidence-mass zero.
             return self.backbone(q_data, qa_data, target)
@@ -255,12 +257,20 @@ class ResearchGraphNative(nn.Module):
         base_probabilities = torch.sigmoid(base_logits)
         residual = torch.zeros_like(base_logits)
         applied = torch.zeros_like(q_data, dtype=torch.bool)
-        for row, local, message, features in active:
-            gate = (torch.sigmoid(self.gate(base_logits.new_tensor(features))).reshape(())
-                    if self.gate is not None else base_logits.new_ones(()))
-            # Alpha=0 is deliberately not a shortcut: d(loss)/d(alpha) survives.
-            residual[row, local] = self.alpha * gate * message
-            applied[row, local] = True
+        if self.variant == 'A1':
+            rows = torch.tensor([entry[0] for entry in active], dtype=torch.long, device=base_logits.device)
+            positions = torch.tensor([entry[1] for entry in active], dtype=torch.long, device=base_logits.device)
+            messages = base_logits.new_tensor([entry[2] for entry in active])
+            # Một phép ghi giữ gradient alpha=0, tránh chuỗi scalar CopySlices.
+            residual[rows, positions] = self.alpha * base_logits.new_ones(()) * messages
+            applied[rows, positions] = True
+        else:
+            for row, local, message, features in active:
+                gate = (torch.sigmoid(self.gate(base_logits.new_tensor(features))).reshape(())
+                        if self.gate is not None else base_logits.new_ones(()))
+                # Alpha=0 is deliberately not a shortcut: d(loss)/d(alpha) survives.
+                residual[row, local] = self.alpha * gate * message
+                applied[row, local] = True
         logits = base_logits + residual
         probabilities = torch.where(applied, torch.sigmoid(logits), base_probabilities)
         labels = target.reshape(-1)

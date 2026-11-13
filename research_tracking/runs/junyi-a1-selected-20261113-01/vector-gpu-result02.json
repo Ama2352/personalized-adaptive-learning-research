@@ -1,0 +1,46 @@
+{
+  "status": "FAILED_PRESERVED",
+  "scope": "H100_SYNTHETIC_A1_SCALAR_VECTOR_PARITY",
+  "source_sha256": {
+    "old": "997fe9191388738954c0f4aeb1f7062c9c1e3cf6646a5b2486d2618b5c02c177",
+    "new": "3a3a45634ba7ea84520472f57c1828b28a705b9d2a8a10f8476510cf682507e5"
+  },
+  "tolerances": {
+    "loss": {
+      "atol": 1e-06,
+      "rtol": 1e-06
+    },
+    "probabilities": {
+      "atol": 1e-07,
+      "rtol": 1e-06
+    },
+    "gradients": {
+      "atol": 1e-07,
+      "rtol": 1e-05
+    },
+    "parameters": {
+      "atol": 2e-07,
+      "rtol": 2e-05
+    },
+    "adam_moments": {
+      "atol": 1e-07,
+      "rtol": 1e-05
+    }
+  },
+  "max_wall_seconds": 90,
+  "max_additional_uss_bytes": 2147483648,
+  "training_process_changed": false,
+  "fixture_optimizer_steps_per_model_per_alpha": 1,
+  "alphas": [],
+  "data": "synthetic_only",
+  "training_epochs": 0,
+  "new_cloud_job_started": false,
+  "baseline_uss_bytes": 29151232,
+  "baseline_rss_bytes": 29151232,
+  "peak_rss_bytes": 3458060288,
+  "peak_uss_bytes": 3458060288,
+  "error_type": "MemoryError",
+  "error": "GPU parity probe vượt thêm 2 GiB private USS",
+  "traceback": "Traceback (most recent call last):\n  File \"/opt/kltn-checks/probe_gpu_vector_parity.py\", line 87, in main\n    import torch\n  File \"/opt/kltn/.venv/lib/python3.13/site-packages/torch/__init__.py\", line 1813, in <module>\n    from torch._tensor import Tensor  # usort: skip\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1369, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1340, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 935, in _load_unlocked\n  File \"<frozen importlib._bootstrap_external>\", line 1023, in exec_module\n  File \"<frozen importlib._bootstrap_external>\", line 1119, in get_code\n  File \"<frozen importlib._bootstrap_external>\", line 1219, in get_data\n  File \"/opt/kltn-checks/probe_gpu_vector_parity.py\", line 59, in memory_exhausted\n    raise MemoryError('GPU parity probe vượt thêm 2 GiB private USS')\nMemoryError: GPU parity probe vượt thêm 2 GiB private USS\n",
+  "elapsed_seconds": 0.5377848549999271
+}

@@ -2,8 +2,7 @@
 
 ## 13/11 — A1 H100 và validation A0 thực
 
-[Hồ sơ](../research_tracking/runs/junyi-a1-selected-20261113-01/README.md) có Gate Linux 2.328 ca, A0 checkpoint9 full-selection batch128 đạt Log Loss bằng giá trị cũ; A1 batch128 đã dispatch, chưa xác nhận học.
-
+[Hồ sơ](../research_tracking/runs/junyi-a1-selected-20261113-01/README.md) có Gate Linux 2.328 ca, A0 checkpoint9 full-selection batch128 đạt Log Loss bằng giá trị cũ; A1 đã cập nhật trọng số trên H100, epoch còn đang chạy.
 
 ## 13/11 — kiểm checkpoint A0 thật
 

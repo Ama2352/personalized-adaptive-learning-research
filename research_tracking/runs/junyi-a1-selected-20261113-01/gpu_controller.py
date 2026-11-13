@@ -5,6 +5,7 @@ from decimal import Decimal
 import hashlib
 import json
 import math
+import time
 import os
 from pathlib import Path
 import re
@@ -227,7 +228,7 @@ def main():
     (native/'billing-before.json').write_text(json.dumps(billing,indent=2))
     (native/'project-budget-admission.json').write_text(json.dumps(dict(
         ledger_sha256=ledger_sha256,decision=budget),indent=2)+'\n')
-    worker_request = dict(request,run_id=run_id,gpu=args.gpu)
+    worker_request = dict(request,run_id=run_id,gpu=args.gpu,local_deadline_unix=time.time()+2000)
     worker_request_path = native/'worker-request.json'
     worker_request_path.write_text(json.dumps(worker_request,indent=2))
     paths = {'/opt/junyi-numerical-worker.py':bundle/'gpu_worker.py',
@@ -261,8 +262,9 @@ def main():
     gpu_specification = 'H100!' if h100_batch128 else args.gpu
     mounts={'/durable':volume}
     replay_plan=json.loads((bundle/'a0-validation-replay-plan.json').read_text())
-    for entry in replay_plan['checkpoints']:
-        mounts[entry['mount']]=modal.Volume.from_name(entry['volume_name'],create_if_missing=False)
+    if not request.get('reuse_verified_a0_replay'):
+        for entry in replay_plan['checkpoints']:
+            mounts[entry['mount']]=modal.Volume.from_name(entry['volume_name'],create_if_missing=False)
     function = app.function(image=image,gpu=gpu_specification,cpu=cpu_limit,memory=memory_limit,
         timeout=2100 if h100_batch128 else 3300,startup_timeout=60,retries=0,max_containers=1,scaledown_window=60,
         volumes=mounts)(remote_probe)

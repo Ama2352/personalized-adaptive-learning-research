@@ -4,7 +4,11 @@
 
 Sau phép kiểm CPU, đã đối chiếu checkpoint A0 epoch 9 thật trên H100 bằng validation batch128. Toàn bộ 1.600.343 target selection khớp dữ liệu và thứ tự lịch sử, 0 OOV. Log Loss bằng giá trị validation cũ 0,3535801768 trong độ chính xác đã lưu. Lượt dự đoán mất 25,11 giây, trọng số giữ nguyên. Checkpoint này vốn được train bằng batch128. Chưa kiểm lại cách chọn epoch trên đủ 12 checkpoint. Kết quả mới xác nhận validation batch128 cho checkpoint được chọn trên selection thật.
 
-Đã chuẩn bị A1 đồ thị cố định với batch128 cho train và validation, cùng split, backbone, seed và quy tắc chọn epoch của A0. Linux CPU Gate đạt 2.328 ca. Các lỗi launcher và gọi entrypoint được giữ log và đã sửa. Yêu cầu H100 hiện đã dispatch, chưa xác nhận bước học A1 thực tế. Trần đợt H100 3 USD trong tổng 30 USD toàn KLTN, checkpoint có sync bền vững và watchdog dừng GPU.
+A1 đã bắt đầu training thật trên H100 với batch128 cho cả train và validation. Bằng chứng tiến độ gần nhất ghi 500 bước optimizer, 3,665,458 target đã học và 500 bước cập nhật trọng số. Chưa hoàn tất epoch hoặc có kết quả validation A1. Tốc độ đang chậm hơn A0, cần kiểm chi phí xử lý đồ thị. Giữ checkpoint/resume và trần H100 3 USD của đợt này. Bản cũ đã lưu checkpoint1000 riêng. Lượt bản tối ưu khởi tạo lại seed42, source đã qua 2.336 ca Linux và đối chiếu H100 fixture; chưa nghiệm thu toàn trajectory. Các lỗi thiết lập trước được giữ log.
+
+Bản tối ưu đã kiểm trên H100 với dữ liệu tổng hợp. Loss, xác suất và tham số sau một bước Adam khớp bản cũ trong hai điều kiện đã kiểm; sai lệch gradient lớn nhất khoảng6,52×10⁻⁹. Phép kiểm kéo dài9,02giây, chưa chứng minh cả quỹ đạo training giống từng bit. Trên Junyi thật,500bước đầu bản mới mất khoảng6phút07giây, bản cũ khoảng10phút03giây trên cùng số target. Còn chờ nghiệm thu epoch đầy đủ. Checkpoint bản cũ đã được giữ; lượt chính mới bắt đầu lại từ cùng seed42 theo quyết định vận hành của agent.
+
+![Đối chiếu phần xử lý A1 trên H100](../../../runs/junyi-a1-selected-20261113-01/a1-vector-h100-v1.svg)
 
 ## 13/11 — chuẩn bị tối ưu validation
 

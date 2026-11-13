@@ -1,0 +1,36 @@
+{
+  "status": "CPU_FOCUSED_AND_NATIVE_REGRESSION_PASS_GPU_PENDING",
+  "tests": 56,
+  "seconds": 23.84,
+  "source_sha256": {
+    "src/knowledge_tracing/akt/research_graph_model.py": "3a3a45634ba7ea84520472f57c1828b28a705b9d2a8a10f8476510cf682507e5",
+    "tests/akt/test_a1_vector_residual.py": "2563f5893a47850dc0972c3cd7e9a4d330e29d76af34b5f257fc6774f81777f6"
+  },
+  "tolerances": {
+    "loss": {
+      "atol": 1e-06,
+      "rtol": 1e-06
+    },
+    "probabilities": {
+      "atol": 1e-07,
+      "rtol": 1e-06
+    },
+    "gradients": {
+      "atol": 1e-07,
+      "rtol": 1e-05
+    },
+    "parameters_after_two_adam_steps": {
+      "atol": 2e-07,
+      "rtol": 2e-05
+    }
+  },
+  "max_drift_small_fixture": {
+    "loss": 0,
+    "probability": 0,
+    "gradient": 0,
+    "parameter": 0
+  },
+  "limits_vi": "Native CPU, fixture2x6 mixedlength9targets. Chưa benchmarkCUDA hoặc chứng minh trajectory batch128 H100 giống bitwise. Run04 không hotpatch. Không bỏ kiểm integrity, A2/A3 vẫn scalar branch.",
+  "gpu_used": false,
+  "modal_spent_usd": 0
+}
