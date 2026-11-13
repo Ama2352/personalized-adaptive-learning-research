@@ -1,0 +1,113 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.5, pytest-9.1.1, pluggy-1.7.0 -- D:\Dev\KLTN\.venv\Scripts\python.exe
+rootdir: D:\Dev\KLTN
+configfile: pyproject.toml
+plugins: anyio-4.16.0, platformdirs-4.14.5
+collecting ... collected 1 item
+
+tests/akt/test_junyi_staged_local.py::test_controller_uploads_before_gpu_and_downloads_after_stop FAILED
+
+================================== FAILURES ===================================
+_________ test_controller_uploads_before_gpu_and_downloads_after_stop _________
+
+package = (WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/local-gpu-separation03/test_controller_uploads_before0/repo'), Windo...atch_size': 128, 'config': {'run_id': 'unit-a2-logical', 'batch_size': 128, 'seed': 42, 'max_wall_seconds': 60, ...}}})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000199D2D0CD60>
+
+    def test_controller_uploads_before_gpu_and_downloads_after_stop(package,monkeypatch):
+        root,snapshot,prepared,_=package
+        monkeypatch.setattr(staged,'ROOT',root)
+        io.write_new(snapshot/'CPU_CHECK.json',dict(status='PASS_LOCAL_STAGE_INPUTS',
+            inputs_sha256=io.sha(snapshot/'INPUTS.json'),worker_request_sha256=io.sha(snapshot/'project/gpu-stage-request.json')))
+        io.write_new(root/'research_tracking/COMPUTE_BUDGET.json',{})
+        events=[]
+        remote={}
+        checkpoint=b'kept-checkpoint'
+        remote_receipt=dict(status='PARTIAL_SELECTED_ONLY_NOT_FINAL',files={
+            'outputs/unit-a2-logical/checkpoints/epoch-001/state.pt':dict(bytes=len(checkpoint),sha256=hashlib.sha256(checkpoint).hexdigest())})
+    
+        class Volume:
+            @classmethod
+            def from_name(cls,*args,**kwargs):return cls()
+            def read_file(self,name):
+                if name not in remote:raise FileNotFoundError(name)
+                if name.startswith('outputs/'):
+                    assert 'stop_acknowledged' in events
+                    events.append('local_download')
+                yield remote[name]
+            @contextmanager
+            def batch_upload(self,force):
+                assert force is False and 'gpu_start' not in events
+                events.append('local_upload')
+                yield self
+            def put_file(self,path,name):remote[name.lstrip('/')]=Path(path).read_bytes()
+            def with_mount_options(self,**kwargs):return self
+    
+        class Image:
+            @classmethod
+            def from_id(cls,_):return cls()
+            def add_local_file(self,*args):return self
+    
+        class Call:
+            object_id='unit-call'
+            def get(self,timeout):
+                remote[next(iter(remote_receipt['files']))]=checkpoint
+                events.append('gpu_result')
+                return remote_receipt
+    
+        class Function:
+            def spawn(self,*args):return Call()
+    
+        class App:
+            def __init__(self,name):self.name=name;self.app_id='ap-unit'
+            def function(self,**kwargs):
+                assert kwargs['max_containers']==1 and kwargs['retries']==0
+                assert '/opt/kltn/.venv' not in kwargs['volumes']
+                return lambda callback:Function()
+            @contextmanager
+            def run(self,**kwargs):
+                assert 'local_upload' in events
+                events.append('gpu_start')
+                yield
+    
+        class Guard:
+            def __init__(self,*args,diagnostic_path,**kwargs):self.path=diagnostic_path
+            def __enter__(self):return self
+            def __exit__(self,*args):
+                events.append('stop_acknowledged')
+                io.write_new(self.path,dict(stop_acknowledged=True))
+    
+        @contextmanager
+        def enabled():yield
+    
+        async def billing():return dict(billing=dict(metered_cost='0'))
+        monkeypatch.setitem(sys.modules,'modal',SimpleNamespace(Volume=Volume,Image=Image,App=App,enable_output=enabled))
+        monkeypatch.setitem(sys.modules,'modal_graph_selected',SimpleNamespace(read_billing=billing))
+        monkeypatch.setitem(sys.modules,'modal_junyi_main_selected',SimpleNamespace(validate_project_budget=lambda *args:{}))
+        monkeypatch.setitem(sys.modules,'modal_budget_guard',SimpleNamespace(
+            ModalRunDeadline=lambda seconds:SimpleNamespace(remaining=lambda:seconds),ModalAppBudgetGuard=Guard,
+            PendingOwnedModalApp=lambda *args:object(),stop_owned_app_cli=lambda *args:None))
+>       result=staged.run(snapshot,execution_request())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_staged_local.py:181: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+experiments\akt\modal_junyi_staged.py:180: in run
+    output.mkdir(exist_ok=False)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/local-gpu-separation03/test_controller_uploads_before0/repo/experiments/akt/results/unit-a2-attempt1')
+mode = 511, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\local-gpu-separation03\\test_controller_uploads_before0\\repo\\experiments\\akt\\results\\unit-a2-attempt1'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+- generated xml file: D:\Dev\KLTN\research_tracking\runs\junyi-local-gpu-separation-20261113-01\tests03.xml -
+=========================== short test summary info ===========================
+FAILED tests/akt/test_junyi_staged_local.py::test_controller_uploads_before_gpu_and_downloads_after_stop - FileNotFoundError: [WinError 3] The system cannot find the path specified: 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\local-gpu-separation03\\test_controller_uploads_before0\\repo\\experiments\\akt\\results\\unit-a2-attempt1'
+============================== 1 failed in 0.41s ==============================

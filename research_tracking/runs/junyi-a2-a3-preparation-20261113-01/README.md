@@ -43,3 +43,8 @@ Hiện receipt CPU trước GPU đã nối producer/CLI và được kiểm toà
 Đã siết nguồn validator trước/sau full strict admission và trước ghi handoff. tests09 đạt41ca cache, gồm phát hiện source thay đổi trong/sau CPU pass; suite này có overlap với339ca tests08 nên không cộng tổng. Receipt01 giữ làm lịch sử, dùng cùng source tại commit23bd552. Source hiện tại dùng receipt02 mới, strict toàn232.662record/13.347.331target trong285,31giây CPU. Nhận lại với source/key/manifest/shard SHA khớp mất3,13giây CPU,5window prefix khớp. `full-cpu-admission02.log` và `full-handoff-verification02.json` giữ số liệu. Chưa đo trên Linux/GPU. Hai lượt có tải máy khác nhau.
 
 STATE.json giữ bốn taskA23–A26 và acceptance cụ thể. Learned topology/điều kiện learned chưa triển khai trong nhánh này, tiếp tục nằm trong phạm vi KLTN. Gói hiện tại đã hoàn tất kiểm local; chuẩn bị Modal chưa READY vì confidence thật, staged orchestration, Gate Linux/CUDA và dự toán toàn matrix còn chờ. Không mở GPU trong đợt này. Checkpoint A0/A1, export, prediction và closed bundles giữ nguyên.
+
+
+## Tiếp nối 14/11 — controller staged đã có kiểm local
+
+A24 đã triển khai CPU local chuẩn bị/upload → function GPU → xác nhận dừng → CPU local download/nén. 71 ca local đạt, gồm lỗi và checkpoint recovery bằng Modal giả lập. Chưa kiểm cloud/CUDA thật, chưa fit confidence thật và chưa training A2/A3. [Hồ sơ tiếp nối](../junyi-local-gpu-separation-20261113-01/README.md). Kế hoạch ba CPU/GPU App ở trên được thay bằng CPU local ở hai đầu theo yêu cầu mới.

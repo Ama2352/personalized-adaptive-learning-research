@@ -1,5 +1,14 @@
 # Báo cáo tiến độ khóa luận — cập nhật 13/11/2026
 
+## 14/11 — Chuẩn bị A2/A3 với chi phí GPU được tách khỏi xử lý ngoài training
+
+Sau khi A0 và A1 đã hoàn tất bước chọn checkpoint Junyi, bước tiếp theo là A2 dùng độ tin cậy từng cạnh và A3 có thêm cổng điều chỉnh ảnh hưởng đồ thị. Trước khi thuê GPU tiếp, đã triển khai luồng CPU local chuẩn bị dữ liệu và upload, function GPU chạy học và validation, sau đó CPU local nhận và đóng gói kết quả khi GPU đã dừng.
+
+Đã đối chiếu 27 trường cấu hình học, cấu hình số học và định danh dữ liệu với model A0/A1 đã lưu. Bộ kiểm local đạt 71 ca, bao gồm gián đoạn, checkpoint và tải artifact sai byte. Chưa dùng thêm credit trong đợt này. Đây là tiến bộ về độ sẵn sàng thực thi RQ3, chưa bổ sung kết quả thực nghiệm để kết luận đồ thị có ích.
+
+Trước training A2/A3 còn phải fit confidence từ TRAIN80, nghiệm thu source mới trên Linux và kiểm ngắn CUDA/resume. A0 lịch sử chọn epoch bằng validation batch 1, chỉ epoch 9 đã được replay batch 128, nên vẫn giữ giới hạn khi diễn giải so sánh. Đọc batch và lưu checkpoint vẫn cần thời gian trong function GPU. Chưa đo mức tiết kiệm thực tế của luồng mới.
+
+
 ## 13/11 — Chuẩn bị A2/A3 và chuyển kiểm dữ liệu sang CPU
 
 A2 và A3 đã nối được độ tin cậy từng cạnh, có đường tính message và gate theo batch trên nhánh Junyi. Bộ hồi quy CPU gộp đạt 339 ca, gồm kiểm A1 cũ, tắt đồ thị, confidence bằng 0, đối chiếu dự đoán/gradient/Adam với đường tham chiếu và checkpoint/resume. Chưa có confidence fit trên Junyi thật hoặc training A2/A3.

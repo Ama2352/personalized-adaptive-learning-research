@@ -20,11 +20,18 @@ a{color:#155c88;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{
 @media(max-width:760px){.mastery-cases{grid-template-columns:1fr}.mastery-case{padding:1rem}}
 @media(max-width:700px){#chang-17 table{table-layout:fixed}#chang-17 th,#chang-17 td{min-width:0;overflow-wrap:anywhere;padding:.6rem .4rem}#chang-17 thead th:first-child{width:18%}}
 </style></head><body><a class="skip" href="#noi-dung">Đến nội dung</a><main class="page" id="noi-dung">
-<header class="masthead"><div class="byline">Báo cáo tiến độ nghiên cứu · cập nhật 13/11/2026</div>
+<header class="masthead"><div class="byline">Báo cáo tiến độ nghiên cứu · cập nhật 14/11/2026</div>
 <h1>Khi nào thông tin tiên quyết thực sự giúp chọn bài và học tốt hơn?</h1>
 <p class="lead">Báo cáo quá trình đi từ kết quả của hai paper đến các chẩn đoán mới, những điều đã làm rõ và các phép kiểm còn thiếu để kết luận khóa luận.</p>
 <p class="byline"><strong>Đề tài:</strong> Nghiên cứu và phát triển hệ thống học tập thích ứng cá nhân hóa dựa trên mô hình hóa tri thức và tối ưu hóa lộ trình.<br>
 <strong>Sinh viên:</strong> Phạm Triều Dương · Hồ Nguyễn Minh Sang<br><strong>GVHD:</strong> TS. Lê Văn Tuấn</p></header>
+<section id="cap-nhat-20261114-staged">
+<h2>14/11 — Chuẩn bị A2/A3 trước lượt thuê GPU tiếp theo</h2>
+<p>Sau khi A0 và A1 hoàn tất bước chọn checkpoint Junyi, đã triển khai luồng CPU local chuẩn bị và upload dữ liệu, function GPU chạy học và validation, rồi CPU local nhận và đóng gói kết quả sau khi GPU dừng. A2 bổ sung độ tin cậy từng cạnh. A3 thêm cổng điều chỉnh ảnh hưởng đồ thị.</p>
+<p><strong>Đã đạt</strong> đối chiếu 27 trường cấu hình học, cấu hình số học và định danh dữ liệu với model A0/A1 đã lưu. 71 ca kiểm local đạt, gồm gián đoạn, checkpoint và toàn vẹn artifact. Đợt này dùng 0 USD Modal.</p>
+<p><strong>Còn thiếu</strong> fit confidence từ TRAIN80, Gate Linux mới và kiểm ngắn CUDA/resume trước training A2/A3. Những ca đạt hiện tại dùng Modal giả lập. Đây là tiến bộ chuẩn bị RQ3, chưa bổ sung bằng chứng về lợi ích đồ thị. A0 chỉ có checkpoint epoch 9 được replay validation batch 128, ranking toàn 12 epoch còn chưa đối chiếu. Đọc batch và lưu checkpoint vẫn nằm trong function GPU. Mức tiết kiệm thực tế của luồng mới chưa được đo.</p>
+</section>
+
 <nav aria-label="Mục lục"><a href="#boi-canh">Điểm xuất phát</a><a href="#tien-do">Tiến độ hiện tại</a><a href="#chang-1">1. Kiểm nền thí nghiệm</a><a href="#chang-2">2. Tách tác động</a><a href="#chang-3">3. Kiểm điều kiện</a><a href="#chang-4">4. Chuẩn bị giải pháp</a><a href="#chang-5">5. Đo trực tiếp quyết định thành thạo</a><a href="#chang-6">6. Kiểm phản hồi quan sát</a><a href="#chang-7">7. Kiểm mức tự tin theo nhóm</a><a href="#chang-8">8. Chạy quy trình AKT</a><a href="#chang-9">9. Kiểm điểm tổng hợp</a><a href="#chang-10">10. Giải thích cơ chế chương</a><a href="#chang-11">11. Từ thành thạo đến tập sẵn sàng</a><a href="#chang-12">12. Khi đồ thị chỉ đổi thứ tự</a><a href="#chang-13">13. Đổi nguồn đồ thị và đối chứng bất hoạt</a><a href="#chang-14">14. Đối chiếu trạng thái thật</a><a href="#chang-15">15. Kiểm trên mười khối mới</a><a href="#con-thieu">Phần còn thiếu</a><a href="#chang-16">16. Kiểm độ bất định giữa các khối</a><a href="#chang-17">17. Kiểm trạng thái ngoài câu đang hỏi</a></nav>
 
 <section id="boi-canh" class="opening"><h2>Điểm xuất phát: hai paper đã cho biết gì?</h2>

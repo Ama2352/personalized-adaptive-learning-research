@@ -9,7 +9,7 @@
   "gpu_started": false,
   "next": [
     "fit_real_train80_confidence_cpu_with_spool_and_resume",
-    "stage_modal_cpu_prepare_gpu_compute_cpu_finalize",
+    "validate_staged_pipeline_on_linux_cuda_after_real_confidence",
     "linux_cuda_parity_and_resume",
     "measure_remaining_fit_refit_matrix_cost_before_GPU_training"
   ],
@@ -39,7 +39,8 @@
         "A23"
       ],
       "acceptance": "GPU chỉ khởi động sau CPU receipt; xác nhận GPU App dừng trước đóng zip; lỗi mỗi stage giữ artifact và không chạy lại epoch đã đóng",
-      "status": "PENDING"
+      "status": "IMPLEMENTED_LOCAL_VERIFIED_PLATFORM_PENDING",
+      "evidence": "research_tracking/runs/junyi-local-gpu-separation-20261113-01/README.md"
     },
     {
       "id": "A25",

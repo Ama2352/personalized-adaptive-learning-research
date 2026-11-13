@@ -1,0 +1,22 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.5, pytest-9.1.1, pluggy-1.7.0 -- D:\Dev\KLTN\.venv\Scripts\python.exe
+rootdir: D:\Dev\KLTN
+configfile: pyproject.toml
+plugins: anyio-4.16.0, platformdirs-4.14.5
+collecting ... collected 16 items
+
+tests/akt/test_junyi_staged_local.py::test_prepare_local_snapshot_and_mutation_rejection PASSED
+tests/akt/test_junyi_staged_local.py::test_relative_paths_reject_traversal[../outside] PASSED
+tests/akt/test_junyi_staged_local.py::test_relative_paths_reject_traversal[/outside] PASSED
+tests/akt/test_junyi_staged_local.py::test_relative_paths_reject_traversal[a/../../x] PASSED
+tests/akt/test_junyi_staged_local.py::test_relative_paths_reject_traversal[C:/x] PASSED
+tests/akt/test_junyi_staged_local.py::test_relative_paths_reject_traversal[a\\b] PASSED
+tests/akt/test_junyi_staged_local.py::test_relative_paths_reject_traversal[a//b] PASSED
+tests/akt/test_junyi_staged_local.py::test_prepare_rejects_archive_sha_before_snapshot PASSED
+tests/akt/test_junyi_staged_local.py::test_prepare_rejects_archive_traversal_and_private PASSED
+tests/akt/test_junyi_staged_local.py::test_collect_requires_stop_and_preserves_bytes_retry PASSED
+tests/akt/test_junyi_staged_local.py::test_execution_caps_reject_invalid_request[change0] PASSED
+tests/akt/test_junyi_staged_local.py::test_execution_caps_reject_invalid_request[change1] PASSED
+tests/akt/test_junyi_staged_local.py::test_execution_caps_reject_invalid_request[change2] PASSED
+tests/akt/test_junyi_staged_local.py::test_execution_caps_reject_invalid_request[change3] PASSED
+tests/akt/test_junyi_staged_local.py::test_execution_caps_reject_invalid_request[change4] PASSED

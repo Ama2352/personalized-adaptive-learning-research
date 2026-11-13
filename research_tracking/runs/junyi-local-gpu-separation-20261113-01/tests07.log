@@ -1,0 +1,228 @@
+....................EEEEEEEE.............................                [100%]
+=================================== ERRORS ====================================
+_ ERROR at setup of test_baseline_fields_profile_and_data_match_before_dispatch _
+
+    @pytest.fixture
+    def comparison_case():
+        from dataclasses import asdict
+        from knowledge_tracing.akt.config import AKTConfig,ResearchCUDAExecutionProfile
+        from knowledge_tracing.akt.comparison_contract import TRAINING_FIELDS
+        config=json.loads(json.dumps(asdict(AKTConfig()),default=str))
+>       profile=asdict(ResearchCUDAExecutionProfile(16*1024**3))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_staged_local.py:286: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<string>:24: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = ResearchCUDAExecutionProfile(max_vram_bytes=17179869184, recipe_id='cgakt-cuda-fp32-v1', device='cuda:0', initializati...32=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8')
+
+    def __post_init__(self):
+        large_batch = self.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
+        max_vram = 16*1024**3 if large_batch else 2*1024**3
+        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= max_vram:
+>           raise ValueError('explicit CUDA allocator budget outside declared recipe')
+E           ValueError: explicit CUDA allocator budget outside declared recipe
+
+src\knowledge_tracing\akt\config.py:111: ValueError
+_____ ERROR at setup of test_baseline_mismatch_is_rejected_locally[seed] ______
+
+    @pytest.fixture
+    def comparison_case():
+        from dataclasses import asdict
+        from knowledge_tracing.akt.config import AKTConfig,ResearchCUDAExecutionProfile
+        from knowledge_tracing.akt.comparison_contract import TRAINING_FIELDS
+        config=json.loads(json.dumps(asdict(AKTConfig()),default=str))
+>       profile=asdict(ResearchCUDAExecutionProfile(16*1024**3))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_staged_local.py:286: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<string>:24: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = ResearchCUDAExecutionProfile(max_vram_bytes=17179869184, recipe_id='cgakt-cuda-fp32-v1', device='cuda:0', initializati...32=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8')
+
+    def __post_init__(self):
+        large_batch = self.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
+        max_vram = 16*1024**3 if large_batch else 2*1024**3
+        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= max_vram:
+>           raise ValueError('explicit CUDA allocator budget outside declared recipe')
+E           ValueError: explicit CUDA allocator budget outside declared recipe
+
+src\knowledge_tracing\akt\config.py:111: ValueError
+__ ERROR at setup of test_baseline_mismatch_is_rejected_locally[batch_size] ___
+
+    @pytest.fixture
+    def comparison_case():
+        from dataclasses import asdict
+        from knowledge_tracing.akt.config import AKTConfig,ResearchCUDAExecutionProfile
+        from knowledge_tracing.akt.comparison_contract import TRAINING_FIELDS
+        config=json.loads(json.dumps(asdict(AKTConfig()),default=str))
+>       profile=asdict(ResearchCUDAExecutionProfile(16*1024**3))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_staged_local.py:286: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<string>:24: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = ResearchCUDAExecutionProfile(max_vram_bytes=17179869184, recipe_id='cgakt-cuda-fp32-v1', device='cuda:0', initializati...32=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8')
+
+    def __post_init__(self):
+        large_batch = self.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
+        max_vram = 16*1024**3 if large_batch else 2*1024**3
+        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= max_vram:
+>           raise ValueError('explicit CUDA allocator budget outside declared recipe')
+E           ValueError: explicit CUDA allocator budget outside declared recipe
+
+src\knowledge_tracing\akt\config.py:111: ValueError
+____ ERROR at setup of test_baseline_mismatch_is_rejected_locally[dropout] ____
+
+    @pytest.fixture
+    def comparison_case():
+        from dataclasses import asdict
+        from knowledge_tracing.akt.config import AKTConfig,ResearchCUDAExecutionProfile
+        from knowledge_tracing.akt.comparison_contract import TRAINING_FIELDS
+        config=json.loads(json.dumps(asdict(AKTConfig()),default=str))
+>       profile=asdict(ResearchCUDAExecutionProfile(16*1024**3))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_staged_local.py:286: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<string>:24: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = ResearchCUDAExecutionProfile(max_vram_bytes=17179869184, recipe_id='cgakt-cuda-fp32-v1', device='cuda:0', initializati...32=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8')
+
+    def __post_init__(self):
+        large_batch = self.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
+        max_vram = 16*1024**3 if large_batch else 2*1024**3
+        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= max_vram:
+>           raise ValueError('explicit CUDA allocator budget outside declared recipe')
+E           ValueError: explicit CUDA allocator budget outside declared recipe
+
+src\knowledge_tracing\akt\config.py:111: ValueError
+__ ERROR at setup of test_baseline_mismatch_is_rejected_locally[max_epochs] ___
+
+    @pytest.fixture
+    def comparison_case():
+        from dataclasses import asdict
+        from knowledge_tracing.akt.config import AKTConfig,ResearchCUDAExecutionProfile
+        from knowledge_tracing.akt.comparison_contract import TRAINING_FIELDS
+        config=json.loads(json.dumps(asdict(AKTConfig()),default=str))
+>       profile=asdict(ResearchCUDAExecutionProfile(16*1024**3))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_staged_local.py:286: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<string>:24: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = ResearchCUDAExecutionProfile(max_vram_bytes=17179869184, recipe_id='cgakt-cuda-fp32-v1', device='cuda:0', initializati...32=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8')
+
+    def __post_init__(self):
+        large_batch = self.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
+        max_vram = 16*1024**3 if large_batch else 2*1024**3
+        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= max_vram:
+>           raise ValueError('explicit CUDA allocator budget outside declared recipe')
+E           ValueError: explicit CUDA allocator budget outside declared recipe
+
+src\knowledge_tracing\akt\config.py:111: ValueError
+____ ERROR at setup of test_baseline_mismatch_is_rejected_locally[profile] ____
+
+    @pytest.fixture
+    def comparison_case():
+        from dataclasses import asdict
+        from knowledge_tracing.akt.config import AKTConfig,ResearchCUDAExecutionProfile
+        from knowledge_tracing.akt.comparison_contract import TRAINING_FIELDS
+        config=json.loads(json.dumps(asdict(AKTConfig()),default=str))
+>       profile=asdict(ResearchCUDAExecutionProfile(16*1024**3))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_staged_local.py:286: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<string>:24: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = ResearchCUDAExecutionProfile(max_vram_bytes=17179869184, recipe_id='cgakt-cuda-fp32-v1', device='cuda:0', initializati...32=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8')
+
+    def __post_init__(self):
+        large_batch = self.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
+        max_vram = 16*1024**3 if large_batch else 2*1024**3
+        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= max_vram:
+>           raise ValueError('explicit CUDA allocator budget outside declared recipe')
+E           ValueError: explicit CUDA allocator budget outside declared recipe
+
+src\knowledge_tracing\akt\config.py:111: ValueError
+_____ ERROR at setup of test_baseline_mismatch_is_rejected_locally[roles] _____
+
+    @pytest.fixture
+    def comparison_case():
+        from dataclasses import asdict
+        from knowledge_tracing.akt.config import AKTConfig,ResearchCUDAExecutionProfile
+        from knowledge_tracing.akt.comparison_contract import TRAINING_FIELDS
+        config=json.loads(json.dumps(asdict(AKTConfig()),default=str))
+>       profile=asdict(ResearchCUDAExecutionProfile(16*1024**3))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_staged_local.py:286: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<string>:24: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = ResearchCUDAExecutionProfile(max_vram_bytes=17179869184, recipe_id='cgakt-cuda-fp32-v1', device='cuda:0', initializati...32=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8')
+
+    def __post_init__(self):
+        large_batch = self.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
+        max_vram = 16*1024**3 if large_batch else 2*1024**3
+        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= max_vram:
+>           raise ValueError('explicit CUDA allocator budget outside declared recipe')
+E           ValueError: explicit CUDA allocator budget outside declared recipe
+
+src\knowledge_tracing\akt\config.py:111: ValueError
+__ ERROR at setup of test_baseline_mismatch_is_rejected_locally[validation] ___
+
+    @pytest.fixture
+    def comparison_case():
+        from dataclasses import asdict
+        from knowledge_tracing.akt.config import AKTConfig,ResearchCUDAExecutionProfile
+        from knowledge_tracing.akt.comparison_contract import TRAINING_FIELDS
+        config=json.loads(json.dumps(asdict(AKTConfig()),default=str))
+>       profile=asdict(ResearchCUDAExecutionProfile(16*1024**3))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_staged_local.py:286: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<string>:24: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = ResearchCUDAExecutionProfile(max_vram_bytes=17179869184, recipe_id='cgakt-cuda-fp32-v1', device='cuda:0', initializati...32=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8')
+
+    def __post_init__(self):
+        large_batch = self.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
+        max_vram = 16*1024**3 if large_batch else 2*1024**3
+        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= max_vram:
+>           raise ValueError('explicit CUDA allocator budget outside declared recipe')
+E           ValueError: explicit CUDA allocator budget outside declared recipe
+
+src\knowledge_tracing\akt\config.py:111: ValueError
+=========================== short test summary info ===========================
+ERROR tests/akt/test_junyi_staged_local.py::test_baseline_fields_profile_and_data_match_before_dispatch
+ERROR tests/akt/test_junyi_staged_local.py::test_baseline_mismatch_is_rejected_locally[seed]
+ERROR tests/akt/test_junyi_staged_local.py::test_baseline_mismatch_is_rejected_locally[batch_size]
+ERROR tests/akt/test_junyi_staged_local.py::test_baseline_mismatch_is_rejected_locally[dropout]
+ERROR tests/akt/test_junyi_staged_local.py::test_baseline_mismatch_is_rejected_locally[max_epochs]
+ERROR tests/akt/test_junyi_staged_local.py::test_baseline_mismatch_is_rejected_locally[profile]
+ERROR tests/akt/test_junyi_staged_local.py::test_baseline_mismatch_is_rejected_locally[roles]
+ERROR tests/akt/test_junyi_staged_local.py::test_baseline_mismatch_is_rejected_locally[validation]
+49 passed, 8 errors in 10.03s

@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 14/11 — Tách CPU local và GPU cho A2/A3
+
+[Hồ sơ](../runs/junyi-local-gpu-separation-20261113-01/README.md) giữ 71 ca local đạt, đối chiếu 27 trường với A0/A1 thật, stop barrier trước download/nén và checkpoint recovery. Chưa fit confidence thật, kiểm Linux/CUDA hay training A2/A3. Đợt này 0 USD Modal.
+
+
 ## 13/11 — Chuẩn bị A2/A3 và chuyển kiểm dữ liệu sang CPU
 
 [Hồ sơ](../runs/junyi-a2-a3-preparation-20261113-01/README.md) giữ339ca CPU, A2/A3 compact có confidence/gate, handoff toàn TRAIN80 lượt cuối kiểm285,31giây CPU/nhận3,13giây. Chưa training A2/A3,0USD Modal. Orchestration staged, confidence thật và CUDA còn chờ.

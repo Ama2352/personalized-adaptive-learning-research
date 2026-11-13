@@ -1,0 +1,34 @@
+{
+  "status": "PASS_LOCAL_ENTRYPOINTS",
+  "checks": [
+    {
+      "args": [
+        "scripts/akt/prepare_junyi_gpu_stage.py",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "usage: prepare_junyi_gpu_stage.py [-h] --request REQUEST --snapshot SNAPSHOT\n\nCPU local đóng băng input và đối chiếu A0/A1 trước khi cho phép gọi GPU.\n\noptions:\n  -h, --help           show this help message and exit\n  --request REQUEST\n  --snapshot SNAPSHOT\n"
+    },
+    {
+      "args": [
+        "experiments/akt/modal_junyi_staged.py",
+        "--snapshot",
+        "artifacts/akt/modal/not-prepared",
+        "--request",
+        "artifacts/akt/modal/not-approved.json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"status\": \"NO_CLOUD_ACTION\", \"snapshot\": \"artifacts\\\\akt\\\\modal\\\\not-prepared\"}\n"
+    }
+  ],
+  "parsed_sources": [
+    "experiments/akt/junyi_staged_io.py",
+    "experiments/akt/modal_junyi_staged.py",
+    "scripts/akt/prepare_junyi_gpu_stage.py",
+    "scripts/akt/run_junyi_gpu_stage.py",
+    "scripts/akt/build_colab_bundle.py",
+    "tests/akt/test_junyi_staged_local.py",
+    "tests/akt/test_colab_bundle.py"
+  ],
+  "modal_spent_usd": 0
+}

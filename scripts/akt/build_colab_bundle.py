@@ -32,6 +32,7 @@ def bundle_contents():
               ('smoke.json', 'pilot.json', 'fold0.json', 'simulator-research-corpus01.json')]
     paths += [ROOT/'requirements-akt.in', ROOT/'requirements-akt.lock.txt']
     paths += [ROOT/'experiments/akt/modal_budget_guard.py']
+    paths += [ROOT/'experiments/akt'/name for name in ('junyi_staged_io.py','modal_junyi_staged.py')]
     # Fixed public contract dependencies read by graph/stage/driver source;
     # no docs glob, runtime credentials, authorization or execution grant.
     paths += [ROOT/name for name in RESEARCH_CONTRACT_FILES]
