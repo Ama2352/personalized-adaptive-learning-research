@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 13/11 — A1 giảm chuyển đổi evidence và kiểm T4
+
+[Hồ sơ](../runs/junyi-a1-fastpath-t4-20261113-01/README.md) giữ phép kiểm GPU 28,62 giây, drift0 ở hai alpha, 19 ca Colab và 74 ca local. Chuỗi sáu bước giảm 6,20→4,93 giây, GPU mẫu 26,5→37,8%. Full producer/resume còn chờ, 0 USD Modal.
+
 ## 13/11 — rà soát cơ sở kiến trúc A1
 
 [Đối chiếu paper và source](A1_ARCHITECTURE_REFERENCE_REVIEW_20261113.md) xem AKT/RKT/GKT/GIKT/KSGKT và pyKT, ghi rõ phạm vi đã đọc. Thiết kế tiếp theo còn chờ quyết định; H100 đang tắt.

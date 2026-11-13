@@ -8,7 +8,7 @@ chống caller sửa private attributes. Không cấp quyền execution hoặc c
 from __future__ import annotations
 
 from collections.abc import Sequence
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, fields, is_dataclass
 import hashlib
 import json
 import math
@@ -128,7 +128,17 @@ def _cuda_execution_check(profile, *, synchronize=False):
 
 def _evidence_sha(evidence):
     _need(type(evidence) is tuple and all(type(row) is tuple for row in evidence), 'immutable evidence rows required')
-    return identity_hash(tuple(tuple(None if item is None else asdict(item) for item in row) for row in evidence))
+    _need(all(item is None or (is_dataclass(item) and not isinstance(item, type))
+              for row in evidence for item in row), 'dataclass evidence required')
+    # JSON tự duyệt tuple và primitive. Chỉ mở từng dataclass khi encoder gặp nó,
+    # tránh deepcopy toàn bộ lịch sử quan sát trước mỗi lần kiểm integrity.
+    payload = json.dumps(evidence, default=_evidence_json_default, sort_keys=True,
+                         separators=(',', ':'), allow_nan=False).encode()
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _evidence_json_default(value):
+    return {field.name: getattr(value, field.name) for field in fields(value)}
 
 
 def _features(audit):

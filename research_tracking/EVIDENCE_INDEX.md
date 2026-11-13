@@ -1,5 +1,9 @@
 # Chỉ mục bằng chứng
 
+## 13/11 — A1 giảm chuyển đổi evidence và kiểm T4
+
+[Hồ sơ](runs/junyi-a1-fastpath-t4-20261113-01/README.md) giữ phép kiểm GPU 28,62 giây, drift0 ở hai alpha, 19 ca Colab và 74 ca local. Chuỗi sáu bước giảm 6,20→4,93 giây, GPU mẫu 26,5→37,8%. Full producer/resume còn chờ, 0 USD Modal.
+
 ## 12/11 — A0 H100 batch128 đang training
 
 [Bundle](runs/junyi-a0-h100-batch128-20261112-01/README.md) giữ CPUgate2234, inputs/source,20checkpoint inventory trongreceipt, telemetry, figureSVG/PDF/PNG/CSV, nămepoch đã kiểm và hồ sơ nối từ6. Bundle chưa đóng.

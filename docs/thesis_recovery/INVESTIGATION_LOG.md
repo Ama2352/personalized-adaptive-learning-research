@@ -1182,3 +1182,12 @@ Sau metadata vàadmission16shards0,389s, Rootreviewvàchạy fullTRAIN80label-fr
 ## 13/11/2026 — A1 epoch1 và kiểm sử dụng H100
 
 A0 checkpoint9 full selection validation batch128 giữ Log Loss0,3535801768. A1 source2 đã train đủ13.347.331target/1818step, checkpoint trước validation và archive đủ3checkpoint đã tải D/kiểm SHA. GPU sample training trung bình4,98%, CPU gần1core, user yêu cầu ít nhất50%. Đã dừng H100,0container. CPUprofile thực định vị context/hash/dataclass, cache chưa triển khai. Root chọn restartsource2 từseed42 sau sourcecũpartial, giữ riêng1000step cũ. Tiếp tục cần tối ưu CPU/cached graph, kiểm tương đương và resume-validation; chưa hoàn tất selected fit hoặc có kết luận A1 tốt hơnA0. Nguồn research_tracking/runs/junyi-a1-selected-20261113-01/.
+
+
+## 13/11/2026 — vòng tối ưu nhỏ A1 và kiểm T4 miễn phí
+
+Sau khi đối chiếu cơ sở thiết kế, nhóm giữ công thức A1 và sửa riêng cách tạo mã kiểm tra tính toàn vẹn của dữ liệu đồ thị. Mục tiêu là giảm chuyển đổi dữ liệu Python lặp trước khi GPU tính toán. Phép kiểm Tesla T4 miễn phí kéo dài 28,62 giây. Loss, xác suất, gradient, trọng số sau một bước Adam và trạng thái optimizer khớp hoàn toàn ở hai điều kiện đã kiểm. Bộ kiểm helper trên Colab đạt 19 ca, kiểm hồi quy local đạt 74 ca, có cả adapter Junyi và Grade10.
+
+Chuỗi đo gồm sáu bước mỗi bản trên dữ liệu tổng hợp, prefix được dựng trước. Thông lượng tăng 1,26 lần và thời gian giảm 20,5%. GPU-Util trung bình đo được tăng từ 26,5% lên 37,8%, vẫn dưới mục tiêu 50% trong lượt ngắn này. Cần kiểm toàn pipeline và tính tương thích khi nối checkpoint trước khi dùng nguồn mới cho lượt H100 tiếp theo. Kết quả này bổ sung bằng chứng kỹ thuật chuẩn bị AKT. Thực nghiệm kết luận RQ3, validation A1 epoch1 và selected fit còn đang chờ.
+
+Logs, số liệu, hình SVG/PDF/PNG và archive đã được tải về ổ D, kiểm tính toàn vẹn. Đã gửi lệnh trả runtime Colab và đóng bridge sau khi lấy bằng chứng. Đợt này dùng 0 USD Modal.

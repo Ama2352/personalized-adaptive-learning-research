@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 13/11 — A1 giảm chuyển đổi evidence và kiểm T4
+
+[Hồ sơ](../research_tracking/runs/junyi-a1-fastpath-t4-20261113-01/README.md) giữ phép kiểm GPU 28,62 giây, drift0 ở hai alpha, 19 ca Colab và 74 ca local. Chuỗi sáu bước giảm 6,20→4,93 giây, GPU mẫu 26,5→37,8%. Full producer/resume còn chờ, 0 USD Modal.
+
 ## 13/11 — A1 H100 và validation A0 thực
 
 [Hồ sơ](../research_tracking/runs/junyi-a1-selected-20261113-01/README.md) có Gate Linux 2.336 ca, A0 checkpoint9 full-selection batch128 đạt Log Loss bằng giá trị cũ; A1 đã train đủ epoch1, validation còn chờ; checkpoint/logs đã lưu D, H100 dừng. GPU training trung bình4,98%, cần xử lý nút thắt CPU trước chạy tiếp.

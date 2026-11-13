@@ -8480,5 +8480,44 @@
     "gpu_spent_usd": 0,
     "closed_checkpoints_preserved": true,
     "next_vi": "Đối chiếu phương trình và semantics từng nguồn với A0–A3, đánh giá hướng tối ưu công thức hiện hành và hướng relation-aware attention, chốt thiết kế trước sửa tiếp A1. Giữ causal/window/learner boundaries và tiêu chí GPU50% được đo thực."
+  },
+  "a1_fastpath_t4_20261113": {
+    "status": "PARTIAL_PERFORMANCE_IMPROVEMENT_VERIFIED",
+    "bundle": "research_tracking/runs/junyi-a1-fastpath-t4-20261113-01",
+    "production_helper_changed": true,
+    "architecture_changed": false,
+    "source_sha256": "1909b4890422d7fb8fae4a58ba2d9b63984f6636c6e4026b2ddabba7fc3689a9",
+    "selected_checkpoint_modified": false,
+    "checkpoint_migration_applied": false,
+    "local_regression_passed": 74,
+    "colab_helper_tests_passed": 19,
+    "t4_seconds": 28.621429662000025,
+    "training": [
+      {
+        "method": "old",
+        "steps": 6,
+        "seconds": 6.196020465999993,
+        "targets_per_second": 12395.052666696613,
+        "samples": 19,
+        "gpu_util_mean_percent": 26.526315789473685,
+        "peak_memory_mib": 5269.0
+      },
+      {
+        "method": "new",
+        "steps": 6,
+        "seconds": 4.925157002999981,
+        "targets_per_second": 15593.411530479141,
+        "samples": 16,
+        "gpu_util_mean_percent": 37.75,
+        "peak_memory_mib": 5269.0
+      }
+    ],
+    "synthetic_parity_all_drift_zero": true,
+    "full_producer_benchmarked": false,
+    "gpu50percent_accepted": false,
+    "modal_spent_usd": 0,
+    "cloud_training_started": false,
+    "runtime_release": "research_tracking/runs/junyi-a1-fastpath-t4-20261113-01/runtime-release.json",
+    "next_vi": "Tối ưu prefix/message cố định với provenance, kiểm full producer gồm adapter và data prep. Kiểm resume-validation từ checkpoint source2 theo nguồn mới trước khi cấp H100. Giữ checkpoint cũ và hạn mức 30 USD toàn KLTN."
   }
 }
