@@ -1,5 +1,12 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 13/11 — kiểm checkpoint A0 thật
+
+Kiểm tiếp bằng checkpoint A0 epoch 9 thật trên CPU với 3.538 target tổng hợp đã xác nhận nạp đúng trọng số, target/thứ tự khớp và model không đổi. Sai lệch xác suất lớn nhất 0,0000224 vượt ngưỡng kiểm đã đặt, dù chênh lệch Log Loss chỉ khoảng 0,0000000218. Giữ nguyên ngưỡng kiểm, chưa nghiệm thu batch128 cho training chính. Cần đối chiếu checkpoint này trên CUDA và selection Junyi thật. Lượt kiểm dùng 0 USD Modal.
+
+[Hồ sơ](../runs/junyi-a0-checkpoint-parity-20261113-01/README.md)
+
+
 ## 13/11 — validation theo batch
 
 [Hồ sơ](../runs/junyi-validation-batch-20261113-01/README.md) giữ 126 ca Linux đạt, hai phép kiểm T4, log và figure. Trên 12.800 target tổng hợp có tín hiệu đồ thị, A0 tăng tốc 3,88 lần, A1 2,01 lần. Chưa kiểm lại toàn selection bằng checkpoint A0. Không train epoch, không dùng Modal.

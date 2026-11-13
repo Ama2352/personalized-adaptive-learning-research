@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-a0-checkpoint-parity-20261113-01\check_checkpoint.py", line 95, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-a0-checkpoint-parity-20261113-01\check_checkpoint.py", line 74, in main
+    np.testing.assert_allclose(p, q, atol=1e-6, rtol=1e-6)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\numpy\testing\_private\utils.py", line 1780, in assert_allclose
+    assert_array_compare(compare, actual, desired, err_msg=str(err_msg),
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                         verbose=verbose, header=header, equal_nan=equal_nan,
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                         strict=strict)
+                         ^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\numpy\testing\_private\utils.py", line 988, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Not equal to tolerance rtol=1e-06, atol=1e-06
+
+Mismatched elements: 86 / 3538 (2.43%)
+First 5 mismatches are at indices:
+ [108]: 0.3553770184516907 (ACTUAL), 0.3553752899169922 (DESIRED)
+ [130]: 0.12061770260334015 (ACTUAL), 0.1206112951040268 (DESIRED)
+ [131]: 0.5778705477714539 (ACTUAL), 0.5778721570968628 (DESIRED)
+ [154]: 0.5540198683738708 (ACTUAL), 0.5540300607681274 (DESIRED)
+ [155]: 0.2539476454257965 (ACTUAL), 0.2539413571357727 (DESIRED)
+Max absolute difference among violations: 2.23815441e-05
+Max relative difference among violations: 8.17934527e-05
+ ACTUAL: array([0.854131, 0.039795, 0.470984, ..., 0.071002, 0.296544, 0.357391],
+      shape=(3538,))
+ DESIRED: array([0.854131, 0.039795, 0.470984, ..., 0.071002, 0.296544, 0.357391],
+      shape=(3538,))

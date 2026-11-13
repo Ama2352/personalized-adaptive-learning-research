@@ -15,6 +15,8 @@ Target, nhãn và thứ tự khớp hoàn toàn. Sai lệch xác suất lớn nh
 
 ![Thời gian và bộ nhớ validation T4](../../../runs/junyi-validation-batch-20261113-01/validation-batch-t4-v2.svg)
 
+**Kiểm checkpoint đã train tiếp theo.** Kiểm tiếp bằng checkpoint A0 epoch 9 thật trên CPU với 3.538 target tổng hợp đã xác nhận nạp đúng trọng số, target/thứ tự khớp và model không đổi. Sai lệch xác suất lớn nhất 0,0000224 vượt ngưỡng kiểm đã đặt, dù chênh lệch Log Loss chỉ khoảng 0,0000000218. Giữ nguyên ngưỡng kiểm, chưa nghiệm thu batch128 cho training chính. Cần đối chiếu checkpoint này trên CUDA và selection Junyi thật. Lượt kiểm dùng 0 USD Modal.
+
 ## 13/11 — lõi confidence Junyi đã kiểm CPU
 
 Đã cài lõi chuẩn bị đặc trưng và crossfit confidence cho Junyi, có kiểm vocabulary717. Đặc trưng chỉ dùng quá khứ trong đúng cửa sổ AKT. Fitter tái dùng solver và learner bootstrap của Method24, fit theo từng child để hỗ trợ xử lý giới hạn RAM. Kiểm CPU với solver thật xác nhận loại người học thuộc fold đánh giá khỏi dữ liệu fit và giữ confidence null khi thiếu hỗ trợ. Đây là kiểm trên dữ liệu tổng hợp. Worker train80, artifact confidence và tích hợp A2/A3 còn cần hoàn thiện trước training chính.
