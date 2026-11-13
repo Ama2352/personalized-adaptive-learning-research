@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 13/11 — validation theo batch
+
+[Hồ sơ](../research_tracking/runs/junyi-validation-batch-20261113-01/README.md) có126ca CPU đạt, probe và notebook T4 đã chuẩn bị. Chưa có GPU speedup hoặc A0 full-selection parity.
+
 ## 13/11 — confidence Junyi theo native window
 
 [Hồ sơ CPU](../research_tracking/runs/junyi-confidence-core-20261113-01/README.md) giữ kiểm717exercise, crossfit solver thật, ledger và unsupported null trên dữ liệu tổng hợp. Worker/artifact/model A2/A3 còn chờ.

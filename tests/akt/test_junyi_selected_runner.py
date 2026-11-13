@@ -165,12 +165,13 @@ def harness(tmp_path, monkeypatch):
     monkeypatch.setattr(training,'train_epoch',train_epoch)
     losses = {1:.5,2:.4,3:.40001,4:.40002,5:.40003}
 
-    def evaluate(adapter, actual_learners, target_count, *, output=None):
+    def evaluate(adapter, actual_learners, target_count, *, output=None,batch_size=None):
         if isinstance(adapter,TinyGraphAdapter):
             assert adapter.phase.view.scope=='raw_selection10'
         assert target_count==2 and sum(len(learner.events) for learner in actual_learners)==2
         epoch = int(adapter.native.epoch_marker.item())
         control['evaluate_calls'].append((epoch,output is not None))
+        control.setdefault('validation_batches',[]).append(batch_size)
         prevalidation = config.output_dir/'checkpoints'/f'train-epoch-{epoch:03d}'
         assert (prevalidation/'COMPLETE.json').is_file()
         assert (prevalidation/'state.pt').is_file()
@@ -185,9 +186,12 @@ def harness(tmp_path, monkeypatch):
     monkeypatch.setattr(selected,'_evaluate',evaluate)
 
     def run(*, epochs=20,resume=None,graph_condition=None,wrong_graph_grant=False,
-            comparison_reference=None,reference_pin=None,encoding_args=None,purpose='bounded_engineering'):
+            comparison_reference=None,reference_pin=None,encoding_args=None,purpose='bounded_engineering',
+            validation_batch_size=None,bind_validation_batch=True):
         control['grants'] += 1
         prepared = {} if resume is None else dict(resume_checkpoint_sha256=selected.file_sha(resume))
+        if validation_batch_size is not None and bind_validation_batch:
+            prepared['validation_batch_size']=validation_batch_size
         if comparison_reference is not None:
             prepared['comparison_reference_sha256']=reference_pin or selected.file_sha(comparison_reference)
         if encoding_args:
@@ -225,7 +229,8 @@ def harness(tmp_path, monkeypatch):
             expected_resume_sha256=None if resume is None else selected.file_sha(resume),
             comparison_reference_file=comparison_reference,
             expected_comparison_reference_sha256=None if comparison_reference is None else (
-                reference_pin or selected.file_sha(comparison_reference)),**extra)
+                reference_pin or selected.file_sha(comparison_reference)),
+            validation_batch_size=validation_batch_size,**extra)
 
     return SimpleNamespace(run=run,control=control,config=config,inputs=inputs,
                            native_load=native_load,native_snapshot=native_snapshot,encoding=encoding,profile=profile)

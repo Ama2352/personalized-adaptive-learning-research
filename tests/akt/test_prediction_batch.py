@@ -66,12 +66,22 @@ class FakeAdapter:
     ['A']*101+['OOV']+['B']*205,
     ['OOV']*205,
 ])
-def test_exact_historical_records_for_geometry_and_oov(items):
+@pytest.mark.parametrize('configured',[4,128])
+def test_exact_historical_records_for_geometry_and_oov(items,configured):
     students = [learner('u',items)]
-    expected = list(historical_iterator()(FakeAdapter(),students))
-    actual = list(iter_predictions_batched(FakeAdapter(),students))
+    expected = list(historical_iterator()(FakeAdapter(batch_size=configured),students))
+    actual = list(iter_predictions_batched(FakeAdapter(batch_size=configured),students))
     assert actual == expected
     assert len(actual) == len(items)
+
+
+def test_128_windows_and_final_partial_batch_keep_all_target_identities():
+    students=[learner(f'u{index:03d}',['A','B'],start_row=index*10+1) for index in range(131)]
+    adapter=FakeAdapter(batch_size=128)
+    actual=list(iter_predictions_batched(adapter,students))
+    expected=list(historical_iterator()(FakeAdapter(batch_size=128),students))
+    assert actual==expected
+    assert [len(call) for call in adapter.calls]==[128,3]
 
 
 def test_batch_across_learners_with_same_output_order():

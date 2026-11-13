@@ -1,0 +1,58 @@
+..........F
+================================== FAILURES ===================================
+____ test_native_predictions_preserve_metadata_state_and_causality[False] _____
+
+setup = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-...cc179564cdaed0ec1391ddd84aad55955e', identity='7f709edd43e0f973d54da108e5472d3b03930bce7e79919b76cc89cb74cba3a3'), ...}
+graph = False
+
+    @pytest.mark.parametrize('graph',[False,True])
+    def test_native_predictions_preserve_metadata_state_and_causality(setup,graph):
+        from knowledge_tracing.akt.model import AKTAdapter
+        from knowledge_tracing.akt.prediction import iter_predictions
+        from knowledge_tracing.akt.prediction_batch import iter_predictions_batched
+        from knowledge_tracing.akt.research_junyi_data import JunyiPhaseView
+        from knowledge_tracing.akt.research_junyi_graph import JunyiGraphPhaseSession
+        from knowledge_tracing.akt.research_junyi_graph_model import JunyiGraphAKTAdapter
+        from knowledge_tracing.akt.types import KTEvent,LearnerEvents
+        condition=setup['condition']()
+        roles=setup['train'].roles
+        view=JunyiPhaseView(roles,'raw_selection10',roles.selection_users,roles.identity)
+        config=replace(setup['config'],batch_size=128)
+        torch.manual_seed(42)
+        if graph:
+            adapter=JunyiGraphAKTAdapter(config=config,encoding=setup['encoding'],condition=condition,
+                phase=JunyiGraphPhaseSession(condition,view))
+            with torch.no_grad():
+                adapter.native.alpha.fill_(1.)
+        else:
+            adapter=AKTAdapter(config,setup['encoding'].native)
+        adapter.checkpoint_id='native-validation-parity-fixture'
+        students=[]
+        for index,(user,size) in enumerate(zip(view.users,(1,101,205,7))):
+            events=tuple(KTEvent(user,'OOV' if index==2 and rank==17 else ('A','C')[rank%2],
+                rank+1,index*1000+rank+1,rank%2,0,0) for rank in range(size))
+            students.append(LearnerEvents(user,0,events))
+        state={name:value.clone() for name,value in adapter.native.state_dict().items()}
+        rng=torch.get_rng_state().clone()
+        before=list(iter_predictions(adapter,students))
+        after=list(iter_predictions_batched(adapter,students,batch_size=128))
+        assert [replace(row,prediction=None) for row in before]==[replace(row,prediction=None) for row in after]
+        np.testing.assert_allclose([row.prediction for row in before if row.prediction is not None],
+            [row.prediction for row in after if row.prediction is not None],atol=1e-6,rtol=1e-6)
+        assert all(torch.equal(value,adapter.native.state_dict()[name]) for name,value in state.items())
+        assert torch.equal(rng,torch.get_rng_state())
+        changed=[]
+        for student in students:
+            changed.append(replace(student,events=tuple(replace(event,correct=1-event.correct)
+                if index>=50 else event for index,event in enumerate(student.events))))
+        perturbed=list(iter_predictions_batched(adapter,changed,batch_size=128))
+        for original,altered in zip(after,perturbed):
+>           if original.global_rank<=50:
+               ^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'PredictionRecord' object has no attribute 'global_rank'
+
+tests\akt\test_junyi_validation_batch.py:107: AttributeError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_junyi_validation_batch.py::test_native_predictions_preserve_metadata_state_and_causality[False]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 10 passed in 8.11s

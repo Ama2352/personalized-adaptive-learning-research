@@ -105,18 +105,27 @@ def validate_selected_grant(config, inputs, grant, *, config_sha256, gate_sha256
         raise PermissionError('Main selected requires full frozen roles and early-stopping envelope')
 
 
-def _evaluate(adapter, learners, target_count, *, output=None):
+def _prediction_implementation(batch_size):
+    return 'legacy_single_window_v1' if batch_size is None else f'batched_windows_v1_batch{batch_size}'
+
+
+def _evaluate(adapter, learners, target_count, *, output=None, batch_size=None):
     """Giữ hai vector số bounded, stream identity/output thay vì giữ hàng triệu dict."""
     import numpy as np
     import torch
     from .prediction import iter_predictions
+    if batch_size is None:
+        records=iter_predictions(adapter,learners)
+    else:
+        from .prediction_batch import iter_predictions_batched
+        records=iter_predictions_batched(adapter,learners,batch_size=batch_size)
     probabilities = np.empty(target_count,dtype=np.float32)
     labels = np.empty(target_count,dtype=np.float32)
     supported = total = 0
     population = hashlib.sha256()
     previous_user=None
     global_rank=-1
-    for record in iter_predictions(adapter,learners):
+    for record in records:
         total += 1
         if total > target_count:
             raise ValueError('Prediction target count exceeds frozen input')
@@ -151,7 +160,8 @@ def _make_selected_adapter(config, profile, encoding, view, condition):
 
 
 def _comparison_candidate(config, profile, inputs, encoding, initial_backbone, *,
-        encoding_file, encoding_receipt, train_window_cache, graph_condition, candidate_id):
+        encoding_file, encoding_receipt, train_window_cache, graph_condition, candidate_id,
+        validation_batch_size=None):
     """Đo các định danh đầu vào thực để đối chiếu A0 đã nghiệm thu."""
     from .comparison_contract import TRAINING_FIELDS
     if any(value is None for value in (encoding_file,encoding_receipt,train_window_cache)):
@@ -164,7 +174,8 @@ def _comparison_candidate(config, profile, inputs, encoding, initial_backbone, *
             window_manifest=file_sha(Path(train_window_cache)/'manifest.json')),
         roles_identity=inputs.train.roles.identity,encoding_identity=encoding.identity,
         train_view_identity=inputs.train.identity,train_targets=inputs.train_targets,
-        selection_targets=inputs.selection_targets,prediction_implementation='legacy_single_window_v1',
+        selection_targets=inputs.selection_targets,
+        prediction_implementation=_prediction_implementation(validation_batch_size),
         initial_backbone_sha256=initial_backbone,numeric_profile=asdict(profile),
         training_config={key:config_values[key] for key in TRAINING_FIELDS})
     if graph_condition is not None:
@@ -181,9 +192,13 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         train_window_cache=None, expected_train_window_manifest_sha256=None,
         resume_checkpoint=None, expected_resume_sha256=None,
         encoding_receipt=None, expected_encoding_receipt_sha256=None, graph_condition=None,
-        comparison_reference_file=None, expected_comparison_reference_sha256=None):
+        comparison_reference_file=None, expected_comparison_reference_sha256=None,
+        validation_batch_size=None):
     """A0 hoặc A1 expert, selected fit80/rawbest10 với cùng state machine."""
     validate_config(config,cuda_profile=profile)
+    if validation_batch_size is not None and (type(validation_batch_size) is not int
+            or not 1<=validation_batch_size<=min(128,config.batch_size)):
+        raise ValueError('Validation batch must fit configured training batch and 128 ceiling')
     if config.phase!='junyi-research' or config.execution_enabled is not True:
         raise PermissionError('Explicit Junyi CUDA execution config required')
     if (config.max_train_users<len(inputs.train.users) or config.max_val_users<len(inputs.selection.users)
@@ -198,6 +213,8 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
             and comparison_reference_file is None):
         raise PermissionError('Main graph training requires a pinned A0 comparison reference')
     prepared = {}
+    if validation_batch_size is not None:
+        prepared['validation_batch_size']=validation_batch_size
     comparison_reference = None
     if comparison_reference_file is not None:
         if file_sha(comparison_reference_file)!=expected_comparison_reference_sha256:
@@ -206,6 +223,8 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         if document.get('status')!='PASS_A0_DATA_LINEAGE_CANDIDATES_PENDING':
             raise ValueError('Verified A0 data-lineage reference required')
         comparison_reference = document['reference']
+        if comparison_reference['prediction_implementation']!=_prediction_implementation(validation_batch_size):
+            raise ValueError('Prediction batching differs from A0 comparison reference')
         prepared['comparison_reference_sha256']=expected_comparison_reference_sha256
         if grant.get('purpose')=='main_selected':
             verified_inputs=load_full_selected_cache(inputs.paths.canonical.parent,inputs.paths.split_manifest,
@@ -280,7 +299,7 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
             expected_manifest_sha256=expected_train_window_manifest_sha256)
         windows_factory=cache_session.iter_windows
     identity = dict(kind='junyi_a0_selected_v1',inputs=inputs.identity,encoding=encoding.identity,
-        prediction_implementation='legacy_single_window_v1',
+        prediction_implementation=_prediction_implementation(validation_batch_size),
         config=json.loads(json.dumps(asdict(config),default=str)),profile=asdict(profile),
         source_build_sha256=_identity(json.loads(Path(gate['evidence_path']).read_text())['build_hashes']))
     if graph_condition is not None:
@@ -289,6 +308,8 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
                 phase_sha256=inputs.train.identity,graph_enabled=True))
     if comparison_reference is not None:
         identity['comparison_reference_sha256']=expected_comparison_reference_sha256
+    if validation_batch_size is not None:
+        identity['validation_batch_size']=validation_batch_size
     if resume_checkpoint is None:
         write_json(output/'run-manifest.json',identity)
     elif json.loads((output/'run-manifest.json').read_text())!=identity or (output/'COMPLETE.json').exists():
@@ -314,7 +335,8 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         from .comparison_contract import require_matched_candidate
         comparison_candidate = _comparison_candidate(config,profile,inputs,encoding,initial_backbone,
             encoding_file=encoding_file,encoding_receipt=encoding_receipt,
-            train_window_cache=train_window_cache,graph_condition=graph_condition,candidate_id=candidate_id)
+            train_window_cache=train_window_cache,graph_condition=graph_condition,candidate_id=candidate_id,
+            validation_batch_size=validation_batch_size)
         require_matched_candidate(comparison_reference,comparison_candidate)
         write_json(output/f'comparison-admission-{attempt_id}.json',dict(
             status='MATCHED_A0_INPUTS_INITIALIZATION_AND_TRAINING_CONFIG',
@@ -324,6 +346,7 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         weight_decay=config.weight_decay,foreach=False,fused=False,capturable=False,differentiable=False,
         amsgrad=False,maximize=False,decoupled_weight_decay=False)
     stopper = EarlyStopping(config.patience,config.min_delta)
+    evaluation_options={} if validation_batch_size is None else dict(batch_size=validation_batch_size)
     steps = targets = 0
     history = []
     population = None
@@ -424,7 +447,8 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
             adapter.set_phase(JunyiGraphPhaseSession(graph_condition,inputs.selection))
         validation_started=time.monotonic()
         validation = _evaluate(adapter,
-            iter_junyi_phase_learners(inputs.paths,inputs.selection,**reader_options),inputs.selection_targets)
+            iter_junyi_phase_learners(inputs.paths,inputs.selection,**reader_options),inputs.selection_targets,
+            **evaluation_options)
         if comparison_candidate is not None:
             require_matched_candidate(comparison_reference,dict(comparison_candidate,
                 observed_selection_population_sha256=validation['population_sha256']),observed=True)
@@ -467,7 +491,8 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
     predictions_file=output/f'raw-best-selection-{attempt_id}.jsonl'
     with predictions_file.open('x',encoding='utf-8') as stream:
         validation = _evaluate(adapter,
-            iter_junyi_phase_learners(inputs.paths,inputs.selection,**reader_options),inputs.selection_targets,output=stream)
+            iter_junyi_phase_learners(inputs.paths,inputs.selection,**reader_options),inputs.selection_targets,
+            output=stream,**evaluation_options)
     expected = history[stopper.best_epoch-1]['validation']
     if validation!=expected:
         raise ValueError('Best checkpoint reload changed target population or predictions')
@@ -484,6 +509,9 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
     if comparison_reference is not None:
         terminal.update(comparison_reference_sha256=expected_comparison_reference_sha256,
             comparison_population_matched=True)
+    if validation_batch_size is not None:
+        terminal.update(validation_batch_size=validation_batch_size,
+            prediction_implementation=_prediction_implementation(validation_batch_size))
     write_json(output/'selected-terminal.json',terminal)
     write_json(output/'COMPLETE.json',dict(status=terminal['status'],terminal_sha256=file_sha(output/'selected-terminal.json')))
     return terminal
@@ -495,7 +523,8 @@ def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfi
         train_window_cache=None, expected_train_window_manifest_sha256=None,
         resume_checkpoint=None, expected_resume_sha256=None,
         encoding_receipt=None, expected_encoding_receipt_sha256=None,
-        comparison_reference_file=None, expected_comparison_reference_sha256=None):
+        comparison_reference_file=None, expected_comparison_reference_sha256=None,
+        validation_batch_size=None):
     """Giữ entrypoint và hợp đồng A0 hiện có."""
     return run_junyi_selected(config,profile,inputs,authorization_file=authorization_file,
         expected_authorization_sha256=expected_authorization_sha256,runtime_report=runtime_report,
@@ -505,4 +534,5 @@ def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfi
         resume_checkpoint=resume_checkpoint,expected_resume_sha256=expected_resume_sha256,
         encoding_receipt=encoding_receipt,expected_encoding_receipt_sha256=expected_encoding_receipt_sha256,
         comparison_reference_file=comparison_reference_file,
-        expected_comparison_reference_sha256=expected_comparison_reference_sha256)
+        expected_comparison_reference_sha256=expected_comparison_reference_sha256,
+        validation_batch_size=validation_batch_size)

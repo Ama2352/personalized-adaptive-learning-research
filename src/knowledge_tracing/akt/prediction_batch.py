@@ -45,16 +45,16 @@ def iter_predictions_batched(adapter, learners: Iterable[LearnerEvents], *,
                              batch_size: int | None = None) -> Iterator[PredictionRecord]:
     """Giữ thứ tự record/OOV; chỉ cửa sổ nhân quả đi vào predict_windows.
 
-Batch tối đa4 cửa sổ, có thể chứa nhiều learner. Gặp OOV thì xuất batch đang
+Batch tối đa128 cửa sổ, có thể chứa nhiều learner. Gặp OOV thì xuất batch đang
 chờ trước, sau đó phát record null. Caller phải tiêu thụ iterator tới cuối.
 Metadata/target coverage giữ cùng iterator lịch sử. Sai khác số học khi dùng
 batch CUDA cần được đo riêng trên runtime thật trước producer chính.
 """
     configured = adapter.config.batch_size
     requested = configured if batch_size is None else batch_size
-    if (type(configured) is not int or not 1 <= configured <= 4
+    if (type(configured) is not int or not 1 <= configured <= 128
             or type(requested) is not int or not 1 <= requested <= configured):
-        raise ValueError('prediction batch must be an integer within configured1..4')
+        raise ValueError('prediction batch must be an integer within configured1..128')
     checkpoint_id = _checkpoint_identity(adapter)
     support = adapter.encoding.train_support_students
     pending = []

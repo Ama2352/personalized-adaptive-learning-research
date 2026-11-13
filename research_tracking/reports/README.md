@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 13/11 — validation theo batch
+
+[Hồ sơ](../runs/junyi-validation-batch-20261113-01/README.md) có126ca CPU đạt, probe và notebook T4 đã chuẩn bị. Chưa có GPU speedup hoặc A0 full-selection parity.
+
 ## Đính chính số mẫu fixture confidence ngày13/11
 
 Số chuẩn trong [summary đã nghiệm thu](../runs/junyi-confidence-core-20261113-01/crossfit-summary.json) là **640child targets,64learner tổng hợp,1.920OOF rows và12fit slots**. README của bundle đã đóng ghi nhầm500targets/50learner/1.500OOF do nhập tay. JSON, ledger và kết quả kiểm không bị ảnh hưởng. Giữ bundle cũ nguyên byte và dùng số liệu JSON này khi trích dẫn.

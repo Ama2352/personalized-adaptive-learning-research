@@ -1,5 +1,9 @@
 # Báo cáo tiến độ khóa luận — cập nhật 12/11/2026
 
+## 13/11 — chuẩn bị tối ưu validation
+
+Đã nối validation và xuất dự báo theo batch tối đa128cửa sổ, giữ ranh giới lịch sử từng learner và các target/OOV. Bộ kiểm local đạt126ca, gồm native AKT/A1 trên CPU và kiểm trạng thái mô hình, thứ tự dữ liệu, grant và resume. Mode chạy mới có định danh riêng để tránh trộn với validation từng cửa sổ của A0 trước đây. Chưa có số đo tăng tốc T4 hoặc kết quả kiểm lại toàn selection bằng checkpoint A0, nên chưa nghiệm thu tối ưu cho training chính.
+
 ## 13/11 — lõi confidence Junyi đã kiểm CPU
 
 Đã cài lõi chuẩn bị đặc trưng và crossfit confidence cho Junyi, có kiểm vocabulary717. Đặc trưng chỉ dùng quá khứ trong đúng cửa sổ AKT. Fitter tái dùng solver và learner bootstrap của Method24, fit theo từng child để hỗ trợ xử lý giới hạn RAM. Kiểm CPU với solver thật xác nhận loại người học thuộc fold đánh giá khỏi dữ liệu fit và giữ confidence null khi thiếu hỗ trợ. Đây là kiểm trên dữ liệu tổng hợp. Worker train80, artifact confidence và tích hợp A2/A3 còn cần hoàn thiện trước training chính.

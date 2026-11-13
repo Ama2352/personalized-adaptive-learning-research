@@ -1,5 +1,9 @@
 # Notebook nghiên cứu
 
+## 13/11 — validation theo batch
+
+[Hồ sơ](../research_tracking/runs/junyi-validation-batch-20261113-01/README.md) có126ca CPU đạt, probe và notebook T4 đã chuẩn bị. Chưa có GPU speedup hoặc A0 full-selection parity.
+
 ## 13/11 — kiểm Junyi trước các biến thể AKT
 
 [Hồ sơ kiểm](../research_tracking/runs/junyi-comparison-preflight-20261113-01/README.md) có audit split/vocabulary, hợp đồng so sánh và kết quả T4 A0/A1 batch128 cùng checkpoint đã tải về D. [Notebook T4](akt_colab_junyi_comparison.ipynb) dùng gói nguồn03 và venv trong dự án. A2/A3 Junyi và ràng buộc entrypoint còn cần hoàn thiện trước training chính.
