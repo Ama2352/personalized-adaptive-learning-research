@@ -1,0 +1,195 @@
+[
+  {
+    "source_file": "result-5cc3a66f90e2424d97f20d3daf2faf05.json",
+    "outputs": [
+      {
+        "output_type": "stream",
+        "name": "stdout",
+        "text": [
+          "{\"python\": \"3.13.18 (main, Oct 26 2026, 15:28:15) [GCC 13.3.0]\", \"torch\": \"2.14.1+cpu\", \"cuda\": null, \"available\": false, \"gpu\": null, \"existing_project\": false}\n"
+        ]
+      }
+    ]
+  },
+  {
+    "source_file": "result-88b3a7ecffd54d2c979ea7e0ea17a96a.json",
+    "outputs": [
+      {
+        "output_type": "stream",
+        "name": "stdout",
+        "text": [
+          "{\"python\": \"3.13.16 (main, Oct  1 2026, 15:40:24) [GCC 13.3.0]\", \"torch\": \"2.14.1+cu130\", \"cuda\": \"13.0\", \"available\": true, \"gpu\": \"Tesla T4\", \"existing_project\": false}\n"
+        ]
+      }
+    ]
+  },
+  {
+    "source_file": "result-b0a4d82db5e84ed1b92b852b439ba357.json",
+    "outputs": [
+      {
+        "output_type": "stream",
+        "name": "stdout",
+        "text": [
+          "SOURCE_VERIFIED 315\n"
+        ]
+      },
+      {
+        "output_type": "error",
+        "ename": "CalledProcessError",
+        "evalue": "Command '['/usr/bin/python3', '-m', 'venv', '--system-site-packages', '/content/KLTN-junyi-comparison-20261113-01/.venv']' returned non-zero exit status 1.",
+        "traceback": [
+          "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+          "\u001b[0;31mCalledProcessError\u001b[0m                        Traceback (most recent call last)",
+          "\u001b[0;32m/tmp/ipykernel_495/435971970.py\u001b[0m in \u001b[0;36m<cell line: 0>\u001b[0;34m()\u001b[0m\n\u001b[1;32m     11\u001b[0m \u001b[0;32mfor\u001b[0m \u001b[0mname\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0mexpected\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mmanifest\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'files'\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mitems\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0;32massert\u001b[0m \u001b[0mhashlib\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0msha256\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mPROJECT\u001b[0m\u001b[0;34m/\u001b[0m\u001b[0mname\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mread_bytes\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mhexdigest\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m==\u001b[0m\u001b[0mexpected\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0mname\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     12\u001b[0m \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m'SOURCE_VERIFIED'\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0mlen\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mmanifest\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'files'\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 13\u001b[0;31m \u001b[0msubprocess\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mrun\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0msys\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mexecutable\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m'-m'\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m'venv'\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m'--system-site-packages'\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mPROJECT\u001b[0m\u001b[0;34m/\u001b[0m\u001b[0;34m'.venv'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0mcheck\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;32mTrue\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0mtimeout\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;36m60\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     14\u001b[0m \u001b[0mPYTHON\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mPROJECT\u001b[0m\u001b[0;34m/\u001b[0m\u001b[0;34m'.venv/bin/python'\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     15\u001b[0m env = dict(os.environ,PYTHONPATH=str(PROJECT/'src'),OMP_NUM_THREADS='2',MKL_NUM_THREADS='2',\n",
+          "\u001b[0;32m/usr/lib/python3.13/subprocess.py\u001b[0m in \u001b[0;36mrun\u001b[0;34m(input, capture_output, timeout, check, *popenargs, **kwargs)\u001b[0m\n\u001b[1;32m    576\u001b[0m         \u001b[0mretcode\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mprocess\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mpoll\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    577\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mcheck\u001b[0m \u001b[0;32mand\u001b[0m \u001b[0mretcode\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 578\u001b[0;31m             raise CalledProcessError(retcode, process.args,\n\u001b[0m\u001b[1;32m    579\u001b[0m                                      output=stdout, stderr=stderr)\n\u001b[1;32m    580\u001b[0m     \u001b[0;32mreturn\u001b[0m \u001b[0mCompletedProcess\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mprocess\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mretcode\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mstdout\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mstderr\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+          "\u001b[0;31mCalledProcessError\u001b[0m: Command '['/usr/bin/python3', '-m', 'venv', '--system-site-packages', '/content/KLTN-junyi-comparison-20261113-01/.venv']' returned non-zero exit status 1."
+        ]
+      }
+    ]
+  },
+  {
+    "source_file": "result-d6a1bf373a80438fb5c6a82e224db58d.json",
+    "outputs": [
+      {
+        "output_type": "stream",
+        "name": "stdout",
+        "text": [
+          "{\"python\": \"3.13.16 (main, Oct  1 2026, 15:40:24) [GCC 13.3.0]\", \"torch\": \"2.14.1+cu130\", \"numpy\": \"2.4.6\", \"cuda\": \"13.0\", \"available\": true, \"gpu\": \"Tesla T4\"}\n",
+          "\n"
+        ]
+      }
+    ]
+  },
+  {
+    "source_file": "result-f33b25951c6748d69c60954cde2e3b08.json",
+    "outputs": [
+      {
+        "output_type": "stream",
+        "name": "stdout",
+        "text": [
+          "........................................................................ [ 46%]\n",
+          "...............................E\n",
+          "==================================== ERRORS ====================================\n",
+          "_ ERROR at setup of test_native_graph_checkpoint_resume_matches_continuous[True] _\n",
+          "\n",
+          "self = PosixPath('/content/KLTN-junyi-comparison-20261113-01/artifacts/akt/local-tests/colab-comparison')\n",
+          "mode = 448, parents = False, exist_ok = False\n",
+          "\n",
+          "    def mkdir(self, mode=0o777, parents=False, exist_ok=False):\n",
+          "        \"\"\"\n",
+          "        Create a new directory at this given path.\n",
+          "        \"\"\"\n",
+          "        try:\n",
+          ">           os.mkdir(self, mode)\n",
+          "E           FileNotFoundError: [Errno 2] No such file or directory: '/content/KLTN-junyi-comparison-20261113-01/artifacts/akt/local-tests/colab-comparison'\n",
+          "\n",
+          "/usr/lib/python3.13/pathlib/_local.py:722: FileNotFoundError\n",
+          "- generated xml file: /content/KLTN-junyi-comparison-20261113-01/experiments/akt/results/colab-comparison-20261113-01/tests.xml -\n",
+          "=========================== short test summary info ============================\n",
+          "ERROR tests/akt/test_junyi_graph_model.py::test_native_graph_checkpoint_resume_matches_continuous[True]\n",
+          "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!\n",
+          "103 passed, 1 error in 4.11s\n",
+          "\n"
+        ]
+      },
+      {
+        "output_type": "error",
+        "ename": "AssertionError",
+        "evalue": "Giữ log lỗi và dừng trước kiểm GPU",
+        "traceback": [
+          "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+          "\u001b[0;31mAssertionError\u001b[0m                            Traceback (most recent call last)",
+          "\u001b[0;32m/tmp/ipykernel_495/938338279.py\u001b[0m in \u001b[0;36m<cell line: 0>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      9\u001b[0m         '--junitxml='+str(OUTPUT/'tests.xml')],cwd=PROJECT,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=300)\n\u001b[1;32m     10\u001b[0m \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mOUTPUT\u001b[0m\u001b[0;34m/\u001b[0m\u001b[0;34m'tests.log'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mread_text\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m-\u001b[0m\u001b[0;36m5000\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 11\u001b[0;31m \u001b[0;32massert\u001b[0m \u001b[0mresult\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mreturncode\u001b[0m \u001b[0;34m==\u001b[0m \u001b[0;36m0\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'Giữ log lỗi và dừng trước kiểm GPU'\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+          "\u001b[0;31mAssertionError\u001b[0m: Giữ log lỗi và dừng trước kiểm GPU"
+        ]
+      }
+    ]
+  },
+  {
+    "source_file": "result-bd6bc2b3f80d4d85bdf0c8802eb5e115.json",
+    "outputs": [
+      {
+        "output_type": "stream",
+        "name": "stdout",
+        "text": [
+          "........................................................................ [ 46%]\n",
+          "........................................................................ [ 92%]\n",
+          "............                                                             [100%]\n",
+          "- generated xml file: /content/KLTN-junyi-comparison-20261113-01/experiments/akt/results/colab-comparison-20261113-01/test-attempt-01.xml -\n",
+          "156 passed in 20.16s\n",
+          "\n"
+        ]
+      }
+    ]
+  },
+  {
+    "source_file": "result-a0942b56b1024a669db07b124d8b1c3a.json",
+    "outputs": [
+      {
+        "output_type": "stream",
+        "name": "stdout",
+        "text": [
+          "Traceback (most recent call last):\n",
+          "  File \"/content/KLTN-junyi-comparison-20261113-01/scripts/akt/synthetic_junyi_comparison_probe.py\", line 167, in <module>\n",
+          "    main()\n",
+          "    ~~~~^^\n",
+          "  File \"/content/KLTN-junyi-comparison-20261113-01/scripts/akt/synthetic_junyi_comparison_probe.py\", line 140, in main\n",
+          "    restore_checkpoint(clone,clone_optimizer,load_checkpoint(checkpoint,expected_identity=identity,device='cuda'))\n",
+          "    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n",
+          "  File \"/content/KLTN-junyi-comparison-20261113-01/src/knowledge_tracing/akt/checkpoint.py\", line 85, in restore_checkpoint\n",
+          "    raise ValueError('checkpoint is incomplete')\n",
+          "ValueError: checkpoint is incomplete\n",
+          "\n"
+        ]
+      },
+      {
+        "output_type": "error",
+        "ename": "AssertionError",
+        "evalue": "Giữ failure, tải artifact bằng cell cuối, không chuyển sang Modal",
+        "traceback": [
+          "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+          "\u001b[0;31mAssertionError\u001b[0m                            Traceback (most recent call last)",
+          "\u001b[0;32m/tmp/ipykernel_495/2858751159.py\u001b[0m in \u001b[0;36m<cell line: 0>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      5\u001b[0m         '--output',str(GPU_OUTPUT)],cwd=PROJECT,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=300)\n\u001b[1;32m      6\u001b[0m \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mOUTPUT\u001b[0m\u001b[0;34m/\u001b[0m\u001b[0;34m'gpu.log'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mread_text\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m-\u001b[0m\u001b[0;36m5000\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 7\u001b[0;31m \u001b[0;32massert\u001b[0m \u001b[0mresult\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mreturncode\u001b[0m \u001b[0;34m==\u001b[0m \u001b[0;36m0\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'Giữ failure, tải artifact bằng cell cuối, không chuyển sang Modal'\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      8\u001b[0m \u001b[0mreceipt\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mjson\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mloads\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mGPU_OUTPUT\u001b[0m\u001b[0;34m/\u001b[0m\u001b[0;34m'result.json'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mread_text\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      9\u001b[0m \u001b[0;32massert\u001b[0m \u001b[0mreceipt\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'status'\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m==\u001b[0m \u001b[0;34m'PASS_SYNTHETIC_A0_A1_T4_BATCH128'\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+          "\u001b[0;31mAssertionError\u001b[0m: Giữ failure, tải artifact bằng cell cuối, không chuyển sang Modal"
+        ]
+      }
+    ]
+  },
+  {
+    "source_file": "result-3659f65e275a4ed287bddfb844418f51.json",
+    "outputs": [
+      {
+        "output_type": "stream",
+        "name": "stdout",
+        "text": [
+          "{\"project_exists\": true, \"gpu_files\": [\"colab-junyi-a0-a1-t4-20261113-01\", \"colab-comparison-20261113-01\"], \"alive\": \"0 %, 3 MiB\\n\"}\n"
+        ]
+      }
+    ]
+  },
+  {
+    "source_file": "result-0ef442d4953a4e3982310b9ab227d5fc.json",
+    "outputs": [
+      {
+        "output_type": "stream",
+        "name": "stdout",
+        "text": [
+          "{\"status\": \"PASS_SYNTHETIC_A0_A1_T4_BATCH128\", \"torch\": \"2.14.1+cu130\", \"cuda\": \"13.0\", \"gpu\": \"Tesla T4\", \"vocabulary\": 717, \"batch_size\": 128, \"max_length\": 200, \"steps_continuous\": [{\"stepped\": true, \"valid_targets\": 12800, \"loss_sum\": 8879.572265625, \"mean_loss\": 0.6937165856361389, \"pre_clip_norm\": 0.17831353843212128, \"post_clip_norm\": 0.17831353843212128, \"parameter_updated\": true, \"forward_seconds\": 1.1211712780000198, \"backward_seconds\": 0.6901117239999621, \"gradient_clip_seconds\": 0.09127582400003575, \"optimizer_seconds\": 0.0377108310000267}, {\"stepped\": true, \"valid_targets\": 12800, \"loss_sum\": 8763.9072265625, \"mean_loss\": 0.6846802234649658, \"pre_clip_norm\": 0.145824134349823, \"post_clip_norm\": 0.145824134349823, \"parameter_updated\": true, \"forward_seconds\": 1.0645859149999524, \"backward_seconds\": 0.4661272559999361, \"gradient_clip_seconds\": 0.1488573679999945, \"optimizer_seconds\": 0.007610630000044694}], \"resumed_step\": {\"stepped\": true, \"valid_targets\": 12800, \"loss_sum\": 8763.9072265625, \"mean_loss\": 0.6846802234649658, \"pre_clip_norm\": 0.145824134349823, \"post_clip_norm\": 0.145824134349823, \"parameter_updated\": true, \"forward_seconds\": 1.0730569309999964, \"backward_seconds\": 0.5808261930000072, \"gradient_clip_seconds\": 0.14053952200004005, \"optimizer_seconds\": 0.011170493000008719}, \"initial_backbone_sha256\": \"a29f65ae4c668b55c1ff30a19f41f232a6761848ba2304c9cde5ba594db9fa9c\", \"checkpoint_sha256\": \"844dbb0d17ef126a1cdb119a829ae0a5953ab48166da0ce78c24759919d07b6f\", \"prediction_rows\": 200, \"model_and_adam_resume_exact\": true, \"causal_current_future_test\": true, \"graph_off_matches_a0\": true, \"max_vram_allocated\": 5048437248, \"seconds\": 14.092469560999916, \"a2_a3_junyi_tested\": false, \"real_junyi_data_used\": false, \"limits_vi\": \"Kiểm tổng hợp A0/A1 batch128 trên T4. Chưa nghiệm thu A2/A3 Junyi, full producer hoặc H100 môi trường khác.\"}\n",
+          "\n"
+        ]
+      }
+    ]
+  },
+  {
+    "source_file": "result-632192833b0f44558f4988b0df6792a1.json",
+    "outputs": [
+      {
+        "output_type": "stream",
+        "name": "stdout",
+        "text": [
+          "{\"event\": \"ARCHIVE_READY\", \"bytes\": 25111987, \"sha256\": \"9b2d028cc3b75cd7343dce29f7c66b8171606bd712d94f9d36bef42d78ba5328\", \"files\": 11, \"result\": {\"status\": \"PASS_SYNTHETIC_A0_A1_T4_BATCH128\", \"torch\": \"2.14.1+cu130\", \"cuda\": \"13.0\", \"gpu\": \"Tesla T4\", \"vocabulary\": 717, \"batch_size\": 128, \"max_length\": 200, \"steps_continuous\": [{\"stepped\": true, \"valid_targets\": 12800, \"loss_sum\": 8879.572265625, \"mean_loss\": 0.6937165856361389, \"pre_clip_norm\": 0.17831353843212128, \"post_clip_norm\": 0.17831353843212128, \"parameter_updated\": true, \"forward_seconds\": 1.1211712780000198, \"backward_seconds\": 0.6901117239999621, \"gradient_clip_seconds\": 0.09127582400003575, \"optimizer_seconds\": 0.0377108310000267}, {\"stepped\": true, \"valid_targets\": 12800, \"loss_sum\": 8763.9072265625, \"mean_loss\": 0.6846802234649658, \"pre_clip_norm\": 0.145824134349823, \"post_clip_norm\": 0.145824134349823, \"parameter_updated\": true, \"forward_seconds\": 1.0645859149999524, \"backward_seconds\": 0.4661272559999361, \"gradient_clip_seconds\": 0.1488573679999945, \"optimizer_seconds\": 0.007610630000044694}], \"resumed_step\": {\"stepped\": true, \"valid_targets\": 12800, \"loss_sum\": 8763.9072265625, \"mean_loss\": 0.6846802234649658, \"pre_clip_norm\": 0.145824134349823, \"post_clip_norm\": 0.145824134349823, \"parameter_updated\": true, \"forward_seconds\": 1.0730569309999964, \"backward_seconds\": 0.5808261930000072, \"gradient_clip_seconds\": 0.14053952200004005, \"optimizer_seconds\": 0.011170493000008719}, \"initial_backbone_sha256\": \"a29f65ae4c668b55c1ff30a19f41f232a6761848ba2304c9cde5ba594db9fa9c\", \"checkpoint_sha256\": \"844dbb0d17ef126a1cdb119a829ae0a5953ab48166da0ce78c24759919d07b6f\", \"prediction_rows\": 200, \"model_and_adam_resume_exact\": true, \"causal_current_future_test\": true, \"graph_off_matches_a0\": true, \"max_vram_allocated\": 5048437248, \"seconds\": 14.092469560999916, \"a2_a3_junyi_tested\": false, \"real_junyi_data_used\": false, \"limits_vi\": \"Ki\\u1ec3m t\\u1ed5ng h\\u1ee3p A0/A1 batch128 tr\\u00ean T4. Ch\\u01b0a nghi\\u1ec7m thu A2/A3 Junyi, full producer ho\\u1eb7c H100 m\\u00f4i tr\\u01b0\\u1eddng kh\\u00e1c.\"}}\n"
+        ]
+      }
+    ]
+  }
+]

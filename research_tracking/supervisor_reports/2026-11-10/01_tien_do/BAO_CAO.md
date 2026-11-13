@@ -1,5 +1,14 @@
 # Báo cáo tiến độ khóa luận — cập nhật 12/11/2026
 
+## 13/11 — kiểm tính tương thích trước training các biến thể
+
+Đã đối chiếu split A0 với assignments BKT/GAM-KT, tái dựng đúng bốn nhóm người học và kiểm hash cache train/selection cùng vocabulary 717. Colab đạt 156 ca kiểm trên Linux. Kiểm CUDA tổng hợp A0/A1 trên T4 dùng batch128, chiều dài200 và vocabulary717 đã đạt trong khoảng14giây, VRAM cấp phát cao nhất4,70GiB. Backbone khởi tạo khớp chính xác với A0 H100, graph-off khớp A0 và nhãn hiện tại/tương lai giữ đúng ranh giới nhân quả. Model và Adam sau phục hồi khớp chạy liên tục. Checkpoint, dự báo kiểm, runtime và logs đã tải về D, đối chiếu SHA/CRC/inventory.
+
+Mốc này xác nhận thêm độ tin cậy kỹ thuật cho A0/A1. A2/A3 Junyi còn thiếu confidence fitted đúng train80 và tích hợp producer. Hợp đồng so sánh mới đã có kiểm âm, còn cần nối bắt buộc vào các entrypoint trước training chính. Các variant cần cùng batch128, split/vocabulary, cửa sổ, khởi tạo backbone và quy tắc tối đa20epoch/patience3/min_delta0,0001. Epoch tốt nhất có thể khác nhau. Đề xuất giới hạn9epoch và bỏrefit trong hội thoại chưa được áp dụng vào protocol.
+
+BKT/GAM-KT lịch sử dùng toàn outer-train, còn A0 hiện fit train80. Metric selection A0 phục vụ chọn checkpoint. Bảng so sánh chính thức cần cùng outer-validation, target identity và coverage, đồng thời công khai khác biệt dữ liệu train hoặc thực hiện matched baseline fit riêng. Các công thức AUC/LogLoss/Brier/ECE15bins được giữ tương ứng. Cả ma trận fit/refit/calibration/inference còn cần dự toán trong credits còn lại trước lượt H100 tiếp theo.
+
+
 
 ## Chốt 13/11 — A0 H100 đã chọn checkpoint epoch 9
 

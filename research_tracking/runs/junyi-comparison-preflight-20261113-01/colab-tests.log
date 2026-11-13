@@ -1,0 +1,22 @@
+........................................................................ [ 46%]
+...............................E
+==================================== ERRORS ====================================
+_ ERROR at setup of test_native_graph_checkpoint_resume_matches_continuous[True] _
+
+self = PosixPath('/content/KLTN-junyi-comparison-20261113-01/artifacts/akt/local-tests/colab-comparison')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/content/KLTN-junyi-comparison-20261113-01/artifacts/akt/local-tests/colab-comparison'
+
+/usr/lib/python3.13/pathlib/_local.py:722: FileNotFoundError
+- generated xml file: /content/KLTN-junyi-comparison-20261113-01/experiments/akt/results/colab-comparison-20261113-01/tests.xml -
+=========================== short test summary info ============================
+ERROR tests/akt/test_junyi_graph_model.py::test_native_graph_checkpoint_resume_matches_continuous[True]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+103 passed, 1 error in 4.11s

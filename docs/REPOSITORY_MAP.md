@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 13/11 — kiểm Junyi trước các biến thể AKT
+
+[Hồ sơ kiểm](../research_tracking/runs/junyi-comparison-preflight-20261113-01/README.md) có audit split/vocabulary, hợp đồng so sánh và kết quả T4 A0/A1 batch128 cùng checkpoint đã tải về D. A2/A3 Junyi và ràng buộc entrypoint còn cần hoàn thiện trước training chính.
+
+
 ## Chốt 13/11 — A0 H100 hoàn tất chọn checkpoint
 
 [A0 H100 hoàn tất](../research_tracking/runs/junyi-a0-h100-batch128-20261112-01/README.md) có 12 epoch, selected 9, 1.600.343 dự báo đã kiểm, model xuất về D và cả ba App đã dừng. [Báo cáo training riêng](../research_tracking/supervisor_reports/2026-11-13/BAO_CAO_A0_H100.html). Các mốc bên dưới giữ theo thời điểm lịch sử.

@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 13/11 — kiểm Junyi trước các biến thể AKT
+
+[Hồ sơ kiểm](../runs/junyi-comparison-preflight-20261113-01/README.md) có audit split/vocabulary, hợp đồng so sánh và kết quả T4 A0/A1 batch128 cùng checkpoint đã tải về D. A2/A3 Junyi và ràng buộc entrypoint còn cần hoàn thiện trước training chính.
+
+
 ## Chốt 13/11 — A0 H100 hoàn tất chọn checkpoint
 
 [A0 H100](../supervisor_reports/2026-11-13/BAO_CAO_A0_H100.html) đã hoàn tất chọn checkpoint epoch 9 sau 12 epoch, model và dự báo đã lưu trên D. [Bằng chứng](../runs/junyi-a0-h100-batch128-20261112-01/README.md). Refit/calibration/đánh giá độc lập còn chờ.
