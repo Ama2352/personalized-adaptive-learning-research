@@ -69,3 +69,13 @@ def test_equal_counts_do_not_replace_observed_target_identity(reference):
     require_matched_candidate(reference, condition)
     with pytest.raises(ValueError, match='target population'):
         require_matched_candidate(reference, condition, observed=True)
+
+
+def test_device_vram_cap_can_differ_with_same_numerical_recipe(reference):
+    reference['numeric_profile']['max_vram_bytes']=16*1024**3
+    condition=candidate(reference)
+    condition['numeric_profile']['max_vram_bytes']=12*1024**3
+    require_matched_candidate(reference,condition)
+    condition['numeric_profile']['dtype']='float16'
+    with pytest.raises(ValueError,match='numeric_profile'):
+        require_matched_candidate(reference,condition)

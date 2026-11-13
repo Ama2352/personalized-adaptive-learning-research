@@ -1,0 +1,37 @@
+...................F
+================================== FAILURES ===================================
+_________ test_partial_epoch_is_recoverable_and_never_selected_final __________
+
+harness = namespace(run=<function harness.<locals>.run at 0x0000023E034AA700>, control={'train_calls': [1], 'evaluate_calls': []...2=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8'))
+
+    def test_partial_epoch_is_recoverable_and_never_selected_final(harness):
+        harness.control['partial_epoch']=1
+>       result = harness.run(epochs=1)
+                 ^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_selected_runner.py:329: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_selected_runner.py:222: in run
+    return runner(config,profile,inputs,
+src\knowledge_tracing\akt\research_junyi_selection.py:494: in run_a0_junyi_selected
+    return run_junyi_selected(config,profile,inputs,authorization_file=authorization_file,
+src\knowledge_tracing\akt\research_junyi_selection.py:380: in run_junyi_selected
+    stats = train_epoch(adapter,windows_factory,
+tests\akt\test_junyi_selected_runner.py:161: in train_epoch
+    recovery['checkpoint_callback'](path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/comparison-admission-20261113-01/test_partial_epoch_is_recovera0/run/batch-recovery/unit-epoch001-step001.pt')
+
+    def publish_batch(path):
+        import os
+        directory=output/'checkpoints'/path.stem
+        directory.mkdir(parents=True)
+>       os.link(path,directory/'state.pt')
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\comparison-admission-20261113-01\\test_partial_epoch_is_recovera0\\run\\batch-recovery\\unit-epoch001-step001.pt' -> 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\comparison-admission-20261113-01\\test_partial_epoch_is_recovera0\\run\\checkpoints\\unit-epoch001-step001\\state.pt'
+
+src\knowledge_tracing\akt\research_junyi_selection.py:352: PermissionError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_junyi_selected_runner.py::test_partial_epoch_is_recoverable_and_never_selected_final
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 19 passed in 20.52s

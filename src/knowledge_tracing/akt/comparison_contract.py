@@ -27,9 +27,17 @@ def require_matched_candidate(reference, candidate, *, observed=False):
         raise ValueError('Candidate identity required')
     for key in ('data_pins', 'roles_identity', 'encoding_identity',
                 'train_view_identity', 'train_targets', 'selection_targets',
-                'prediction_implementation', 'initial_backbone_sha256', 'numeric_profile'):
+                'prediction_implementation', 'initial_backbone_sha256'):
         if key not in reference or candidate.get(key) != reference[key]:
             raise ValueError(f'Comparison mismatch: {key}')
+    profiles = (reference.get('numeric_profile'),candidate.get('numeric_profile'))
+    if any(type(profile) is not dict for profile in profiles):
+        raise ValueError('Comparison mismatch: numeric_profile')
+    # VRAM là trần tài nguyên của thiết bị, các cờ số học vẫn phải khớp.
+    numeric = [{key:value for key,value in profile.items() if key!='max_vram_bytes'}
+               for profile in profiles]
+    if numeric[0]!=numeric[1]:
+        raise ValueError('Comparison mismatch: numeric_profile')
     for key in TRAINING_FIELDS:
         if key not in reference['training_config'] or candidate.get('training_config', {}).get(key) != reference['training_config'][key]:
             raise ValueError(f'Training mismatch: {key}')

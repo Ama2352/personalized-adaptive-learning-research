@@ -1,5 +1,10 @@
 # Báo cáo tiến độ khóa luận — cập nhật 12/11/2026
 
+## 13/11 — kiểm được gắn vào luồng training chính
+
+Đã nối kiểm tương thích vào luồng training graph chính. Trước bước optimizer đầu tiên, producer đối chiếu đầu vào thực, cấu hình và khởi tạo backbone với tham chiếu A0. Main còn kiểm lại cache trước khi dựng model. Mỗi validation đối chiếu target population với A0 và checkpoint ghi tham chiếu để bảo vệ resume. Bộ hồi quy CPU đạt77ca. Một lượt SQL độc lập đã kiểm đủ1.600.343target selection của15.847người học,0OOV và khớp từng khóa cùng thứ tự với A0 H100. Confidence và producer A2/A3 Junyi cùng dự toán toàn ma trận vẫn đang cần hoàn thiện trước main GPU.
+
+
 ## 13/11 — kiểm tính tương thích trước training các biến thể
 
 Đã đối chiếu split A0 với assignments BKT/GAM-KT, tái dựng đúng bốn nhóm người học và kiểm hash cache train/selection cùng vocabulary 717. Colab đạt 156 ca kiểm trên Linux. Kiểm CUDA tổng hợp A0/A1 trên T4 dùng batch128, chiều dài200 và vocabulary717 đã đạt trong khoảng14giây, VRAM cấp phát cao nhất4,70GiB. Backbone khởi tạo khớp chính xác với A0 H100, graph-off khớp A0 và nhãn hiện tại/tương lai giữ đúng ranh giới nhân quả. Model và Adam sau phục hồi khớp chạy liên tục. Checkpoint, dự báo kiểm, runtime và logs đã tải về D, đối chiếu SHA/CRC/inventory.

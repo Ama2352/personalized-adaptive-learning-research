@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 13/11 — guard so sánh đã nối vào producer
+
+[Hồ sơ](../research_tracking/runs/junyi-comparison-admission-20261113-01/README.md) có77ca CPU đạt và kiểm SQL độc lập1.600.343selection targets khớp A0. Confidence Junyi và kiểm source Linux tiếp theo còn chờ.
+
+
 ## 13/11 — kiểm Junyi trước các biến thể AKT
 
 [Hồ sơ kiểm](../research_tracking/runs/junyi-comparison-preflight-20261113-01/README.md) có audit split/vocabulary, hợp đồng so sánh và kết quả T4 A0/A1 batch128 cùng checkpoint đã tải về D. A2/A3 Junyi và ràng buộc entrypoint còn cần hoàn thiện trước training chính.

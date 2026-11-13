@@ -184,9 +184,17 @@ def harness(tmp_path, monkeypatch):
 
     monkeypatch.setattr(selected,'_evaluate',evaluate)
 
-    def run(*, epochs=20,resume=None,graph_condition=None,wrong_graph_grant=False):
+    def run(*, epochs=20,resume=None,graph_condition=None,wrong_graph_grant=False,
+            comparison_reference=None,reference_pin=None,encoding_args=None,purpose='bounded_engineering'):
         control['grants'] += 1
         prepared = {} if resume is None else dict(resume_checkpoint_sha256=selected.file_sha(resume))
+        if comparison_reference is not None:
+            prepared['comparison_reference_sha256']=reference_pin or selected.file_sha(comparison_reference)
+        if encoding_args:
+            for source,target in (('expected_encoding_sha256','encoding_sha256'),
+                    ('expected_encoding_receipt_sha256','encoding_receipt_sha256'),
+                    ('expected_train_window_manifest_sha256','train_window_manifest_sha256')):
+                prepared[target]=encoding_args[source]
         candidate_id='A0'
         if graph_condition is not None:
             from knowledge_tracing.akt.research_junyi_graph import JunyiGraphPhaseSession
@@ -205,18 +213,22 @@ def harness(tmp_path, monkeypatch):
             config_sha256=authorization.config_hash(config),inputs_identity=inputs.identity,
             gate_sha256=gate['report_sha256'],runtime_sha256=selected.file_sha(runtime)),
             prepared_inputs=prepared,approval_reference='unit-test-fixture-only',
-            workload_epochs=epochs,purpose='bounded_engineering')
+            workload_epochs=epochs,purpose=purpose)
         authorization_file = tmp_path/f'authorization-{control["grants"]:02d}.json'
         authorization_file.write_text(json.dumps(grant))
         runner=selected.run_a0_junyi_selected if graph_condition is None else selected.run_junyi_selected
         extra={} if graph_condition is None else dict(graph_condition=graph_condition)
+        extra.update(encoding_args or {})
         return runner(config,profile,inputs,
             authorization_file=authorization_file,expected_authorization_sha256=selected.file_sha(authorization_file),
             runtime_report=runtime,lock_file=lock,resume_checkpoint=resume,
-            expected_resume_sha256=None if resume is None else selected.file_sha(resume),**extra)
+            expected_resume_sha256=None if resume is None else selected.file_sha(resume),
+            comparison_reference_file=comparison_reference,
+            expected_comparison_reference_sha256=None if comparison_reference is None else (
+                reference_pin or selected.file_sha(comparison_reference)),**extra)
 
     return SimpleNamespace(run=run,control=control,config=config,inputs=inputs,
-                           native_load=native_load,native_snapshot=native_snapshot,encoding=encoding)
+                           native_load=native_load,native_snapshot=native_snapshot,encoding=encoding,profile=profile)
 
 
 def graph_condition(harness):

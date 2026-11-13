@@ -150,12 +150,38 @@ def _make_selected_adapter(config, profile, encoding, view, condition):
         phase=JunyiGraphPhaseSession(condition,view),cuda_profile=profile)
 
 
+def _comparison_candidate(config, profile, inputs, encoding, initial_backbone, *,
+        encoding_file, encoding_receipt, train_window_cache, graph_condition, candidate_id):
+    """Đo các định danh đầu vào thực để đối chiếu A0 đã nghiệm thu."""
+    from .comparison_contract import TRAINING_FIELDS
+    if any(value is None for value in (encoding_file,encoding_receipt,train_window_cache)):
+        raise ValueError('Matched comparison requires prepared encoding and window cache')
+    config_values = json.loads(json.dumps(asdict(config),default=str))
+    candidate = dict(candidate_id=candidate_id,
+        data_pins=dict(roles=file_sha(inputs.paths.split_manifest),
+            selected_manifest=file_sha(inputs.paths.canonical_manifest),
+            encoding=file_sha(encoding_file),encoding_receipt=file_sha(encoding_receipt),
+            window_manifest=file_sha(Path(train_window_cache)/'manifest.json')),
+        roles_identity=inputs.train.roles.identity,encoding_identity=encoding.identity,
+        train_view_identity=inputs.train.identity,train_targets=inputs.train_targets,
+        selection_targets=inputs.selection_targets,prediction_implementation='legacy_single_window_v1',
+        initial_backbone_sha256=initial_backbone,numeric_profile=asdict(profile),
+        training_config={key:config_values[key] for key in TRAINING_FIELDS})
+    if graph_condition is not None:
+        candidate['graph_provenance'] = dict(train_view_identity=graph_condition.encoding.fit_view.identity,
+            encoding_identity=graph_condition.encoding.identity,
+            history_scope='effective_native_window_prefix',artifact_sha256=graph_condition.identity,
+            topology_source_sha256=graph_condition.topology_source_sha256,uses_oracle_labels=False)
+    return candidate
+
+
 def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         inputs: JunyiSelectedInputs, *, authorization_file, expected_authorization_sha256,
         runtime_report, lock_file, encoding_file=None, expected_encoding_sha256=None,
         train_window_cache=None, expected_train_window_manifest_sha256=None,
         resume_checkpoint=None, expected_resume_sha256=None,
-        encoding_receipt=None, expected_encoding_receipt_sha256=None, graph_condition=None):
+        encoding_receipt=None, expected_encoding_receipt_sha256=None, graph_condition=None,
+        comparison_reference_file=None, expected_comparison_reference_sha256=None):
     """A0 hoặc A1 expert, selected fit80/rawbest10 với cùng state machine."""
     validate_config(config,cuda_profile=profile)
     if config.phase!='junyi-research' or config.execution_enabled is not True:
@@ -166,7 +192,27 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
     if file_sha(authorization_file)!=expected_authorization_sha256:
         raise PermissionError('Authorization file changed')
     grant = json.loads(Path(authorization_file).read_text(encoding='utf-8'))
+    if (comparison_reference_file is None)!=(expected_comparison_reference_sha256 is None):
+        raise ValueError('Comparison reference path and external pin required together')
+    if (graph_condition is not None and grant.get('purpose')=='main_selected'
+            and comparison_reference_file is None):
+        raise PermissionError('Main graph training requires a pinned A0 comparison reference')
     prepared = {}
+    comparison_reference = None
+    if comparison_reference_file is not None:
+        if file_sha(comparison_reference_file)!=expected_comparison_reference_sha256:
+            raise ValueError('Comparison reference changed')
+        document = json.loads(Path(comparison_reference_file).read_text(encoding='utf-8'))
+        if document.get('status')!='PASS_A0_DATA_LINEAGE_CANDIDATES_PENDING':
+            raise ValueError('Verified A0 data-lineage reference required')
+        comparison_reference = document['reference']
+        prepared['comparison_reference_sha256']=expected_comparison_reference_sha256
+        if grant.get('purpose')=='main_selected':
+            verified_inputs=load_full_selected_cache(inputs.paths.canonical.parent,inputs.paths.split_manifest,
+                expected_manifest_sha256=comparison_reference['data_pins']['selected_manifest'],
+                expected_roles_sha256=comparison_reference['data_pins']['roles'])
+            if verified_inputs != inputs:
+                raise ValueError('Main comparison inputs differ from verified frozen cache')
     candidate_id = 'A0'
     if graph_condition is not None:
         from .research_junyi_graph import JunyiGraphCondition
@@ -241,6 +287,8 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         identity.update(kind='junyi_a1_selected_v1',candidate_id=candidate_id,
             batch_factory=dict(condition_sha256=graph_condition.identity,encoding_sha256=encoding.identity,
                 phase_sha256=inputs.train.identity,graph_enabled=True))
+    if comparison_reference is not None:
+        identity['comparison_reference_sha256']=expected_comparison_reference_sha256
     if resume_checkpoint is None:
         write_json(output/'run-manifest.json',identity)
     elif json.loads((output/'run-manifest.json').read_text())!=identity or (output/'COMPLETE.json').exists():
@@ -261,6 +309,17 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         write_json(initial_path,dict(sha256=initial_backbone,seed=42,encoding_identity=encoding.identity))
     elif json.loads(initial_path.read_text())['sha256']!=initial_backbone:
         raise ValueError('Resume backbone initialization differs from frozen run')
+    comparison_candidate = None
+    if comparison_reference is not None:
+        from .comparison_contract import require_matched_candidate
+        comparison_candidate = _comparison_candidate(config,profile,inputs,encoding,initial_backbone,
+            encoding_file=encoding_file,encoding_receipt=encoding_receipt,
+            train_window_cache=train_window_cache,graph_condition=graph_condition,candidate_id=candidate_id)
+        require_matched_candidate(comparison_reference,comparison_candidate)
+        write_json(output/f'comparison-admission-{attempt_id}.json',dict(
+            status='MATCHED_A0_INPUTS_INITIALIZATION_AND_TRAINING_CONFIG',
+            reference_sha256=expected_comparison_reference_sha256,candidate=comparison_candidate,
+            expected_selection_population_sha256=comparison_reference['selection_population_sha256']))
     optimizer = torch.optim.Adam(adapter.native.parameters(),lr=config.lr,betas=config.betas,eps=config.eps,
         weight_decay=config.weight_decay,foreach=False,fused=False,capturable=False,differentiable=False,
         amsgrad=False,maximize=False,decoupled_weight_decay=False)
@@ -366,6 +425,9 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         validation_started=time.monotonic()
         validation = _evaluate(adapter,
             iter_junyi_phase_learners(inputs.paths,inputs.selection,**reader_options),inputs.selection_targets)
+        if comparison_candidate is not None:
+            require_matched_candidate(comparison_reference,dict(comparison_candidate,
+                observed_selection_population_sha256=validation['population_sha256']),observed=True)
         if population is not None and validation['population_sha256'] != population:
             raise ValueError('Selection population changed across epochs')
         population = validation['population_sha256']
@@ -419,6 +481,9 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         external_freeze=False,refit_completed=False,calibration_completed=False)
     if graph_condition is not None:
         terminal.update(candidate_id=candidate_id,graph_condition_sha256=graph_condition.identity)
+    if comparison_reference is not None:
+        terminal.update(comparison_reference_sha256=expected_comparison_reference_sha256,
+            comparison_population_matched=True)
     write_json(output/'selected-terminal.json',terminal)
     write_json(output/'COMPLETE.json',dict(status=terminal['status'],terminal_sha256=file_sha(output/'selected-terminal.json')))
     return terminal
@@ -429,7 +494,8 @@ def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfi
         runtime_report, lock_file, encoding_file=None, expected_encoding_sha256=None,
         train_window_cache=None, expected_train_window_manifest_sha256=None,
         resume_checkpoint=None, expected_resume_sha256=None,
-        encoding_receipt=None, expected_encoding_receipt_sha256=None):
+        encoding_receipt=None, expected_encoding_receipt_sha256=None,
+        comparison_reference_file=None, expected_comparison_reference_sha256=None):
     """Giữ entrypoint và hợp đồng A0 hiện có."""
     return run_junyi_selected(config,profile,inputs,authorization_file=authorization_file,
         expected_authorization_sha256=expected_authorization_sha256,runtime_report=runtime_report,
@@ -437,4 +503,6 @@ def run_a0_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfi
         train_window_cache=train_window_cache,
         expected_train_window_manifest_sha256=expected_train_window_manifest_sha256,
         resume_checkpoint=resume_checkpoint,expected_resume_sha256=expected_resume_sha256,
-        encoding_receipt=encoding_receipt,expected_encoding_receipt_sha256=expected_encoding_receipt_sha256)
+        encoding_receipt=encoding_receipt,expected_encoding_receipt_sha256=expected_encoding_receipt_sha256,
+        comparison_reference_file=comparison_reference_file,
+        expected_comparison_reference_sha256=expected_comparison_reference_sha256)

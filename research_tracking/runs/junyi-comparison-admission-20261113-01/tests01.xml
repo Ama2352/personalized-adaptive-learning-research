@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="20" time="20.519" timestamp="2026-11-13T10:49:38.522592+07:00" hostname="Ama"><testcase classname="tests.akt.test_junyi_comparison_admission" name="test_main_graph_requires_reference_before_model_or_train" time="0.062" /><testcase classname="tests.akt.test_junyi_comparison_admission" name="test_matched_reference_is_bound_to_checkpoint_and_terminal[False]" time="8.319" /><testcase classname="tests.akt.test_junyi_comparison_admission" name="test_matched_reference_is_bound_to_checkpoint_and_terminal[True]" time="0.872" /><testcase classname="tests.akt.test_junyi_comparison_admission" name="test_changed_reference_pin_stops_before_model" time="0.075" /><testcase classname="tests.akt.test_junyi_comparison_admission" name="test_mismatch_stops_before_first_optimizer_step[initial_backbone_sha256-0000000000000000000000000000000000000000000000000000000000000000]" time="0.129" /><testcase classname="tests.akt.test_junyi_comparison_admission" name="test_mismatch_stops_before_first_optimizer_step[encoding_identity-0000000000000000000000000000000000000000000000000000000000000000]" time="0.144" /><testcase classname="tests.akt.test_junyi_comparison_admission" name="test_mismatch_stops_before_first_optimizer_step[train_targets-5]" time="0.096" /><testcase classname="tests.akt.test_junyi_comparison_admission" name="test_mismatch_stops_before_first_optimizer_step[selection_targets-3]" time="0.109" /><testcase classname="tests.akt.test_junyi_comparison_admission" name="test_mismatch_stops_before_first_optimizer_step[roles_identity-0000000000000000000000000000000000000000000000000000000000000000]" time="0.094" /><testcase classname="tests.akt.test_junyi_comparison_admission" name="test_population_mismatch_cannot_publish_selected_checkpoint" time="0.142" /><testcase classname="tests.akt.test_junyi_comparison_admission" name="test_reference_change_is_rejected_on_resume" time="0.201" /><testcase classname="tests.akt.test_junyi_selected_runner" name="test_selection_uses_legacy_prediction_path" time="0.302" /><testcase classname="tests.akt.test_junyi_selected_runner" name="test_graph_selection_shares_stopping_checkpoint_and_export_protocol" time="0.807" /><testcase classname="tests.akt.test_junyi_selected_runner" name="test_graph_selection_resumes_before_validation_without_retraining" time="0.221" /><testcase classname="tests.akt.test_junyi_selected_runner" name="test_graph_selection_rejects_a0_authorization" time="0.037" /><testcase classname="tests.akt.test_junyi_selected_runner" name="test_early_stopping_reloads_best_complete_checkpoint" time="0.823" /><testcase classname="tests.akt.test_junyi_selected_runner" name="test_epoch_checkpoint_published_before_validation_failure" time="0.120" /><testcase classname="tests.akt.test_junyi_selected_runner" name="test_resume_prevalidation_checkpoint_skips_completed_training" time="0.221" /><testcase classname="tests.akt.test_junyi_selected_runner" name="test_resume_postvalidation_restores_history_and_stopper" time="0.872" /><testcase classname="tests.akt.test_junyi_selected_runner" name="test_partial_epoch_is_recoverable_and_never_selected_final" time="0.074"><failure message="PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\comparison-admission-20261113-01\\test_partial_epoch_is_recovera0\\run\\batch-recovery\\unit-epoch001-step001.pt' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\comparison-admission-20261113-01\\test_partial_epoch_is_recovera0\\run\\checkpoints\\unit-epoch001-step001\\state.pt'">harness = namespace(run=&lt;function harness.&lt;locals&gt;.run at 0x0000023E034AA700&gt;, control={'train_calls': [1], 'evaluate_calls': []...2=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8'))
+
+    def test_partial_epoch_is_recoverable_and_never_selected_final(harness):
+        harness.control['partial_epoch']=1
+&gt;       result = harness.run(epochs=1)
+                 ^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_selected_runner.py:329: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_selected_runner.py:222: in run
+    return runner(config,profile,inputs,
+src\knowledge_tracing\akt\research_junyi_selection.py:494: in run_a0_junyi_selected
+    return run_junyi_selected(config,profile,inputs,authorization_file=authorization_file,
+src\knowledge_tracing\akt\research_junyi_selection.py:380: in run_junyi_selected
+    stats = train_epoch(adapter,windows_factory,
+tests\akt\test_junyi_selected_runner.py:161: in train_epoch
+    recovery['checkpoint_callback'](path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/comparison-admission-20261113-01/test_partial_epoch_is_recovera0/run/batch-recovery/unit-epoch001-step001.pt')
+
+    def publish_batch(path):
+        import os
+        directory=output/'checkpoints'/path.stem
+        directory.mkdir(parents=True)
+&gt;       os.link(path,directory/'state.pt')
+E       PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\comparison-admission-20261113-01\\test_partial_epoch_is_recovera0\\run\\batch-recovery\\unit-epoch001-step001.pt' -&gt; 'D:\\Dev\\KLTN\\artifacts\\akt\\local-tests\\comparison-admission-20261113-01\\test_partial_epoch_is_recovera0\\run\\checkpoints\\unit-epoch001-step001\\state.pt'
+
+src\knowledge_tracing\akt\research_junyi_selection.py:352: PermissionError</failure></testcase></testsuite></testsuites>

@@ -25,6 +25,8 @@ def main():
     parser.add_argument('--train-window-manifest-sha256')
     parser.add_argument('--resume-checkpoint',type=Path)
     parser.add_argument('--resume-sha256')
+    parser.add_argument('--comparison-reference',type=Path)
+    parser.add_argument('--comparison-reference-sha256')
     args = parser.parse_args()
     profile = ResearchCUDAExecutionProfile(**json.loads(args.cuda_profile.read_text(encoding='utf-8')))
     config = load_config(args.config,cuda_profile=profile)
@@ -41,7 +43,9 @@ def main():
             expected_train_window_manifest_sha256=args.train_window_manifest_sha256,
             resume_checkpoint=args.resume_checkpoint,expected_resume_sha256=args.resume_sha256,
             encoding_receipt=args.encoding_receipt,
-            expected_encoding_receipt_sha256=args.encoding_receipt_sha256)
+            expected_encoding_receipt_sha256=args.encoding_receipt_sha256,
+            comparison_reference_file=args.comparison_reference,
+            expected_comparison_reference_sha256=args.comparison_reference_sha256)
         print(json.dumps(result),flush=True)
 
 
