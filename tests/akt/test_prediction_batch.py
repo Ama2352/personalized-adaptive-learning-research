@@ -59,6 +59,38 @@ class FakeAdapter:
         return result
 
 
+@pytest.mark.parametrize('batch',[1,4,128])
+def test_prefetch_exact_records_batches_and_rng(batch):
+    import random
+    students=[learner('u000',['A','B']*105+['OOV']+['A']*101),
+              learner('u001',['OOV','B','A'],start_row=1000)]
+    before=(random.getstate(),np.random.get_state())
+    first=FakeAdapter(batch_size=batch);second=FakeAdapter(batch_size=batch)
+    assert list(iter_predictions_batched(first,students,batch_size=batch))==list(
+        iter_predictions_batched(second,students,batch_size=batch,prefetch=True))
+    assert [tuple(w.window_id for w in group) for group in first.calls]==[
+        tuple(w.window_id for w in group) for group in second.calls]
+    assert random.getstate()==before[0]
+    after=np.random.get_state()
+    assert after[0]==before[1][0] and np.array_equal(after[1],before[1][1]) and after[2:]==before[1][2:]
+
+
+def test_prefetch_closes_source_when_model_fails():
+    from knowledge_tracing.akt.prediction_batch import prepare_prediction_windows,iter_prepared_predictions_batched
+    closed=[]
+    adapter=FakeAdapter(batch_size=1)
+    def prepared():
+        try:
+            yield from prepare_prediction_windows(adapter,[learner('u',['A']*1000)])
+        finally:
+            closed.append(True)
+    def fail(_windows):raise RuntimeError('unit model failure')
+    adapter.predict_windows=fail
+    with pytest.raises(RuntimeError,match='unit model failure'):
+        list(iter_prepared_predictions_batched(adapter,prepared(),batch_size=1,prefetch=True))
+    assert closed==[True]
+
+
 @pytest.mark.parametrize('items',[
     ['A','B','A'],
     ['A','B']*260,

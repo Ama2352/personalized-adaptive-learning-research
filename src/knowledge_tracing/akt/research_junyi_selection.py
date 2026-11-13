@@ -109,16 +109,23 @@ def _prediction_implementation(batch_size):
     return 'legacy_single_window_v1' if batch_size is None else f'batched_windows_v1_batch{batch_size}'
 
 
-def _evaluate(adapter, learners, target_count, *, output=None, batch_size=None):
+def _evaluate(adapter, learners, target_count, *, output=None, batch_size=None, selection_cache=None,
+              prefetch=False):
     """Giữ hai vector số bounded, stream identity/output thay vì giữ hàng triệu dict."""
     import numpy as np
     import torch
     from .prediction import iter_predictions
-    if batch_size is None:
+    if selection_cache is not None:
+        from .research_junyi_selection_cache import SelectionCacheSession
+        from .prediction_batch import iter_prepared_predictions_batched
+        if type(selection_cache) is not SelectionCacheSession or batch_size is None:
+            raise ValueError('Typed selection cache requires admitted prediction batching')
+        records=iter_prepared_predictions_batched(adapter,selection_cache.iter_prepared(),batch_size=batch_size,prefetch=prefetch)
+    elif batch_size is None:
         records=iter_predictions(adapter,learners)
     else:
         from .prediction_batch import iter_predictions_batched
-        records=iter_predictions_batched(adapter,learners,batch_size=batch_size)
+        records=iter_predictions_batched(adapter,learners,batch_size=batch_size,prefetch=prefetch)
     probabilities = np.empty(target_count,dtype=np.float32)
     labels = np.empty(target_count,dtype=np.float32)
     supported = total = 0
@@ -197,7 +204,10 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         encoding_receipt=None, expected_encoding_receipt_sha256=None, graph_condition=None,
         comparison_reference_file=None, expected_comparison_reference_sha256=None,
         validation_batch_size=None, train_graph_context_cache=None,
-        expected_train_graph_context_cache_sha256=None):
+        expected_train_graph_context_cache_sha256=None,
+        selection_window_cache=None, expected_selection_cache_manifest_sha256=None,
+        prefetch_train_windows=False, source_transition_file=None,
+        expected_source_transition_sha256=None, prefetch_selection_windows=False):
     """A0 hoặc A1 expert, selected fit80/rawbest10 với cùng state machine."""
     validate_config(config,cuda_profile=profile)
     if validation_batch_size is not None and (type(validation_batch_size) is not int
@@ -217,6 +227,34 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
             and comparison_reference_file is None):
         raise PermissionError('Main graph training requires a pinned A0 comparison reference')
     prepared = {}
+    if type(prefetch_selection_windows) is not bool or (prefetch_selection_windows and validation_batch_size is None):
+        raise ValueError('Boolean selection prefetch requires admitted batching')
+    if prefetch_selection_windows:
+        prepared['prefetch_selection_windows']=True
+    if (source_transition_file is None)!=(expected_source_transition_sha256 is None):
+        raise ValueError('Source transition receipt and external pin required together')
+    transition = None
+    if source_transition_file is not None:
+        if resume_checkpoint is None or graph_condition is None:
+            raise ValueError('Source transition requires A1 checkpoint resume')
+        if file_sha(source_transition_file)!=expected_source_transition_sha256:
+            raise ValueError('Source transition receipt changed')
+        transition=json.loads(Path(source_transition_file).read_text(encoding='utf-8'))
+        if set(transition)!= {'source_identity','evidence'}:
+            raise ValueError('Explicit source identity and parity evidence required')
+        prepared['source_transition_sha256']=expected_source_transition_sha256
+    if type(prefetch_train_windows) is not bool or (prefetch_train_windows and train_window_cache is None):
+        raise ValueError('Boolean prefetch requires pinned train window cache')
+    if prefetch_train_windows:
+        prepared['prefetch_train_windows']=True
+    if (selection_window_cache is None)!=(expected_selection_cache_manifest_sha256 is None):
+        raise ValueError('Selection cache path and pin required together')
+    if selection_window_cache is not None:
+        if validation_batch_size is None or encoding_file is None:
+            raise ValueError('Selection cache requires pinned encoding and admitted batching')
+        if file_sha(Path(selection_window_cache)/'manifest.json')!=expected_selection_cache_manifest_sha256:
+            raise ValueError('Selection cache manifest changed')
+        prepared['selection_cache_manifest_sha256']=expected_selection_cache_manifest_sha256
     if (train_graph_context_cache is None)!=(expected_train_graph_context_cache_sha256 is None):
         raise ValueError('Graph context cache path and pin required together')
     if train_graph_context_cache is not None:
@@ -288,7 +326,7 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
     from .research_runner import _state_hash
     _cuda_execution_check(profile,synchronize=True)
     output = config.output_dir
-    output.mkdir(exist_ok=resume_checkpoint is not None)
+    output.mkdir(exist_ok=resume_checkpoint is not None and transition is None)
     started = time.monotonic()
     reader_options=dict(temp_dir=PROJECT_ROOT/'artifacts/akt/tmp'/config.run_id)
     if encoding_file is None:
@@ -308,7 +346,7 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         from .research_junyi_window_cache import JunyiWindowCacheSession
         cache_session=JunyiWindowCacheSession(train_window_cache,view=inputs.train,
             encoding=encoding,source_data_sha256=inputs.source_identity,expected_target_rows=inputs.train_targets,
-            expected_manifest_sha256=expected_train_window_manifest_sha256)
+            expected_manifest_sha256=expected_train_window_manifest_sha256,prefetch=prefetch_train_windows)
         windows_factory=cache_session.iter_windows
     graph_cache = None
     if train_graph_context_cache is not None:
@@ -320,6 +358,14 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
             window_manifest_sha256=expected_train_window_manifest_sha256)
         if graph_cache.targets!=inputs.train_targets:
             raise ValueError('Graph context cache target population differs')
+    selection_session = None
+    if selection_window_cache is not None:
+        from .research_junyi_selection_cache import SelectionCacheSession
+        selection_session=SelectionCacheSession(selection_window_cache,view=inputs.selection,
+            encoding=encoding,source_sha256=inputs.source_identity,expected_targets=inputs.selection_targets,
+            expected_manifest_sha256=expected_selection_cache_manifest_sha256)
+        if comparison_reference is not None and selection_session.manifest['population_sha256']!=comparison_reference['selection_population_sha256']:
+            raise ValueError('Selection cache population differs from A0 reference')
     identity = dict(kind='junyi_a0_selected_v1',inputs=inputs.identity,encoding=encoding.identity,
         prediction_implementation=_prediction_implementation(validation_batch_size),
         config=json.loads(json.dumps(asdict(config),default=str)),profile=asdict(profile),
@@ -333,7 +379,17 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         identity['comparison_reference_sha256']=expected_comparison_reference_sha256
     if validation_batch_size is not None:
         identity['validation_batch_size']=validation_batch_size
-    if resume_checkpoint is None:
+    if selection_session is not None:
+        identity['selection_cache_manifest_sha256']=expected_selection_cache_manifest_sha256
+    if prefetch_train_windows:
+        identity['prefetch_train_windows']=True
+    if prefetch_selection_windows:
+        identity['prefetch_selection_windows']=True
+    if transition is not None:
+        from .research_junyi_transition import validate_source_transition
+        validate_source_transition(transition['source_identity'],identity,transition['evidence'],
+            checkpoint_sha256=expected_resume_sha256)
+    if resume_checkpoint is None or transition is not None:
         write_json(output/'run-manifest.json',identity)
     elif json.loads((output/'run-manifest.json').read_text())!=identity or (output/'COMPLETE.json').exists():
         raise ValueError('Resume requires identical unfinished logical run')
@@ -352,7 +408,7 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
     else:
         initial_backbone=_state_hash(adapter)
     initial_path=output/'initial-backbone.json'
-    if resume_checkpoint is None:
+    if resume_checkpoint is None or transition is not None:
         write_json(initial_path,dict(sha256=initial_backbone,seed=42,encoding_identity=encoding.identity))
     elif json.loads(initial_path.read_text())['sha256']!=initial_backbone:
         raise ValueError('Resume backbone initialization differs from frozen run')
@@ -373,6 +429,10 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
         amsgrad=False,maximize=False,decoupled_weight_decay=False)
     stopper = EarlyStopping(config.patience,config.min_delta)
     evaluation_options={} if validation_batch_size is None else dict(batch_size=validation_batch_size)
+    if prefetch_selection_windows:
+        evaluation_options['prefetch']=True
+    if selection_session is not None:
+        evaluation_options['selection_cache']=selection_session
     steps = targets = 0
     history = []
     population = None
@@ -380,7 +440,21 @@ def run_junyi_selected(config: AKTConfig, profile: ResearchCUDAExecutionProfile,
     pending_stats=None
     epoch_resume=None
     if resume_checkpoint is not None:
-        payload=load_training_snapshot(resume_checkpoint,expected_identity=identity,device='cuda')
+        source_identity=identity if transition is None else transition['source_identity']
+        payload=load_training_snapshot(resume_checkpoint,expected_identity=source_identity,device='cuda')
+        if transition is not None:
+            progress=payload.get('progress',{})
+            stats=progress.get('epoch_stats',{})
+            if (payload.get('checkpoint_kind') is not None or progress.get('complete') is not True
+                    or progress.get('epoch')!=1 or progress.get('validation_complete') is not False
+                    or progress.get('history')!=[] or progress.get('optimizer_steps')!=0
+                    or progress.get('valid_targets')!=0 or stats.get('complete') is not True
+                    or stats.get('valid_targets')!=inputs.train_targets):
+                raise ValueError('Source transition only supports full epoch1 before validation')
+            write_json(output/'source-transition.json',dict(
+                source_checkpoint_sha256=expected_resume_sha256,receipt_sha256=expected_source_transition_sha256,
+                source_identity=source_identity,target_identity=identity,
+                scope='complete_epoch1_preserved_validation_pending'))
         if payload.get('checkpoint_kind')=='training_recovery_v1':
             state=payload['resume_state']['trainer_state']['selection_state']
             first_epoch=payload['resume_state']['epoch']

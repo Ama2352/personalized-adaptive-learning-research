@@ -180,7 +180,7 @@ def harness(tmp_path, monkeypatch):
         epoch = int(adapter.native.epoch_marker.item())
         control['evaluate_calls'].append((epoch,output is not None))
         control.setdefault('validation_batches',[]).append(batch_size)
-        prevalidation = config.output_dir/'checkpoints'/f'train-epoch-{epoch:03d}'
+        prevalidation = adapter.config.output_dir/'checkpoints'/f'train-epoch-{epoch:03d}'
         assert (prevalidation/'COMPLETE.json').is_file()
         assert (prevalidation/'state.pt').is_file()
         if control['fail_validation_epoch']==epoch:
@@ -195,11 +195,14 @@ def harness(tmp_path, monkeypatch):
 
     def run(*, epochs=20,resume=None,graph_condition=None,wrong_graph_grant=False,
             comparison_reference=None,reference_pin=None,encoding_args=None,purpose='bounded_engineering',
-            validation_batch_size=None,bind_validation_batch=True):
+            validation_batch_size=None,bind_validation_batch=True,config_override=None,transition_file=None):
+        actual_config=config if config_override is None else config_override
         control['grants'] += 1
         prepared = {} if resume is None else dict(resume_checkpoint_sha256=selected.file_sha(resume))
         if validation_batch_size is not None and bind_validation_batch:
             prepared['validation_batch_size']=validation_batch_size
+        if transition_file is not None:
+            prepared['source_transition_sha256']=selected.file_sha(transition_file)
         if comparison_reference is not None:
             prepared['comparison_reference_sha256']=reference_pin or selected.file_sha(comparison_reference)
         if encoding_args:
@@ -222,7 +225,7 @@ def harness(tmp_path, monkeypatch):
                 prepared['graph_condition_sha256']=graph_condition.identity
                 candidate_id='A1_EXPERT'
         grant = dict(status='USER_APPROVED',binding=dict(candidate_id=candidate_id,phase='junyi_selected_only',
-            config_sha256=authorization.config_hash(config),inputs_identity=inputs.identity,
+            config_sha256=authorization.config_hash(actual_config),inputs_identity=inputs.identity,
             gate_sha256=gate['report_sha256'],runtime_sha256=selected.file_sha(runtime)),
             prepared_inputs=prepared,approval_reference='unit-test-fixture-only',
             workload_epochs=epochs,purpose=purpose)
@@ -230,8 +233,11 @@ def harness(tmp_path, monkeypatch):
         authorization_file.write_text(json.dumps(grant))
         runner=selected.run_a0_junyi_selected if graph_condition is None else selected.run_junyi_selected
         extra={} if graph_condition is None else dict(graph_condition=graph_condition)
+        if transition_file is not None:
+            extra.update(source_transition_file=transition_file,
+                expected_source_transition_sha256=selected.file_sha(transition_file))
         extra.update(encoding_args or {})
-        return runner(config,profile,inputs,
+        return runner(actual_config,profile,inputs,
             authorization_file=authorization_file,expected_authorization_sha256=selected.file_sha(authorization_file),
             runtime_report=runtime,lock_file=lock,resume_checkpoint=resume,
             expected_resume_sha256=None if resume is None else selected.file_sha(resume),
@@ -371,3 +377,31 @@ def test_completed_logical_run_cannot_resume(harness):
     path = harness.config.output_dir/'checkpoints/epoch-005/state.pt'
     with pytest.raises(ValueError,match='unfinished logical run'):
         harness.run(resume=path)
+
+
+def test_explicit_transition_preserves_completed_training_before_validation(harness,tmp_path,monkeypatch):
+    """State machine CPU giả, receipt-validator được kiểm riêng bằng dict thuần."""
+    from dataclasses import replace
+    from knowledge_tracing.akt import research_junyi_transition
+    condition=graph_condition(harness)
+    harness.control['fail_validation_epoch']=1
+    with pytest.raises(RuntimeError):harness.run(graph_condition=condition)
+    source=harness.config.output_dir/'checkpoints/train-epoch-001/state.pt'
+    source_identity=json.loads((harness.config.output_dir/'run-manifest.json').read_text())
+    transition_file=tmp_path/'unit-transition.json'
+    transition_file.write_text(json.dumps(dict(source_identity=source_identity,evidence={'unit_fixture':True})))
+    checked=[]
+    def validator(old,new,evidence,*,checkpoint_sha256):
+        assert old==source_identity and evidence=={'unit_fixture':True}
+        assert checkpoint_sha256==selected.file_sha(source)
+        checked.append(new)
+    monkeypatch.setattr(research_junyi_transition,'validate_source_transition',validator)
+    target=replace(harness.config,run_id='unit-transition-target',output_dir=tmp_path/'transition-target')
+    harness.control['fail_validation_epoch']=None
+    result=harness.run(epochs=1,resume=source,graph_condition=condition,config_override=target,
+                       transition_file=transition_file)
+    assert checked and harness.control['train_calls']==[1]
+    assert result['optimizer_steps']==2 and result['trained_targets']==4
+    assert result['history'][0]['epoch']==1
+    assert (target.output_dir/'source-transition.json').is_file()
+    assert selected.file_sha(source)==selected.file_sha(harness.config.output_dir/'checkpoints/train-epoch-001/state.pt')

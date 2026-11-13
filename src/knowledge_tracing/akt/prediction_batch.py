@@ -42,7 +42,7 @@ def _validate_learner(learner, previous_user):
 
 
 def iter_predictions_batched(adapter, learners: Iterable[LearnerEvents], *,
-                             batch_size: int | None = None) -> Iterator[PredictionRecord]:
+                             batch_size: int | None = None, prefetch: bool = False) -> Iterator[PredictionRecord]:
     """Giữ thứ tự record/OOV; chỉ cửa sổ nhân quả đi vào predict_windows.
 
 Batch tối đa128 cửa sổ, có thể chứa nhiều learner. Gặp OOV thì xuất batch đang
@@ -50,10 +50,57 @@ chờ trước, sau đó phát record null. Caller phải tiêu thụ iterator t
 Metadata/target coverage giữ cùng iterator lịch sử. Sai khác số học khi dùng
 batch CUDA cần được đo riêng trên runtime thật trước producer chính.
 """
+    yield from iter_prepared_predictions_batched(adapter,prepare_prediction_windows(adapter,learners),
+                                                 batch_size=batch_size,prefetch=prefetch)
+
+
+def prepare_prediction_windows(adapter, learners):
+    previous_user = None
+    for learner in learners:
+        _validate_learner(learner, previous_user)
+        events_by_row = {event.source_row: event for event in learner.events}
+        for window in iter_windows(learner, adapter.encoding, context=adapter.config.context,
+                                   target_block=adapter.config.target_block, training=False):
+            if isinstance(window, UnseenTarget):
+                yield window
+            else:
+                targets = tuple((int(index), events_by_row.get(int(window.inputs.source_rows[index])))
+                                for index in np.flatnonzero(window.target_mask))
+                yield window, targets
+        previous_user = learner.user_id
+
+
+def _prefetch_prepared(prepared,size):
+    """Một chunk tương lai, giữ nguyên record/OOV và đóng reader khi lỗi."""
+    from concurrent.futures import ThreadPoolExecutor
+    from itertools import islice
+    source=iter(prepared)
+    try:
+        with ThreadPoolExecutor(max_workers=1,thread_name_prefix='akt-selection') as executor:
+            def take():
+                return tuple(islice(source,size))
+            future=executor.submit(take)
+            try:
+                while True:
+                    chunk=future.result()
+                    if not chunk:
+                        break
+                    future=executor.submit(take)
+                    yield from chunk
+            finally:
+                future.cancel()
+    finally:
+        close=getattr(source,'close',None)
+        if close is not None:
+            close()
+
+
+def iter_prepared_predictions_batched(adapter, prepared, *, batch_size=None, prefetch=False):
+    """Chấm cùng batch từ input/metadata đã chuẩn bị; model chỉ nhận WindowInputs."""
     configured = adapter.config.batch_size
     requested = configured if batch_size is None else batch_size
     if (type(configured) is not int or not 1 <= configured <= 128
-            or type(requested) is not int or not 1 <= requested <= configured):
+            or type(requested) is not int or not 1 <= requested <= configured or type(prefetch) is not bool):
         raise ValueError('prediction batch must be an integer within configured1..128')
     checkpoint_id = _checkpoint_identity(adapter)
     support = adapter.encoding.train_support_students
@@ -84,14 +131,12 @@ batch CUDA cần được đo riêng trên runtime thật trước producer chí
                     bool(window.context_reset[index]), window.window_id, checkpoint_id)
         pending.clear()
 
-    previous_user = None
-    for learner in learners:
-        _validate_learner(learner, previous_user)
-        events_by_row = {event.source_row: event for event in learner.events}
-        for window in iter_windows(learner, adapter.encoding, context=adapter.config.context,
-                                   target_block=adapter.config.target_block, training=False):
-            if isinstance(window, UnseenTarget):
+    source=_prefetch_prepared(prepared,requested) if prefetch else prepared
+    try:
+        for record in source:
+            if isinstance(record, UnseenTarget):
                 yield from flush()
+                window = record
                 event = window.event
                 block_start = (window.global_rank // adapter.config.target_block) * adapter.config.target_block
                 base = max(0, block_start-adapter.config.context)
@@ -102,10 +147,11 @@ batch CUDA cần được đo riêng trên runtime thật trước producer chí
                     hashlib.sha256(f'{event.user_id}\0{window.global_rank}\0unseen'.encode()).hexdigest(),
                     checkpoint_id)
                 continue
-            targets = tuple((int(index), events_by_row.get(int(window.inputs.source_rows[index])))
-                            for index in np.flatnonzero(window.target_mask))
+            window, targets = record
             pending.append((window, targets))
             if len(pending) == requested:
                 yield from flush()
-        previous_user = learner.user_id
-    yield from flush()
+        yield from flush()
+    finally:
+        if prefetch:
+            source.close()

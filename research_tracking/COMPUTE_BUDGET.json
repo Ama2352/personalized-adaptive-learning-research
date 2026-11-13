@@ -6,7 +6,20 @@
   "authorization_reference": "Người dùng ngày 12/11/2026 cho phép tự phân bổ các khoản chi nhỏ, tổng toàn KLTN tối đa 30 USD free credits.",
   "historical_usage_reserved_upper_usd": 15.151990764299184,
   "safety_and_final_inference_reserve_usd": 3,
-  "new_allocations": [],
+  "new_allocations": [
+    {
+      "id": "junyi-a1-selection-cpu-20261113-01",
+      "cap_usd": 0.15,
+      "status": "BOUNDED_LINUX_CPU_GATE",
+      "purpose_vi": "Kiểm source cuối gồm cache/prefetch/transition trước H100, tối đa600giây CPU, không GPU"
+    },
+    {
+      "id": "junyi-a1-compact-resume-h100-20261113-01",
+      "cap_usd": 3,
+      "status": "READY_BOUNDED_CUDA_CANARY_AND_A1_RESUME",
+      "purpose_vi": "Một H100, kiểm checkpoint CUDA rồi nối validation epoch1/training A1 với source đã qua2528ca; không Holdout/fullCV."
+    }
+  ],
   "stop_rule": "Không mở lượt chạy nếu cận chi phí lịch sử, tổng allocation và dự phòng vượt 30 USD. Nếu chưa xác nhận dừng App thì kiểm trạng thái server trước lượt mới.",
   "historical_upper_note": "2 USD là dự phòng bảo thủ cho các lượt đã chạy trước ledger, không phải số chi phí đã đối soát cuối kỳ.",
   "provider_metering_note": "Snapshot có thể trễ hoặc được điều chỉnh. Không dùng billing alert làm giới hạn cứng. Mỗi lượt có watchdog, timeout và tối đa một GPU.",
@@ -21,9 +34,10 @@
   },
   "gpu_specific_holds": {
     "H100": {
-      "status": "HELD_PENDING_GRAPH_PIPELINE_CPU_OPTIMIZATION",
+      "status": "BOUNDED_CANARY_AND_CHECKPOINT_RESUME",
       "authorization_reference": "Người dùng yêu cầu tiếp tục training A1, đã cho phép tự phân bổ chi nhỏ trong trần toàn dự án30USD.",
-      "scope": "Người dùng yêu cầu ít nhất50%GPUutilization trongtraining. Checkpoint train-epoch1 đã giữ; cache/fastpath chưa triển khai; chỉ mở boundedcheck sau sửa CPUbottleneck, tổng30USD."
+      "scope": "Gate Linux2528PASS; T4 compact≥50%GPU trong kiểm trước; checkpoint thật CPU drift0. Worker phải đạt CUDA canary trước producer. Một GPU, cap3USD/tranche trong30USD toànKLTN, giữ checkpoint và đánh giá telemetry thực.",
+      "evidence": "research_tracking/runs/junyi-a1-selection-cache-20261113-01/"
     }
   },
   "concurrency_final_billing_snapshot": {

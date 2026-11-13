@@ -332,6 +332,7 @@ kiểm key/encoding ở đầu–cuối lượt và kiểm SHA/bytes từng shar
     source_data_sha256: str
     expected_target_rows: int
     expected_manifest_sha256: str
+    prefetch: bool = False
     strict_records_verified: int = field(init=False)
     strict_seconds: float = field(init=False)
     _root: Path = field(init=False, repr=False)
@@ -343,6 +344,7 @@ kiểm key/encoding ở đầu–cuối lượt và kiểm SHA/bytes từng shar
     _summary: tuple = field(init=False, repr=False)
 
     def __post_init__(self):
+        _need(type(self.prefetch) is bool, 'Boolean shard prefetch control required')
         started = time.monotonic()
         root = _owned_root(self.cache_root)
         self._check_control_files(root)
@@ -397,9 +399,28 @@ kiểm key/encoding ở đầu–cuối lượt và kiểm SHA/bytes từng shar
         self.assert_boundary()
         records = tokens = targets = 0
         limits = dict(shard_records=self._limits[0], max_shard_tokens=self._limits[1])
-        for pin in self._shards:
+        def read(pin):
             entry = dict(zip(('name', 'sha256', 'bytes', 'records', 'tokens'), pin))
-            for record in _load_shard(self._root/entry['name'], entry, limits):
+            return _load_shard(self._root/entry['name'], entry, limits)
+
+        def shards():
+            if not self.prefetch:
+                for pin in self._shards:
+                    yield read(pin)
+                return
+            # Chỉ một shard tương lai. Reader không dùng RNG của model/sampler.
+            from concurrent.futures import ThreadPoolExecutor
+            with ThreadPoolExecutor(max_workers=1,thread_name_prefix='akt-shard') as executor:
+                pending=None
+                for index,pin in enumerate(self._shards):
+                    current=list(read(pin)) if pending is None else pending.result()
+                    pending=None
+                    if index+1<len(self._shards):
+                        pending=executor.submit(lambda next_pin: list(read(next_pin)),self._shards[index+1])
+                    yield current
+
+        for shard in shards():
+            for record in shard:
                 records += 1
                 if type(record) is UnseenTarget:
                     targets += 1

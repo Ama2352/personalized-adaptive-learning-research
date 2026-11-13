@@ -15,6 +15,38 @@ from knowledge_tracing.akt import research_junyi_window_cache as cache
 SOURCE = 'a'*64
 
 
+@pytest.mark.parametrize('scope',['train','selection'])
+def test_prefetch_preserves_order_bytes_and_counts(case,scope):
+    root,train,selection,encoding=case
+    view=train if scope=='train' else selection
+    items=['A','B']*205
+    if scope=='selection':items[102]='OOV'
+    source=records(view,encoding,items,[i%2 for i in range(len(items))])
+    receipt=build(case,view,source,shard_records=1)
+    kwargs=dict(view=view,encoding=encoding,source_data_sha256=SOURCE,
+        expected_target_rows=receipt['summary']['target_rows'],expected_manifest_sha256=receipt['manifest_sha256'])
+    sequential=cache.JunyiWindowCacheSession(root,**kwargs)
+    prefetched=cache.JunyiWindowCacheSession(root,**kwargs,prefetch=True)
+    for _ in range(2):
+        first=list(sequential.iter_windows());second=list(prefetched.iter_windows())
+        assert len(first)==len(second)==len(source)
+        for left,right in zip(first,second):assert_record_equal(left,right)
+
+
+def test_prefetch_propagates_background_read_error(case,monkeypatch):
+    root,train,_,encoding=case
+    source=records(train,encoding,['A']*305,[1]*305)
+    receipt=build(case,train,source,shard_records=1)
+    session=cache.JunyiWindowCacheSession(root,view=train,encoding=encoding,source_data_sha256=SOURCE,
+        expected_target_rows=305,expected_manifest_sha256=receipt['manifest_sha256'],prefetch=True)
+    original=cache._load_shard
+    def fail(path,entry,manifest):
+        if entry['name']=='shard-000001.npz':raise OSError('unit background read failure')
+        yield from original(path,entry,manifest)
+    monkeypatch.setattr(cache,'_load_shard',fail)
+    with pytest.raises(OSError,match='background read failure'):list(session.iter_windows())
+
+
 @pytest.fixture
 def case(tmp_path, monkeypatch):
     monkeypatch.setattr(cache, 'CACHE_BASE', tmp_path/'owned')
