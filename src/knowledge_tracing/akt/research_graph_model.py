@@ -30,11 +30,13 @@ from . import research_simulator_data as data
 from .tensors import AKTBatch, collate_windows
 from .types import TrainingWindow, WindowInputs
 from .upstream import build_native
+from .research_junyi_compact import CompactA1Context
 
 ROOT = Path(__file__).resolve().parents[3]
 RECIPE = conditions.RECIPE
 SOURCE_PATHS = tuple(sorted((
     'src/knowledge_tracing/akt/research_graph_model.py',
+    'src/knowledge_tracing/akt/research_junyi_compact.py',
     'src/knowledge_tracing/akt/research_graph_context.py',
     'src/knowledge_tracing/akt/research_graph_condition.py',
     'src/knowledge_tracing/akt/research_simulator_data.py',
@@ -127,6 +129,8 @@ def _cuda_execution_check(profile, *, synchronize=False):
 
 
 def _evidence_sha(evidence):
+    if type(evidence) is CompactA1Context:
+        return evidence.identity
     _need(type(evidence) is tuple and all(type(row) is tuple for row in evidence), 'immutable evidence rows required')
     _need(all(item is None or (is_dataclass(item) and not isinstance(item, type))
               for row in evidence for item in row), 'dataclass evidence required')
@@ -155,7 +159,7 @@ def _features(audit):
 class _Call:
     batch: AKTBatch
     payload_sha256: str
-    evidence: tuple
+    evidence: tuple | CompactA1Context
     evidence_sha256: str
     enabled: bool
 
@@ -202,15 +206,19 @@ class ResearchGraphNative(nn.Module):
         _need(self._call is None and type(enabled) is bool, 'one outstanding native context only')
         _need((self.variant, self.condition_sha256) == self._recipe_identity, 'native variant/condition drift')
         _need(_cuda_profile_sha(self.cuda_profile) == self._cuda_profile_sha, 'native CUDA execution profile drift')
-        _need(len(evidence) == batch.q_data.shape[0], 'context/batch row mismatch')
-        _need(all(len(row) <= batch.q_data.shape[1] for row in evidence), 'context/batch length mismatch')
-        target_mask = batch.target_mask.detach().cpu().numpy()
-        valid_mask = batch.valid_mask.detach().cpu().numpy()
-        for row, items in enumerate(evidence):
-            for local, item in enumerate(items):
-                if item is not None:
-                    _need(bool(target_mask[row, local]) and bool(valid_mask[row, local]), 'context outside target mask')
-                    _need(item.local_position == local and item.source_row == int(batch.source_rows[row, local]), 'context target identity mismatch')
+        if type(evidence) is CompactA1Context:
+            _need(self.variant=='A1', 'compact context requires A1')
+            evidence.assert_for(batch,self.condition_sha256)
+        else:
+            _need(len(evidence) == batch.q_data.shape[0], 'context/batch row mismatch')
+            _need(all(len(row) <= batch.q_data.shape[1] for row in evidence), 'context/batch length mismatch')
+            target_mask = batch.target_mask.detach().cpu().numpy()
+            valid_mask = batch.valid_mask.detach().cpu().numpy()
+            for row, items in enumerate(evidence):
+                for local, item in enumerate(items):
+                    if item is not None:
+                        _need(bool(target_mask[row, local]) and bool(valid_mask[row, local]), 'context outside target mask')
+                        _need(item.local_position == local and item.source_row == int(batch.source_rows[row, local]), 'context target identity mismatch')
         digest = _evidence_sha(evidence)
         _need(expected_evidence_sha256 is None or digest == expected_evidence_sha256,
               'expected native evidence drift')
@@ -242,7 +250,13 @@ class ResearchGraphNative(nn.Module):
         _need(all(p.device == self._device and p.dtype == torch.float32 for p in self.parameters()),
               'FP32 parameters on the explicit execution device required')
         active = []
-        if call.enabled and self.variant != 'A0':
+        compact_values = None
+        if call.enabled and type(call.evidence) is CompactA1Context:
+            _need(self.variant=='A1', 'compact context requires A1')
+            message,applied,_,_=call.evidence.arrays()
+            rows,positions=np.nonzero(applied)
+            compact_values=(rows,positions,message[applied])
+        elif call.enabled and self.variant != 'A0':
             for row, items in enumerate(call.evidence):
                 for local, item in enumerate(items):
                     if item is None:
@@ -254,7 +268,7 @@ class ResearchGraphNative(nn.Module):
                     if mass > 0:
                         message = sum(p.confidence * (p.mean_observed_correctness - .5) for p in observed) / max(1., mass)
                         active.append((row, local, message, None if self.variant == 'A1' else _features(audit)))
-        if not active:
+        if not active and (compact_values is None or len(compact_values[0])==0):
             # Includes A0, whole-off, empty graph and all-confidence-mass zero.
             return self.backbone(q_data, qa_data, target)
         # Exact NonRasch upstream operations; no inverse sigmoid or attention edit.
@@ -268,9 +282,11 @@ class ResearchGraphNative(nn.Module):
         residual = torch.zeros_like(base_logits)
         applied = torch.zeros_like(q_data, dtype=torch.bool)
         if self.variant == 'A1':
-            rows = torch.tensor([entry[0] for entry in active], dtype=torch.long, device=base_logits.device)
-            positions = torch.tensor([entry[1] for entry in active], dtype=torch.long, device=base_logits.device)
-            messages = base_logits.new_tensor([entry[2] for entry in active])
+            values = compact_values if compact_values is not None else (
+                [entry[0] for entry in active],[entry[1] for entry in active],[entry[2] for entry in active])
+            rows = torch.tensor(values[0], dtype=torch.long, device=base_logits.device)
+            positions = torch.tensor(values[1], dtype=torch.long, device=base_logits.device)
+            messages = base_logits.new_tensor(values[2])
             # Một phép ghi giữ gradient alpha=0, tránh chuỗi scalar CopySlices.
             residual[rows, positions] = self.alpha * base_logits.new_ones(()) * messages
             applied[rows, positions] = True

@@ -16,6 +16,7 @@ from .research_graph_model import (ResearchGraphNative, _batch_sha, _config_sha,
     _cuda_execution_check, _cuda_profile_sha, _evidence_sha, source_inventory)
 from .research_junyi_data import JunyiResearchEncoding
 from .research_junyi_graph import JunyiGraphCondition, JunyiGraphPhaseSession
+from .research_junyi_compact import CompactA1Context, build_compact_context
 from .tensors import AKTBatch, collate_windows
 from .types import TrainingWindow, WindowInputs
 
@@ -37,7 +38,7 @@ def _source_inventory():
 class _TrainingTicket:
     batch: AKTBatch
     batch_sha256: str
-    evidence: tuple
+    evidence: tuple | CompactA1Context
     evidence_sha256: str
     phase_identity: str
     graph_enabled: bool
@@ -49,7 +50,7 @@ class JunyiGraphAKTAdapter:
     def __init__(self, *, config: AKTConfig, encoding: JunyiResearchEncoding,
                  condition: JunyiGraphCondition, phase: JunyiGraphPhaseSession,
                  cuda_profile: ResearchCUDAExecutionProfile | None = None,
-                 graph_enabled: bool = True):
+                 graph_enabled: bool = True, compact_context: bool = False):
         _need(type(config) is AKTConfig and config.phase=='junyi-research',
               'Explicit Junyi research config required')
         validate_config(config,cuda_profile=cuda_profile)
@@ -57,6 +58,9 @@ class JunyiGraphAKTAdapter:
               'Typed Junyi encoding and graph condition required')
         _need(type(graph_enabled) is bool and condition.variant=='A1',
               'A1 condition and explicit Boolean graph control required')
+        _need(type(compact_context) is bool, 'Boolean compact context control required')
+        self._compact_context = compact_context
+        self._context_backend = compact_context
         _need(config.source_root==PROJECT_ROOT/'artifacts/akt/dependencies/upstream'
               and torch.get_default_dtype()==torch.float32, 'Pinned FP32 native construction required')
         condition.assert_integrity()
@@ -113,6 +117,8 @@ class JunyiGraphAKTAdapter:
         _need(_config_sha(self.config)==self._config_sha
               and _cuda_profile_sha(self.cuda_profile)==self._profile_sha, 'Junyi model config/profile changed')
         _need(type(self._graph_enabled) is bool, 'Boolean graph control required')
+        _need(type(self._compact_context) is bool and self._compact_context==self._context_backend,
+              'Junyi context backend changed')
         # Session kiểm header frozen và hash support nhỏ; full role audit ở boundary.
         self.phase._light_check()
         _need(self.phase.view.identity==self._phase_identity
@@ -139,13 +145,15 @@ class JunyiGraphAKTAdapter:
         """Danh tính graph/collator nhẹ để kiểm tại mỗi batch boundary."""
         self._integrity()
         return dict(condition_sha256=self._condition_sha,encoding_sha256=self._encoding_sha,
-                    phase_sha256=self._phase_identity,graph_enabled=self._graph_enabled)
+                    phase_sha256=self._phase_identity,graph_enabled=self._graph_enabled,
+                    context_backend='compact-a1-v1' if self._compact_context else 'reference')
 
     def _collate(self, windows, targets=None):
         _need(1<=len(windows)<=self.config.batch_size
               and all(type(window) is WindowInputs for window in windows), 'Bounded typed windows required')
         _need(len({window.window_id for window in windows})==len(windows), 'Duplicate native window IDs')
-        evidence = tuple(self.phase.prefix_evidence(window) for window in windows)
+        evidence = (build_compact_context(tuple(windows),self.phase) if self._compact_context
+                    else tuple(self.phase.prefix_evidence(window) for window in windows))
         batch = collate_windows(windows,n_items=len(self.encoding.vocabulary.values),
                                 device=self._device,targets=targets)
         return batch,evidence

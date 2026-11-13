@@ -1,0 +1,73 @@
+{
+  "status": "PASS_COMPACT_ADAPTER_CONTEXT_CPU_COMPONENT",
+  "scope": "CPU_GRAPH_CONTEXT_SINGLE_SHARD_DIAGNOSTIC",
+  "requested_windows": 128,
+  "seed": 43,
+  "max_rss_bytes": 1073741824,
+  "max_wall_seconds": 120,
+  "max_cpu_seconds": 120,
+  "gpu_used": false,
+  "model_constructed": false,
+  "model_trained": false,
+  "full_cache_verified": false,
+  "source_run": "modal-junyi-a1-b128-h100-20261113-05",
+  "peak_rss_bytes": 228655104,
+  "resource_failure": null,
+  "input_pins": {
+    "artifacts/akt/junyi-roles/outer4-research-v1-20261112-01/roles.json": "b0ca8f6949edd226e48d1cdb24e34ea34a042a385467e1650755994e96567ba3",
+    "artifacts/akt/window-cache/full-train80-20261112-02.encoding.json": "4d5d7330d17f48b3b7d759bc331a99523093cfd249a0f9d7fd455480789c209f",
+    "artifacts/akt/window-cache/full-train80-20261112-02.encoding.receipt.json": "9d05015ef08e0b45bfc8e0a27d0ae0b459fcc0b79f1c4d75bfb6c362cba32845",
+    "research_tracking/runs/cpu-junyi-graph-reconstruction-20261107-01/graph.json": "df7595b1437c46421cd7fea8cc2f3234ff9a69207961c4c34df4a78cae7f80b1",
+    "artifacts/akt/window-cache/full-train80-20261112-02/manifest.json": "43f48045370b6811e537d7936ed307291e1dee88be313c111e4879198556a839",
+    "src/knowledge_tracing/akt/research_graph_model.py": "ed8af1f46cb9e1b595141ed271a745af8736bc0b8057753df7b0025f42a39dfb",
+    "src/knowledge_tracing/akt/research_junyi_graph.py": "82397157252650c12a5e51fa22000afb767ae823b4bb57645440139b19c66571",
+    "src/knowledge_tracing/akt/research_junyi_data.py": "81bfb2a0be967e60c46fe72a4cfcd0395f39c6a0c53fca5b885269c5aaba70dd",
+    "src/knowledge_tracing/akt/research_junyi_window_cache.py": "4b637976a05f972b8e114b1abfe7ddd040560dd14fa4bbc9aa1e4591a5da3152",
+    "src/knowledge_tracing/akt/research_junyi_roles.py": "4a267a649871b919707a0dd3a8b6248d4844d0f5121480504e175fedd4c41126",
+    "artifacts/akt/window-cache/full-train80-20261112-02/shard-000000.npz": "72ae5f113e2e2aea950fc032881f266bc2825b54cf59941bd4c7771475b787e9",
+    "src/knowledge_tracing/akt/research_junyi_compact.py": "84066d9743affd72d5aa1a5578f2b14bb4ea204313f8aef693176de1631d681a",
+    "src/knowledge_tracing/akt/research_junyi_graph_model.py": "665bb669773a6f71c7ea130559a9cbdecffa280338a2f09bbb352cdaa1002350"
+  },
+  "encoding_identity": "0555833f58150121f1149ac7d3c4d0f0cad057b2dc530331e5ffbe83fc040ba1",
+  "condition_identity": "849023ee3224dbfbddeaf3bc5ed2e98fd342a7daaa8b40a747de6a84a9933ef8",
+  "role_identity": "7c9a8102e399bdbc6569fc5a929faae525480c86fe0c60d2d805244a80b8e45a",
+  "phase_identity": "d0131b7f05170cc447ba19c2b3deb6f0129107507b0cd47d90caa8988704b809",
+  "graph_edges": 976,
+  "vocabulary": 717,
+  "shard": "shard-000000.npz",
+  "shard_records": 256,
+  "selected_windows": 128,
+  "targets": 5527,
+  "window_tokens": 9327,
+  "unique_learners": 102,
+  "setup_seconds": 4.617815800000244,
+  "all_messages_fp32_exact": true,
+  "mask_exact": true,
+  "active_targets": 2246,
+  "timings": [
+    {
+      "method": "reference",
+      "seconds": 0.8399299000011524
+    },
+    {
+      "method": "compact",
+      "seconds": 0.06499219999750494
+    },
+    {
+      "method": "compact",
+      "seconds": 0.06545879999976023
+    },
+    {
+      "method": "reference",
+      "seconds": 0.8367832000003546
+    }
+  ],
+  "mean_seconds": {
+    "reference": 0.8383565500007535,
+    "compact": 0.06522549999863259
+  },
+  "component_speedup": 12.853202352121933,
+  "wall_seconds": 7.479047500000888,
+  "process_cpu_seconds": 6.28125,
+  "limits_vi": "128 window seed43 shard đầu TRAIN80. Chỉ đo dựng context/checksum, không forward/backward hoặc toàn epoch. Compact kiểm phase hai đầu batch và geometry từng window. Reference dùng helper JSON mới. Không đọc calibration/Holdout events."
+}

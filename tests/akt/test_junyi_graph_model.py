@@ -132,12 +132,12 @@ def setup(tmp_path,monkeypatch):
         graph = PrerequisiteGraph.from_edges(('A','B','C'),edges)
         return JunyiGraphCondition(encoding,graph,'a'*64)
 
-    def adapter(*,edges=(('A','C'),),phase=train,enabled=True):
+    def adapter(*,edges=(('A','C'),),phase=train,enabled=True,compact=False):
         cond = condition(edges)
         session = JunyiGraphPhaseSession(cond,phase)
         torch.manual_seed(42)
         return model.JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=cond,
-            phase=session,graph_enabled=enabled)
+            phase=session,graph_enabled=enabled,compact_context=compact)
 
     return dict(config=config,encoding=encoding,train=train,selection=selection,
                 student=student,condition=condition,adapter=adapter)

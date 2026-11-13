@@ -8541,5 +8541,68 @@
     "gpu_tested": false,
     "modal_spent_usd": 0,
     "next_vi": "Nối representation có version và input/source binding vào adapter/native, kiểm loss/gradient/Adam/RNG/resume từ source2. Sau đó đo full producer T4 trước H100; giữ mục tiêu GPU50% và cap30USD."
+  },
+  "a1_compact_adapter_t4_20261113": {
+    "status": "IMPLEMENTED_BOUNDED_CPU_CUDA_VERIFIED",
+    "bundle": "research_tracking/runs/junyi-a1-compact-adapter-20261113-01",
+    "source_pins": {
+      "src/knowledge_tracing/akt/research_junyi_compact.py": "84066d9743affd72d5aa1a5578f2b14bb4ea204313f8aef693176de1631d681a",
+      "src/knowledge_tracing/akt/research_graph_model.py": "ed8af1f46cb9e1b595141ed271a745af8736bc0b8057753df7b0025f42a39dfb",
+      "src/knowledge_tracing/akt/research_junyi_graph_model.py": "665bb669773a6f71c7ea130559a9cbdecffa280338a2f09bbb352cdaa1002350",
+      "src/knowledge_tracing/akt/research_junyi_selection.py": "6c3605a190374175c045adc2c1833beeb4375a6659cbcf07c1571ef9c3cd79d2",
+      "tests/akt/test_junyi_compact_context.py": "e1044b4a8d30d72c349779265ab8ba1934bbe7144b8bc8436a4000f27db159b0",
+      "tests/akt/test_junyi_graph_model.py": "0b54b177124bcb584fd24427aa7c1f29f3e53394aa40c34c77ae855bbe226356"
+    },
+    "local_tests_passed": 69,
+    "gpu_parity": [
+      {
+        "alpha": 0.0,
+        "status": "PASS",
+        "max_absolute_drift": 0.0,
+        "loss": 8410.705078125,
+        "targets": 12800
+      },
+      {
+        "alpha": 0.75,
+        "status": "PASS",
+        "max_absolute_drift": 0.0,
+        "loss": 8466.6240234375,
+        "targets": 12800
+      }
+    ],
+    "gpu_speedup": 4.065312424033821,
+    "gpu_telemetry": [
+      {
+        "method": "reference",
+        "steps": 8,
+        "seconds": 13.787333106999995,
+        "targets": 102400,
+        "targets_per_second": 7427.10712835467,
+        "samples": 44,
+        "gpu_util_mean_percent": 14.977272727272727,
+        "peak_memory_mib": 5305.0
+      },
+      {
+        "method": "compact",
+        "steps": 8,
+        "seconds": 3.3914572039999484,
+        "targets": 102400,
+        "targets_per_second": 30193.510883530394,
+        "samples": 12,
+        "gpu_util_mean_percent": 76.0,
+        "peak_memory_mib": 5305.0
+      }
+    ],
+    "cpu_component_speedup": 12.853202352121933,
+    "selected_producer_wired": true,
+    "full_producer_gpu_benchmarked": false,
+    "gpu50_observed_synthetic": true,
+    "gpu50_real_training_accepted": false,
+    "source2_checkpoint_migrated": false,
+    "full_linux_source_gate_passed": false,
+    "modal_spent_usd": 0,
+    "gpu_run_active": false,
+    "cache_on_disk_implemented": false,
+    "next_vi": "Đối chiếu source cuối/Gate Linux và nghiệm thu migration source2 epoch1 thật với manifest riêng. Giữ source/weights/optimizer/RNG/counters/population cũ, không bỏ kiểm identity. Sau đó workload đại diện tính cả I/O/validation/checkpoint trước dự toán full training. Tạm hoãn cache đĩa cho đến khi benchmark cho thấy còn cần."
   }
 }

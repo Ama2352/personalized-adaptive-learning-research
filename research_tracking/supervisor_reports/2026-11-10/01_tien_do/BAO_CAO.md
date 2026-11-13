@@ -1,5 +1,17 @@
 # Báo cáo tiến độ khóa luận — cập nhật 13/11/2026
 
+## 13/11 — A1 đã giảm thời gian cả bước học trên T4
+
+Sau thí nghiệm biểu diễn gọn trên CPU, nhóm đã nối cách chuẩn bị dữ liệu này vào adapter và bước training A1. Phần dữ liệu đồ thị được giữ thành các mảng số và bytes bất biến, giúp giảm tạo lại nhiều đối tượng Python. Các kiểm về vai người học, thứ tự thời gian, target và dữ liệu thay đổi vẫn được duy trì. Bước gọi selected-fit A1 đã được nối với đường thực thi mới.
+
+Trên T4 miễn phí, cùng mẫu tổng hợp và cấu hình FP32/batch128, tổng thời gian chuẩn bị batch và tám bước học giảm từ 13,79 xuống 3,39 giây, nhanh hơn 4,07 lần. Mức sử dụng GPU trung bình theo mẫu tăng từ 15,0% lên 76,0%, VRAM đỉnh khoảng 5.305 MiB. Lượt kiểm kéo dài 34 giây. Loss, gradient, trọng số sau bước Adam, trạng thái optimizer và RNG khớp ở hai điều kiện đã kiểm. Bộ kiểm local đạt tổng 69 ca, gồm dự đoán và chạy ngắt rồi phục hồi cùng backend.
+
+CPU được kiểm thêm trên 128 cửa sổ Junyi TRAIN80 thật với 5.527 target. Riêng phần chuẩn bị context và kiểm tính toàn vẹn giảm từ 0,838 xuống 0,065 giây. Message FP32 và mặt nạ áp dụng khớp hoàn toàn. Hai phép đo CPU và T4 bổ sung bằng chứng rằng phần chuẩn bị dữ liệu đồ thị là một nút thắt có thể giảm bằng tổ chức lại thực thi.
+
+Phép đo T4 dùng dữ liệu tổng hợp, gồm hai đoạn bốn bước mỗi bản theo thứ tự đối chiếu đảo chiều. Chưa đo toàn producer với I/O, validation, checkpoint hoặc toàn epoch Junyi/H100. Mức 76% thuộc đoạn kiểm ngắn, chưa là mức GPU trung bình của training nghiên cứu. Bước tiếp theo là kiểm nguồn cuối và chuyển tiếp checkpoint A1 epoch1 thật có provenance, rồi đo workload đại diện. Checkpoint lịch sử đã được giữ nguyên. Đợt này dùng 0 USD Modal, artifacts và figure đã tải về D, runtime Colab đã được yêu cầu trả và bridge đã đóng.
+
+[Hồ sơ CPU và T4](../../../runs/junyi-a1-compact-adapter-20261113-01/README.md)
+
 ## 13/11 — kiểm hướng biểu diễn ngữ cảnh đồ thị gọn
 
 Sau cải tiến nhỏ đã kiểm trên T4, nhóm thử giảm phần dựng dữ liệu đồ thị trước khi GPU tính toán. Trên 128 cửa sổ Junyi TRAIN80 thật, gồm 5.527 target, prototype chuyển thông tin quá khứ thành message dạng mảng số và mặt nạ áp dụng. Cả hai khớp hoàn toàn với cách tính A1 hiện hành sau chuyển FP32. Giữ kiểm vai người học, cấu trúc cửa sổ và biên thời gian. Thay đáp án ở phía sau giữ nguyên thông tin cho các target phía trước.

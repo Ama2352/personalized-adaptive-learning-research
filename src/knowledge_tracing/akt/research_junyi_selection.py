@@ -156,7 +156,7 @@ def _make_selected_adapter(config, profile, encoding, view, condition):
     from .research_junyi_graph import JunyiGraphPhaseSession
     from .research_junyi_graph_model import JunyiGraphAKTAdapter
     return JunyiGraphAKTAdapter(config=config,encoding=encoding,condition=condition,
-        phase=JunyiGraphPhaseSession(condition,view),cuda_profile=profile)
+        phase=JunyiGraphPhaseSession(condition,view),cuda_profile=profile,compact_context=True)
 
 
 def _comparison_candidate(config, profile, inputs, encoding, initial_backbone, *,

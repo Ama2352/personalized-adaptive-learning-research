@@ -1,0 +1,49 @@
+{
+  "status": "PASS_CPU_AND_T4_COMPACT_ADAPTER",
+  "gpu": [
+    {
+      "method": "reference",
+      "steps": 8,
+      "seconds": 13.787333106999995,
+      "targets": 102400,
+      "targets_per_second": 7427.10712835467,
+      "samples": 44,
+      "gpu_util_mean_percent": 14.977272727272727,
+      "peak_memory_mib": 5305.0
+    },
+    {
+      "method": "compact",
+      "steps": 8,
+      "seconds": 3.3914572039999484,
+      "targets": 102400,
+      "targets_per_second": 30193.510883530394,
+      "samples": 12,
+      "gpu_util_mean_percent": 76.0,
+      "peak_memory_mib": 5305.0
+    }
+  ],
+  "gpu_speedup": 4.065312424033821,
+  "cpu_component_speedup": 12.853202352121933,
+  "gpu_probe_seconds": 34.03107997899997,
+  "gpu_parity": [
+    {
+      "alpha": 0.0,
+      "status": "PASS",
+      "max_absolute_drift": 0.0,
+      "loss": 8410.705078125,
+      "targets": 12800
+    },
+    {
+      "alpha": 0.75,
+      "status": "PASS",
+      "max_absolute_drift": 0.0,
+      "loss": 8466.6240234375,
+      "targets": 12800
+    }
+  ],
+  "local_tests_passed": 69,
+  "modal_spent_usd": 0,
+  "real_junyi_epoch_benchmarked": false,
+  "source2_checkpoint_migrated": false,
+  "limits_vi": "GPU fixture tổng hợp, 8 bước mỗi bản theo ABBA. Gồm collate/prefix/checksum và step. Chưa gồm SQL/cache I/O, checkpoint, validation, epoch Junyi hoặc H100. CPU component dùng 128 window thật từ shard đầu TRAIN80. GPU sample có tương quan."
+}
