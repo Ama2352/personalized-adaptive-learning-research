@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 13/11 — rà soát cơ sở kiến trúc A1
+
+[Đối chiếu paper và source](A1_ARCHITECTURE_REFERENCE_REVIEW_20261113.md) xem AKT/RKT/GKT/GIKT/KSGKT và pyKT, ghi rõ phạm vi đã đọc. Thiết kế tiếp theo còn chờ quyết định; H100 đang tắt.
+
+
 ## 13/11 — A1 H100 và validation A0 thực
 
 [Hồ sơ](../runs/junyi-a1-selected-20261113-01/README.md) có Gate Linux 2.336 ca, A0 checkpoint9 full-selection batch128 đạt Log Loss bằng giá trị cũ; A1 đã train đủ epoch1, validation còn chờ; checkpoint/logs đã lưu D, H100 dừng. GPU training trung bình4,98%, cần xử lý nút thắt CPU trước chạy tiếp.

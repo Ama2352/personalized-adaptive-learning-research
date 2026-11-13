@@ -8451,6 +8451,34 @@
     "gpu_utilization_goal_percent": 50,
     "observed_training_gpu_utilization_percent": 4.9809688581314875,
     "cached_graph_pipeline_implemented": false,
-    "next_vi": "Giữ source2/checkpoint train-epoch-001, resume validation trước khi train thêm. Thiết kế cache/fast path đồ thị, đối chiếu causal/output/gradient và checkpoint compatibility trên CPU. GPU hiện đã tắt, chỉ cấp bounded run tiếp sau khi xử lý CPU bottleneck và dự toán trong30USD."
+    "next_vi": "Đọc A1_ARCHITECTURE_REFERENCE_REVIEW_20261113.md trước sửa tiếp. Chốt kiến trúc có nguồn và thiết kế thực thi theo tensor/cache, kiểm checkpoint compatibility và causal parity, sau đó mới bounded GPU acceptance. A1 epoch1 đã train đủ, validation còn chờ; source2/model giữ nguyên, H100 đã tắt."
+  },
+  "a1_architecture_review_20261113": {
+    "status": "INITIAL_PRIMARY_SOURCE_REVIEW_DESIGN_DECISION_PENDING",
+    "report": "research_tracking/reports/A1_ARCHITECTURE_REFERENCE_REVIEW_20261113.md",
+    "sources": [
+      "AKT",
+      "RKT",
+      "GKT",
+      "GIKT",
+      "KSGKT",
+      "pyKT"
+    ],
+    "core_source_inspected": [
+      "local pinned AKT",
+      "pyKT RKT",
+      "jhljx GKT"
+    ],
+    "abstract_read": [
+      "RKT",
+      "GIKT",
+      "KSGKT",
+      "pyKT"
+    ],
+    "new_architecture_adopted": false,
+    "production_source_changed": false,
+    "gpu_spent_usd": 0,
+    "closed_checkpoints_preserved": true,
+    "next_vi": "Đối chiếu phương trình và semantics từng nguồn với A0–A3, đánh giá hướng tối ưu công thức hiện hành và hướng relation-aware attention, chốt thiết kế trước sửa tiếp A1. Giữ causal/window/learner boundaries và tiêu chí GPU50% được đo thực."
   }
 }

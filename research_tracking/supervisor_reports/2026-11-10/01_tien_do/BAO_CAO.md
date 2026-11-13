@@ -1,5 +1,11 @@
 # Báo cáo tiến độ khóa luận — cập nhật 12/11/2026
 
+## 13/11 — đối chiếu cơ sở thiết kế A1
+
+Sau khi xác nhận nút thắt CPU, nhóm đối chiếu cơ sở thiết kế A1 với các nghiên cứu graph/relation-aware KT và source tham khảo. RKT cung cấp cơ chế đưa quan hệ bài tập vào attention, GKT cung cấp cách tổng hợp graph theo tensor và pyKT cung cấp khung đối chiếu benchmark. A1 residual hiện tại là lựa chọn thiết kế của nhóm. Hai hướng đang được xem xét là tổ chức lại phép tính hiện hành hoặc phát triển phần tích hợp quan hệ vào attention có đối chiếu nguồn. Chưa áp dụng kiến trúc mới hoặc chạy lại GPU. Checkpoint epoch1 được giữ nguyên.
+
+[Nguồn thiết kế RKT](https://arxiv.org/abs/2008.12736), [source GKT](https://github.com/jhljx/GKT), [nghiên cứu benchmark pyKT](https://proceedings.nips.cc/paper_files/paper/2022/hash/75ca2b23d9794f02a92449af65a57556-Abstract-Datasets_and_Benchmarks.html).
+
 ## 13/11 — kiểm checkpoint A0 trên H100 và triển khai A1
 
 Sau phép kiểm CPU, đã đối chiếu checkpoint A0 epoch 9 thật trên H100 bằng validation batch128. Toàn bộ 1.600.343 target selection khớp dữ liệu và thứ tự lịch sử, 0 OOV. Log Loss bằng giá trị validation cũ 0,3535801768 trong độ chính xác đã lưu. Lượt dự đoán mất 25,11 giây, trọng số giữ nguyên. Checkpoint này vốn được train bằng batch128. Chưa kiểm lại cách chọn epoch trên đủ 12 checkpoint. Kết quả mới xác nhận validation batch128 cho checkpoint được chọn trên selection thật.
