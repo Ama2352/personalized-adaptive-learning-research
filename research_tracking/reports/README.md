@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 13/11 — Xuất gọn A1 Junyi và giới hạn so sánh A0
+
+[Hồ sơ xuất model](../runs/akt-model-export-20261113-01/README.md) giữ gói bốn file trên D, một .pt epoch 9, kiểm CPU load/Adam/RNG/SHA đạt. Cấu hình học và tập target A0–A1 khớp. A0 chọn epoch bằng validation batch 1, chỉ epoch 9 đã replay batch 128; ranking toàn 12 epoch còn chờ. Refit/calibration/đánh giá độc lập còn chờ.
+
+
 ## 13/11 — A1 hoàn tất chọn checkpoint Junyi với dữ liệu so sánh đã kiểm
 
 [Hồ sơ](../runs/junyi-a1-selection-cache-20261113-01/README.md) giữ Gate2.528ca, parity checkpoint thật CPU/CUDA, A1 Junyi selected-fit hoàn tất12epoch/chọn9 theo min_delta0,0001, reload/prediction khớp. Train mới182–206giây/epoch, GPU gần đây35–38%. Mọi checkpoint/predictions/logs đã tảiD, H100 dừng. Refit/calibration/đánh giá độc lập và A2/A3 Junyi còn chờ.
