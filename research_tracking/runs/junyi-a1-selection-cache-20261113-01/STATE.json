@@ -1,5 +1,5 @@
 {
-  "status": "LINUX_GATE2528_PASS_H100_RESUME_READY",
+  "status": "H10009_RUNNING_SAME_SOURCE_RESUME",
   "completed": [
     "Cache toàn selection10 xây CPU226,55s;1.600.343targets/A0population khớp",
     "Full input/metadata parity:28.449windows/0OOV",
@@ -8,18 +8,37 @@
   ],
   "source_checkpoint": "experiments/akt/results/modal-junyi-a1-b128-h100-20261113-05/checkpoints/train-epoch-001/state.pt",
   "modal_spent_usd_this_batch": 0,
-  "h100_started": false,
+  "h100_started": true,
   "remaining": [
-    "Đo lại metadata streaming sau lookup chậm",
-    "Kiểm source cuối trên Linux CPU Gate",
-    "Pin transition receipt và chuẩn bị worker nối epoch1 trước validation",
-    "Bounded H100 actual-checkpoint parity rồi validation/training có checkpoint"
+    "Hoàn tất selected fit A1 theo early stopping cố định hoặc checkpoint ở cap",
+    "Đối soát chi thực với Modal sau lượt",
+    "Refit/calibration/đánh giá độc lập và A2/A3 Junyi vẫn chờ"
   ],
-  "next_step": "Commit nguồn đã kiểm, dispatch H100 có CUDA canary checkpoint thật rồi nối validation epoch1 và epoch2; theo dõi telemetry, checkpoint và trần30USD.",
+  "next_step": "Theo dõi H10009 tới terminal; kiểm archive, GPU dừng và ledger. Lỗi import08 đã dừng/có regression check, không có worker training08.",
   "source_build_sha256": "7e284eb5287d39c87c828d54833c654070d2fbb9d96dedc143fa4c6fc918f18e",
   "selection_disk_cache_enabled": false,
   "graph_disk_cache_enabled": false,
   "prefetch_train_windows": true,
   "prefetch_selection_windows": true,
-  "h100_budget_cap_usd": 3
+  "h100_budget_cap_usd": 3,
+  "active_run_id": "modal-junyi-a1-b128-h100-20261113-09",
+  "controller_session": 74235,
+  "modal_app_id": "ap-O4c03qOMs4k9crHbQtMyru",
+  "source_checkpoint_sha256": "eb614e5fcd3f8d1c3d19d51d0c088ee075e6924ca8560fbf1b893b9df9d224e9",
+  "cuda_actual_checkpoint_parity": "PASS_DRIFT0_200TARGETS_152ACTIVE",
+  "last_observed_epoch": 2,
+  "last_observed_steps": 1500,
+  "last_observed_train_wall_seconds": 166.224421438,
+  "recent_gpu_mean_percent": 35.1333,
+  "epoch1_validation_complete": true,
+  "allocation_cap_shared_usd": 3,
+  "current_attempt_cap_usd": 2.6,
+  "previous_attempt06_failed_reserved_upper_usd": 0.1,
+  "source_code_commit": "3723de1",
+  "h100_active": true,
+  "last_completed_validation_epoch": 6,
+  "latest_checkpoint": "inner-batch-epoch-7-step-1797-16a25fa0c5fd4206bd480a74710150bd",
+  "latest_checkpoint_sha256": "750a7bfcef42fa472c25106666652c49e925eceeacae4a4e27c397bf93db1ce3",
+  "native_archive_verified": true,
+  "remaining_epoch7_optimizer_steps": 21
 }

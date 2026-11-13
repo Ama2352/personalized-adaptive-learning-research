@@ -20,6 +20,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--device',choices=('cpu','cuda'),default='cpu')
     parser.add_argument('--output-name',default='actual-checkpoint-parity.json')
+    parser.add_argument('--shard-index',type=int)
     args=parser.parse_args()
     assert Path(args.output_name).name==args.output_name and args.output_name.endswith('.json')
     import numpy as np
@@ -86,9 +87,14 @@ def main():
     condition=JunyiGraphCondition(encoding,PrerequisiteGraph.from_edges(topology['nodes'],topology['corrected_edges']),request['graph_sha256'])
     phase=JunyiGraphPhaseSession(condition,inputs.train)
     cache=ROOT/data['train_window_cache'];manifest=json.loads((cache/'manifest.json').read_text())
-    cohort=json.loads((ROOT/'artifacts/akt/colab/junyi-real-t4-cohort-20261113-01/cohort.json').read_text())
+    if args.shard_index is None:
+        cohort=json.loads((ROOT/'artifacts/akt/colab/junyi-real-t4-cohort-20261113-01/cohort.json').read_text())
+        shard_indices=cohort['train_shard_indices']
+    else:
+        assert 0<=args.shard_index<len(manifest['shards'])
+        shard_indices=(args.shard_index,)
     records=()
-    for shard_index in cohort['train_shard_indices']:
+    for shard_index in shard_indices:
         entry=manifest['shards'][shard_index]
         candidates=tuple(_load_shard(cache/entry['name'],entry,manifest))
         active=build_compact_context(tuple(e.window for e in candidates),phase).arrays()[1].any(axis=1)

@@ -35,3 +35,15 @@ Giá H100 chính thức kiểm ngày13/11 là0,001097USD/giây. Trần tính b�
 - `cpu_controller.py` và `gpu_controller.py` mặc định chỉ admission, cần `--run` để dispatch. Lượt GPU còn phải kiểm ledger/source pins và trạng thái App trước khi gọi.
 
 Bundle đang mở trong khi H100 được chuẩn bị. Kết quả GPU, checkpoint, figure và báo cáo được cập nhật theo kết quả thực, không suy từ exit code hoặc App đã tạo.
+
+## Kết quả H10007 và tiếp nối cùng nguồn
+
+H10007 đã đạt canary CUDA drift0 trên checkpoint thật. Validation epoch1 giữ nguyên model, Adam và mọi RNG so checkpoint gốc, không học lại epoch1. Sáu lượt validation đầy đủ có Log Loss lần lượt 0,3600010;0,3568946;0,3557300;0,3555519;0,3548359;0,3543379. Mỗi lượt 1.600.343 target,0OOV, cùng population A0. Đây là tập selection để lựa epoch, đánh giá độc lập còn chờ.
+
+Epoch2–6 train đủ 13.347.331 target/1.818 bước, thời gian 202,10–205,89 giây. Validation khoảng36,5–37,2giây, tổng gần4phút/epoch. GPU gần đây33–36%, VRAM khoảng5,8GiB. Mức tăng thông lượng quan sát khoảng6,6lần so epoch1 source2, phép đo dùng các epoch khác nhau. `a1-resume-h100-v2.svg`, CSV và `build_figure.py --version <mới> --history validated-history07.json` giữ hình, số liệu và cách dựng lại.
+
+H10007 dừng đúng bound gần cuối epoch7, còn21bước. Archive106file638.175.905byte đã kiểm toàn bộ SHA và giải nén trênD, có stop acknowledgment. `tranche07-summary.json`, `archive-extraction07.json`, `validated-history07.json`, `epoch1-preservation.json` là chứng cứ. Checkpoint1..6 và partial7 được đưa nguyên byte vào resume-control02.zip để tiếp nối cùng source/config/sampler/Adam/RNG.
+
+Lượt08 lỗi import controller tại `/root/resume_controller.py` vì tính `parents[3]` trên đường dẫn ngắn, trước worker/training. Agent dừng App, có acknowledgment264,18giây kể từ guard, giữ log lỗi. Cận chi dự phòng0,40USD, chưa là hóa đơn thực. Bản sửa dùng chuỗi `.parent` chịu được đường dẫn root, giống controller07. Phép kiểm `check_controller_import.py` tái hiện lỗi08 và xác nhận bản sửa import được theo ngữ nghĩa POSIX, không gọi GPU.
+
+Lượt09 dùng cùng logical07, source/Gate/model/config và partial7, cap2,60USD cộng dự phòng lỗi08 tối đa0,40USD trong allocation3USD. Không lặp canary hoặc epoch1..6. Watchdog1700giây, function timeout1800giây, một H100, không auto retry. Khi kết thúc phải kiểm archive trênD và App dừng trước chốt kết quả. Refit/calibration/đánh giá độc lập và A2/A3 Junyi còn chờ.

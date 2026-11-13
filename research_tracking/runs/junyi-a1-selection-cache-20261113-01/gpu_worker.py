@@ -145,7 +145,8 @@ try:
     canary=ROOT/'research_tracking/runs/junyi-a1-selection-cache-20261113-01/check_actual_checkpoint.py'
     with (OPERATION/'actual-checkpoint-cuda.log').open('x') as log:
         proof=subprocess.run([sys.executable,'-B',str(canary),'--device','cuda',
-            '--output-name','actual-checkpoint-gpu-parity.json'],cwd=ROOT,
+            '--output-name','actual-checkpoint-gpu-parity.json','--shard-index',
+            str(json.loads(Path('/opt/actual-checkpoint-cpu-parity.json').read_text())['shard_index'])],cwd=ROOT,
             stdout=log,stderr=subprocess.STDOUT,timeout=180)
     proof_file=canary.parent/'actual-checkpoint-gpu-parity.json'
     assert proof.returncode==0 and proof_file.is_file(),'Actual checkpoint CUDA canary failed'

@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 13/11 — A1 đã nối epoch1, có validation toàn selection và training nhanh hơn
+
+[Hồ sơ](../research_tracking/runs/junyi-a1-selection-cache-20261113-01/README.md) giữ source Gate 2.528 ca, toàn selection 1.600.343 target khớp, checkpoint epoch1 được giữ nguyên qua validation và nối H100. Hai epoch mới mất khoảng 202 giây, bản chụp đến epoch6. Checkpoint đã tải D, H100 đầu đã dừng. GPU 33–36%, đang nối gần cuối epoch7 cùng source.
+
 ## 13/11 — cache A1 đã tích hợp và kiểm T4
 
 [Hồ sơ cache A1](../research_tracking/runs/junyi-a1-graph-cache-20261113-01/README.md) giữ 62 ca local đạt, parity T4 drift 0, 100 bước kiểm kỹ thuật, throughput tăng 1,84% và GPU 70,8% trong đoạn đo. Cache giữ tùy chọn vì chênh lệch thời gian còn nhỏ. Có rà 14 bước cache của epoch, artifact đã tải về D và T4 đã trả, 0 USD Modal. Cache toàn TRAIN80, migration source2 và producer CUDA còn chờ.
