@@ -1,5 +1,10 @@
 # Báo cáo tiến độ khóa luận — cập nhật 12/11/2026
 
+## 13/11 — lõi confidence Junyi đã kiểm CPU
+
+Đã cài lõi chuẩn bị đặc trưng và crossfit confidence cho Junyi, có kiểm vocabulary717. Đặc trưng chỉ dùng quá khứ trong đúng cửa sổ AKT. Fitter tái dùng solver và learner bootstrap của Method24, fit theo từng child để hỗ trợ xử lý giới hạn RAM. Kiểm CPU với solver thật xác nhận loại người học thuộc fold đánh giá khỏi dữ liệu fit và giữ confidence null khi thiếu hỗ trợ. Đây là kiểm trên dữ liệu tổng hợp. Worker train80, artifact confidence và tích hợp A2/A3 còn cần hoàn thiện trước training chính.
+
+
 ## 13/11 — kiểm được gắn vào luồng training chính
 
 Đã nối kiểm tương thích vào luồng training graph chính. Trước bước optimizer đầu tiên, producer đối chiếu đầu vào thực, cấu hình và khởi tạo backbone với tham chiếu A0. Main còn kiểm lại cache trước khi dựng model. Mỗi validation đối chiếu target population với A0 và checkpoint ghi tham chiếu để bảo vệ resume. Bộ hồi quy CPU đạt77ca. Một lượt SQL độc lập đã kiểm đủ1.600.343target selection của15.847người học,0OOV và khớp từng khóa cùng thứ tự với A0 H100. Confidence và producer A2/A3 Junyi cùng dự toán toàn ma trận vẫn đang cần hoàn thiện trước main GPU.

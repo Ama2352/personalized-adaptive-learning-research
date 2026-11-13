@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 13/11 — confidence Junyi theo native window
+
+[Hồ sơ CPU](../runs/junyi-confidence-core-20261113-01/README.md) giữ kiểm717exercise, crossfit solver thật, ledger và unsupported null trên dữ liệu tổng hợp. Worker/artifact/model A2/A3 còn chờ.
+
+
 ## 13/11 — guard so sánh đã nối vào producer
 
 [Hồ sơ](../runs/junyi-comparison-admission-20261113-01/README.md) có77ca CPU đạt và kiểm SQL độc lập1.600.343selection targets khớp A0. Confidence Junyi và kiểm source Linux tiếp theo còn chờ.
