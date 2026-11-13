@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## Đính chính số mẫu fixture confidence ngày13/11
+
+Số chuẩn trong [summary đã nghiệm thu](../runs/junyi-confidence-core-20261113-01/crossfit-summary.json) là **640child targets,64learner tổng hợp,1.920OOF rows và12fit slots**. README của bundle đã đóng ghi nhầm500targets/50learner/1.500OOF do nhập tay. JSON, ledger và kết quả kiểm không bị ảnh hưởng. Giữ bundle cũ nguyên byte và dùng số liệu JSON này khi trích dẫn.
+
+
 ## 13/11 — confidence Junyi theo native window
 
 [Hồ sơ CPU](../runs/junyi-confidence-core-20261113-01/README.md) giữ kiểm717exercise, crossfit solver thật, ledger và unsupported null trên dữ liệu tổng hợp. Worker/artifact/model A2/A3 còn chờ.
