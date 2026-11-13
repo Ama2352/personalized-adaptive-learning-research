@@ -1,0 +1,108 @@
+{
+  "status": "PASS_A0_DATA_LINEAGE_CANDIDATES_PENDING",
+  "reference": {
+    "candidate_id": "A0",
+    "data_pins": {
+      "roles": "b0ca8f6949edd226e48d1cdb24e34ea34a042a385467e1650755994e96567ba3",
+      "encoding": "4d5d7330d17f48b3b7d759bc331a99523093cfd249a0f9d7fd455480789c209f",
+      "encoding_receipt": "9d05015ef08e0b45bfc8e0a27d0ae0b459fcc0b79f1c4d75bfb6c362cba32845",
+      "selected_manifest": "f42afe12c9566ba334dec68c1ebb22a4bfc6b2e5b673b629c9a2724c8d74db14",
+      "window_manifest": "43f48045370b6811e537d7936ed307291e1dee88be313c111e4879198556a839"
+    },
+    "roles_identity": "7c9a8102e399bdbc6569fc5a929faae525480c86fe0c60d2d805244a80b8e45a",
+    "encoding_identity": "0555833f58150121f1149ac7d3c4d0f0cad057b2dc530331e5ffbe83fc040ba1",
+    "train_view_identity": "d0131b7f05170cc447ba19c2b3deb6f0129107507b0cd47d90caa8988704b809",
+    "train_targets": 13347331,
+    "selection_targets": 1600343,
+    "training_config": {
+      "partition": "development",
+      "source_commit": "01b7e8d7d7c862cabc9467108e3e7f2555653a88",
+      "outer_fold": 4,
+      "seed": 42,
+      "context": 100,
+      "target_block": 100,
+      "max_length": 200,
+      "d_model": 256,
+      "heads": 8,
+      "blocks": 1,
+      "d_ff": 1024,
+      "final_fc": 512,
+      "dropout": 0.05,
+      "kq_same": 1,
+      "separate_qa": false,
+      "n_pid": 0,
+      "batch_size": 128,
+      "lr": 0.0001,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.0,
+      "max_grad_norm": 1.0,
+      "inner_val_fraction": 0.1,
+      "min_delta": 0.0001,
+      "patience": 3,
+      "max_epochs": 20,
+      "protocol_version": "akt-nr-exercise-v2-batch128"
+    },
+    "numeric_profile": {
+      "max_vram_bytes": 17179869184,
+      "recipe_id": "cgakt-cuda-fp32-batch128-v2",
+      "device": "cuda:0",
+      "initialization": "cpu-default-generator-42-then-device",
+      "dtype": "float32",
+      "seed": 42,
+      "foreach": false,
+      "fused": false,
+      "capturable": false,
+      "differentiable": false,
+      "amsgrad": false,
+      "maximize": false,
+      "decoupled_weight_decay": false,
+      "clip_foreach": "native-default-None",
+      "deterministic_algorithms": true,
+      "deterministic_warn_only": false,
+      "matmul_allow_tf32": false,
+      "cudnn_allow_tf32": false,
+      "matmul_precision": "highest",
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "initial_backbone_sha256": "a29f65ae4c668b55c1ff30a19f41f232a6761848ba2304c9cde5ba594db9fa9c",
+    "prediction_implementation": "batched_windows_v1_batch128",
+    "selection_population_sha256": "c26bac9fbbdcf488dc1c8d7b953663158b53216d980676de70b67819fc470b64"
+  },
+  "candidate_status": "NOT_SUPPLIED_NOT_APPROVED_FOR_TRAINING",
+  "bkt_gam_assignments_sha256": "ee588c5b72fc214295e6eef1839b5110c884f43ab52ab4a792ca82e35812be20",
+  "role_counts": {
+    "train_users": 126774,
+    "selection_users": 15847,
+    "calibration_users": 15847,
+    "outer_validation_users": 39616
+  },
+  "development_learners": 198084,
+  "vocabulary_size": 717,
+  "window_summary": {
+    "learners": 126774,
+    "records": 232662,
+    "target_rows": 13347331,
+    "unseen_targets": 0,
+    "window_tokens": 23936131,
+    "windows": 232662
+  },
+  "cache_output_sha256": {
+    "canonical.parquet": "4c987e63522bf9c4f2770bdb1d8f999a82ad1a441b81dd4d1205033c74d84add",
+    "assignments.parquet": "586a1f1ae731b41f3b978d31138dfbb07b8fa064d7e3b31d581c8a50b657cd29"
+  },
+  "limits_vi": "Ki\u1ec3m metadata v\u00e0 hash cache. Ch\u01b0a replay to\u00e0n b\u1ed9 target, ch\u01b0a CUDA A1\u2013A3, ch\u01b0a ch\u1ee9ng minh kh\u00f4ng c\u00f3 m\u1ecdi d\u1ea1ng leakage. BKT/GAM l\u1ecbch s\u1eed fit outer-train kh\u00e1c AKT train80. H\u1ee3p \u0111\u1ed3ng ch\u01b0a \u0111\u01b0\u1ee3c n\u1ed1i b\u1eaft bu\u1ed9c v\u00e0o m\u1ecdi launcher.",
+  "validation_batch_replay": {
+    "evidence": "/opt/kltn/experiments/akt/results/modal-junyi-a1-b128-h100-20261113-03-operation/a0-validation-replay.json",
+    "evidence_sha256": "f56f212004033f27db474d9399a49fa2ddeb96fa19bfb363398110d10bb1749d",
+    "selected_epoch": 9,
+    "a0_epoch_choice_replayed": false,
+    "a0_historical_epoch_selection_mode": "legacy_single_window_v1",
+    "adoption_reference": "Ng\u01b0\u1eddi d\u00f9ng ch\u1ecdn validation batch128 cho A1 ng\u00e0y13/11/2026, \u01b0u ti\u00ean training, gi\u1eef gi\u1edbi h\u1ea1n ch\u01b0a replay ch\u1ecdn epoch A0.",
+    "original_reference_sha256": "419c63f88d02b0a17d3865913bbafa0abdeb0ef9410ea93f052ccb19bff508be"
+  }
+}

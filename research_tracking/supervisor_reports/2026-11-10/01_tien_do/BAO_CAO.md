@@ -1,5 +1,11 @@
 # Báo cáo tiến độ khóa luận — cập nhật 12/11/2026
 
+## 13/11 — kiểm checkpoint A0 trên H100 và triển khai A1
+
+Sau phép kiểm CPU, đã đối chiếu checkpoint A0 epoch 9 thật trên H100 bằng validation batch128. Toàn bộ 1.600.343 target selection khớp dữ liệu và thứ tự lịch sử, 0 OOV. Log Loss bằng giá trị validation cũ 0,3535801768 trong độ chính xác đã lưu. Lượt dự đoán mất 25,11 giây, trọng số giữ nguyên. Checkpoint này vốn được train bằng batch128. Chưa kiểm lại cách chọn epoch trên đủ 12 checkpoint. Kết quả mới xác nhận validation batch128 cho checkpoint được chọn trên selection thật.
+
+Đã chuẩn bị A1 đồ thị cố định với batch128 cho train và validation, cùng split, backbone, seed và quy tắc chọn epoch của A0. Linux CPU Gate đạt 2.328 ca. Các lỗi launcher và gọi entrypoint được giữ log và đã sửa. Yêu cầu H100 hiện đã dispatch, chưa xác nhận bước học A1 thực tế. Trần đợt H100 3 USD trong tổng 30 USD toàn KLTN, checkpoint có sync bền vững và watchdog dừng GPU.
+
 ## 13/11 — chuẩn bị tối ưu validation
 
 Validation trước đây xử lý lần lượt từng cửa sổ lịch sử, khiến GPU phải nhận nhiều lượt nhỏ. Đã nối cách gom tối đa 128 cửa sổ độc lập và kiểm trên T4 miễn phí của Colab. Bộ kiểm Linux đạt 126 ca. Phép đo dùng 64 người học tổng hợp, 12.800 lượt dự báo, mỗi mô hình đo ba cặp để đối chiếu thời gian và kết quả. Đây là kiểm dự đoán, không cập nhật trọng số.

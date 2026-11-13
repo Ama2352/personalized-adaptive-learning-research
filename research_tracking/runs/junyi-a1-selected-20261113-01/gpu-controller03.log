@@ -1,0 +1,42 @@
+{"run_id": "modal-junyi-a1-b128-h100-20261113-03", "gpu": "H100", "status": "USER_APPROVED", "execution_requested": true}
+✓ Initialized. View run at 
+https://modal.com/apps/honguyenminhsang2005/main/ap-qHPdqv888UDH87DQUKVnt3
+✓ Created objects.
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\gpu_contro
+│   ller.py
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\artifacts\akt\modal\junyi-throughput-20261112-01\full-selected-
+│   data.zip
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\experiments\akt\results\modal-junyi-a1-selected-cpu-20261113-01
+│   \artifacts.zip
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\a0-validat
+│   ion-replay-plan.json
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\artifacts\akt\modal\junyi-a1-selected-20261113-01\source.zip
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\replay_a0_
+│   validation.py
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\experiments\akt\results\modal-junyi-a1-b128-h100-20261113-03\wo
+│   rker-request.json
+├── ✓ Uploaded D:\Dev\KLTN\experiments\akt\modal_artifact_sync.py
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\gpu_worker
+│   .py
+└── ✓ Created Function remote_probe.
+Stopping app - local entrypoint completed.
+Runner terminated.
+✓ App completed. View run at 
+https://modal.com/apps/honguyenminhsang2005/main/ap-qHPdqv888UDH87DQUKVnt3
+{"status": "FAILED", "run_id": "modal-junyi-a1-b128-h100-20261113-03", "checkpoint_transfers": {}, "returncode": 1, "worker_result": {"status": "FAILED", "scope": "full_junyi_a1_expert_selected_only", "refit_completed": false, "calibration_completed": false, "error_type": "TypeError", "error": "run_a0_junyi_selected() got an unexpected keyword argument 'graph_condition'", "elapsed_seconds": 45.829148154}, "error_type": "AssertionError", "error": "{'status': 'FAILED', 'scope': 'full_junyi_a1_expert_selected_only', 'refit_completed': False, 'calibration_completed': False, 'error_type': 'TypeError', 'error': \"run_a0_junyi_selected() got an unexpected keyword argument 'graph_condition'\", 'elapsed_seconds': 45.829148154}", "elapsed_seconds": 46.951791525000004, "archive_bytes": 11084, "archive_sha256": "f5308b04ab932ceee66840ca48640d485479fa2d2646cbf71a085ac324e1c750", "total_remote_seconds": 46.957869732000006, "download_inventory_verified": true}
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\gpu_controller.py", line 305, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\gpu_controller.py", line 301, in main
+    assert receipt['status'] in ('PARTIAL_SELECTED_ONLY_NOT_FINAL','JUNYI_A0_SELECTED_ONLY_COMPLETE')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

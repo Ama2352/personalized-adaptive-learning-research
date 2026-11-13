@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 13/11 — A1 H100 và validation A0 thực
+
+[Hồ sơ](../research_tracking/runs/junyi-a1-selected-20261113-01/README.md) có Gate Linux 2.328 ca, A0 checkpoint9 full-selection batch128 đạt Log Loss bằng giá trị cũ; A1 batch128 đã dispatch, chưa xác nhận học.
+
+
 ## 13/11 — kiểm checkpoint A0 thật
 
 Kiểm tiếp bằng checkpoint A0 epoch 9 thật trên CPU với 3.538 target tổng hợp đã xác nhận nạp đúng trọng số, target/thứ tự khớp và model không đổi. Sai lệch xác suất lớn nhất 0,0000224 vượt ngưỡng kiểm đã đặt, dù chênh lệch Log Loss chỉ khoảng 0,0000000218. Giữ nguyên ngưỡng kiểm, chưa nghiệm thu batch128 cho training chính. Cần đối chiếu checkpoint này trên CUDA và selection Junyi thật. Lượt kiểm dùng 0 USD Modal.

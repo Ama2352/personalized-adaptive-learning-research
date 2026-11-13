@@ -1,0 +1,34 @@
+{"run_id": "modal-junyi-a1-b128-h100-20261113-01", "gpu": "H100", "status": "USER_APPROVED", "execution_requested": true}
+✓ Initialized. View run at 
+https://modal.com/apps/honguyenminhsang2005/main/ap-N4iN9WuIsxgL9YiundzHwU
+Stopping app - uncaught exception raised locally: NotFoundError("Volume 'kltn-akt-modal-junyi-a0-b128-h100-20261112-02' not found in environment 'main'").
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\gpu_controller.py", line 305, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-a1-selected-20261113-01\gpu_controller.py", line 271, in main
+    with modal.enable_output(),app.run(environment_name='main'):
+                               ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\app.py", line 497, in run
+    async with _run_app(
+               ~~~~~~~~^
+        self, name=name, client=client, detach=detach, interactive=interactive, environment_name=environment_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\runner.py", line 457, in _run_app
+    await _create_all_objects(running_app, local_app_state, load_context)
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\runner.py", line 205, in _create_all_objects
+    await asyncio.gather(*[tc.create_task(_load(tag, obj)) for tag, obj in indexed_objects.items()])
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\runner.py", line 196, in _load
+    await resolver.load(obj, load_context, existing_object_id=existing_object_id)
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\volume.py", line 758, in _load
+    response = await load_context.client._stub.VolumeGetOrCreate(req)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+modal.exception.NotFoundError: Volume 'kltn-akt-modal-junyi-a0-b128-h100-20261112-02' not found in environment 'main'

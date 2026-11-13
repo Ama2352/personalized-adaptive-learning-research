@@ -1,0 +1,65 @@
+{
+  "status": "USER_APPROVED",
+  "approval_reference": "Người dùng yêu cầu ưu tiên chạy A1, chọn batch128 cho validation ngày13/11/2026 và cho phép các tranche nhỏ trong trần30USD toànKLTN.",
+  "root_review_status": "ROOT_REVIEWED_BOUNDED_DISPATCH",
+  "authorized_batch_usd": 3,
+  "reserved_usd_per_run": 3,
+  "allocation_id": "junyi-a1-selected-h100-20261113-01",
+  "project_budget_file": "research_tracking/COMPUTE_BUDGET.json",
+  "gpu": "H100",
+  "run_id": "modal-junyi-a1-b128-h100-20261113-04",
+  "archives": {
+    "source": {
+      "path": "artifacts/akt/modal/junyi-a1-selected-20261113-01/source.zip",
+      "sha256": "0e6cdd2b32f7ff2fcd04da2a65889c7cfa303b54fb35763dff5435a21ac581df"
+    },
+    "cpu_gate": {
+      "path": "experiments/akt/results/modal-junyi-a1-selected-cpu-20261113-01/artifacts.zip",
+      "sha256": "afb4703002fbaa216d8b88b3afd70028495df92ff4ec67093b9fb31ddb879d9d"
+    },
+    "data": {
+      "path": "artifacts/akt/modal/junyi-throughput-20261112-01/full-selected-data.zip",
+      "sha256": "cfa8597cae89eba796f00a119748217ee1c61e20c7f6b4e7c5452d713931de96"
+    }
+  },
+  "inputs": {
+    "selected_cache_root": "artifacts/akt/junyi-cohorts/outer4-selected-full-20261112-03",
+    "roles_path": "artifacts/akt/junyi-roles/outer4-research-v1-20261112-01/roles.json",
+    "encoding_file": "artifacts/akt/window-cache/full-train80-20261112-02.encoding.json",
+    "encoding_receipt": "artifacts/akt/window-cache/full-train80-20261112-02.encoding.receipt.json",
+    "train_window_cache": "artifacts/akt/window-cache/full-train80-20261112-02",
+    "selected_cache_manifest_sha256": "f42afe12c9566ba334dec68c1ebb22a4bfc6b2e5b673b629c9a2724c8d74db14",
+    "roles_sha256": "b0ca8f6949edd226e48d1cdb24e34ea34a042a385467e1650755994e96567ba3",
+    "encoding_sha256": "4d5d7330d17f48b3b7d759bc331a99523093cfd249a0f9d7fd455480789c209f",
+    "encoding_receipt_sha256": "9d05015ef08e0b45bfc8e0a27d0ae0b459fcc0b79f1c4d75bfb6c362cba32845",
+    "train_window_manifest_sha256": "43f48045370b6811e537d7936ed307291e1dee88be313c111e4879198556a839"
+  },
+  "purpose": "main_selected",
+  "workload_epochs": 20,
+  "train_targets": 13347331,
+  "selection_targets": 1600343,
+  "max_optimizer_steps": 36360,
+  "max_total_training_targets": 266946620,
+  "native_max_seconds": 1500,
+  "native_max_wall_seconds": 1600,
+  "worker_backup_seconds": 1800,
+  "remote_child_seconds": 1900,
+  "local_watchdog_seconds": 2000,
+  "function_timeout_seconds": 2100,
+  "checkpoint_every_steps": "native source04 unchanged1000",
+  "scope": "A1 expert fullTRAIN80 selected-only batch128 train and validation, A0 selected checkpoint parity before training, no Holdout/calibration/outer-validation",
+  "batch_size": 128,
+  "benchmark_before_training": false,
+  "validation_implementation": "batched_windows_v1_batch128",
+  "graph_file": "research_tracking/runs/cpu-junyi-graph-reconstruction-20261107-01/graph.json",
+  "comparison_reference_file": "research_tracking/runs/junyi-comparison-preflight-20261113-01/data-audit.json",
+  "a0_epoch_choice_replayed": false,
+  "graph_sha256": "df7595b1437c46421cd7fea8cc2f3234ff9a69207961c4c34df4a78cae7f80b1",
+  "comparison_reference_sha256": "419c63f88d02b0a17d3865913bbafa0abdeb0ef9410ea93f052ccb19bff508be",
+  "a0_replay_plan_sha256": "e9f45e3507208b51a166796e3b56af33ea8deb3681e8eda680577f9580b481fb",
+  "worker_sha256": "62e73dec1f9b168ed1963eb3ca497667f774bae67b617ed5fae6a8cc8f95bf70",
+  "a0_replay_worker_sha256": "b18c5dbc7f40e6ae56a0f5c5a8ef81b76ee3b4ae3dcc70a8d33ea0d8e924e7af",
+  "reused_a0_reference_sha256": "302f93ea633f174ea75ece3d1b47b3f1c53cc7cd4182fb4a88735f82ac6ad5e8",
+  "reused_a0_replay_sha256": "f56f212004033f27db474d9399a49fa2ddeb96fa19bfb363398110d10bb1749d",
+  "reuse_verified_a0_replay": true
+}
