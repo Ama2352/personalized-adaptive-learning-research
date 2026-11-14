@@ -1,0 +1,87 @@
+{
+  "status": "FITTING_CONFIDENCE_CHILDREN",
+  "output": "artifacts/akt/confidence/full-train80-20261114-02",
+  "prior_state": "research_tracking/runs/junyi-confidence-train80-20261114-01/STATE.json",
+  "source_pins_match": true,
+  "spool_complete": true,
+  "corpus": {
+    "status": "SPOOL_VERIFIED_AND_SEALED",
+    "records": 232662,
+    "targets": 13347331,
+    "stored_rows": 11807185,
+    "database_sha256": "5400942205cbf09f299934eaede84b28d2bd125cca131174215d2ef6b23d4d17",
+    "children_with_rows": 680,
+    "largest_children": [
+      [
+        "representing_numbers",
+        301489
+      ],
+      [
+        "subtraction_1",
+        271037
+      ],
+      [
+        "multiplication_0.5",
+        254958
+      ],
+      [
+        "multiplication_1",
+        220521
+      ],
+      [
+        "subtraction_2",
+        207594
+      ],
+      [
+        "telling_time",
+        191719
+      ],
+      [
+        "arithmetic_word_problems_1",
+        190680
+      ],
+      [
+        "division_0.5",
+        145522
+      ],
+      [
+        "telling_time_2",
+        140712
+      ],
+      [
+        "addition_2",
+        137331
+      ]
+    ],
+    "children_above_default_row_cap": 5
+  },
+  "completed_children": 177,
+  "total_children": 736,
+  "action": "BATCH_FIT_LOCAL_TRANCHE_3600S",
+  "fitter_source_unchanged": true,
+  "observed_at_unix": 1794630582.7034638,
+  "current_child": "distance_formula",
+  "worker_elapsed_seconds": 1530.1926414000045,
+  "rss_mib": 166.04296875,
+  "available_ram_mib": 2219.90625,
+  "modal_reserved_upper_usd": 0.3,
+  "modal_actual_isolated_cost_usd": null,
+  "linux_gate": {
+    "status": "PASS",
+    "passed": 2614,
+    "source_build_sha256": "678a19e867fea9d4b911bad84419b927bdee561bc899bcbf5b1f5c4dd7429b22",
+    "archive_sha256": "3a21d44d556df9740695add2838fdc83750f4614e4339eaf801facabb8a2ad0a",
+    "output": "experiments/akt/results/modal-junyi-a2-a3-final-cpu-20261114-02",
+    "stop_acknowledged": true
+  },
+  "selection_cpu_admitted": true,
+  "active_exec_session": 69534,
+  "next_steps": [
+    "Tiếp tục batch confidence local, checkpoint theo child; nếu hết3600giây chạy tranche mới cùng output",
+    "Khi đủ736child, audit SHA/lineage và finalize confidence",
+    "Chạy prepare_worker_inputs.py rồi prepare_junyi_staged_caches.py với selection-output full-selection10-staged-20261114-02",
+    "Kiểm CPU snapshot/baseline; fresh sourceGate02 đã PASS, T4 parity/resume kỹ thuật đã PASS",
+    "Dự toán và kiểm bounded Modal stage trước main A2/A3"
+  ],
+  "confidence_complete": false
+}

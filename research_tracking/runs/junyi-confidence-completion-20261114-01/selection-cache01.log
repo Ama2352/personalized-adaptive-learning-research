@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\scripts\akt\prepare_junyi_selection_cache.py", line 34, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\scripts\akt\prepare_junyi_selection_cache.py", line 24, in main
+    receipt=build_selection_cache(ROOT/request['output_root'],
+        iter_junyi_phase_learners(inputs.paths,inputs.selection,temp_dir=ROOT/'artifacts/akt/tmp/selection-cache',
+    ...<2 lines>...
+        view=inputs.selection,encoding=encoding,source_sha256=inputs.source_identity,
+        expected_targets=inputs.selection_targets,max_seconds=request['max_seconds'],max_rss_bytes=request['max_rss_bytes'])
+  File "D:\Dev\KLTN\src\knowledge_tracing\akt\research_junyi_selection_cache.py", line 121, in build_selection_cache
+    result=build_junyi_window_cache(root/'windows',windows(),view=view,encoding=encoding,
+        source_data_sha256=source_sha256,expected_target_rows=expected_targets,compressed=False)
+  File "D:\Dev\KLTN\src\knowledge_tracing\akt\research_junyi_window_cache.py", line 207, in build_junyi_window_cache
+    for record in records:
+                  ^^^^^^^
+  File "D:\Dev\KLTN\src\knowledge_tracing\akt\research_junyi_selection_cache.py", line 101, in windows
+    for learner in learners:
+                   ^^^^^^^^
+  File "D:\Dev\KLTN\src\knowledge_tracing\akt\research_junyi_data.py", line 100, in iter_junyi_phase_learners
+    for learner in stream:
+                   ^^^^^^
+  File "D:\Dev\KLTN\src\knowledge_tracing\akt\research_junyi_cache.py", line 24, in iter_cached_phase_learners
+    raise ValueError('Cache role/domain/purpose mismatch')
+ValueError: Cache role/domain/purpose mismatch

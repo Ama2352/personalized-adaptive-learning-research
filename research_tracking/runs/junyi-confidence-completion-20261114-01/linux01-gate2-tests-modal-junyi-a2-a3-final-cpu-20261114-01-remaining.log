@@ -1,0 +1,76 @@
+....................................F................................... [  3%]
+........................................................................ [  6%]
+........................................................................ [  9%]
+........................................................................ [ 12%]
+........................................................................ [ 15%]
+........................................................................ [ 18%]
+........................................................................ [ 21%]
+................................................................ [ 24%]
+..................................................................... [ 27%]
+........................................................................ [ 30%]
+........................................................................ [ 33%]
+........................................................................ [ 36%]
+........................................................................ [ 39%]
+........................................................................ [ 42%]
+.......................................................................... [ 46%]
+........................................................................ [ 49%]
+........................................................................ [ 52%]
+........................................................................ [ 55%]
+........................................................................ [ 58%]
+........................... [ 59%]
+........................................................................ [ 62%]
+........................................................................ [ 65%]
+........................................................................ [ 69%]
+........................................................................ [ 72%]
+........................................................................ [ 75%]
+........................................................................ [ 78%]
+........................................................................ [ 81%]
+........................................................................ [ 84%]
+............................ [ 85%]
+................................................... [ 87%]
+............................................................... [ 90%]
+........................................................................ [ 93%]
+........................................................................ [ 96%]
+........................................................................ [ 99%]
+.                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_actual_cli_fresh_attempt_recovery_and_prediction_export[batch-exit] ___
+
+tmp_path = PosixPath('/opt/kltn/artifacts/akt/local-tests/gate2-7027e9ca5acc4e5583b331b01f403a5b/remaining/test_actual_cli_fresh_attempt_0')
+boundary = 'batch-exit'
+
+    @pytest.mark.parametrize('boundary', ['batch-exit', 'export'])
+    def test_actual_cli_fresh_attempt_recovery_and_prediction_export(tmp_path, boundary):
+        root = tmp_path / 'project'
+        root.mkdir()
+        template = load_config(PROJECT_ROOT / 'experiments/akt/configs/smoke.json')
+        config = replace(template, project_root=root, execution_enabled=True, run_id='continuous',
+            output_dir=root / 'experiments/akt/results/continuous', recovery=RecoveryOptions(),
+            dropout=.2, batch_size=2, max_steps=3, max_seconds=60, max_wall_seconds=180)
+        result = launch(config, tmp_path / 'continuous-cli')
+        assert result.returncode == 0, result.stderr
+        interrupted = replace(config, run_id='old', output_dir=config.output_dir.with_name('old'))
+        result = launch(interrupted, tmp_path / 'old-cli', interrupt=boundary)
+        assert result.returncode != 0
+        source = interrupted.output_dir / 'recovery-envelope.json'
+        envelope = json.loads(source.read_text(encoding='utf-8'))
+        assert envelope['attempt'] == 1 and envelope['cumulative_wall_seconds'] > 0
+        assert json.loads((interrupted.output_dir / 'watchdog-resources.json').read_text())['status'] == 'failed'
+        before = {path.name: digest_file(path) for path in interrupted.output_dir.iterdir() if path.is_file()}
+        resumed = replace(config, run_id='resumed', output_dir=config.output_dir.with_name('resumed'),
+                          recovery=RecoveryOptions(source_envelope=source, source_sha256=digest_file(source)))
+        result = launch(resumed, tmp_path / 'resumed-cli')
+        assert result.returncode == 0, result.stderr
+        expected = json.loads((config.output_dir / 'manifest.json').read_text())
+        actual = json.loads((resumed.output_dir / 'manifest.json').read_text())
+        assert actual['status'] == expected['status'] == 'completed'
+        assert actual['attempt'] == 2 and actual['retry_history'][0]['source_run_id'] == 'old'
+        assert actual['summary']['training']['valid_targets'] == expected['summary']['training']['valid_targets'] == 85
+        assert actual['summary']['training']['optimizer_steps'] == 3
+>       assert actual['summary']['validation_loss'] == expected['summary']['validation_loss']
+E       assert 0.6788624227046967 == 0.6788622438907623
+
+tests/akt/test_cli_recovery.py:77: AssertionError
+=========================== short test summary info ============================
+FAILED tests/akt/test_cli_recovery.py::test_actual_cli_fresh_attempt_recovery_and_prediction_export[batch-exit]
+1 failed, 2320 passed, 272 subtests passed in 159.23s (0:02:39)

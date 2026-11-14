@@ -1,5 +1,16 @@
 # Báo cáo tiến độ khóa luận — cập nhật 14/11/2026
 
+## 14/11 — Corpus confidence đã niêm phong và selection đầy đủ đã kiểm
+
+Sau lượt T4 kiểm được luồng tính A2/A3, công việc tiếp theo là tạo bộ độ tin cậy thật từ TRAIN80 để hai biến thể dùng chung. Corpus đã niêm phong đủ 13.347.331 target trong 232.662 record. Confidence đang fit theo từng khái niệm con, đã có 121/736 checkpoint hoàn tất ở lần kiểm 11:22. Còn phải fit đủ và kiểm toàn bộ artifact trước khi công bố bộ confidence chung.
+
+Cache selection mới đã xây và kiểm nối đầy đủ trên CPU, gồm 1.600.343 target và cùng định danh quần thể với A0. Đã sửa bước chuẩn bị để dùng đúng reader của tập Parquet đầy đủ. Fitter confidence, seed, cách chia nhóm người học và bootstrap giữ theo source đã ghim. Bộ độ tin cậy được ước lượng bằng TRAIN80; selection, calibration và tập đánh giá ngoài nằm ngoài bước fit này.
+
+Source mới đã qua 2.614 ca kiểm Linux, gồm phục hồi checkpoint và xuất dự đoán. Lượt trước phát hiện chênh loss CPU rất nhỏ; sau khi ghim fixture về một luồng và tính toán xác định, toàn bộ phép so sánh bitwise đã đạt. Giữ log cả hai lượt, App đã dừng và artifact đã tải/kiểm. Tổng dự phòng hai lượt CPU là 0,30 USD, chưa tách được chi phí thực riêng từng lượt. Training chính A2/A3 còn chờ confidence hoàn chỉnh và cache đồ thị thật.
+
+[Hồ sơ tiếp tục confidence và chuẩn bị A2/A3](../../../runs/junyi-confidence-completion-20261114-01/README.md).
+
+
 ## 14/11 — A2/A3 đã qua kiểm CUDA và phục hồi checkpoint trên T4
 
 Để tránh thuê GPU trong lúc chuẩn bị dữ liệu, đã nối cache đồ thị train/selection cùng hồ sơ kiểm CPU vào luồng thực thi A2/A3. Cache được tạo trên máy local trước khi gửi sang Colab. Luồng gọi GPU yêu cầu đủ đầu vào đã kiểm và giữ kiểm tra định danh dữ liệu khi nhận lại.

@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 14/11 — Tiếp tục confidence thật và selection đầy đủ
+
+[Hồ sơ](../runs/junyi-confidence-completion-20261114-01/README.md) giữ corpus đã niêm phong13.347.331target, tiến độ fit confidence theo child và cache selection1.600.343target khớp A0. STATE là điểm tiếp tục. Gate Linux02 đạt 2.614 ca sau khi ghim fixture CPU xác định; giữ failure01. Cả hai App đã dừng, tổng reservation 0,30 USD đóng theo cận bảo thủ. Chưa training chính A2/A3.
+
+
 ## 14/11 — Cache A2/A3 và resume đã kiểm trên T4 qua MCP
 
 [Hồ sơ](../runs/junyi-gpu-boundary-t4-20261114-01/README.md) giữ 102 ca hồi quy local, 39 ca hợp đồng cache mở rộng và parity/resume thực tế A2/A3 trên T4. Sai lệch dự đoán bằng 0; tốc độ cache A2 giảm 4,7%, A3 gần như ngang nhau trong phép đo ngắn. Confidence fixture kỹ thuật; training chính và stop barrier Modal thật còn chờ. Trạng thái tải artifact/trả runtime ghi ở STATE, 0 USD Modal.

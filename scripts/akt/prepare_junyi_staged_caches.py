@@ -66,9 +66,7 @@ def main():
     if not (selection_root/'COMPLETE.json').exists():
         if selection_root.exists():
             raise ValueError('Incomplete selection output preserved; choose a new selection-output')
-        build_selection_cache(selection_root,iter_junyi_phase_learners(inputs.paths,inputs.selection,
-            cache_root=local(data['selected_cache_root']),
-            expected_cache_manifest_sha256=data['selected_cache_manifest_sha256']),
+        build_selection_cache(selection_root,iter_junyi_phase_learners(inputs.paths,inputs.selection),
             view=inputs.selection,encoding=encoding,source_sha256=inputs.source_identity,
             expected_targets=inputs.selection_targets,max_seconds=remaining(),
             max_rss_bytes=args.max_rss_mib*1024**2)

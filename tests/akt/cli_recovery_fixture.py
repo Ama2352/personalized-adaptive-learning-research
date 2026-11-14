@@ -13,6 +13,11 @@ import sys
 
 
 def main():
+    import torch
+    # So sánh bitwise giữa các process cần cùng cấu hình CPU xác định.
+    torch.set_num_threads(1)
+    torch.set_num_interop_threads(1)
+    torch.use_deterministic_algorithms(True)
     from knowledge_tracing.akt import config as config_module, runner, watchdog, authorization
     from knowledge_tracing.akt import training, prediction
     from knowledge_tracing.akt.types import KTEvent, LearnerEvents
