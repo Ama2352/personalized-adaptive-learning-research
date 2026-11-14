@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import time
@@ -33,6 +34,17 @@ def write(path, value):
     with path.open('x', encoding='utf-8') as stream:
         json.dump(value, stream, ensure_ascii=False, indent=2)
         stream.write('\n')
+
+
+def prepare_runtime_report(root, operation, upstream, lock, device):
+    """Dùng đúng vùng output của CLI, giữ bản báo cáo trong artifact theo lượt."""
+    generated=root/'artifacts/akt/preflight'/(operation.name+'-runtime.json')
+    subprocess.run([str(root/'.venv/bin/python'),'-I','-B',str(root/'scripts/akt/check_runtime.py'),
+        '--upstream',str(upstream),'--device',device,'--lock-file',str(lock),
+        '--output',str(generated)],check=True,timeout=90)
+    report=operation/'runtime.json'
+    shutil.copyfile(generated,report)
+    return report
 
 
 def main():
@@ -83,12 +95,9 @@ def main():
         assert config.run_id == request['logical_run_id']
         assert config.output_dir == ROOT/'experiments/akt/results'/config.run_id
         assert sha(args.request) == execution['worker_request_sha256']
-        runtime = operation / 'runtime.json'
         lock = Path('/opt/locked-cu126.txt')
         assert sha(lock) == request['runtime_lock_sha256']
-        subprocess.run([sys.executable,'-I','-B',str(ROOT/'scripts/akt/check_runtime.py'),
-            '--upstream',str(config.source_root),'--device','cuda','--lock-file',str(lock),
-            '--output',str(runtime)], check=True, timeout=90)
+        runtime = prepare_runtime_report(ROOT,operation,config.source_root,lock,'cuda')
         gate = require_gate2_evidence(config, lock_file=lock)
         preflight(config, runtime_report_path=runtime, lock_file=lock, cuda_profile=profile)
         data = request['inputs']

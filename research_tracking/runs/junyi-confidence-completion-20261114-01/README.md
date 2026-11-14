@@ -55,3 +55,7 @@ Bốn cache CPU thật đã hoàn tất, gồm 13.347.331 target train và 1.600
 Lượt01 bị SDK chặn vì một Volume gắn nhiều mount. Lượt02 bị chặn do copy layer sau local runtime mount. Lượt03 không mount được vào thư mục artifacts còn file. Lượt04/05 giữ lỗi dựng image CPU do rename trên overlay và cú pháp multiline của run_commands. Lượt06 kiểm CPU bắt thiếu configs trong source image. Lượt07 kiểm toàn SHA trên Volume quá180giây, H100 chưa được gọi. Mọi App cũ đã có xác nhận dừng. Các lượt02–07 giữ settlement riêng trong ledger; số tiền đóng là cận bảo thủ, chưa phải chi thực tế.
 
 Đường thực thi sửa dùng một image chứa toàn bộ snapshot, dựng trên CPU, rồi kiểm đủ1.491file và dependency trên CPU provider trước gọi H100. GPU đọc cache từ image local, chỉ gắn Volume output. Source numerical, dữ liệu, confidence, cấu hình học và Gate trong snapshot giữ nguyên byte. Controller local sửa riêng, các kiểm hợp đồng mới nhất đạt39ca. `provider-preparation-manifest01.json` ghim source controller, tests và các log đã kết thúc. Lượt08 đang chuẩn bị image, chưa có kết quả epoch tại mốc này.
+
+## A2 đã bắt đầu training thật
+
+Source03 sửa đường dẫn runtime đạt Gate Linux 2.615 ca. Snapshot03 giữ cùng worker request, confidence, data và numeric profile, qua nghiệm thu CPU và checkout. Lượt09 CPU provider đạt 9,5268 giây, gồm 4,6607 giây SHA. Đã xác nhận CUDA và 600 bước epoch1 bằng telemetry, xem `a2-remote-progress.jsonl`. Một H100 với cap2,60USD; chờ kết thúc, stop acknowledgement và thu đủ artifact trước khi đóng lượt.

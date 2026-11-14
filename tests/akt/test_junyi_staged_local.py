@@ -18,6 +18,26 @@ sys.path.insert(0,str(ROOT/'scripts/akt'))
 from prepare_junyi_gpu_stage import validate_baseline_metadata
 
 
+def test_gpu_runtime_probe_uses_cli_allowed_output_and_keeps_report(tmp_path,monkeypatch):
+    import check_runtime
+    import run_junyi_gpu_stage as worker
+    root=tmp_path/'repo'
+    operation=root/'experiments/akt/results/run-operation'
+    operation.mkdir(parents=True)
+    report=dict(device='cuda',torch_version='synthetic')
+
+    def probe(command,**kwargs):
+        assert command[-2]=='--output' and command[command.index('--device')+1]=='cuda'
+        generated=check_runtime.validate_output_path(Path(command[-1]),kind='runtime',project_root=root)
+        generated.parent.mkdir(parents=True,exist_ok=True)
+        generated.write_text(json.dumps(report))
+
+    monkeypatch.setattr(worker.subprocess,'run',probe)
+    saved=worker.prepare_runtime_report(root,operation,root/'upstream',root/'lock.txt','cuda')
+    assert saved==operation/'runtime.json'
+    assert json.loads(saved.read_text())==report
+
+
 def archive(path,files,*,gate=False):
     path.parent.mkdir(parents=True,exist_ok=True)
     pins={name:dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest()) for name,raw in files.items()}
@@ -191,6 +211,7 @@ def test_controller_uploads_before_gpu_and_downloads_after_stop(package,monkeypa
             assert copy is True and 'gpu_start' not in events
             assert args==(snapshot/'project','/opt/kltn')
             events.append('cpu_source_image')
+            events.append('local_upload')
             return self
         def run_commands(self,*args):
             assert 'gpu_start' not in events
@@ -222,7 +243,7 @@ def test_controller_uploads_before_gpu_and_downloads_after_stop(package,monkeypa
             assert len({volume.object_id for volume in mounts.values()})==len(mounts)
             def decorate(callback):
                 if callback is staged.cpu_mount_preflight:
-                    return SimpleNamespace(spawn=lambda:SimpleNamespace(get=lambda timeout:
+                    return SimpleNamespace(spawn=lambda *args:SimpleNamespace(get=lambda timeout:
                         dict(status='PASS_STAGED_PROVIDER_INPUTS')))
                 return Function()
             return decorate

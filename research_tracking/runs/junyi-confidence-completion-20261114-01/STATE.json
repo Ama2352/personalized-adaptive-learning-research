@@ -1,5 +1,5 @@
 {
-  "status": "BUILDING_A2_LOCAL_INPUT_IMAGE_ON_MODAL_CPU",
+  "status": "A2_MAIN_SELECTED_TRAINING_ON_H100",
   "output": "artifacts/akt/confidence/full-train80-20261114-02",
   "prior_state": "research_tracking/runs/junyi-confidence-train80-20261114-01/STATE.json",
   "source_pins_match": true,
@@ -68,14 +68,11 @@
   "modal_actual_isolated_cost_usd": null,
   "linux_gate": {
     "status": "PASS",
-    "passed": 2614,
-    "source_build_sha256": "678a19e867fea9d4b911bad84419b927bdee561bc899bcbf5b1f5c4dd7429b22",
-    "archive_sha256": "3a21d44d556df9740695add2838fdc83750f4614e4339eaf801facabb8a2ad0a",
-    "output": "experiments/akt/results/modal-junyi-a2-a3-final-cpu-20261114-02",
-    "stop_acknowledged": true
+    "passed": 2615,
+    "output": "experiments/akt/results/modal-junyi-a2-a3-final-cpu-20261114-03"
   },
   "selection_cpu_admitted": true,
-  "active_exec_session": 35136,
+  "active_exec_session": 48883,
   "next_steps": [
     "Theo dõi upload và dispatch thực tế, xác minh GPU đã chạy qua dispatch/telemetry",
     "Khi dừng, xác nhận stop barrier và tải/kiểm mọi checkpoint/artifact trên D",
@@ -97,7 +94,7 @@
     "supported_edges": 708,
     "unsupported_edges": 268
   },
-  "active_operation": "image_build_then_cpu_byte_preflight_then_h100",
+  "active_operation": "bounded_h100_training_then_stop_and_collect",
   "fitter_processes_stopped": true,
   "confidence_summary": {
     "status": "FINAL_CONFIDENCE_WEIGHT_SUMMARY",
@@ -162,12 +159,16 @@
   },
   "graph_caches_complete": true,
   "snapshot_dependency_verified": true,
-  "snapshot": "artifacts/akt/staged/junyi-a2-expert-20261114-02",
-  "training_request": "a2-training-request08.json",
-  "training_log": "a2-training08.log",
-  "gpu_start_confirmed": false,
+  "snapshot": "artifacts/akt/staged/junyi-a2-expert-20261114-03",
+  "training_request": "a2-training-request09.json",
+  "training_log": "a2-training09.log",
+  "gpu_start_confirmed": true,
   "first_attempt_stop_acknowledged": true,
   "first_attempt_dispatched": false,
   "input_transport": "frozen-image-built-on-cpu",
-  "current_controller": "experiments/akt/modal_junyi_staged.py"
+  "current_controller": "experiments/akt/modal_junyi_staged.py",
+  "execution_id": "modal-junyi-a2-staged-h100-20261114-09",
+  "provider_cpu_preflight_seconds": 9.526807325,
+  "provider_cpu_hashing_seconds": 4.660742151999999,
+  "latest_observation": "a2-remote-progress.jsonl"
 }

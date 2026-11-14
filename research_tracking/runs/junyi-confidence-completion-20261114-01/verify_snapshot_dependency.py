@@ -16,7 +16,9 @@ def main():
     variant = sys.argv[1].lower()
     if variant not in ('a2', 'a3'):
         raise ValueError('Chỉ kiểm snapshot A2/A3')
-    snapshot = ROOT / f'artifacts/akt/staged/junyi-{variant}-expert-20261114-02'
+    version = sys.argv[2] if len(sys.argv)>2 else '02'
+    assert version in ('02','03')
+    snapshot = ROOT / f'artifacts/akt/staged/junyi-{variant}-expert-20261114-{version}'
     source = snapshot / 'project/artifacts/akt/dependencies/upstream'
     os.environ.update(GIT_OPTIONAL_LOCKS='0', GIT_CONFIG_COUNT='3',
                       GIT_CONFIG_KEY_0='core.fsmonitor', GIT_CONFIG_VALUE_0='false',
@@ -32,7 +34,7 @@ def main():
     result = dict(status='PASS_SNAPSHOT_DEPENDENCY_AND_INVENTORY', variant=variant.upper(),
                   snapshot=str(snapshot.relative_to(ROOT)), files=len(before['files']),
                   dependency=identity, inventory_unchanged=True, gpu_started=False)
-    output = HERE / f'{variant}-snapshot-dependency-verification02.json'
+    output = HERE / f'{variant}-snapshot-dependency-verification{version}.json'
     with output.open('x', encoding='utf-8') as stream:
         json.dump(result, stream, ensure_ascii=False, indent=2)
         stream.write('\n')

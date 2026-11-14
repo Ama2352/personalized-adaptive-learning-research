@@ -1,8 +1,16 @@
 # Báo cáo tiến độ khóa luận — cập nhật 14/11/2026
 
-## 14/11 — A2 đã đạt kiểm snapshot, chuyển sang lượt training có giới hạn
+## 14/11 — A2 đã bắt đầu huấn luyện thật trên Junyi
 
-Đã hoàn tất cả bốn cache ngữ cảnh đồ thị cho A2/A3 trên toàn bộ tập train và selection. Snapshot A2 đã qua kiểm dữ liệu, 27 trường cấu hình học so với A0/A1, toàn bộ 1.491 file và checkout AKT. Lỗi đóng gói dependency được phát hiện và sửa trong bước local. Đã gọi quy trình tải input rồi training A2 trên H100 với mức dự phòng tối đa 2,60 USD và giới hạn thời gian. Trạng thái hiện tại đang chờ xác nhận GPU bắt đầu. Kết quả epoch và checkpoint sẽ được bổ sung sau khi có output thực tế.
+A2 đã bắt đầu huấn luyện thật trên Junyi bằng H100. Mô hình dùng cùng TRAIN80 gồm 126.774 người học, 13.347.331 lượt trả lời và tập selection gồm 1.600.343 lượt trả lời như A0/A1. A2 bổ sung trọng số độ tin cậy cho từng cạnh đã ước lượng hoàn toàn từ TRAIN80.
+
+Để hạn chế thời gian thuê GPU, toàn bộ cache và source được đóng vào image bằng CPU trước khi gọi H100. Lượt kiểm provider mới nhất đối chiếu đủ 1.491 file và chạy đúng bước kiểm runtime trong 9,53 giây, trong đó kiểm SHA mất 4,66 giây. GPU đọc input từ file local của container và ghi checkpoint vào Volume riêng.
+
+Trước lượt này đã sửa các lỗi tích hợp mount/image và đường dẫn xuất báo cáo runtime. Source numerical sau sửa đã đạt 2.615 ca kiểm Linux. Các lượt lỗi có log và xác nhận dừng App. Lượt H100 trước bị dừng ở bước runtime sau khoảng 6 giây, chưa học epoch. Bộ kiểm controller local hiện hành đạt 40 ca.
+
+Ở mốc đầu tiên được lưu, epoch 1 đã học 600 bước và khoảng 4,40 triệu lượt trả lời trong 59 giây pha train. VRAM khoảng 5,65 GiB, GPU trung bình đoạn đo gần nhất khoảng 40%. Cần hoàn tất epoch để xác nhận thời gian train và selection đầy đủ. Checkpoint được lưu định kỳ để tiếp tục nếu hết thời hạn lượt chạy.
+
+Phần đang chạy là chọn checkpoint trên TRAIN80/selection của Development outer fold 4. Refit, calibration và đánh giá độc lập còn chờ. Chưa có kết quả đối chứng cuối của A2 để kết luận hiệu quả đồ thị cho RQ3.
 
 ## 14/11 — Hoàn tất confidence TRAIN80 cho A2/A3
 

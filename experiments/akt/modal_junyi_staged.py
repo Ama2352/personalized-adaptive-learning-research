@@ -17,7 +17,7 @@ import time
 ROOT = Path(__file__).resolve().parent.parent.parent
 
 
-def cpu_mount_preflight():
+def cpu_mount_preflight(execution_id):
     """Kiểm mount và byte thực tế trên CPU provider trước khi gọi GPU."""
     import hashlib
     import json
@@ -41,13 +41,21 @@ def cpu_mount_preflight():
         GIT_CONFIG_KEY_0='core.fsmonitor',GIT_CONFIG_VALUE_0='false',
         GIT_CONFIG_KEY_1='safe.directory',GIT_CONFIG_VALUE_1=str(root/'artifacts/akt/dependencies/upstream'),
         GIT_CONFIG_KEY_2='core.autocrlf',GIT_CONFIG_VALUE_2='false')
-    script=('import sys;sys.path.insert(0,"/opt/kltn/src");import torch;'
-        'from pathlib import Path;from knowledge_tracing.akt.provenance import verify_upstream;'
-        'verify_upstream(Path("/opt/kltn/artifacts/akt/dependencies/upstream"),'
-        '"01b7e8d7d7c862cabc9467108e3e7f2555653a88");print(torch.__version__)')
-    checked=subprocess.run([str(root/'.venv/bin/python'),'-B','-c',script],
-        env=environment,capture_output=True,text=True,check=True,timeout=60)
-    return dict(status='PASS_STAGED_PROVIDER_INPUTS',files=len(inventory['files']),torch=checked.stdout.strip(),
+    operation=root/'experiments/akt/results'/(execution_id+'-cpu-preflight')
+    operation.mkdir(parents=True)
+    script=('import sys;sys.path.insert(0,"/opt/kltn/scripts/akt");'
+        'from pathlib import Path;from run_junyi_gpu_stage import prepare_runtime_report;'
+        'prepare_runtime_report(Path("/opt/kltn"),Path(sys.argv[1]),'
+        'Path("/opt/kltn/artifacts/akt/dependencies/upstream"),Path("/opt/locked-cu126.txt"),"cpu")')
+    try:
+        subprocess.run([str(root/'.venv/bin/python'),'-B','-c',script,str(operation)],
+            env=environment,capture_output=True,text=True,check=True,timeout=120)
+    except subprocess.CalledProcessError as error:
+        print(error.stderr,flush=True)
+        raise
+    runtime=json.loads((operation/'runtime.json').read_text())
+    return dict(status='PASS_STAGED_PROVIDER_INPUTS',files=len(inventory['files']),torch=runtime['torch_version'],
+                runtime=runtime,
                 hashing_seconds=hashing_seconds,total_seconds=time.monotonic()-started)
 
 
@@ -195,7 +203,7 @@ def validate_execution(request, worker):
 
 def run(snapshot, request):
     sys.path.insert(0,str(ROOT/'experiments/akt'))
-    from junyi_staged_io import verify_project, collect_outputs, upload_snapshot, sha, write_new
+    from junyi_staged_io import verify_project, collect_outputs, sha, write_new
     from modal_budget_guard import ModalRunDeadline, ModalAppBudgetGuard, PendingOwnedModalApp, stop_owned_app_cli
     from modal_junyi_main_selected import validate_project_budget
     from modal_graph_selected import read_billing
@@ -237,9 +245,7 @@ def run(snapshot, request):
         allocation_id=request['allocation_id'],reserved_usd=request['reserved_usd_per_run'],
         ledger_sha256=sha(ledger_path)))
     volume_name='kltn-staged-'+worker['logical_run_id']
-    input_volume=modal.Volume.from_name(volume_name,create_if_missing=True,version=2)
-    # Upload hoàn tất trong process local, trước app.run GPU.
-    upload_snapshot(input_volume,snapshot,prepared)
+    # Input upload/dựng image hoàn tất trước CPU preflight và function GPU.
     output_volume_name=volume_name+'-outputs'
     volume=modal.Volume.from_name(output_volume_name,create_if_missing=True,version=2)
     app=modal.App('kltn-akt-'+request['execution_id'])
@@ -279,13 +285,13 @@ def run(snapshot, request):
         with ModalAppBudgetGuard(binding,deadline,stop_app=stop_owned_app_cli,
                                  diagnostic_path=output/'app-budget-guard.json'):
             with modal.enable_output(),app.run(environment_name='main'):
-                provider=cpu_check.spawn().get(timeout=min(240,deadline.remaining()))
+                provider=cpu_check.spawn(request['execution_id']).get(timeout=min(240,deadline.remaining()))
                 if provider.get('status')!='PASS_STAGED_PROVIDER_INPUTS':
                     raise ValueError('CPU provider chưa nghiệm thu input')
                 write_new(output/'provider-cpu-preflight.json',provider)
                 call=function.spawn(execution,output_volume_name)
                 write_new(output/'dispatch.json',dict(app_id=app.app_id,call_id=call.object_id,
-                    volume_name=output_volume_name,input_volume_name=volume_name))
+                    volume_name=output_volume_name,input_snapshot_sha256=sha(snapshot/'INPUTS.json')))
                 receipt=call.get(timeout=deadline.remaining())
     except BaseException as error:
         write_new(output/'local-failure.json',dict(error_type=type(error).__name__,error=str(error)))

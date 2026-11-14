@@ -68,4 +68,14 @@ if raw:
     result['worker_log_tail'] = raw[-2500:]
 with (HERE / 'a2-remote-progress.jsonl').open('a', encoding='utf-8') as stream:
     stream.write(json.dumps(result, ensure_ascii=False) + '\n')
-print(json.dumps(result, ensure_ascii=False))
+summary=dict(execution_id=execution,gpu=result.get('gpu'),error=result.get('failure.log'))
+event=result.get('progress',{})
+summary.update(epoch=event.get('epoch'),steps=event.get('training',{}).get('optimizer_steps'),
+    targets=event.get('training',{}).get('valid_targets'),
+    train_seconds=event.get('training',{}).get('resource',{}).get('wall_seconds'))
+summary['completed_training']={name:dict(complete=value.get('complete'),targets=value.get('valid_targets'),
+    seconds=value.get('resource',{}).get('wall_seconds')) for name,value in result.items()
+    if name.endswith('-training.json')}
+if 'result.json' in result:
+    summary['result']=result['result.json']
+print(json.dumps(summary, ensure_ascii=False))
