@@ -1,18 +1,17 @@
 {
-  "status": "LOCAL_NATIVE_REFIT_RESUME_78_PASS_PREPARATION_PENDING",
+  "status": "READY_FOR_BOUNDED_CUDA_VERIFICATION",
   "closed": false,
   "prior_evidence": "research_tracking/runs/junyi-a3-selected-20261114-01/CLOSEOUT_MANIFEST.json",
   "requested_scope": "Hoàn thiện pipeline refit A0–A3, ưu tiên local",
   "real_data_training_performed": false,
-  "modal_spending_this_batch_usd": 0,
+  "modal_spending_this_batch_usd": null,
   "gpu_started": false,
   "next_steps": [
-    "Kiểm phase refit90 và confidence TRAIN80 bằng hồi quy tổng hợp",
-    "Kiểm refit native A0–A3, interrupt/resume và epoch budget cố định",
-    "Tạo epoch plan thật từ bốn model đã xuất",
-    "Chuẩn bị encoding90 và window/cache trên CPU",
-    "Nối CLI chỉ thực thi khi có grant và Gate/runtime đúng source mới",
-    "Cập nhật báo cáo theo phạm vi đã kiểm, commit gói hoàn thiện"
+    "Kiểm CUDA bounded bằng đường refit mới và đo cost/target, giữ model kỹ thuật riêng",
+    "Đối soát ngân sách đủ36epoch và inference/calibration trước fullrefit",
+    "Đóng snapshot A1–A3 khi cần để tránh nhân bản cache lớn",
+    "Refit lần lượt A0–A3 đúng9epoch, resume cùng logicalrun",
+    "Xuất model, chuẩn bị calibration10 và đánh giá độc lập theo protocol"
   ],
   "verified_tests": {
     "passed": 78,
@@ -20,5 +19,49 @@
     "native_cpu": true,
     "log": "tests04.log"
   },
-  "epoch_plan": "epoch-plan.json"
+  "epoch_plan": "epoch-plan.json",
+  "active_cpu_session": null,
+  "latest_tests": {
+    "log": "tests10.log",
+    "passed": 85,
+    "scope": "refit native/resume, export checkpoint, staged budget/handoff",
+    "cuda_admission_mocked": true
+  },
+  "encoding90_identity": "4b8eb3e6bc5be9abd1419cf4e818b2e75dc86b82e59a0fe94e837c5f3299734f",
+  "encoding90_items": 717,
+  "window_cache_complete": true,
+  "window_records": 261111,
+  "window_targets": 14947674,
+  "source_receipt_recovered": true,
+  "active_graph_variant": null,
+  "active_cpu_child_pid": null,
+  "completed_graph_contexts": [
+    "A1",
+    "A2",
+    "A3"
+  ],
+  "prepared_matrix": "prepared-refit-matrix.json",
+  "source_gate": {
+    "status": "PASS",
+    "passed": 2660,
+    "failed": 0,
+    "skipped": 0,
+    "log": "source-gate02.log",
+    "receipt": "linux02/result.json",
+    "gpu": false,
+    "app_stop_acknowledged": true
+  },
+  "engineering_commit": "642e1de",
+  "modal_reserved_upper_closed_this_batch_usd": 0.3,
+  "staged_requests": [
+    "stage-inputs-a0.json",
+    "stage-inputs-a1.json",
+    "stage-inputs-a2.json",
+    "stage-inputs-a3.json"
+  ],
+  "validated_snapshot": {
+    "variant": "A0",
+    "path": "artifacts/akt/staged/junyi-a0-refit-20261114-01",
+    "receipt": "snapshot-a0.receipt.json"
+  }
 }

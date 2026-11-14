@@ -1,0 +1,92 @@
+{"request": {"run_id": "modal-junyi-refit-source-cpu-20261114-01", "reserved_usd": 0.15, "authorized_batch_usd": 0.15, "reserved_usd_per_run": 0.15, "allocation_id": "junyi-refit-source-cpu-20261114-01", "source_sha256": "e6fd0b58c3672e33947ec49e08ea992de41a0d0fcca06eb9570bc100e7fa474e", "expected_source_build_sha256": "a15a79c457faf42c09b48f0ca5eef4e68a42f6a93891036066cff0d10ba7534c", "source_bytes": 1460129, "worker_sha256": "e6fcbbf795c0a96d158c6ac14056c2b22d52969094a9a40b35393eaf59a6b3e4", "gpu": null, "max_vm_seconds": 600, "numerical_diagnostic_repeated": false}, "paid_execution_requested": true}
+<modal-server>:0: ServerWarning: Your Modal token ak-KS7sMBH7nUgNAN5E076FJf expires in 6h. Run `modal token new` to create a replacement.
+✓ Initialized. View run at 
+https://modal.com/apps/honguyenminhsang2005/main/ap-dYJ84mQT48kphoDGkZI5hc
+✓ Created objects.
+Building image im-IH13tOguOz4ql7hDEjlMNa
+Building image im-IH13tOguOz4ql7hDEjlMNa
+
+=> Step 0: FROM base
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+
+=> Step 1: COPY . /
+Saving image...
+Saving image...
+Image saved, took 1.03s
+
+Built image im-IH13tOguOz4ql7hDEjlMNa in 2.16s
+
+
+Image saved, took 1.03s
+
+Built image im-IH13tOguOz4ql7hDEjlMNa in 2.16s
+
+
+Building image im-dO8VZCY4dUX52X4SPtIawJ
+Building image im-dO8VZCY4dUX52X4SPtIawJ
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Saving image...
+Image saved, took 1.08s
+Image saved, took 1.08s
+
+Built image im-dO8VZCY4dUX52X4SPtIawJ in 2.56s
+
+
+
+Built image im-dO8VZCY4dUX52X4SPtIawJ in 2.56s
+
+
+Building image im-XS5eIC4aWPi5b0OnSjDwoA
+Building image im-XS5eIC4aWPi5b0OnSjDwoA
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+
+=> Step 0: FROM base
+
+=> Step 1: COPY . /
+Saving image...
+Saving image...
+Image saved, took 559.94ms
+Image saved, took 559.94ms
+
+Built image im-XS5eIC4aWPi5b0OnSjDwoA in 2.37s
+
+
+
+Built image im-XS5eIC4aWPi5b0OnSjDwoA in 2.37s
+
+
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/honguyenminhsang2005/main/ap-dYJ84mQT48kphoDGkZI5hc
+{"status": "FAILED_PRESERVED", "run_id": "modal-junyi-refit-source-cpu-20261114-01", "gpu_requested": false, "main_training": false, "numerical_diagnostic_repeated": false, "max_vm_seconds": 600, "returncode": 1, "source_files_unchanged": true, "elapsed_seconds": 96.832196727, "download_inventory_verified": true, "archive_sha256": "5810c1295769f457a4cd6f4fdc62a373565f91abff79703e767acdd3d4cc9eed", "archive_bytes": 50241}
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-refit-pipeline-20261114-01\linux01\cpu_controller.py", line 115, in <module>
+    asyncio.run(main(arguments()))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-refit-pipeline-20261114-01\linux01\cpu_controller.py", line 111, in main
+    assert result['status']=='MODAL_CPU_GATE_VERIFIED'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

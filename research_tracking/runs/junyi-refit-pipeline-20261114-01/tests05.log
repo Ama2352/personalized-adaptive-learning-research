@@ -1,0 +1,235 @@
+.........FFFFFFF                                                         [100%]
+================================== FAILURES ===================================
+______ test_epoch_plan_rejects_unmatched_selected_models[missing_model] _______
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+mutation = 'missing_model'
+
+    @pytest.mark.parametrize('mutation', ['missing_model', 'wrong_variant', 'changed_inputs', 'changed_config'])
+    def test_epoch_plan_rejects_unmatched_selected_models(case, mutation):
+        from knowledge_tracing.akt.research_junyi_refit import make_epoch_plan
+>       _, indices, _ = plan_inputs(case)
+                        ^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:147: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:134: in plan_inputs
+    profile = ResearchCUDAExecutionProfile(max_vram_bytes=16 * 1024**3)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:24: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = ResearchCUDAExecutionProfile(max_vram_bytes=17179869184, recipe_id='cgakt-cuda-fp32-v1', device='cuda:0', initializati...32=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8')
+
+    def __post_init__(self):
+        large_batch = self.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
+        max_vram = 16*1024**3 if large_batch else 2*1024**3
+        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= max_vram:
+>           raise ValueError('explicit CUDA allocator budget outside declared recipe')
+E           ValueError: explicit CUDA allocator budget outside declared recipe
+
+src\knowledge_tracing\akt\config.py:111: ValueError
+______ test_epoch_plan_rejects_unmatched_selected_models[wrong_variant] _______
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+mutation = 'wrong_variant'
+
+    @pytest.mark.parametrize('mutation', ['missing_model', 'wrong_variant', 'changed_inputs', 'changed_config'])
+    def test_epoch_plan_rejects_unmatched_selected_models(case, mutation):
+        from knowledge_tracing.akt.research_junyi_refit import make_epoch_plan
+>       _, indices, _ = plan_inputs(case)
+                        ^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:147: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:134: in plan_inputs
+    profile = ResearchCUDAExecutionProfile(max_vram_bytes=16 * 1024**3)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:24: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = ResearchCUDAExecutionProfile(max_vram_bytes=17179869184, recipe_id='cgakt-cuda-fp32-v1', device='cuda:0', initializati...32=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8')
+
+    def __post_init__(self):
+        large_batch = self.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
+        max_vram = 16*1024**3 if large_batch else 2*1024**3
+        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= max_vram:
+>           raise ValueError('explicit CUDA allocator budget outside declared recipe')
+E           ValueError: explicit CUDA allocator budget outside declared recipe
+
+src\knowledge_tracing\akt\config.py:111: ValueError
+______ test_epoch_plan_rejects_unmatched_selected_models[changed_inputs] ______
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+mutation = 'changed_inputs'
+
+    @pytest.mark.parametrize('mutation', ['missing_model', 'wrong_variant', 'changed_inputs', 'changed_config'])
+    def test_epoch_plan_rejects_unmatched_selected_models(case, mutation):
+        from knowledge_tracing.akt.research_junyi_refit import make_epoch_plan
+>       _, indices, _ = plan_inputs(case)
+                        ^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:147: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:134: in plan_inputs
+    profile = ResearchCUDAExecutionProfile(max_vram_bytes=16 * 1024**3)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:24: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = ResearchCUDAExecutionProfile(max_vram_bytes=17179869184, recipe_id='cgakt-cuda-fp32-v1', device='cuda:0', initializati...32=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8')
+
+    def __post_init__(self):
+        large_batch = self.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
+        max_vram = 16*1024**3 if large_batch else 2*1024**3
+        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= max_vram:
+>           raise ValueError('explicit CUDA allocator budget outside declared recipe')
+E           ValueError: explicit CUDA allocator budget outside declared recipe
+
+src\knowledge_tracing\akt\config.py:111: ValueError
+______ test_epoch_plan_rejects_unmatched_selected_models[changed_config] ______
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+mutation = 'changed_config'
+
+    @pytest.mark.parametrize('mutation', ['missing_model', 'wrong_variant', 'changed_inputs', 'changed_config'])
+    def test_epoch_plan_rejects_unmatched_selected_models(case, mutation):
+        from knowledge_tracing.akt.research_junyi_refit import make_epoch_plan
+>       _, indices, _ = plan_inputs(case)
+                        ^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:147: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:134: in plan_inputs
+    profile = ResearchCUDAExecutionProfile(max_vram_bytes=16 * 1024**3)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:24: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = ResearchCUDAExecutionProfile(max_vram_bytes=17179869184, recipe_id='cgakt-cuda-fp32-v1', device='cuda:0', initializati...32=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8')
+
+    def __post_init__(self):
+        large_batch = self.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
+        max_vram = 16*1024**3 if large_batch else 2*1024**3
+        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= max_vram:
+>           raise ValueError('explicit CUDA allocator budget outside declared recipe')
+E           ValueError: explicit CUDA allocator budget outside declared recipe
+
+src\knowledge_tracing\akt\config.py:111: ValueError
+________ test_epoch_plan_rejects_tampering_and_different_role_lineage _________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+
+    def test_epoch_plan_rejects_tampering_and_different_role_lineage(case):
+        from knowledge_tracing.akt.research_junyi_refit import validate_epoch_plan
+>       plan, _, profile = plan_inputs(case)
+                           ^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:134: in plan_inputs
+    profile = ResearchCUDAExecutionProfile(max_vram_bytes=16 * 1024**3)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:24: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = ResearchCUDAExecutionProfile(max_vram_bytes=17179869184, recipe_id='cgakt-cuda-fp32-v1', device='cuda:0', initializati...32=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8')
+
+    def __post_init__(self):
+        large_batch = self.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
+        max_vram = 16*1024**3 if large_batch else 2*1024**3
+        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= max_vram:
+>           raise ValueError('explicit CUDA allocator budget outside declared recipe')
+E           ValueError: explicit CUDA allocator budget outside declared recipe
+
+src\knowledge_tracing\akt\config.py:111: ValueError
+____ test_public_entry_checks_exact_grant_before_constructing_model[False] ____
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/runtime/refit-pipeline-tests-20261114-05/test_public_entry_checks_exact0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021EF10495A0>
+valid_grant = False
+
+    @pytest.mark.parametrize('valid_grant', [False, True])
+    def test_public_entry_checks_exact_grant_before_constructing_model(case, tmp_path, monkeypatch, valid_grant):
+        from knowledge_tracing.akt import authorization, research_junyi_refit as refit
+        from knowledge_tracing.akt import research_junyi_window_cache as windows
+        from knowledge_tracing.akt.research_junyi_engineering import file_sha
+        monkeypatch.setattr(windows, 'CACHE_BASE', tmp_path)
+        config = replace(case['config'], output_dir=tmp_path / 'output', run_id='synthetic-refit-public',
+            max_steps=100, max_seconds=60., max_wall_seconds=120., max_rss_bytes=2 * 1024**3,
+            min_available_ram_bytes=1)
+>       plan, _, profile = plan_inputs(case, config)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:179: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:134: in plan_inputs
+    profile = ResearchCUDAExecutionProfile(max_vram_bytes=16 * 1024**3)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:24: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = ResearchCUDAExecutionProfile(max_vram_bytes=17179869184, recipe_id='cgakt-cuda-fp32-v1', device='cuda:0', initializati...32=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8')
+
+    def __post_init__(self):
+        large_batch = self.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
+        max_vram = 16*1024**3 if large_batch else 2*1024**3
+        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= max_vram:
+>           raise ValueError('explicit CUDA allocator budget outside declared recipe')
+E           ValueError: explicit CUDA allocator budget outside declared recipe
+
+src\knowledge_tracing\akt\config.py:111: ValueError
+____ test_public_entry_checks_exact_grant_before_constructing_model[True] _____
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/runtime/refit-pipeline-tests-20261114-05/test_public_entry_checks_exact1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021EF1049F40>
+valid_grant = True
+
+    @pytest.mark.parametrize('valid_grant', [False, True])
+    def test_public_entry_checks_exact_grant_before_constructing_model(case, tmp_path, monkeypatch, valid_grant):
+        from knowledge_tracing.akt import authorization, research_junyi_refit as refit
+        from knowledge_tracing.akt import research_junyi_window_cache as windows
+        from knowledge_tracing.akt.research_junyi_engineering import file_sha
+        monkeypatch.setattr(windows, 'CACHE_BASE', tmp_path)
+        config = replace(case['config'], output_dir=tmp_path / 'output', run_id='synthetic-refit-public',
+            max_steps=100, max_seconds=60., max_wall_seconds=120., max_rss_bytes=2 * 1024**3,
+            min_available_ram_bytes=1)
+>       plan, _, profile = plan_inputs(case, config)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:179: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:134: in plan_inputs
+    profile = ResearchCUDAExecutionProfile(max_vram_bytes=16 * 1024**3)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<string>:24: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = ResearchCUDAExecutionProfile(max_vram_bytes=17179869184, recipe_id='cgakt-cuda-fp32-v1', device='cuda:0', initializati...32=False, cudnn_allow_tf32=False, matmul_precision='highest', cudnn_benchmark=False, cublas_workspace_config=':4096:8')
+
+    def __post_init__(self):
+        large_batch = self.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
+        max_vram = 16*1024**3 if large_batch else 2*1024**3
+        if type(self.max_vram_bytes) is not int or not 64*1024**2 <= self.max_vram_bytes <= max_vram:
+>           raise ValueError('explicit CUDA allocator budget outside declared recipe')
+E           ValueError: explicit CUDA allocator budget outside declared recipe
+
+src\knowledge_tracing\akt\config.py:111: ValueError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_junyi_refit.py::test_epoch_plan_rejects_unmatched_selected_models[missing_model]
+FAILED tests/akt/test_junyi_refit.py::test_epoch_plan_rejects_unmatched_selected_models[wrong_variant]
+FAILED tests/akt/test_junyi_refit.py::test_epoch_plan_rejects_unmatched_selected_models[changed_inputs]
+FAILED tests/akt/test_junyi_refit.py::test_epoch_plan_rejects_unmatched_selected_models[changed_config]
+FAILED tests/akt/test_junyi_refit.py::test_epoch_plan_rejects_tampering_and_different_role_lineage
+FAILED tests/akt/test_junyi_refit.py::test_public_entry_checks_exact_grant_before_constructing_model[False]
+FAILED tests/akt/test_junyi_refit.py::test_public_entry_checks_exact_grant_before_constructing_model[True]
+7 failed, 9 passed in 45.26s

@@ -1,5 +1,15 @@
 # Báo cáo tiến độ khóa luận — cập nhật 14/11/2026
 
+## 14/11 — Đã chuẩn bị dữ liệu và pipeline refit A0–A3
+
+Sau khi chọn được số epoch trên nhóm học và nhóm chọn checkpoint riêng, bước tiếp theo là học lại từng mô hình từ đầu trên hợp hai nhóm này. Cách làm này tận dụng thêm dữ liệu Development trước khi hiệu chỉnh xác suất và đánh giá độc lập. Số epoch đã được cố định, nên bước refit không tiếp tục chọn epoch bằng kết quả đánh giá cuối.
+
+Đã đối chiếu bốn model đã lưu và đóng băng 9 epoch cho mỗi phiên bản, tổng cộng 36 epoch. Tập refit gồm 142.621 người học và 14.947.674 lượt trả lời mỗi epoch. Bộ mã hóa mới gồm 717 bài tập. Nhóm dùng hiệu chỉnh xác suất và nhóm đánh giá độc lập giữ riêng. Độ tin cậy cạnh tiếp tục giữ bản ước lượng từ TRAIN80 theo thiết kế đã chốt.
+
+Đã dựng xong cache cửa sổ tương tác và cache đồ thị A1–A3 trên CPU, đồng thời kiểm cả bốn bộ đầu vào khớp về người học, mã hóa và quần thể mục tiêu. Pipeline có khởi tạo model mới, giới hạn thời gian/tài nguyên, checkpoint mỗi epoch, lưu trạng thái khi ngắt và xuất gọn model. 85 ca kiểm local đã đạt, gồm đối chiếu model, Adam và trạng thái ngẫu nhiên khi chạy liên tục so với nối lại trên dữ liệu tổng hợp.
+
+Đây là tiến độ chuẩn bị thực thi. Model refit dữ liệu thật, hiệu chỉnh xác suất và kết quả so sánh độc lập vẫn còn chờ. Source mới đã đạt 2.660 ca kiểm trên Linux, và snapshot A0 đã kiểm đạt trên local. Đường refit mới còn cần một lượt kiểm CUDA có giới hạn trước khi chạy đủ 36 epoch. Giới hạn toàn KLTN vẫn là 30 USD, và dự toán phần còn lại phải được kiểm lại từ hiệu năng thực tế.
+
 ## 14/11 — A0–A3 đã hoàn tất chọn checkpoint trên Junyi
 
 Sau A0 không dùng đồ thị, A1 dùng đồ thị cố định và A2 dùng độ tin cậy từng cạnh, đã hoàn tất A3 với thêm một cổng học điều chỉnh ảnh hưởng đồ thị. Bốn cấu hình tạo thành chuỗi đối chứng dự báo cho RQ3. Confidence được ước lượng riêng từ TRAIN80 trước khi học A2/A3.

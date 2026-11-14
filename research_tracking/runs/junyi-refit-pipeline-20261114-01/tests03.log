@@ -1,0 +1,192 @@
+.....FFF...........................................................F.... [ 92%]
+......                                                                   [100%]
+================================== FAILURES ===================================
+___________ test_native_refit_partial_resume_equals_continuous[A1] ____________
+
+case = {'roles': JunyiResearchRoles(train_users=('0', '1', '10', '11', '12', '13', '16', '2', '3', '5', '6', '8'), selection_...aa7d4519b2f88bf14292e02366817f34f2', identity='13f08a778a78e32be86d4fc29337a92b077e620c0f9cfe3d0961d0c25303def2'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/runtime/refit-pipeline-tests-20261114-03/test_native_refit_partial_resu1')
+variant = 'A1'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_native_refit_partial_resume_equals_continuous(case, tmp_path, variant):
+        torch.set_num_threads(1)
+        targets = len(case['refit'].users) * 6
+        budget = dict(max_steps=100, max_targets=targets, max_seconds=60.,
+            max_rss_bytes=2 * 1024**3, min_available_ram_bytes=1)
+        def make():
+            adapter = case['adapter'](variant)
+            optimizer = torch.optim.Adam(adapter.native.parameters(), lr=1e-4, foreach=False, fused=False)
+            identity = dict(phase='synthetic_refit90', variant=variant)
+            if variant != 'A0':
+                identity['batch_factory'] = adapter.audit_context_boundary()
+            return adapter, optimizer, identity
+        continuous, optimizer, identity = make()
+        common = dict(epochs=2, targets=targets, max_seconds=120., checkpoint_every_steps=1)
+>       expected = _run_epochs(continuous, lambda: iter(case['entries']), optimizer=optimizer,
+            output=tmp_path / 'continuous', identity=identity, budget=budget, **common)
+
+tests\akt\test_junyi_refit.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_refit.py:166: in _run_epochs
+    stats = train_epoch(adapter, windows_factory, optimizer=optimizer, epoch=epoch, budget=epoch_budget,
+src\knowledge_tracing\akt\training.py:346: in train_epoch
+    if len(pending) >= adapter.config.batch_size and not flush():
+                                                         ^^^^^^^
+src\knowledge_tracing\akt\training.py:288: in flush
+    batch = batch_factory(tuple(pending))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph_model.py:189: in collate_training
+    batch,evidence = self._collate(tuple(entry.window for entry in entries),[entry.targets for entry in entries])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph_model.py:177: in _collate
+    evidence=builder(tuple(windows),self.phase)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_compact.py:90: in build_compact_context
+    _validate_window(window,phase)
+src\knowledge_tracing\akt\research_junyi_graph.py:268: in _validate_window
+    _need(np.all(inputs.source_rows > 0) and len(set(inputs.source_rows.tolist())) == size
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = np.False_
+message = 'Unique positive source rows and timestamps required'
+
+    def _need(value, message):
+        if not value:
+>           raise ValueError(message)
+E           ValueError: Unique positive source rows and timestamps required
+
+src\knowledge_tracing\akt\research_junyi_graph.py:25: ValueError
+___________ test_native_refit_partial_resume_equals_continuous[A2] ____________
+
+case = {'roles': JunyiResearchRoles(train_users=('0', '1', '10', '11', '12', '13', '16', '2', '3', '5', '6', '8'), selection_...aa7d4519b2f88bf14292e02366817f34f2', identity='13f08a778a78e32be86d4fc29337a92b077e620c0f9cfe3d0961d0c25303def2'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/runtime/refit-pipeline-tests-20261114-03/test_native_refit_partial_resu2')
+variant = 'A2'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_native_refit_partial_resume_equals_continuous(case, tmp_path, variant):
+        torch.set_num_threads(1)
+        targets = len(case['refit'].users) * 6
+        budget = dict(max_steps=100, max_targets=targets, max_seconds=60.,
+            max_rss_bytes=2 * 1024**3, min_available_ram_bytes=1)
+        def make():
+            adapter = case['adapter'](variant)
+            optimizer = torch.optim.Adam(adapter.native.parameters(), lr=1e-4, foreach=False, fused=False)
+            identity = dict(phase='synthetic_refit90', variant=variant)
+            if variant != 'A0':
+                identity['batch_factory'] = adapter.audit_context_boundary()
+            return adapter, optimizer, identity
+        continuous, optimizer, identity = make()
+        common = dict(epochs=2, targets=targets, max_seconds=120., checkpoint_every_steps=1)
+>       expected = _run_epochs(continuous, lambda: iter(case['entries']), optimizer=optimizer,
+            output=tmp_path / 'continuous', identity=identity, budget=budget, **common)
+
+tests\akt\test_junyi_refit.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_refit.py:166: in _run_epochs
+    stats = train_epoch(adapter, windows_factory, optimizer=optimizer, epoch=epoch, budget=epoch_budget,
+src\knowledge_tracing\akt\training.py:346: in train_epoch
+    if len(pending) >= adapter.config.batch_size and not flush():
+                                                         ^^^^^^^
+src\knowledge_tracing\akt\training.py:288: in flush
+    batch = batch_factory(tuple(pending))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph_model.py:189: in collate_training
+    batch,evidence = self._collate(tuple(entry.window for entry in entries),[entry.targets for entry in entries])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph_model.py:177: in _collate
+    evidence=builder(tuple(windows),self.phase)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_compact.py:159: in build_compact_confidence_context
+    _validate_window(window,phase)
+src\knowledge_tracing\akt\research_junyi_graph.py:268: in _validate_window
+    _need(np.all(inputs.source_rows > 0) and len(set(inputs.source_rows.tolist())) == size
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = np.False_
+message = 'Unique positive source rows and timestamps required'
+
+    def _need(value, message):
+        if not value:
+>           raise ValueError(message)
+E           ValueError: Unique positive source rows and timestamps required
+
+src\knowledge_tracing\akt\research_junyi_graph.py:25: ValueError
+___________ test_native_refit_partial_resume_equals_continuous[A3] ____________
+
+case = {'roles': JunyiResearchRoles(train_users=('0', '1', '10', '11', '12', '13', '16', '2', '3', '5', '6', '8'), selection_...aa7d4519b2f88bf14292e02366817f34f2', identity='13f08a778a78e32be86d4fc29337a92b077e620c0f9cfe3d0961d0c25303def2'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/runtime/refit-pipeline-tests-20261114-03/test_native_refit_partial_resu3')
+variant = 'A3'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_native_refit_partial_resume_equals_continuous(case, tmp_path, variant):
+        torch.set_num_threads(1)
+        targets = len(case['refit'].users) * 6
+        budget = dict(max_steps=100, max_targets=targets, max_seconds=60.,
+            max_rss_bytes=2 * 1024**3, min_available_ram_bytes=1)
+        def make():
+            adapter = case['adapter'](variant)
+            optimizer = torch.optim.Adam(adapter.native.parameters(), lr=1e-4, foreach=False, fused=False)
+            identity = dict(phase='synthetic_refit90', variant=variant)
+            if variant != 'A0':
+                identity['batch_factory'] = adapter.audit_context_boundary()
+            return adapter, optimizer, identity
+        continuous, optimizer, identity = make()
+        common = dict(epochs=2, targets=targets, max_seconds=120., checkpoint_every_steps=1)
+>       expected = _run_epochs(continuous, lambda: iter(case['entries']), optimizer=optimizer,
+            output=tmp_path / 'continuous', identity=identity, budget=budget, **common)
+
+tests\akt\test_junyi_refit.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_refit.py:166: in _run_epochs
+    stats = train_epoch(adapter, windows_factory, optimizer=optimizer, epoch=epoch, budget=epoch_budget,
+src\knowledge_tracing\akt\training.py:346: in train_epoch
+    if len(pending) >= adapter.config.batch_size and not flush():
+                                                         ^^^^^^^
+src\knowledge_tracing\akt\training.py:288: in flush
+    batch = batch_factory(tuple(pending))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph_model.py:189: in collate_training
+    batch,evidence = self._collate(tuple(entry.window for entry in entries),[entry.targets for entry in entries])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_graph_model.py:177: in _collate
+    evidence=builder(tuple(windows),self.phase)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_compact.py:159: in build_compact_confidence_context
+    _validate_window(window,phase)
+src\knowledge_tracing\akt\research_junyi_graph.py:268: in _validate_window
+    _need(np.all(inputs.source_rows > 0) and len(set(inputs.source_rows.tolist())) == size
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = np.False_
+message = 'Unique positive source rows and timestamps required'
+
+    def _need(value, message):
+        if not value:
+>           raise ValueError(message)
+E           ValueError: Unique positive source rows and timestamps required
+
+src\knowledge_tracing\akt\research_junyi_graph.py:25: ValueError
+____________ test_phase_switch_separates_prediction_from_training _____________
+
+setup = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/artifacts/akt/runtim...cc179564cdaed0ec1391ddd84aad55955e', identity='7f709edd43e0f973d54da108e5472d3b03930bce7e79919b76cc89cb74cba3a3'), ...}
+
+    def test_phase_switch_separates_prediction_from_training(setup):
+        adapter = setup['adapter']()
+        selection = JunyiGraphPhaseSession(adapter.condition,setup['selection'])
+        adapter.set_phase(selection)
+        values = adapter.predict_windows(windows(setup,setup['selection']))
+        assert len(values)==1 and values[0].shape==(6,)
+        entries = windows(setup,setup['selection'],training=True)
+>       with pytest.raises(ValueError,match='train80'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'train80'
+E         Actual message: 'Fresh optimization phase required for optimizer batches'
+
+tests\akt\test_junyi_graph_model.py:312: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_junyi_refit.py::test_native_refit_partial_resume_equals_continuous[A1]
+FAILED tests/akt/test_junyi_refit.py::test_native_refit_partial_resume_equals_continuous[A2]
+FAILED tests/akt/test_junyi_refit.py::test_native_refit_partial_resume_equals_continuous[A3]
+FAILED tests/akt/test_junyi_graph_model.py::test_phase_switch_separates_prediction_from_training
+4 failed, 74 passed in 91.34s (0:01:31)

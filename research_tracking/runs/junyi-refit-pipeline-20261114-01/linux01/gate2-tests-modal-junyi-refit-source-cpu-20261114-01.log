@@ -1,0 +1,128 @@
+
+=== Gate2 process group stdlib ===
+...................                                                      [100%]
+19 passed in 0.16s
+
+=== Gate2 process group no-torch ===
+........................................................................ [ 26%]
+........................................................................ [ 52%]
+........................................................................ [ 78%]
+..........................................................               [100%]
+274 passed in 6.43s
+
+=== Gate2 process group remaining ===
+........................................FF.............................. [  3%]
+........................................................................ [  6%]
+........................................................................ [  9%]
+........................................................................ [ 12%]
+........................................................................ [ 15%]
+........................................................................ [ 18%]
+........................................................................ [ 21%]
+........................................................................ [ 24%]
+............................................................. [ 26%]
+........................................................................ [ 29%]
+........................................................................ [ 32%]
+........................................................................ [ 36%]
+........................................................................ [ 39%]
+........................................................................ [ 42%]
+.......................................................................... [ 45%]
+........................................................................ [ 48%]
+........................................................................ [ 51%]
+........................................................................ [ 54%]
+........................................................................ [ 57%]
+................................................................................................... [ 61%]
+........................................................................ [ 64%]
+........................................................................ [ 67%]
+........................................................................ [ 70%]
+........................................................................ [ 73%]
+........................................................................ [ 76%]
+........................................................................ [ 79%]
+........................................................................ [ 82%]
+............................................................................................ [ 86%]
+.................................................. [ 88%]
+........................................................................ [ 91%]
+........................................................................ [ 94%]
+........................................................................ [ 98%]
+...............................................                          [100%]
+=================================== FAILURES ===================================
+_________ test_fixed_docs_raw_bytes_and_notebook_transform_without_zip _________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/opt/kltn/artifacts/akt/local-tests/gate2-a34ab5b7842a40aa8748cc1fd549bc03/...ifacts/akt/local-tests/gate2-a34ab5b7842a40aa8748cc1fd549bc03/remaining'), _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f1e401e7110>
+
+    def test_fixed_docs_raw_bytes_and_notebook_transform_without_zip(tmp_path_factory, monkeypatch):
+        tmp_path = tmp_path_factory.mktemp('b')  # Bound Windows ancestor length for Paper2 fixture filenames.
+        collect, contracts = synthetic_collector(tmp_path, monkeypatch)
+>       contents, transforms = collect()
+                               ^^^^^^^^^
+
+tests/akt/test_colab_bundle.py:106: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/akt/build_colab_bundle.py:49: in bundle_contents
+    data = path.read_bytes()
+           ^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:625: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/opt/kltn/artifacts/akt/local-tests/gate2-a34ab5b7842a40aa8748cc1fd549bc03/remaining/b0/experiments/akt/modal_junyi_refit.py')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/opt/kltn/artifacts/akt/local-tests/gate2-a34ab5b7842a40aa8748cc1fd549bc03/remaining/b0/experiments/akt/modal_junyi_refit.py'
+
+/usr/local/lib/python3.13/pathlib/_local.py:537: FileNotFoundError
+____________ test_output_free_notebook_keeps_corpus_source_identity ____________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=PosixPath('/opt/kltn/artifacts/akt/local-tests/gate2-a34ab5b7842a40aa8748cc1fd549bc03/...ifacts/akt/local-tests/gate2-a34ab5b7842a40aa8748cc1fd549bc03/remaining'), _retention_count=3, _retention_policy='all')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f1e40147430>
+
+    def test_output_free_notebook_keeps_corpus_source_identity(tmp_path_factory, monkeypatch):
+        tmp_path = tmp_path_factory.mktemp('b')
+        collect, _ = synthetic_collector(tmp_path, monkeypatch)
+        name = 'paper1/AdaptiveEngineSimulation_Enhanced.ipynb'
+        original = b'{"metadata":{"kernelspec":{"name":"python3"}},"cells":[{"cell_type":"code","source":["x=1"],"metadata":{},"outputs":[],"execution_count":null}]}\r\n'
+        (tmp_path/name).write_bytes(original)
+>       contents, transforms = collect()
+                               ^^^^^^^^^
+
+tests/akt/test_colab_bundle.py:129: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/akt/build_colab_bundle.py:49: in bundle_contents
+    data = path.read_bytes()
+           ^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/pathlib/_abc.py:625: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/opt/kltn/artifacts/akt/local-tests/gate2-a34ab5b7842a40aa8748cc1fd549bc03/remaining/b1/experiments/akt/modal_junyi_refit.py')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/opt/kltn/artifacts/akt/local-tests/gate2-a34ab5b7842a40aa8748cc1fd549bc03/remaining/b1/experiments/akt/modal_junyi_refit.py'
+
+/usr/local/lib/python3.13/pathlib/_local.py:537: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/akt/test_colab_bundle.py::test_fixed_docs_raw_bytes_and_notebook_transform_without_zip
+FAILED tests/akt/test_colab_bundle.py::test_output_free_notebook_keeps_corpus_source_identity
+2 failed, 2365 passed, 272 subtests passed in 88.02s (0:01:28)

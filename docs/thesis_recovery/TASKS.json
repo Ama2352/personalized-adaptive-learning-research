@@ -4,7 +4,7 @@
   "as_of": "2026-11-14",
   "execution_authorized": false,
   "approval_rule": "Chỉ thực hiện trong phạm vi người dùng đã duyệt, giữ grant/timeout và trần cloud toàn KLTN 30 USD. Không tự duyệt mới phương pháp, full CV, Holdout hoặc lựa chọn mô hình cuối ngoài phạm vi đã chốt.",
-  "latest_authorization_vi": "Người dùng14/11 cho phép chuẩn bị và training A3, giữ cấu hình A0–A2, trần toàn KLTN30USD, lưu checkpoint/artifact và cập nhật report. Hai lượt A3 đã đóng, nhiệm vụ tiếp theo vẫn theo phạm vi người dùng giao và ledger hiện hành.",
+  "latest_authorization_vi": "Người dùng14/11 giao tiếp tục hoàn thiện pipeline refit A0–A3. Chuẩn bị/kiểm local, giữ epoch đã chọn và Recipe26, chi kiểm CPU hữu hạn theo ủy quyền nhỏ trong trần toànKLTN30USD. Refit/GPU thật cần ledger/timeout hợp lệ, taskstatus không tự cấp quyền.",
   "tasks": [
     {
       "id": "T01",
@@ -4467,6 +4467,30 @@
         "status": "CANONICAL_TEST10_AND_FOUR_EXPORT_PAIRS_PASS",
         "bundle": "research_tracking/runs/selection-artifact-io-integration-20261110-01",
         "external_freeze_complete": false
+      },
+      "junyi_refit_component_20261114": {
+        "status": "LINUX_GATE_PASS_CPU_SNAPSHOT_A0_READY_CUDA_PENDING",
+        "bundle": "research_tracking/runs/junyi-refit-pipeline-20261114-01",
+        "frozen_epochs": {
+          "A0": 9,
+          "A1": 9,
+          "A2": 9,
+          "A3": 9
+        },
+        "train90_learners": 142621,
+        "train90_targets_per_epoch": 14947674,
+        "local_test_log": "tests10.log",
+        "local_tests_passed": 85,
+        "real_data_refit_completed": false,
+        "calibration_completed": false,
+        "independent_evaluation_completed": false,
+        "remaining": [
+          "CUDA numerical nghiệm thu và cost/target90",
+          "dự toán toàn phần còn lại trong30USD",
+          "refit,calibration,đánh giá độc lập"
+        ],
+        "linux_tests_passed": 2660,
+        "validated_snapshot": "artifacts/akt/staged/junyi-a0-refit-20261114-01"
       }
     },
     {

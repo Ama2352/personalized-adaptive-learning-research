@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\scripts\akt\prepare_junyi_cpu_admission.py", line 70, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\scripts\akt\prepare_junyi_cpu_admission.py", line 49, in main
+    assert file_sha(plan_path) == plan_pin['sha256']
+           ^^^^^^^^
+NameError: name 'file_sha' is not defined
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\scripts\akt\prepare_junyi_cpu_admission.py", line 70, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\scripts\akt\prepare_junyi_cpu_admission.py", line 24, in main
+    subprocess.run([sys.executable, '-B', str(Path(__file__).resolve()), '--request', str(args.request),
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    '--output', str(destination), '--max-seconds', str(args.max_seconds), '--worker'],
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                   check=True, timeout=args.max_seconds, cwd=ROOT)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe', '-B', 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_cpu_admission.py', '--request', 'research_tracking\\runs\\junyi-refit-pipeline-20261114-01\\cpu-admission-request.json', '--output', 'D:\\Dev\\KLTN\\artifacts\\akt\\window-cache\\full-refit90-cpu-admission-20261114-01.json', '--max-seconds', '600', '--worker']' returned non-zero exit status 1.
