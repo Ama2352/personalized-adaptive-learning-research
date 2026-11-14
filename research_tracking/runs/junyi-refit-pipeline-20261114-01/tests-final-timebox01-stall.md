@@ -1,0 +1,1 @@
+Lượt pytest local đầu không phát log sau hơn ba phút, CPU thấp, RAM khoảng 54 MiB. Đã dừng đúng hai tiến trình của lượt kiểm này. Chưa có kết quả test để nghiệm thu. Lượt tiếp theo tắt plugin tự nạp và bật traceback chẩn đoán sau 30 giây. Không tác động training Modal.
