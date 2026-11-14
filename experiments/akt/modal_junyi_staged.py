@@ -190,7 +190,7 @@ def validate_execution(request, worker):
     return validate_resource_budget(request, worker)
 
 
-def validate_resource_budget(request, worker):
+def validate_resource_budget(request, worker, *, allow_short_final_epoch=False):
     """Dùng chung deadline, tài nguyên và cận chi phí cho selected/refit."""
     if request.get('status')!='USER_APPROVED' or not request.get('approval_reference'):
         raise PermissionError('Thiếu quyền thực thi lượt chạy')
@@ -215,7 +215,7 @@ def validate_resource_budget(request, worker):
     upper=(watchdog+60)*rate
     if upper>request['reserved_usd_per_run']:
         raise PermissionError('Cap tiền thấp hơn cận thời gian/tài nguyên')
-    if (worker['config']['max_wall_seconds']+120>child
+    if ((not allow_short_final_epoch and worker['config']['max_wall_seconds']+120>child)
             or worker['config']['max_seconds']>worker['config']['max_wall_seconds']):
         raise ValueError('Cần chừa thời gian runtime, handoff và checkpoint trong cap GPU')
     return dict(upper_usd=upper,rate_upper_usd_per_second=rate)
