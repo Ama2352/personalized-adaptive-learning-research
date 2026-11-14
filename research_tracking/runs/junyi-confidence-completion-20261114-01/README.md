@@ -18,7 +18,7 @@ Request gốc ở `../junyi-confidence-train80-20261114-01/request.json`. Đã �
 
 ## Kết quả và phần còn thiếu
 
-Đang kiểm/niêm phong corpus. Chưa công bố confidence hoàn chỉnh hoặc chạy training chính A2/A3 trong đợt này. Đọc `STATE.json` để biết tiến độ thực tế. Đợt T4 trước đã kiểm parity/resume A2/A3 với fixture, còn cần nghiệm thu source cuối và bộ confidence thật cho training chính.
+Corpus đã niêm phong, cache selection đã kiểm đầy đủ và source mới đạt 2.614 ca Linux. Confidence đang fit local theo checkpoint từng child. Đọc `STATE.json` để biết tiến độ thật. Confidence hoàn chỉnh và cache graph thật còn cần hoàn tất trước training chính A2/A3.
 
 ## Cập nhật lúc tiếp tục
 
@@ -31,3 +31,9 @@ Gate Linux CPU01 giữ2613ca đạt và1ca lỗi so sánh loss tuyệt đối c�
 ## Gate Linux đã đạt
 
 Lượt02 với fixture CPU một luồng và deterministic giữ nguyên so sánh bitwise đã đạt 2.614 ca, 0 lỗi hoặc skip trong 183,737 giây worker. Giữ failure01, kết quả local nguồn cũ và kiểm local fixture mới. `linux02/` ghim source ZIP cùng báo cáo, settlement và controller của lượt02. Hai App đã dừng, artifact ZIP đã tải và đối chiếu. Tổng cap hai lượt CPU 0,30 USD được cộng theo cận bảo thủ vào ledger, chi phí riêng thực tế chưa tách được. Confidence tiếp tục local, chưa training chính A2/A3.
+
+## Dependency và request để chuẩn bị snapshot
+
+`runtime-lock-verification.json` đối chiếu cùng SHA lock giữa T4, Gate Linux và file local trên D. `upstream-portable-inventory.json` ghi checkout AKT sạch, đúng commit và file LF, chuẩn bị riêng vì mount artifacts của worker sẽ che bản dependency sẵn trong image. Git objects được sao chép/đối chiếu trước checkout, không thay source upstream gốc. Checkout khoảng 94 MB gồm các tệp công khai kèm repo để Git xác minh sạch.
+
+`prepare_worker_inputs.py` chỉ tạo request khi COMPLETE confidence thật hiện diện và khớp SHA. `assemble_stage_requests.py` chỉ ghép khi có cache đầy đủ, kèm upstream và các SHA nguồn/đích. Reflog và hooks của Git được loại khỏi gói chuyển. Hai helper này còn chờ chạy trên artifact hoàn chỉnh. Sau tạo snapshot phải kiểm lại checkout ngay trong snapshot trước khi cấp GPU.

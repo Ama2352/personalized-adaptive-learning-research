@@ -51,7 +51,7 @@ def main():
             confidence_fit_artifact=(CONFIDENCE/'fit-manifest.json').relative_to(ROOT).as_posix(),
             a0_model_index='experiments/akt/results/model-export-a0-batch128-20261112-01/MODEL_INDEX.json',
             a1_model_index='experiments/akt/results/model-export-a1-batch128-20261113-01/MODEL_INDEX.json',
-            runtime_lock_file='artifacts/akt/runtime-locks/locked-cu126.txt',
+            runtime_lock_file='artifacts/akt/runtime/modal-linux-cuda.lock.txt',
             runtime_lock_sha256='60dad3de310562db4f775d1977e2097a6d1c8f57a22bfa4f7afc3ceab35cc45a')
         save_new(HERE/(variant.lower()+'-worker-base.json'), worker)
     print(json.dumps(dict(status='REAL_CONFIDENCE_WORKER_BASES_PREPARED', gpu_started=False)))
