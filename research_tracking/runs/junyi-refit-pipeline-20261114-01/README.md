@@ -62,3 +62,7 @@ GPUcontroller là `experiments/akt/modal_junyi_refit.py --snapshot <snapshot> --
 ## Báo cáo GVHD chốt ngày14/11
 
 Đã tạo đợt `supervisor_reports/2026-11-14/01_tien_do/` với HTML tự chứa và Markdown. Đối chiếu các phát hiện cốt lõi12/11 và trạng thái nghiệm thu14/11; giữ figure A3 gốc. `report-20261114-qa.json` giữ nguồn/SHA, kiểm3bảng/8section, anchor và ảnh liên quan. Đã xem ảnh desktop1280 và khung hẹp640 bằng Edge headless. Ảnh390 thử bị cắt, giữ diagnostic; chưa nghiệm thu viewport390. MCP không truy cập đượcfile/localhost, đã đóngtab và tắt server8769. Không chạy thí nghiệm/training mới.
+
+## Tiếp tục H100 theo yêu cầu người dùng
+
+Đã đối soát mốc metering sau các App cũ và giữ1USD biên trễ, reserve cuối1,50USD, trần30USD. Tranche600giây, cap1,25USD, epoch vẫn9. `budget-reconciliation-refit01.json` giữ thay đổi dự phòng do agent chọn. Lần01 bị chặn local vì selected-index metadata nằm trong snapshot vùngresults; chưa gọiApp/GPU. `input-relocation-*-02.json` kiểmSHAtrước/sau copy metadata sangartifacts/refit-inputs, không sửaindexcũ. Bốn snapshotbounded02 đã kiểmCPUđạt. Lần02 đangupload/Appkhởi tạo, chưadispatchGPU theo lần kiểm gần nhất. `advance_refit.py` chỉnghiệmthu/lập request/resume vàpromote, khôngtựgọi cloud; fixture đã kiểm chọncheckpointpartialmớinhất và chặnngânsách.

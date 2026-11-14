@@ -4,20 +4,24 @@
   "extra_payment_allowed": false,
   "automatic_monthly_budget_reset": false,
   "authorization_reference": "Người dùng ngày 12/11/2026 cho phép tự phân bổ các khoản chi nhỏ, tổng toàn KLTN tối đa 30 USD free credits.",
-  "historical_usage_reserved_upper_usd": 27.358544695386357,
-  "safety_and_final_inference_reserve_usd": 2.5,
-  "new_allocations": [],
+  "historical_usage_reserved_upper_usd": 23.60665918,
+  "safety_and_final_inference_reserve_usd": 1.5,
+  "new_allocations": [
+    {
+      "id": "junyi-a0-refit-h100-20261114-02",
+      "cap_usd": 1.25,
+      "purpose_vi": "RefitA0 H100 tranche600giây, tổng9epochcốđịnh, lưu checkpoint partial và tải D sau stop."
+    }
+  ],
   "stop_rule": "Không mở lượt chạy nếu cận chi phí lịch sử, tổng allocation và dự phòng vượt 30 USD. Nếu chưa xác nhận dừng App thì kiểm trạng thái server trước lượt mới.",
-  "historical_upper_note": "Cận sau đối soátA3 dựa trên metering mốcA1, toàn bộ cận tài nguyên các lượt sau mốc đó và1USD biên trễ. Đây là cận dự phòng, số metering hiện tại được lưu riêng. Khoản dự phòng cuối hiện2,50USD, trần toàn dự án30USD.",
+  "historical_upper_note": "Đối soát trước refit14/11: mốc metering bảo thủ22,60665918USD cộng1USD biên trễ sau xác nhận các App dừng. Chi các tranche refit thêm theo cận tài nguyên đã đo. Giữ reserve1,50USD; trần30USD.",
   "provider_metering_note": "Snapshot có thể trễ hoặc được điều chỉnh. Không dùng billing alert làm giới hạn cứng. Mỗi lượt có watchdog, timeout và tối đa một GPU.",
   "last_accounting_snapshot": {
-    "observed_at_utc": "2026-11-14T12:28:41.502440+00:00",
-    "metered_cost_usd": 22.60665918,
+    "observed_at_utc": "2026-11-14T16:26:44.244591+00:00",
+    "metered_cost_usd": 22.52665918,
     "billed_cost_usd": 0.0,
-    "credits_applied_usd": 22.43,
-    "evidence": "research_tracking/runs/junyi-a3-selected-20261114-01/billing-after.json",
-    "containers_empty": true,
-    "full_remaining_matrix_cost_status": "REESTIMATE_REFIT_CALIBRATION_AND_INDEPENDENT_EVALUATION"
+    "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/refit-billing-before01.json",
+    "containers_empty": true
   },
   "gpu_specific_holds": {
     "H100": {
@@ -436,6 +440,13 @@
       "actual_isolated_cost_usd": null,
       "stop_acknowledged": true,
       "evidence": "experiments/akt/results/modal-junyi-refit-source-cpu-20261114-02/receipt.json"
+    },
+    {
+      "id": "junyi-a0-refit-h100-20261114-01",
+      "status": "LOCAL_OUTPUT_METADATA_REJECTED_BEFORE_APP_GPU_DISPATCH",
+      "reserved_upper_closed_usd": 0,
+      "actual_isolated_cost_usd": 0,
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/a0-refit-execution01.log"
     }
   ],
   "a0_h100_settlement": {
