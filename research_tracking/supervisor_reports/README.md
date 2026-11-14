@@ -2,7 +2,7 @@
 
 ## Bản cập nhật hiện hành ngày 15/11/2026
 
-[HTML ngày15/11](2026-11-15/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown](2026-11-15/01_tien_do/BAO_CAO.md) nối tiếp bản14/11, bổ sung A0refit9epoch đã xuất trênD, figure/CSV thời gian thật và trạng thái ba phiên bản còn lại. Đợt15/11 là nơi cập nhật tiếp theo; đợt14/11 giữ nguyên theo thời điểm chốt. Refit và evaluation được ghi riêng.
+[HTML ngày 15/11](2026-11-15/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown](2026-11-15/01_tien_do/BAO_CAO.md) nối tiếp bản 14/11, ghi A0, A1, A2 đã refit đủ 9 epoch và lưu model. Có figure thời gian học trên cùng TRAIN90, cùng nguồn số liệu CSV và các phần còn thiếu. A3 refit chờ nguồn GPU phù hợp ngân sách. Hiệu chỉnh và đánh giá độc lập còn chờ. Bằng chứng nghiệm thu theo bundle `junyi-refit-pipeline-20261114-01`, báo cáo đọc vẫn gồm hai file.
 
 
 ## Bản chốt hiện hành ngày 14/11/2026

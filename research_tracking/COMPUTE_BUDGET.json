@@ -4,15 +4,9 @@
   "extra_payment_allowed": false,
   "automatic_monthly_budget_reset": false,
   "authorization_reference": "Người dùng ngày 12/11/2026 cho phép tự phân bổ các khoản chi nhỏ, tổng toàn KLTN tối đa 30 USD free credits.",
-  "historical_usage_reserved_upper_usd": 23.60665918,
-  "safety_and_final_inference_reserve_usd": 1.5,
-  "new_allocations": [
-    {
-      "id": "junyi-a0-refit-h100-20261114-02",
-      "cap_usd": 1.25,
-      "purpose_vi": "RefitA0 H100 tranche600giây, tổng9epochcốđịnh, lưu checkpoint partial và tải D sau stop."
-    }
-  ],
+  "historical_usage_reserved_upper_usd": 29.617480209592788,
+  "safety_and_final_inference_reserve_usd": 0.2,
+  "new_allocations": [],
   "stop_rule": "Không mở lượt chạy nếu cận chi phí lịch sử, tổng allocation và dự phòng vượt 30 USD. Nếu chưa xác nhận dừng App thì kiểm trạng thái server trước lượt mới.",
   "historical_upper_note": "Đối soát trước refit14/11: mốc metering bảo thủ22,60665918USD cộng1USD biên trễ sau xác nhận các App dừng. Chi các tranche refit thêm theo cận tài nguyên đã đo. Giữ reserve1,50USD; trần30USD.",
   "provider_metering_note": "Snapshot có thể trễ hoặc được điều chỉnh. Không dùng billing alert làm giới hạn cứng. Mỗi lượt có watchdog, timeout và tối đa một GPU.",
@@ -447,6 +441,163 @@
       "reserved_upper_closed_usd": 0,
       "actual_isolated_cost_usd": 0,
       "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/a0-refit-execution01.log"
+    },
+    {
+      "id": "junyi-a0-refit-h100-20261114-02",
+      "status": "UPLOAD_COMPLETED_AFTER_DEADLINE_NO_GPU_DISPATCH",
+      "reserved_upper_closed_usd": 0.05,
+      "actual_isolated_cost_usd": null,
+      "stop_acknowledged": true,
+      "built_images": [
+        "im-c4eNhrkJMQU1mHfOq9ABj0",
+        "im-RWnD8Bgze9GpAnWtYuPyil"
+      ],
+      "evidence": "a0-refit-execution02.log",
+      "reason_vi": "Đã tải đủblob/snapshot, buildCPU23,38+2,28giây; deadline trước CPUFunctionMap, chưa GPUspawn. Giữ0,05USD cậnCPUbuild."
+    },
+    {
+      "id": "junyi-a0-refit-h100-20261114-03",
+      "status": "STOPPED_ARTIFACTS_VERIFIED_FAILED",
+      "reserved_upper_closed_usd": 0.09944601539611946,
+      "actual_isolated_cost_usd": null,
+      "gpu_worker_seconds": 3.9804717729999997,
+      "app_elapsed_seconds": 63.0836188000103,
+      "stop_acknowledged": true,
+      "evidence": "experiments/akt/results/modal-junyi-a0-refit-h100-20261114-03/remote-inventory.json"
+    },
+    {
+      "id": "junyi-refit-cpu-path-probe-20261114-01",
+      "status": "CPU_PATH_CONFIRMED_APPS_STOPPED",
+      "reserved_upper_closed_usd": 0.05,
+      "actual_isolated_cost_usd": null,
+      "stop_acknowledged": true,
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/cpu-path-probe03-result.json"
+    },
+    {
+      "id": "junyi-refit-source-cpu-20261114-03",
+      "status": "GATE2663_PASS_SOURCE_VOLUME_GUARD_APPS_STOPPED",
+      "reserved_upper_closed_usd": 0.15,
+      "actual_isolated_cost_usd": null,
+      "stop_acknowledged": true,
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/linux03/result.json"
+    },
+    {
+      "id": "junyi-a0-refit-h100-20261114-04",
+      "status": "STOPPED_ARTIFACTS_VERIFIED_FAILED",
+      "reserved_upper_closed_usd": 0.11224349812609119,
+      "actual_isolated_cost_usd": null,
+      "gpu_worker_seconds": 9.546563934,
+      "app_elapsed_seconds": 91.23219540002174,
+      "stop_acknowledged": true,
+      "evidence": "experiments/akt/results/modal-junyi-a0-refit-h100-20261114-04/remote-inventory.json"
+    },
+    {
+      "id": "junyi-refit-source-cpu-20261114-04",
+      "status": "GATE2667_PASS_RESEARCH_ALLOCATOR_APP_STOPPED",
+      "reserved_upper_closed_usd": 0.15,
+      "actual_isolated_cost_usd": null,
+      "stop_acknowledged": true,
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/linux04/result.json"
+    },
+    {
+      "id": "junyi-a0-refit-h100-20261114-05",
+      "status": "STOPPED_ARTIFACTS_VERIFIED_PARTIAL_JUNYI_REFIT90",
+      "reserved_upper_closed_usd": 0.9216663725334474,
+      "actual_isolated_cost_usd": null,
+      "gpu_worker_seconds": 615.7504971049999,
+      "app_elapsed_seconds": 698.7417011999933,
+      "stop_acknowledged": true,
+      "evidence": "experiments/akt/results/modal-junyi-a0-refit-h100-20261114-05/remote-inventory.json"
+    },
+    {
+      "id": "junyi-a0-refit-h100-20261114-06",
+      "status": "STOPPED_ARTIFACTS_VERIFIED_JUNYI_REFIT90_COMPLETE",
+      "reserved_upper_closed_usd": 0.8879995291889388,
+      "actual_isolated_cost_usd": null,
+      "gpu_worker_seconds": 596.896340553,
+      "app_elapsed_seconds": 644.1235218000074,
+      "stop_acknowledged": true,
+      "evidence": "experiments/akt/results/modal-junyi-a0-refit-h100-20261114-06/remote-inventory.json"
+    },
+    {
+      "id": "junyi-a1-refit-h100-20261114-01",
+      "status": "STOPPED_ARTIFACTS_VERIFIED_PARTIAL_JUNYI_REFIT90",
+      "reserved_upper_closed_usd": 0.9338429219924533,
+      "actual_isolated_cost_usd": null,
+      "gpu_worker_seconds": 619.417763427,
+      "app_elapsed_seconds": 733.0407012999931,
+      "stop_acknowledged": true,
+      "evidence": "experiments/akt/results/modal-junyi-a1-refit-h100-20261114-01/remote-inventory.json"
+    },
+    {
+      "id": "junyi-a1-refit-h100-20261114-02",
+      "status": "STOPPED_ARTIFACTS_VERIFIED_PARTIAL_JUNYI_REFIT90",
+      "reserved_upper_closed_usd": 0.9364844562088227,
+      "actual_isolated_cost_usd": null,
+      "gpu_worker_seconds": 628.018919137,
+      "app_elapsed_seconds": 704.4611387999903,
+      "stop_acknowledged": true,
+      "evidence": "experiments/akt/results/modal-junyi-a1-refit-h100-20261114-02/remote-inventory.json"
+    },
+    {
+      "id": "junyi-a1-refit-h100-20261114-03",
+      "status": "STOPPED_ARTIFACTS_VERIFIED_PARTIAL_JUNYI_REFIT90",
+      "reserved_upper_closed_usd": 0.9409215545199096,
+      "actual_isolated_cost_usd": null,
+      "gpu_worker_seconds": 634.706042873,
+      "app_elapsed_seconds": 692.267480599985,
+      "stop_acknowledged": true,
+      "evidence": "experiments/akt/results/modal-junyi-a1-refit-h100-20261114-03/remote-inventory.json"
+    },
+    {
+      "id": "junyi-a1-refit-h100-20261114-04",
+      "status": "STOPPED_ARTIFACTS_VERIFIED_JUNYI_REFIT90_COMPLETE",
+      "reserved_upper_closed_usd": 0.4503465487238612,
+      "actual_isolated_cost_usd": null,
+      "gpu_worker_seconds": 266.548320334,
+      "app_elapsed_seconds": 327.5275168999797,
+      "stop_acknowledged": true,
+      "evidence": "experiments/akt/results/modal-junyi-a1-refit-h100-20261114-04/remote-inventory.json"
+    },
+    {
+      "id": "junyi-a2-refit-h100-20261114-01",
+      "status": "STOPPED_ARTIFACTS_VERIFIED_PARTIAL_JUNYI_REFIT90",
+      "reserved_upper_closed_usd": 1.0057100584991296,
+      "actual_isolated_cost_usd": null,
+      "gpu_worker_seconds": 677.599069928,
+      "app_elapsed_seconds": 766.8714402999904,
+      "stop_acknowledged": true,
+      "evidence": "experiments/akt/results/modal-junyi-a2-refit-h100-20261114-01/remote-inventory.json"
+    },
+    {
+      "id": "junyi-a2-refit-h100-20261114-02",
+      "status": "STOPPED_ARTIFACTS_VERIFIED_PARTIAL_JUNYI_REFIT90",
+      "reserved_upper_closed_usd": 0.9305819319662635,
+      "actual_isolated_cost_usd": null,
+      "gpu_worker_seconds": 627.598876873,
+      "app_elapsed_seconds": 681.5697628999769,
+      "stop_acknowledged": true,
+      "evidence": "experiments/akt/results/modal-junyi-a2-refit-h100-20261114-02/remote-inventory.json"
+    },
+    {
+      "id": "junyi-a2-refit-h100-20261114-03",
+      "status": "STOPPED_ARTIFACTS_VERIFIED_PARTIAL_JUNYI_REFIT90",
+      "reserved_upper_closed_usd": 0.942251812676799,
+      "actual_isolated_cost_usd": null,
+      "gpu_worker_seconds": 635.80018001,
+      "app_elapsed_seconds": 692.8142992000212,
+      "stop_acknowledged": true,
+      "evidence": "experiments/akt/results/modal-junyi-a2-refit-h100-20261114-03/remote-inventory.json"
+    },
+    {
+      "id": "junyi-a2-refit-h100-20261114-04",
+      "status": "STOPPED_ARTIFACTS_VERIFIED_JUNYI_REFIT90_COMPLETE",
+      "reserved_upper_closed_usd": 0.5567450995927921,
+      "actual_isolated_cost_usd": null,
+      "gpu_worker_seconds": 345.87841546799996,
+      "app_elapsed_seconds": 409.0243893000006,
+      "stop_acknowledged": true,
+      "evidence": "experiments/akt/results/modal-junyi-a2-refit-h100-20261114-04/remote-inventory.json"
     }
   ],
   "a0_h100_settlement": {
@@ -594,5 +745,221 @@
       "full_remaining_matrix_cost_status": "REESTIMATE_WITH_MEASURED_BATCH32_THROUGHPUT_AND_UNKNOWN_CONVERGENCE"
     }
   ],
-  "historical_upper_note_before_a3_reconciliation": "2 USD là dự phòng bảo thủ cho các lượt đã chạy trước ledger, không phải số chi phí đã đối soát cuối kỳ."
+  "historical_upper_note_before_a3_reconciliation": "2 USD là dự phòng bảo thủ cho các lượt đã chạy trước ledger, không phải số chi phí đã đối soát cuối kỳ.",
+  "verified_app_billing_corrections": [
+    {
+      "id": "junyi-a0-refit-h100-20261114-02",
+      "original_upper_usd": 0.05,
+      "reported_closed_hour_app_cost_usd": 0.00011521,
+      "per_app_adjustment_buffer_usd": 0.02,
+      "revised_upper_usd": 0.02011521,
+      "released_upper_usd": 0.02988479,
+      "app_ids": [
+        "ap-5qndXxv76HCrL7G6KMw9F6"
+      ],
+      "all_apps_stopped": true,
+      "closed_hour_cutoff": "2026-11-14T18:00:00+00:00",
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/billing-hourly-resource-20261115-03.json"
+    },
+    {
+      "id": "junyi-a0-refit-h100-20261114-03",
+      "original_upper_usd": 0.09944601539611946,
+      "reported_closed_hour_app_cost_usd": 0.00913747,
+      "per_app_adjustment_buffer_usd": 0.02,
+      "revised_upper_usd": 0.02913747,
+      "released_upper_usd": 0.07030854539611946,
+      "app_ids": [
+        "ap-YkY1Gj9ZsTAVXGNM6QxnbC"
+      ],
+      "all_apps_stopped": true,
+      "closed_hour_cutoff": "2026-11-14T18:00:00+00:00",
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/billing-hourly-resource-20261115-03.json"
+    },
+    {
+      "id": "junyi-refit-cpu-path-probe-20261114-01",
+      "original_upper_usd": 0.05,
+      "reported_closed_hour_app_cost_usd": 4.163e-05,
+      "per_app_adjustment_buffer_usd": 0.02,
+      "revised_upper_usd": 0.04004163,
+      "released_upper_usd": 0.00995837,
+      "app_ids": [
+        "ap-aBc7ZMi5O2kBUTvt2zzGdH",
+        "ap-6wH0NBtitnofjAvpmuXdtl"
+      ],
+      "all_apps_stopped": true,
+      "closed_hour_cutoff": "2026-11-14T18:00:00+00:00",
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/billing-hourly-resource-20261115-03.json"
+    },
+    {
+      "id": "junyi-refit-source-cpu-20261114-03",
+      "original_upper_usd": 0.15,
+      "reported_closed_hour_app_cost_usd": 0.00942837,
+      "per_app_adjustment_buffer_usd": 0.02,
+      "revised_upper_usd": 0.02942837,
+      "released_upper_usd": 0.12057163,
+      "app_ids": [
+        "ap-MdEo4fxziaE529uMY1hXEH"
+      ],
+      "all_apps_stopped": true,
+      "closed_hour_cutoff": "2026-11-14T18:00:00+00:00",
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/billing-hourly-resource-20261115-03.json"
+    },
+    {
+      "id": "junyi-a0-refit-h100-20261114-04",
+      "original_upper_usd": 0.11224349812609119,
+      "reported_closed_hour_app_cost_usd": 0.01618555,
+      "per_app_adjustment_buffer_usd": 0.02,
+      "revised_upper_usd": 0.03618555,
+      "released_upper_usd": 0.0760579481260912,
+      "app_ids": [
+        "ap-ErhLc8dBw6YOuFbhMPILG6"
+      ],
+      "all_apps_stopped": true,
+      "closed_hour_cutoff": "2026-11-14T18:00:00+00:00",
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/billing-hourly-resource-20261115-03.json"
+    },
+    {
+      "id": "junyi-refit-source-cpu-20261114-04",
+      "original_upper_usd": 0.15,
+      "reported_closed_hour_app_cost_usd": 0.02018413,
+      "per_app_adjustment_buffer_usd": 0.02,
+      "revised_upper_usd": 0.04018413,
+      "released_upper_usd": 0.10981587,
+      "app_ids": [
+        "ap-n2tERpbVz0ZMfckuf85CPJ"
+      ],
+      "all_apps_stopped": true,
+      "closed_hour_cutoff": "2026-11-14T18:00:00+00:00",
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/billing-hourly-resource-20261115-03.json"
+    },
+    {
+      "id": "junyi-a0-refit-h100-20261114-05",
+      "original_upper_usd": 0.9216663725334474,
+      "reported_closed_hour_app_cost_usd": 0.70922831,
+      "per_app_adjustment_buffer_usd": 0.02,
+      "revised_upper_usd": 0.72922831,
+      "released_upper_usd": 0.1924380625334474,
+      "app_ids": [
+        "ap-tABTgV3u0ioQfwNRUADe5w"
+      ],
+      "all_apps_stopped": true,
+      "closed_hour_cutoff": "2026-11-14T18:00:00+00:00",
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/billing-hourly-resource-20261115-03.json"
+    },
+    {
+      "id": "junyi-a0-refit-h100-20261114-06",
+      "original_upper_usd": 0.8879995291889388,
+      "reported_closed_hour_app_cost_usd": 0.68021049,
+      "per_app_adjustment_buffer_usd": 0.02,
+      "revised_upper_usd": 0.70021049,
+      "released_upper_usd": 0.1877890391889388,
+      "app_ids": [
+        "ap-QPRnlDXuRagoK1TfRz5AVR"
+      ],
+      "all_apps_stopped": true,
+      "closed_hour_cutoff": "2026-11-14T18:00:00+00:00",
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/billing-hourly-resource-20261115-03.json"
+    },
+    {
+      "id": "junyi-a1-refit-h100-20261114-01",
+      "original_upper_usd": 0.9338429219924533,
+      "reported_closed_hour_app_cost_usd": 0.70211954,
+      "per_app_adjustment_buffer_usd": 0.02,
+      "revised_upper_usd": 0.72211954,
+      "released_upper_usd": 0.2117233819924533,
+      "app_ids": [
+        "ap-VSgigLVuYhbR1x4irmLx1Y"
+      ],
+      "all_apps_stopped": true,
+      "closed_hour_cutoff": "2026-11-14T19:00:00+00:00",
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/billing-hourly-resource-20261115-04.json"
+    },
+    {
+      "id": "junyi-a1-refit-h100-20261114-02",
+      "original_upper_usd": 0.9364844562088227,
+      "reported_closed_hour_app_cost_usd": 0.71994991,
+      "per_app_adjustment_buffer_usd": 0.02,
+      "revised_upper_usd": 0.73994991,
+      "released_upper_usd": 0.1965345462088227,
+      "app_ids": [
+        "ap-IURC1sK03644gNv60x9LOS"
+      ],
+      "all_apps_stopped": true,
+      "closed_hour_cutoff": "2026-11-14T19:00:00+00:00",
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/billing-hourly-resource-20261115-04.json"
+    },
+    {
+      "id": "junyi-a1-refit-h100-20261114-03",
+      "original_upper_usd": 0.9409215545199096,
+      "reported_closed_hour_app_cost_usd": 0.72773901,
+      "per_app_adjustment_buffer_usd": 0.02,
+      "revised_upper_usd": 0.74773901,
+      "released_upper_usd": 0.1931825445199096,
+      "app_ids": [
+        "ap-JmmzHnrLbN8nUFnsYYvid2"
+      ],
+      "all_apps_stopped": true,
+      "closed_hour_cutoff": "2026-11-14T19:00:00+00:00",
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/billing-hourly-resource-20261115-04.json"
+    },
+    {
+      "id": "junyi-a1-refit-h100-20261114-04",
+      "original_upper_usd": 0.4503465487238612,
+      "reported_closed_hour_app_cost_usd": 0.31226746,
+      "per_app_adjustment_buffer_usd": 0.02,
+      "revised_upper_usd": 0.33226746,
+      "released_upper_usd": 0.1180790887238612,
+      "app_ids": [
+        "ap-jGW6uznlGEXDVlz74mwhUe"
+      ],
+      "all_apps_stopped": true,
+      "closed_hour_cutoff": "2026-11-14T19:00:00+00:00",
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/billing-hourly-resource-20261115-04.json"
+    },
+    {
+      "id": "junyi-a2-refit-h100-20261114-01",
+      "original_upper_usd": 1.0057100584991296,
+      "reported_closed_hour_app_cost_usd": 0.7799631,
+      "per_app_adjustment_buffer_usd": 0.02,
+      "revised_upper_usd": 0.7999631,
+      "released_upper_usd": 0.2057469584991296,
+      "app_ids": [
+        "ap-3XKgZyGrIFYp2SzY86Iipo"
+      ],
+      "all_apps_stopped": true,
+      "closed_hour_cutoff": "2026-11-14T19:00:00+00:00",
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/billing-hourly-resource-20261115-04.json"
+    },
+    {
+      "id": "junyi-a2-refit-h100-20261114-02",
+      "original_upper_usd": 0.9305819319662635,
+      "reported_closed_hour_app_cost_usd": 0.71895462,
+      "per_app_adjustment_buffer_usd": 0.02,
+      "revised_upper_usd": 0.73895462,
+      "released_upper_usd": 0.1916273119662635,
+      "app_ids": [
+        "ap-dImhDx7BLo3UNkI0YtwwgA"
+      ],
+      "all_apps_stopped": true,
+      "closed_hour_cutoff": "2026-11-14T20:00:00+00:00",
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/billing-hourly-resource-20261115-06.json"
+    },
+    {
+      "id": "junyi-a2-refit-h100-20261114-03",
+      "original_upper_usd": 0.942251812676799,
+      "reported_closed_hour_app_cost_usd": 0.72855113,
+      "per_app_adjustment_buffer_usd": 0.02,
+      "revised_upper_usd": 0.74855113,
+      "released_upper_usd": 0.193700682676799,
+      "app_ids": [
+        "ap-kOXTBzml058sVXt5InxG4H"
+      ],
+      "all_apps_stopped": true,
+      "closed_hour_cutoff": "2026-11-14T20:00:00+00:00",
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/billing-hourly-resource-20261115-06.json"
+    }
+  ],
+  "reserve_refit02_evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/budget-reserve-refit02.json",
+  "reserve_refit03_evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/budget-reserve-refit03.json",
+  "refit_remaining_global_billing_delay_margin_usd": 0
 }

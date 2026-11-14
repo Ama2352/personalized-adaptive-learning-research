@@ -1,5 +1,11 @@
 # Chỉ mục bằng chứng
 
+## 15/11 — A0, A1, A2 đã refit và lưu model trên D
+
+[Hồ sơ refit](runs/junyi-refit-pipeline-20261114-01/README.md), [kiểm gói model và hợp đồng chung](runs/junyi-refit-pipeline-20261114-01/exports-verified-a0-a1-a2.json), [ngân sách còn lại](runs/junyi-refit-pipeline-20261114-01/refit-remaining-budget-review.json). Mỗi model đủ 9 epoch, 18.360 bước, 134.529.066 target qua các epoch. Gói model nằm trong `experiments/akt/results/model-export-a{0,1,2}-refit-20261114-01/`. Các checkpoint và archive gốc theo từng tranche vẫn được lưu. A3 refit, hiệu chỉnh và đánh giá độc lập còn chờ. Đây là bằng chứng thực thi đúng hợp đồng training, chưa phải kết quả chứng minh đồ thị cải thiện dự báo hoặc học tập.
+
+[Figure thời gian refit](runs/junyi-refit-pipeline-20261114-01/figures/refit-epoch-time-a0-a1-a2-v01.svg) có PNG, CSV, nguồn và cách dựng tại cùng bundle. Hai file báo cáo GVHD hiện hành ở đợt 15/11.
+
 ## 14/11 — A3 selected-fit, model và cơ chế cổng đã lưu
 
 [Hồ sơ A3](runs/junyi-a3-selected-20261114-01/README.md), [nghiệm thu](runs/junyi-a3-selected-20261114-01/a3-final-acceptance.json) và [đối chiếu](runs/junyi-a3-selected-20261114-01/a3-comparison-audit.json). A3 đã hoàn tất 12 epoch, chọn epoch 9, học đủ TRAIN80 13.347.331 target mỗi epoch. Đã kiểm đủ 1.600.343 dự đoán selection, target/order/probability identity, 0 OOV, checkpoint/Adam/RNG và gói model bốn file trên D. Log Loss native selection 0.35357115. A0–A3 expert đã hoàn tất selected-fit, đánh giá độc lập và các bước cuối còn chờ.

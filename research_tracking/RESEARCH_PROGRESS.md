@@ -1,5 +1,11 @@
 # Tiến độ nghiên cứu
 
+## Mốc 15/11 — A0, A1, A2 Junyi đã refit đủ 9 epoch
+
+Ba model refit TRAIN90 đã xuất trên D và kiểm đủ 134.529.066 target qua 9 epoch cùng 18.360 bước optimizer mỗi model. Đối chiếu xác nhận cùng split, mã hóa, cửa sổ, backbone khởi tạo và cấu hình tính toán. A3 refit còn chờ nguồn GPU phù hợp ngân sách. Snapshot Modal lúc 03:18 ghi còn khoảng 1,12 USD credit, billed 0. Mọi App H100 đã dừng. Các thay đổi dự phòng nội bộ, checkpoint/resume, source Gate và log được giữ trong [hồ sơ refit](runs/junyi-refit-pipeline-20261114-01/README.md).
+
+Đây là hoàn tất bước học lại ba mô hình. Hiệu chỉnh, đánh giá độc lập và kết luận so sánh đồ thị còn chờ. [Đối chiếu gói model](runs/junyi-refit-pipeline-20261114-01/exports-verified-a0-a1-a2.json) và [báo cáo GVHD 15/11](supervisor_reports/2026-11-15/01_tien_do/BAO_CAO_NGHIEN_CUU.html) ghi rõ phần đã làm và còn thiếu.
+
 ## Mốc 14/11 — A0–A3 expert Junyi đã selected-fit, A3 đã xuất model
 
 A3 đã hoàn tất 12 epoch, chọn epoch 9, học đủ TRAIN80 13.347.331 target mỗi epoch. Đã kiểm đủ 1.600.343 dự đoán selection, target/order/probability identity, 0 OOV, checkpoint/Adam/RNG và gói model bốn file trên D. Log Loss native selection 0.35357115. A0–A3 expert đã hoàn tất selected-fit, đánh giá độc lập và các bước cuối còn chờ.

@@ -2,7 +2,7 @@
 
 ## Báo cáo GVHD hiện hành — cập nhật15/11
 
-[HTML](../research_tracking/supervisor_reports/2026-11-15/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown](../research_tracking/supervisor_reports/2026-11-15/01_tien_do/BAO_CAO.md) kế thừa14/11, bổ sung A0đãrefit9epoch/đủ134.529.066target, checkpoint/modelxuấtD, figurethờigianvàthựcnghiệmcònthiếu. LoopH100A1–A3 theo `refit-loop-progress.json` trong bundle refit14/11. NativeGate2667 và guardVolume/allocator đã sửa. Các tiêu đề cũ bên dưới giữ lịch sử.
+[HTML](../research_tracking/supervisor_reports/2026-11-15/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown](../research_tracking/supervisor_reports/2026-11-15/01_tien_do/BAO_CAO.md) nối tiếp ngày 14/11. A0, A1, A2 đã hoàn tất refit 9 epoch mỗi model và xuất gói model trên D. Có figure SVG/PNG/CSV so thời gian cùng TRAIN90, cùng 134.529.066 target qua 9 epoch mỗi model. A3 refit còn chờ ngân sách, hiệu chỉnh và đánh giá độc lập còn thiếu. Bundle refit giữ `STATE.json`, `exports-verified-a0-a1-a2.json` và `refit-remaining-budget-review.json`. Mọi App H100 của đợt này đã dừng. Các mục bên dưới lưu diễn tiến lịch sử.
 
 
 ## Báo cáo GVHD hiện hành — chốt ngày14/11

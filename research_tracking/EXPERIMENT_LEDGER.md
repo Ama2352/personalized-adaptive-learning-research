@@ -249,3 +249,9 @@ Không cộng repeated targets/tests thành independent samples hoặc phần tr
 ## 12/11 — Junyi A0 một epoch GPU
 
 NVIDIA A10,256train/32selection,11.833targets/79updates,1.530selection/1.405supported/125OOV. Checkpoint freshreload exact,3durablefiles kiểm lại. Engineering cohort300events/user, chưa epochselection/refit/calibration/outerevaluation. [Bundle](runs/junyi-akt-cuda-engineering-20261112-01/README.md). Hai lỗi trước training và cách sửa giữ nguyên.
+
+## 15/11 — Refit A0, A1, A2 trên Junyi TRAIN90
+
+[Bundle refit](runs/junyi-refit-pipeline-20261114-01/README.md) giữ 9 epoch mỗi model, cùng 142.621 người học, 14.947.674 target mỗi epoch, batch 128, FP32, seed 42. Đã dừng App, tải đủ artifact, kiểm SHA và xuất ba gói model. Confidence/topology giữ TRAIN80 trong neural refit90. Source Gate 2.667 ca, kiểm host timebox cuối 85 ca local có chồng lặp với các bộ trước. Timebox cuối A2 hoàn tất cả phần đuôi epoch 8 và epoch 9, giữ đủ target/step và identity.
+
+A3 refit chưa chạy vì cận cấp phát vượt ngân sách còn lại. Hiệu chỉnh và đánh giá độc lập chưa thực hiện trong đợt này. Hóa đơn, dự phòng do agent đặt rồi tái phân bổ, các lỗi pre-init và kiểm local thất bại đều giữ trong bundle. Hai báo cáo GVHD 15/11 và figure SVG/PNG/CSV đã cập nhật. Các chỉ số thời gian thực thi phục vụ vận hành, không được diễn giải thành lợi ích của đồ thị.

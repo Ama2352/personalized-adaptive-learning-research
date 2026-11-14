@@ -1,80 +1,55 @@
 {
-  "status": "UPLOADING_CPU_INPUTS_BEFORE_H100",
+  "status": "A0_A1_A2_REFIT_EXPORTED_A3_PENDING_BUDGET",
   "closed": false,
-  "prior_evidence": "research_tracking/runs/junyi-a3-selected-20261114-01/CLOSEOUT_MANIFEST.json",
   "requested_scope": "Hoàn thiện pipeline refit A0–A3, ưu tiên local",
-  "real_data_training_performed": false,
-  "modal_spending_this_batch_usd": null,
-  "gpu_started": false,
+  "real_data_training_performed": true,
+  "gpu_started": true,
+  "active_execution": null,
+  "refit_models": {
+    "A0": {
+      "status": "JUNYI_REFIT90_COMPLETE",
+      "epochs": 9,
+      "output": "experiments/akt/results/modal-junyi-a0-refit-h100-20261114-06",
+      "checkpoint_export_pending": false,
+      "model_export": "experiments/akt/results/model-export-a0-refit-20261114-01"
+    },
+    "A1": {
+      "status": "JUNYI_REFIT90_COMPLETE",
+      "epochs": 9,
+      "output": "experiments/akt/results/modal-junyi-a1-refit-h100-20261114-04",
+      "checkpoint_export_pending": false,
+      "model_export": "experiments/akt/results/model-export-a1-refit-20261114-01"
+    },
+    "A2": {
+      "status": "JUNYI_REFIT90_COMPLETE",
+      "epochs": 9,
+      "output": "experiments/akt/results/modal-junyi-a2-refit-h100-20261114-04",
+      "checkpoint_export_pending": false,
+      "model_export": "experiments/akt/results/model-export-a2-refit-20261114-01"
+    }
+  },
   "next_steps": [
-    "Kiểm CUDA bounded bằng đường refit mới và đo cost/target, giữ model kỹ thuật riêng",
-    "Đối soát ngân sách đủ36epoch và inference/calibration trước fullrefit",
-    "Đóng snapshot A1–A3 khi cần để tránh nhân bản cache lớn",
-    "Refit lần lượt A0–A3 đúng9epoch, resume cùng logicalrun",
-    "Xuất model, chuẩn bị calibration10 và đánh giá độc lập theo protocol"
+    "A3 refit đủ 9 epoch khi có nguồn GPU phù hợp trần 30 USD",
+    "Hiệu chỉnh xác suất bằng calibration10 và đánh giá độc lập theo protocol đã chốt",
+    "Tổng hợp so sánh mô hình và các kết quả closed-loop còn thiếu"
   ],
-  "verified_tests": {
-    "passed": 78,
-    "cuda_admission_mocked": true,
-    "native_cpu": true,
-    "log": "tests04.log"
-  },
-  "epoch_plan": "epoch-plan.json",
-  "active_cpu_session": null,
-  "latest_tests": {
-    "log": "tests10.log",
-    "passed": 85,
-    "scope": "refit native/resume, export checkpoint, staged budget/handoff",
-    "cuda_admission_mocked": true
-  },
-  "encoding90_identity": "4b8eb3e6bc5be9abd1419cf4e818b2e75dc86b82e59a0fe94e837c5f3299734f",
-  "encoding90_items": 717,
-  "window_cache_complete": true,
-  "window_records": 261111,
-  "window_targets": 14947674,
-  "source_receipt_recovered": true,
-  "active_graph_variant": null,
-  "active_cpu_child_pid": null,
-  "completed_graph_contexts": [
+  "all_owned_refit_apps_stopped": true,
+  "updated_at_utc": "2026-11-14T20:21:58.836199+00:00",
+  "prior_state_file": "STATE_checkpoint_A2_refit_20261115.json",
+  "prior_state_sha256": "0ba7fd01465f99128061068e4ae55fcc120dc870f8e4791c631ba01d2a96ca4e",
+  "refit_models_exported": [
+    "A0",
     "A1",
-    "A2",
-    "A3"
+    "A2"
   ],
-  "prepared_matrix": "prepared-refit-matrix.json",
-  "source_gate": {
-    "status": "PASS",
-    "passed": 2660,
-    "failed": 0,
-    "skipped": 0,
-    "log": "source-gate02.log",
-    "receipt": "linux02/result.json",
-    "gpu": false,
-    "app_stop_acknowledged": true
-  },
-  "engineering_commit": "642e1de",
-  "modal_reserved_upper_closed_this_batch_usd": 0.3,
-  "staged_requests": [
-    "stage-inputs-a0.json",
-    "stage-inputs-a1.json",
-    "stage-inputs-a2.json",
-    "stage-inputs-a3.json"
-  ],
-  "validated_snapshot": {
-    "variant": "A0",
-    "path": "artifacts/akt/staged/junyi-a0-refit-20261114-01",
-    "receipt": "snapshot-a0.receipt.json"
-  },
-  "active_execution": "modal-junyi-a0-refit-h100-20261114-02",
-  "tranche_max_wall_seconds": 600,
-  "authorization_vi": "Người dùng14/11 yêu cầu tiếp tụcA0–A3refit bằngH100, giữ9epoch/cấu hình so sánh và trần30USD toànKLTN.",
-  "financial_reconciliation": "budget-reconciliation-refit01.json",
-  "active_local_session": 58115,
-  "prepared_refit_snapshots": [
-    "artifacts/akt/staged/junyi-a0-refit-bounded-20261114-02",
-    "artifacts/akt/staged/junyi-a1-refit-bounded-20261114-02",
-    "artifacts/akt/staged/junyi-a2-refit-bounded-20261114-02",
-    "artifacts/akt/staged/junyi-a3-refit-bounded-20261114-02"
-  ],
-  "execution_helper": "advance_refit.py",
-  "prior_local_failure": "a0-refit-execution01.log"
+  "last_verified_exports": "exports-verified-a0-a1-a2.json",
+  "last_execution": "modal-junyi-a2-refit-h100-20261114-04",
+  "last_terminal_evidence": "experiments/akt/results/modal-junyi-a2-refit-h100-20261114-04/remote-inventory.json",
+  "budget_review": "refit-remaining-budget-review.json",
+  "loop_progress": "refit-loop-progress.json",
+  "a3_snapshot": "artifacts/akt/staged/junyi-a3-refit-bounded-20261114-04",
+  "source_gate_passed": 2667,
+  "local_host_checks_passed": 85,
+  "supervisor_report": "research_tracking/supervisor_reports/2026-11-15/01_tien_do/BAO_CAO_NGHIEN_CUU.html",
+  "limits_vi": "A3 refit còn thiếu. Hiệu chỉnh và đánh giá độc lập chưa thực hiện. Dữ liệu và model gốc giữ ở outputs theo run, file state cũ được chụp lại với SHA để giữ toàn bộ diễn tiến. Đọc bản kiểm export và ngân sách trước khi tiếp tục, không tự reset trần 30 USD."
 }
