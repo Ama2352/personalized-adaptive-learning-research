@@ -1,5 +1,10 @@
 # Báo cáo tiến độ theo ngày
 
+## Bản cập nhật hiện hành ngày 15/11/2026
+
+[HTML ngày15/11](2026-11-15/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown](2026-11-15/01_tien_do/BAO_CAO.md) nối tiếp bản14/11, bổ sung A0refit9epoch đã xuất trênD, figure/CSV thời gian thật và trạng thái ba phiên bản còn lại. Đợt15/11 là nơi cập nhật tiếp theo; đợt14/11 giữ nguyên theo thời điểm chốt. Refit và evaluation được ghi riêng.
+
+
 ## Bản chốt hiện hành ngày 14/11/2026
 
 [Báo cáo HTML ngày 14/11](2026-11-14/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [bản Markdown](2026-11-14/01_tien_do/BAO_CAO.md) tổng hợp tiến độ từngRQ, mạch phát hiện từ hai paper, A0–A3 Junyi đã chọn checkpoint và pipeline refit đã kiểm Linux. Hai file đọc đặt trong đợt14/11; các đợt cũ giữ làm lịch sử. Các cập nhật tiếp theo dùng đợt14/11 cho đến khi có bản chốt ngày mới. Bằng chứng số liệu/logs/figure tiếp tục theo bundle run gốc, QA báo cáo trong bundle refit14/11.

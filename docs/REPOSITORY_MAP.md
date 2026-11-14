@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## Báo cáo GVHD hiện hành — cập nhật15/11
+
+[HTML](../research_tracking/supervisor_reports/2026-11-15/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown](../research_tracking/supervisor_reports/2026-11-15/01_tien_do/BAO_CAO.md) kế thừa14/11, bổ sung A0đãrefit9epoch/đủ134.529.066target, checkpoint/modelxuấtD, figurethờigianvàthựcnghiệmcònthiếu. LoopH100A1–A3 theo `refit-loop-progress.json` trong bundle refit14/11. NativeGate2667 và guardVolume/allocator đã sửa. Các tiêu đề cũ bên dưới giữ lịch sử.
+
+
 ## Báo cáo GVHD hiện hành — chốt ngày14/11
 
 [Báo cáo HTML](../research_tracking/supervisor_reports/2026-11-14/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown](../research_tracking/supervisor_reports/2026-11-14/01_tien_do/BAO_CAO.md) là hai file đọc của bản chốt mới, có tiến độ từngRQ, mạch nghiên cứu và phần còn thiếu. Đợt10/11 giữ lịch sử. QA theo `report-20261114-qa.json` trong bundle refit, hình gốc vẫn theo runA3.

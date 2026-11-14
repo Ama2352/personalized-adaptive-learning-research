@@ -1,5 +1,6 @@
 """Loop hữu hạn refit9epoch×4 đã được giao, dừng lỗi/ngân sách, không tự đổi recipe."""
 import argparse
+import hashlib
 from datetime import datetime,timezone
 import importlib.util
 import json
@@ -38,19 +39,44 @@ def inspect_completed(request):
     return receipt
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--run',action='store_true');args=parser.parse_args()
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--run',action='store_true')
+    parser.add_argument('--resume-reviewed-budget',action='store_true')
+    args=parser.parse_args()
     if not args.run:
         print(json.dumps(dict(status='NO_EXECUTION',scope='A0–A3refit90;9epoch;H100;total30USD')));return
-    status=dict(status='RUNNING_FIXED_REFIT_MATRIX',started_at_utc=datetime.now(timezone.utc).isoformat(),models={})
+    prior = None
+    if args.resume_reviewed_budget:
+        prior = read(HERE/'refit-loop-progress.json')
+        if (prior['status'] != 'STOPPED_REQUIRES_ROOT_REVIEW'
+                or 'BUDGET_ENVELOPE_REQUIRES_RECONCILIATION' not in prior.get('error','')):
+            raise ValueError('Explicit reviewed budget stop required for this resume path')
+    status=dict(status='RUNNING_FIXED_REFIT_MATRIX',started_at_utc=datetime.now(timezone.utc).isoformat(),
+                models={} if prior is None else prior['models'])
     try:
         for variant in ('a0','a1','a2','a3'):
             snapshot=ROOT/f'artifacts/akt/staged/junyi-{variant}-refit-bounded-20261114-04'
             assert read(snapshot/'CPU_CHECK.json')['status']=='PASS_LOCAL_STAGE_INPUTS'
+            exported=ROOT/f'experiments/akt/results/model-export-{variant}-refit-20261114-01/MODEL_INDEX.json'
+            if prior is not None and exported.exists():
+                index=read(exported)
+                checkpoint=exported.parent/index['checkpoint_file']
+                with checkpoint.open('rb') as stream:
+                    digest=hashlib.file_digest(stream,'sha256').hexdigest()
+                assert (index['phase']=='refit90' and index['epochs']==9
+                        and index['identity']['variant']==variant.upper()
+                        and digest==index['checkpoint_sha256'])
+                continue
             previous=None
             first=5 if variant=='a0' else 1
+            if prior is not None and variant in prior['models']:
+                record=prior['models'][variant]
+                assert record['status']=='PARTIAL_JUNYI_REFIT90'
+                previous=HERE/record['last_request']
+                first=int(previous.stem[-2:])+1
             for attempt in range(first,21):
                 request=HERE/f'{variant}-refit-execution{attempt:02}.json'
-                if variant=='a0' and attempt==5:
+                if variant=='a0' and attempt==5 and prior is None:
                     pass  # Đợt này đã được root khởi chạy, chỉ chờ nghiệm thu.
                 else:
                     advance.prepare_next(variant,attempt,previous)

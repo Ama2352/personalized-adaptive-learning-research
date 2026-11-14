@@ -70,3 +70,7 @@ GPUcontroller là `experiments/akt/modal_junyi_refit.py --snapshot <snapshot> --
 ## Hậu xử lý local tiết kiệm mạng và ổD
 
 Sau khi H100 dừng, collector mới tái dùng output bất biến trùngSHA/bytes trong cùng receipt hoặc receipt trước. Dùng hardlink trên cùng ổD để giữ mọi vị trí artifact mà tránh nhân bản vật lý; có fallbackcopy và kiểmSHA. Input snapshots vẫn copyđộc lập, không hardlinksource/dataset/configs. `tests14.log`/`tests15.log`41ca mỗi lượt có chồng lặp; `host-io-dedup-check.json`/`host-io-link-check.json` kiểm3output chỉ2remote reads, tất cả byte giữ nguyên và samefile thật. Đây là tối ưu local sau stop; numerical source/Gate2667 và identity checkpoint giữ nguyên. Các rawoutputs đã nghiệm thu phải tiếp tục giữ bất biến.
+
+## A0refit đã nghiệm thu và báo cáo15/11
+
+Hai đợt05/06 hoàn tất9epoch, mỗi epoch2.040Adamstep/14.947.674target; tổng18.360step/134.529.066target. Tensorfinite/checkpoint/Adam/RNG/SHA được kiểm và xuất bốnfile tại `experiments/akt/results/model-export-a0-refit-20261114-01/`. `refit-report-20261115-state.json` và `figures/a0-refit-training-time-v01.*` giữ số liệu chuẩn. Báo cáo hiện hành chuyển sangđợt15/11, giữ14/11 nguyên trạng. A1 đã vàooptimizer, backbonekhởi tạo khớpA0(`a1-live-progress01-001.json`); A1/A2/A3chưađượctínhrefitcomplete khi chỉđangchạy. Cóhai lỗiGPUpreinit đãgiữlogvàbảnCPUchẩnđoánVolume, allocatorresearch16GiB; SourceGate2667/local92 đã đạt. Loop26355tiếptụctrongscope9×4/cap30USD, dừnglỗihoặcbudget đểROOTreview.
