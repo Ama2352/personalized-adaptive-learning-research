@@ -1,16 +1,16 @@
 # Báo cáo tiến độ khóa luận — ngày 15/11/2026
 
-## 15/11 — A0 hoàn tất refit; tiếp tục các phiên bản còn lại
+## 15/11 — A0, A1 hoàn tất refit; tiếp tục các phiên bản còn lại
 
-Bước refit khởi tạo mô hình mới và học lại trên hợp nhóm huấn luyện với nhóm đã dùng chọn số epoch. Nhóm hiệu chỉnh xác suất và nhóm đánh giá độc lập tiếp tục được giữ riêng. Đến đợt cập nhật ngày 15/11, đã nghiệm thu và xuất model refit cho 1/4 phiên bản. A0 hoàn tất 9 epoch trên TRAIN90, tổng cộng 134.529.066 lượt tương tác được dùng làm mục tiêu dự báo qua 9 vòng học, với 18.360 bước cập nhật trọng số. Mỗi tương tác được dùng một lần làm mục tiêu trong mỗi epoch.
+Bước refit khởi tạo mô hình mới và học lại trên hợp nhóm huấn luyện với nhóm đã dùng chọn số epoch. Nhóm hiệu chỉnh xác suất và nhóm đánh giá độc lập tiếp tục được giữ riêng. Đến đợt cập nhật ngày 15/11, đã nghiệm thu và xuất model refit cho 2/4 phiên bản. A0 hoàn tất 9 epoch trên TRAIN90, tổng cộng 134.529.066 lượt tương tác được dùng làm mục tiêu dự báo qua 9 vòng học, với 18.360 bước cập nhật trọng số. Mỗi tương tác được dùng một lần làm mục tiêu trong mỗi epoch.
 
-Thời gian học A0 trung bình 128.8 giây/epoch, dao động 122.1–140.8 giây. Hai đợt H100 đã hoàn tất, có nối lại từ checkpoint. Toàn bộ artifact đã tải về D và kiểm inventory; gói xuất gọn có checkpoint 9, optimizer, nguồn ngẫu nhiên, cấu hình và mã hóa bài tập.
+Thời gian học A0 trung bình 128.8 giây/epoch, dao động 122.1–140.8 giây. Hai đợt H100 đã hoàn tất, có nối lại từ checkpoint. Toàn bộ artifact đã tải về D và kiểm inventory; gói xuất gọn có checkpoint 9, optimizer, nguồn ngẫu nhiên, cấu hình và mã hóa bài tập. Các phiên bản refit tiếp theo đã nghiệm thu trên cùng quần thể và số bước cập nhật. A1 trung bình 221.3 giây/epoch.
 
 | Phiên bản | Thành phần | Refit TRAIN90 | Hiệu chỉnh và đánh giá độc lập |
 |---|---|---|---|
 | A0 | AKT không đồ thị | Đã refit 9/9 epoch, model đã xuất trên D | Còn chờ |
-| A1 | Đồ thị cố định | Đang refit; 8/9 epoch đã nghiệm thu trên D | Còn chờ |
-| A2 | Độ tin cậy cạnh | Đã chuẩn bị đầu vào; chờ thực thi | Còn chờ |
+| A1 | Đồ thị cố định | Đã refit 9/9 epoch, model đã xuất trên D | Còn chờ |
+| A2 | Độ tin cậy cạnh | Đang refit; 0/9 epoch đã nghiệm thu trên D | Còn chờ |
 | A3 | Độ tin cậy cạnh và cổng | Đã chuẩn bị đầu vào; chờ thực thi | Còn chờ |
 
 ![Thời gian học A0 refit](../../../runs/junyi-refit-pipeline-20261114-01/figures/a0-refit-training-time-v01.svg)
@@ -32,8 +32,8 @@ Phần tiến bộ trong ngày 14/11 tập trung vào A2, A3, độ tin cậy c�
 |---|---|---|
 | RQ1 · Nguyên nhân | Đã xác định các kết quả phụ thuộc quy tắc mô phỏng và những điểm thay đổi dự báo thường chưa đổi quyết định. | Hiệu chỉnh xác suất quanh ngưỡng thành thạo và đối chứng tác động đến kết quả học trên đánh giá độc lập. |
 | RQ2 · Điều kiện hiệu lực | Đã kiểm đối chứng cơ chế năng lực trên 120 thế giới mô phỏng và cơ hội quan sát cạnh trong Junyi. | Kiểm dự báo với các đối chứng thứ tự Junyi; điều kiện nhiễu cạnh, lịch sử và nhóm người học theo protocol chính. |
-| RQ3 · CG-AKT | Đã có A0–A3 Junyi, mỗi bản chạy 12 epoch và chọn epoch 9; checkpoint và dự đoán đã lưu. | Hoàn tất refit A1–A3, hiệu chỉnh xác suất, so sánh độc lập và kết quả vòng kín của mô hình mới. |
-| Chuẩn bị refit | Đã kiểm bốn bộ đầu vào thật; cache CPU hoàn tất; source đạt 2.667 ca kiểm Linux. | A0 đã refit đủ 9 epoch; tiếp tục A1–A3 và đánh giá độc lập. |
+| RQ3 · CG-AKT | Đã có A0–A3 Junyi, mỗi bản chạy 12 epoch và chọn epoch 9; checkpoint và dự đoán đã lưu. | Hoàn tất refit A2, A3, hiệu chỉnh xác suất, so sánh độc lập và kết quả vòng kín của mô hình mới. |
+| Chuẩn bị refit | Đã kiểm bốn bộ đầu vào thật; cache CPU hoàn tất; source đạt 2.667 ca kiểm Linux. | A0 đã refit đủ 9 epoch; tiếp tục A2, A3 và đánh giá độc lập. |
 
 
 ## 1. Từ hai nghiên cứu trước đến ba câu hỏi của khóa luận
@@ -113,7 +113,7 @@ Sau khi chọn số epoch, mỗi mô hình được khởi tạo mới và học
 Pipeline refit đã có lưu checkpoint từng epoch, trạng thái optimizer và nguồn ngẫu nhiên, phục hồi khi ngắt, giới hạn thời gian/tài nguyên và xuất model gọn. Kiểm tổng hợp trên CPU xác nhận model, Adam và trạng thái ngẫu nhiên khớp giữa chạy liên tục và nối lại cho cả bốn phiên bản. Source hiện tại đạt 2.667 ca kiểm Linux, với 0 lỗi và 0 ca bỏ qua. Snapshot A0 đã được đóng gói và kiểm đầu vào trên local; A1–A3 đã có đặc tả đóng gói.
 
 
-Tại bản chốt ngày 14/11, refit dữ liệu thật còn chờ. Ngày 15/11 đã sửa/kiểm guard Volume và allocator CUDA, hoàn tất refit A0 trên H100. Tiếp tục A1–A3 và đối soát ngân sách. Kết quả kiểm phần mềm được dùng làm điều kiện thực thi; kết luận RQ3 cần kết quả đánh giá mô hình sau các bước này.
+Tại bản chốt ngày 14/11, refit dữ liệu thật còn chờ. Ngày 15/11 đã sửa/kiểm guard Volume và allocator CUDA, hoàn tất refit A0 trên H100. Tiếp tục A2, A3 và đối soát ngân sách. Kết quả kiểm phần mềm được dùng làm điều kiện thực thi; kết luận RQ3 cần kết quả đánh giá mô hình sau các bước này.
 
 
 ## 6. Tài nguyên, mô hình đã lưu và công việc tiếp theo

@@ -74,3 +74,9 @@ Sau khi H100 dừng, collector mới tái dùng output bất biến trùngSHA/by
 ## A0refit đã nghiệm thu và báo cáo15/11
 
 Hai đợt05/06 hoàn tất9epoch, mỗi epoch2.040Adamstep/14.947.674target; tổng18.360step/134.529.066target. Tensorfinite/checkpoint/Adam/RNG/SHA được kiểm và xuất bốnfile tại `experiments/akt/results/model-export-a0-refit-20261114-01/`. `refit-report-20261115-state.json` và `figures/a0-refit-training-time-v01.*` giữ số liệu chuẩn. Báo cáo hiện hành chuyển sangđợt15/11, giữ14/11 nguyên trạng. A1 đã vàooptimizer, backbonekhởi tạo khớpA0(`a1-live-progress01-001.json`); A1/A2/A3chưađượctínhrefitcomplete khi chỉđangchạy. Cóhai lỗiGPUpreinit đãgiữlogvàbảnCPUchẩnđoánVolume, allocatorresearch16GiB; SourceGate2667/local92 đã đạt. Loop26355tiếptụctrongscope9×4/cap30USD, dừnglỗihoặcbudget đểROOTreview.
+
+## 15/11 — A1 hoàn tất refit, tiếp tục A2 trong ngân sách
+
+A1 hoàn tất 9 epoch qua bốn đợt có checkpoint/resume. Đã dừng các App, tải đủ artifact và xuất gói model tại `experiments/akt/results/model-export-a1-refit-20261114-01/`. `exports-verified-a0-a1.json` kiểm SHA của model và SUPPORT, số target/step từng epoch, cùng split, encoding, window, khởi tạo backbone và cấu hình tính toán của A0/A1. A1 trung bình 221,35 giây/epoch, A0 128,78 giây/epoch, cùng TRAIN90. Chưa hiệu chỉnh hay đánh giá độc lập.
+
+`budget-reserve-refit02.json` và `budget-reserve-refit03.json` giữ quyết định tái phân bổ dự phòng nội bộ do agent đặt. Còn 0,25 USD dự phòng riêng và 1 USD biên trễ trong cận lịch sử. Giữ nguyên trần 30 USD toàn KLTN và cap 1,25 USD mỗi đợt. Snapshot `billing-during-refit-20261115-03.json` lúc 01:44 ghi nhận 26,49 USD credit đã dùng, số liệu có thể cập nhật chậm. A2 bắt đầu theo snapshot04. Chưa khẳng định đủ tiền hoàn tất A3, phải đối soát trước mỗi đợt. Hai báo cáo 15/11 đã bổ sung A1 hoàn tất và phần còn thiếu.
