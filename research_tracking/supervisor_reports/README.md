@@ -1,5 +1,10 @@
 # Báo cáo tiến độ theo ngày
 
+## Bản chốt hiện hành ngày 14/11/2026
+
+[Báo cáo HTML ngày 14/11](2026-11-14/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [bản Markdown](2026-11-14/01_tien_do/BAO_CAO.md) tổng hợp tiến độ từngRQ, mạch phát hiện từ hai paper, A0–A3 Junyi đã chọn checkpoint và pipeline refit đã kiểm Linux. Hai file đọc đặt trong đợt14/11; các đợt cũ giữ làm lịch sử. Các cập nhật tiếp theo dùng đợt14/11 cho đến khi có bản chốt ngày mới. Bằng chứng số liệu/logs/figure tiếp tục theo bundle run gốc, QA báo cáo trong bundle refit14/11.
+
+
 ## Chốt 13/11 — A0 H100 hoàn tất chọn checkpoint
 
 [Báo cáo riêng A0 H100](2026-11-13/BAO_CAO_A0_H100.html) là một HTML tự chứa, trình bày cấu hình, ba phiên H100, 12 epoch, checkpoint epoch 9, metrics selection, tài nguyên, chi phí và bước còn thiếu. Báo cáo tiến độ tổng thể tiếp tục ở đợt 10/11 và đã cập nhật kết quả này.

@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## Báo cáo GVHD hiện hành — chốt ngày14/11
+
+[Báo cáo HTML](../research_tracking/supervisor_reports/2026-11-14/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown](../research_tracking/supervisor_reports/2026-11-14/01_tien_do/BAO_CAO.md) là hai file đọc của bản chốt mới, có tiến độ từngRQ, mạch nghiên cứu và phần còn thiếu. Đợt10/11 giữ lịch sử. QA theo `report-20261114-qa.json` trong bundle refit, hình gốc vẫn theo runA3.
+
+
 ## 14/11 — Hoàn thiện pipeline refit A0–A3 trên local
 
 [Hồ sơ refit](../research_tracking/runs/junyi-refit-pipeline-20261114-01/README.md) giữ epoch plan thật9×4,19ca refit mới và78ca hồi quy trước đó, có chồng lặp. Model/Adam/RNG của bốn biến thể khớp khi kiểm continuous/resume trên CPU tổng hợp. Đã dựng encoding90, window/context cache cho142.621người học/14.947.674target; bốn đầu vào thật kiểm đạt. 85ca local đạt, Gate Linux2.660ca PASS, snapshotA0 đã đóng/kiểm trênD. CUDA refit còn chờ. Entrypoint ghim grant/Gate/runtime và khóa đúng topology/confidence TRAIN80 qua selected index. Đọc STATE trước tiếp tục. Chưa refit dữ liệu thật; Modal chỉ có lượt kiểm CPU nguồn mới.
