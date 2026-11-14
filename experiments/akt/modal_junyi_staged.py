@@ -47,6 +47,14 @@ def cpu_mount_preflight(execution_id):
         'from pathlib import Path;from run_junyi_gpu_stage import prepare_runtime_report;'
         'prepare_runtime_report(Path("/opt/kltn"),Path(sys.argv[1]),'
         'Path("/opt/kltn/artifacts/akt/dependencies/upstream"),Path("/opt/locked-cu126.txt"),"cpu")')
+    worker=json.loads((root/'gpu-stage-request.json').read_text())
+    if worker.get('purpose')=='refit90':
+        script+=(';import json;from run_junyi_refit import pinned,prepare_inputs;'
+            'w=json.loads(Path("/opt/kltn/gpu-stage-request.json").read_text());'
+            'c=prepare_inputs(json.loads(pinned(w["refit_request"]).read_text()));'
+            'Path(sys.argv[1],"refit-inputs.json").write_text(json.dumps(dict('
+            'status="PASS_REFIT90_PROVIDER_INPUTS",variant=w["variant"],'
+            'targets=c["inputs"].targets,encoding=c["encoding"].identity,plan=c["plan"]["identity"])))')
     try:
         subprocess.run([str(root/'.venv/bin/python'),'-B','-c',script,str(operation)],
             env=environment,capture_output=True,text=True,check=True,timeout=120)
@@ -56,6 +64,8 @@ def cpu_mount_preflight(execution_id):
     runtime=json.loads((operation/'runtime.json').read_text())
     return dict(status='PASS_STAGED_PROVIDER_INPUTS',files=len(inventory['files']),torch=runtime['torch_version'],
                 runtime=runtime,
+                refit_inputs=(json.loads((operation/'refit-inputs.json').read_text())
+                              if worker.get('purpose')=='refit90' else None),
                 hashing_seconds=hashing_seconds,total_seconds=time.monotonic()-started)
 
 

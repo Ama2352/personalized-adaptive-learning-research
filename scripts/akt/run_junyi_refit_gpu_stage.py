@@ -59,7 +59,7 @@ def main():
         write_json(operation / 'authorization.json', grant)
         if execution.get('resume_checkpoint') is not None:
             resume = ROOT / execution['resume_checkpoint']
-            if not resume.resolve().is_relative_to(config.output_dir / 'checkpoints'):
+            if not resume.resolve().is_relative_to((config.output_dir / 'checkpoints').resolve()):
                 raise ValueError('Resume outside logical refit output')
             context.update(resume=resume, expected_resume_sha256=execution['resume_sha256'])
         terminal = run_junyi_refit(**context, grant=grant, runtime_report=runtime, lock_file=lock,

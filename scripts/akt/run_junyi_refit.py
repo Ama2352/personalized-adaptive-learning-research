@@ -21,6 +21,13 @@ def pinned(entry):
     return path
 
 
+def validate_output_root(config):
+    # Volume v2 ánh xạ thư mục mount sang /__modal/volumes/ trên Linux.
+    base = (ROOT / 'experiments/akt/results').resolve()
+    if config.output_dir.resolve().parent != base or config.output_dir.name != config.run_id:
+        raise ValueError('Exclusive owned logical refit output required')
+
+
 def prepare_inputs(request):
     """Nạp/kiểm asset trên CPU, dùng chung cho preflight và numerical worker."""
     from knowledge_tracing.akt.config import load_config, ResearchCUDAExecutionProfile
@@ -34,8 +41,7 @@ def prepare_inputs(request):
     from knowledge_tracing.shared_kt import PrerequisiteGraph
     profile = ResearchCUDAExecutionProfile(**json.loads(pinned(request['cuda_profile']).read_text()))
     config = load_config(pinned(request['config']), cuda_profile=profile)
-    if config.output_dir.resolve().parent != ROOT / 'experiments/akt/results' or config.output_dir.name != config.run_id:
-        raise ValueError('Exclusive owned logical refit output required')
+    validate_output_root(config)
     data = request['inputs']
     selected = load_full_selected_cache(ROOT / data['selected_cache_root'], pinned(data['roles']),
         expected_manifest_sha256=data['selected_cache_manifest_sha256'], expected_roles_sha256=data['roles']['sha256'])
@@ -70,7 +76,7 @@ def prepare_inputs(request):
         raise ValueError('A0 requires graph-free inputs')
     resume_entry = request.get('resume_checkpoint')
     resume = None if resume_entry is None else pinned(resume_entry)
-    if resume is not None and not resume.resolve().is_relative_to(config.output_dir / 'checkpoints'):
+    if resume is not None and not resume.resolve().is_relative_to((config.output_dir / 'checkpoints').resolve()):
         raise ValueError('Resume must belong to the same logical refit')
     index = json.loads(pinned(request['selected_index']).read_text())
     validate_epoch_plan(plan, config=config, profile=profile, inputs=inputs)
@@ -85,7 +91,6 @@ def configure_cuda(profile, threads):
     os.environ.update(CUBLAS_WORKSPACE_CONFIG=profile.cublas_workspace_config, CUDA_VISIBLE_DEVICES='0',
         OMP_NUM_THREADS=str(threads), MKL_NUM_THREADS=str(threads), OPENBLAS_NUM_THREADS=str(threads))
     import torch
-    from knowledge_tracing.akt.device_budget import configure_cuda_budget
     torch.set_num_threads(threads)
     torch.set_default_dtype(torch.float32)
     torch.use_deterministic_algorithms(True, warn_only=False)
@@ -93,7 +98,13 @@ def configure_cuda(profile, threads):
     torch.backends.cudnn.allow_tf32 = False
     torch.backends.cudnn.benchmark = False
     torch.set_float32_matmul_precision('highest')
-    configure_cuda_budget(torch.cuda, max_vram_bytes=profile.max_vram_bytes)
+    if torch.cuda.is_available() is not True or torch.cuda.device_count() != 1:
+        raise ValueError('Refit requires exactly one visible CUDA device')
+    total = torch.cuda.get_device_properties(0).total_memory
+    if type(total) is not int or not 0 < profile.max_vram_bytes <= total:
+        raise ValueError('GPU memory below approved refit allocator budget')
+    # Cùng allocator với selected worker; profile research có thể lớn hơn smoke2GiB.
+    torch.cuda.set_per_process_memory_fraction(profile.max_vram_bytes / total, 0)
 
 
 def execute(request):

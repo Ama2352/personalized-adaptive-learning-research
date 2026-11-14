@@ -41,7 +41,8 @@ def settle(request_path):
     result=receipt.get('worker_result',{}).get('terminal',{})
     state=read(HERE/'STATE.json')
     variant=result.get('variant') or request['execution_id'].split('-')[2].upper()
-    state.update(status='REFIT_TRANCHE_VERIFIED',gpu_started=True,real_data_training_performed=True,
+    performed = receipt['status'] in ('PARTIAL_JUNYI_REFIT90', 'JUNYI_REFIT90_COMPLETE') and bool(receipt.get('checkpoints'))
+    state.update(status='REFIT_TRANCHE_VERIFIED',gpu_started=True,real_data_training_performed=performed,
         active_execution=None,last_execution=request['execution_id'],last_terminal=result)
     state.setdefault('refit_models',{})[variant]=dict(status=receipt['status'],epochs=result.get('complete_epochs'),
         output=output.relative_to(ROOT).as_posix(),checkpoint_export_pending=receipt['status']=='JUNYI_REFIT90_COMPLETE')
@@ -49,7 +50,7 @@ def settle(request_path):
     print(json.dumps(dict(settlement=evidence,terminal=result)))
 
 def prepare_next(variant,attempt,previous):
-    assert variant in ('a0','a1','a2','a3') and 1<=attempt<=8
+    assert variant in ('a0','a1','a2','a3') and 1<=attempt<=20
     ledger_path=ROOT/'research_tracking/COMPUTE_BUDGET.json';ledger=read(ledger_path)
     assert ledger['new_allocations']==[]
     request=read(HERE/'a0-refit-execution02.json')

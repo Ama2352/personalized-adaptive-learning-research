@@ -79,3 +79,54 @@ def test_preparer_binds_inline_worker_to_pinned_inputs(tmp_path, monkeypatch, wo
     else:
         with pytest.raises(ValueError):
             preparer.validate_worker(worker, request)
+
+
+@pytest.mark.parametrize('invalid', [False, 'wrong_parent', 'wrong_name'])
+def test_output_guard_resolves_both_volume_paths(tmp_path, monkeypatch, invalid):
+    from types import SimpleNamespace
+    root = tmp_path / 'repository'
+    base = root / 'experiments/akt/results'
+    mounted = tmp_path / 'mounted-volume'
+    original = type(base).resolve
+    def resolve(path, *args, **kwargs):
+        if path == base:
+            return mounted
+        if path == base / 'logical-refit':
+            return mounted / 'logical-refit'
+        return original(path, *args, **kwargs)
+    monkeypatch.setattr(cli, 'ROOT', root)
+    monkeypatch.setattr(type(base), 'resolve', resolve)
+    config = SimpleNamespace(output_dir=base / 'logical-refit', run_id='logical-refit')
+    if invalid == 'wrong_parent':
+        config.output_dir = tmp_path / 'unowned/logical-refit'
+    if invalid == 'wrong_name':
+        config.run_id = 'another-run'
+    if invalid:
+        with pytest.raises(ValueError, match='owned'):
+            cli.validate_output_root(config)
+    else:
+        cli.validate_output_root(config)
+
+
+@pytest.mark.parametrize('available,count,total', [(True, 1, 80), (False, 1, 80),
+    (True, 2, 80), (True, 1, 8)])
+def test_refit_cuda_setup_accepts_research_budget_and_checks_device(monkeypatch, available, count, total):
+    from types import SimpleNamespace as NS
+    calls = []
+    cuda = NS(is_available=lambda: available, device_count=lambda: count,
+        get_device_properties=lambda index: NS(total_memory=total * 1024**3),
+        set_per_process_memory_fraction=lambda fraction, index: calls.append((fraction, index)))
+    torch = NS(cuda=cuda, float32='float32', set_num_threads=lambda value: None,
+        set_default_dtype=lambda value: None, use_deterministic_algorithms=lambda *a, **k: None,
+        set_float32_matmul_precision=lambda value: None,
+        backends=NS(cuda=NS(matmul=NS(allow_tf32=True)), cudnn=NS(allow_tf32=True, benchmark=True)))
+    monkeypatch.setitem(sys.modules, 'torch', torch)
+    profile = NS(max_vram_bytes=16 * 1024**3, cublas_workspace_config=':4096:8')
+    if available and count == 1 and total >= 16:
+        cli.configure_cuda(profile, 2)
+        assert calls == [(.2, 0)]
+        assert torch.backends.cuda.matmul.allow_tf32 is False
+    else:
+        with pytest.raises(ValueError):
+            cli.configure_cuda(profile, 2)
+        assert calls == []
