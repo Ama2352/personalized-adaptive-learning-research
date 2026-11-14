@@ -38,6 +38,9 @@ def package(tmp_path):
     worker=dict(variant='A2',logical_run_id='unit-a2-logical',validation_batch_size=128,
         profile=dict(max_vram_bytes=12*1024**3),
         config=dict(run_id='unit-a2-logical',batch_size=128,seed=42,max_wall_seconds=60,max_seconds=50))
+    from knowledge_tracing.akt.research_junyi_prepared import CACHE_FIELDS
+    worker['cpu_prepared']={name:dict(path='artifacts/akt/cache/'+name,sha256='a'*64)
+                            for name,*_ in CACHE_FIELDS}
     request=dict(archives=archives,local_files={},worker=worker)
     snapshot=root/'artifacts/akt/staged/unit'
     receipt=io.prepare_project(root,request,snapshot)
@@ -49,6 +52,38 @@ def test_prepare_local_snapshot_and_mutation_rejection(package):
     assert io.verify_project(snapshot)==receipt
     (snapshot/'project/artifacts/akt/cache/shard.bin').write_bytes(b'changed')
     with pytest.raises(ValueError,match='Snapshot local thay đổi'):io.verify_project(snapshot)
+
+
+def test_missing_cpu_preparation_blocks_gpu_before_dispatch(package):
+    _,_,_,request=package
+    worker=deepcopy(request['worker'])
+    del worker['cpu_prepared']['selection_graph']
+    with pytest.raises(ValueError,match='CPU caches'):
+        staged.validate_execution(execution_request(),worker)
+
+
+@pytest.mark.parametrize('field,value', [
+    ('path', '../outside'), ('path', '/outside'), ('path', 'a//b'),
+    ('path', 'a/./b'), ('path', 'C:/outside'), ('path', 'a\\b'),
+    ('sha256', 'A'*64), ('sha256', 'a'*63), ('sha256', None),
+])
+def test_cpu_prepared_contract_rejects_invalid_paths_or_pins(package, field, value):
+    from knowledge_tracing.akt.research_junyi_prepared import prepared_cache_options
+    _,_,_,request=package
+    worker=deepcopy(request['worker'])
+    worker['cpu_prepared']['train_graph'][field]=value
+    with pytest.raises(ValueError,match='CPU cache'):
+        prepared_cache_options(worker,Path)
+
+
+def test_cpu_prepared_contract_passes_every_external_pin(package):
+    from knowledge_tracing.akt.research_junyi_prepared import CACHE_FIELDS,prepared_cache_options
+    _,_,_,request=package
+    options,pins=prepared_cache_options(request['worker'],Path)
+    assert len(options)==10 and len(pins)==5
+    for name,path_key,pin_key,grant_key in CACHE_FIELDS:
+        assert options[path_key]==Path(request['worker']['cpu_prepared'][name]['path'])
+        assert options[pin_key]==pins[grant_key]=='a'*64
 
 
 @pytest.mark.parametrize('name',['../outside','/outside','a/../../x','C:/x','a\\b','a//b'])

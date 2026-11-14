@@ -11,6 +11,44 @@ from knowledge_tracing.akt.prediction_batch import iter_predictions_batched,iter
 from knowledge_tracing.akt.research_junyi_selection_cache import build_selection_cache,SelectionCacheSession
 
 
+def test_cpu_admission_replays_same_population_and_cannot_reauthorize(case,tmp_path):
+    from knowledge_tracing.akt.research_junyi_selection_cache import write_selection_cpu_admission
+    from knowledge_tracing.akt.research_junyi_engineering import file_sha
+    _,strict,receipt=build(case,['OOV','A','B']*90)
+    admission=tmp_path/'selection-admission.json'
+    window=tmp_path/'window-admission.json'
+    write_selection_cpu_admission(strict,admission,window)
+    restored=SelectionCacheSession(strict.root,view=case[2],encoding=case[3],source_sha256=SOURCE,
+        expected_targets=270,expected_manifest_sha256=receipt['manifest_sha256'],
+        admission_file=admission,expected_admission_sha256=file_sha(admission),
+        window_admission_file=window,expected_window_admission_sha256=file_sha(window))
+    first=FakeAdapter();second=FakeAdapter()
+    first.encoding=second.encoding=case[3].native
+    assert list(iter_prepared_predictions_batched(first,restored.iter_prepared(),batch_size=4))==list(
+        iter_prepared_predictions_batched(second,strict.iter_prepared(),batch_size=4))
+    with pytest.raises(ValueError,match='Fresh full selection join'):
+        write_selection_cpu_admission(restored,tmp_path/'bad.json',tmp_path/'bad-window.json')
+
+
+@pytest.mark.parametrize('change',['receipt_sha','window_sha','population','validator'])
+def test_cpu_admission_mismatch_is_rejected(case,tmp_path,change):
+    from knowledge_tracing.akt import research_junyi_selection_cache as module
+    from knowledge_tracing.akt.research_junyi_engineering import file_sha
+    _,strict,receipt=build(case,['A','B']*5)
+    admission=tmp_path/'selection-admission.json';window=tmp_path/'window-admission.json'
+    module.write_selection_cpu_admission(strict,admission,window)
+    if change in ('population','validator'):
+        payload=json.loads(admission.read_text())
+        if change=='population':payload['population_sha256']='b'*64
+        else:payload['validator_sources']['selection_join']='b'*64
+        admission.write_text(json.dumps(payload))
+    with pytest.raises(ValueError):
+        SelectionCacheSession(strict.root,view=case[2],encoding=case[3],source_sha256=SOURCE,
+            expected_targets=10,expected_manifest_sha256=receipt['manifest_sha256'],
+            admission_file=admission,expected_admission_sha256='b'*64 if change=='receipt_sha' else file_sha(admission),
+            window_admission_file=window,expected_window_admission_sha256='b'*64 if change=='window_sha' else file_sha(window))
+
+
 def build(case,items):
     root,_,view,encoding=case
     student=learner(view.users[0],items)

@@ -37,6 +37,10 @@ def validate_recipe(root,request):
     from knowledge_tracing.akt.research_junyi_confidence_binding import load_binding
     from knowledge_tracing.akt.research_junyi_graph import JunyiGraphCondition
     from knowledge_tracing.akt.research_junyi_window_cache import JunyiWindowCacheSession
+    from knowledge_tracing.akt.research_junyi_prepared import prepared_cache_options
+    from knowledge_tracing.akt.research_junyi_graph_cache import GraphContextCache
+    from knowledge_tracing.akt.research_junyi_selection_cache import SelectionCacheSession
+    from knowledge_tracing.akt.research_junyi_graph import JunyiGraphPhaseSession
     from knowledge_tracing.shared_kt import PrerequisiteGraph
     from knowledge_tracing.akt.config import AKTConfig,ResearchCUDAExecutionProfile,validate_config
     from knowledge_tracing.edge_confidence import EdgeConfidenceRecipe
@@ -108,6 +112,26 @@ def validate_recipe(root,request):
         inputs.source_identity,inputs.train_targets,data['train_window_manifest_sha256'],
         admission_receipt=original(worker['train_admission_file']),
         expected_admission_sha256=worker['train_admission_sha256'])
+    cache_options,cache_pins=prepared_cache_options(worker,original)
+    selection=SelectionCacheSession(cache_options['selection_window_cache'],view=inputs.selection,
+        encoding=encoding,source_sha256=inputs.source_identity,expected_targets=inputs.selection_targets,
+        expected_manifest_sha256=cache_options['expected_selection_cache_manifest_sha256'],
+        admission_file=cache_options['selection_cpu_admission_file'],
+        expected_admission_sha256=cache_options['expected_selection_cpu_admission_sha256'],
+        window_admission_file=cache_options['selection_window_admission_file'],
+        expected_window_admission_sha256=cache_options['expected_selection_window_admission_sha256'])
+    if selection.manifest['population_sha256']!=reference['selection_population_sha256']:
+        raise ValueError('Selection CPU cache population differs from A0/A1')
+    for scope,view,manifest,targets in (
+        ('train',inputs.train,data['train_window_manifest_sha256'],inputs.train_targets),
+        ('selection',inputs.selection,selection.manifest['window_manifest_sha256'],
+         inputs.selection_targets-dict(selection.windows._summary)['unseen_targets'])):
+        cached=GraphContextCache.open(cache_options[scope+'_graph_context_cache'],
+            cache_options['expected_'+scope+'_graph_context_cache_sha256'],
+            JunyiGraphPhaseSession(condition,view),dataset_sha256=inputs.source_identity,
+            window_manifest_sha256=manifest)
+        if cached.targets!=targets:
+            raise ValueError('Graph context cache target population differs')
     if (inputs.train_targets!=reference['train_targets'] or inputs.selection_targets!=reference['selection_targets']
             or inputs.train.identity!=reference['train_view_identity'] or encoding.identity!=reference['encoding_identity']):
         raise ValueError('Population hoặc encoding khác baseline')
@@ -126,6 +150,7 @@ def validate_recipe(root,request):
     return dict(training_fields_matched=matched_fields,train_targets=inputs.train_targets,
         selection_targets=inputs.selection_targets,condition_identity=condition.identity,
         confidence_identity=confidence.identity,admitted_records=admitted.strict_records_verified,
+        prepared_cache_pins=cache_pins,
         a0_epoch_ranking_batch128_replayed=False)
 
 

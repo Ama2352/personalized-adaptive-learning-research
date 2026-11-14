@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 14/11 — Cache A2/A3 và resume đã kiểm trên T4 qua MCP
+
+[Hồ sơ](../runs/junyi-gpu-boundary-t4-20261114-01/README.md) giữ 102 ca hồi quy local, 39 ca hợp đồng cache mở rộng và parity/resume thực tế A2/A3 trên T4. Sai lệch dự đoán bằng 0; tốc độ cache A2 giảm 4,7%, A3 gần như ngang nhau trong phép đo ngắn. Confidence fixture kỹ thuật; training chính và stop barrier Modal thật còn chờ. Trạng thái tải artifact/trả runtime ghi ở STATE, 0 USD Modal.
+
+
 ## 14/11 — Confidence TRAIN80, tạm dừng có lưu tiến độ
 
 [Hồ sơ](../runs/junyi-confidence-train80-20261114-01/README.md) giữ checkpoint đủ số record/target nhưng corpus chưa niêm phong, chưa fit child. Gate Linux2590ca trước cache mới, cache A2/A3 local38ca. Selection wiring mới chưa kiểm, chưa training A2/A3. STATE giữ đường dẫn tiếp tục và các blocker.

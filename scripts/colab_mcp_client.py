@@ -115,7 +115,16 @@ async def main(args):
             # task MCP proxy nếu người dùng cần hơn60s để xác nhận trong browser.
             url = f'{COLAB}{SCRATCH_PATH}#mcpProxyToken={session.wss.token}&mcpProxyPort={session.wss.port}'
             opened += 1
-            return {'event':'browser_open', 'opened':bool(webbrowser.open_new(url)),
+            if args.browser == 'edge':
+                candidates = (Path('C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'),
+                              Path('C:/Program Files/Microsoft/Edge/Application/msedge.exe'))
+                executable = next((path for path in candidates if path.is_file()), None)
+                if executable is None:
+                    raise FileNotFoundError('Không tìm thấy Edge tại vị trí cài đặt chuẩn')
+                accepted = webbrowser.BackgroundBrowser(str(executable)).open_new(url)
+            else:
+                accepted = webbrowser.open_new(url)
+            return {'event':'browser_open', 'opened':bool(accepted), 'browser':args.browser,
                     'note':'Tab Google chính thức; xác nhận kết nối nếu được hỏi; URL nonce không được log'}
 
         emit({**status(), 'event':'ready'})
@@ -179,6 +188,7 @@ async def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--open-browser', action='store_true')
+    parser.add_argument('--browser', choices=('default','edge'), default='default')
     parser.add_argument('--ttl-seconds', type=int, default=7200)
     options = parser.parse_args()
     if not 10 <= options.ttl_seconds <= 7200:

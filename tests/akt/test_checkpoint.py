@@ -38,6 +38,31 @@ def test_checkpoint_roundtrip_restores_state_and_rejects_mismatch(tmp_path):
         save_checkpoint(path, model, opt, identity=identity, progress={'epoch': 3, 'complete': True})
 
 
+@pytest.mark.parametrize('optimizer_class', [torch.optim.Adam, torch.optim.AdamW])
+@pytest.mark.parametrize('capturable,fused,expected_calls', [
+    (False, False, 1), (True, False, 0), (False, True, 0),
+])
+def test_adam_resume_step_device_policy(monkeypatch, optimizer_class, capturable, fused, expected_calls):
+    parameter = torch.nn.Parameter(torch.ones(1))
+    optimizer = optimizer_class([parameter], capturable=capturable, fused=fused)
+    step = torch.tensor(3.)
+    momentum = torch.tensor([.25])
+    optimizer.state[parameter] = {'step': step, 'exp_avg': momentum}
+    original_cpu = torch.Tensor.cpu
+    calls = []
+
+    def record_cpu(tensor, *args, **kwargs):
+        calls.append(tensor)
+        return original_cpu(tensor, *args, **kwargs)
+
+    monkeypatch.setattr(torch.Tensor, 'cpu', record_cpu)
+    checkpoint_module._restore_adam_step_devices(optimizer)
+    assert len(calls) == expected_calls
+    assert all(value is step for value in calls)
+    assert optimizer.state[parameter]['step'].item() == 3
+    assert optimizer.state[parameter]['exp_avg'] is momentum
+
+
 def test_checkpoint_rejects_incomplete_epoch(tmp_path):
     model = adapter()
     optimizer = torch.optim.Adam(model.native.parameters(), lr=0.001)

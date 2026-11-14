@@ -1,4 +1,17 @@
-# Báo cáo tiến độ khóa luận — cập nhật 13/11/2026
+# Báo cáo tiến độ khóa luận — cập nhật 14/11/2026
+
+## 14/11 — A2/A3 đã qua kiểm CUDA và phục hồi checkpoint trên T4
+
+Để tránh thuê GPU trong lúc chuẩn bị dữ liệu, đã nối cache đồ thị train/selection cùng hồ sơ kiểm CPU vào luồng thực thi A2/A3. Cache được tạo trên máy local trước khi gửi sang Colab. Luồng gọi GPU yêu cầu đủ đầu vào đã kiểm và giữ kiểm tra định danh dữ liệu khi nhận lại.
+
+Trên T4 miễn phí, A2 và A3 đã cho dự đoán khớp hoàn toàn giữa cách tính trực tiếp và cache. Gradient, cập nhật model/Adam và checkpoint/resume đều qua đối chiếu. Một lỗi vị trí bộ đếm Adam khi đọc checkpoint CUDA đã được phát hiện, sửa và kiểm lại thành công. Bộ hồi quy local đạt 102 ca; kiểm mở rộng hợp đồng cache đạt 39 ca, trong đó có 10 ca bổ sung.
+
+Phép đo ngắn gồm hai block đổi thứ tự chạy cho mỗi biến thể. Cache giảm khoảng 4,7% thời gian A2, còn A3 gần như ngang nhau. Chưa có bằng chứng tăng tốc ổn định cho cả epoch hoặc GPU luôn trên 50%. Việc chuẩn bị cache ngoài function GPU đã được thực hiện; đọc batch, kiểm danh tính và ghi checkpoint vẫn cần CPU trong lúc học.
+
+Lượt kiểm dùng các giá trị độ tin cậy cố định để kiểm luồng tính toán. Confidence TRAIN80 thật, cache toàn bộ dữ liệu, Gate Linux của source cuối và kiểm ranh giới thực thi trên Modal còn chờ. Chưa chạy training chính A2/A3 Junyi, chưa bổ sung kết luận về lợi ích đồ thị cho RQ3. Đã lưu đủ 45 file, gồm 12 checkpoint kiểm kỹ thuật, trên ổ D và đối chiếu từng file. Colab đã nhận lệnh trả runtime T4. Đợt này chưa dùng credit Modal.
+
+[Hồ sơ kiểm T4 và kết quả gốc](../../../runs/junyi-gpu-boundary-t4-20261114-01/README.md).
+
 
 ## 14/11 — Chuẩn bị độ tin cậy từng cạnh cho A2/A3
 

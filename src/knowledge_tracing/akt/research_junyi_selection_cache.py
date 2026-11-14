@@ -21,6 +21,12 @@ from .windows import iter_windows
 KIND='JUNYI_SELECTION_WINDOW_SIDECAR_V1'
 
 
+def _require_ordering_index(path):
+    with sqlite3.connect(Path(path).as_uri()+'?mode=ro&immutable=1',uri=True) as connection:
+        columns=tuple(row[2] for row in connection.execute('PRAGMA index_info(events_chronology)'))
+    _need(columns==('user_id','time_done','source_row'),'CPU selection ordering index required')
+
+
 def _selection_admission_sources():
     from pathlib import Path
     from .research_junyi_window_cache import _admission_sources
@@ -37,10 +43,12 @@ def write_selection_cpu_admission(session,path,window_receipt):
           'Selection validator changed after CPU join')
     path,window_receipt=Path(path),Path(window_receipt)
     session._check()
+    _require_ordering_index(session._events)
     write_cpu_admission(session.windows,window_receipt)
     payload=dict(status='CPU_SELECTION_JOIN_VERIFIED',manifest_sha256=session._pin,
         binding=session._binding,events_sha256=session.manifest['events_sha256'],
         population_sha256=session.manifest['population_sha256'],targets=session.manifest['targets'],
+        ordering_index='events_chronology',
         window_admission_sha256=file_sha(window_receipt),validator_sources=_selection_admission_sources())
     with path.open('x',encoding='utf-8') as stream:
         json.dump(payload,stream,sort_keys=True)
@@ -113,6 +121,8 @@ def build_selection_cache(root,learners,*,view,encoding,source_sha256,expected_t
         result=build_junyi_window_cache(root/'windows',windows(),view=view,encoding=encoding,
             source_data_sha256=source_sha256,expected_target_rows=expected_targets,compressed=False)
         _need(binding==_binding(view,encoding,source_sha256),'Selection binding changed')
+        # Chuẩn bị thứ tự đọc trên CPU, tránh sort toàn sidecar trong mỗi validation.
+        connection.execute('CREATE INDEX events_chronology ON events(user_id,time_done,source_row)')
         _need(time.monotonic()-started<=max_seconds and process.memory_info().rss<=max_rss_bytes,
               'Selection cache resource limit')
         connection.commit()
@@ -162,8 +172,10 @@ class SelectionCacheSession:
             _need(admitted==dict(status='CPU_SELECTION_JOIN_VERIFIED',manifest_sha256=self._pin,
                 binding=self._binding,events_sha256=self.manifest['events_sha256'],
                 population_sha256=self.manifest['population_sha256'],targets=expected_targets,
+                ordering_index='events_chronology',
                 window_admission_sha256=expected_window_admission_sha256,
                 validator_sources=_selection_admission_sources()),'Selection CPU receipt binding/source mismatch')
+            _require_ordering_index(self._events)
         self.windows=JunyiWindowCacheSession(self.root/'windows',view=view,encoding=encoding,
             source_data_sha256=source_sha256,expected_target_rows=expected_targets,
             expected_manifest_sha256=self.manifest['window_manifest_sha256'],

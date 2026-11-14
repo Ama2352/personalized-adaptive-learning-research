@@ -61,6 +61,7 @@ def main():
         from knowledge_tracing.akt.research_junyi_data import load_prepared_junyi_encoding
         from knowledge_tracing.akt.research_junyi_graph import JunyiGraphCondition
         from knowledge_tracing.akt.research_junyi_confidence_binding import load_binding
+        from knowledge_tracing.akt.research_junyi_prepared import prepared_cache_options
         from knowledge_tracing.shared_kt import PrerequisiteGraph
         torch.set_num_threads(2)
         torch.set_default_dtype(torch.float32)
@@ -109,6 +110,8 @@ def main():
             prefetch_train_windows=True, prefetch_selection_windows=True,
             edge_confidence_identity=confidence.identity, edge_confidence_sha256=confidence.fit_artifact_sha256,
             train_cache_admission_sha256=request['train_admission_sha256'])
+        cache_options,cache_pins=prepared_cache_options(request,relative)
+        prepared.update(cache_pins)
         resume = execution.get('resume_checkpoint')
         if resume is not None:
             if not resume.startswith('experiments/akt/results/'+config.run_id+'/checkpoints/'):
@@ -134,7 +137,7 @@ def main():
             train_cache_admission_receipt=relative(request['train_admission_file']),
             expected_train_cache_admission_sha256=request['train_admission_sha256'],
             resume_checkpoint=None if resume is None else relative(resume),
-            expected_resume_sha256=execution.get('resume_sha256'))
+            expected_resume_sha256=execution.get('resume_sha256'),**cache_options)
         result.update(status=terminal['status'],terminal=terminal,gpu=torch.cuda.get_device_name(0))
     except BaseException as error:
         result.update(error_type=type(error).__name__,error=str(error))

@@ -127,6 +127,9 @@ def validate_execution(request, worker):
         raise PermissionError('Thiếu quyền thực thi lượt chạy')
     if worker['variant'] not in ('A2','A3') or worker['config']['batch_size']!=128:
         raise ValueError('A2/A3 batch128 đã chốt mới được dùng entry này')
+    sys.path.insert(0,str(ROOT/'src'))
+    from knowledge_tracing.akt.research_junyi_prepared import prepared_cache_options
+    prepared_cache_options(worker,lambda value:value)
     if worker['logical_run_id']!=worker['config']['run_id']:
         raise ValueError('Logical run khác config')
     for name in (request['execution_id'],worker['logical_run_id']):

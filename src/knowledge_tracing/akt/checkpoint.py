@@ -93,6 +93,7 @@ def _restore_payload(adapter, optimizer, payload):
         raise ValueError('checkpoint encoding mismatch')
     adapter.native.load_state_dict(payload['model_state_dict'])
     optimizer.load_state_dict(payload['optimizer_state_dict'])
+    _restore_adam_step_devices(optimizer)
     random.setstate(_nested_tuple(payload['python_rng']))
     numpy_state = payload['numpy_rng']
     np.random.set_state((numpy_state[0], np.asarray(numpy_state[1], dtype=np.uint32),
@@ -102,6 +103,24 @@ def _restore_payload(adapter, optimizer, payload):
     if torch.cuda.is_available() and cuda_states:
         # map_location=cuda cũng chuyển RNG byte tensors lên GPU; generator cần CPU state.
         torch.cuda.set_rng_state_all([state.cpu() for state in cuda_states])
+
+
+def _restore_adam_step_devices(optimizer):
+    """Giữ bộ đếm Adam trên CPU theo chính sách non-capturable của PyTorch.
+
+    load_state_dict giữ nguyên thiết bị của step khi fused/capturable tắt.
+    Vì vậy map_location=cuda cần được đảo lại riêng cho bộ đếm này.
+    """
+    if not isinstance(optimizer, (torch.optim.Adam, torch.optim.AdamW)):
+        return
+    for group in optimizer.param_groups:
+        if group.get('capturable', False) or group.get('fused', False):
+            continue
+        for parameter in group['params']:
+            state = optimizer.state.get(parameter, {})
+            step = state.get('step')
+            if isinstance(step, torch.Tensor):
+                state['step'] = step.cpu()
 
 
 def _validate_resume_state(state: dict) -> None:

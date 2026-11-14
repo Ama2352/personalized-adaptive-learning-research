@@ -1,0 +1,37 @@
+F..................................................                      [100%]
+================================== FAILURES ===================================
+______ test_cpu_admission_replays_same_population_and_cannot_reauthorize ______
+
+case = (WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/gpu-boundary-selection02/test_cpu_admission_replays_sam0/owned/cache...21bb6ec7f9718177aac6bba94cc6a8a89b0773'), identity='af5184bc6fe567372cf22695ebc60a79b49c5176e18d51bf847391748d818f70'))
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/gpu-boundary-selection02/test_cpu_admission_replays_sam0')
+
+    def test_cpu_admission_replays_same_population_and_cannot_reauthorize(case,tmp_path):
+        from knowledge_tracing.akt.research_junyi_selection_cache import write_selection_cpu_admission
+        from knowledge_tracing.akt.research_junyi_engineering import file_sha
+        _,strict,receipt=build(case,['OOV','A','B']*90)
+        admission=tmp_path/'selection-admission.json'
+        window=tmp_path/'window-admission.json'
+        write_selection_cpu_admission(strict,admission,window)
+        restored=SelectionCacheSession(strict.root,view=case[2],encoding=case[3],source_sha256=SOURCE,
+            expected_targets=270,expected_manifest_sha256=receipt['manifest_sha256'],
+            admission_file=admission,expected_admission_sha256=file_sha(admission),
+            window_admission_file=window,expected_window_admission_sha256=file_sha(window))
+>       assert list(restored.iter_prepared())==list(strict.iter_prepared())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_selection_cache.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<string>:17: in __eq__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = CausalSequenceInputs(item_ids=array([0, 1]), timestamps=array([101, 102]), prior_responses=array([-1,  1], dtype=int8), source_rows=array([2, 3]), sequence_offsets=array([0, 2]), user_ids=('17', '17'), concept_ids=None)
+other = CausalSequenceInputs(item_ids=array([0, 1]), timestamps=array([101, 102]), prior_responses=array([-1,  1], dtype=int8), source_rows=array([2, 3]), sequence_offsets=array([0, 2]), user_ids=('17', '17'), concept_ids=None)
+
+>   ???
+E   ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+<string>:17: ValueError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_junyi_selection_cache.py::test_cpu_admission_replays_same_population_and_cannot_reauthorize
+1 failed, 50 passed in 19.26s
