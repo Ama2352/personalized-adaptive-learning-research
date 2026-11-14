@@ -10,7 +10,7 @@ from modal_junyi_staged import ROOT, run, validate_resource_budget
 
 
 def verify_final_epoch_timebox(request, worker):
-    """Chỉ cho timebox ngắn khi checkpoint đã kiểm nằm trong epoch cuối.
+    """Chỉ cho timebox ngắn ở phần cuối của refit đã có checkpoint kiểm đủ.
 
     Cấu hình và identity mô hình giữ nguyên. Deadline của controller được rút
     ngắn để giới hạn tiền lượt cuối. Nếu quá hạn, controller dừng process và
@@ -31,7 +31,7 @@ def verify_final_epoch_timebox(request, worker):
     terminal = previous.get('worker_result', {}).get('terminal', {})
     epochs = worker['frozen_epochs']
     if (previous.get('status') != 'PARTIAL_JUNYI_REFIT90'
-            or terminal.get('complete_epochs') != epochs - 1
+            or terminal.get('complete_epochs') not in (epochs - 1, epochs - 2)
             or terminal.get('frozen_epochs') != epochs):
         raise ValueError('Chỉ cho timebox ngắn ở epoch refit cuối đã xác nhận')
     remote_checkpoint = owned_input(ROOT, request['resume_checkpoint'])
@@ -40,9 +40,20 @@ def verify_final_epoch_timebox(request, worker):
     if not relative.startswith(prefix):
         raise ValueError('Checkpoint cuối khác logical run')
     name = remote_checkpoint.parent.name
-    match = re.fullmatch(r'refit-batch-epoch-(\d+)-step-\d+-[a-f0-9]+', name)
-    if match is None or int(match[1]) != epochs:
+    match = re.fullmatch(r'refit-batch-epoch-(\d+)-step-(\d+)-[a-f0-9]+', name)
+    if match is None:
         raise ValueError('Checkpoint không thuộc epoch cuối')
+    epoch, step = int(match[1]), int(match[2])
+    if epoch != terminal['complete_epochs'] + 1:
+        raise ValueError('Checkpoint khác số epoch đã nghiệm thu')
+    if epoch != epochs:
+        # TRAIN90 thật có 2.040 batch/epoch. Chỉ cho phần đuôi epoch 8
+        # khi còn tối đa 40 batch rồi đến epoch 9, giữ nguyên mọi target.
+        history = terminal.get('history', [])
+        if (epoch != epochs - 1 or not 2000 <= step <= 2040 or not history
+                or history[-1].get('optimizer_steps') != 2040
+                or history[-1].get('valid_targets') != 14947674):
+            raise ValueError('Phần refit còn lại vượt phạm vi đợt cuối')
     key = 'outputs/' + relative
     checkpoint = owned_input(ROOT, (previous_path.parent / 'files' / key).relative_to(ROOT).as_posix())
     marker_key = key.rsplit('/', 1)[0] + '/COMPLETE.json'

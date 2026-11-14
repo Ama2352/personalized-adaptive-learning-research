@@ -11,12 +11,14 @@ sys.path.insert(0, str(ROOT / 'experiments/akt'))
 import modal_junyi_refit as controller
 
 
-@pytest.fixture
-def final_epoch(tmp_path, monkeypatch):
+@pytest.fixture(params=[False, True])
+def final_epoch(tmp_path, monkeypatch, request):
     monkeypatch.setattr(controller, 'ROOT', tmp_path)
+    tail = request.param
     run = 'unit-a2-refit'
     prior = tmp_path / 'experiments/akt/results/unit-prior'
-    relative = f'{run}/checkpoints/refit-batch-epoch-9-step-1200-abc/state.pt'
+    epoch = 8 if tail else 9
+    relative = f'{run}/checkpoints/refit-batch-epoch-{epoch}-step-2007-abc/state.pt'
     checkpoint = prior / 'files/outputs' / relative
     checkpoint.parent.mkdir(parents=True)
     checkpoint.write_bytes(b'checkpoint-fixture-only')
@@ -30,7 +32,8 @@ def final_epoch(tmp_path, monkeypatch):
         key = path.relative_to(prior / 'files').as_posix()
         files[key] = dict(bytes=path.stat().st_size, sha256=hashlib.sha256(path.read_bytes()).hexdigest())
     receipt = dict(status='PARTIAL_JUNYI_REFIT90', files=files,
-        worker_result=dict(terminal=dict(complete_epochs=8, frozen_epochs=9)))
+        worker_result=dict(terminal=dict(complete_epochs=epoch-1, frozen_epochs=9,
+            history=[dict(optimizer_steps=2040, valid_targets=14947674)])))
     (prior / 'remote-inventory.json').write_text(json.dumps(receipt))
     (prior / 'COMPLETE.json').write_text(json.dumps(dict(status='LOCAL_ARTIFACTS_VERIFIED_GPU_STOPPED')))
     (prior / 'app-budget-guard.json').write_text(json.dumps(dict(stop_acknowledged=True)))
@@ -66,7 +69,7 @@ def test_short_timebox_rejects_unverified_or_unsafe_final_epoch(final_epoch, mut
     if mutation == 'epoch':
         path = prior / 'remote-inventory.json'
         receipt = json.loads(path.read_text())
-        receipt['worker_result']['terminal']['complete_epochs'] = 7
+        receipt['worker_result']['terminal']['complete_epochs'] = 6
         path.write_text(json.dumps(receipt))
     if mutation == 'marker':
         (checkpoint.parent / 'COMPLETE.json').write_text('{}')

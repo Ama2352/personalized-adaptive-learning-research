@@ -53,6 +53,7 @@ def main():
             raise ValueError('Explicit reviewed budget stop required for this resume path')
     status=dict(status='RUNNING_FIXED_REFIT_MATRIX',started_at_utc=datetime.now(timezone.utc).isoformat(),
                 models={} if prior is None else prior['models'])
+    (HERE/'refit-loop-progress.json').write_text(json.dumps(status,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     try:
         for variant in ('a0','a1','a2','a3'):
             snapshot=ROOT/f'artifacts/akt/staged/junyi-{variant}-refit-bounded-20261114-04'
