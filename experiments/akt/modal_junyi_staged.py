@@ -265,7 +265,8 @@ def run(snapshot, request):
     mounts={}
     mounts['/opt/kltn/experiments/akt/results']=volume.with_mount_options(sub_path='/outputs')
     gpu_specification='H100!' if request['gpu']=='H100' else request['gpu']
-    function=app.function(image=image,gpu=gpu_specification,cpu=(.25,4),memory=(4096,12288),
+    # Hai luồng Torch cần CPU được bảo đảm để tránh host bận làm GPU chờ.
+    function=app.function(image=image,gpu=gpu_specification,cpu=(2,4),memory=(4096,12288),
         timeout=request['function_timeout_seconds'],startup_timeout=60,max_containers=1,retries=0,
         scaledown_window=2,volumes=mounts)(gpu_compute)
     cpu_check=app.function(image=image,cpu=2,memory=4096,timeout=180,
@@ -308,7 +309,11 @@ def run(snapshot, request):
         raise
     # Context guard chỉ trả về sau stop acknowledged. CPU download/zip bắt đầu ở đây.
     guard=json.loads((output/'app-budget-guard.json').read_text())
-    result=collect_outputs(receipt,output,volume.read_file,stop_acknowledged=guard['stop_acknowledged'])
+    previous_output=None
+    if request.get('resume_inventory') is not None:
+        previous_output=(ROOT/request['resume_inventory']).parent
+    result=collect_outputs(receipt,output,volume.read_file,stop_acknowledged=guard['stop_acknowledged'],
+                           reuse_from=previous_output)
     result['worker_status']=receipt['status']
     write_new(output/'stage-result.json',result)
     if receipt['status']=='FAILED':

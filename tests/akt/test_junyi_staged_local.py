@@ -149,6 +149,25 @@ def test_collect_requires_stop_and_preserves_bytes_retry(tmp_path):
         assert saved.read(next(iter(receipt['files'])))==raw
 
 
+def test_collect_resume_reuses_verified_local_files_without_remote_download(tmp_path):
+    raw=b'unchanged-checkpoint'
+    name='outputs/logical/checkpoints/epoch-001/state.pt'
+    receipt=dict(status='PARTIAL_SELECTED_ONLY_NOT_FINAL',files={
+        name:dict(bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())})
+    old=tmp_path/'old'
+    io.collect_outputs(receipt,old,lambda _:iter([raw]),stop_acknowledged=True)
+    calls=[]
+
+    def remote(path):
+        calls.append(path)
+        raise AssertionError('Artifact trùng đã có trên D')
+
+    io.collect_outputs(receipt,tmp_path/'new',remote,stop_acknowledged=True,reuse_from=old)
+    assert calls==[]
+    assert (tmp_path/'new/files'/name).read_bytes()==raw
+    assert (old/'files'/name).read_bytes()==raw
+
+
 def execution_request():
     return dict(status='USER_APPROVED',approval_reference='synthetic-local-test',execution_id='unit-a2-attempt1',
         gpu='T4',child_timeout_seconds=200,function_timeout_seconds=230,watchdog_seconds=260,

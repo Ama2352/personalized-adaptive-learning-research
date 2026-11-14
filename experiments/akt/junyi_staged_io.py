@@ -190,7 +190,7 @@ def upload_snapshot(volume,destination,receipt):
         batch.put_file(destination/'INPUTS.json','/'+marker)
 
 
-def collect_outputs(receipt, destination, read_file, *, stop_acknowledged):
+def collect_outputs(receipt, destination, read_file, *, stop_acknowledged, reuse_from=None):
     """Tải/đối chiếu và nén bằng CPU sau xác nhận dừng GPU.
 
     read_file là Volume.read_file hoặc reader local trong tests.
@@ -200,6 +200,13 @@ def collect_outputs(receipt, destination, read_file, *, stop_acknowledged):
         raise PermissionError('Phải xác nhận GPU đã dừng trước CPU postprocess')
     destination = Path(destination)
     destination.mkdir(parents=True, exist_ok=True)
+    cached = None if reuse_from is None else Path(reuse_from)
+    cached_files = {}
+    if cached is not None:
+        complete = json.loads((cached/'COMPLETE.json').read_text(encoding='utf-8'))
+        if complete['status']!='LOCAL_ARTIFACTS_VERIFIED_GPU_STOPPED':
+            raise ValueError('Chỉ tái dùng artifact local đã nghiệm thu')
+        cached_files=json.loads((cached/'remote-inventory.json').read_text(encoding='utf-8'))['files']
     inventory_path=destination / 'remote-inventory.json'
     if inventory_path.exists():
         if json.loads(inventory_path.read_text(encoding='utf-8'))!=receipt:
@@ -214,7 +221,12 @@ def collect_outputs(receipt, destination, read_file, *, stop_acknowledged):
             if sha(target) != pin['sha256']:
                 raise ValueError('File local cũ khác artifact remote')
             continue
-        partial = target.with_name(target.name + '.download.' + uuid.uuid4().hex)
+        # File tạm ở root đợt tải để recovery trên Windows không vượt MAX_PATH.
+        partial = destination / (target.name + '.download.' + uuid.uuid4().hex)
+        if cached_files.get(name)==pin:
+            _copy_verified(cached/'files'/Path(*safe_relative(name).parts),partial,pin)
+            partial.rename(target)
+            continue
         with partial.open('xb') as stream:
             for block in read_file(name):
                 stream.write(block)
