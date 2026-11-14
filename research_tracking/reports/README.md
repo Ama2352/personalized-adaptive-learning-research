@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 14/11 — A3 kiểm snapshot, cấp training có giới hạn
+
+[Hồ sơ A3](../runs/junyi-a3-selected-20261114-01/README.md) giữ cùng dữ liệu/cấu hình học với A2, source03 đã qua Gate Linux2.615ca, confidence TRAIN80 và cache A3. Đã đối soát reservation lịch sử, giữ trần30USD/dự phòng cuối3USD, cấp tối đa2,60USD cho lượt đầu. Chờ nghiệm thu training, checkpoint và artifact trước cập nhật kết luận nghiên cứu.
+
 ## 14/11 — A2 hoàn tất selected-fit trên Junyi
 
 [Hồ sơ A2](../runs/junyi-confidence-completion-20261114-01/README.md) và [nghiệm thu](../runs/junyi-confidence-completion-20261114-01/a2-final-acceptance.json) ghi 12 epoch/chọn 9 trên đầy đủ TRAIN80, 1.600.343 dự đoán selection đã kiểm, model bốn file trên D. Có figure SVG/PNG/CSV và cập nhật cả [summary GVHD](../supervisor_reports/2026-11-10/01_tien_do/BAO_CAO.md) lẫn [HTML](../supervisor_reports/2026-11-10/01_tien_do/BAO_CAO_NGHIEN_CUU.html). Điểm A0/A1/A2 trên selection gần nhau, chưa kết luận hơn kém độc lập. H100 đã dừng, mục tiêu GPU trên 50% chưa đạt. Refit/calibration, A3 và đánh giá độc lập còn chờ.

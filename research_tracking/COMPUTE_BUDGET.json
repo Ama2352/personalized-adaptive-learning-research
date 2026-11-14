@@ -4,9 +4,15 @@
   "extra_payment_allowed": false,
   "automatic_monthly_budget_reset": false,
   "authorization_reference": "Người dùng ngày 12/11/2026 cho phép tự phân bổ các khoản chi nhỏ, tổng toàn KLTN tối đa 30 USD free credits.",
-  "historical_usage_reserved_upper_usd": 25.227106049162703,
+  "historical_usage_reserved_upper_usd": 22.305758224863517,
   "safety_and_final_inference_reserve_usd": 3,
-  "new_allocations": [],
+  "new_allocations": [
+    {
+      "id": "junyi-a3-staged-h100-20261114-01",
+      "cap_usd": 2.6,
+      "purpose_vi": "A3 selected-fit Junyi, một H100 tối đa30phút, checkpoint và stop barrier."
+    }
+  ],
   "stop_rule": "Không mở lượt chạy nếu cận chi phí lịch sử, tổng allocation và dự phòng vượt 30 USD. Nếu chưa xác nhận dừng App thì kiểm trạng thái server trước lượt mới.",
   "historical_upper_note": "2 USD là dự phòng bảo thủ cho các lượt đã chạy trước ledger, không phải số chi phí đã đối soát cuối kỳ.",
   "provider_metering_note": "Snapshot có thể trễ hoặc được điều chỉnh. Không dùng billing alert làm giới hạn cứng. Mỗi lượt có watchdog, timeout và tối đa một GPU.",
@@ -508,5 +514,12 @@
     "historical_upper_usd": 19.829361004299184,
     "available_after_safety_reserve_upper_policy_usd": 7.170638995700816,
     "note_vi": "Cận tài nguyên là dự phòng bảo thủ. Billing có thể trễ, hai số có ý nghĩa khác nhau."
-  }
+  },
+  "reservation_reconciliations": [
+    {
+      "evidence": "research_tracking/runs/junyi-a3-selected-20261114-01/budget-reconciliation.json",
+      "previous_historical_upper_usd": 25.227106049162703,
+      "revised_historical_upper_usd": 22.305758224863517
+    }
+  ]
 }

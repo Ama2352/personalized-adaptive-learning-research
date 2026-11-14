@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 14/11 — A3 đã kiểm snapshot và bắt đầu lượt training có giới hạn
+
+[Hồ sơ A3](../research_tracking/runs/junyi-a3-selected-20261114-01/README.md) giữ đối chiếu cấu hình A0–A2, snapshot03, cache/confidence TRAIN80 và đối soát ngân sách. Một lượt H100 tối đa2,60USD được cấp trong trần toàn KLTN30USD, dự phòng cuối3USD. `STATE.json` giữ tiến độ và điểm tiếp tục. Kết quả training chỉ được nghiệm thu sau kiểm checkpoint/prediction/inventory và xác nhận GPU dừng.
+
 ## 14/11 — A2 Junyi hoàn tất selected-fit, model đã xuất trên D
 
 [Hồ sơ A2 và confidence](../research_tracking/runs/junyi-confidence-completion-20261114-01/README.md) giữ confidence TRAIN80, cache thật, Gate Linux 2.615 ca và snapshot03. A2 đã hoàn tất 12 epoch, chọn epoch 9, kiểm đủ 1.600.343 dự đoán theo target/thứ tự thời gian và xuất gói bốn file tại `experiments/akt/results/model-export-a2-batch128-20261114-01/`. Lượt cuối có 210 artifact đã tải D/kiểm, cả hai H100 đã dừng. Có SVG/PNG/CSV và báo cáo GVHD cập nhật. Trung bình mẫu NVML hai lượt 32,23%, mục tiêu 50% chưa đạt. STATE giữ phần còn thiếu gồm A3, refit/calibration/đánh giá độc lập và đối soát dự toán trước khoản GPU tiếp theo.
