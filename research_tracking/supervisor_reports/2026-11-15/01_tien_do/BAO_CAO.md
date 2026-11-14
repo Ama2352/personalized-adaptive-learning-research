@@ -9,7 +9,7 @@ Thời gian học A0 trung bình 128.8 giây/epoch, dao động 122.1–140.8 gi
 | Phiên bản | Thành phần | Refit TRAIN90 | Hiệu chỉnh và đánh giá độc lập |
 |---|---|---|---|
 | A0 | AKT không đồ thị | Đã refit 9/9 epoch, model đã xuất trên D | Còn chờ |
-| A1 | Đồ thị cố định | Đang refit theo từng đợt có giới hạn | Còn chờ |
+| A1 | Đồ thị cố định | Đang refit; 8/9 epoch đã nghiệm thu trên D | Còn chờ |
 | A2 | Độ tin cậy cạnh | Đã chuẩn bị đầu vào; chờ thực thi | Còn chờ |
 | A3 | Độ tin cậy cạnh và cổng | Đã chuẩn bị đầu vào; chờ thực thi | Còn chờ |
 

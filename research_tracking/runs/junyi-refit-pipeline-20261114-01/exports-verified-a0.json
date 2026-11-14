@@ -1,0 +1,65 @@
+{
+  "status": "PASS_EXISTING_REFIT_EXPORTS",
+  "models": {
+    "a0": {
+      "checkpoint_sha256": "47f3b86bc1eeed338b43a9514d7c0321e4bd9523faa173f55b214561f0034fb8",
+      "complete_sha256": "8239c0f713939b69c4cd68549ce846b83ec8e2a9f0c94234f69aff9a798a686e",
+      "export": "experiments/akt/results/model-export-a0-refit-20261114-01",
+      "epochs": 9,
+      "total_optimizer_steps": 18360,
+      "total_target_uses": 134529066,
+      "epoch_seconds": [
+        140.82554710000002,
+        126.98998587399998,
+        130.016421938,
+        128.48029463700004,
+        140.695943293,
+        122.09422827399999,
+        122.28492806999998,
+        125.125725311,
+        122.54860571399996
+      ],
+      "mean_epoch_seconds": 128.78463113455555
+    }
+  },
+  "shared_identity": {
+    "phase": "junyi_refit90",
+    "plan_sha256": "1947a3b41f0ade34ee47f479402a5c039990ebb413a13a0f963ee748f1a342a7",
+    "inputs": "bd65b035820d57a1d88f54b590e35683941496dce2a21a715430e6027a75809f",
+    "encoding": "4b8eb3e6bc5be9abd1419cf4e818b2e75dc86b82e59a0fe94e837c5f3299734f",
+    "window_identity": "1dfa67ae4303fac68a843e9970d878c47c2ef69cc1a358b85ce8b02134114c68",
+    "gate_sha256": "7e0586e2b102c9d6a98fd9dcfbf029cf6f2e73535e0bdf3231a48c2eec953c7d",
+    "epochs": 9,
+    "profile": {
+      "max_vram_bytes": 17179869184,
+      "recipe_id": "cgakt-cuda-fp32-batch128-v2",
+      "device": "cuda:0",
+      "initialization": "cpu-default-generator-42-then-device",
+      "dtype": "float32",
+      "seed": 42,
+      "foreach": false,
+      "fused": false,
+      "capturable": false,
+      "differentiable": false,
+      "amsgrad": false,
+      "maximize": false,
+      "decoupled_weight_decay": false,
+      "clip_foreach": "native-default-None",
+      "deterministic_algorithms": true,
+      "deterministic_warn_only": false,
+      "matmul_allow_tf32": false,
+      "cudnn_allow_tf32": false,
+      "matmul_precision": "highest",
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "confidence_policy": "frozen_train80_through_neural_refit90",
+    "initial_backbone_sha256": "a29f65ae4c668b55c1ff30a19f41f232a6761848ba2304c9cde5ba594db9fa9c"
+  },
+  "missing_exports": [
+    "a1",
+    "a2",
+    "a3"
+  ],
+  "limits_vi": "Kiểm file, số target/step và identity. Chưa hiệu chỉnh hay đánh giá độc lập; không suy ra hiệu quả đồ thị từ việc refit thành công."
+}

@@ -49,13 +49,27 @@ def main():
         prefix.with_suffix('.json').write_text(json.dumps(dict(source=source.relative_to(ROOT).as_posix(),source_sha256=sha(source),phase='refit90',population_targets_per_epoch=14947674,style_reference='research_tracking/runs/figures4papers-akt-20261112-01/upstream-reference.json',style_upstream_commit='e78584f4c1432fb9f9a10f021a2e3f8fa4dfcb15',license='CC BY-NC 4.0',generation_script=(HERE/'report_refit_progress.py').relative_to(ROOT).as_posix(),files={p.name:dict(sha256=sha(p),bytes=p.stat().st_size) for p in [prefix.with_suffix('.svg'),prefix.with_suffix('.png'),prefix.with_suffix('.csv')]}),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     labels=dict(a0='AKT không đồ thị',a1='Đồ thị cố định',a2='Độ tin cậy cạnh',a3='Độ tin cậy cạnh và cổng')
     active=read(ROOT/'research_tracking/COMPUTE_BUDGET.json')['new_allocations']
+    progress=read(HERE/'refit-loop-progress.json')
     table=[]
     for variant,label in labels.items():
-        state='Đã refit 9/9 epoch, model đã xuất trên D' if variant in models else 'Đang refit theo từng đợt có giới hạn' if any(variant in x['id'] for x in active) else 'Đã chuẩn bị đầu vào; chờ thực thi'
+        record=progress.get('models',{}).get(variant,{})
+        completed=record.get('complete_epochs',0)
+        state='Đã chuẩn bị đầu vào; chờ thực thi'
+        if completed:
+            state=f'Đã lưu checkpoint sau {completed}/9 epoch; chờ tiếp tục'
+        if any(variant in allocation['id'] for allocation in active):
+            state=f'Đang refit; {completed}/9 epoch đã nghiệm thu trên D'
+        if variant in models:
+            state='Đã refit 9/9 epoch, model đã xuất trên D'
         table.append([variant.upper(),label,state,'Còn chờ'])
     summary=f'Bước refit khởi tạo mô hình mới và học lại trên hợp nhóm huấn luyện với nhóm đã dùng chọn số epoch. Nhóm hiệu chỉnh xác suất và nhóm đánh giá độc lập tiếp tục được giữ riêng. Đến đợt cập nhật ngày 15/11, đã nghiệm thu và xuất model refit cho {len(models)}/4 phiên bản. A0 hoàn tất 9 epoch trên TRAIN90, tổng cộng 134.529.066 lượt tương tác được dùng làm mục tiêu dự báo qua 9 vòng học, với 18.360 bước cập nhật trọng số. Mỗi tương tác được dùng một lần làm mục tiêu trong mỗi epoch.'
     timing=f'Thời gian học A0 trung bình {mean(r["seconds"] for r in rows):.1f} giây/epoch, dao động {min(r["seconds"] for r in rows):.1f}–{max(r["seconds"] for r in rows):.1f} giây. Hai đợt H100 đã hoàn tất, có nối lại từ checkpoint. Toàn bộ artifact đã tải về D và kiểm inventory; gói xuất gọn có checkpoint 9, optimizer, nguồn ngẫu nhiên, cấu hình và mã hóa bài tập.'
     limit='Đây là hoàn tất bước học lại mô hình theo số epoch đã chọn. Hiệu chỉnh xác suất, xuất dự đoán trên nhóm đánh giá độc lập và kết luận hiệu quả đồ thị còn chờ. Thời gian trong biểu đồ là thời gian học từng epoch, gồm phần tích lũy khi nối lại; thời gian chuẩn bị, tải artifact và tổng thời gian sử dụng function được theo dõi riêng.'
+    if progress['status']=='STOPPED_REQUIRES_ROOT_REVIEW' and not active:
+        if 'BUDGET_ENVELOPE_REQUIRES_RECONCILIATION' in progress.get('error',''):
+            limit+=' Lượt tiếp theo đang dừng để đối soát ngân sách còn lại. Checkpoint đã lưu cho phép tiếp tục từ vị trí gần nhất; chưa nghiệm thu các phiên bản còn thiếu.'
+        else:
+            limit+=' Tiến trình đã dừng để kiểm tra lỗi vận hành trước lượt tiếp theo. Chỉ các model đã xuất và kiểm đầy đủ mới được tính hoàn tất.'
     svg=prefix.with_suffix('.svg').read_text();svg=svg[svg.index('<svg'):svg.rindex('</svg>')+6]
     for identifier in sorted(set(re.findall(r'\bid="([^"]+)"',svg)),key=len,reverse=True):
         new='a0refit_'+identifier
@@ -83,7 +97,7 @@ def main():
     md=md.replace('Kiểm CUDA có giới hạn, dự toán chi phí còn lại rồi chạy 36 epoch refit.','A0 đã refit đủ 9 epoch; tiếp tục A1–A3 và đánh giá độc lập.').replace('Refit thật, hiệu chỉnh xác suất, so sánh độc lập và kết quả vòng kín của mô hình mới.','Hoàn tất refit A1–A3, hiệu chỉnh xác suất, so sánh độc lập và kết quả vòng kín của mô hình mới.')
     md=md.replace('Tiến độ chốt ngày 15/11/2026','Tiến độ đến ngày 15/11/2026').replace(old_intro,'Bước mới nhất là hoàn tất refit A0 trên TRAIN90 và tiếp tục các biến thể đồ thị theo cùng protocol.')
     (REPORT/'BAO_CAO.md').write_bytes(md.encode())
-    evidence=dict(status='A0_REFIT9_EXPORTED_ARTIFACTS_VERIFIED',epochs=9,targets_per_epoch=14947674,total_targets=134529066,total_steps=18360,mean_epoch_seconds=mean(r['seconds'] for r in rows),models_exported=list(models),reports=REPORT.relative_to(ROOT).as_posix(),source_complete_sha256=sha(ROOT/'experiments/akt/results/junyi-a0-refit-20261114-01/COMPLETE.json'))
+    evidence=dict(status='REFIT_EXPORTED_ARTIFACTS_VERIFIED',epochs=9,targets_per_epoch=14947674,total_targets=134529066,total_steps=18360,mean_epoch_seconds=mean(r['seconds'] for r in rows),models_exported=list(models),loop_status=progress['status'],reports=REPORT.relative_to(ROOT).as_posix(),source_complete_sha256=sha(ROOT/'experiments/akt/results/junyi-a0-refit-20261114-01/COMPLETE.json'))
     (HERE/'refit-report-20261115-state.json').write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(evidence,ensure_ascii=False))
 
