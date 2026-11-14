@@ -1,5 +1,5 @@
 {
-  "status": "FITTING_CONFIDENCE_CHILDREN",
+  "status": "BUILDING_REAL_CPU_GRAPH_CACHES",
   "output": "artifacts/akt/confidence/full-train80-20261114-02",
   "prior_state": "research_tracking/runs/junyi-confidence-train80-20261114-01/STATE.json",
   "source_pins_match": true,
@@ -55,15 +55,15 @@
     ],
     "children_above_default_row_cap": 5
   },
-  "completed_children": 455,
+  "completed_children": 736,
   "total_children": 736,
   "action": "BATCH_FIT_LOCAL_TRANCHE_3600S",
   "fitter_source_unchanged": true,
-  "observed_at_unix": 1794632665.0734625,
-  "current_child": "parabola_intuition_2",
-  "worker_elapsed_seconds": 3600.7591947000037,
-  "rss_mib": 198.9921875,
-  "available_ram_mib": 1151.87890625,
+  "observed_at_unix": 1794634582.7908492,
+  "current_child": "z_scores_3",
+  "worker_elapsed_seconds": 1895.3658477999998,
+  "rss_mib": 187.0,
+  "available_ram_mib": 2255.84375,
   "modal_reserved_upper_usd": 0.3,
   "modal_actual_isolated_cost_usd": null,
   "linux_gate": {
@@ -75,7 +75,7 @@
     "stop_acknowledged": true
   },
   "selection_cpu_admitted": true,
-  "active_exec_session": 6125,
+  "active_exec_session": 29515,
   "next_steps": [
     "Tiếp tục batch confidence local, checkpoint theo child; nếu hết3600giây chạy tranche mới cùng output",
     "Khi đủ736child, audit SHA/lineage và finalize confidence",
@@ -84,11 +84,34 @@
     "Bổ sung portable upstream khi assemble snapshot; kiểm verify_upstream ngay trong snapshot để tránh mount che dependency",
     "Dự toán và kiểm bounded Modal stage trước main A2/A3"
   ],
-  "confidence_complete": false,
+  "confidence_complete": true,
   "active_processes": [],
   "portable_upstream": "upstream-portable-inventory.json",
   "runtime_lock": "runtime-lock-verification.json",
   "preparation_commit": "f5c81c4",
   "last_tranche_status": "EXPECTED_3600_SECOND_BOUNDARY",
-  "remaining_children": 281
+  "remaining_children": 0,
+  "confidence": {
+    "confidence_sha256": "0733388094e64aad52cc91c17d5f0c0c0fae52607300e642bb0493ea10d41695",
+    "edges": 976,
+    "fit_artifact_sha256": "cf816067a327b918189e6ccc4a605fc1b36fa3c3b72871613f939167b34bc02a",
+    "status": "COMPLETE_FULL_TRAIN80_CONFIDENCE",
+    "supported_edges": 708,
+    "unsupported_edges": 268
+  },
+  "active_operation": "prepare_real_graph_caches",
+  "fitter_processes_stopped": true,
+  "confidence_summary": {
+    "status": "FINAL_CONFIDENCE_WEIGHT_SUMMARY",
+    "edges": 976,
+    "supported": 708,
+    "unsupported": 268,
+    "positive_operational_weights": 700,
+    "zero_operational_weights": 276,
+    "minimum": 0.0,
+    "maximum": 1.0,
+    "mean": 0.6088217213114754,
+    "uses_oracle_labels": false,
+    "semantics": "conditional_predictive_stability_not_edge_truth_probability"
+  }
 }

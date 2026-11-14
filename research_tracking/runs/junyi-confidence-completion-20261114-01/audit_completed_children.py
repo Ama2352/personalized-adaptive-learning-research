@@ -21,7 +21,7 @@ graph = json.loads((ROOT/request['topology_file']).read_text())
 expected_edges = {tuple(pair) for pair in graph['corrected_edges']}
 reasons = Counter()
 children = []
-edges = []
+edge_count = 0
 targets = 0
 solver_exceptions = []
 for marker_path in sorted((OUTPUT/'children').glob('*/COMPLETE.json')):
@@ -48,11 +48,11 @@ for marker_path in sorted((OUTPUT/'children').glob('*/COMPLETE.json')):
         if (fit.get('reason') or '').startswith('SOLVER_EXCEPTION:'):
             solver_exceptions.append(dict(child=child, reason=fit['reason']))
     children.append(child)
-    edges.extend(summary['edges'])
+    edge_count += len(summary['edges'])
     targets += summary['targets']
 assert not solver_exceptions, solver_exceptions
 result = dict(status='COMPLETED_CHILD_ARTIFACTS_VERIFIED', children=len(children),
-              expected_children=len({child for _, child in expected_edges}), edges=len(edges),
+              expected_children=len({child for _, child in expected_edges}), edges=edge_count,
               child_targets=targets, reason_counts=dict(reasons), solver_exceptions=solver_exceptions)
 (HERE/'child-audit-current.json').write_text(json.dumps(result, indent=2)+'\n')
 print(json.dumps(result))

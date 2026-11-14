@@ -18,7 +18,7 @@ Request gốc ở `../junyi-confidence-train80-20261114-01/request.json`. Đã �
 
 ## Kết quả và phần còn thiếu
 
-Corpus đã niêm phong, cache selection đã kiểm đầy đủ và source mới đạt 2.614 ca Linux. Confidence đang fit local theo checkpoint từng child. Đọc `STATE.json` để biết tiến độ thật. Confidence hoàn chỉnh và cache graph thật còn cần hoàn tất trước training chính A2/A3.
+Corpus đã niêm phong, cache selection đã kiểm đầy đủ và source mới đạt 2.614 ca Linux. Confidence đã fit đủ 736 child và hoàn tất kiểm toàn vẹn. Đọc `STATE.json` để biết tiến độ thật. Confidence hoàn chỉnh và cache graph thật còn cần hoàn tất trước training chính A2/A3.
 
 ## Cập nhật lúc tiếp tục
 
@@ -37,3 +37,9 @@ Lượt02 với fixture CPU một luồng và deterministic giữ nguyên so sá
 `runtime-lock-verification.json` đối chiếu cùng SHA lock giữa T4, Gate Linux và file local trên D. `upstream-portable-inventory.json` ghi checkout AKT sạch, đúng commit và file LF, chuẩn bị riêng vì mount artifacts của worker sẽ che bản dependency sẵn trong image. Git objects được sao chép/đối chiếu trước checkout, không thay source upstream gốc. Checkout khoảng 94 MB gồm các tệp công khai kèm repo để Git xác minh sạch.
 
 `prepare_worker_inputs.py` chỉ tạo request khi COMPLETE confidence thật hiện diện và khớp SHA. `assemble_stage_requests.py` chỉ ghép khi có cache đầy đủ, kèm upstream và các SHA nguồn/đích. Reflog và hooks của Git được loại khỏi gói chuyển. Hai helper này còn chờ chạy trên artifact hoàn chỉnh. Sau tạo snapshot phải kiểm lại checkout ngay trong snapshot trước khi cấp GPU.
+
+## Confidence thật đã hoàn tất
+
+`confidence-acceptance.json` và `CONFIDENCE_MANIFEST.json` ghim artifact cuối. Toàn bộ 736 child, 976 cạnh, 11.807.185 row có child được fit từ corpus đã duyệt đủ 13.347.331 target. Có 708 cạnh supported, 268 unsupported; 700 trọng số dương và 276 bằng 0. Không có solver exception. Supported chưa đồng nghĩa trọng số dương hoặc cạnh tiên quyết thật. `confidence-weight-summary.json` giữ thống kê mô tả; artifact chưa chứng minh A2/A3 cải thiện kết quả nghiên cứu.
+
+Lượt batch02 dừng đúng cap 3.600 giây sau 455 child. Lượt batch03 hoàn tất 281 child còn lại trong 1.896,390 giây, tái dùng checkpoint cũ. `child-audit-final01.log` kiểm đủ mọi SHA/lineage/coverage. `finalize01.log` ghi công bố confidence thành công. Artifact lớn, summary và OOF được giữ nguyên tại output trên D. Hiện chạy `prepare_junyi_staged_caches.py` trên confidence thật, output `artifacts/akt/graph-context-cache/full-train80-staged-20261114-01/`; cache còn cần nghiệm thu.

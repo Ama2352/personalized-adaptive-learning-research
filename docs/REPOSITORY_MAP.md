@@ -2,7 +2,7 @@
 
 ## 14/11 — Tiếp tục confidence thật và selection đầy đủ
 
-[Hồ sơ](../research_tracking/runs/junyi-confidence-completion-20261114-01/README.md) giữ corpus đã niêm phong13.347.331target, tiến độ fit confidence theo child và cache selection1.600.343target khớp A0. STATE là điểm tiếp tục. Gate Linux02 đạt 2.614 ca sau khi ghim fixture CPU xác định; giữ failure01. Cả hai App đã dừng, tổng reservation 0,30 USD đóng theo cận bảo thủ. Chưa training chính A2/A3.
+[Hồ sơ](../research_tracking/runs/junyi-confidence-completion-20261114-01/README.md) giữ confidence thật đã hoàn tất 736 child/976 cạnh, corpus 13.347.331 target và cache selection 1.600.343 target khớp A0. Đang build cache graph thật trên CPU. STATE là điểm tiếp tục. Gate Linux02 đạt 2.614 ca sau khi ghim fixture CPU xác định; giữ failure01. Cả hai App đã dừng, tổng reservation 0,30 USD đóng theo cận bảo thủ. Chưa training chính A2/A3.
 
 
 ## 14/11 — Cache A2/A3 và resume đã kiểm trên T4 qua MCP
