@@ -1,5 +1,9 @@
 # Báo cáo tiến độ khóa luận — cập nhật 14/11/2026
 
+## 14/11 — A2 đã đạt kiểm snapshot, chuyển sang lượt training có giới hạn
+
+Đã hoàn tất cả bốn cache ngữ cảnh đồ thị cho A2/A3 trên toàn bộ tập train và selection. Snapshot A2 đã qua kiểm dữ liệu, 27 trường cấu hình học so với A0/A1, toàn bộ 1.491 file và checkout AKT. Lỗi đóng gói dependency được phát hiện và sửa trong bước local. Đã gọi quy trình tải input rồi training A2 trên H100 với mức dự phòng tối đa 2,60 USD và giới hạn thời gian. Trạng thái hiện tại đang chờ xác nhận GPU bắt đầu. Kết quả epoch và checkpoint sẽ được bổ sung sau khi có output thực tế.
+
 ## 14/11 — Hoàn tất confidence TRAIN80 cho A2/A3
 
 Sau khi kiểm được luồng tính A2/A3 trên T4, đã ước lượng xong độ tin cậy từ TRAIN80 thật để hai mô hình dùng chung. Đã kiểm đủ 13.347.331 lượt trả lời của 126.774 người học trong phần dữ liệu huấn luyện TRAIN80. Toàn bộ 736 khái niệm con đã fit xong; đã đối chiếu SHA, số target và nguồn của từng checkpoint, không phát hiện ngoại lệ từ solver.

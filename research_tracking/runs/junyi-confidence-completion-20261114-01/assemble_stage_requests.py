@@ -46,6 +46,12 @@ def main():
         if sha(path) != pin['sha256']:
             raise ValueError('Portable upstream đổi byte')
         add(path, upstream['snapshot_path']+'/'+relative)
+    # Inventory chỉ chứa file nên thư mục refs rỗng không đi theo snapshot.
+    # Một ref public giữ cấu trúc Git hợp lệ sau copy/upload, không đổi HEAD.
+    head = ROOT/upstream['local_path']/'.git/HEAD'
+    if head.read_text().strip() != upstream['identity']['commit']:
+        raise ValueError('Portable upstream cần HEAD detached đúng commit')
+    add(head, upstream['snapshot_path']+'/.git/refs/heads/kltn-pinned')
     outputs = []
     for variant in ('A2', 'A3'):
         worker = json.loads((HERE/(variant.lower()+'-worker-base.json')).read_text())
@@ -66,7 +72,7 @@ def main():
                 relative = item.relative_to(ROOT).as_posix()
                 extras[relative] = dict(path=relative, bytes=item.stat().st_size, sha256=sha(item))
         request = dict(worker=worker, archives=archives, local_files=extras)
-        path = HERE/(variant.lower()+'-stage-inputs.json')
+        path = HERE/(variant.lower()+'-stage-inputs02.json')
         raw = (json.dumps(request, ensure_ascii=False, indent=2)+'\n').encode('utf-8')
         if path.exists():
             if path.read_bytes() != raw:
@@ -75,7 +81,7 @@ def main():
             path.write_bytes(raw)
         outputs.append(dict(variant=variant, path=path.relative_to(ROOT).as_posix(),
                             sha256=sha(path), extra_files=len(extras)))
-    (HERE/'stage-inputs-assembly.json').write_text(json.dumps(dict(status='REAL_STAGE_INPUTS_ASSEMBLED',
+    (HERE/'stage-inputs-assembly02.json').write_text(json.dumps(dict(status='REAL_STAGE_INPUTS_ASSEMBLED',
         outputs=outputs, source_build_sha256=gate['source_build_sha256'], gpu_started=False), indent=2)+'\n')
     print(json.dumps(dict(status='REAL_STAGE_INPUTS_ASSEMBLED', outputs=outputs)))
 

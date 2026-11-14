@@ -1,5 +1,5 @@
 {
-  "status": "BUILDING_REAL_CPU_GRAPH_CACHES",
+  "status": "A2_SNAPSHOT_VERIFIED_TRAINING_DISPATCH_REQUESTED",
   "output": "artifacts/akt/confidence/full-train80-20261114-02",
   "prior_state": "research_tracking/runs/junyi-confidence-train80-20261114-01/STATE.json",
   "source_pins_match": true,
@@ -75,14 +75,12 @@
     "stop_acknowledged": true
   },
   "selection_cpu_admitted": true,
-  "active_exec_session": 29515,
+  "active_exec_session": 94692,
   "next_steps": [
-    "Tiếp tục batch confidence local, checkpoint theo child; nếu hết3600giây chạy tranche mới cùng output",
-    "Khi đủ736child, audit SHA/lineage và finalize confidence",
-    "Chạy prepare_worker_inputs.py rồi prepare_junyi_staged_caches.py với selection-output full-selection10-staged-20261114-02",
-    "Kiểm CPU snapshot/baseline; fresh sourceGate02 đã PASS, T4 parity/resume kỹ thuật đã PASS",
-    "Bổ sung portable upstream khi assemble snapshot; kiểm verify_upstream ngay trong snapshot để tránh mount che dependency",
-    "Dự toán và kiểm bounded Modal stage trước main A2/A3"
+    "Theo dõi upload và dispatch thực tế, xác minh GPU đã chạy qua dispatch/telemetry",
+    "Khi dừng, xác nhận stop barrier và tải/kiểm mọi checkpoint/artifact trên D",
+    "Đọc tiến độ epoch, đối soát ngân sách và tiếp tục từ checkpoint nếu cần",
+    "Cập nhật báo cáo theo kết quả thực tế và commit gói hoàn thiện"
   ],
   "confidence_complete": true,
   "active_processes": [],
@@ -99,7 +97,7 @@
     "supported_edges": 708,
     "unsupported_edges": 268
   },
-  "active_operation": "prepare_real_graph_caches",
+  "active_operation": "upload_snapshot_then_bounded_h100_training",
   "fitter_processes_stopped": true,
   "confidence_summary": {
     "status": "FINAL_CONFIDENCE_WEIGHT_SUMMARY",
@@ -113,5 +111,59 @@
     "mean": 0.6088217213114754,
     "uses_oracle_labels": false,
     "semantics": "conditional_predictive_stability_not_edge_truth_probability"
-  }
+  },
+  "cache_progress": {
+    "observed_at": "2026-11-14T12:54:13.217051+07:00",
+    "completed_caches": 4,
+    "expected_caches": 4,
+    "receipts": [
+      {
+        "name": "a2-selection.receipt.json",
+        "status": "COMPLETE",
+        "windows": 28449,
+        "targets": 1600343,
+        "bytes": 28930048,
+        "seconds": 46.26066539999738,
+        "sha256": "bdcec39dd0822e5425ba0e20c66da0d0821b4d9471e9f74420195475f65d3f87",
+        "peak_rss_mib": 64.76171875
+      },
+      {
+        "name": "a2-train.receipt.json",
+        "status": "COMPLETE",
+        "windows": 232662,
+        "targets": 13347331,
+        "bytes": 240738304,
+        "seconds": 375.7490303000086,
+        "sha256": "d2537ca860b323973345eadf8ef9d5198570fd968a48defea9226526d244c56d",
+        "peak_rss_mib": 68.44921875
+      },
+      {
+        "name": "a3-selection.receipt.json",
+        "status": "COMPLETE",
+        "windows": 28449,
+        "targets": 1600343,
+        "bytes": 28930048,
+        "seconds": 39.24177390000841,
+        "sha256": "37a146f5fe4085f2492fe09f43dbf97090e78e506996ddaec4bbead7bee6c0b4",
+        "peak_rss_mib": 64.69921875
+      },
+      {
+        "name": "a3-train.receipt.json",
+        "status": "COMPLETE",
+        "windows": 232662,
+        "targets": 13347331,
+        "bytes": 240738304,
+        "seconds": 326.1234181000036,
+        "sha256": "8542dfb672ffc0c158893b2b5e69b0eded0ffd3dbd5f7fc2b1c18b8075f74df8",
+        "peak_rss_mib": 69.11328125
+      }
+    ],
+    "partial": []
+  },
+  "graph_caches_complete": true,
+  "snapshot_dependency_verified": true,
+  "snapshot": "artifacts/akt/staged/junyi-a2-expert-20261114-02",
+  "training_request": "a2-training-request01.json",
+  "training_log": "a2-training01.log",
+  "gpu_start_confirmed": false
 }

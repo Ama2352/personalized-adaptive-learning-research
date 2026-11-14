@@ -43,3 +43,9 @@ Lượt02 với fixture CPU một luồng và deterministic giữ nguyên so sá
 `confidence-acceptance.json` và `CONFIDENCE_MANIFEST.json` ghim artifact cuối. Toàn bộ 736 child, 976 cạnh, 11.807.185 row có child được fit từ corpus đã duyệt đủ 13.347.331 target. Có 708 cạnh supported, 268 unsupported; 700 trọng số dương và 276 bằng 0. Không có solver exception. Supported chưa đồng nghĩa trọng số dương hoặc cạnh tiên quyết thật. `confidence-weight-summary.json` giữ thống kê mô tả; artifact chưa chứng minh A2/A3 cải thiện kết quả nghiên cứu.
 
 Lượt batch02 dừng đúng cap 3.600 giây sau 455 child. Lượt batch03 hoàn tất 281 child còn lại trong 1.896,390 giây, tái dùng checkpoint cũ. `child-audit-final01.log` kiểm đủ mọi SHA/lineage/coverage. `finalize01.log` ghi công bố confidence thành công. Artifact lớn, summary và OOF được giữ nguyên tại output trên D. Hiện chạy `prepare_junyi_staged_caches.py` trên confidence thật, output `artifacts/akt/graph-context-cache/full-train80-staged-20261114-01/`; cache còn cần nghiệm thu.
+
+## Nghiệm thu snapshot A2 và bắt đầu lượt chạy có giới hạn
+
+Bốn cache CPU thật đã hoàn tất, gồm 13.347.331 target train và 1.600.343 target selection cho mỗi biến thể. Snapshot A2 phiên bản02 đã kiểm đủ 1.491 file, đúng checkout AKT upstream và inventory giữ nguyên sau kiểm Git. Lượt01 giữ bằng chứng lỗi thiếu thư mục Git refs trong gói file-only. Lượt02 bổ sung một ref công khai trỏ đúng commit đã ghim.
+
+`a2-snapshot-dependency-verification02.json` giữ nghiệm thu. `a2-training-request01.json` dành tối đa 2,60 USD cho một H100, watchdog 1.860 giây, tối đa một container và không retry tự động. Ledger giữ cận tổng dự kiến 25,8794 USD gồm dự phòng 3 USD. Runner đọc billing thật trước cấp GPU. Đã gọi entrypoint upload rồi training, chưa xác nhận GPU bắt đầu tại mốc ghi này. Log ở `a2-training01.log`, output dự kiến `experiments/akt/results/modal-junyi-a2-staged-h100-20261114-01/`.
