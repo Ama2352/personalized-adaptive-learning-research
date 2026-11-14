@@ -1,5 +1,5 @@
 {
-  "status": "A2_SNAPSHOT_VERIFIED_TRAINING_DISPATCH_REQUESTED",
+  "status": "BUILDING_A2_LOCAL_INPUT_IMAGE_ON_MODAL_CPU",
   "output": "artifacts/akt/confidence/full-train80-20261114-02",
   "prior_state": "research_tracking/runs/junyi-confidence-train80-20261114-01/STATE.json",
   "source_pins_match": true,
@@ -75,7 +75,7 @@
     "stop_acknowledged": true
   },
   "selection_cpu_admitted": true,
-  "active_exec_session": 94692,
+  "active_exec_session": 35136,
   "next_steps": [
     "Theo dõi upload và dispatch thực tế, xác minh GPU đã chạy qua dispatch/telemetry",
     "Khi dừng, xác nhận stop barrier và tải/kiểm mọi checkpoint/artifact trên D",
@@ -97,7 +97,7 @@
     "supported_edges": 708,
     "unsupported_edges": 268
   },
-  "active_operation": "upload_snapshot_then_bounded_h100_training",
+  "active_operation": "image_build_then_cpu_byte_preflight_then_h100",
   "fitter_processes_stopped": true,
   "confidence_summary": {
     "status": "FINAL_CONFIDENCE_WEIGHT_SUMMARY",
@@ -163,7 +163,11 @@
   "graph_caches_complete": true,
   "snapshot_dependency_verified": true,
   "snapshot": "artifacts/akt/staged/junyi-a2-expert-20261114-02",
-  "training_request": "a2-training-request01.json",
-  "training_log": "a2-training01.log",
-  "gpu_start_confirmed": false
+  "training_request": "a2-training-request08.json",
+  "training_log": "a2-training08.log",
+  "gpu_start_confirmed": false,
+  "first_attempt_stop_acknowledged": true,
+  "first_attempt_dispatched": false,
+  "input_transport": "frozen-image-built-on-cpu",
+  "current_controller": "experiments/akt/modal_junyi_staged.py"
 }

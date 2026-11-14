@@ -162,7 +162,10 @@ def test_controller_uploads_before_gpu_and_downloads_after_stop(package,monkeypa
 
     class Volume:
         @classmethod
-        def from_name(cls,*args,**kwargs):return cls()
+        def from_name(cls,*args,**kwargs):
+            result=cls()
+            result.object_id=args[0]
+            return result
         def read_file(self,name):
             if name not in remote:raise FileNotFoundError(name)
             if name.startswith('outputs/'):
@@ -181,7 +184,17 @@ def test_controller_uploads_before_gpu_and_downloads_after_stop(package,monkeypa
     class Image:
         @classmethod
         def from_id(cls,_):return cls()
-        def add_local_file(self,*args):return self
+        def add_local_file(self,*args,copy):
+            assert copy is True
+            return self
+        def add_local_dir(self,*args,copy):
+            assert copy is True and 'gpu_start' not in events
+            assert args==(snapshot/'project','/opt/kltn')
+            events.append('cpu_source_image')
+            return self
+        def run_commands(self,*args):
+            assert 'gpu_start' not in events
+            return self
 
     class Call:
         object_id='unit-call'
@@ -204,7 +217,15 @@ def test_controller_uploads_before_gpu_and_downloads_after_stop(package,monkeypa
         def function(self,**kwargs):
             assert kwargs['max_containers']==1 and kwargs['retries']==0
             assert '/opt/kltn/.venv' not in kwargs['volumes']
-            return lambda callback:Function()
+            mounts=kwargs['volumes']
+            assert set(mounts)=={'/opt/kltn/experiments/akt/results'}
+            assert len({volume.object_id for volume in mounts.values()})==len(mounts)
+            def decorate(callback):
+                if callback is staged.cpu_mount_preflight:
+                    return SimpleNamespace(spawn=lambda:SimpleNamespace(get=lambda timeout:
+                        dict(status='PASS_STAGED_PROVIDER_INPUTS')))
+                return Function()
+            return decorate
         @contextmanager
         def run(self,**kwargs):
             assert 'local_upload' in events

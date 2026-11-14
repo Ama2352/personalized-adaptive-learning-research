@@ -4,13 +4,13 @@
   "extra_payment_allowed": false,
   "automatic_monthly_budget_reset": false,
   "authorization_reference": "Người dùng ngày 12/11/2026 cho phép tự phân bổ các khoản chi nhỏ, tổng toàn KLTN tối đa 30 USD free credits.",
-  "historical_usage_reserved_upper_usd": 20.27936100429918,
+  "historical_usage_reserved_upper_usd": 20.559361004299188,
   "safety_and_final_inference_reserve_usd": 3,
   "new_allocations": [
     {
-      "id": "junyi-a2-staged-h100-20261114-01",
+      "id": "junyi-a2-staged-h100-20261114-08",
       "cap_usd": 2.6,
-      "purpose_vi": "A2 Junyi TRAIN80 selected-fit, một H100, tiếp tục bằng checkpoint nếu hết tranche."
+      "purpose_vi": "Retry A2 sau sửa mount Volume, giữ snapshot và toàn cấu hình học."
     }
   ],
   "stop_rule": "Không mở lượt chạy nếu cận chi phí lịch sử, tổng allocation và dự phòng vượt 30 USD. Nếu chưa xác nhận dừng App thì kiểm trạng thái server trước lượt mới.",
@@ -294,6 +294,74 @@
       "cap_usd": 0.15,
       "status": "CPU_GATE_PASS_STOP_ACKNOWLEDGED_ARTIFACT_VERIFIED",
       "receipt": "experiments/akt/results/modal-junyi-a2-a3-final-cpu-20261114-02/receipt.json"
+    },
+    {
+      "id": "junyi-a2-staged-h100-20261114-01",
+      "status": "MOUNT_REJECTED_BEFORE_FUNCTION_DISPATCH_APP_STOPPED",
+      "stop_acknowledged": true,
+      "app_id": "ap-Z0Z6JNoUUwCw2bWVunbjtc",
+      "compute_actual_usd": null,
+      "reserved_upper_closed_usd": 0.03,
+      "note_vi": "Không dispatch function. Giữ 0,03 USD dự phòng bảo thủ cho lỗi khởi tạo, tái dùng input Volume đã upload."
+    },
+    {
+      "id": "junyi-a2-staged-h100-20261114-02",
+      "status": "MOUNT_REJECTED_BEFORE_FUNCTION_DISPATCH_APP_STOPPED",
+      "stop_acknowledged": true,
+      "app_id": "ap-RAHF8Dka31cDXtBFTtUCzT",
+      "compute_actual_usd": null,
+      "reserved_upper_closed_usd": 0.03,
+      "note_vi": "Không dispatch function. Giữ 0,03 USD dự phòng bảo thủ cho lỗi khởi tạo, tái dùng input Volume đã upload."
+    },
+    {
+      "id": "junyi-a2-staged-h100-20261114-03",
+      "status": "PROVIDER_STARTUP_FAILED_APP_STOPPED",
+      "stop_acknowledged": true,
+      "app_id": "ap-ptvz95h84N83jf0U39a4ct",
+      "compute_actual_usd": null,
+      "reserved_upper_closed_usd": 0.1,
+      "function_dispatched": true,
+      "note_vi": "Lỗi cấu hình khởi tạo trước numerical worker. Giữ cận chi bảo thủ, tái dùng input Volume đã upload."
+    },
+    {
+      "id": "junyi-a2-staged-h100-20261114-04",
+      "status": "PROVIDER_STARTUP_FAILED_APP_STOPPED",
+      "stop_acknowledged": true,
+      "app_id": "ap-XnQgqSRa00A6crV7KK0ywb",
+      "compute_actual_usd": null,
+      "reserved_upper_closed_usd": 0.03,
+      "function_dispatched": false,
+      "note_vi": "Lỗi cấu hình khởi tạo trước numerical worker. Giữ cận chi bảo thủ, tái dùng input Volume đã upload."
+    },
+    {
+      "id": "junyi-a2-staged-h100-20261114-05",
+      "status": "PROVIDER_STARTUP_FAILED_APP_STOPPED",
+      "stop_acknowledged": true,
+      "app_id": "ap-uhMtxurnLgBD9zoAXMgMNM",
+      "compute_actual_usd": null,
+      "reserved_upper_closed_usd": 0.03,
+      "function_dispatched": false,
+      "note_vi": "Lỗi cấu hình khởi tạo trước numerical worker. Giữ cận chi bảo thủ, tái dùng input Volume đã upload."
+    },
+    {
+      "id": "junyi-a2-staged-h100-20261114-06",
+      "status": "PROVIDER_STARTUP_FAILED_APP_STOPPED",
+      "stop_acknowledged": true,
+      "app_id": "ap-or1kNmNAwlymdoLUydyCR5",
+      "compute_actual_usd": null,
+      "reserved_upper_closed_usd": 0.03,
+      "function_dispatched": false,
+      "note_vi": "Lỗi cấu hình khởi tạo trước numerical worker. Giữ cận chi bảo thủ, tái dùng input Volume đã upload."
+    },
+    {
+      "id": "junyi-a2-staged-h100-20261114-07",
+      "status": "PROVIDER_STARTUP_FAILED_APP_STOPPED",
+      "stop_acknowledged": true,
+      "app_id": "ap-BkvpXuTtU0hAIB4za9txiJ",
+      "compute_actual_usd": null,
+      "reserved_upper_closed_usd": 0.03,
+      "function_dispatched": false,
+      "note_vi": "Lỗi cấu hình khởi tạo trước numerical worker. Giữ cận chi bảo thủ, tái dùng input Volume đã upload."
     }
   ],
   "a0_h100_settlement": {

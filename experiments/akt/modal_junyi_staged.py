@@ -17,6 +17,40 @@ import time
 ROOT = Path(__file__).resolve().parent.parent.parent
 
 
+def cpu_mount_preflight():
+    """Kiểm mount và byte thực tế trên CPU provider trước khi gọi GPU."""
+    import hashlib
+    import json
+    import os
+    from pathlib import Path
+    import subprocess
+    import time
+    started=time.monotonic()
+    root=Path('/opt/kltn')
+    inventory=json.loads((root/'staged-input-inventory.json').read_text())
+    for index,(name,pin) in enumerate(inventory['files'].items(),1):
+        path=root/name
+        with path.open('rb') as stream:
+            digest=hashlib.file_digest(stream,'sha256').hexdigest()
+        if path.stat().st_size!=pin['bytes'] or digest!=pin['sha256']:
+            raise ValueError('Input provider khác snapshot local: '+name)
+        if index%250==0:
+            print(json.dumps(dict(checked_files=index,seconds=time.monotonic()-started)),flush=True)
+    hashing_seconds=time.monotonic()-started
+    environment=dict(os.environ,GIT_OPTIONAL_LOCKS='0',GIT_CONFIG_COUNT='3',
+        GIT_CONFIG_KEY_0='core.fsmonitor',GIT_CONFIG_VALUE_0='false',
+        GIT_CONFIG_KEY_1='safe.directory',GIT_CONFIG_VALUE_1=str(root/'artifacts/akt/dependencies/upstream'),
+        GIT_CONFIG_KEY_2='core.autocrlf',GIT_CONFIG_VALUE_2='false')
+    script=('import sys;sys.path.insert(0,"/opt/kltn/src");import torch;'
+        'from pathlib import Path;from knowledge_tracing.akt.provenance import verify_upstream;'
+        'verify_upstream(Path("/opt/kltn/artifacts/akt/dependencies/upstream"),'
+        '"01b7e8d7d7c862cabc9467108e3e7f2555653a88");print(torch.__version__)')
+    checked=subprocess.run([str(root/'.venv/bin/python'),'-B','-c',script],
+        env=environment,capture_output=True,text=True,check=True,timeout=60)
+    return dict(status='PASS_STAGED_PROVIDER_INPUTS',files=len(inventory['files']),torch=checked.stdout.strip(),
+                hashing_seconds=hashing_seconds,total_seconds=time.monotonic()-started)
+
+
 def gpu_compute(execution, volume_name):
     """Không giải nén input và không nén output trong container GPU."""
     import csv
@@ -203,22 +237,33 @@ def run(snapshot, request):
         allocation_id=request['allocation_id'],reserved_usd=request['reserved_usd_per_run'],
         ledger_sha256=sha(ledger_path)))
     volume_name='kltn-staged-'+worker['logical_run_id']
-    volume=modal.Volume.from_name(volume_name,create_if_missing=True,version=2)
+    input_volume=modal.Volume.from_name(volume_name,create_if_missing=True,version=2)
     # Upload hoàn tất trong process local, trước app.run GPU.
-    upload_snapshot(volume,snapshot,prepared)
+    upload_snapshot(input_volume,snapshot,prepared)
+    output_volume_name=volume_name+'-outputs'
+    volume=modal.Volume.from_name(output_volume_name,create_if_missing=True,version=2)
     app=modal.App('kltn-akt-'+request['execution_id'])
-    image=modal.Image.from_id(request['image_id']).add_local_file(
-        snapshot/'project/gpu-stage-request.json','/opt/kltn/gpu-stage-request.json')
+    # Chỉ dọn hai mount đích trong layer image mới. Image gốc bất biến.
+    image=modal.Image.from_id(request['image_id']).run_commands(
+        'rm -rf /opt/kltn/artifacts /opt/kltn/experiments/akt/results',
+        'mkdir -p /opt/kltn/artifacts /opt/kltn/experiments/akt/results')
+    # Image được dựng trên CPU. Cache lớn trở thành file local của GPU container.
+    image=image.add_local_dir(snapshot/'project','/opt/kltn',copy=True)
+    image=image.add_local_file(snapshot/'INPUTS.json','/opt/kltn/staged-input-inventory.json',copy=True)
     directories={name.split('/')[0] for name in prepared['files'] if '/' in name}
     if '.venv' in directories or 'dataset' in directories:
         raise ValueError('Snapshot có vùng không được phép mount')
-    mounts={'/opt/kltn/'+name:volume.with_mount_options(read_only=True,sub_path='/project/'+name)
-            for name in directories if name!='experiments'}
+    # Một Volume output duy nhất, input đã ghim trong image.
+    if (snapshot/'project/experiments/akt/results').exists():
+        raise ValueError('Snapshot source không được chứa output cũ')
+    mounts={}
     mounts['/opt/kltn/experiments/akt/results']=volume.with_mount_options(sub_path='/outputs')
     gpu_specification='H100!' if request['gpu']=='H100' else request['gpu']
     function=app.function(image=image,gpu=gpu_specification,cpu=(.25,4),memory=(4096,12288),
         timeout=request['function_timeout_seconds'],startup_timeout=60,max_containers=1,retries=0,
         scaledown_window=2,volumes=mounts)(gpu_compute)
+    cpu_check=app.function(image=image,cpu=2,memory=4096,timeout=180,
+        startup_timeout=60,max_containers=1,retries=0,scaledown_window=2,volumes=mounts)(cpu_mount_preflight)
     execution=dict(execution_id=request['execution_id'],approval_reference=request['approval_reference'],
         gpu=request['gpu'],
         child_timeout_seconds=request['child_timeout_seconds'],
@@ -234,8 +279,13 @@ def run(snapshot, request):
         with ModalAppBudgetGuard(binding,deadline,stop_app=stop_owned_app_cli,
                                  diagnostic_path=output/'app-budget-guard.json'):
             with modal.enable_output(),app.run(environment_name='main'):
-                call=function.spawn(execution,volume_name)
-                write_new(output/'dispatch.json',dict(app_id=app.app_id,call_id=call.object_id,volume_name=volume_name))
+                provider=cpu_check.spawn().get(timeout=min(240,deadline.remaining()))
+                if provider.get('status')!='PASS_STAGED_PROVIDER_INPUTS':
+                    raise ValueError('CPU provider chưa nghiệm thu input')
+                write_new(output/'provider-cpu-preflight.json',provider)
+                call=function.spawn(execution,output_volume_name)
+                write_new(output/'dispatch.json',dict(app_id=app.app_id,call_id=call.object_id,
+                    volume_name=output_volume_name,input_volume_name=volume_name))
                 receipt=call.get(timeout=deadline.remaining())
     except BaseException as error:
         write_new(output/'local-failure.json',dict(error_type=type(error).__name__,error=str(error)))
