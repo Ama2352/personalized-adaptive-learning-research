@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 14/11 — A2 hoàn tất selected-fit trên Junyi
+
+[Hồ sơ A2](../runs/junyi-confidence-completion-20261114-01/README.md) và [nghiệm thu](../runs/junyi-confidence-completion-20261114-01/a2-final-acceptance.json) ghi 12 epoch/chọn 9 trên đầy đủ TRAIN80, 1.600.343 dự đoán selection đã kiểm, model bốn file trên D. Có figure SVG/PNG/CSV và cập nhật cả [summary GVHD](../supervisor_reports/2026-11-10/01_tien_do/BAO_CAO.md) lẫn [HTML](../supervisor_reports/2026-11-10/01_tien_do/BAO_CAO_NGHIEN_CUU.html). Điểm A0/A1/A2 trên selection gần nhau, chưa kết luận hơn kém độc lập. H100 đã dừng, mục tiêu GPU trên 50% chưa đạt. Refit/calibration, A3 và đánh giá độc lập còn chờ.
+
 ## 14/11 — Tiếp tục confidence thật và selection đầy đủ
 
 [Hồ sơ](../runs/junyi-confidence-completion-20261114-01/README.md) giữ confidence thật đã hoàn tất 736 child/976 cạnh, corpus 13.347.331 target và cache selection 1.600.343 target khớp A0. Đang build cache graph thật trên CPU. STATE là điểm tiếp tục. Gate Linux02 đạt 2.614 ca sau khi ghim fixture CPU xác định; giữ failure01. Cả hai App đã dừng, tổng reservation 0,30 USD đóng theo cận bảo thủ. Chưa training chính A2/A3.

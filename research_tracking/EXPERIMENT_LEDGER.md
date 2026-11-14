@@ -1,5 +1,11 @@
 # Sổ cái thí nghiệm
 
+## Mốc 14/11 — A2 Junyi selected-fit đã hoàn tất
+
+Lượt `modal-junyi-a2-staged-h100-20261114-09` học 7 epoch, tải/kiểm 125 artifact và dừng. Lượt `...-10` khôi phục từ checkpoint epoch 7, học tiếp đến 12 epoch, chọn epoch 9 theo min_delta 0,0001/patience 3, nạp lại và xuất 1.600.343 dự đoán selection. Không truy cập Holdout. Toàn bộ 210 artifact cuối đã tải/kiểm trên D, H100 dừng trước khi tải/nén. [Nghiệm thu](runs/junyi-confidence-completion-20261114-01/a2-final-acceptance.json) và [hồ sơ vận hành](runs/junyi-confidence-completion-20261114-01/README.md) giữ cả lỗi trước training và source Gate 2.615 ca.
+
+Tổng thời gian hai function GPU khoảng 47 phút 19 giây. Mẫu NVML trung bình 32,23%, VRAM đỉnh 5.789 MiB. Chuẩn bị input và thu artifact đã tách khỏi GPU, mục tiêu sử dụng GPU trên 50% chưa đạt. [So sánh selection](runs/junyi-confidence-completion-20261114-01/a2-comparison-audit.json) chỉ là mô tả Development một seed. A3, refit/calibration và đánh giá độc lập còn chờ.
+
 ## Mốc09/11 — learned graph trong đối chứng năng lực đã có kết quả
 
 [E9 bản thảo luận văn](reports/THESIS_RQ1_MECHANISMS_DRAFT_20261109.md) đã xuất bản từ learned19, giữ43.799bytes E1–E8. [Writing11](runs/thesis-rq1-e9-writing-20261109-01/README.md) giữ before/after và map112nguồn, Root kiểm66JSONpointers/hai phép cộng. Viết không thêm model call hoặc mẫu độc lập.

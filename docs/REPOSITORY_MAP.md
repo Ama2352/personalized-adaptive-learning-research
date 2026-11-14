@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 14/11 — A2 Junyi hoàn tất selected-fit, model đã xuất trên D
+
+[Hồ sơ A2 và confidence](../research_tracking/runs/junyi-confidence-completion-20261114-01/README.md) giữ confidence TRAIN80, cache thật, Gate Linux 2.615 ca và snapshot03. A2 đã hoàn tất 12 epoch, chọn epoch 9, kiểm đủ 1.600.343 dự đoán theo target/thứ tự thời gian và xuất gói bốn file tại `experiments/akt/results/model-export-a2-batch128-20261114-01/`. Lượt cuối có 210 artifact đã tải D/kiểm, cả hai H100 đã dừng. Có SVG/PNG/CSV và báo cáo GVHD cập nhật. Trung bình mẫu NVML hai lượt 32,23%, mục tiêu 50% chưa đạt. STATE giữ phần còn thiếu gồm A3, refit/calibration/đánh giá độc lập và đối soát dự toán trước khoản GPU tiếp theo.
+
 ## 14/11 — Tiếp tục confidence thật và selection đầy đủ
 
 [Hồ sơ](../research_tracking/runs/junyi-confidence-completion-20261114-01/README.md) giữ confidence thật đã hoàn tất 736 child/976 cạnh, corpus 13.347.331 target và cache selection 1.600.343 target khớp A0. Đang build cache graph thật trên CPU. STATE là điểm tiếp tục. Gate Linux02 đạt 2.614 ca sau khi ghim fixture CPU xác định; giữ failure01. Cả hai App đã dừng, tổng reservation 0,30 USD đóng theo cận bảo thủ. Chưa training chính A2/A3.

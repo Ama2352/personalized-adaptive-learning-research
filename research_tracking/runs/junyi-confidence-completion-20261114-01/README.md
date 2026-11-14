@@ -1,4 +1,26 @@
-# Hoàn tất confidence TRAIN80 và chuẩn bị A2/A3 — 14/11/2026
+# Confidence TRAIN80 và A2 Junyi — đã hoàn tất selected-fit ngày 14/11
+
+## Kết quả đã nghiệm thu
+
+A2 đã học 12 epoch trên đủ 13.347.331 target TRAIN80 mỗi epoch, chọn checkpoint epoch 9 và xuất đúng 1.600.343 dự đoán của 15.847 người học selection. Đã kiểm target/order, xác suất, checkpoint, Adam và RNG. Hai lượt H100 đã dừng trước khi thu artifact. Lượt cuối có 210 file, 2.925.030.322 byte, archive đã đối chiếu. Gói model bốn file giữ một checkpoint .pt tại `experiments/akt/results/model-export-a2-batch128-20261114-01/`.
+
+- `a2-final-acceptance.json` và `a2-export-result.json` là điểm kiểm A2 và model.
+- `a2-selection-metrics.json` giữ AUC 0,805993, Log Loss chuẩn 0,353567, Brier 0,107698 và ECE 0,004138 từ hàm chấm dùng cho GAM-KT.
+- `a2-comparison-audit.json` giữ cùng quần thể/cấu hình học A0–A2 và giới hạn A0 chưa replay đầy đủ ranking epoch bằng batch128.
+- `a2-final-performance.json` ghi 47 phút 19 giây trong hai function GPU, trung bình train 3 phút 03 giây/epoch, 1.320 mẫu NVML trung bình 32,23%, VRAM đỉnh 5.789 MiB. Mục tiêu GPU trên 50% chưa đạt.
+- `figures/` giữ SVG, PNG, CSV và manifest. `build_a2_selection_figure.py` dựng lại sang prefix/thư mục mới, theo quy ước figures4papers đã lưu.
+- `a2-report-verification.json` giữ kiểm HTML/ID và quan sát PNG. Hai báo cáo GVHD tại `research_tracking/supervisor_reports/2026-11-10/01_tien_do/` đã cập nhật.
+
+## Phạm vi kết luận và bước sau
+
+Đã hoàn tất selected-fit của A2 trên Development outer fold 4, một seed. Điểm chọn checkpoint A0/A1/A2 lần lượt 0,35358018/0,35356185/0,35356694, là quan sát mô tả trên selection. A3, refit/calibration, đánh giá độc lập, kiểm quanh ngưỡng và mô phỏng vòng kín còn chờ. Không suy ra lợi ích đồ thị hoặc RQ3 đã hoàn tất từ các điểm này.
+
+CPU chuẩn bị và tải/nén đã tách khỏi thời gian thuê GPU. Tăng mức CPU bảo đảm lên 2 vCPU ở lượt tiếp tục chưa có đối chứng xác nhận tăng tốc. Billing sau training ghi 19,09665620 USD metered toàn workspace, billed bằng 0. Ledger giữ cận lịch sử 25,22710605 USD và dự phòng 3 USD. Phải đối soát cận cũ trước một allocation A3 2,60 USD, giữ trần toàn KLTN 30 USD.
+
+Hồ sơ này đã niêm phong. Dùng STATE để đọc điểm tiếp tục, tạo bundle mới khi phát sinh công việc mới. Giữ nguyên các log lỗi, source và checkpoint lịch sử.
+
+## Lịch sử triển khai được giữ nguyên bên dưới
+
 
 ## Phạm vi
 
@@ -59,3 +81,13 @@ Lượt01 bị SDK chặn vì một Volume gắn nhiều mount. Lượt02 bị c
 ## A2 đã bắt đầu training thật
 
 Source03 sửa đường dẫn runtime đạt Gate Linux 2.615 ca. Snapshot03 giữ cùng worker request, confidence, data và numeric profile, qua nghiệm thu CPU và checkout. Lượt09 CPU provider đạt 9,5268 giây, gồm 4,6607 giây SHA. Đã xác nhận CUDA và 600 bước epoch1 bằng telemetry, xem `a2-remote-progress.jsonl`. Một H100 với cap2,60USD; chờ kết thúc, stop acknowledgement và thu đủ artifact trước khi đóng lượt.
+
+## Nghiệm thu lượt09 và tiếp tục lượt10
+
+Lượt09 hoàn tất7epoch trên toàn TRAIN80, mỗi epoch13.347.331target và1.600.343target selection,0OOV. `a2-tranche09-acceptance.json` xác nhận125artifact/1.215.327.363byte đã tải và đối chiếu, checkpoint epoch007 nạp CPU được, tensor hữu hạn, Adam và Python/NumPy/Torch/CUDA RNG đầy đủ. Chưa đạt điều kiện dừng selected-fit. Đã tiếp tục từ epoch8 bằng cùng snapshot03 và checkpoint epoch007, không lặp lại7epoch cũ.
+
+`a2-tranche09-performance.json` ghi21phút26giây train gồm checkpoint định kỳ,4phút59giây selection,41giây khác trong function,768mẫuNVML trung bình32,4375%, VRAM đỉnh5.789MiB. Lượt này chưa đạt mục tiêuGPU trên50%. Cache đúng về số học trong kiểm T4 trước đó, nhưng chưa có đối chứng full-epoch chứng minh tăng tốc mạnh. Chuẩn bị và tải/nén artifact ở ngoài thời gian thuê GPU đã hoạt động thực tế.
+
+Lượt10 dành2vCPU thay mức bảo đảm0,25vCPU, giới hạn vẫn4vCPU, cùng2luồngTorch và numeric recipe. Đây là quyết định tài nguyên của agent dựa trên mẫuCPU115,5% một lõi, chưa có đối chứng xác nhận lợi ích. `a2-resume-resource-choice10.json` ghim controller và lý do. Giới hạn2,60USD/lượt và cận toàn dự án29,0542USD gồm3USD dự phòng vẫn dưới30USD. Billing trước lượt10 ghi17,59665434USD metered, khác cận dự phòng bảo thủ.
+
+Collector local mới giữ file tạm ở root đợt tải để tránh đường dẫn recovery dài trên Windows. Các file của lượt trước có cùng SHA/bytes được sao chép từ bản đã nghiệm thu trênD, tránh tải lại qua mạng.41ca local đạt, gồm đường dẫn dài và không gọi remote reader cho file trùng. Source numerical trong image/Gate giữ nguyên. Checkpoint/predictions/logs lớn giữ tại output theo run; đọc STATE để biết lượt hiện hành.

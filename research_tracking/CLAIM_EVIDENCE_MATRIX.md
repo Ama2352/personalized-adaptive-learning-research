@@ -1,5 +1,9 @@
 # Ma trận claim–evidence
 
+## Mốc 14/11 — A2 đã học thật, so sánh selection có giới hạn
+
+CLM-RQ3-JUNYI-A2-SELECTED-FIT80-20261114. [Nghiệm thu](runs/junyi-confidence-completion-20261114-01/a2-final-acceptance.json) xác nhận A2 đủ TRAIN80, 12 epoch/chọn 9, 1.600.343 dự đoán có target/order/probability identity khớp, checkpoint/Adam/RNG và export trên D. [So sánh](runs/junyi-confidence-completion-20261114-01/a2-comparison-audit.json) kiểm dữ liệu, 27 trường training và backbone khởi tạo. Log Loss chọn checkpoint A0/A1/A2 lần lượt 0,35358018/0,35356185/0,35356694. Đây là quan sát mô tả trên nhóm dùng chọn epoch, một seed. A0 chỉ checkpoint 9 đã replay batch128, ranking đầy đủ còn chờ. Chưa suy ra lợi ích đồ thị, tương đương thống kê, nhân quả, độ ổn định đa seed, hiệu chỉnh quanh ngưỡng hay kết quả vòng kín. A3 và đánh giá độc lập còn chờ.
+
 ## Mốc09/11 — Paper1 có proof điều kiện; MainC8 đã áp dụng, kiểm còn pending
 
 CLM-PAPER1-CONDITIONAL-LOCAL-INVARIANCE. [Proof Paper1](reports/paper1_concept_local_invariance_20261109.md) và [bundle17](runs/paper1-concept-local-invariance-20261109-01/README.md). Khi cùng bank/init/local tape và update concept-local, nếu cả hai DAG branches hoàn thành thì local stopping counts, terminal states và tổng feedback giống nhau; order/re-entry có thể khác. Actual91tests/0FES gồm6fixture mới kiểm cả wrongY/finiteH/cap/no-cap. 13episodes/464feedback là trần tĩnh, không measuredledger hoặc sample nghiên cứu.

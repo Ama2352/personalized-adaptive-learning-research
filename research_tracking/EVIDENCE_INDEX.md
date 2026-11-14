@@ -1,5 +1,9 @@
 # Chỉ mục bằng chứng
 
+## 14/11 — A2 Junyi đã hoàn tất selected-fit và xuất model
+
+[Hồ sơ](runs/junyi-confidence-completion-20261114-01/README.md), [nghiệm thu](runs/junyi-confidence-completion-20261114-01/a2-final-acceptance.json) và [metrics](runs/junyi-confidence-completion-20261114-01/a2-selection-metrics.json) giữ 12 epoch/chọn 9, đầy đủ TRAIN80 và 1.600.343 dự đoán selection, 0 OOV, checkpoint/Adam/RNG, chronology và probability digest khớp. Gói model bốn file và 210 artifact lượt cuối nằm trên D. Figure SVG/PNG/CSV trong bundle. Hai H100 đã dừng. A0/A1/A2 có điểm chọn checkpoint gần nhau, chưa có kết luận hơn kém trên đánh giá độc lập. Mẫu NVML toàn hai lượt trung bình 32,23%, chưa đạt mục tiêu 50%.
+
 ## 13/11 — Junyi thật trênT4, chuỗi dài và cache
 
 [Hồ sơ](runs/junyi-a1-real-t4-20261113-01/README.md) giữ parity dữ liệu thật,32step A1 sauwarmup GPU69,7%, input preloaded75,4%, traceCPU/CUDA và prototypecachecontext1,65×. Mức48,5% đoạn ngắn được giữ. Modelbenchmark28,9MB đã tảiD/kiểm799chunk vànạpCPU. T4đãtrả,0USDModal. Full training/source2migration/cacheproduction cònchờ.

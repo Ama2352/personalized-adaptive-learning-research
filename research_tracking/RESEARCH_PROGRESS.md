@@ -1,5 +1,11 @@
 # Tiến độ nghiên cứu
 
+## Mốc 14/11 — A2 Junyi đã hoàn tất selected-fit, model và số liệu đã lưu
+
+A0/A1/A2 của nhánh Junyi hiện đều có 12 epoch/chọn checkpoint 9. A2 đã học đủ TRAIN80 với 13.347.331 target mỗi epoch và xuất 1.600.343 dự đoán selection, 0 OOV. Đã kiểm thứ tự/định danh/xác suất, checkpoint/Adam/RNG và gói model bốn file trên D. Có [nghiệm thu](runs/junyi-confidence-completion-20261114-01/a2-final-acceptance.json), [metrics dùng chung](runs/junyi-confidence-completion-20261114-01/a2-selection-metrics.json), [đối chiếu](runs/junyi-confidence-completion-20261114-01/a2-comparison-audit.json), figure SVG/PNG/CSV và hai báo cáo GVHD đã cập nhật.
+
+Điểm chọn checkpoint A0/A1/A2 gần nhau, chưa có kết luận hơn kém trên đánh giá độc lập. A3, refit/calibration và các kiểm vòng kín còn chờ. Hai H100 đã dừng, tổng thời gian function khoảng 47 phút 19 giây. Chuẩn bị input và thu artifact đã tách khỏi GPU, nhưng trung bình mẫu NVML 32,23% nên mục tiêu trên 50% chưa đạt. Đọc [STATE](runs/junyi-confidence-completion-20261114-01/STATE.json) trước batch kế tiếp, giữ trần tổng 30 USD và đối soát cận reservation lịch sử trước chạy A3.
+
 ## Mốc 12/11 lúc 17:50 — AKT và RQ1/RQ2 chạy song song
 
 A0 Junyi đã hoàn tất 3 epoch, mỗi epoch gồm 13.347.331 target train và 1.600.343 target selection, không OOV. Log Loss selection giảm 0,359648 → 0,356651 → 0,355651. Archive execution03 đã được kiểm và App đã dừng. Execution04 tiếp tục epoch4. Bộ nối hữu hạn sau04 chỉ gồm05/06 với dự phòng1,70USD đã phân bổ, chưa refit hoặc dùng Holdout. [Nghiệm thu execution03](runs/junyi-main-selected-20261112-01/execution03-verification.json).

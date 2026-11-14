@@ -32,6 +32,9 @@ for name in ('runtime.json', 'result.json', 'failure.log', 'controller-failure.l
     raw = read(operation + name)
     if raw is not None:
         result[name] = json.loads(raw) if name.endswith('.json') else raw[-4000:]
+raw=read(operation+'checkpoint-index.json')
+if raw:
+    result['checkpoint_index']=json.loads(raw)
 raw = read(operation + 'gpu-telemetry.jsonl')
 if raw:
     samples = []
@@ -76,6 +79,8 @@ summary.update(epoch=event.get('epoch'),steps=event.get('training',{}).get('opti
 summary['completed_training']={name:dict(complete=value.get('complete'),targets=value.get('valid_targets'),
     seconds=value.get('resource',{}).get('wall_seconds')) for name,value in result.items()
     if name.endswith('-training.json')}
+summary['durable_checkpoint_count']=sum(name.endswith('/state.pt')
+    for name in result.get('checkpoint_index',{}).get('files',{}))
 if 'result.json' in result:
     summary['result']=result['result.json']
 print(json.dumps(summary, ensure_ascii=False))

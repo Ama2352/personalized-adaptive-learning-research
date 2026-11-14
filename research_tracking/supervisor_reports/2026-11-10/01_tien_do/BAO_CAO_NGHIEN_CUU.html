@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
 <meta name="description" content="Báo cáo tiến độ nghiên cứu KLTN: từ hai nghiên cứu trước đến chẩn đoán RQ1–RQ2 và nền dữ liệu cho CG-AKT.">
-<title>Báo cáo nghiên cứu KLTN — 13/11/2026</title><style>
+<title>Báo cáo nghiên cứu KLTN — 14/11/2026</title><style>
 :root{--navy:#17324d;--petrol:#087d86;--blue:#346fa0;--ink:#243747;--muted:#617484;--pale:#f1f6fa;--line:#cbd9e2}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:1rem}body{margin:0;background:white;color:var(--ink);font:18px/1.72 Cambria,Georgia,serif}
 a{color:#155c88;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{color:var(--petrol)}a:focus-visible,summary:focus-visible,.table-scroll:focus-visible{outline:3px solid var(--petrol);outline-offset:4px}
@@ -25,7 +25,417 @@ a{color:#155c88;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{
 <p class="lead">Báo cáo quá trình đi từ kết quả của hai paper đến các chẩn đoán mới, những điều đã làm rõ và các phép kiểm còn thiếu để kết luận khóa luận.</p>
 <p class="byline"><strong>Đề tài:</strong> Nghiên cứu và phát triển hệ thống học tập thích ứng cá nhân hóa dựa trên mô hình hóa tri thức và tối ưu hóa lộ trình.<br>
 <strong>Sinh viên:</strong> Phạm Triều Dương · Hồ Nguyễn Minh Sang<br><strong>GVHD:</strong> TS. Lê Văn Tuấn</p></header>
-<section id="cap-nhat-20261114-a2-dispatch"><h2>14/11 — A2 đã bắt đầu huấn luyện thật trên Junyi</h2><p>A2 đã bắt đầu huấn luyện thật trên Junyi bằng H100. Mô hình dùng cùng TRAIN80 gồm 126.774 người học, 13.347.331 lượt trả lời và tập selection gồm 1.600.343 lượt trả lời như A0/A1. A2 bổ sung trọng số độ tin cậy cho từng cạnh đã ước lượng hoàn toàn từ TRAIN80.</p><p>Để hạn chế thời gian thuê GPU, toàn bộ cache và source được đóng vào image bằng CPU trước khi gọi H100. Lượt kiểm provider mới nhất đối chiếu đủ 1.491 file và chạy đúng bước kiểm runtime trong 9,53 giây, trong đó kiểm SHA mất 4,66 giây. GPU đọc input từ file local của container và ghi checkpoint vào Volume riêng.</p><p>Trước lượt này đã sửa các lỗi tích hợp mount/image và đường dẫn xuất báo cáo runtime. Source numerical sau sửa đã đạt 2.615 ca kiểm Linux. Các lượt lỗi có log và xác nhận dừng App. Lượt H100 trước bị dừng ở bước runtime sau khoảng 6 giây, chưa học epoch. Bộ kiểm controller local hiện hành đạt 40 ca.</p><p>Ở mốc đầu tiên được lưu, epoch 1 đã học 600 bước và khoảng 4,40 triệu lượt trả lời trong 59 giây pha train. VRAM khoảng 5,65 GiB, GPU trung bình đoạn đo gần nhất khoảng 40%. Cần hoàn tất epoch để xác nhận thời gian train và selection đầy đủ. Checkpoint được lưu định kỳ để tiếp tục nếu hết thời hạn lượt chạy.</p><p>Phần đang chạy là chọn checkpoint trên TRAIN80/selection của Development outer fold 4. Refit, calibration và đánh giá độc lập còn chờ. Chưa có kết quả đối chứng cuối của A2 để kết luận hiệu quả đồ thị cho RQ3.</p></section>
+<section id="cap-nhat-20261114-a2-dispatch"><h2>14/11 — A2 hoàn tất bước chọn checkpoint trên Junyi</h2><p>Để kiểm tra độ tin cậy từng cạnh có giúp mô hình dự báo tốt hơn hay không trong RQ3, đã hoàn tất huấn luyện A2 trên Junyi. A2 bổ sung trọng số độ tin cậy vào AKT NonRasch. Bộ trọng số được ước lượng từ TRAIN80 trước khi học mô hình. Lượt này dùng Development outer fold 4 theo protocol đã chốt. Tập train gồm 126.774 người học và 13.347.331 lượt trả lời, tập chọn checkpoint gồm 15.847 người học và 1.600.343 lượt trả lời. Các nhóm người học được tách riêng và giữ đúng ranh giới dữ liệu của A0/A1.</p><p>Sau mỗi epoch, mô hình dự đoán trên nhóm chọn checkpoint. Log Loss theo dõi mức phù hợp của xác suất dự báo với câu trả lời thực tế và phạt mạnh các dự đoán sai nhưng quá tự tin. A2 đã chạy 12 epoch, chọn checkpoint epoch 9 và nạp lại thành công. Toàn bộ 1.600.343 dự đoán xuất ra khớp quần thể và thứ tự thời gian, không có bài tập OOV.</p><p>Epoch 10 có điểm thấp hơn epoch 9 khoảng 0,000045, chưa vượt mức cải thiện tối thiểu 0,0001 đã chốt. Vì vậy bộ chọn giữ epoch 9 và dừng sau ba epoch chưa cải thiện đủ. Đây là kết quả của cùng quy tắc chọn checkpoint được áp dụng cho các biến thể AKT.</p><figure><div class="svg-frame"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="590.4pt" height="345.6pt" viewBox="0 0 590.4 345.6" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-14T16:33:18.167230</dc:date>
+    <dc:description>Lịch sử selected-fit A2 Junyi. Dữ liệu Development dùng chọn epoch.</dc:description>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>KLTN, áp dụng quy ước figures4papers của Chen Liu</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="a2-junyi-v01-figure_1">
+  <g id="a2-junyi-v01-patch_1">
+   <path d="M 0 345.6 
+L 590.4 345.6 
+L 590.4 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="a2-junyi-v01-axes_1">
+   <g id="a2-junyi-v01-patch_2">
+    <path d="M 76.752 269.568 
+L 572.688 269.568 
+L 572.688 48.384 
+L 76.752 48.384 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="a2-junyi-v01-matplotlib.axis_1">
+    <g id="a2-junyi-v01-xtick_1">
+     <g id="a2-junyi-v01-line2d_1">
+      <defs>
+       <path id="a2-junyi-v01-m4cba26a40a" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#a2-junyi-v01-m4cba26a40a" x="95.12" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_1">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="95.12" y="284.925422" transform="rotate(-0 95.12 284.925422)">1</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-xtick_2">
+     <g id="a2-junyi-v01-line2d_2">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m4cba26a40a" x="136.865455" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_2">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="136.865455" y="284.925422" transform="rotate(-0 136.865455 284.925422)">2</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-xtick_3">
+     <g id="a2-junyi-v01-line2d_3">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m4cba26a40a" x="178.610909" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_3">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="178.610909" y="284.925422" transform="rotate(-0 178.610909 284.925422)">3</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-xtick_4">
+     <g id="a2-junyi-v01-line2d_4">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m4cba26a40a" x="220.356364" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_4">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="220.356364" y="284.925422" transform="rotate(-0 220.356364 284.925422)">4</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-xtick_5">
+     <g id="a2-junyi-v01-line2d_5">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m4cba26a40a" x="262.101818" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_5">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="262.101818" y="284.925422" transform="rotate(-0 262.101818 284.925422)">5</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-xtick_6">
+     <g id="a2-junyi-v01-line2d_6">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m4cba26a40a" x="303.847273" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_6">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="303.847273" y="284.925422" transform="rotate(-0 303.847273 284.925422)">6</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-xtick_7">
+     <g id="a2-junyi-v01-line2d_7">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m4cba26a40a" x="345.592727" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_7">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="345.592727" y="284.925422" transform="rotate(-0 345.592727 284.925422)">7</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-xtick_8">
+     <g id="a2-junyi-v01-line2d_8">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m4cba26a40a" x="387.338182" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_8">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="387.338182" y="284.925422" transform="rotate(-0 387.338182 284.925422)">8</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-xtick_9">
+     <g id="a2-junyi-v01-line2d_9">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m4cba26a40a" x="429.083636" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_9">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="429.083636" y="284.925422" transform="rotate(-0 429.083636 284.925422)">9</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-xtick_10">
+     <g id="a2-junyi-v01-line2d_10">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m4cba26a40a" x="470.829091" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_10">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="470.829091" y="284.925422" transform="rotate(-0 470.829091 284.925422)">10</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-xtick_11">
+     <g id="a2-junyi-v01-line2d_11">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m4cba26a40a" x="512.574545" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_11">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="512.574545" y="284.925422" transform="rotate(-0 512.574545 284.925422)">11</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-xtick_12">
+     <g id="a2-junyi-v01-line2d_12">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m4cba26a40a" x="554.32" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_12">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="554.32" y="284.925422" transform="rotate(-0 554.32 284.925422)">12</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-text_13">
+     <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="324.72" y="299.926281" transform="rotate(-0 324.72 299.926281)">Epoch</text>
+    </g>
+   </g>
+   <g id="a2-junyi-v01-matplotlib.axis_2">
+    <g id="a2-junyi-v01-ytick_1">
+     <g id="a2-junyi-v01-line2d_13">
+      <path d="M 76.752 262.557612 
+L 572.688 262.557612 
+" clip-path="url(#a2-junyi-v01-pf7fe688850)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a2-junyi-v01-line2d_14">
+      <defs>
+       <path id="a2-junyi-v01-m7d591bd56a" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#a2-junyi-v01-m7d591bd56a" x="76.752" y="262.557612" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_14">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="69.752" y="266.736323" transform="rotate(-0 69.752 266.736323)">0.353</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-ytick_2">
+     <g id="a2-junyi-v01-line2d_15">
+      <path d="M 76.752 234.966303 
+L 572.688 234.966303 
+" clip-path="url(#a2-junyi-v01-pf7fe688850)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a2-junyi-v01-line2d_16">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m7d591bd56a" x="76.752" y="234.966303" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_15">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="69.752" y="239.145013" transform="rotate(-0 69.752 239.145013)">0.354</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-ytick_3">
+     <g id="a2-junyi-v01-line2d_17">
+      <path d="M 76.752 207.374993 
+L 572.688 207.374993 
+" clip-path="url(#a2-junyi-v01-pf7fe688850)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a2-junyi-v01-line2d_18">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m7d591bd56a" x="76.752" y="207.374993" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_16">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="69.752" y="211.553704" transform="rotate(-0 69.752 211.553704)">0.355</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-ytick_4">
+     <g id="a2-junyi-v01-line2d_19">
+      <path d="M 76.752 179.783684 
+L 572.688 179.783684 
+" clip-path="url(#a2-junyi-v01-pf7fe688850)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a2-junyi-v01-line2d_20">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m7d591bd56a" x="76.752" y="179.783684" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_17">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="69.752" y="183.962395" transform="rotate(-0 69.752 183.962395)">0.356</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-ytick_5">
+     <g id="a2-junyi-v01-line2d_21">
+      <path d="M 76.752 152.192375 
+L 572.688 152.192375 
+" clip-path="url(#a2-junyi-v01-pf7fe688850)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a2-junyi-v01-line2d_22">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m7d591bd56a" x="76.752" y="152.192375" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_18">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="69.752" y="156.371086" transform="rotate(-0 69.752 156.371086)">0.357</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-ytick_6">
+     <g id="a2-junyi-v01-line2d_23">
+      <path d="M 76.752 124.601066 
+L 572.688 124.601066 
+" clip-path="url(#a2-junyi-v01-pf7fe688850)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a2-junyi-v01-line2d_24">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m7d591bd56a" x="76.752" y="124.601066" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_19">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="69.752" y="128.779777" transform="rotate(-0 69.752 128.779777)">0.358</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-ytick_7">
+     <g id="a2-junyi-v01-line2d_25">
+      <path d="M 76.752 97.009757 
+L 572.688 97.009757 
+" clip-path="url(#a2-junyi-v01-pf7fe688850)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a2-junyi-v01-line2d_26">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m7d591bd56a" x="76.752" y="97.009757" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_20">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="69.752" y="101.188467" transform="rotate(-0 69.752 101.188467)">0.359</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-ytick_8">
+     <g id="a2-junyi-v01-line2d_27">
+      <path d="M 76.752 69.418447 
+L 572.688 69.418447 
+" clip-path="url(#a2-junyi-v01-pf7fe688850)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a2-junyi-v01-line2d_28">
+      <g>
+       <use xlink:href="#a2-junyi-v01-m7d591bd56a" x="76.752" y="69.418447" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a2-junyi-v01-text_21">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="69.752" y="73.597158" transform="rotate(-0 69.752 73.597158)">0.360</text>
+     </g>
+    </g>
+    <g id="a2-junyi-v01-text_22">
+     <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="31.618484" y="158.976" transform="rotate(-90 31.618484 158.976)">Log Loss trên tập chọn checkpoint</text>
+    </g>
+   </g>
+   <g id="a2-junyi-v01-line2d_29">
+    <path d="M 95.12 69.788903 
+L 136.865455 155.146207 
+L 178.610909 187.148721 
+L 220.356364 192.804398 
+L 262.101818 212.270353 
+L 303.847273 226.181772 
+L 345.592727 222.904966 
+L 387.338182 233.195864 
+L 429.083636 246.914868 
+L 470.829091 248.163097 
+L 512.574545 245.061437 
+L 554.32 247.316143 
+" clip-path="url(#a2-junyi-v01-pf7fe688850)" style="fill: none; stroke: #0f4d92; stroke-width: 2; stroke-linecap: square"/>
+    <defs>
+     <path id="a2-junyi-v01-mb551ceca52" d="M 0 2.5 
+C 0.663008 2.5 1.29895 2.236584 1.767767 1.767767 
+C 2.236584 1.29895 2.5 0.663008 2.5 0 
+C 2.5 -0.663008 2.236584 -1.29895 1.767767 -1.767767 
+C 1.29895 -2.236584 0.663008 -2.5 0 -2.5 
+C -0.663008 -2.5 -1.29895 -2.236584 -1.767767 -1.767767 
+C -2.236584 -1.29895 -2.5 -0.663008 -2.5 0 
+C -2.5 0.663008 -2.236584 1.29895 -1.767767 1.767767 
+C -1.29895 2.236584 -0.663008 2.5 0 2.5 
+z
+" style="stroke: #0f4d92"/>
+    </defs>
+    <g clip-path="url(#a2-junyi-v01-pf7fe688850)">
+     <use xlink:href="#a2-junyi-v01-mb551ceca52" x="95.12" y="69.788903" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a2-junyi-v01-mb551ceca52" x="136.865455" y="155.146207" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a2-junyi-v01-mb551ceca52" x="178.610909" y="187.148721" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a2-junyi-v01-mb551ceca52" x="220.356364" y="192.804398" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a2-junyi-v01-mb551ceca52" x="262.101818" y="212.270353" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a2-junyi-v01-mb551ceca52" x="303.847273" y="226.181772" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a2-junyi-v01-mb551ceca52" x="345.592727" y="222.904966" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a2-junyi-v01-mb551ceca52" x="387.338182" y="233.195864" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a2-junyi-v01-mb551ceca52" x="429.083636" y="246.914868" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a2-junyi-v01-mb551ceca52" x="470.829091" y="248.163097" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a2-junyi-v01-mb551ceca52" x="512.574545" y="245.061437" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a2-junyi-v01-mb551ceca52" x="554.32" y="247.316143" style="fill: #0f4d92; stroke: #0f4d92"/>
+    </g>
+   </g>
+   <g id="a2-junyi-v01-patch_3">
+    <path d="M 76.752 269.568 
+L 76.752 48.384 
+" style="fill: none; stroke: #000000; stroke-width: 1.1; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="a2-junyi-v01-patch_4">
+    <path d="M 76.752 269.568 
+L 572.688 269.568 
+" style="fill: none; stroke: #000000; stroke-width: 1.1; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="a2-junyi-v01-patch_5">
+    <path d="M 404.169817 99.366036 
+Q 416.460599 172.156583 428.509391 243.513972 
+" style="fill: none; stroke: #b64342; stroke-width: 1.3; stroke-linecap: round"/>
+    <path d="M 429.946108 238.809098 
+L 428.509391 243.513972 
+L 425.607521 239.541674 
+" style="fill: none; stroke: #b64342; stroke-width: 1.3; stroke-linecap: round"/>
+   </g>
+   <g id="a2-junyi-v01-text_23">
+    <g id="a2-junyi-v01-patch_6">
+     <path d="M 314.80128 96.890772 
+L 486.540499 96.890772 
+Q 491.490499 96.890772 491.490499 91.940772 
+L 491.490499 65.347413 
+Q 491.490499 60.397413 486.540499 60.397413 
+L 314.80128 60.397413 
+Q 309.85128 60.397413 309.85128 65.347413 
+L 309.85128 91.940772 
+Q 309.85128 96.890772 314.80128 96.890772 
+z
+" style="fill: #ffffff; stroke: #d5dee6; stroke-linejoin: miter"/>
+    </g>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'" transform="translate(314.80128 74.994112)">Checkpoint đã chọn</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'" transform="translate(314.80128 88.19712)">epoch 9 · Log Loss 0,35356694</text>
+   </g>
+   <g id="a2-junyi-v01-text_24">
+    <text style="font-size: 13.2px; font-family: 'DejaVu Sans'; text-anchor: middle" x="324.72" y="42.384" transform="rotate(-0 324.72 42.384)">Diễn biến chọn checkpoint A2 trên Junyi</text>
+   </g>
+   <g id="a2-junyi-v01-PathCollection_1">
+    <defs>
+     <path id="a2-junyi-v01-mad208994f9" d="M 0 5 
+C 1.326016 5 2.597899 4.473168 3.535534 3.535534 
+C 4.473168 2.597899 5 1.326016 5 0 
+C 5 -1.326016 4.473168 -2.597899 3.535534 -3.535534 
+C 2.597899 -4.473168 1.326016 -5 0 -5 
+C -1.326016 -5 -2.597899 -4.473168 -3.535534 -3.535534 
+C -4.473168 -2.597899 -5 -1.326016 -5 0 
+C -5 1.326016 -4.473168 2.597899 -3.535534 3.535534 
+C -2.597899 4.473168 -1.326016 5 0 5 
+z
+" style="stroke: #b64342"/>
+    </defs>
+    <g clip-path="url(#a2-junyi-v01-pf7fe688850)">
+     <use xlink:href="#a2-junyi-v01-mad208994f9" x="429.083636" y="246.914868" style="fill: #b64342; stroke: #b64342"/>
+    </g>
+   </g>
+  </g>
+  <g id="a2-junyi-v01-text_25">
+   <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="76.752" y="317.952" transform="rotate(-0 76.752 317.952)">Selection cố định · 15.847 người học · 1.600.343 tương tác · seed 42</text>
+  </g>
+  <g id="a2-junyi-v01-text_26">
+   <text style="font-size: 9.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #465466" x="76.752" y="333.504" transform="rotate(-0 76.752 333.504)">Checkpoint được chọn theo cải thiện tối thiểu 0,0001 và patience 3.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="a2-junyi-v01-pf7fe688850">
+   <rect x="76.752" y="48.384" width="495.936" height="221.184"/>
+  </clipPath>
+ </defs>
+</svg>
+</div><figcaption>Diễn biến chọn checkpoint A2 trên 1.600.343 lượt trả lời selection. Chấm đỏ đánh dấu epoch được chọn theo quy tắc cải thiện tối thiểu và patience đã chốt. Đã giữ SVG, PNG, bảng số liệu và cách dựng lại trong hồ sơ nghiên cứu.</figcaption></figure><div class="table-scroll"><table><caption>Điểm dùng chọn checkpoint trên cùng nhóm selection</caption><thead><tr><th>Mô hình</th><th>Cấu hình</th><th>Log Loss</th></tr></thead><tbody><tr><td>A0</td><td>AKT không đồ thị</td><td>0,353580</td></tr><tr><td>A1</td><td>AKT đồ thị cố định</td><td>0,353562</td></tr><tr><td>A2</td><td>AKT theo độ tin cậy cạnh</td><td>0,353567</td></tr></tbody></table></div><p>Các điểm chọn checkpoint của A0, A1 và A2 hiện rất gần nhau. Quan sát này chưa cho thấy một khác biệt lớn về dự báo do thêm độ tin cậy cạnh trên nhóm selection. Cần đánh giá độc lập và lượng hóa độ bất định trước khi kết luận hơn kém. A0 đã được chấm lại tại checkpoint epoch 9 bằng batch 128, phần đối chiếu lại toàn bộ lịch sử chọn epoch A0 còn chờ.</p><p>Đã tải và kiểm đủ 210 artifact của lượt cuối, lưu checkpoint, dự đoán và log trên ổ D. Gói model A2 gồm một file .pt cùng cấu hình, graph, confidence và nguồn để dựng lại. Nhánh Junyi hiện có A0, A1 và A2 đã hoàn tất selected-fit. A3 có thêm cổng điều chỉnh ảnh hưởng đồ thị, refit, calibration và đánh giá độc lập còn chờ. Kết quả hiện tại bổ sung bằng chứng triển khai và dự báo, chưa hoàn tất phần quyết định lộ trình và mô phỏng vòng kín của RQ3.</p><details><summary>Chấm lại file dự đoán bằng bộ metric dùng chung</summary><p>Đã tính lại từ file dự đoán bằng hàm chấm được dùng cho GAM-KT. Các điểm này mô tả nhóm dùng chọn epoch, chưa phải kết quả đánh giá độc lập. ECE toàn cục còn cần được bổ sung bằng kiểm tra quanh ngưỡng thành thạo.</p><div class="table-scroll"><table><thead><tr><th>Metric</th><th>A2</th><th>Mục đích</th></tr></thead><tbody><tr><td>AUC</td><td>0,805993</td><td>Khả năng phân biệt câu trả lời đúng và sai</td></tr><tr><td>Log Loss</td><td>0,353567</td><td>Độ phù hợp của xác suất dự báo với kết quả</td></tr><tr><td>Brier</td><td>0,107698</td><td>Sai lệch bình phương của xác suất</td></tr><tr><td>ECE</td><td>0,004138</td><td>Độ khớp xác suất và tỷ lệ đúng trong 15 nhóm</td></tr></tbody></table></div></details><details><summary>Thời gian thực thi và sử dụng tài nguyên</summary><p>Hai lượt H100 dùng tổng cộng 47 phút 19 giây trong function, trung bình pha train khoảng 3 phút 03 giây mỗi epoch. Trung bình 1.320 mẫu NVML là 32,23%, VRAM đỉnh khoảng 5,65 GiB. Mục tiêu GPU trên 50% chưa đạt. Chuẩn bị input, upload và tải/nén artifact chạy ngoài thời gian thuê GPU. Mức CPU bảo đảm được tăng từ 0,25 lên 2 vCPU ở lượt tiếp tục, cùng hai luồng Torch, chưa có đối chứng xác nhận tăng tốc. Modal báo tổng metered toàn workspace khoảng 19,10 USD ở lần đọc sau training, billed cost bằng 0. Trần toàn KLTN vẫn là 30 USD.</p></details></section>
 <section id="cap-nhat-20261114-confidence-completion"><h2>14/11 — Hoàn tất confidence TRAIN80 cho A2/A3</h2>
 <p>Sau khi kiểm được luồng tính A2/A3 trên T4, đã ước lượng xong độ tin cậy từ TRAIN80 thật để hai mô hình dùng chung. Đã kiểm đủ 13.347.331 lượt trả lời của 126.774 người học trong phần dữ liệu huấn luyện TRAIN80. Toàn bộ 736 khái niệm con đã fit xong; đã đối chiếu từng checkpoint về số target, nguồn và tính toàn vẹn của file.</p>
 <p>Bộ trọng số cuối bao phủ đủ 976 cạnh. Có 708 cạnh đủ điều kiện ước lượng; 268 cạnh thiếu hỗ trợ được giữ lý do và đặt trọng số 0. Tổng cộng 700 cạnh có trọng số dương, 276 cạnh có trọng số 0. Đây là đầu vào cho A2 sử dụng đồ thị theo độ tin cậy và A3 học thêm cổng điều chỉnh ảnh hưởng đồ thị. Hiệu quả sẽ được đánh giá bằng đối chứng các mô hình sau training.</p>

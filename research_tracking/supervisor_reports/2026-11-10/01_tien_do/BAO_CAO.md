@@ -1,16 +1,35 @@
 # Báo cáo tiến độ khóa luận — cập nhật 14/11/2026
 
-## 14/11 — A2 đã bắt đầu huấn luyện thật trên Junyi
+## 14/11 — A2 hoàn tất bước chọn checkpoint trên Junyi
 
-A2 đã bắt đầu huấn luyện thật trên Junyi bằng H100. Mô hình dùng cùng TRAIN80 gồm 126.774 người học, 13.347.331 lượt trả lời và tập selection gồm 1.600.343 lượt trả lời như A0/A1. A2 bổ sung trọng số độ tin cậy cho từng cạnh đã ước lượng hoàn toàn từ TRAIN80.
+Để kiểm tra độ tin cậy từng cạnh có giúp mô hình dự báo tốt hơn hay không trong RQ3, đã hoàn tất huấn luyện A2 trên Junyi. A2 bổ sung trọng số độ tin cậy vào AKT NonRasch. Bộ trọng số được ước lượng từ TRAIN80 trước khi học mô hình. Lượt này dùng Development outer fold 4 theo protocol đã chốt. Tập train gồm 126.774 người học và 13.347.331 lượt trả lời, tập chọn checkpoint gồm 15.847 người học và 1.600.343 lượt trả lời. Các nhóm người học được tách riêng và giữ đúng ranh giới dữ liệu của A0/A1.
 
-Để hạn chế thời gian thuê GPU, toàn bộ cache và source được đóng vào image bằng CPU trước khi gọi H100. Lượt kiểm provider mới nhất đối chiếu đủ 1.491 file và chạy đúng bước kiểm runtime trong 9,53 giây, trong đó kiểm SHA mất 4,66 giây. GPU đọc input từ file local của container và ghi checkpoint vào Volume riêng.
+Sau mỗi epoch, mô hình dự đoán trên nhóm chọn checkpoint. Log Loss theo dõi mức phù hợp của xác suất dự báo với câu trả lời thực tế và phạt mạnh các dự đoán sai nhưng quá tự tin. A2 đã chạy 12 epoch, chọn checkpoint epoch 9 và nạp lại thành công. Toàn bộ 1.600.343 dự đoán xuất ra khớp quần thể và thứ tự thời gian, không có bài tập OOV.
 
-Trước lượt này đã sửa các lỗi tích hợp mount/image và đường dẫn xuất báo cáo runtime. Source numerical sau sửa đã đạt 2.615 ca kiểm Linux. Các lượt lỗi có log và xác nhận dừng App. Lượt H100 trước bị dừng ở bước runtime sau khoảng 6 giây, chưa học epoch. Bộ kiểm controller local hiện hành đạt 40 ca.
+Epoch 10 có điểm thấp hơn epoch 9 khoảng 0,000045, chưa vượt mức cải thiện tối thiểu 0,0001 đã chốt. Vì vậy bộ chọn giữ epoch 9 và dừng sau ba epoch chưa cải thiện đủ. Đây là kết quả của cùng quy tắc chọn checkpoint được áp dụng cho các biến thể AKT.
 
-Ở mốc đầu tiên được lưu, epoch 1 đã học 600 bước và khoảng 4,40 triệu lượt trả lời trong 59 giây pha train. VRAM khoảng 5,65 GiB, GPU trung bình đoạn đo gần nhất khoảng 40%. Cần hoàn tất epoch để xác nhận thời gian train và selection đầy đủ. Checkpoint được lưu định kỳ để tiếp tục nếu hết thời hạn lượt chạy.
+![Lịch sử chọn checkpoint A2](../../../runs/junyi-confidence-completion-20261114-01/figures/a2-junyi-selection-v01.svg)
 
-Phần đang chạy là chọn checkpoint trên TRAIN80/selection của Development outer fold 4. Refit, calibration và đánh giá độc lập còn chờ. Chưa có kết quả đối chứng cuối của A2 để kết luận hiệu quả đồ thị cho RQ3.
+| Mô hình | Cấu hình | Log Loss chọn checkpoint |
+|---|---|---|
+| A0 | AKT không đồ thị | 0,353580 |
+| A1 | AKT đồ thị cố định | 0,353562 |
+| A2 | AKT theo độ tin cậy cạnh | 0,353567 |
+
+Các điểm chọn checkpoint của A0, A1 và A2 hiện rất gần nhau. Quan sát này chưa cho thấy một khác biệt lớn về dự báo do thêm độ tin cậy cạnh trên nhóm selection. Cần đánh giá độc lập và lượng hóa độ bất định trước khi kết luận hơn kém. A0 đã được chấm lại tại checkpoint epoch 9 bằng batch 128, phần đối chiếu lại toàn bộ lịch sử chọn epoch A0 còn chờ.
+
+Đã tải và kiểm đủ 210 artifact của lượt cuối, lưu checkpoint, dự đoán và log trên ổ D. Gói model A2 gồm một file .pt cùng cấu hình, graph, confidence và nguồn để dựng lại. Nhánh Junyi hiện có A0, A1 và A2 đã hoàn tất selected-fit. A3 có thêm cổng điều chỉnh ảnh hưởng đồ thị, refit, calibration và đánh giá độc lập còn chờ. Kết quả hiện tại bổ sung bằng chứng triển khai và dự báo, chưa hoàn tất phần quyết định lộ trình và mô phỏng vòng kín của RQ3.
+
+| Metric trên selection | A2 | Mục đích |
+|---|---|---|
+| AUC | 0,805993 | Khả năng phân biệt câu trả lời đúng và sai |
+| Log Loss | 0,353567 | Độ phù hợp của xác suất dự báo với kết quả |
+| Brier | 0,107698 | Sai lệch bình phương của xác suất |
+| ECE | 0,004138 | Độ khớp xác suất và tỷ lệ đúng trong 15 nhóm |
+
+Hai lượt H100 dùng tổng cộng 47 phút 19 giây trong function, trung bình pha train khoảng 3 phút 03 giây mỗi epoch. Trung bình 1.320 mẫu NVML là 32,23%, VRAM đỉnh khoảng 5,65 GiB. Mục tiêu GPU trên 50% chưa đạt. Chuẩn bị input, upload và tải/nén artifact chạy ngoài thời gian thuê GPU. Mức CPU bảo đảm được tăng từ 0,25 lên 2 vCPU ở lượt tiếp tục, cùng hai luồng Torch, chưa có đối chứng xác nhận tăng tốc. Modal báo tổng metered toàn workspace khoảng 19,10 USD ở lần đọc sau training, billed cost bằng 0. Trần toàn KLTN vẫn là 30 USD.
+
+[Hồ sơ nghiệm thu A2](../../../runs/junyi-confidence-completion-20261114-01/a2-final-acceptance.json), [bằng chứng và giới hạn](../../../runs/junyi-confidence-completion-20261114-01/README.md), [gói model trên D](../../../../experiments/akt/results/model-export-a2-batch128-20261114-01/README.md).
 
 ## 14/11 — Hoàn tất confidence TRAIN80 cho A2/A3
 
