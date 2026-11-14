@@ -1,5 +1,10 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 14/11 — A3 hoàn tất selected-fit, đủ A0–A3 expert trên Junyi
+
+[Hồ sơ A3](../research_tracking/runs/junyi-a3-selected-20261114-01/README.md) giữ A3 đã hoàn tất 12 epoch, chọn epoch 9, học đủ TRAIN80 13.347.331 target mỗi epoch. Đã kiểm đủ 1.600.343 dự đoán selection, target/order/probability identity, 0 OOV, checkpoint/Adam/RNG và gói model bốn file trên D. Log Loss native selection 0.35357115. A0–A3 expert đã hoàn tất selected-fit, đánh giá độc lập và các bước cuối còn chờ. Model chính tại `experiments/akt/results/model-export-a3-batch128-20261114-01/`. Đã có figure và hai báo cáo GVHD cập nhật. Đọc STATE/CLOSEOUT_MANIFEST trước công việc tiếp theo.
+
+
 ## 14/11 — A3 đã kiểm snapshot và bắt đầu lượt training có giới hạn
 
 [Hồ sơ A3](../research_tracking/runs/junyi-a3-selected-20261114-01/README.md) giữ đối chiếu cấu hình A0–A2, snapshot03, cache/confidence TRAIN80 và đối soát ngân sách. Một lượt H100 tối đa2,60USD được cấp trong trần toàn KLTN30USD, dự phòng cuối3USD. `STATE.json` giữ tiến độ và điểm tiếp tục. Kết quả training chỉ được nghiệm thu sau kiểm checkpoint/prediction/inventory và xác nhận GPU dừng.

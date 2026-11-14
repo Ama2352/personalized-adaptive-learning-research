@@ -4,7 +4,7 @@
   "as_of": "2026-11-14",
   "execution_authorized": false,
   "approval_rule": "Chỉ thực hiện trong phạm vi người dùng đã duyệt, giữ grant/timeout và trần cloud toàn KLTN 30 USD. Không tự duyệt mới phương pháp, full CV, Holdout hoặc lựa chọn mô hình cuối ngoài phạm vi đã chốt.",
-  "latest_authorization_vi": "Người dùng cho phép chạy A2 sau nghiệm thu snapshot và tự phân bổ các lượt nhỏ trong tổng 30 USD. Quyền này không mở một vòng engineering/cloud không giới hạn.",
+  "latest_authorization_vi": "Người dùng14/11 cho phép chuẩn bị và training A3, giữ cấu hình A0–A2, trần toàn KLTN30USD, lưu checkpoint/artifact và cập nhật report. Hai lượt A3 đã đóng, nhiệm vụ tiếp theo vẫn theo phạm vi người dùng giao và ledger hiện hành.",
   "tasks": [
     {
       "id": "T01",
@@ -6150,18 +6150,20 @@
       "id": "AKTJ02",
       "implementation_objective": "Nối Junyi role phaseviews và typedCUDA selected producer A0–A3, tái dùng core/windowing/metrics, chuẩn bị benchmark bounded riêng",
       "acceptance_criteria": "Khôngdùng legacy90/10cho research;train-onlyvocab/graph/confidence;matchedtargetkeys;causalmask;checkpoint/export/coverage hợp lệ;newGate đúngnguồn trướcGPU",
-      "verification_steps": "A0/A1/A2 Junyi selected-fit đều đã có 12 epoch/chọn 9 trong export. A2 source numerical Gate2615, full TRAIN80 13.347.331 target mỗi epoch, 1.600.343 dự đoán selection khớp target/order/probability identity, 0 OOV. Controller local41ca. A3 và đánh giá cuối còn chờ.",
+      "verification_steps": "A0–A3 expert Junyi đều12epoch/chọn9. A3 Gate numerical2615, controller41ca riêng, đủTRAIN80/1.600.343prediction, strict chronology/population/probability khớp,0OOV, checkpoint/Adam/RNG và sampler partial271 đã kiểm. Đã replay early stopping từ history, export và hai báo cáo/figure. Thống kê gateCPU riêng, refit/calibration/finaleval còn chờ.",
       "required_artifacts": "phase-role audit, source/runtimeGate, config/auth, throughput/cost estimate",
       "previous_status_before_20261114": "PARTIALLY_VERIFIED_A0_THREE_FULL_EPOCHS_CONTINUATION04_ACTIVE",
-      "status": "PARTIALLY_VERIFIED_A0_A1_A2_SELECTED_COMPLETE_A3_AND_FINAL_EVALUATION_PENDING",
-      "status_change_reason_vi": "Đã nghiệm thu actual A2 sau 12 epoch, export bốn file và 210 artifact trên D, đối chiếu với model index A0/A1. Không đánh dấu toàn RQ3 hoặc matrix đã hoàn tất.",
+      "status": "PARTIALLY_VERIFIED_A0_A1_A2_A3_EXPERT_SELECTED_COMPLETE_FINAL_EVALUATION_PENDING",
+      "status_change_reason_vi": "Đã nghiệm thu A3 thật, tải216artifact cuối trênD, so khớp A0–A2 và xuất model bốn file. Giữ giới hạn selection/mộtseed và A0rankingbatch1.",
       "blockers": [
-        "A3 Junyi selected-fit còn chờ, confidence TRAIN80 và cache A2/A3 đã hoàn tất",
-        "Refit/calibration, learned-graph, đủ baseline và đánh giá độc lập còn cần nghiệm thu đầy đủ",
-        "A0 chưa replay toàn ranking epoch bằng batch128, cận ngân sách lịch sử cần đối soát trước allocation GPU tiếp theo"
+        "Refit/calibration, learned-graph, đủ baseline và đánh giá độc lập còn cần nghiệm thu",
+        "A0 chưa replay toàn ranking epoch bằng batch128",
+        "RQ3 còn graph-off/perturbation/ổn định/quyết định và vòng kín",
+        "Đối soát dự toán và chọn workload có ích trước khoản Modal tiếp theo trong trần30USD"
       ],
       "benchmark_contract": "research_tracking/reports/AKT_BENCHMARK_CONTRACT_20261112.md",
-      "verification_evidence": "research_tracking/runs/junyi-confidence-completion-20261114-01/a2-final-acceptance.json"
+      "verification_evidence": "research_tracking/runs/junyi-a3-selected-20261114-01/a3-final-acceptance.json",
+      "previous_status_before_a3_20261114": "PARTIALLY_VERIFIED_A0_A1_A2_SELECTED_COMPLETE_A3_AND_FINAL_EVALUATION_PENDING"
     },
     {
       "id": "RQDIAG33",

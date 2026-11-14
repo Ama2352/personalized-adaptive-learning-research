@@ -1,5 +1,14 @@
 # Sổ cái thí nghiệm
 
+## Mốc 14/11 — A3 Junyi học xong và đóng hai lượt H100
+
+A3 đã hoàn tất 12 epoch, chọn epoch 9, học đủ TRAIN80 13.347.331 target mỗi epoch. Đã kiểm đủ 1.600.343 dự đoán selection, target/order/probability identity, 0 OOV, checkpoint/Adam/RNG và gói model bốn file trên D. Log Loss native selection 0.35357115. A0–A3 expert đã hoàn tất selected-fit, đánh giá độc lập và các bước cuối còn chờ.
+
+Hai lượt A3 có tổng function 52.25 phút, mẫu NVML trung bình 28.82%, VRAM đỉnh 5789 MiB. H100 đã dừng trước tải/nén artifact. Mục tiêu GPU trung bình trên 50% còn thiếu. Lượt đầu mất kết nối local, server đã kết thúc đúng giới hạn và đã phục hồi checkpoint partial epoch7/bước271. Metered toàn workspace 22.61 USD, billed0. Cận lịch sử 27.0585 USD cộng dự phòng 2.50 USD nằm trong trần toàn KLTN30USD.
+
+[Hồ sơ A3](runs/junyi-a3-selected-20261114-01/README.md) và [nghiệm thu](runs/junyi-a3-selected-20261114-01/a3-final-acceptance.json). Lượt01 có115artifact, lượt02 có216artifact đã tải/kiểm. Chỉ sử dụng TRAIN80/selection, không truy cập calibration, outer validation hoặc Holdout.
+
+
 ## Mốc 14/11 — A2 Junyi selected-fit đã hoàn tất
 
 Lượt `modal-junyi-a2-staged-h100-20261114-09` học 7 epoch, tải/kiểm 125 artifact và dừng. Lượt `...-10` khôi phục từ checkpoint epoch 7, học tiếp đến 12 epoch, chọn epoch 9 theo min_delta 0,0001/patience 3, nạp lại và xuất 1.600.343 dự đoán selection. Không truy cập Holdout. Toàn bộ 210 artifact cuối đã tải/kiểm trên D, H100 dừng trước khi tải/nén. [Nghiệm thu](runs/junyi-confidence-completion-20261114-01/a2-final-acceptance.json) và [hồ sơ vận hành](runs/junyi-confidence-completion-20261114-01/README.md) giữ cả lỗi trước training và source Gate 2.615 ca.

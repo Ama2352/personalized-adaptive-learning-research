@@ -38,3 +38,11 @@ Hồi quy local đầu bị ngắt trước collection, giữ log trống và kh
 Đã tải và nghiệm thu 115 artifact của lượt đầu, archive khoảng 1,01 GB, cùng toàn bộ checkpoint trên D. Checkpoint partial ở bước 271 của epoch 7 giữ optimizer, RNG và sampler. `a3-settlement01.json` ghi phạm vi resume chính xác. Lượt02 tiếp tục từ checkpoint đó với source, dữ liệu và cấu hình học giữ nguyên.
 
 Đóng dự toán lượt đầu bằng cận tài nguyên request 2,5626624 USD, giữ riêng số metering thực tế chưa tách hóa đơn theo run. Khoản dự phòng cuối được tạm giảm từ 3 xuống 2,50 USD để cấp lượt02 tối đa 2,60 USD. Cận tổng dự án là 29,96842062486352 USD, gồm biên trễ 1 USD đã có trong cận lịch sử. `reserve-reallocation01.json` giữ quyết định phân bổ của agent. Trần người dùng 30 USD tiếp tục áp dụng. Phần dự phòng 3 USD được khôi phục khi đóng lượt nếu cận chi cho phép.
+
+## Kết quả đã nghiệm thu
+
+A3 đã hoàn tất 12 epoch, chọn epoch 9, học đủ TRAIN80 13.347.331 target mỗi epoch. Đã kiểm đủ 1.600.343 dự đoán selection, target/order/probability identity, 0 OOV, checkpoint/Adam/RNG và gói model bốn file trên D. Log Loss native selection 0.35357115. A0–A3 expert đã hoàn tất selected-fit, đánh giá độc lập và các bước cuối còn chờ.
+
+Hai lượt A3 có tổng function 52.25 phút, mẫu NVML trung bình 28.82%, VRAM đỉnh 5789 MiB. H100 đã dừng trước tải/nén artifact. Mục tiêu GPU trung bình trên 50% còn thiếu. Lượt đầu mất kết nối local, server đã kết thúc đúng giới hạn và đã phục hồi checkpoint partial epoch7/bước271. Metered toàn workspace 22.61 USD, billed0. Cận lịch sử 27.0585 USD cộng dự phòng 2.50 USD nằm trong trần toàn KLTN30USD.
+
+`a3-selection-metrics.json` tái chấm prediction bằng hàm metrics chung GAM-KT. `a3-comparison-audit.json` giữ giới hạn A0 và thông tin so sánh. `a3-gate-selection-audit.json` mô tả cơ chế gate từ checkpoint và cache trênCPU. Figure độc lập nằm trong `figures/`, có SVG/PNG/CSV/provenance và script dựng lại. Hai báo cáo tại `research_tracking/supervisor_reports/2026-11-10/01_tien_do/` đã cập nhật. HTML đã kiểm tĩnh, PNG được xem trực tiếp. API inference độc lập của gói export còn chờ kiểm.

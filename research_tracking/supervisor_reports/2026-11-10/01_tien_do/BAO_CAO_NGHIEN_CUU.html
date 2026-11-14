@@ -25,6 +25,416 @@ a{color:#155c88;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{
 <p class="lead">Báo cáo quá trình đi từ kết quả của hai paper đến các chẩn đoán mới, những điều đã làm rõ và các phép kiểm còn thiếu để kết luận khóa luận.</p>
 <p class="byline"><strong>Đề tài:</strong> Nghiên cứu và phát triển hệ thống học tập thích ứng cá nhân hóa dựa trên mô hình hóa tri thức và tối ưu hóa lộ trình.<br>
 <strong>Sinh viên:</strong> Phạm Triều Dương · Hồ Nguyễn Minh Sang<br><strong>GVHD:</strong> TS. Lê Văn Tuấn</p></header>
+<section id="cap-nhat-20261114-a3-complete"><h2>14/11 — A0–A3 đã hoàn tất chọn checkpoint trên Junyi</h2><p>Sau A0 không dùng đồ thị, A1 dùng đồ thị cố định và A2 dùng độ tin cậy từng cạnh, đã hoàn tất A3 với thêm một cổng học điều chỉnh ảnh hưởng đồ thị. Bốn cấu hình tạo thành chuỗi đối chứng dự báo cho RQ3. Confidence được ước lượng riêng từ TRAIN80 trước khi học A2/A3.</p><p>A3 đã chạy 12 epoch và chọn checkpoint epoch 9 theo cùng quy tắc cải thiện tối thiểu 0,0001 và patience 3. Mỗi epoch học đủ 13.347.331 lượt trả lời của 126.774 người học. Tập chọn checkpoint giữ riêng 15.847 người học, với 1.600.343 lượt trả lời. Đã đối chiếu split, vocabulary, 27 trường cấu hình học, seed và khởi tạo backbone với các bản trước.</p><p>Sau khi học, đã nạp lại checkpoint được chọn và xuất đủ dự đoán selection, kiểm đúng thứ tự thời gian và tập tương tác, 0 bài tập ngoài vocabulary. Log Loss được dùng để theo dõi mức phù hợp của xác suất với câu trả lời thực tế, giúp chọn checkpoint theo một quy tắc thống nhất.</p><figure><div class="svg-frame"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="590.4pt" height="345.6pt" viewBox="0 0 590.4 345.6" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-14T19:33:18.998982</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>KLTN, quy ước figures4papers của Chen Liu</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="a3-v01-figure_1">
+  <g id="a3-v01-patch_1">
+   <path d="M 0 345.6 
+L 590.4 345.6 
+L 590.4 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="a3-v01-axes_1">
+   <g id="a3-v01-patch_2">
+    <path d="M 76.752 269.568 
+L 572.688 269.568 
+L 572.688 48.384 
+L 76.752 48.384 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="a3-v01-matplotlib.axis_1">
+    <g id="a3-v01-xtick_1">
+     <g id="a3-v01-line2d_1">
+      <defs>
+       <path id="a3-v01-mc15d6109df" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#a3-v01-mc15d6109df" x="95.12" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_1">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="95.12" y="284.925422" transform="rotate(-0 95.12 284.925422)">1</text>
+     </g>
+    </g>
+    <g id="a3-v01-xtick_2">
+     <g id="a3-v01-line2d_2">
+      <g>
+       <use xlink:href="#a3-v01-mc15d6109df" x="136.865455" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_2">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="136.865455" y="284.925422" transform="rotate(-0 136.865455 284.925422)">2</text>
+     </g>
+    </g>
+    <g id="a3-v01-xtick_3">
+     <g id="a3-v01-line2d_3">
+      <g>
+       <use xlink:href="#a3-v01-mc15d6109df" x="178.610909" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_3">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="178.610909" y="284.925422" transform="rotate(-0 178.610909 284.925422)">3</text>
+     </g>
+    </g>
+    <g id="a3-v01-xtick_4">
+     <g id="a3-v01-line2d_4">
+      <g>
+       <use xlink:href="#a3-v01-mc15d6109df" x="220.356364" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_4">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="220.356364" y="284.925422" transform="rotate(-0 220.356364 284.925422)">4</text>
+     </g>
+    </g>
+    <g id="a3-v01-xtick_5">
+     <g id="a3-v01-line2d_5">
+      <g>
+       <use xlink:href="#a3-v01-mc15d6109df" x="262.101818" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_5">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="262.101818" y="284.925422" transform="rotate(-0 262.101818 284.925422)">5</text>
+     </g>
+    </g>
+    <g id="a3-v01-xtick_6">
+     <g id="a3-v01-line2d_6">
+      <g>
+       <use xlink:href="#a3-v01-mc15d6109df" x="303.847273" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_6">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="303.847273" y="284.925422" transform="rotate(-0 303.847273 284.925422)">6</text>
+     </g>
+    </g>
+    <g id="a3-v01-xtick_7">
+     <g id="a3-v01-line2d_7">
+      <g>
+       <use xlink:href="#a3-v01-mc15d6109df" x="345.592727" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_7">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="345.592727" y="284.925422" transform="rotate(-0 345.592727 284.925422)">7</text>
+     </g>
+    </g>
+    <g id="a3-v01-xtick_8">
+     <g id="a3-v01-line2d_8">
+      <g>
+       <use xlink:href="#a3-v01-mc15d6109df" x="387.338182" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_8">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="387.338182" y="284.925422" transform="rotate(-0 387.338182 284.925422)">8</text>
+     </g>
+    </g>
+    <g id="a3-v01-xtick_9">
+     <g id="a3-v01-line2d_9">
+      <g>
+       <use xlink:href="#a3-v01-mc15d6109df" x="429.083636" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_9">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="429.083636" y="284.925422" transform="rotate(-0 429.083636 284.925422)">9</text>
+     </g>
+    </g>
+    <g id="a3-v01-xtick_10">
+     <g id="a3-v01-line2d_10">
+      <g>
+       <use xlink:href="#a3-v01-mc15d6109df" x="470.829091" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_10">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="470.829091" y="284.925422" transform="rotate(-0 470.829091 284.925422)">10</text>
+     </g>
+    </g>
+    <g id="a3-v01-xtick_11">
+     <g id="a3-v01-line2d_11">
+      <g>
+       <use xlink:href="#a3-v01-mc15d6109df" x="512.574545" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_11">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="512.574545" y="284.925422" transform="rotate(-0 512.574545 284.925422)">11</text>
+     </g>
+    </g>
+    <g id="a3-v01-xtick_12">
+     <g id="a3-v01-line2d_12">
+      <g>
+       <use xlink:href="#a3-v01-mc15d6109df" x="554.32" y="269.568" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_12">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="554.32" y="284.925422" transform="rotate(-0 554.32 284.925422)">12</text>
+     </g>
+    </g>
+    <g id="a3-v01-text_13">
+     <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="324.72" y="299.926281" transform="rotate(-0 324.72 299.926281)">Epoch</text>
+    </g>
+   </g>
+   <g id="a3-v01-matplotlib.axis_2">
+    <g id="a3-v01-ytick_1">
+     <g id="a3-v01-line2d_13">
+      <path d="M 76.752 262.454525 
+L 572.688 262.454525 
+" clip-path="url(#a3-v01-pd58bd10af7)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a3-v01-line2d_14">
+      <defs>
+       <path id="a3-v01-m36b933a64a" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#a3-v01-m36b933a64a" x="76.752" y="262.454525" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_14">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="69.752" y="266.633236" transform="rotate(-0 69.752 266.633236)">0.353</text>
+     </g>
+    </g>
+    <g id="a3-v01-ytick_2">
+     <g id="a3-v01-line2d_15">
+      <path d="M 76.752 234.953986 
+L 572.688 234.953986 
+" clip-path="url(#a3-v01-pd58bd10af7)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a3-v01-line2d_16">
+      <g>
+       <use xlink:href="#a3-v01-m36b933a64a" x="76.752" y="234.953986" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_15">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="69.752" y="239.132697" transform="rotate(-0 69.752 239.132697)">0.354</text>
+     </g>
+    </g>
+    <g id="a3-v01-ytick_3">
+     <g id="a3-v01-line2d_17">
+      <path d="M 76.752 207.453447 
+L 572.688 207.453447 
+" clip-path="url(#a3-v01-pd58bd10af7)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a3-v01-line2d_18">
+      <g>
+       <use xlink:href="#a3-v01-m36b933a64a" x="76.752" y="207.453447" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_16">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="69.752" y="211.632158" transform="rotate(-0 69.752 211.632158)">0.355</text>
+     </g>
+    </g>
+    <g id="a3-v01-ytick_4">
+     <g id="a3-v01-line2d_19">
+      <path d="M 76.752 179.952909 
+L 572.688 179.952909 
+" clip-path="url(#a3-v01-pd58bd10af7)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a3-v01-line2d_20">
+      <g>
+       <use xlink:href="#a3-v01-m36b933a64a" x="76.752" y="179.952909" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_17">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="69.752" y="184.13162" transform="rotate(-0 69.752 184.13162)">0.356</text>
+     </g>
+    </g>
+    <g id="a3-v01-ytick_5">
+     <g id="a3-v01-line2d_21">
+      <path d="M 76.752 152.45237 
+L 572.688 152.45237 
+" clip-path="url(#a3-v01-pd58bd10af7)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a3-v01-line2d_22">
+      <g>
+       <use xlink:href="#a3-v01-m36b933a64a" x="76.752" y="152.45237" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_18">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="69.752" y="156.631081" transform="rotate(-0 69.752 156.631081)">0.357</text>
+     </g>
+    </g>
+    <g id="a3-v01-ytick_6">
+     <g id="a3-v01-line2d_23">
+      <path d="M 76.752 124.951831 
+L 572.688 124.951831 
+" clip-path="url(#a3-v01-pd58bd10af7)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a3-v01-line2d_24">
+      <g>
+       <use xlink:href="#a3-v01-m36b933a64a" x="76.752" y="124.951831" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_19">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="69.752" y="129.130542" transform="rotate(-0 69.752 129.130542)">0.358</text>
+     </g>
+    </g>
+    <g id="a3-v01-ytick_7">
+     <g id="a3-v01-line2d_25">
+      <path d="M 76.752 97.451293 
+L 572.688 97.451293 
+" clip-path="url(#a3-v01-pd58bd10af7)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a3-v01-line2d_26">
+      <g>
+       <use xlink:href="#a3-v01-m36b933a64a" x="76.752" y="97.451293" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_20">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="69.752" y="101.630004" transform="rotate(-0 69.752 101.630004)">0.359</text>
+     </g>
+    </g>
+    <g id="a3-v01-ytick_8">
+     <g id="a3-v01-line2d_27">
+      <path d="M 76.752 69.950754 
+L 572.688 69.950754 
+" clip-path="url(#a3-v01-pd58bd10af7)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a3-v01-line2d_28">
+      <g>
+       <use xlink:href="#a3-v01-m36b933a64a" x="76.752" y="69.950754" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a3-v01-text_21">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="69.752" y="74.129465" transform="rotate(-0 69.752 74.129465)">0.360</text>
+     </g>
+    </g>
+    <g id="a3-v01-text_22">
+     <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="31.618484" y="158.976" transform="rotate(-90 31.618484 158.976)">Log Loss trên tập chọn checkpoint</text>
+    </g>
+   </g>
+   <g id="a3-v01-line2d_29">
+    <path d="M 95.12 69.788903 
+L 136.865455 155.335016 
+L 178.610909 187.350267 
+L 220.356364 193.006188 
+L 262.101818 212.221239 
+L 303.847273 226.612243 
+L 345.592727 221.184985 
+L 387.338182 233.865525 
+L 429.083636 246.747682 
+L 470.829091 248.163097 
+L 512.574545 243.191525 
+L 554.32 247.830347 
+" clip-path="url(#a3-v01-pd58bd10af7)" style="fill: none; stroke: #0f4d92; stroke-width: 2; stroke-linecap: square"/>
+    <defs>
+     <path id="a3-v01-mdb9287a761" d="M 0 2.5 
+C 0.663008 2.5 1.29895 2.236584 1.767767 1.767767 
+C 2.236584 1.29895 2.5 0.663008 2.5 0 
+C 2.5 -0.663008 2.236584 -1.29895 1.767767 -1.767767 
+C 1.29895 -2.236584 0.663008 -2.5 0 -2.5 
+C -0.663008 -2.5 -1.29895 -2.236584 -1.767767 -1.767767 
+C -2.236584 -1.29895 -2.5 -0.663008 -2.5 0 
+C -2.5 0.663008 -2.236584 1.29895 -1.767767 1.767767 
+C -1.29895 2.236584 -0.663008 2.5 0 2.5 
+z
+" style="stroke: #0f4d92"/>
+    </defs>
+    <g clip-path="url(#a3-v01-pd58bd10af7)">
+     <use xlink:href="#a3-v01-mdb9287a761" x="95.12" y="69.788903" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a3-v01-mdb9287a761" x="136.865455" y="155.335016" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a3-v01-mdb9287a761" x="178.610909" y="187.350267" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a3-v01-mdb9287a761" x="220.356364" y="193.006188" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a3-v01-mdb9287a761" x="262.101818" y="212.221239" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a3-v01-mdb9287a761" x="303.847273" y="226.612243" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a3-v01-mdb9287a761" x="345.592727" y="221.184985" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a3-v01-mdb9287a761" x="387.338182" y="233.865525" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a3-v01-mdb9287a761" x="429.083636" y="246.747682" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a3-v01-mdb9287a761" x="470.829091" y="248.163097" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a3-v01-mdb9287a761" x="512.574545" y="243.191525" style="fill: #0f4d92; stroke: #0f4d92"/>
+     <use xlink:href="#a3-v01-mdb9287a761" x="554.32" y="247.830347" style="fill: #0f4d92; stroke: #0f4d92"/>
+    </g>
+   </g>
+   <g id="a3-v01-patch_3">
+    <path d="M 76.752 269.568 
+L 76.752 48.384 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="a3-v01-patch_4">
+    <path d="M 76.752 269.568 
+L 572.688 269.568 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="a3-v01-patch_5">
+    <path d="M 381.578254 98.900743 
+Q 405.024323 171.869939 428.128374 243.7747 
+" style="fill: none; stroke: #b64342; stroke-linecap: round"/>
+    <path d="M 428.842875 239.133635 
+L 428.128374 243.7747 
+L 424.844222 240.41846 
+" style="fill: none; stroke: #b64342; stroke-linecap: round"/>
+   </g>
+   <g id="a3-v01-text_23">
+    <g id="a3-v01-patch_6">
+     <path d="M 299.9232 96.495606 
+L 450.494841 96.495606 
+Q 455.219841 96.495606 455.219841 91.770606 
+L 455.219841 66.386036 
+Q 455.219841 61.661036 450.494841 61.661036 
+L 299.9232 61.661036 
+Q 295.1982 61.661036 295.1982 66.386036 
+L 295.1982 91.770606 
+Q 295.1982 96.495606 299.9232 96.495606 
+z
+" style="fill: #ffffff; stroke: #d5dee6; stroke-linejoin: miter"/>
+    </g>
+    <text style="font-size: 10.5px; font-family: 'DejaVu Sans'" transform="translate(299.9232 75.594249)">Checkpoint đã chọn</text>
+    <text style="font-size: 10.5px; font-family: 'DejaVu Sans'" transform="translate(299.9232 88.19712)">epoch 9 · Log Loss 0,353571</text>
+   </g>
+   <g id="a3-v01-text_24">
+    <text style="font-size: 13.2px; font-family: 'DejaVu Sans'; text-anchor: middle" x="324.72" y="42.384" transform="rotate(-0 324.72 42.384)">Diễn biến chọn checkpoint A3 trên Junyi</text>
+   </g>
+   <g id="a3-v01-PathCollection_1">
+    <defs>
+     <path id="a3-v01-m0cedb397bc" d="M 0 4.873397 
+C 1.29244 4.873397 2.532119 4.359905 3.446012 3.446012 
+C 4.359905 2.532119 4.873397 1.29244 4.873397 0 
+C 4.873397 -1.29244 4.359905 -2.532119 3.446012 -3.446012 
+C 2.532119 -4.359905 1.29244 -4.873397 0 -4.873397 
+C -1.29244 -4.873397 -2.532119 -4.359905 -3.446012 -3.446012 
+C -4.359905 -2.532119 -4.873397 -1.29244 -4.873397 0 
+C -4.873397 1.29244 -4.359905 2.532119 -3.446012 3.446012 
+C -2.532119 4.359905 -1.29244 4.873397 0 4.873397 
+z
+" style="stroke: #b64342"/>
+    </defs>
+    <g clip-path="url(#a3-v01-pd58bd10af7)">
+     <use xlink:href="#a3-v01-m0cedb397bc" x="429.083636" y="246.747682" style="fill: #b64342; stroke: #b64342"/>
+    </g>
+   </g>
+  </g>
+  <g id="a3-v01-text_25">
+   <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="76.752" y="317.952" transform="rotate(-0 76.752 317.952)">Selection cố định · 15.847 người học · 1.600.343 tương tác · seed 42</text>
+  </g>
+  <g id="a3-v01-text_26">
+   <text style="font-size: 9.5px; font-family: 'DejaVu Sans'; text-anchor: start" x="76.752" y="333.504" transform="rotate(-0 76.752 333.504)">Chọn checkpoint theo cải thiện tối thiểu 0,0001 và patience 3.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="a3-v01-pd58bd10af7">
+   <rect x="76.752" y="48.384" width="495.936" height="221.184"/>
+  </clipPath>
+ </defs>
+</svg>
+</div><figcaption>Chọn checkpoint A3 trên cùng nhóm selection, seed 42. Chấm đỏ đánh dấu checkpoint được chọn theo quy tắc đã chốt.</figcaption></figure><div class="table-scroll"><table><thead><tr><th>Mô hình</th><th>Cấu hình</th><th>Epoch đã chạy</th><th>Epoch đã chọn</th><th>Log Loss selection</th></tr></thead><tbody><tr><td>A0</td><td>AKT không đồ thị</td><td>12</td><td>9</td><td>0,353580</td></tr><tr><td>A1</td><td>Đồ thị cố định</td><td>12</td><td>9</td><td>0,353562</td></tr><tr><td>A2</td><td>Độ tin cậy cạnh</td><td>12</td><td>9</td><td>0,353567</td></tr><tr><td>A3</td><td>Độ tin cậy cạnh và cổng</td><td>12</td><td>9</td><td>0,353571</td></tr></tbody></table></div><p>Các điểm trong bảng thuộc tập dùng chọn checkpoint. Cần đánh giá độc lập và khoảng bất định để kết luận mức độ cải thiện. A0 lịch sử chọn epoch bằng validation batch 1, riêng checkpoint epoch 9 đã được chấm lại bằng batch 128. Đối chiếu lại toàn bộ lịch sử chọn epoch A0 vẫn còn thiếu.</p><p>Để biết mô hình thực sự đưa thông tin đồ thị vào dự báo đến mức nào, đã đọc riêng cơ chế cổng từ checkpoint được chọn và ngữ cảnh quá khứ trong cache. Có 38,49% lượt trả lời selection có ngữ cảnh đồ thị đủ điều kiện. Trên nhóm này, giá trị cổng trung vị là 0,7742 trên thang 0–1. Ảnh hưởng cuối còn phụ thuộc hệ số đồ thị và thông tin tiên quyết quan sát được. Thống kê cơ chế được dựng lại trên CPU, kiểm CUDA riêng và đối chứng tắt đồ thị trên tập độc lập còn chờ.</p><p>Nhánh Junyi đã có đủ A0–A3 ở bước selected-fit. Kết quả bổ sung bằng chứng mô hình học được và xuất dự đoán có thể so sánh theo cùng tập target. Refit, calibration, đánh giá độc lập, đối chứng cổng trên tập độc lập và hiệu quả quyết định lộ trình trong mô phỏng còn chờ. RQ3 cần các bước đó để kết luận về hệ thống học tập thích ứng.</p><details><summary>Metric dự báo và tài nguyên đã kiểm</summary><p>A3 có AUC 0,805992, Log Loss 0,353571, Brier 0,107698, ECE 0,004120. Hàm chấm metric dùng chung với GAM-KT, ECE 15 nhóm. AUC theo dõi phân biệt đúng/sai, Brier và ECE bổ sung kiểm chất lượng xác suất. Các lượt A3 dùng tổng 52,2 phút trong function GPU. Pha train trung bình 200,2 giây mỗi epoch. Trung bình 1.439 mẫu NVML là 28,82%, VRAM đỉnh 5,65 GiB. Chuẩn bị snapshot và upload diễn ra trước gọi GPU. Việc tải và nén artifact diễn ra sau xác nhận dừng App. Modal báo tổng metered toàn workspace 22,61 USD, billed 0,00 USD. Trần toàn KLTN là 30 USD. Mục tiêu GPU trung bình trên 50% còn chưa đạt.</p></details></section>
 <section id="cap-nhat-20261114-a2-dispatch"><h2>14/11 — A2 hoàn tất bước chọn checkpoint trên Junyi</h2><p>Để kiểm tra độ tin cậy từng cạnh có giúp mô hình dự báo tốt hơn hay không trong RQ3, đã hoàn tất huấn luyện A2 trên Junyi. A2 bổ sung trọng số độ tin cậy vào AKT NonRasch. Bộ trọng số được ước lượng từ TRAIN80 trước khi học mô hình. Lượt này dùng Development outer fold 4 theo protocol đã chốt. Tập train gồm 126.774 người học và 13.347.331 lượt trả lời, tập chọn checkpoint gồm 15.847 người học và 1.600.343 lượt trả lời. Các nhóm người học được tách riêng và giữ đúng ranh giới dữ liệu của A0/A1.</p><p>Sau mỗi epoch, mô hình dự đoán trên nhóm chọn checkpoint. Log Loss theo dõi mức phù hợp của xác suất dự báo với câu trả lời thực tế và phạt mạnh các dự đoán sai nhưng quá tự tin. A2 đã chạy 12 epoch, chọn checkpoint epoch 9 và nạp lại thành công. Toàn bộ 1.600.343 dự đoán xuất ra khớp quần thể và thứ tự thời gian, không có bài tập OOV.</p><p>Epoch 10 có điểm thấp hơn epoch 9 khoảng 0,000045, chưa vượt mức cải thiện tối thiểu 0,0001 đã chốt. Vì vậy bộ chọn giữ epoch 9 và dừng sau ba epoch chưa cải thiện đủ. Đây là kết quả của cùng quy tắc chọn checkpoint được áp dụng cho các biến thể AKT.</p><figure><div class="svg-frame"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="590.4pt" height="345.6pt" viewBox="0 0 590.4 345.6" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">

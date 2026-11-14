@@ -1,5 +1,39 @@
 # Báo cáo tiến độ khóa luận — cập nhật 14/11/2026
 
+## 14/11 — A0–A3 đã hoàn tất chọn checkpoint trên Junyi
+
+Sau A0 không dùng đồ thị, A1 dùng đồ thị cố định và A2 dùng độ tin cậy từng cạnh, đã hoàn tất A3 với thêm một cổng học điều chỉnh ảnh hưởng đồ thị. Bốn cấu hình tạo thành chuỗi đối chứng dự báo cho RQ3. Confidence được ước lượng riêng từ TRAIN80 trước khi học A2/A3.
+
+A3 đã chạy 12 epoch và chọn checkpoint epoch 9 theo cùng quy tắc cải thiện tối thiểu 0,0001 và patience 3. Mỗi epoch học đủ 13.347.331 lượt trả lời của 126.774 người học. Tập chọn checkpoint giữ riêng 15.847 người học, với 1.600.343 lượt trả lời. Đã đối chiếu split, vocabulary, 27 trường cấu hình học, seed và khởi tạo backbone với các bản trước.
+
+Sau khi học, đã nạp lại checkpoint được chọn và xuất đủ dự đoán selection, kiểm đúng thứ tự thời gian và tập tương tác, 0 bài tập ngoài vocabulary. Log Loss được dùng để theo dõi mức phù hợp của xác suất với câu trả lời thực tế, giúp chọn checkpoint theo một quy tắc thống nhất.
+
+![Chọn checkpoint A3](../../../runs/junyi-a3-selected-20261114-01/figures/a3-junyi-selection-v01.svg)
+
+| Mô hình | Cấu hình | Epoch đã chạy | Epoch đã chọn | Log Loss selection |
+|---|---|---|---|---|
+| A0 | AKT không đồ thị | 12 | 9 | 0,353580 |
+| A1 | Đồ thị cố định | 12 | 9 | 0,353562 |
+| A2 | Độ tin cậy cạnh | 12 | 9 | 0,353567 |
+| A3 | Độ tin cậy cạnh và cổng | 12 | 9 | 0,353571 |
+
+Các điểm trong bảng thuộc tập dùng chọn checkpoint. Cần đánh giá độc lập và khoảng bất định để kết luận mức độ cải thiện. A0 lịch sử chọn epoch bằng validation batch 1, riêng checkpoint epoch 9 đã được chấm lại bằng batch 128. Đối chiếu lại toàn bộ lịch sử chọn epoch A0 vẫn còn thiếu.
+
+Để biết mô hình thực sự đưa thông tin đồ thị vào dự báo đến mức nào, đã đọc riêng cơ chế cổng từ checkpoint được chọn và ngữ cảnh quá khứ trong cache. Có 38,49% lượt trả lời selection có ngữ cảnh đồ thị đủ điều kiện. Trên nhóm này, giá trị cổng trung vị là 0,7742 trên thang 0–1. Ảnh hưởng cuối còn phụ thuộc hệ số đồ thị và thông tin tiên quyết quan sát được. Thống kê cơ chế được dựng lại trên CPU, kiểm CUDA riêng và đối chứng tắt đồ thị trên tập độc lập còn chờ.
+
+Nhánh Junyi đã có đủ A0–A3 ở bước selected-fit. Kết quả bổ sung bằng chứng mô hình học được và xuất dự đoán có thể so sánh theo cùng tập target. Refit, calibration, đánh giá độc lập, đối chứng cổng trên tập độc lập và hiệu quả quyết định lộ trình trong mô phỏng còn chờ. RQ3 cần các bước đó để kết luận về hệ thống học tập thích ứng.
+
+Các lượt A3 dùng tổng 52,2 phút trong function GPU. Pha train trung bình 200,2 giây mỗi epoch. Trung bình 1.439 mẫu NVML là 28,82%, VRAM đỉnh 5,65 GiB. Chuẩn bị snapshot và upload diễn ra trước gọi GPU. Việc tải và nén artifact diễn ra sau xác nhận dừng App. Modal báo tổng metered toàn workspace 22,61 USD, billed 0,00 USD. Trần toàn KLTN là 30 USD. Mục tiêu GPU trung bình trên 50% còn chưa đạt.
+
+| Metric A3 trên selection | Giá trị | Mục đích |
+|---|---|---|
+| AUC | 0,805992 | Phân biệt câu trả lời đúng/sai |
+| Log Loss | 0,353571 | Độ phù hợp của xác suất |
+| Brier | 0,107698 | Sai lệch bình phương xác suất |
+| ECE | 0,004120 | Độ khớp xác suất và tỷ lệ đúng, 15 nhóm |
+
+[Nghiệm thu A3](../../../runs/junyi-a3-selected-20261114-01/a3-final-acceptance.json), [hồ sơ và giới hạn](../../../runs/junyi-a3-selected-20261114-01/README.md), [gói model](../../../../experiments/akt/results/model-export-a3-batch128-20261114-01/README.md).
+
 ## 14/11 — A2 hoàn tất bước chọn checkpoint trên Junyi
 
 Để kiểm tra độ tin cậy từng cạnh có giúp mô hình dự báo tốt hơn hay không trong RQ3, đã hoàn tất huấn luyện A2 trên Junyi. A2 bổ sung trọng số độ tin cậy vào AKT NonRasch. Bộ trọng số được ước lượng từ TRAIN80 trước khi học mô hình. Lượt này dùng Development outer fold 4 theo protocol đã chốt. Tập train gồm 126.774 người học và 13.347.331 lượt trả lời, tập chọn checkpoint gồm 15.847 người học và 1.600.343 lượt trả lời. Các nhóm người học được tách riêng và giữ đúng ranh giới dữ liệu của A0/A1.

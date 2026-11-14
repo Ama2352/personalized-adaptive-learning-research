@@ -1,27 +1,46 @@
 {
-  "status": "A3_PARTIAL_CHECKPOINT_VERIFIED",
-  "closed": false,
+  "status": "A3_SELECTED_FIT80_COMPLETE_ARTIFACTS_VERIFIED",
+  "closed": true,
   "prior_evidence": "research_tracking/runs/junyi-confidence-completion-20261114-01",
   "snapshot": "artifacts/akt/staged/junyi-a3-expert-20261114-03",
   "execution_id": "modal-junyi-a3-staged-h100-20261114-02",
   "gpu_started": false,
   "token_refresh_required": false,
   "next_steps": [
-    "Kiểm snapshot03, runtime/upstream và cache A3 trên CPU local",
-    "Đối soát cận reservation lịch sử, giữ toàn KLTN30USD",
-    "Xác nhận token đủ thời hạn trước GPU",
-    "Training có checkpoint, dừng GPU trước tải artifact"
+    "Tạo bundle mới cho công việc tiếp theo, không sửa hồ sơ đã niêm phong này",
+    "A0–A3 Junyi đã selected-fit, còn refit/calibration/đánh giá độc lập theo protocol",
+    "Đối chiếu ranking đầy đủ A0 khi dùng validation batch128",
+    "RQ3 còn đối chứng graph-off, ổn định, perturbation và quyết định/vòng kín; thống kê gate CPU là mô tả",
+    "Kiểm lại ngân sách và workload có ích trước khoản Modal tiếp theo trong trần toàn KLTN30USD"
   ],
   "budget_admission": "budget-admission-local.json",
   "snapshot_verified": true,
   "active_exec_session": null,
-  "app_id": "ap-T7LjfYYBIS79yKxCOfnwxR",
+  "app_id": "ap-kJfF0SUOKiFlC9LiTlnaMp",
   "gpu_stopped_acknowledged": true,
   "completed_epochs": 6,
   "network_recovery": "recovery-stop-acknowledged01.json",
-  "complete_epochs": 6,
-  "latest_output": "experiments/akt/results/modal-junyi-a3-staged-h100-20261114-01",
+  "complete_epochs": 12,
+  "latest_output": "experiments/akt/results/modal-junyi-a3-staged-h100-20261114-02",
   "verified_tranches": [
-    "modal-junyi-a3-staged-h100-20261114-01"
-  ]
+    "modal-junyi-a3-staged-h100-20261114-01",
+    "modal-junyi-a3-staged-h100-20261114-02"
+  ],
+  "selected_epoch": 9,
+  "export_model": "D:\\Dev\\KLTN\\experiments\\akt\\results\\model-export-a3-batch128-20261114-01\\MODEL_INDEX.json",
+  "acceptance": "a3-final-acceptance.json",
+  "refit_completed": false,
+  "calibration_completed": false,
+  "independent_evaluation_completed": false,
+  "action": "READ_ONLY_CLOSED_EVIDENCE",
+  "active_processes": [],
+  "gpu_utilization_goal_50_percent_met": false,
+  "mean_sampled_gpu_utilization": 28.823488533703962,
+  "budget_at_closeout": {
+    "historical_reserved_upper_usd": 27.05854469538636,
+    "safety_reserve_usd": 2.5,
+    "last_provider_metered_usd": 22.60665918,
+    "last_provider_billed_usd": 0.0,
+    "project_ceiling_usd": 30
+  }
 }

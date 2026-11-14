@@ -29,6 +29,13 @@ def main():
     assert terminal['status'] == 'JUNYI_A3_SELECTED_ONLY_COMPLETE'
     assert terminal['full_role_coverage'] and terminal['comparison_population_matched']
     epochs, chosen = terminal['complete_epochs'], terminal['selected_epoch']
+    from knowledge_tracing.akt.training import EarlyStopping
+    stopper = EarlyStopping(patience=3, min_delta=.0001)
+    for row in terminal['history']:
+        stopped = stopper.observe(row['epoch'], row['validation']['native_bce'])
+        assert not stopped or row['epoch'] == epochs
+    assert stopper.best_epoch == chosen
+    assert stopper.stale_epochs >= 3 or epochs == 20
     assert terminal['optimizer_steps'] == epochs * 1818
     assert terminal['trained_targets'] == epochs * 13347331
     checkpoint = logical / f'checkpoints/epoch-{chosen:03}/state.pt'
@@ -91,6 +98,7 @@ def main():
         probability_sha256=terminal['validation']['probability_sha256'], predictions_sha256=sha(predictions),
         archive_sha256=complete['archive_sha256'], archive_files=complete['files'],
         optimizer_rng_verified=True, checkpoint_tensors_finite=True, chronology_verified=True,
+        early_stopping_replayed_from_history=True,
         model_comparison_boundary_verified=True, refit_completed=False, calibration_completed=False,
         independent_evaluation_completed=False, gpu_stopped=True)
     write_new(HERE / 'a3-final-acceptance.json', acceptance)

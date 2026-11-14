@@ -1,5 +1,12 @@
 # Chỉ mục bằng chứng
 
+## 14/11 — A3 selected-fit, model và cơ chế cổng đã lưu
+
+[Hồ sơ A3](runs/junyi-a3-selected-20261114-01/README.md), [nghiệm thu](runs/junyi-a3-selected-20261114-01/a3-final-acceptance.json) và [đối chiếu](runs/junyi-a3-selected-20261114-01/a3-comparison-audit.json). A3 đã hoàn tất 12 epoch, chọn epoch 9, học đủ TRAIN80 13.347.331 target mỗi epoch. Đã kiểm đủ 1.600.343 dự đoán selection, target/order/probability identity, 0 OOV, checkpoint/Adam/RNG và gói model bốn file trên D. Log Loss native selection 0.35357115. A0–A3 expert đã hoàn tất selected-fit, đánh giá độc lập và các bước cuối còn chờ.
+
+[Thống kê gate CPU](runs/junyi-a3-selected-20261114-01/a3-gate-selection-audit.json) có 615981 target với ngữ cảnh đủ điều kiện trên toàn selection. Đây là mô tả từ checkpoint/cache, kiểm CUDA riêng và graph-off độc lập còn chờ. Hồ sơ giữ cả lỗi mạng local, bằng chứng server dừng, resume và mọi checkpoint/predictions trên D.
+
+
 ## 14/11 — A2 Junyi đã hoàn tất selected-fit và xuất model
 
 [Hồ sơ](runs/junyi-confidence-completion-20261114-01/README.md), [nghiệm thu](runs/junyi-confidence-completion-20261114-01/a2-final-acceptance.json) và [metrics](runs/junyi-confidence-completion-20261114-01/a2-selection-metrics.json) giữ 12 epoch/chọn 9, đầy đủ TRAIN80 và 1.600.343 dự đoán selection, 0 OOV, checkpoint/Adam/RNG, chronology và probability digest khớp. Gói model bốn file và 210 artifact lượt cuối nằm trên D. Figure SVG/PNG/CSV trong bundle. Hai H100 đã dừng. A0/A1/A2 có điểm chọn checkpoint gần nhau, chưa có kết luận hơn kém trên đánh giá độc lập. Mẫu NVML toàn hai lượt trung bình 32,23%, chưa đạt mục tiêu 50%.

@@ -1,5 +1,14 @@
 # Tiến độ nghiên cứu
 
+## Mốc 14/11 — A0–A3 expert Junyi đã selected-fit, A3 đã xuất model
+
+A3 đã hoàn tất 12 epoch, chọn epoch 9, học đủ TRAIN80 13.347.331 target mỗi epoch. Đã kiểm đủ 1.600.343 dự đoán selection, target/order/probability identity, 0 OOV, checkpoint/Adam/RNG và gói model bốn file trên D. Log Loss native selection 0.35357115. A0–A3 expert đã hoàn tất selected-fit, đánh giá độc lập và các bước cuối còn chờ.
+
+Hai lượt A3 có tổng function 52.25 phút, mẫu NVML trung bình 28.82%, VRAM đỉnh 5789 MiB. H100 đã dừng trước tải/nén artifact. Mục tiêu GPU trung bình trên 50% còn thiếu. Lượt đầu mất kết nối local, server đã kết thúc đúng giới hạn và đã phục hồi checkpoint partial epoch7/bước271. Metered toàn workspace 22.61 USD, billed0. Cận lịch sử 27.0585 USD cộng dự phòng 2.50 USD nằm trong trần toàn KLTN30USD.
+
+[Hồ sơ A3](runs/junyi-a3-selected-20261114-01/README.md), [nghiệm thu](runs/junyi-a3-selected-20261114-01/a3-final-acceptance.json), [đối chiếu](runs/junyi-a3-selected-20261114-01/a3-comparison-audit.json). Đã cập nhật hai báo cáo GVHD và giữ figure SVG/PNG/CSV cùng nguồn. Refit/calibration, graph-off, ổn định đa seed, perturbation, learned-graph và kết quả vòng kín còn chờ.
+
+
 ## Mốc 14/11 — A2 Junyi đã hoàn tất selected-fit, model và số liệu đã lưu
 
 A0/A1/A2 của nhánh Junyi hiện đều có 12 epoch/chọn checkpoint 9. A2 đã học đủ TRAIN80 với 13.347.331 target mỗi epoch và xuất 1.600.343 dự đoán selection, 0 OOV. Đã kiểm thứ tự/định danh/xác suất, checkpoint/Adam/RNG và gói model bốn file trên D. Có [nghiệm thu](runs/junyi-confidence-completion-20261114-01/a2-final-acceptance.json), [metrics dùng chung](runs/junyi-confidence-completion-20261114-01/a2-selection-metrics.json), [đối chiếu](runs/junyi-confidence-completion-20261114-01/a2-comparison-audit.json), figure SVG/PNG/CSV và hai báo cáo GVHD đã cập nhật.

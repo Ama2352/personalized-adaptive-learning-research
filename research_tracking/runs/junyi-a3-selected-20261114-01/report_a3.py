@@ -124,6 +124,8 @@ def main():
                  sha256=sha(prefix.with_suffix(ext))) for ext in ('.svg', '.png', '.csv')}))
     comparison = read(HERE / 'a3-comparison-audit.json')
     metrics = read(HERE / 'a3-selection-metrics.json')['metrics']
+    gate_audit = read(HERE / 'a3-gate-selection-audit.json')
+    assert gate_audit['status'] == 'PASS_CPU_SELECTED_GATE_CONTEXT_AUDIT'
     billing = read(HERE / 'billing-after.json')
     heading = '14/11 — A0–A3 đã hoàn tất chọn checkpoint trên Junyi'
     paragraphs = [
@@ -137,12 +139,18 @@ def main():
         'Sau khi học, đã nạp lại checkpoint được chọn và xuất đủ dự đoán selection, kiểm đúng thứ tự thời gian '
         'và tập tương tác, 0 bài tập ngoài vocabulary. Log Loss được dùng để theo dõi mức phù hợp của xác suất '
         'với câu trả lời thực tế, giúp chọn checkpoint theo một quy tắc thống nhất.',
-        'Các điểm dưới đây thuộc tập dùng chọn checkpoint. Cần đánh giá độc lập và khoảng bất định để '
+        'Các điểm trong bảng thuộc tập dùng chọn checkpoint. Cần đánh giá độc lập và khoảng bất định để '
         'kết luận mức độ cải thiện. A0 lịch sử chọn epoch bằng validation batch 1, riêng checkpoint epoch 9 '
         'đã được chấm lại bằng batch 128. Đối chiếu lại toàn bộ lịch sử chọn epoch A0 vẫn còn thiếu.',
+        'Để biết mô hình thực sự đưa thông tin đồ thị vào dự báo đến mức nào, '
+        'đã đọc riêng cơ chế cổng từ checkpoint được chọn và ngữ cảnh quá khứ trong cache. '
+        f"Có {vn(gate_audit['active_fraction'] * 100, 2)}% lượt trả lời selection có ngữ cảnh đồ thị đủ điều kiện. "
+        f"Trên nhóm này, giá trị cổng trung vị là {vn(gate_audit['gate_on_active_targets']['median'], 4)} trên thang 0–1. "
+        'Ảnh hưởng cuối còn phụ thuộc hệ số đồ thị và thông tin tiên quyết quan sát được. '
+        'Thống kê cơ chế được dựng lại trên CPU, kiểm CUDA riêng và đối chứng tắt đồ thị trên tập độc lập còn chờ.',
         'Nhánh Junyi đã có đủ A0–A3 ở bước selected-fit. Kết quả bổ sung bằng chứng mô hình học được và '
         'xuất dự đoán có thể so sánh theo cùng tập target. Refit, calibration, đánh giá độc lập, '
-        'phân tích cổng theo từng tương tác và hiệu quả quyết định lộ trình trong mô phỏng còn chờ. '
+        'đối chứng cổng trên tập độc lập và hiệu quả quyết định lộ trình trong mô phỏng còn chờ. '
         'RQ3 cần các bước đó để kết luận về hệ thống học tập thích ứng.'
     ]
     labels = {'A0': 'AKT không đồ thị', 'A1': 'Đồ thị cố định',
@@ -150,10 +158,12 @@ def main():
     table_rows = [(item['model'].replace('_EXPERT', ''), labels[item['model'].replace('_EXPERT', '')],
                    str(item['complete_epochs']), str(item['selected_epoch']), vn(item['native_bce']))
                   for item in comparison['models']]
-    resource = (f"Các lượt A3 dùng tổng {function_seconds / 60:.1f} phút trong function GPU. "
-        f"Trung bình {len(samples):,} mẫu NVML là {vn(mean_gpu, 2)}%, VRAM đỉnh "
+    count_text = format(len(samples), ',').replace(',', '.')
+    resource = (f"Các lượt A3 dùng tổng {vn(function_seconds / 60, 1)} phút trong function GPU. "
+        f"Pha train trung bình {vn(performance['train_seconds_mean'], 1)} giây mỗi epoch. "
+        f"Trung bình {count_text} mẫu NVML là {vn(mean_gpu, 2)}%, VRAM đỉnh "
         f"{vn(performance['peak_vram_mib'] / 1024, 2)} GiB. "
-        'Chuẩn bị snapshot và upload diễn ra trước gọi GPU; tải và nén artifact diễn ra sau xác nhận dừng App. '
+        'Chuẩn bị snapshot và upload diễn ra trước gọi GPU. Việc tải và nén artifact diễn ra sau xác nhận dừng App. '
         f"Modal báo tổng metered toàn workspace {vn(float(billing['billing']['metered_cost']), 2)} USD, "
         f"billed {vn(float(billing['billing']['billed_cost']), 2)} USD. Trần toàn KLTN là 30 USD.")
     if mean_gpu < 50:
@@ -173,11 +183,11 @@ def main():
     html_section += table + ''.join('<p>' + escape(text) + '</p>' for text in paragraphs[3:])
     html_section += '<details><summary>Metric dự báo và tài nguyên đã kiểm</summary><p>'
     html_section += escape(f"A3 có AUC {vn(metrics['auc'])}, Log Loss {vn(metrics['log_loss'])}, "
-        f"Brier {vn(metrics['brier'])}, ECE {vn(metrics['ece'])}. Hàm chấm metric dùng chung với GAM-KT, ECE15nhóm. "
+        f"Brier {vn(metrics['brier'])}, ECE {vn(metrics['ece'])}. Hàm chấm metric dùng chung với GAM-KT, ECE 15 nhóm. "
         'AUC theo dõi phân biệt đúng/sai, Brier và ECE bổ sung kiểm chất lượng xác suất. ' + resource)
     html_section += '</p></details></section>\n'
     html_path = REPORT / 'BAO_CAO_NGHIEN_CUU.html'
-    raw = html_path.read_text(encoding='utf-8')
+    raw = html_path.read_bytes().decode('utf-8')
     assert 'cap-nhat-20261114-a3-complete' not in raw
     marker = '<section id="cap-nhat-20261114-a2-dispatch">'
     assert marker in raw
@@ -185,20 +195,27 @@ def main():
     inventory = IdInventory()
     inventory.feed(raw)
     assert all(count == 1 for count in Counter(inventory.ids).values())
-    html_path.write_text(raw, encoding='utf-8')
+    html_path.write_bytes(raw.encode('utf-8'))
     markdown = '## ' + heading + '\n\n' + '\n\n'.join(paragraphs[:3]) + '\n\n'
     markdown += '![Chọn checkpoint A3](../../../runs/junyi-a3-selected-20261114-01/figures/a3-junyi-selection-v01.svg)\n\n'
     markdown += '| ' + ' | '.join(table_header) + ' |\n|---|---|---|---|---|\n'
     markdown += ''.join('| ' + ' | '.join(row) + ' |\n' for row in table_rows) + '\n'
     markdown += '\n\n'.join(paragraphs[3:]) + '\n\n' + resource + '\n\n'
+    markdown += '| Metric A3 trên selection | Giá trị | Mục đích |\n|---|---|---|\n'
+    for label, key, purpose in (('AUC', 'auc', 'Phân biệt câu trả lời đúng/sai'),
+            ('Log Loss', 'log_loss', 'Độ phù hợp của xác suất'),
+            ('Brier', 'brier', 'Sai lệch bình phương xác suất'),
+            ('ECE', 'ece', 'Độ khớp xác suất và tỷ lệ đúng, 15 nhóm')):
+        markdown += f'| {label} | {vn(metrics[key])} | {purpose} |\n'
+    markdown += '\n'
     markdown += '[Nghiệm thu A3](../../../runs/junyi-a3-selected-20261114-01/a3-final-acceptance.json), '
     markdown += '[hồ sơ và giới hạn](../../../runs/junyi-a3-selected-20261114-01/README.md), '
     markdown += '[gói model](../../../../experiments/akt/results/model-export-a3-batch128-20261114-01/README.md).\n\n'
     md_path = REPORT / 'BAO_CAO.md'
-    text = md_path.read_text(encoding='utf-8')
+    text = md_path.read_bytes().decode('utf-8')
     marker_md = '## 14/11 — A2 hoàn tất bước chọn checkpoint trên Junyi'
     assert marker_md in text and heading not in text
-    md_path.write_text(text.replace(marker_md, markdown + marker_md, 1), encoding='utf-8')
+    md_path.write_bytes(text.replace(marker_md, markdown + marker_md, 1).encode('utf-8'))
     write_new(HERE / 'a3-report-verification.json', dict(status='PASS_STATIC_A3_REPORT_AND_FIGURE_OUTPUTS',
         duplicate_html_ids=False, standalone_figure_files=4, browser_layout_tested=False,
         reports={str(path.relative_to(ROOT)): sha(path) for path in (html_path, md_path)}))

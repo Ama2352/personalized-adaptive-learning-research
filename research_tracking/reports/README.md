@@ -1,5 +1,10 @@
 # Mục lục báo cáo và phân tích KLTN
 
+## 14/11 — A3 hoàn tất selected-fit, đã cập nhật báo cáo GVHD
+
+[Hồ sơ](../runs/junyi-a3-selected-20261114-01/README.md) và [nghiệm thu](../runs/junyi-a3-selected-20261114-01/a3-final-acceptance.json) giữ A3 đã hoàn tất 12 epoch, chọn epoch 9, học đủ TRAIN80 13.347.331 target mỗi epoch. Đã kiểm đủ 1.600.343 dự đoán selection, target/order/probability identity, 0 OOV, checkpoint/Adam/RNG và gói model bốn file trên D. Log Loss native selection 0.35357115. A0–A3 expert đã hoàn tất selected-fit, đánh giá độc lập và các bước cuối còn chờ. Có figure SVG/PNG/CSV, thống kê gate CPU, hai lượt H100 đã dừng và [HTML GVHD](../supervisor_reports/2026-11-10/01_tien_do/BAO_CAO_NGHIEN_CUU.html) đã cập nhật.
+
+
 ## 14/11 — A3 kiểm snapshot, cấp training có giới hạn
 
 [Hồ sơ A3](../runs/junyi-a3-selected-20261114-01/README.md) giữ cùng dữ liệu/cấu hình học với A2, source03 đã qua Gate Linux2.615ca, confidence TRAIN80 và cache A3. Đã đối soát reservation lịch sử, giữ trần30USD/dự phòng cuối3USD, cấp tối đa2,60USD cho lượt đầu. Chờ nghiệm thu training, checkpoint và artifact trước cập nhật kết luận nghiên cứu.

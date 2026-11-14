@@ -4,26 +4,20 @@
   "extra_payment_allowed": false,
   "automatic_monthly_budget_reset": false,
   "authorization_reference": "Người dùng ngày 12/11/2026 cho phép tự phân bổ các khoản chi nhỏ, tổng toàn KLTN tối đa 30 USD free credits.",
-  "historical_usage_reserved_upper_usd": 24.868420624863518,
+  "historical_usage_reserved_upper_usd": 27.05854469538636,
   "safety_and_final_inference_reserve_usd": 2.5,
-  "new_allocations": [
-    {
-      "id": "junyi-a3-staged-h100-20261114-02",
-      "cap_usd": 2.6,
-      "purpose_vi": "Tiếp tục A3 từ checkpoint đã kiểm, cùng recipe, một H100 tối đa30phút."
-    }
-  ],
+  "new_allocations": [],
   "stop_rule": "Không mở lượt chạy nếu cận chi phí lịch sử, tổng allocation và dự phòng vượt 30 USD. Nếu chưa xác nhận dừng App thì kiểm trạng thái server trước lượt mới.",
-  "historical_upper_note": "2 USD là dự phòng bảo thủ cho các lượt đã chạy trước ledger, không phải số chi phí đã đối soát cuối kỳ.",
+  "historical_upper_note": "Cận sau đối soátA3 dựa trên metering mốcA1, toàn bộ cận tài nguyên các lượt sau mốc đó và1USD biên trễ. Đây là cận dự phòng, số metering hiện tại được lưu riêng. Khoản dự phòng cuối hiện2,50USD, trần toàn dự án30USD.",
   "provider_metering_note": "Snapshot có thể trễ hoặc được điều chỉnh. Không dùng billing alert làm giới hạn cứng. Mỗi lượt có watchdog, timeout và tối đa một GPU.",
   "last_accounting_snapshot": {
-    "observed_at_utc": "2026-11-12T13:59:26.207958+00:00",
-    "metered_cost_usd": 3.23858233,
-    "credits_applied_usd": 3.23,
+    "observed_at_utc": "2026-11-14T12:28:41.502440+00:00",
+    "metered_cost_usd": 22.60665918,
     "billed_cost_usd": 0.0,
-    "evidence": "research_tracking\\runs\\junyi-batch32-utilization-20261112-01\\billing-after.json",
+    "credits_applied_usd": 22.43,
+    "evidence": "research_tracking/runs/junyi-a3-selected-20261114-01/billing-after.json",
     "containers_empty": true,
-    "full_remaining_matrix_cost_status": "REESTIMATE_WITH_MEASURED_BATCH32_THROUGHPUT_AND_UNKNOWN_CONVERGENCE"
+    "full_remaining_matrix_cost_status": "REESTIMATE_REFIT_CALIBRATION_AND_INDEPENDENT_EVALUATION"
   },
   "gpu_specific_holds": {
     "H100": {
@@ -410,6 +404,22 @@
       "resume_scope": "exact_partial_epoch_sampler",
       "resume_checkpoint_key": "outputs/junyi-a3-expert-selected-20261114-01/checkpoints/inner-batch-epoch-7-step-271-99016b48cbd04085abf1d23b8c9fb319/state.pt",
       "financial_time_basis": "provider_hard_timeout_upper_after_local_disconnect"
+    },
+    {
+      "id": "junyi-a3-staged-h100-20261114-02",
+      "status": "JUNYI_A3_SELECTED_ONLY_COMPLETE",
+      "reserved_upper_closed_usd": 2.190124070522842,
+      "elapsed_upper_seconds": 1640.8865308999957,
+      "actual_isolated_cost_usd": null,
+      "stop_acknowledged": true,
+      "complete_epochs": 12,
+      "verified_files": 216,
+      "archive_sha256": "c64719c12446f8af3f15e07d2e37f9dc9894575d1fb4c28dca9d3346e6ba535a",
+      "checkpoint_sha256": "f195b51f11af805d12208c57449d6d7924973805729bd895ed7e3c58c8d9cbca",
+      "optimizer_rng_verified": true,
+      "resume_scope": "next_complete_epoch",
+      "resume_checkpoint_key": "outputs/junyi-a3-expert-selected-20261114-01/checkpoints/epoch-012/state.pt",
+      "financial_time_basis": "guard_elapsed_plus60"
     }
   ],
   "a0_h100_settlement": {
@@ -545,5 +555,17 @@
       "temporary_reserve_usd": 2.5,
       "reason_vi": "Dành tối đa0,50USD từ dự phòng nội bộ cho A3. Trần toàn dự án30USD và1USD biên metering trễ trong historical_upper tiếp tục áp dụng. Khôi phục dự phòng3USD khi đóng lượt nếu cận chi cho phép."
     }
-  ]
+  ],
+  "accounting_snapshot_history": [
+    {
+      "observed_at_utc": "2026-11-12T13:59:26.207958+00:00",
+      "metered_cost_usd": 3.23858233,
+      "credits_applied_usd": 3.23,
+      "billed_cost_usd": 0.0,
+      "evidence": "research_tracking\\runs\\junyi-batch32-utilization-20261112-01\\billing-after.json",
+      "containers_empty": true,
+      "full_remaining_matrix_cost_status": "REESTIMATE_WITH_MEASURED_BATCH32_THROUGHPUT_AND_UNKNOWN_CONVERGENCE"
+    }
+  ],
+  "historical_upper_note_before_a3_reconciliation": "2 USD là dự phòng bảo thủ cho các lượt đã chạy trước ledger, không phải số chi phí đã đối soát cuối kỳ."
 }

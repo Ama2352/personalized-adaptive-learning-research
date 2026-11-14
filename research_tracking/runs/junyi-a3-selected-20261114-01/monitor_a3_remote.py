@@ -57,15 +57,21 @@ for entry in entries:
             result[name] = json.loads(raw)
 progress_names = sorted(entry.path for entry in entries if entry.path.endswith('-progress.jsonl'))
 if progress_names:
-    raw = read(progress_names[-1].lstrip('/'))
-    if raw:
-        lines = raw.splitlines()
-        for line in reversed(lines):
-            try:
-                result['progress'] = json.loads(line)
-                break
-            except json.JSONDecodeError:
-                continue
+    latest_prefix = progress_names[-1].rsplit('/', 1)[-1][:9]
+    candidates = []
+    for name in progress_names:
+        if name.rsplit('/', 1)[-1].startswith(latest_prefix):
+            raw = read(name.lstrip('/'))
+            if raw:
+                for line in reversed(raw.splitlines()):
+                    try:
+                        candidates.append(json.loads(line))
+                        break
+                    except json.JSONDecodeError:
+                        continue
+    if candidates:
+        result['progress'] = max(candidates, key=lambda event: (
+            event.get('epoch', 0), event.get('training', {}).get('optimizer_steps', 0)))
 raw = read(operation + 'worker.log')
 if raw:
     result['worker_log_tail'] = raw[-2500:]

@@ -1,5 +1,12 @@
 # Ma trận claim–evidence
 
+## Mốc 14/11 — A3 đã học thật, kết luận hiệu quả còn chờ đánh giá độc lập
+
+CLM-RQ3-JUNYI-A3-SELECTED-FIT80-20261114. A3 đã hoàn tất 12 epoch, chọn epoch 9, học đủ TRAIN80 13.347.331 target mỗi epoch. Đã kiểm đủ 1.600.343 dự đoán selection, target/order/probability identity, 0 OOV, checkpoint/Adam/RNG và gói model bốn file trên D. Log Loss native selection 0.35357115. A0–A3 expert đã hoàn tất selected-fit, đánh giá độc lập và các bước cuối còn chờ.
+
+[nghiệm thu](runs/junyi-a3-selected-20261114-01/a3-final-acceptance.json) và [đối chiếu](runs/junyi-a3-selected-20261114-01/a3-comparison-audit.json) ghim cùng dữ liệu, 27 trường training, seed và backbone khởi tạo. Các điểm selection A0–A3 gần nhau, một seed. A0 chỉ checkpoint9 đã replay batch128, ranking đầy đủ còn chờ. Thống kê gate CPU không thay cho đối chứng graph-off, CI learner-level hoặc kết quả vòng kín. Chưa kết luận lợi ích nhân quả hay tương đương thống kê.
+
+
 ## Mốc 14/11 — A2 đã học thật, so sánh selection có giới hạn
 
 CLM-RQ3-JUNYI-A2-SELECTED-FIT80-20261114. [Nghiệm thu](runs/junyi-confidence-completion-20261114-01/a2-final-acceptance.json) xác nhận A2 đủ TRAIN80, 12 epoch/chọn 9, 1.600.343 dự đoán có target/order/probability identity khớp, checkpoint/Adam/RNG và export trên D. [So sánh](runs/junyi-confidence-completion-20261114-01/a2-comparison-audit.json) kiểm dữ liệu, 27 trường training và backbone khởi tạo. Log Loss chọn checkpoint A0/A1/A2 lần lượt 0,35358018/0,35356185/0,35356694. Đây là quan sát mô tả trên nhóm dùng chọn epoch, một seed. A0 chỉ checkpoint 9 đã replay batch128, ranking đầy đủ còn chờ. Chưa suy ra lợi ích đồ thị, tương đương thống kê, nhân quả, độ ổn định đa seed, hiệu chỉnh quanh ngưỡng hay kết quả vòng kín. A3 và đánh giá độc lập còn chờ.
