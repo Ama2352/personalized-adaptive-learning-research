@@ -213,19 +213,34 @@ def collect_outputs(receipt, destination, read_file, *, stop_acknowledged, reuse
             raise ValueError('Inventory thay đổi khi retry tải artifact')
     else:
         write_new(inventory_path, receipt)
+    verified_local = {}
     for name, pin in receipt['files'].items():
         safe_relative(name)
         target = destination / 'files' / Path(*PurePosixPath(name).parts)
         target.parent.mkdir(parents=True, exist_ok=True)
+        blob = (pin['sha256'], pin['bytes'])
         if target.exists():
-            if sha(target) != pin['sha256']:
+            if target.stat().st_size != pin['bytes'] or sha(target) != pin['sha256']:
                 raise ValueError('File local cũ khác artifact remote')
+            verified_local[blob] = target
             continue
         # File tạm ở root đợt tải để recovery trên Windows không vượt MAX_PATH.
         partial = destination / (target.name + '.download.' + uuid.uuid4().hex)
-        if cached_files.get(name)==pin:
-            _copy_verified(cached/'files'/Path(*safe_relative(name).parts),partial,pin)
+        reusable = verified_local.get(blob)
+        if reusable is None and cached_files.get(name)==pin:
+            reusable = cached/'files'/Path(*safe_relative(name).parts)
+        if reusable is not None:
+            if reusable.stat().st_size != pin['bytes'] or sha(reusable) != pin['sha256']:
+                raise ValueError('Output đã nghiệm thu thay đổi trước tái dùng')
+            # Output đã niêm phong giữ chỉ đọc. Hardlink giữ mọi đường dẫn/bằng chứng trên D.
+            try:
+                os.link(reusable, partial)
+            except OSError:
+                _copy_verified(reusable,partial,pin)
+            if sha(partial) != pin['sha256']:
+                raise ValueError('Tái dùng output sai SHA')
             partial.rename(target)
+            verified_local[blob] = target
             continue
         with partial.open('xb') as stream:
             for block in read_file(name):
@@ -235,6 +250,7 @@ def collect_outputs(receipt, destination, read_file, *, stop_acknowledged, reuse
         if partial.stat().st_size != pin['bytes'] or sha(partial) != pin['sha256']:
             raise ValueError('Artifact tải về sai bytes/SHA')
         partial.rename(target)
+        verified_local[blob] = target
     archive = destination / 'artifacts.zip'
     packed=destination/('artifacts.packing.'+uuid.uuid4().hex+'.zip')
     if not archive.exists():

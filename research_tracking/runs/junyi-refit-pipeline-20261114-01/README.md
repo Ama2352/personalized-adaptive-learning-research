@@ -66,3 +66,7 @@ GPUcontroller là `experiments/akt/modal_junyi_refit.py --snapshot <snapshot> --
 ## Tiếp tục H100 theo yêu cầu người dùng
 
 Đã đối soát mốc metering sau các App cũ và giữ1USD biên trễ, reserve cuối1,50USD, trần30USD. Tranche600giây, cap1,25USD, epoch vẫn9. `budget-reconciliation-refit01.json` giữ thay đổi dự phòng do agent chọn. Lần01 bị chặn local vì selected-index metadata nằm trong snapshot vùngresults; chưa gọiApp/GPU. `input-relocation-*-02.json` kiểmSHAtrước/sau copy metadata sangartifacts/refit-inputs, không sửaindexcũ. Bốn snapshotbounded02 đã kiểmCPUđạt. Lần02 đangupload/Appkhởi tạo, chưadispatchGPU theo lần kiểm gần nhất. `advance_refit.py` chỉnghiệmthu/lập request/resume vàpromote, khôngtựgọi cloud; fixture đã kiểm chọncheckpointpartialmớinhất và chặnngânsách.
+
+## Hậu xử lý local tiết kiệm mạng và ổD
+
+Sau khi H100 dừng, collector mới tái dùng output bất biến trùngSHA/bytes trong cùng receipt hoặc receipt trước. Dùng hardlink trên cùng ổD để giữ mọi vị trí artifact mà tránh nhân bản vật lý; có fallbackcopy và kiểmSHA. Input snapshots vẫn copyđộc lập, không hardlinksource/dataset/configs. `tests14.log`/`tests15.log`41ca mỗi lượt có chồng lặp; `host-io-dedup-check.json`/`host-io-link-check.json` kiểm3output chỉ2remote reads, tất cả byte giữ nguyên và samefile thật. Đây là tối ưu local sau stop; numerical source/Gate2667 và identity checkpoint giữ nguyên. Các rawoutputs đã nghiệm thu phải tiếp tục giữ bất biến.
