@@ -109,8 +109,9 @@ class JunyiGraphAKTAdapter:
         _need(phase.condition is self.condition and phase.condition.identity==self._condition_sha
               and phase.condition.encoding.identity==self._encoding_sha,
               'Phase condition/encoding mismatch')
-        _need(phase.view.scope in ('select_train80','raw_selection10'),
-              'A1 Junyi adapter currently supports train80 and selection only')
+        allowed = (('select_train80', 'raw_selection10') if self.condition.train80_origin is None
+                   else ('refit_union90', 'calibration_predict'))
+        _need(phase.view.scope in allowed, 'Junyi adapter phase differs from fitted encoding lineage')
         _need(phase.condition.encoding.native.vocabulary.values==self.encoding.vocabulary.values,
               'Phase/native vocabulary mismatch')
         _need(context_cache is None or (type(context_cache) is GraphContextCache and self._compact_context),
@@ -182,8 +183,8 @@ class JunyiGraphAKTAdapter:
 
     def collate_training(self, entries: Sequence[TrainingWindow]) -> AKTBatch:
         self._integrity()
-        _need(self._ticket is None and self.phase.view.scope=='select_train80',
-              'Fresh train80 phase required for optimizer batches')
+        _need(self._ticket is None and self.phase.view.optimization,
+              'Fresh train80 or refit90 optimization phase required for optimizer batches')
         _need(all(type(entry) is TrainingWindow for entry in entries), 'Typed training windows required')
         batch,evidence = self._collate(tuple(entry.window for entry in entries),[entry.targets for entry in entries])
         self._ticket = _TrainingTicket(batch,_batch_sha(batch,device=self._device),evidence,

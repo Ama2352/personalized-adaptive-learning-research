@@ -37,6 +37,7 @@ class JunyiGraphCondition:
     variant: str = 'A1'
     graph_mode: str = 'expert_declared'
     confidence: JunyiConfidenceBinding | None = None
+    train80_origin: JunyiResearchEncoding | None = field(default=None, repr=False)
     content_sha256: str = field(init=False)
 
     def __post_init__(self):
@@ -45,8 +46,17 @@ class JunyiGraphCondition:
         _need((self.variant == 'A1' and self.confidence is None)
               or (self.variant in ('A2', 'A3') and type(self.confidence) is JunyiConfidenceBinding),
               'Only A1 permits absent fitted confidence; A2/A3 require TRAIN80 binding')
-        _need(type(self.encoding) is JunyiResearchEncoding
-              and self.encoding.fit_view.scope == 'select_train80', 'TRAIN80 Junyi encoding required')
+        _need(type(self.encoding) is JunyiResearchEncoding, 'Typed Junyi encoding required')
+        if self.encoding.fit_view.scope == 'refit_union90':
+            origin = self.train80_origin
+            _need(type(origin) is JunyiResearchEncoding and origin.fit_view.scope == 'select_train80'
+                  and origin.fit_view.roles.identity == self.encoding.fit_view.roles.identity
+                  and origin.fit_view.full_role_coverage and self.encoding.fit_view.full_role_coverage,
+                  'Refit requires full union90 and original full TRAIN80 lineage')
+            origin.assert_for(origin.fit_view)
+        else:
+            _need(self.encoding.fit_view.scope == 'select_train80' and self.train80_origin is None,
+                  'TRAIN80 Junyi encoding required')
         self.encoding.assert_for(self.encoding.fit_view)
         _need(type(self.topology_source_sha256) is str and len(self.topology_source_sha256) == 64
               and all(c in '0123456789abcdef' for c in self.topology_source_sha256),
@@ -71,16 +81,17 @@ class JunyiGraphCondition:
             _need(self.variant == 'A1', 'Fitted confidence required')
             return
         self.confidence.assert_integrity()
+        fitted = self.encoding if self.train80_origin is None else self.train80_origin
         _need(self.variant in ('A2', 'A3')
-              and self.confidence.train_view_identity == self.encoding.fit_view.identity
-              and self.confidence.encoding_identity == self.encoding.identity
+              and self.confidence.train_view_identity == fitted.fit_view.identity
+              and self.confidence.encoding_identity == fitted.identity
               and self.confidence.topology_source_sha256 == self.topology_source_sha256,
               'Confidence must bind exact TRAIN80, encoding and topology')
         _need(tuple((row.parent_id, row.child_id) for row in self.confidence.weights) == self.graph.edges,
               'Confidence edge coverage mismatch')
 
     def _payload(self):
-        return dict(variant=self.variant, graph_mode=self.graph_mode, nodes=self.graph.nodes,
+        payload = dict(variant=self.variant, graph_mode=self.graph_mode, nodes=self.graph.nodes,
             edges=self.graph.edges, direction=self.graph.edge_direction,
             topology_source_sha256=self.topology_source_sha256, encoding=self.encoding.identity,
             train_view=self.encoding.fit_view.identity, roles=self.encoding.fit_view.roles.identity,
@@ -88,9 +99,18 @@ class JunyiGraphCondition:
             history='effective_native_window_prefix',
             graph_pruning='none', audit_schema=AUDIT_SCHEMA,
             role='junyi_condition_only_not_fitted_weights')
+        if self.train80_origin is not None:
+            payload.update(train80_origin=self.train80_origin.identity,
+                           confidence_refit_policy='frozen_train80_through_neural_refit90')
+        return payload
 
     def assert_integrity(self):
         self.encoding.assert_for(self.encoding.fit_view)
+        if self.train80_origin is not None:
+            self.train80_origin.assert_for(self.train80_origin.fit_view)
+            _need(self.train80_origin.fit_view.roles.identity == self.encoding.fit_view.roles.identity
+                  and self.train80_origin.fit_view.full_role_coverage and self.encoding.fit_view.full_role_coverage,
+                  'Refit TRAIN80 origin or union90 changed')
         self._check_confidence()
         _need(self.content_sha256 == _identity(self._payload()), 'Junyi graph condition changed')
 
@@ -145,7 +165,9 @@ def _condition_header(condition):
     return (id(condition.encoding), id(condition.graph), id(condition.graph.nodes),
             id(condition.graph.edges), condition.graph.edge_direction, condition.variant,
             condition.graph_mode, condition.topology_source_sha256, condition.content_sha256,
-            id(condition.confidence), None if condition.confidence is None else id(condition.confidence.weights))
+            id(condition.confidence), None if condition.confidence is None else id(condition.confidence.weights),
+            id(condition.train80_origin), None if condition.train80_origin is None else (
+                _view_header(condition.train80_origin.fit_view), _role_header(condition.train80_origin.fit_view.roles)))
 
 
 @dataclass(frozen=True)
@@ -208,6 +230,9 @@ header kiểm O(1), không hash lại gần198nghìn learner IDs mỗi window.
         encoding = self.condition.encoding
         _need(encoding.identity == self._encoding_identity == _identity(encoding._payload()),
               'Bound Junyi encoding content changed')
+        origin = self.condition.train80_origin
+        if origin is not None:
+            _need(origin.identity == _identity(origin._payload()), 'Frozen TRAIN80 origin changed')
 
     def assert_boundary(self):
         self._light_check()

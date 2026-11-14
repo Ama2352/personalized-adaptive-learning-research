@@ -1,0 +1,89 @@
+{
+  "schema": "junyi-expert-epoch-plan-v1",
+  "scope": "A0_A1_A2_A3_EXPERT_FOLD4",
+  "roles_identity": "7c9a8102e399bdbc6569fc5a929faae525480c86fe0c60d2d805244a80b8e45a",
+  "candidates": {
+    "A0": {
+      "epochs": 9,
+      "checkpoint_sha256": "9d392e1d723872fdc78ad868bc6a1f3c8fc767d9e9ee6e864ec0eb5071995b16",
+      "selected_index_sha256": "566ef6524318d4d92d93f7b6163599fbef8c13ed3bcadf53aabed56e54ddb351"
+    },
+    "A1": {
+      "epochs": 9,
+      "checkpoint_sha256": "42378392367e32eb629666110d860ddda40b5ed17625bb69e3b6292480aec266",
+      "selected_index_sha256": "2e3430d899f353b8e2017db4a6bb82fb377f3d38f4adbeef24a2f04ed62cfae3"
+    },
+    "A2": {
+      "epochs": 9,
+      "checkpoint_sha256": "0f172dffc83e93d08806b6be0ecd5b265c9edfcc3723e8e5740d65d8955f6dd5",
+      "selected_index_sha256": "415bf501b1bee90510f4c6a440bfff1164fa4ef8fa6d916e10b3ddaaf5ad9e46"
+    },
+    "A3": {
+      "epochs": 9,
+      "checkpoint_sha256": "9a38418a61caa646e9810b086e47fca9ac6de208c03e53d9f36e72136adcf618",
+      "selected_index_sha256": "ab0caa4680cd68ebb4f00c36559d82e67a4739caf3391d59abc69854a9c0f051"
+    }
+  },
+  "training_config": {
+    "partition": "development",
+    "source_commit": "01b7e8d7d7c862cabc9467108e3e7f2555653a88",
+    "outer_fold": 4,
+    "seed": 42,
+    "context": 100,
+    "target_block": 100,
+    "max_length": 200,
+    "d_model": 256,
+    "heads": 8,
+    "blocks": 1,
+    "d_ff": 1024,
+    "final_fc": 512,
+    "dropout": 0.05,
+    "kq_same": 1,
+    "separate_qa": false,
+    "n_pid": 0,
+    "batch_size": 128,
+    "lr": 0.0001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.0,
+    "max_grad_norm": 1.0,
+    "inner_val_fraction": 0.1,
+    "min_delta": 0.0001,
+    "patience": 3,
+    "max_epochs": 20,
+    "protocol_version": "akt-nr-exercise-v2-batch128"
+  },
+  "selected_inputs_identity": "1eae85bdbe9fb8e5bb4473351f504a6d69ec5ee08529bb0e1d752f0731b76a0b",
+  "selected_encoding_identity": "0555833f58150121f1149ac7d3c4d0f0cad057b2dc530331e5ffbe83fc040ba1",
+  "numeric_profile": {
+    "max_vram_bytes": 17179869184,
+    "recipe_id": "cgakt-cuda-fp32-batch128-v2",
+    "device": "cuda:0",
+    "initialization": "cpu-default-generator-42-then-device",
+    "dtype": "float32",
+    "seed": 42,
+    "foreach": false,
+    "fused": false,
+    "capturable": false,
+    "differentiable": false,
+    "amsgrad": false,
+    "maximize": false,
+    "decoupled_weight_decay": false,
+    "clip_foreach": "native-default-None",
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": false,
+    "matmul_allow_tf32": false,
+    "cudnn_allow_tf32": false,
+    "matmul_precision": "highest",
+    "cudnn_benchmark": false,
+    "cublas_workspace_config": ":4096:8"
+  },
+  "selection_population_sha256": "c26bac9fbbdcf488dc1c8d7b953663158b53216d980676de70b67819fc470b64",
+  "confidence_policy": "frozen_train80_through_neural_refit90",
+  "system_winner_selected": false,
+  "a0_full_epoch_ranking_batch128_replayed": false,
+  "identity": "1947a3b41f0ade34ee47f479402a5c039990ebb413a13a0f963ee748f1a342a7"
+}

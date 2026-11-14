@@ -25,6 +25,9 @@ def main():
     parser.add_argument('--encoding-input-sha256')
     parser.add_argument('--encoding-input-receipt',type=Path)
     parser.add_argument('--encoding-input-receipt-sha256')
+    parser.add_argument('--scope', choices=('select_train80', 'refit_union90'), default='select_train80')
+    parser.add_argument('--epoch-plan', type=Path)
+    parser.add_argument('--epoch-plan-sha256')
     args=parser.parse_args()
     base=(ROOT/'artifacts/akt/window-cache').resolve()
     if (args.encoding_output.resolve().parent!=base or args.encoding_output.exists()
@@ -33,35 +36,51 @@ def main():
     started=time.monotonic()
     inputs=load_full_selected_cache(args.cache,args.roles,expected_manifest_sha256=args.cache_sha256,
                                    expected_roles_sha256=args.roles_sha256)
+    view, targets = inputs.train, inputs.train_targets
+    plan_identity = None
+    if args.scope == 'refit_union90':
+        from knowledge_tracing.akt.research_junyi_refit import refit_view
+        from knowledge_tracing.akt.research_junyi_selection import _identity
+        if args.epoch_plan is None or file_sha(args.epoch_plan) != args.epoch_plan_sha256:
+            raise ValueError('Refit preprocessing requires pinned epoch plan')
+        plan = json.loads(args.epoch_plan.read_text(encoding='utf-8'))
+        if (plan['identity'] != _identity({key:value for key,value in plan.items() if key!='identity'})
+                or plan['roles_identity'] != inputs.train.roles.identity
+                or plan['selected_inputs_identity'] != inputs.identity):
+            raise ValueError('Epoch plan/source/roles mismatch')
+        refit = refit_view(inputs)
+        view, targets, plan_identity = refit.view, refit.targets, plan['identity']
     source_before=dict(cache=file_sha(args.cache/'manifest.json'),roles=file_sha(args.roles))
     temporary=ROOT/'artifacts/akt/tmp'/args.output.name
     options=dict(temp_dir=temporary)
     if (args.encoding_input is None)!=(args.encoding_input_sha256 is None):
         raise ValueError('Pinned existing encoding required together')
     if args.encoding_input is None:
-        encoding=fit_junyi_research_encoding(inputs.paths,inputs.train,**options)
+        encoding=fit_junyi_research_encoding(inputs.paths,view,**options)
     else:
         if args.encoding_input_receipt is None or args.encoding_input_receipt_sha256 is None:
             raise ValueError('Existing encoding requires original fit lineage receipt')
-        encoding=load_prepared_junyi_encoding(args.encoding_input,args.encoding_input_receipt,view=inputs.train,
+        encoding=load_prepared_junyi_encoding(args.encoding_input,args.encoding_input_receipt,view=view,
             source_data_sha256=inputs.source_identity,expected_file_sha256=args.encoding_input_sha256,
             expected_receipt_sha256=args.encoding_input_receipt_sha256)
-    print(json.dumps(dict(status='FULL_TRAIN80_ENCODING_FITTED',items=len(encoding.native.vocabulary.values),
+    print(json.dumps(dict(status='JUNYI_TRAIN_ENCODING_FITTED',scope=view.scope,items=len(encoding.native.vocabulary.values),
                          encoding_identity=encoding.identity,encoding_reused=args.encoding_input is not None,
                          seconds=time.monotonic()-started)),flush=True)
     base.mkdir(parents=True,exist_ok=True)
     encoding_sha=save_encoding(encoding.native,args.encoding_output)
     write_json(args.encoding_output.with_suffix('.receipt.json'),dict(status='JUNYI_TRAIN_ENCODING_FITTED',
-        fit_view_identity=inputs.train.identity,phase_scope=inputs.train.scope,
+        fit_view_identity=view.identity,phase_scope=view.scope,
         source_data_sha256=inputs.source_identity,encoding_file_sha256=encoding_sha,
-        encoding_identity=encoding.identity))
+        encoding_identity=encoding.identity,epoch_plan_identity=plan_identity))
     result=build_junyi_window_cache(args.output,
-        iter_junyi_research_windows(inputs.paths,inputs.train,encoding,**options),
-        view=inputs.train,encoding=encoding,source_data_sha256=inputs.source_identity,
-        expected_target_rows=inputs.train_targets)
+        iter_junyi_research_windows(inputs.paths,view,encoding,**options),
+        view=view,encoding=encoding,source_data_sha256=inputs.source_identity,
+        expected_target_rows=targets)
     if source_before!=dict(cache=file_sha(args.cache/'manifest.json'),roles=file_sha(args.roles)):
         raise ValueError('Source changed during preprocessing')
-    write_json(args.receipt,dict(status='FULL_JUNYI_TRAIN80_WINDOWS_PREPARED_NOT_TRAINED',cache=result,
+    status = ('FULL_JUNYI_TRAIN80_WINDOWS_PREPARED_NOT_TRAINED' if args.scope=='select_train80'
+              else 'FULL_JUNYI_REFIT90_WINDOWS_PREPARED_NOT_TRAINED')
+    write_json(args.receipt,dict(status=status,cache=result,
         encoding_file=str(args.encoding_output.relative_to(ROOT)),encoding_sha256=encoding_sha,
         encoding_identity=encoding.identity,source_identity=inputs.source_identity,
         seconds=time.monotonic()-started,neural_training_performed=False))
