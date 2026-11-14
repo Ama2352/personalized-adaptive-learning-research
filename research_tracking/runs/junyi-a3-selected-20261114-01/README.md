@@ -24,3 +24,17 @@ Hồ sơ A2 trước đó đã niêm phong tại `../junyi-confidence-completion
 ## Vị trí kết quả
 
 Hồ sơ và log nhỏ nằm trong bundle này. Checkpoint, predictions, telemetry và archive tải về nằm trong `experiments/akt/results/modal-junyi-a3-staged-h100-20261114-*/`. Snapshot và cache nằm trong `artifacts/akt/`. Mọi artifact tải về đều phải nghiệm thu inventory/SHA trước coi hoàn tất.
+
+## Gián đoạn kết nối và phục hồi lượt đầu
+
+Lượt local mất DNS trong khoảng gián đoạn dài. Guard local ghi stop muộn và không xác nhận được qua mạng. Giữ nguyên `app-budget-guard.json` và `local-failure.json` của lượt đầu, cùng log lỗi. Kiểm lại server xác nhận App đã kết thúc lúc 17 giờ 48 ngày 14/11 và không còn container. Worker đã hoàn tất 6 epoch và lưu phần epoch 7 theo giới hạn thời gian trên server. `recovery-stop-acknowledged01.json` giữ bằng chứng dừng độc lập. Thu artifact bằng `recover_artifacts01.py`, không gọi GPU mới trong bước tải.
+
+Thời gian monotonic local trong khoảng mất kết nối không được coi là thời gian GPU thực. Settlement giữ cận tài nguyên request đã nghiệm thu theo timeout server, một container, retries 0. Metering toàn workspace sau lượt đầu khoảng 20,82 USD, billed 0. Các số metering và cận dự phòng được lưu riêng.
+
+Hồi quy local đầu bị ngắt trước collection, giữ log trống và không tính đạt. Lượt chạy lại có quyền đọc thực tế trên D đạt 41 ca trong 1,23 giây, ghi ở `local-regression02.log`. Gate Linux source numerical giữ 2.615 ca đã nghiệm thu từ hồ sơ A2, không cộng hai số kiểm này như các ca độc lập.
+
+## Tiếp tục từ vị trí sampler đã lưu
+
+Đã tải và nghiệm thu 115 artifact của lượt đầu, archive khoảng 1,01 GB, cùng toàn bộ checkpoint trên D. Checkpoint partial ở bước 271 của epoch 7 giữ optimizer, RNG và sampler. `a3-settlement01.json` ghi phạm vi resume chính xác. Lượt02 tiếp tục từ checkpoint đó với source, dữ liệu và cấu hình học giữ nguyên.
+
+Đóng dự toán lượt đầu bằng cận tài nguyên request 2,5626624 USD, giữ riêng số metering thực tế chưa tách hóa đơn theo run. Khoản dự phòng cuối được tạm giảm từ 3 xuống 2,50 USD để cấp lượt02 tối đa 2,60 USD. Cận tổng dự án là 29,96842062486352 USD, gồm biên trễ 1 USD đã có trong cận lịch sử. `reserve-reallocation01.json` giữ quyết định phân bổ của agent. Trần người dùng 30 USD tiếp tục áp dụng. Phần dự phòng 3 USD được khôi phục khi đóng lượt nếu cận chi cho phép.
