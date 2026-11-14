@@ -81,7 +81,7 @@ def main():
     status = ('FULL_JUNYI_TRAIN80_WINDOWS_PREPARED_NOT_TRAINED' if args.scope=='select_train80'
               else 'FULL_JUNYI_REFIT90_WINDOWS_PREPARED_NOT_TRAINED')
     write_json(args.receipt,dict(status=status,cache=result,
-        encoding_file=str(args.encoding_output.relative_to(ROOT)),encoding_sha256=encoding_sha,
+        encoding_file=str(args.encoding_output.resolve().relative_to(ROOT)),encoding_sha256=encoding_sha,
         encoding_identity=encoding.identity,source_identity=inputs.source_identity,
         seconds=time.monotonic()-started,neural_training_performed=False))
     print(json.dumps(result),flush=True)

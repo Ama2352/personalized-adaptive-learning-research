@@ -21,12 +21,11 @@ def pinned(entry):
     return path
 
 
-def execute(request):
-    os.environ.update(CUBLAS_WORKSPACE_CONFIG=':4096:8', CUDA_VISIBLE_DEVICES='0',
-        OMP_NUM_THREADS='2', MKL_NUM_THREADS='2', OPENBLAS_NUM_THREADS='2')
+def prepare_inputs(request):
+    """Nạp/kiểm asset trên CPU, dùng chung cho preflight và numerical worker."""
     from knowledge_tracing.akt.config import load_config, ResearchCUDAExecutionProfile
     from knowledge_tracing.akt.research_junyi_selection import load_full_selected_cache
-    from knowledge_tracing.akt.research_junyi_refit import refit_view, run_junyi_refit
+    from knowledge_tracing.akt.research_junyi_refit import refit_view, validate_epoch_plan, validate_selected_lineage
     from knowledge_tracing.akt.research_junyi_data import load_prepared_junyi_encoding
     from knowledge_tracing.akt.research_junyi_window_cache import JunyiWindowCacheSession
     from knowledge_tracing.akt.research_junyi_graph_cache import GraphContextCache
@@ -35,16 +34,6 @@ def execute(request):
     from knowledge_tracing.shared_kt import PrerequisiteGraph
     profile = ResearchCUDAExecutionProfile(**json.loads(pinned(request['cuda_profile']).read_text()))
     config = load_config(pinned(request['config']), cuda_profile=profile)
-    import torch
-    from knowledge_tracing.akt.device_budget import configure_cuda_budget
-    torch.set_num_threads(config.threads)
-    torch.set_default_dtype(torch.float32)
-    torch.use_deterministic_algorithms(True, warn_only=False)
-    torch.backends.cuda.matmul.allow_tf32 = False
-    torch.backends.cudnn.allow_tf32 = False
-    torch.backends.cudnn.benchmark = False
-    torch.set_float32_matmul_precision('highest')
-    configure_cuda_budget(torch.cuda, max_vram_bytes=profile.max_vram_bytes)
     if config.output_dir.resolve().parent != ROOT / 'experiments/akt/results' or config.output_dir.name != config.run_id:
         raise ValueError('Exclusive owned logical refit output required')
     data = request['inputs']
@@ -58,6 +47,8 @@ def execute(request):
             expected_file_sha256=data[prefix]['sha256'], expected_receipt_sha256=data[prefix + '_receipt']['sha256'])
     encoding = encoding_for('encoding90', inputs.view)
     admission = data.get('window_admission')
+    if admission is None:
+        raise ValueError('CPU window admission required before loading refit worker')
     cache = JunyiWindowCacheSession(ROOT / data['window_cache90'], inputs.view, encoding,
         inputs.source_identity, inputs.targets, data['window_manifest_sha256'], prefetch=True,
         admission_receipt=None if admission is None else pinned(admission),
@@ -81,12 +72,37 @@ def execute(request):
     resume = None if resume_entry is None else pinned(resume_entry)
     if resume is not None and not resume.resolve().is_relative_to(config.output_dir / 'checkpoints'):
         raise ValueError('Resume must belong to the same logical refit')
-    return run_junyi_refit(config, profile, inputs, encoding, variant=variant, plan=plan,
-        expected_plan_sha256=plan['identity'], grant=json.loads(pinned(request['authorization']).read_text()),
-        runtime_report=pinned(request['runtime_report']), lock_file=pinned(request['lock_file']),
-        gate2_report=pinned(request['gate2_report']), window_cache=cache,
+    index = json.loads(pinned(request['selected_index']).read_text())
+    validate_epoch_plan(plan, config=config, profile=profile, inputs=inputs)
+    validate_selected_lineage(plan, variant, index, condition)
+    return dict(config=config, profile=profile, inputs=inputs, encoding=encoding, variant=variant, plan=plan,
+        selected_index=index, expected_plan_sha256=plan['identity'], window_cache=cache,
         graph_condition=condition, graph_cache=graph_cache, resume=resume,
         expected_resume_sha256=None if resume_entry is None else resume_entry['sha256'])
+
+
+def configure_cuda(profile, threads):
+    os.environ.update(CUBLAS_WORKSPACE_CONFIG=profile.cublas_workspace_config, CUDA_VISIBLE_DEVICES='0',
+        OMP_NUM_THREADS=str(threads), MKL_NUM_THREADS=str(threads), OPENBLAS_NUM_THREADS=str(threads))
+    import torch
+    from knowledge_tracing.akt.device_budget import configure_cuda_budget
+    torch.set_num_threads(threads)
+    torch.set_default_dtype(torch.float32)
+    torch.use_deterministic_algorithms(True, warn_only=False)
+    torch.backends.cuda.matmul.allow_tf32 = False
+    torch.backends.cudnn.allow_tf32 = False
+    torch.backends.cudnn.benchmark = False
+    torch.set_float32_matmul_precision('highest')
+    configure_cuda_budget(torch.cuda, max_vram_bytes=profile.max_vram_bytes)
+
+
+def execute(request):
+    from knowledge_tracing.akt.research_junyi_refit import run_junyi_refit
+    context = prepare_inputs(request)
+    configure_cuda(context['profile'], context['config'].threads)
+    return run_junyi_refit(**context, grant=json.loads(pinned(request['authorization']).read_text()),
+        runtime_report=pinned(request['runtime_report']), lock_file=pinned(request['lock_file']),
+        gate2_report=pinned(request['gate2_report']))
 
 
 def main():
@@ -104,6 +120,13 @@ def main():
         return
     if file_sha(args.request) != args.request_sha256:
         raise ValueError('Pinned execution request required')
+    if not request.get('inputs', {}).get('window_admission'):
+        raise ValueError('CPU window admission must be prepared before GPU execution')
+    for name in ('config', 'cuda_profile', 'epoch_plan', 'selected_index', 'authorization',
+                 'runtime_report', 'lock_file', 'gate2_report'):
+        entry = request.get(name)
+        if not isinstance(entry, dict) or set(entry) != {'path', 'sha256'}:
+            raise ValueError('Missing pinned execution input: ' + name)
     print(json.dumps(execute(request)))
 
 

@@ -4,7 +4,6 @@ Chuẩn bị trên CPU riêng. Entrypoint CUDA yêu cầu grant, Gate và runtim
 Plan chỉ đóng băng epoch cho nhóm A0–A3 expert, giữ mọi candidate để so sánh.
 """
 from dataclasses import asdict, dataclass
-import hashlib
 import json
 import os
 from pathlib import Path
@@ -104,7 +103,7 @@ def validate_epoch_plan(plan, *, config, profile, inputs):
 
 def _run_epochs(adapter, windows_factory, *, optimizer, output, identity, epochs, targets,
                 max_seconds, budget, checkpoint_every_steps=1000, resume=None, checkpoint_callback=None,
-                launch_evidence=None):
+                launch_evidence=None, total_max_steps=None, total_max_targets=None):
     """Dùng train_epoch hiện có, lưu cả sampler/RNG khi chạm giới hạn tranche."""
     from .checkpoint import load_training_snapshot, restore_checkpoint, save_checkpoint
     from .training import train_epoch
@@ -159,14 +158,29 @@ def _run_epochs(adapter, windows_factory, *, optimizer, output, identity, epochs
             previous_wall = payload['resume_state']['trainer_state']['stats']['resource']['wall_seconds']
             del payload
         epoch_budget = dict(budget, max_seconds=previous_wall + min(budget['max_seconds'], remaining - 5))
+        if total_max_steps is not None:
+            left = total_max_steps - sum(row['optimizer_steps'] for row in history)
+            if left <= 0:
+                break
+            epoch_budget['max_steps'] = min(epoch_budget['max_steps'], left)
+        if total_max_targets is not None:
+            left = total_max_targets - sum(row['valid_targets'] for row in history)
+            if left <= 0:
+                break
+            epoch_budget['max_targets'] = min(epoch_budget['max_targets'], left)
         state = dict(role='junyi_refit90', epoch=epoch, history=list(history))
         kwargs = {}
         if hasattr(adapter, 'collate_training'):
             kwargs['batch_factory'] = adapter.collate_training
-        stats = train_epoch(adapter, windows_factory, optimizer=optimizer, epoch=epoch, budget=epoch_budget,
-            recovery=dict(prefix='refit', checkpoint_dir=recovery_root, identity=identity,
-                checkpoint_every_steps=checkpoint_every_steps, resume_checkpoint=epoch_resume,
-                selection_state=state, checkpoint_callback=publish), **kwargs)
+        with (output / f'epoch-{epoch:03}-{attempt}-progress.jsonl').open('x', encoding='utf-8') as log:
+            def progress(event):
+                if event['training']['optimizer_steps'] % 100 == 0 or event['complete_epoch']:
+                    log.write(json.dumps(event, allow_nan=False) + '\n')
+                    log.flush()
+            stats = train_epoch(adapter, windows_factory, optimizer=optimizer, epoch=epoch, budget=epoch_budget,
+                recovery=dict(prefix='refit', checkpoint_dir=recovery_root, identity=identity,
+                    checkpoint_every_steps=checkpoint_every_steps, resume_checkpoint=epoch_resume,
+                    selection_state=state, checkpoint_callback=publish), progress_callback=progress, **kwargs)
         epoch_resume = None
         write_json(output / f'epoch-{epoch:03}-{attempt}.json', asdict(stats))
         if not stats.complete:
@@ -198,13 +212,38 @@ def _run_epochs(adapter, windows_factory, *, optimizer, output, identity, epochs
     return result
 
 
+def refit_grant_binding(*, config, inputs, encoding, variant, plan, window_cache, gate_sha256,
+                        runtime_sha256, graph_condition=None, graph_cache=None):
+    """Dữ liệu cần ghim trong grant do caller được ủy quyền lập."""
+    from .authorization import config_hash
+    return dict(phase='junyi_refit90', variant=variant, plan_sha256=plan['identity'],
+        config_sha256=config_hash(config),
+        inputs=inputs.identity, encoding=encoding.identity, window_identity=window_cache.expected_manifest_sha256,
+        gate_sha256=gate_sha256, runtime_sha256=runtime_sha256,
+        condition=None if graph_condition is None else graph_condition.identity,
+        graph_cache=None if graph_cache is None else graph_cache.identity,
+        epochs=plan['candidates'][variant]['epochs'])
+
+
+def validate_selected_lineage(plan, variant, selected_index, graph_condition):
+    """Khóa đúng index đã đóng băng và dựng lại condition80 để kiểm confidence."""
+    if _identity(selected_index) != plan['candidates'][variant]['selected_index_sha256']:
+        raise ValueError('Selected model index differs from frozen plan')
+    if graph_condition is not None:
+        from .research_junyi_graph import JunyiGraphCondition
+        selected_condition = JunyiGraphCondition(graph_condition.train80_origin, graph_condition.graph,
+            graph_condition.topology_source_sha256, variant=variant, confidence=graph_condition.confidence)
+        if selected_condition.identity != selected_index['graph_condition_sha256']:
+            raise ValueError('Refit topology/confidence differs from selected TRAIN80 condition')
+
+
 def run_junyi_refit(config: AKTConfig, profile: ResearchCUDAExecutionProfile, inputs: JunyiRefitInputs,
                     encoding: JunyiResearchEncoding, *, variant, plan, expected_plan_sha256,
-                    grant, runtime_report, lock_file, gate2_report, window_cache,
+                    selected_index, grant, runtime_report, lock_file, gate2_report, window_cache,
                     graph_condition=None, graph_cache=None, resume=None, expected_resume_sha256=None,
                     checkpoint_callback=None):
     """Entrypoint thật chỉ nhận input đã chuẩn bị và grant khớp byte/source/runtime."""
-    from .authorization import preflight, config_hash, require_gate2_evidence
+    from .authorization import preflight, require_gate2_evidence
     from .training import _seed
     validate_config(config, cuda_profile=profile)
     if config.phase != 'junyi-research' or type(inputs) is not JunyiRefitInputs:
@@ -227,15 +266,13 @@ def run_junyi_refit(config: AKTConfig, profile: ResearchCUDAExecutionProfile, in
                 or graph_condition.train80_origin is None
                 or graph_condition.train80_origin.identity != plan['selected_encoding_identity']):
             raise ValueError('Refit graph must retain frozen TRAIN80 lineage')
+    validate_selected_lineage(plan, variant, selected_index, graph_condition)
     gate = require_gate2_evidence(config, gate2_report=gate2_report, lock_file=lock_file)
     preflight(config, runtime_report_path=runtime_report, lock_file=lock_file, cuda_profile=profile)
     epochs = plan['candidates'][variant]['epochs']
-    binding = dict(phase='junyi_refit90', variant=variant, plan_sha256=expected_plan_sha256,
-        config_sha256=config_hash(config), inputs=inputs.identity, encoding=encoding.identity,
-        window_identity=window_cache.expected_manifest_sha256,
-        gate_sha256=gate['report_sha256'], runtime_sha256=file_sha(runtime_report),
-        condition=None if graph_condition is None else graph_condition.identity,
-        graph_cache=None if graph_cache is None else graph_cache.identity, epochs=epochs)
+    binding = refit_grant_binding(config=config, inputs=inputs, encoding=encoding, variant=variant,
+        plan=plan, window_cache=window_cache, gate_sha256=gate['report_sha256'],
+        runtime_sha256=file_sha(runtime_report), graph_condition=graph_condition, graph_cache=graph_cache)
     if (grant.get('status') != 'USER_APPROVED' or grant.get('binding') != binding
             or not isinstance(grant.get('approval_reference'), str) or not grant['approval_reference'].strip()):
         raise PermissionError('Exact authorized refit grant required')
@@ -243,6 +280,8 @@ def run_junyi_refit(config: AKTConfig, profile: ResearchCUDAExecutionProfile, in
         raise ValueError('Resume file and SHA must be supplied together')
     if resume is not None and file_sha(resume) != expected_resume_sha256:
         raise ValueError('Refit resume checkpoint changed')
+    from .research_graph_model import _cuda_execution_check
+    _cuda_execution_check(profile, synchronize=True)
     import torch
     _seed(config.seed)
     with torch.device('cpu'):
@@ -263,4 +302,5 @@ def run_junyi_refit(config: AKTConfig, profile: ResearchCUDAExecutionProfile, in
     return _run_epochs(adapter, window_cache.iter_windows, optimizer=optimizer, output=config.output_dir,
         identity=identity, epochs=epochs, targets=inputs.targets, max_seconds=config.max_wall_seconds,
         budget=budget, resume=resume, checkpoint_callback=checkpoint_callback,
-        launch_evidence=dict(runtime_sha256=binding['runtime_sha256'], grant_sha256=_identity(grant)))
+        launch_evidence=dict(runtime_sha256=binding['runtime_sha256'], grant_sha256=_identity(grant)),
+        total_max_steps=config.max_steps, total_max_targets=config.max_total_targets)

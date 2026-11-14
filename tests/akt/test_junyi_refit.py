@@ -1,5 +1,6 @@
 """Refit synthetic CPU, admission CUDA mock rõ, kiểm native/RNG/resume."""
-from dataclasses import replace
+from dataclasses import replace, asdict
+from copy import deepcopy
 import json
 
 import pytest
@@ -54,7 +55,7 @@ def case(monkeypatch):
         cond = condition(variant)
         return graph_model.JunyiGraphAKTAdapter(config=config, encoding=encoding, condition=cond,
             phase=JunyiGraphPhaseSession(cond, refit), compact_context=True)
-    return dict(roles=roles, train=train, refit=refit, calibration=calibration, origin=origin,
+    return dict(config=config, roles=roles, train=train, refit=refit, calibration=calibration, origin=origin,
                 encoding=encoding, condition=condition, adapter=adapter, entries=entries)
 
 
@@ -124,3 +125,129 @@ def test_refit_origin_mutation_detected_at_batch_boundary(case):
     case['origin'].native.train_support_students['A'] = 3
     with pytest.raises(ValueError, match='encoding|origin'):
         adapter.collate_training(case['entries'][:1])
+
+
+def plan_inputs(case, config=None):
+    from knowledge_tracing.akt.config import ResearchCUDAExecutionProfile
+    from knowledge_tracing.akt.research_junyi_refit import make_epoch_plan
+    config = case['config'] if config is None else config
+    profile = ResearchCUDAExecutionProfile(max_vram_bytes=2 * 1024**3)
+    identity = dict(inputs='b' * 64, encoding=case['origin'].identity,
+                    config=json.loads(json.dumps(asdict(config), default=str)), profile=asdict(profile))
+    indices = {variant: dict(model=variant, phase='selected_fit80', selected_epoch=2, complete_epochs=3,
+        metadata=dict(epoch=2, identity=deepcopy(identity)), checkpoint_sha256='d' * 64,
+        selection_metrics=dict(population_sha256='c' * 64), refit_completed=False, calibration_completed=False)
+        for variant in ('A0', 'A1', 'A2', 'A3')}
+    return make_epoch_plan(indices, roles_identity=case['roles'].identity), indices, profile
+
+
+@pytest.mark.parametrize('mutation', ['missing_model', 'wrong_variant', 'changed_inputs', 'changed_config'])
+def test_epoch_plan_rejects_unmatched_selected_models(case, mutation):
+    from knowledge_tracing.akt.research_junyi_refit import make_epoch_plan
+    _, indices, _ = plan_inputs(case)
+    if mutation == 'missing_model':
+        indices.pop('A3')
+    elif mutation == 'wrong_variant':
+        indices['A3']['model'] = 'A2'
+    elif mutation == 'changed_inputs':
+        indices['A3']['metadata']['identity']['inputs'] = 'e' * 64
+    else:
+        indices['A3']['metadata']['identity']['config']['seed'] = 7
+    with pytest.raises(ValueError):
+        make_epoch_plan(indices, roles_identity=case['roles'].identity)
+
+
+def test_epoch_plan_rejects_tampering_and_different_role_lineage(case):
+    from knowledge_tracing.akt.research_junyi_refit import validate_epoch_plan
+    plan, _, profile = plan_inputs(case)
+    inputs = JunyiRefitInputs(case['refit'], len(case['refit'].users) * 6, 'a' * 64, 'b' * 64)
+    validate_epoch_plan(plan, config=case['config'], profile=profile, inputs=inputs)
+    plan['candidates']['A3']['epochs'] = 1
+    with pytest.raises(ValueError, match='plan'):
+        validate_epoch_plan(plan, config=case['config'], profile=profile, inputs=inputs)
+
+
+@pytest.mark.parametrize('variant', ['A1', 'A2', 'A3'])
+def test_refit_lineage_binds_original_graph_and_confidence(case, variant):
+    from knowledge_tracing.akt.research_junyi_refit import validate_selected_lineage
+    from knowledge_tracing.akt.research_junyi_selection import _identity
+    condition = case['condition'](variant)
+    original = JunyiGraphCondition(case['origin'], condition.graph, condition.topology_source_sha256,
+                                   variant=variant, confidence=condition.confidence)
+    index = dict(graph_condition_sha256=original.identity)
+    plan = dict(candidates={variant: dict(selected_index_sha256=_identity(index))})
+    validate_selected_lineage(plan, variant, index, condition)
+    if variant != 'A1':
+        weight = replace(condition.confidence.weights[0], source_score=.2, operational_weight=.2)
+        changed = replace(condition, confidence=replace(condition.confidence, weights=(weight,)))
+        with pytest.raises(ValueError, match='topology/confidence'):
+            validate_selected_lineage(plan, variant, index, changed)
+    with pytest.raises(ValueError, match='index'):
+        validate_selected_lineage(plan, variant, dict(index, extra=True), condition)
+
+
+@pytest.mark.parametrize('valid_grant', [False, True])
+def test_public_entry_checks_exact_grant_before_constructing_model(case, tmp_path, monkeypatch, valid_grant):
+    from knowledge_tracing.akt import authorization, research_junyi_refit as refit
+    from knowledge_tracing.akt import research_junyi_window_cache as windows
+    from knowledge_tracing.akt.research_junyi_engineering import file_sha
+    monkeypatch.setattr(windows, 'CACHE_BASE', tmp_path)
+    config = replace(case['config'], output_dir=tmp_path / 'output', run_id='synthetic-refit-public',
+        max_steps=100, max_seconds=60., max_wall_seconds=120., max_rss_bytes=2 * 1024**3,
+        min_available_ram_bytes=1)
+    plan, indices, profile = plan_inputs(case, config)
+    inputs = JunyiRefitInputs(case['refit'], len(case['refit'].users) * 6, 'a' * 64, 'b' * 64)
+    cache_root = tmp_path / 'windows'
+    windows.build_junyi_window_cache(cache_root, iter(case['entries']), view=inputs.view,
+        encoding=case['encoding'], source_data_sha256=inputs.source_identity, expected_target_rows=inputs.targets)
+    cache = windows.JunyiWindowCacheSession(cache_root, inputs.view, case['encoding'], inputs.source_identity,
+        inputs.targets, file_sha(cache_root / 'manifest.json'))
+    runtime = tmp_path / 'runtime.json'
+    runtime.write_text('{}')
+    monkeypatch.setattr(refit, 'validate_config', lambda *args, **kwargs: None)
+    monkeypatch.setattr(authorization, 'require_gate2_evidence', lambda *args, **kwargs: dict(report_sha256='f' * 64))
+    monkeypatch.setattr(authorization, 'preflight', lambda *args, **kwargs: None)
+    calls = []
+    monkeypatch.setattr(native_graph, '_cuda_execution_check', lambda *args, **kwargs: calls.append('cuda-check'))
+    binding = refit.refit_grant_binding(config=config, inputs=inputs, encoding=case['encoding'], variant='A0',
+        plan=plan, window_cache=cache, gate_sha256='f' * 64, runtime_sha256=file_sha(runtime))
+    grant = dict(status='USER_APPROVED', approval_reference='Synthetic CPU mock only', binding=binding)
+    if not valid_grant:
+        grant['binding'] = dict(binding, epochs=3)
+    kwargs = dict(variant='A0', plan=plan, expected_plan_sha256=plan['identity'], grant=grant,
+        selected_index=indices['A0'],
+        runtime_report=runtime, lock_file=tmp_path / 'lock', gate2_report=tmp_path / 'gate', window_cache=cache)
+    if valid_grant:
+        result = refit.run_junyi_refit(config, profile, inputs, case['encoding'], **kwargs)
+        assert result['complete_epochs'] == result['frozen_epochs'] == 2
+        assert calls == ['cuda-check']
+    else:
+        with pytest.raises(PermissionError, match='grant'):
+            refit.run_junyi_refit(config, profile, inputs, case['encoding'], **kwargs)
+        assert calls == [] and not config.output_dir.exists()
+
+
+@pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+def test_completed_refit_export_contract_and_tamper_rejection(case, tmp_path, variant):
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts/akt'))
+    from export_junyi_refit_model import verify_completed
+    adapter = case['adapter'](variant)
+    optimizer = torch.optim.Adam(adapter.native.parameters(), lr=1e-4, foreach=False, fused=False)
+    identity = dict(phase='junyi_refit90', variant=variant, plan_sha256='f' * 64)
+    if variant != 'A0':
+        identity['batch_factory'] = adapter.audit_context_boundary()
+    targets = len(case['refit'].users) * 6
+    output = tmp_path / 'complete'
+    _run_epochs(adapter, lambda: iter(case['entries']), optimizer=optimizer, output=output,
+        identity=identity, epochs=1, targets=targets, max_seconds=120.,
+        budget=dict(max_steps=100, max_targets=targets, max_seconds=60.,
+                    max_rss_bytes=2 * 1024**3, min_available_ram_bytes=1))
+    plan = dict(identity='f' * 64, candidates={variant: dict(epochs=1)})
+    checkpoint, _, complete = verify_completed(output, variant, plan)
+    assert checkpoint.name == 'state.pt' and complete['complete_epochs'] == 1
+    marker = checkpoint.parent / 'COMPLETE.json'
+    marker.write_text('{}')
+    with pytest.raises((ValueError, KeyError)):
+        verify_completed(output, variant, plan)

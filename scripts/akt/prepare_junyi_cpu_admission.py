@@ -27,6 +27,7 @@ def main():
         return
     sys.path.insert(0, str(ROOT / 'src'))
     from knowledge_tracing.akt.research_junyi_selection import load_full_selected_cache
+    from knowledge_tracing.akt.research_junyi_engineering import file_sha
     from knowledge_tracing.akt.research_junyi_data import load_prepared_junyi_encoding
     from knowledge_tracing.akt.research_junyi_window_cache import JunyiWindowCacheSession, write_cpu_admission
     request = json.loads(args.request.read_text(encoding='utf-8'))
@@ -41,16 +42,27 @@ def main():
     started = time.monotonic()
     inputs = load_full_selected_cache(paths['selected_cache_root'], paths['roles_path'],
         expected_manifest_sha256=data['selected_cache_manifest_sha256'], expected_roles_sha256=data['roles_sha256'])
+    view, targets = inputs.train, inputs.train_targets
+    if request.get('phase') == 'junyi_refit90':
+        from knowledge_tracing.akt.research_junyi_refit import refit_view
+        plan_pin = request['epoch_plan']
+        plan_path = ROOT / plan_pin['path']
+        assert file_sha(plan_path) == plan_pin['sha256']
+        plan = json.loads(plan_path.read_text(encoding='utf-8'))
+        assert plan['selected_inputs_identity'] == inputs.identity
+        assert plan['roles_identity'] == inputs.train.roles.identity
+        refit = refit_view(inputs)
+        view, targets = refit.view, refit.targets
     encoding = load_prepared_junyi_encoding(paths['encoding_file'], paths['encoding_receipt'],
-        view=inputs.train, source_data_sha256=inputs.source_identity,
+        view=view, source_data_sha256=inputs.source_identity,
         expected_file_sha256=data['encoding_sha256'], expected_receipt_sha256=data['encoding_receipt_sha256'])
-    session = JunyiWindowCacheSession(paths['train_window_cache'], inputs.train, encoding, inputs.source_identity,
-        inputs.train_targets, data['train_window_manifest_sha256'])
+    session = JunyiWindowCacheSession(paths['train_window_cache'], view, encoding, inputs.source_identity,
+        targets, data['train_window_manifest_sha256'])
     destination.parent.mkdir(parents=True, exist_ok=True)
     write_cpu_admission(session, destination)
     result = dict(status='CPU_STRICT_ADMISSION_COMPLETE', output=str(destination),
                   sha256=hashlib.sha256(destination.read_bytes()).hexdigest(),
-                  train_targets=inputs.train_targets, records=session.strict_records_verified,
+                  train_targets=targets, phase_scope=view.scope, records=session.strict_records_verified,
                   wall_seconds=time.monotonic()-started, gpu_used=False)
     print(json.dumps(result), flush=True)
 

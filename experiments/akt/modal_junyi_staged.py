@@ -83,13 +83,16 @@ def gpu_compute(execution, volume_name):
     if hashlib.sha256(worker_request.read_bytes()).hexdigest()!=execution['worker_request_sha256']:
         raise ValueError('Worker request thay đổi')
     request = json.loads(worker_request.read_text())
+    entrypoint = execution.get('worker_entrypoint', 'run_junyi_gpu_stage.py')
+    if entrypoint not in ('run_junyi_gpu_stage.py', 'run_junyi_refit_gpu_stage.py'):
+        raise ValueError('Numerical worker entrypoint ngoài allowlist')
     process = None
     started = time.monotonic()
     checkpoint_markers = set()
     try:
         with (operation/'worker.log').open('xb') as log, (operation/'gpu-telemetry.jsonl').open('x') as telemetry:
             process = subprocess.Popen([str(root/'.venv/bin/python'),'-B',
-                str(root/'scripts/akt/run_junyi_gpu_stage.py'),'--request',str(worker_request),
+                str(root/'scripts/akt'/entrypoint),'--request',str(worker_request),
                 '--execution',str(operation/'execution.json')], cwd=root,
                 stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
             while True:
@@ -172,6 +175,15 @@ def validate_execution(request, worker):
     sys.path.insert(0,str(ROOT/'src'))
     from knowledge_tracing.akt.research_junyi_prepared import prepared_cache_options
     prepared_cache_options(worker,lambda value:value)
+    if worker['validation_batch_size']!=128 or worker['config']['seed']!=42:
+        raise ValueError('Batch validation/seed khác hợp đồng A0/A1')
+    return validate_resource_budget(request, worker)
+
+
+def validate_resource_budget(request, worker):
+    """Dùng chung deadline, tài nguyên và cận chi phí cho selected/refit."""
+    if request.get('status')!='USER_APPROVED' or not request.get('approval_reference'):
+        raise PermissionError('Thiếu quyền thực thi lượt chạy')
     if worker['logical_run_id']!=worker['config']['run_id']:
         raise ValueError('Logical run khác config')
     for name in (request['execution_id'],worker['logical_run_id']):
@@ -193,15 +205,15 @@ def validate_execution(request, worker):
     upper=(watchdog+60)*rate
     if upper>request['reserved_usd_per_run']:
         raise PermissionError('Cap tiền thấp hơn cận thời gian/tài nguyên')
-    if worker['validation_batch_size']!=128 or worker['config']['seed']!=42:
-        raise ValueError('Batch validation/seed khác hợp đồng A0/A1')
     if (worker['config']['max_wall_seconds']+120>child
             or worker['config']['max_seconds']>worker['config']['max_wall_seconds']):
         raise ValueError('Cần chừa thời gian runtime, handoff và checkpoint trong cap GPU')
     return dict(upper_usd=upper,rate_upper_usd_per_second=rate)
 
 
-def run(snapshot, request):
+def run(snapshot, request, *, worker_entrypoint='run_junyi_gpu_stage.py', execution_validator=None):
+    if worker_entrypoint not in ('run_junyi_gpu_stage.py', 'run_junyi_refit_gpu_stage.py'):
+        raise ValueError('Numerical worker entrypoint ngoài allowlist')
     sys.path.insert(0,str(ROOT/'experiments/akt'))
     from junyi_staged_io import verify_project, collect_outputs, sha, write_new
     from modal_budget_guard import ModalRunDeadline, ModalAppBudgetGuard, PendingOwnedModalApp, stop_owned_app_cli
@@ -213,7 +225,8 @@ def run(snapshot, request):
         raise ValueError('Snapshot phải thuộc artifacts/akt')
     prepared=verify_project(snapshot)
     worker=json.loads((snapshot/'project/gpu-stage-request.json').read_text())
-    resource=validate_execution(request,worker)
+    validator = validate_execution if execution_validator is None else execution_validator
+    resource=validator(request,worker)
     # CPU preparation validator tạo receipt riêng, source/request đều phải khớp.
     cpu=json.loads((snapshot/'CPU_CHECK.json').read_text())
     if (cpu['status']!='PASS_LOCAL_STAGE_INPUTS' or cpu['inputs_sha256']!=sha(snapshot/'INPUTS.json')
@@ -275,6 +288,8 @@ def run(snapshot, request):
         gpu=request['gpu'],
         child_timeout_seconds=request['child_timeout_seconds'],
         worker_request_sha256=sha(snapshot/'project/gpu-stage-request.json'))
+    if worker_entrypoint != 'run_junyi_gpu_stage.py':
+        execution['worker_entrypoint'] = worker_entrypoint
     if request.get('resume_checkpoint') is not None:
         execution.update(resume_checkpoint=request['resume_checkpoint'],resume_sha256=request['resume_sha256'])
     deadline=ModalRunDeadline(request['watchdog_seconds'])
