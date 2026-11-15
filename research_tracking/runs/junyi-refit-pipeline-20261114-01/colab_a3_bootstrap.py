@@ -30,9 +30,9 @@ def copy_member(saved, member, destination, pin=None):
         raise ValueError('Member không khớp inventory ' + member)
 
 
-def bootstrap(index):
+def bootstrap(index, archive_path=None):
     transfer = Path('/content/kltn-a3-transfer')
-    archive = transfer / index['archive']
+    archive = Path(archive_path) if archive_path is not None else transfer / index['archive']
     assert archive.stat().st_size == index['archive_bytes']
     assert digest(archive) == index['archive_sha256']
     root = Path(index['project_root'])
@@ -54,6 +54,7 @@ def bootstrap(index):
             assert name.startswith('recovery/')
             copy_member(saved, name, checked_destination(root, name.removeprefix('recovery/')), pin)
     assert digest(root / index['resume_checkpoint']) == index['resume_sha256']
+    (transfer / 'resume-index.json').write_text(json.dumps(index,indent=2))
     proof = dict(status='PASS_COLAB_A3_INPUT_SHA256', project_root=str(root),
                  source_files=len(inventory['files']), recovery_files=len(index['entries']),
                  checkpoint_sha256=index['resume_sha256'], complete_epochs=index['complete_epochs'],

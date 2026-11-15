@@ -1,0 +1,39 @@
+.F....                                                                   [100%]
+================================== FAILURES ===================================
+___________ test_partial_checkpoint_is_newer_than_prior_full_epoch ____________
+
+case = (WindowsPath('D:/Dev/KLTN/artifacts/akt/runtime/pytest-drive-backup-20261115-01/test_partial_checkpoint_is_new0/projec...WindowsPath('D:/Dev/KLTN/artifacts/akt/runtime/pytest-drive-backup-20261115-01/test_partial_checkpoint_is_new0/drive'))
+
+    def test_partial_checkpoint_is_newer_than_prior_full_epoch(case):
+        root,logical,operation,drive = case
+        checkpoint(logical,'epoch-003')
+        checkpoint(logical,'refit-batch-epoch-4-step-500-abcd')
+>       receipt = json.loads(BACKUP.backup(root,operation,drive).read_text())
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_colab_a3_backup.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+research_tracking\runs\junyi-refit-pipeline-20261114-01\colab_a3_backup.py:57: in backup
+    with source.open('rb') as origin, temporary.open('xb') as target:
+                                      ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/runtime/pytest-drive-backup-20261115-01/test_partial_checkpoint_is_new0/drive/t.../results/logical-a3/checkpoints/refit-batch-epoch-4-step-500-abcd/state.pt.uploading-6cac9cbd40d3420f91394042d7420964')
+mode = 'xb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\runtime\\pytest-drive-backup-20261115-01\\test_partial_checkpoint_is_new0\\drive\\tranches\\attempt-001\\files\\experiments\\akt\\results\\logical-a3\\checkpoints\\refit-batch-epoch-4-step-500-abcd\\state.pt.uploading-6cac9cbd40d3420f91394042d7420964'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_colab_a3_backup.py::test_partial_checkpoint_is_newer_than_prior_full_epoch
+1 failed, 5 passed in 0.51s

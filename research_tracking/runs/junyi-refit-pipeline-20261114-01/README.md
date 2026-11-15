@@ -144,3 +144,14 @@ Người dùng yêu cầu bỏ Colab, bridge đã đóng. MCP đã ngắt trư�
 Người dùng yêu cầu H100. L4 lượt05 đã dừng;45file recovery đã kiểm, checkpoint cuối vẫn đủ3epoch, SHA c9936d5e42dbbdbeb7a0c2fb7c80b8616e363cbfd091169e9d9ca448b8e2baed. Chưa có checkpoint epoch4. Sửa nhận định vận hành trước đó: API call trảPENDING/task_id rỗng vẫn có thể đi cùng telemetryGPU đang ghi, nên không đủ để kết luận GPU chưa được cấp hoặc chưa tiêu credit. Không dùng riêng chỉ báo này để quyết định hủy nữa. Lượt05 đã bị dừng theo yêu cầu đổi H100; phần học sau epoch3 chưa có checkpoint mới để dùng.
 
 Billing cuối điều chỉnh từ29,88xuống29,82USD, billed0, còn0,18USD quan sát. Giữ cap đã đóng30USD khi billing còn biến động. H100 chưa được khởi chạy sau yêu cầu mới: lượt đã kiểm cần dự phòng0,6276328USD; checkpoint native mỗi1.000step, job ngắn hơn không bảo đảm giữ phần học mới. `a3-h100-budget-blocker01.json` giữ điều kiện tiếp tục. Toàn bộApp đã stopped/tasks0. Chờ nguồn credit hợp lệ được cấp thêm; không chuyển lại Colab.
+
+
+## 15/11 — Chuyển lại Colab và lưu phục hồi trên Drive
+
+Người dùng chọn Colab và chấp thuận Drive/sao lưu sau mỗi lượt. Gói06 giữ checkpoint đủ3epoch và bổ sung run-manifest gốc đã nghiệm thu; gói05 checkpoint-only chưa đủ đểkhôi phục độc lập. Giữgói05lịch sử, không sửa artifacts cũ. `a3-portable06-preflight.json` kiểm SHA/identity thực tế. Notebook vận hành cập nhật tại `notebooks/akt_colab_a3_refit_resume.ipynb`.
+
+Đã tạo thưmụcDrive và upload đủ7phần96MiB qua connector, kiểmservername/size/parent theo `a3-drive-upload06-metadata.json`. Công cụ có hai giới hạn thực tế512MiB và100MiB; các lượt quá cỡ bịchặntrướcupload, giữ ghi chú trong manifest chia phần. Colab cầnghép7phần và kiểmSHA trước bootstrap.
+
+MountDrive banđầu lỗi credential propagation; người dùng cấpđủOAuthquyền theo hướngdẫn maintainerColab#6089 thìMount thànhcông. Colab hiệnthấy thưmụctrống, trongkhi connector có7file. Đangxác nhận tài khoản hoặc cachethưmục trước khi copydữliệu. Không suyra đãmất file hoặc chia sẻ côngkhai.
+
+Backup/restore Drive có8test tổnghợp đạt, đónggói có3test đạt, tổng11theo `tests-colab-drive-package01.log`. Thửđầu phát hiện giới hạn MAX_PATH Windows ởfiletạm; đãrútngắn filetạm, giữlogđầu. Chưa kiểmbackuptrênDrive thật, chưatrainingColab. NativeKT source/config/split giữnguyên.

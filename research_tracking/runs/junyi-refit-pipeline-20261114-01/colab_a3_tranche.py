@@ -17,8 +17,12 @@ def sha(path):
         return hashlib.file_digest(stream, 'sha256').hexdigest()
 
 
-def run(attempt, checkpoint, checkpoint_sha):
+def run(attempt, checkpoint, checkpoint_sha, backup_root=None):
     assert json.loads((TRANSFER / 'runtime-verified.json').read_text())['status'] == 'PASS_ISOLATED_CUDA_RUNTIME'
+    if backup_root is not None:
+        backup_root = Path(backup_root)
+        assert backup_root.resolve().is_relative_to(Path('/content/drive/MyDrive').resolve())
+        assert backup_root.is_dir(), 'Drive chưa sẵn sàng để lưu checkpoint'
     worker = ROOT / 'gpu-stage-request.json'
     frozen = json.loads(worker.read_text())
     assert frozen['variant'] == 'a3' and frozen['frozen_epochs'] == 9
@@ -64,6 +68,9 @@ def run(attempt, checkpoint, checkpoint_sha):
         native = json.loads((operation / 'result.json').read_text())
         assert native['status'] in {'PARTIAL_JUNYI_REFIT90', 'JUNYI_REFIT90_COMPLETE'}, native['status']
         result.update(status='PASS_BOUNDED_NATIVE_WORKER', native_status=native['status'])
+        if backup_root is not None:
+            from colab_a3_backup import backup
+            result['drive_backup'] = str(backup(ROOT,operation,backup_root))
     except BaseException:
         if process is not None and process.poll() is None:
             os.killpg(process.pid, signal.SIGTERM)
@@ -87,6 +94,7 @@ if __name__ == '__main__':
     parser.add_argument('--attempt', type=int, required=True)
     parser.add_argument('--checkpoint', required=True)
     parser.add_argument('--sha256', required=True)
+    parser.add_argument('--backup-root', type=Path)
     args = parser.parse_args()
     assert args.attempt > 0
-    run(args.attempt, args.checkpoint, args.sha256)
+    run(args.attempt, args.checkpoint, args.sha256, args.backup_root)
