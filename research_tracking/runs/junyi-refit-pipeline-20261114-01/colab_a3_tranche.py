@@ -87,6 +87,55 @@ def run(attempt, checkpoint, checkpoint_sha, backup_root=None):
         if not result['child_running']:
             lock.unlink()
         print(json.dumps(result, ensure_ascii=False), flush=True)
+    return result
+
+
+def run_sequence(attempt, checkpoint, checkpoint_sha, backup_root, max_tranches, sequence_seconds):
+    """Tiếp tục một protocol đã đóng, dừng ở9epoch/lỗi/giới hạn và kiểm backup mỗi lượt."""
+    from colab_a3_backup import position
+    assert backup_root is not None and 1 <= max_tranches <= 40
+    assert 650 <= sequence_seconds <= 10800
+    started = time.monotonic()
+    backup_root = Path(backup_root)
+    previous = position(Path(checkpoint).parent)
+    state = dict(status='RUNNING', complete_epochs=previous[0] if previous[2] else previous[0]-1)
+    try:
+        for offset in range(max_tranches):
+            if time.monotonic()-started+620 > sequence_seconds:
+                state['status'] = 'TIME_LIMIT_CHECKPOINT_SAVED'
+                break
+            result = run(attempt+offset,checkpoint,checkpoint_sha,backup_root)
+            assert result['status'] == 'PASS_BOUNDED_NATIVE_WORKER' and not result['child_running']
+            manifest = Path(result['drive_backup'])
+            receipt = json.loads(manifest.read_text())
+            assert receipt['status'] == 'PASS_DRIVE_CHECKPOINT_BACKUP' and receipt['frozen_epochs'] == 9
+            pointer = json.loads((backup_root/'LATEST.json').read_text())
+            assert (backup_root/pointer['manifest']).resolve() == manifest.resolve()
+            assert sha(manifest) == pointer['sha256']
+            current = position(Path(receipt['checkpoint']).parent)
+            assert current > previous, 'Không có checkpoint tiến triển, dừng trước lượt tiếp theo'
+            checkpoint, checkpoint_sha = receipt['checkpoint'], receipt['checkpoint_sha256']
+            previous = current
+            state.update(complete_epochs=receipt['complete_epochs'],partial_epoch=receipt['partial_epoch'],
+                partial_optimizer_step=receipt['partial_optimizer_step'],checkpoint=checkpoint,
+                checkpoint_sha256=checkpoint_sha,last_attempt=attempt+offset,
+                status='COMPLETE_9_EPOCHS_DRIVE_BACKED_UP' if receipt['refit_complete'] else 'RUNNING')
+            if receipt['refit_complete']:
+                assert receipt['complete_epochs'] == 9
+                break
+        else:
+            state['status'] = 'TRANCHE_LIMIT_CHECKPOINT_SAVED'
+    except BaseException as error:
+        state.update(status='STOPPED_REQUIRES_REVIEW',error_type=type(error).__name__,error=str(error))
+        raise
+    finally:
+        state['elapsed_seconds'] = time.monotonic()-started
+        (TRANSFER/'sequence-status.json').write_text(json.dumps(state,ensure_ascii=False,indent=2))
+        temporary = backup_root/'SEQUENCE_STATUS.writing.json'
+        temporary.write_text(json.dumps(state,ensure_ascii=False,indent=2))
+        temporary.replace(backup_root/'SEQUENCE_STATUS.json')
+        print(json.dumps(state,ensure_ascii=False),flush=True)
+    return state
 
 
 if __name__ == '__main__':
@@ -95,6 +144,12 @@ if __name__ == '__main__':
     parser.add_argument('--checkpoint', required=True)
     parser.add_argument('--sha256', required=True)
     parser.add_argument('--backup-root', type=Path)
+    parser.add_argument('--max-tranches', type=int, default=1)
+    parser.add_argument('--sequence-seconds', type=int, default=10800)
     args = parser.parse_args()
     assert args.attempt > 0
-    run(args.attempt, args.checkpoint, args.sha256, args.backup_root)
+    if args.max_tranches == 1:
+        run(args.attempt, args.checkpoint, args.sha256, args.backup_root)
+    else:
+        run_sequence(args.attempt,args.checkpoint,args.sha256,args.backup_root,
+                     args.max_tranches,args.sequence_seconds)

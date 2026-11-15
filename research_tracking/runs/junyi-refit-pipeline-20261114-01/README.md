@@ -160,3 +160,10 @@ Backup/restore Drive có8test tổnghợp đạt, đónggói có3test đạt, t�
 ## 15/11 — Xác nhận Drive cá nhân cho Colab
 
 User xác nhận Colab Mount tài khoản cá nhân khác tài khoản connector. Công cụ share_file chỉ nhận file, không nhận folder, nên chưa có thay đổi permission hoặc thông báo email. Chọn upload ZIPgói06 từ D trực tiếp qua webDrive vào thưmục cá nhân đangmount, tránh thayquyền hoặc thêmOAuthconnector. Gói7phần vẫn ởDriveconnector, chưađược dùngtraining. Notebook/bootstrap hiệnđọc một COLAB_RESUME.zip trongMyDrive/KLTN_AKT_RECOVERY và kiểmSHA/identity trướcresume. Trạngthái hiệnchờuserupload, chưaGPU/trainingColab.
+
+
+## 15/11 — ZIP Drive cá nhân đã kiểm trên ColabCPU
+
+Người dùng upload gói06 vào Drive cá nhân. Cell `a3-personal-drive-bootstrap-verified06.json` xác nhận1500source+10filephục hồi đúng SHA và checkpoint hết3epoch đúng nguồn. Source/root/cache được khôi phục ở `/opt/kltn`, chưavenv/CUDA hoặctraining trong phiên mới. Chờ người dùng chuyểnT4 và giữMCP. Sau đổi máy phải gắnDrive/kiểm lại, dựngvenv theo lock rồichạy trancheđầu.
+
+Controller có chuỗi hữu hạn tối đa40tranche/3giờ và dừng ở9epoch, lỗi hoặc không tiến triển, bắt buộcDrivebackup mỗi lượt. Mặc địnhCLI vẫn mộttranche. Chỉ dùngchuỗi sau khi trancheT4đầu vàbackupDrive thực tế đã nghiệmthu. Bộ15test mock/synthetic đạt theo `tests-colab-sequence01.log`, chưa thay kiểmCUDAthực tế. Native source/config/9epoch/split giữnguyên.
