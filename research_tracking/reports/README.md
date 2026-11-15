@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+[15/11 — Đối chiếu phạm vi training với đề cương](TRAINING_SCOPE_RECONCILIATION_20261115.md) phân biệt A3 expert Junyi, ma trận development hiện hành và yêu cầu PDF. Không bắt buộc5fold; ngoàiA3 còn21phase neural nếu giữ đủ ma trận nhóm. Chưa áp dụng đề xuất thu gọn.
+
 [14/11 — Pipeline refit A0–A3](../runs/junyi-refit-pipeline-20261114-01/README.md) giữ85ca local, bốn đầu vào thật/cache90 và tình trạng Gate; chưa là kết quả refit.
 
 ## 14/11 — A3 hoàn tất selected-fit, đã cập nhật báo cáo GVHD

@@ -26,6 +26,8 @@ Strongly recommended gồm 3 training seeds simulator, matched Junyi CG comparis
 
 ## Quy trình lựa chọn và đánh giá
 
+**Chỉ dẫn hiện hành15/11.** Đoạn5fold bên dưới là kế hoạch lịch sử, đã được ProtocolV1 ngày08/11 thu thành development mộtfold4. Đề cương trang4 cho phép nhiều phép chia hoặc bootstrap, không bắt buộc5fold. Xem [đối chiếu phạm vi](../../research_tracking/reports/TRAINING_SCOPE_RECONCILIATION_20261115.md) trước dự toán training. Các model và baRQ giữ nguyên.
+
 5 outer Dev folds đã frozen được giữ cho benchmark Junyi tương thích. Trong mỗi outer-train có một inner learner holdout 10% để chọn epoch, rồi refit outer-train ở E đã chọn. Đây là ordinary outer K-fold evaluation với inner holdout selection, không phải nested K×K CV. Không cần thêm inner 5-fold. Mỗi model được dùng optimizer/stopping phù hợp nhưng cùng ranh giới thông tin và budget search công khai.
 
 Chi phí selection + refit xấp xỉ gấp 1,9 lần một lần train nếu epochs tương đương. Phương án tiết kiệm giữ inner-trained model để outer evaluation có ít dữ liệu fit hơn, phải ghi tên protocol khác và xin duyệt. Fixed-E lấy từ một development selection cohort rồi báo các folds đã dùng selection là development results, không gọi independent CV. Không tự chuyển E=3.
