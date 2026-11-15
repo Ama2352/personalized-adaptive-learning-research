@@ -15,13 +15,13 @@ a{color:#155c88;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{
 .mastery-outcome{font-weight:650;color:#17324d}.mastery-case-count{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums}
 @media(max-width:760px){.mastery-cases{grid-template-columns:1fr}.mastery-case{padding:1rem}}
 @media(max-width:700px){#chang-17 table{table-layout:fixed}#chang-17 th,#chang-17 td{min-width:0;overflow-wrap:anywhere;padding:.6rem .4rem}#chang-17 thead th:first-child{width:18%}}
-</style></head><body><main class="page"><header class="masthead"><div class="byline">Báo cáo tiến độ · cập nhật ngày 15/11/2026</div><h1>Từ chẩn đoán tác động đồ thị đến bốn mô hình AKT trên Junyi</h1><p class="lead">Kết quả đã đạt cho ba câu hỏi nghiên cứu, 3 mô hình đã hoàn tất refit và phần thực nghiệm còn lại.</p><p class="byline">Hồ Nguyễn Minh Sang · Phạm Triều Dương<br>GVHD · TS. Lê Văn Tuấn</p></header><nav aria-label="Mục lục"><a href="#refit-update-20261115">Refit mới nhất</a><a href="#ngan-gon">Tiến độ hiện tại</a><a href="#boi-canh">Bối cảnh</a><a href="#rq1">RQ1</a><a href="#rq2">RQ2</a><a href="#akt">AKT đã huấn luyện</a><a href="#refit">Chuẩn bị refit</a><a href="#nguon-luc">Tài nguyên và bước tiếp</a><a href="#ket-luan">Kết luận</a></nav>
-<section id="refit-update-20261115"><h2>15/11 — A0, A1, A2 hoàn tất refit; tiếp tục các phiên bản còn lại</h2><p>Bước refit khởi tạo mô hình mới và học lại trên hợp nhóm huấn luyện với nhóm đã dùng chọn số epoch. Nhóm hiệu chỉnh xác suất và nhóm đánh giá độc lập tiếp tục được giữ riêng. Đến đợt cập nhật ngày 15/11, đã nghiệm thu và xuất model refit cho 3/4 phiên bản. Mỗi phiên bản đã nghiệm thu hoàn tất 9 epoch trên TRAIN90, tổng cộng 134.529.066 lượt tương tác được dùng làm mục tiêu dự báo qua 9 vòng học, với 18.360 bước cập nhật trọng số. Mỗi tương tác được dùng một lần làm mục tiêu trong mỗi epoch.</p><p>Thời gian học A0 trung bình 128.8 giây/epoch, dao động 122.1–140.8 giây. Hai đợt H100 đã hoàn tất, có nối lại từ checkpoint. Các model và nhật ký đã được lưu, kiểm tra tính toàn vẹn và có checkpoint để tiếp tục khi cần. Các phiên bản refit tiếp theo đã nghiệm thu trên cùng quần thể và số bước cập nhật. A1 trung bình 221.3 giây/epoch. A2 trung bình 230.5 giây/epoch.</p><div class="table-scroll"><table><thead><tr><th scope="col">Phiên bản</th><th scope="col">Thành phần</th><th scope="col">Refit TRAIN90</th><th scope="col">Hiệu chỉnh và đánh giá độc lập</th></tr></thead><tbody><tr><td>A0</td><td>AKT không đồ thị</td><td>Đã refit 9/9 epoch, model đã xuất trên D</td><td>Còn chờ</td></tr><tr><td>A1</td><td>Đồ thị cố định</td><td>Đã refit 9/9 epoch, model đã xuất trên D</td><td>Còn chờ</td></tr><tr><td>A2</td><td>Độ tin cậy cạnh</td><td>Đã refit 9/9 epoch, model đã xuất trên D</td><td>Còn chờ</td></tr><tr><td>A3</td><td>Độ tin cậy cạnh và cổng</td><td>Đã học đủ 7/9 epoch. Checkpoint mới nhất ở epoch 8, bước 256</td><td>Còn chờ</td></tr></tbody></table></div><figure><div class="svg-frame"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="604.8pt" height="295.2pt" viewBox="0 0 604.8 295.2" xmlns="http://www.w3.org/2000/svg" version="1.1">
+</style></head><body><main class="page"><header class="masthead"><div class="byline">Báo cáo tiến độ · cập nhật ngày 15/11/2026</div><h1>Từ chẩn đoán tác động đồ thị đến bốn mô hình AKT trên Junyi</h1><p class="lead">Kết quả đã đạt cho ba câu hỏi nghiên cứu, 4 mô hình đã hoàn tất refit và phần thực nghiệm còn lại.</p><p class="byline">Hồ Nguyễn Minh Sang · Phạm Triều Dương<br>GVHD · TS. Lê Văn Tuấn</p></header><nav aria-label="Mục lục"><a href="#refit-update-20261115">Refit mới nhất</a><a href="#ngan-gon">Tiến độ hiện tại</a><a href="#boi-canh">Bối cảnh</a><a href="#rq1">RQ1</a><a href="#rq2">RQ2</a><a href="#akt">AKT đã huấn luyện</a><a href="#refit">Chuẩn bị refit</a><a href="#nguon-luc">Tài nguyên và bước tiếp</a><a href="#ket-luan">Kết luận</a></nav>
+<section id="refit-update-20261115"><h2>16/11 — A0–A3 hoàn tất refit TRAIN90, model đã xuất và kiểm trên D</h2><p>Bước refit khởi tạo mô hình mới và học lại trên hợp nhóm huấn luyện với nhóm đã dùng chọn số epoch. Nhóm hiệu chỉnh xác suất và nhóm đánh giá độc lập tiếp tục được giữ riêng. Đến đợt cập nhật ngày 15/11, đã nghiệm thu và xuất model refit cho 4/4 phiên bản. Mỗi phiên bản đã nghiệm thu hoàn tất 9 epoch trên TRAIN90, tổng cộng 134.529.066 lượt tương tác được dùng làm mục tiêu dự báo qua 9 vòng học, với 18.360 bước cập nhật trọng số. Mỗi tương tác được dùng một lần làm mục tiêu trong mỗi epoch.</p><p>Thời gian học A0 trung bình 128.8 giây/epoch, dao động 122.1–140.8 giây. Hai đợt H100 đã hoàn tất, có nối lại từ checkpoint. Các model và nhật ký đã được lưu, kiểm tra tính toàn vẹn và có checkpoint để tiếp tục khi cần. Các phiên bản refit tiếp theo đã nghiệm thu trên cùng quần thể và số bước cập nhật. A1 trung bình 221.3 giây/epoch. A2 trung bình 230.5 giây/epoch. A3 trung bình 839.1 giây/epoch. A3 nối các checkpoint qua H100, L4, Tesla T4 rồi H100. Thời gian A3 là tổng thời gian native tích lũy qua các thiết bị, phụ thuộc cả overhead nối lại, nên không dùng để kết luận tốc độ tương đối giữa các cơ chế đồ thị.</p><div class="table-scroll"><table><thead><tr><th scope="col">Phiên bản</th><th scope="col">Thành phần</th><th scope="col">Refit TRAIN90</th><th scope="col">Hiệu chỉnh và đánh giá độc lập</th></tr></thead><tbody><tr><td>A0</td><td>AKT không đồ thị</td><td>Đã refit 9/9 epoch, model đã xuất trên D</td><td>Còn chờ</td></tr><tr><td>A1</td><td>Đồ thị cố định</td><td>Đã refit 9/9 epoch, model đã xuất trên D</td><td>Còn chờ</td></tr><tr><td>A2</td><td>Độ tin cậy cạnh</td><td>Đã refit 9/9 epoch, model đã xuất trên D</td><td>Còn chờ</td></tr><tr><td>A3</td><td>Độ tin cậy cạnh và cổng</td><td>Đã refit 9/9 epoch, model đã xuất trên D</td><td>Còn chờ</td></tr></tbody></table></div><figure><div class="svg-frame"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="604.8pt" height="295.2pt" viewBox="0 0 604.8 295.2" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-11-15T03:15:08.142833</dc:date>
+    <dc:date>2026-11-16T00:04:02.645412</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -36,19 +36,19 @@ a{color:#155c88;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{
  </defs>
  <g id="a0refit_figure_1">
   <g id="a0refit_patch_1">
-   <path d="M 0 295.2 
-L 604.8 295.2 
-L 604.8 0 
-L 0 0 
+   <path d="M 0 295.2
+L 604.8 295.2
+L 604.8 0
+L 0 0
 z
 " style="fill: #ffffff"/>
   </g>
   <g id="a0refit_axes_1">
    <g id="a0refit_patch_2">
-    <path d="M 72.576 247.968 
-L 586.656 247.968 
-L 586.656 53.136 
-L 72.576 53.136 
+    <path d="M 72.576 247.968
+L 586.656 247.968
+L 586.656 53.136
+L 72.576 53.136
 z
 " style="fill: #ffffff"/>
    </g>
@@ -56,202 +56,223 @@ z
     <g id="a0refit_xtick_1">
      <g id="a0refit_line2d_1">
       <defs>
-       <path id="a0refit_m3195dd4d9d" d="M 0 0 
-L 0 3.5 
+       <path id="a0refit_m7ef29c8e1e" d="M 0 0
+L 0 3.5
 " style="stroke: #000000; stroke-width: 0.8"/>
       </defs>
       <g>
-       <use xlink:href="#a0refit_m3195dd4d9d" x="146.343273" y="247.968" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a0refit_m7ef29c8e1e" x="132.14609" y="247.968" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a0refit_text_1">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="146.343273" y="263.325422" transform="rotate(-0 146.343273 263.325422)">A0</text>
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="132.14609" y="263.325422" transform="rotate(-0 132.14609 263.325422)">A0</text>
      </g>
     </g>
     <g id="a0refit_xtick_2">
      <g id="a0refit_line2d_2">
       <g>
-       <use xlink:href="#a0refit_m3195dd4d9d" x="329.616" y="247.968" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a0refit_m7ef29c8e1e" x="263.792697" y="247.968" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a0refit_text_2">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="329.616" y="263.325422" transform="rotate(-0 329.616 263.325422)">A1</text>
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="263.792697" y="263.325422" transform="rotate(-0 263.792697 263.325422)">A1</text>
      </g>
     </g>
     <g id="a0refit_xtick_3">
      <g id="a0refit_line2d_3">
       <g>
-       <use xlink:href="#a0refit_m3195dd4d9d" x="512.888727" y="247.968" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a0refit_m7ef29c8e1e" x="395.439303" y="247.968" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a0refit_text_3">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="512.888727" y="263.325422" transform="rotate(-0 512.888727 263.325422)">A2</text>
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="395.439303" y="263.325422" transform="rotate(-0 395.439303 263.325422)">A2</text>
+     </g>
+    </g>
+    <g id="a0refit_xtick_4">
+     <g id="a0refit_line2d_4">
+      <g>
+       <use xlink:href="#a0refit_m7ef29c8e1e" x="527.08591" y="247.968" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a0refit_text_4">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="527.08591" y="263.325422" transform="rotate(-0 527.08591 263.325422)">A3</text>
      </g>
     </g>
    </g>
    <g id="a0refit_matplotlib.axis_2">
     <g id="a0refit_ytick_1">
-     <g id="a0refit_line2d_4">
-      <path d="M 72.576 247.968 
-L 586.656 247.968 
-" clip-path="url(#a0refit_p6605b582d1)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"/>
-     </g>
      <g id="a0refit_line2d_5">
+      <path d="M 72.576 247.968
+L 586.656 247.968
+" clip-path="url(#a0refit_pb66f0db1c6)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a0refit_line2d_6">
       <defs>
-       <path id="a0refit_m95cd4342cb" d="M 0 0 
-L -3.5 0 
+       <path id="a0refit_mf20b333b33" d="M 0 0
+L -3.5 0
 " style="stroke: #000000; stroke-width: 0.8"/>
       </defs>
       <g>
-       <use xlink:href="#a0refit_m95cd4342cb" x="72.576" y="247.968" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a0refit_mf20b333b33" x="72.576" y="247.968" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
-     <g id="a0refit_text_4">
+     <g id="a0refit_text_5">
       <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="65.576" y="252.146711" transform="rotate(-0 65.576 252.146711)">0</text>
      </g>
     </g>
     <g id="a0refit_ytick_2">
-     <g id="a0refit_line2d_6">
-      <path d="M 72.576 215.461857 
-L 586.656 215.461857 
-" clip-path="url(#a0refit_p6605b582d1)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"/>
-     </g>
      <g id="a0refit_line2d_7">
-      <g>
-       <use xlink:href="#a0refit_m95cd4342cb" x="72.576" y="215.461857" style="stroke: #000000; stroke-width: 0.8"/>
-      </g>
+      <path d="M 72.576 212.248195
+L 586.656 212.248195
+" clip-path="url(#a0refit_pb66f0db1c6)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
-     <g id="a0refit_text_5">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="65.576" y="219.640568" transform="rotate(-0 65.576 219.640568)">50</text>
-     </g>
-    </g>
-    <g id="a0refit_ytick_3">
      <g id="a0refit_line2d_8">
-      <path d="M 72.576 182.955715 
-L 586.656 182.955715 
-" clip-path="url(#a0refit_p6605b582d1)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"/>
-     </g>
-     <g id="a0refit_line2d_9">
       <g>
-       <use xlink:href="#a0refit_m95cd4342cb" x="72.576" y="182.955715" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a0refit_mf20b333b33" x="72.576" y="212.248195" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a0refit_text_6">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="65.576" y="187.134426" transform="rotate(-0 65.576 187.134426)">100</text>
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="65.576" y="216.426906" transform="rotate(-0 65.576 216.426906)">200</text>
      </g>
     </g>
-    <g id="a0refit_ytick_4">
-     <g id="a0refit_line2d_10">
-      <path d="M 72.576 150.449572 
-L 586.656 150.449572 
-" clip-path="url(#a0refit_p6605b582d1)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"/>
+    <g id="a0refit_ytick_3">
+     <g id="a0refit_line2d_9">
+      <path d="M 72.576 176.52839
+L 586.656 176.52839
+" clip-path="url(#a0refit_pb66f0db1c6)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
-     <g id="a0refit_line2d_11">
+     <g id="a0refit_line2d_10">
       <g>
-       <use xlink:href="#a0refit_m95cd4342cb" x="72.576" y="150.449572" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a0refit_mf20b333b33" x="72.576" y="176.52839" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a0refit_text_7">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="65.576" y="154.628283" transform="rotate(-0 65.576 154.628283)">150</text>
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="65.576" y="180.707101" transform="rotate(-0 65.576 180.707101)">400</text>
      </g>
     </g>
-    <g id="a0refit_ytick_5">
-     <g id="a0refit_line2d_12">
-      <path d="M 72.576 117.943429 
-L 586.656 117.943429 
-" clip-path="url(#a0refit_p6605b582d1)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"/>
+    <g id="a0refit_ytick_4">
+     <g id="a0refit_line2d_11">
+      <path d="M 72.576 140.808585
+L 586.656 140.808585
+" clip-path="url(#a0refit_pb66f0db1c6)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
-     <g id="a0refit_line2d_13">
+     <g id="a0refit_line2d_12">
       <g>
-       <use xlink:href="#a0refit_m95cd4342cb" x="72.576" y="117.943429" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a0refit_mf20b333b33" x="72.576" y="140.808585" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a0refit_text_8">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="65.576" y="122.12214" transform="rotate(-0 65.576 122.12214)">200</text>
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="65.576" y="144.987296" transform="rotate(-0 65.576 144.987296)">600</text>
      </g>
     </g>
-    <g id="a0refit_ytick_6">
-     <g id="a0refit_line2d_14">
-      <path d="M 72.576 85.437287 
-L 586.656 85.437287 
-" clip-path="url(#a0refit_p6605b582d1)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"/>
+    <g id="a0refit_ytick_5">
+     <g id="a0refit_line2d_13">
+      <path d="M 72.576 105.08878
+L 586.656 105.08878
+" clip-path="url(#a0refit_pb66f0db1c6)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
-     <g id="a0refit_line2d_15">
+     <g id="a0refit_line2d_14">
       <g>
-       <use xlink:href="#a0refit_m95cd4342cb" x="72.576" y="85.437287" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#a0refit_mf20b333b33" x="72.576" y="105.08878" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="a0refit_text_9">
-      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="65.576" y="89.615998" transform="rotate(-0 65.576 89.615998)">250</text>
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="65.576" y="109.267491" transform="rotate(-0 65.576 109.267491)">800</text>
      </g>
     </g>
-    <g id="a0refit_text_10">
-     <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="37.937172" y="150.552" transform="rotate(-90 37.937172 150.552)">Giây / epoch</text>
+    <g id="a0refit_ytick_6">
+     <g id="a0refit_line2d_15">
+      <path d="M 72.576 69.368975
+L 586.656 69.368975
+" clip-path="url(#a0refit_pb66f0db1c6)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="a0refit_line2d_16">
+      <g>
+       <use xlink:href="#a0refit_mf20b333b33" x="72.576" y="69.368975" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="a0refit_text_10">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end" x="65.576" y="73.547686" transform="rotate(-0 65.576 73.547686)">1000</text>
+     </g>
+    </g>
+    <g id="a0refit_text_11">
+     <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="30.938422" y="150.552" transform="rotate(-90 30.938422 150.552)">Giây / epoch</text>
     </g>
    </g>
    <g id="a0refit_patch_3">
-    <path d="M 95.943273 247.968 
-L 196.743273 247.968 
-L 196.743273 164.242168 
-L 95.943273 164.242168 
+    <path d="M 95.943273 247.968
+L 168.348907 247.968
+L 168.348907 224.96719
+L 95.943273 224.96719
 z
-" clip-path="url(#a0refit_p6605b582d1)" style="fill: #3e7184"/>
+" clip-path="url(#a0refit_pb66f0db1c6)" style="fill: #3e7184"/>
    </g>
    <g id="a0refit_patch_4">
-    <path d="M 279.216 247.968 
-L 380.016 247.968 
-L 380.016 104.06612 
-L 279.216 104.06612 
+    <path d="M 227.58988 247.968
+L 299.995513 247.968
+L 299.995513 208.435879
+L 227.58988 208.435879
 z
-" clip-path="url(#a0refit_p6605b582d1)" style="fill: #3e7184"/>
+" clip-path="url(#a0refit_pb66f0db1c6)" style="fill: #3e7184"/>
    </g>
    <g id="a0refit_patch_5">
-    <path d="M 462.488727 247.968 
-L 563.288727 247.968 
-L 563.288727 98.097231 
-L 462.488727 98.097231 
+    <path d="M 359.236487 247.968
+L 431.64212 247.968
+L 431.64212 206.79613
+L 359.236487 206.79613
 z
-" clip-path="url(#a0refit_p6605b582d1)" style="fill: #3e7184"/>
+" clip-path="url(#a0refit_pb66f0db1c6)" style="fill: #3e7184"/>
    </g>
    <g id="a0refit_patch_6">
-    <path d="M 72.576 247.968 
-L 72.576 53.136 
-" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+    <path d="M 490.883093 247.968
+L 563.288727 247.968
+L 563.288727 98.097231
+L 490.883093 98.097231
+z
+" clip-path="url(#a0refit_pb66f0db1c6)" style="fill: #3e7184"/>
    </g>
    <g id="a0refit_patch_7">
-    <path d="M 72.576 247.968 
-L 586.656 247.968 
+    <path d="M 72.576 247.968
+L 72.576 53.136
 " style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
-   <g id="a0refit_text_11">
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="146.343273" y="155.59959" transform="rotate(-0 146.343273 155.59959)">128.8</text>
+   <g id="a0refit_patch_8">
+    <path d="M 72.576 247.968
+L 586.656 247.968
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="a0refit_text_12">
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="329.616" y="95.423542" transform="rotate(-0 329.616 95.423542)">221.3</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="132.14609" y="216.324612" transform="rotate(-0 132.14609 216.324612)">128.8</text>
    </g>
    <g id="a0refit_text_13">
-    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="512.888727" y="89.454653" transform="rotate(-0 512.888727 89.454653)">230.5</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="263.792697" y="199.793301" transform="rotate(-0 263.792697 199.793301)">221.3</text>
    </g>
    <g id="a0refit_text_14">
-    <text style="font-size: 13.2px; font-family: 'DejaVu Sans'; text-anchor: start" x="72.576" y="35.136" transform="rotate(-0 72.576 35.136)">Refit trên H100 — thời gian học trung bình</text>
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="395.439303" y="198.153552" transform="rotate(-0 395.439303 198.153552)">230.5</text>
+   </g>
+   <g id="a0refit_text_15">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="527.08591" y="89.454653" transform="rotate(-0 527.08591 89.454653)">839.1</text>
+   </g>
+   <g id="a0refit_text_16">
+    <text style="font-size: 13.2px; font-family: 'DejaVu Sans'; text-anchor: start" x="72.576" y="35.136" transform="rotate(-0 72.576 35.136)">Refit TRAIN90 — thời gian học tích lũy qua các thiết bị</text>
    </g>
   </g>
  </g>
  <defs>
-  <clipPath id="a0refit_p6605b582d1">
+  <clipPath id="a0refit_pb66f0db1c6">
    <rect x="72.576" y="53.136" width="514.08" height="194.832"/>
   </clipPath>
  </defs>
-</svg></div><figcaption>Trung bình đủ 9 epoch của từng model đã nghiệm thu, cùng TRAIN90 với 142.621 người học, 14.947.674 mục tiêu mỗi epoch, FP32, batch 128 và seed 42. Đây là thời gian học, các bước chuẩn bị và thu artifact được theo dõi riêng.</figcaption></figure><p>Đây là hoàn tất bước học lại mô hình theo số epoch đã chọn. Hiệu chỉnh xác suất, xuất dự đoán trên nhóm đánh giá độc lập và kết luận hiệu quả đồ thị còn chờ. Thời gian trong biểu đồ là thời gian học từng epoch, gồm phần tích lũy khi nối lại; thời gian chuẩn bị, tải artifact và tổng thời gian sử dụng function được theo dõi riêng. Sau khi kết nối lại, Colab đang là máy mới và chưa đọc được Drive. Lần quan sát trước xác nhận A3 đủ 7 epoch và checkpoint epoch 8, bước 256. Chỉ mục Drive do người dùng tải về trỏ đến lượt sao lưu 023, đang chờ kiểm bundle để xác định tiến độ mới. Workspace Modal mới honguyenminhsang2016 đã xác thực, billing quan sát bằng 0, có 30 USD credit do người dùng cung cấp. Sổ ngân sách mới giữ riêng tài khoản cũ. Chưa mở H100 trong đợt tài khoản mới; cần đối chiếu checkpoint mới nhất trước tiếp tục.</p></section>
-<section id="training-scope-20261115"><h2>15/11 — Đối chiếu phần training còn lại với đề cương</h2><p>Đối chiếu lại đề cương ngày 15/11 cho thấy yêu cầu giữ các mô hình AKT, SAKT, GKT, GAM-KT, Graph-GAM-KT và BKT tham chiếu, hai môi trường Junyi và Grade 10, cùng các đối chứng đồ thị. Đề cương cho phép kiểm độ ổn định qua nhiều phép chia dữ liệu hoặc bootstrap. Protocol development hiện hành chọn một fold Junyi; chưa có yêu cầu bắt buộc chạy đủ 5-fold cho các mô hình mới.</p><p>Bốn phiên bản AKT expert trên Junyi đã hoàn tất chọn checkpoint, ba bản hoàn tất refit. Grade 10 có bảy checkpoint đã chọn cho cấu hình không đồ thị và A1–A3 với đồ thị chuyên gia hoặc học từ dữ liệu; bước refit và hiệu chỉnh còn thiếu. SAKT và GKT đã kiểm trên corpus engineering nhỏ, cần tiếp tục training và đánh giá nghiên cứu. Các kết quả BKT/GAM lịch sử được giữ theo phạm vi gốc.</p><p>Nếu giữ nguyên toàn bộ ma trận development của nhóm, sau refit A3 còn 21 phase training neural gồm selected-fit hoặc refit, phân bổ cho learned graph Junyi, SAKT/GKT và model Grade 10. Đây là số bước của thiết kế phân bổ hiện hành, đề cương không quy định số lượt này. Các bước có kích thước dữ liệu khác nhau nên cần dự toán riêng. Đề xuất thu gọn phần learned graph Junyi chưa được áp dụng.</p><p>Phần tiếp theo phải ưu tiên hiệu chỉnh, đánh giá độc lập và mô phỏng vòng kín để kết luận các RQ. Hoàn tất refit A3 sẽ đóng đợt training expert Junyi hiện tại; mức hoàn tất toàn khóa luận còn phụ thuộc các đối chứng, thống kê, demo và bản thảo. Chưa có căn cứ nghiệm thu cả ba RQ hoặc toàn khóa luận từ số checkpoint đã có.</p></section>
+</svg></div><figcaption>Trung bình đủ 9 epoch của từng model đã nghiệm thu, cùng TRAIN90 với 142.621 người học, 14.947.674 mục tiêu mỗi epoch, FP32, batch 128 và seed 42. Đây là thời gian học, các bước chuẩn bị và thu artifact được theo dõi riêng. A0–A2 dùng H100, A3 nối H100/L4/T4/H100. Số liệu A3 gồm thời gian tích lũy của các lần nối lại và không dùng làm đối chứng tốc độ phần cứng đồng nhất.</figcaption></figure><p>Đây là hoàn tất bước học lại mô hình theo số epoch đã chọn. Hiệu chỉnh xác suất, xuất dự đoán trên nhóm đánh giá độc lập và kết luận hiệu quả đồ thị còn chờ. Thời gian trong biểu đồ là thời gian học từng epoch, gồm phần tích lũy khi nối lại; thời gian chuẩn bị, tải artifact và tổng thời gian sử dụng function được theo dõi riêng. A3 hoàn tất vào ngày 16/11 theo giờ Việt Nam, tiếp nối đợt báo cáo 15/11. Checkpoint Drive lượt 023 đã kiểm trên D ở epoch 9, bước 1.874/2.040. Lượt H100 cuối học tiếp 166 bước, giữ model, Adam, RNG và sampler. App đã xác nhận dừng trước tải artifact. Model cuối và inventory đã kiểm SHA, đủ 9 epoch và optimizer hữu hạn. Đối chiếu A0–A3 giữ các cờ số học và chỉ tách trần tài nguyên VRAM theo comparison_contract. Chưa chứng minh bitwise-equivalence giữa các kiến trúc GPU.</p></section>
+<section id="training-scope-20261115"><h2>15/11 — Đối chiếu phần training còn lại với đề cương</h2><p>Đối chiếu lại đề cương ngày 15/11 cho thấy yêu cầu giữ các mô hình AKT, SAKT, GKT, GAM-KT, Graph-GAM-KT và BKT tham chiếu, hai môi trường Junyi và Grade 10, cùng các đối chứng đồ thị. Đề cương cho phép kiểm độ ổn định qua nhiều phép chia dữ liệu hoặc bootstrap. Protocol development hiện hành chọn một fold Junyi; chưa có yêu cầu bắt buộc chạy đủ 5-fold cho các mô hình mới.</p><p>Bốn phiên bản AKT expert trên Junyi đã hoàn tất chọn checkpoint, cả bốn bản hoàn tất refit. Grade 10 có bảy checkpoint đã chọn cho cấu hình không đồ thị và A1–A3 với đồ thị chuyên gia hoặc học từ dữ liệu; bước refit và hiệu chỉnh còn thiếu. SAKT và GKT đã kiểm trên corpus engineering nhỏ, cần tiếp tục training và đánh giá nghiên cứu. Các kết quả BKT/GAM lịch sử được giữ theo phạm vi gốc.</p><p>Nếu giữ nguyên toàn bộ ma trận development của nhóm, sau khi hoàn tất refit A3 còn 21 phase training neural gồm selected-fit hoặc refit, phân bổ cho learned graph Junyi, SAKT/GKT và model Grade 10. Đây là số bước của thiết kế phân bổ hiện hành, đề cương không quy định số lượt này. Các bước có kích thước dữ liệu khác nhau nên cần dự toán riêng. Đề xuất thu gọn phần learned graph Junyi chưa được áp dụng.</p><p>Phần tiếp theo phải ưu tiên hiệu chỉnh, đánh giá độc lập và mô phỏng vòng kín để kết luận các RQ. Refit A3 đã hoàn tất đợt training expert Junyi hiện tại; mức hoàn tất toàn khóa luận còn phụ thuộc các đối chứng, thống kê, demo và bản thảo. Chưa có căn cứ nghiệm thu cả ba RQ hoặc toàn khóa luận từ số checkpoint đã có.</p></section>
 <section id="ngan-gon"><h2>Tiến độ cập nhật ngày 15/11/2026</h2>
-<p>Đã có các phát hiện chẩn đoán cụ thể cho RQ1–RQ2, đồng thời hoàn tất huấn luyện và chọn checkpoint cho bốn biến thể AKT trên Junyi. Bước mới nhất là hoàn tất refit A0, A1, A2 trên TRAIN90. Khóa luận đang chuyển từ xây dựng mô hình sang hoàn thiện đánh giá độc lập và nối kết quả dự báo với quyết định lộ trình.</p>
+<p>Đã có các phát hiện chẩn đoán cụ thể cho RQ1–RQ2, đồng thời hoàn tất huấn luyện và chọn checkpoint cho bốn biến thể AKT trên Junyi. Bước mới nhất là hoàn tất refit A0, A1, A2, A3 trên TRAIN90. Khóa luận đang chuyển từ xây dựng mô hình sang hoàn thiện đánh giá độc lập và nối kết quả dự báo với quyết định lộ trình.</p>
 <p>Phần tiến bộ trong ngày 14/11 tập trung vào A2, A3, độ tin cậy cạnh và pipeline refit. Những phát hiện RQ1–RQ2 dưới đây kế thừa các thí nghiệm đã lưu từ những ngày trước.</p>
 <div class="table-scroll" role="region" tabindex="0" aria-label="Tiến độ cập nhật ngày 15/11/2026"><table><thead><tr><th scope="col">Hạng mục</th><th scope="col">Đã đạt đến hiện tại</th><th scope="col">Phần còn thiếu</th></tr></thead><tbody>
 <tr><td>RQ1 · Nguyên nhân</td><td>Đã xác định các kết quả phụ thuộc quy tắc mô phỏng và những điểm thay đổi dự báo thường chưa đổi quyết định.</td><td>Hiệu chỉnh xác suất quanh ngưỡng thành thạo và đối chứng tác động đến kết quả học trên đánh giá độc lập.</td></tr>
 <tr><td>RQ2 · Điều kiện hiệu lực</td><td>Đã kiểm đối chứng cơ chế năng lực trên 120 thế giới mô phỏng và cơ hội quan sát cạnh trong Junyi.</td><td>Kiểm dự báo với các đối chứng thứ tự Junyi; điều kiện nhiễu cạnh, lịch sử và nhóm người học theo protocol chính.</td></tr>
-<tr><td>RQ3 · CG-AKT</td><td>Đã có A0–A3 Junyi, mỗi bản chạy 12 epoch và chọn epoch 9; checkpoint và dự đoán đã lưu.</td><td>Hoàn tất refit A3, hiệu chỉnh xác suất, so sánh độc lập và kết quả vòng kín của mô hình mới.</td></tr>
-<tr><td>Chuẩn bị refit</td><td>Đã kiểm bốn bộ đầu vào thật; cache CPU hoàn tất; source đạt 2.667 ca kiểm Linux.</td><td>A0 đã refit đủ 9 epoch; tiếp tục A3 trong trần ngân sách, sau đó hiệu chỉnh và đánh giá độc lập.</td></tr>
+<tr><td>RQ3 · CG-AKT</td><td>Đã có A0–A3 Junyi, mỗi bản chạy 12 epoch và chọn epoch 9; checkpoint và dự đoán đã lưu.</td><td>Hoàn tất refit A1–A3, hiệu chỉnh xác suất, so sánh độc lập và kết quả vòng kín của mô hình mới.</td></tr>
+<tr><td>Chuẩn bị refit</td><td>Đã kiểm bốn bộ đầu vào thật; cache CPU hoàn tất; source đạt 2.667 ca kiểm Linux.</td><td>A0 đã refit đủ 9 epoch; tiếp tục A1–A3 trong trần ngân sách, sau đó hiệu chỉnh và đánh giá độc lập.</td></tr>
 </tbody></table></div>
 </section>
 <section id="boi-canh"><h2>1. Từ hai nghiên cứu trước đến ba câu hỏi của khóa luận</h2>
@@ -695,7 +716,7 @@ z
 <p>Sau khi chọn số epoch, mỗi mô hình được khởi tạo mới và học lại trên hợp nhóm train và nhóm chọn checkpoint. Đây là bước refit. Tập TRAIN90 gồm 142.621 người học và 14.947.674 tương tác mỗi epoch, với 717 bài tập. Số epoch đã được cố định ở 9 cho từng mô hình, tổng cộng 36 epoch. Nhóm hiệu chỉnh xác suất và nhóm đánh giá độc lập được giữ riêng.</p>
 <p>Đã dựng xong cache cửa sổ tương tác và cache đồ thị cho cả A1–A3 trên CPU. Bốn bộ đầu vào đã được kiểm khớp về quần thể, mã hóa và mục tiêu dự đoán. Đồ thị và độ tin cậy cạnh giữ bản TRAIN80 theo thiết kế đã chốt. Việc chuẩn bị cache diễn ra trước khi thuê GPU.</p>
 <p>Pipeline refit đã có lưu checkpoint từng epoch, trạng thái optimizer và nguồn ngẫu nhiên, phục hồi khi ngắt, giới hạn thời gian/tài nguyên và xuất model gọn. Kiểm tổng hợp trên CPU xác nhận model, Adam và trạng thái ngẫu nhiên khớp giữa chạy liên tục và nối lại cho cả bốn phiên bản. Source hiện tại đạt 2.667 ca kiểm Linux, với 0 lỗi và 0 ca bỏ qua. Snapshot A0 đã được đóng gói và kiểm đầu vào trên local; A1–A3 đã có đặc tả đóng gói.</p>
-<p>Tại bản chốt ngày 14/11, refit dữ liệu thật còn chờ. Trong đợt tiếp tục ngày 15/11, đã sửa và kiểm hai lỗi tích hợp ở guard đường dẫn Volume và allocator CUDA, sau đó hoàn tất refit A0 trên H100. Phần tiếp theo là học lại A3 và tiếp tục đối soát ngân sách. Kết quả kiểm phần mềm được dùng làm điều kiện thực thi; kết luận RQ3 cần kết quả đánh giá mô hình sau các bước này.</p>
+<p>Tại bản chốt ngày 14/11, refit dữ liệu thật còn chờ. Trong đợt tiếp tục ngày 15/11, đã sửa và kiểm hai lỗi tích hợp ở guard đường dẫn Volume và allocator CUDA, sau đó hoàn tất refit A0 trên H100. Phần tiếp theo là học lại A1–A3 và tiếp tục đối soát ngân sách. Kết quả kiểm phần mềm được dùng làm điều kiện thực thi; kết luận RQ3 cần kết quả đánh giá mô hình sau các bước này.</p>
 </section>
 <section id="nguon-luc"><h2>6. Tài nguyên, mô hình đã lưu và công việc tiếp theo</h2>
 <p>Các lượt huấn luyện Junyi đã dùng Modal, đồng thời các phép kiểm kỹ thuật đã tận dụng T4 Colab. Riêng A3 có tổng 52,25 phút trong function GPU qua hai lượt, thời gian train trung bình khoảng 200,2 giây/epoch. Trung bình các mẫu đo mức sử dụng GPU là 28,82%, VRAM đỉnh khoảng 5,65 GiB. Mức sử dụng GPU trung bình trên 50% còn chưa đạt.</p>

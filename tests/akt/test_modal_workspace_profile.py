@@ -49,3 +49,18 @@ def test_staged_entry_uses_requested_budget_file(tmp_path, custom):
     program = ast.fix_missing_locations(ast.Module(body=statements, type_ignores=[]))
     exec(compile(program, 'modal_junyi_staged.py', 'exec'), namespace)
     assert namespace['ledger_path'] == tmp_path / (selected if custom else 'research_tracking/COMPUTE_BUDGET.json')
+
+
+@pytest.mark.parametrize('reuse', [True, False])
+def test_imported_checkpoint_can_download_outputs_without_old_modal_cache(tmp_path, reuse):
+    root = Path(__file__).resolve().parents[2]
+    tree = ast.parse((root / 'experiments/akt/modal_junyi_staged.py').read_text(encoding='utf-8'))
+    statements = [node for node in ast.walk(tree) if isinstance(node, ast.If)
+                  and any(isinstance(child, ast.Assign) and any(isinstance(target, ast.Name)
+                      and target.id == 'previous_output' for target in child.targets) for child in node.body)]
+    assert len(statements) == 1
+    namespace = {'ROOT': tmp_path, 'previous_output': None,
+                 'request': {'resume_inventory': 'import/remote-inventory.json', 'reuse_local_outputs': reuse}}
+    program = ast.fix_missing_locations(ast.Module(body=statements, type_ignores=[]))
+    exec(compile(program, 'modal_junyi_staged.py', 'exec'), namespace)
+    assert namespace['previous_output'] == (tmp_path / 'import' if reuse else None)

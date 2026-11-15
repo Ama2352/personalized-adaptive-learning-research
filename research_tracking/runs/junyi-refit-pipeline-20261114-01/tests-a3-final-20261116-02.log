@@ -1,0 +1,1649 @@
+........FFF.FFFFF.........FFFFF......................................... [ 73%]
+..........................                                               [100%]
+================================== FAILURES ===================================
+_ test_refit_preserves_train80_confidence_and_supports_calibration_phase[A1] __
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+variant = 'A1'
+
+    @pytest.mark.parametrize('variant', ['A1', 'A2', 'A3'])
+    def test_refit_preserves_train80_confidence_and_supports_calibration_phase(case, variant):
+>       adapter = case['adapter'](variant)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:56: in adapter
+    return graph_model.JunyiGraphAKTAdapter(config=config, encoding=encoding, condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:90: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = False, timeout = None, check = True
+popenargs = (['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD'],)
+kwargs = {'stdout': -1, 'text': True}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: CalledProcessError
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+_ test_refit_preserves_train80_confidence_and_supports_calibration_phase[A2] __
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+variant = 'A2'
+
+    @pytest.mark.parametrize('variant', ['A1', 'A2', 'A3'])
+    def test_refit_preserves_train80_confidence_and_supports_calibration_phase(case, variant):
+>       adapter = case['adapter'](variant)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:56: in adapter
+    return graph_model.JunyiGraphAKTAdapter(config=config, encoding=encoding, condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:90: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = False, timeout = None, check = True
+popenargs = (['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD'],)
+kwargs = {'stdout': -1, 'text': True}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: CalledProcessError
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+_ test_refit_preserves_train80_confidence_and_supports_calibration_phase[A3] __
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+variant = 'A3'
+
+    @pytest.mark.parametrize('variant', ['A1', 'A2', 'A3'])
+    def test_refit_preserves_train80_confidence_and_supports_calibration_phase(case, variant):
+>       adapter = case['adapter'](variant)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:56: in adapter
+    return graph_model.JunyiGraphAKTAdapter(config=config, encoding=encoding, condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:90: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = False, timeout = None, check = True
+popenargs = (['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD'],)
+kwargs = {'stdout': -1, 'text': True}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: CalledProcessError
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+___________ test_native_refit_partial_resume_equals_continuous[A0] ____________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-02/test_native_refit_partial_resu0')
+variant = 'A0'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_native_refit_partial_resume_equals_continuous(case, tmp_path, variant):
+        torch.set_num_threads(1)
+        targets = len(case['refit'].users) * 6
+        budget = dict(max_steps=100, max_targets=targets, max_seconds=60.,
+            max_rss_bytes=2 * 1024**3, min_available_ram_bytes=1)
+        def make():
+            adapter = case['adapter'](variant)
+            optimizer = torch.optim.Adam(adapter.native.parameters(), lr=1e-4, foreach=False, fused=False)
+            identity = dict(phase='synthetic_refit90', variant=variant)
+            if variant != 'A0':
+                identity['batch_factory'] = adapter.audit_context_boundary()
+            return adapter, optimizer, identity
+>       continuous, optimizer, identity = make()
+                                          ^^^^^^
+
+tests\akt\test_junyi_refit.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:89: in make
+    adapter = case['adapter'](variant)
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_refit.py:54: in adapter
+    return AKTAdapter(config, native)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\model.py:22: in __init__
+    self.native = build_native(config, n_items=len(encoding.vocabulary.values))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = False, timeout = None, check = True
+popenargs = (['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD'],)
+kwargs = {'stdout': -1, 'text': True}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: CalledProcessError
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+___________ test_native_refit_partial_resume_equals_continuous[A1] ____________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-02/test_native_refit_partial_resu1')
+variant = 'A1'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_native_refit_partial_resume_equals_continuous(case, tmp_path, variant):
+        torch.set_num_threads(1)
+        targets = len(case['refit'].users) * 6
+        budget = dict(max_steps=100, max_targets=targets, max_seconds=60.,
+            max_rss_bytes=2 * 1024**3, min_available_ram_bytes=1)
+        def make():
+            adapter = case['adapter'](variant)
+            optimizer = torch.optim.Adam(adapter.native.parameters(), lr=1e-4, foreach=False, fused=False)
+            identity = dict(phase='synthetic_refit90', variant=variant)
+            if variant != 'A0':
+                identity['batch_factory'] = adapter.audit_context_boundary()
+            return adapter, optimizer, identity
+>       continuous, optimizer, identity = make()
+                                          ^^^^^^
+
+tests\akt\test_junyi_refit.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:89: in make
+    adapter = case['adapter'](variant)
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_refit.py:56: in adapter
+    return graph_model.JunyiGraphAKTAdapter(config=config, encoding=encoding, condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:90: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = False, timeout = None, check = True
+popenargs = (['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD'],)
+kwargs = {'stdout': -1, 'text': True}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: CalledProcessError
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+___________ test_native_refit_partial_resume_equals_continuous[A2] ____________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-02/test_native_refit_partial_resu2')
+variant = 'A2'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_native_refit_partial_resume_equals_continuous(case, tmp_path, variant):
+        torch.set_num_threads(1)
+        targets = len(case['refit'].users) * 6
+        budget = dict(max_steps=100, max_targets=targets, max_seconds=60.,
+            max_rss_bytes=2 * 1024**3, min_available_ram_bytes=1)
+        def make():
+            adapter = case['adapter'](variant)
+            optimizer = torch.optim.Adam(adapter.native.parameters(), lr=1e-4, foreach=False, fused=False)
+            identity = dict(phase='synthetic_refit90', variant=variant)
+            if variant != 'A0':
+                identity['batch_factory'] = adapter.audit_context_boundary()
+            return adapter, optimizer, identity
+>       continuous, optimizer, identity = make()
+                                          ^^^^^^
+
+tests\akt\test_junyi_refit.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:89: in make
+    adapter = case['adapter'](variant)
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_refit.py:56: in adapter
+    return graph_model.JunyiGraphAKTAdapter(config=config, encoding=encoding, condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:90: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = False, timeout = None, check = True
+popenargs = (['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD'],)
+kwargs = {'stdout': -1, 'text': True}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: CalledProcessError
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+___________ test_native_refit_partial_resume_equals_continuous[A3] ____________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-02/test_native_refit_partial_resu3')
+variant = 'A3'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_native_refit_partial_resume_equals_continuous(case, tmp_path, variant):
+        torch.set_num_threads(1)
+        targets = len(case['refit'].users) * 6
+        budget = dict(max_steps=100, max_targets=targets, max_seconds=60.,
+            max_rss_bytes=2 * 1024**3, min_available_ram_bytes=1)
+        def make():
+            adapter = case['adapter'](variant)
+            optimizer = torch.optim.Adam(adapter.native.parameters(), lr=1e-4, foreach=False, fused=False)
+            identity = dict(phase='synthetic_refit90', variant=variant)
+            if variant != 'A0':
+                identity['batch_factory'] = adapter.audit_context_boundary()
+            return adapter, optimizer, identity
+>       continuous, optimizer, identity = make()
+                                          ^^^^^^
+
+tests\akt\test_junyi_refit.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:89: in make
+    adapter = case['adapter'](variant)
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+tests\akt\test_junyi_refit.py:56: in adapter
+    return graph_model.JunyiGraphAKTAdapter(config=config, encoding=encoding, condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:90: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = False, timeout = None, check = True
+popenargs = (['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD'],)
+kwargs = {'stdout': -1, 'text': True}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: CalledProcessError
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+____________ test_refit_origin_mutation_detected_at_batch_boundary ____________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+
+    def test_refit_origin_mutation_detected_at_batch_boundary(case):
+>       adapter = case['adapter']('A3')
+                  ^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:56: in adapter
+    return graph_model.JunyiGraphAKTAdapter(config=config, encoding=encoding, condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:90: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = False, timeout = None, check = True
+popenargs = (['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD'],)
+kwargs = {'stdout': -1, 'text': True}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: CalledProcessError
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+____ test_public_entry_checks_exact_grant_before_constructing_model[True] _____
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-02/test_public_entry_checks_exact1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000026C30853B60>
+valid_grant = True
+
+    @pytest.mark.parametrize('valid_grant', [False, True])
+    def test_public_entry_checks_exact_grant_before_constructing_model(case, tmp_path, monkeypatch, valid_grant):
+        from knowledge_tracing.akt import authorization, research_junyi_refit as refit
+        from knowledge_tracing.akt import research_junyi_window_cache as windows
+        from knowledge_tracing.akt.research_junyi_engineering import file_sha
+        monkeypatch.setattr(windows, 'CACHE_BASE', tmp_path)
+        config = replace(case['config'], output_dir=tmp_path / 'output', run_id='synthetic-refit-public',
+            max_steps=100, max_seconds=60., max_wall_seconds=120., max_rss_bytes=2 * 1024**3,
+            min_available_ram_bytes=1)
+        plan, indices, profile = plan_inputs(case, config)
+        inputs = JunyiRefitInputs(case['refit'], len(case['refit'].users) * 6, 'a' * 64, 'b' * 64)
+        cache_root = tmp_path / 'windows'
+        windows.build_junyi_window_cache(cache_root, iter(case['entries']), view=inputs.view,
+            encoding=case['encoding'], source_data_sha256=inputs.source_identity, expected_target_rows=inputs.targets)
+        cache = windows.JunyiWindowCacheSession(cache_root, inputs.view, case['encoding'], inputs.source_identity,
+            inputs.targets, file_sha(cache_root / 'manifest.json'))
+        runtime = tmp_path / 'runtime.json'
+        runtime.write_text('{}')
+        monkeypatch.setattr(refit, 'validate_config', lambda *args, **kwargs: None)
+        monkeypatch.setattr(authorization, 'require_gate2_evidence', lambda *args, **kwargs: dict(report_sha256='f' * 64))
+        monkeypatch.setattr(authorization, 'preflight', lambda *args, **kwargs: None)
+        calls = []
+        monkeypatch.setattr(native_graph, '_cuda_execution_check', lambda *args, **kwargs: calls.append('cuda-check'))
+        binding = refit.refit_grant_binding(config=config, inputs=inputs, encoding=case['encoding'], variant='A0',
+            plan=plan, window_cache=cache, gate_sha256='f' * 64, runtime_sha256=file_sha(runtime))
+        grant = dict(status='USER_APPROVED', approval_reference='Synthetic CPU mock only', binding=binding)
+        if not valid_grant:
+            grant['binding'] = dict(binding, epochs=3)
+        kwargs = dict(variant='A0', plan=plan, expected_plan_sha256=plan['identity'], grant=grant,
+            selected_index=indices['A0'],
+            runtime_report=runtime, lock_file=tmp_path / 'lock', gate2_report=tmp_path / 'gate', window_cache=cache)
+        if valid_grant:
+>           result = refit.run_junyi_refit(config, profile, inputs, case['encoding'], **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:221: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_refit.py:288: in run_junyi_refit
+    adapter = _make_selected_adapter(config, profile, encoding, inputs.view, graph_condition, context_cache=graph_cache)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\research_junyi_selection.py:164: in _make_selected_adapter
+    return AKTAdapter(config,encoding.native)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\model.py:22: in __init__
+    self.native = build_native(config, n_items=len(encoding.vocabulary.values))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = False, timeout = None, check = True
+popenargs = (['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD'],)
+kwargs = {'stdout': -1, 'text': True}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: CalledProcessError
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+________ test_completed_refit_export_contract_and_tamper_rejection[A0] ________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-02/test_completed_refit_export_co0')
+variant = 'A0'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_completed_refit_export_contract_and_tamper_rejection(case, tmp_path, variant):
+        import sys
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts/akt'))
+        from export_junyi_refit_model import verify_completed
+>       adapter = case['adapter'](variant)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:236: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:54: in adapter
+    return AKTAdapter(config, native)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\model.py:22: in __init__
+    self.native = build_native(config, n_items=len(encoding.vocabulary.values))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = False, timeout = None, check = True
+popenargs = (['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD'],)
+kwargs = {'stdout': -1, 'text': True}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: CalledProcessError
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+________ test_completed_refit_export_contract_and_tamper_rejection[A1] ________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-02/test_completed_refit_export_co1')
+variant = 'A1'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_completed_refit_export_contract_and_tamper_rejection(case, tmp_path, variant):
+        import sys
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts/akt'))
+        from export_junyi_refit_model import verify_completed
+>       adapter = case['adapter'](variant)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:236: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:56: in adapter
+    return graph_model.JunyiGraphAKTAdapter(config=config, encoding=encoding, condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:90: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = False, timeout = None, check = True
+popenargs = (['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD'],)
+kwargs = {'stdout': -1, 'text': True}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: CalledProcessError
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+________ test_completed_refit_export_contract_and_tamper_rejection[A2] ________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-02/test_completed_refit_export_co2')
+variant = 'A2'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_completed_refit_export_contract_and_tamper_rejection(case, tmp_path, variant):
+        import sys
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts/akt'))
+        from export_junyi_refit_model import verify_completed
+>       adapter = case['adapter'](variant)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:236: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:56: in adapter
+    return graph_model.JunyiGraphAKTAdapter(config=config, encoding=encoding, condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:90: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = False, timeout = None, check = True
+popenargs = (['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD'],)
+kwargs = {'stdout': -1, 'text': True}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: CalledProcessError
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+________ test_completed_refit_export_contract_and_tamper_rejection[A3] ________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-02/test_completed_refit_export_co3')
+variant = 'A3'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_completed_refit_export_contract_and_tamper_rejection(case, tmp_path, variant):
+        import sys
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts/akt'))
+        from export_junyi_refit_model import verify_completed
+>       adapter = case['adapter'](variant)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:236: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:56: in adapter
+    return graph_model.JunyiGraphAKTAdapter(config=config, encoding=encoding, condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:90: in __init__
+    self.native = ResearchGraphNative(config=config,n_items=len(self.encoding.vocabulary.values),
+src\knowledge_tracing\akt\research_graph_model.py:186: in __init__
+    self.backbone = build_native(config, n_items=n_items)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:47: in build_native
+    module = load_upstream(config.source_root, device=config.device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\upstream.py:27: in load_upstream
+    verify_upstream(root, SOURCE_COMMIT)
+src\knowledge_tracing\akt\provenance.py:30: in verify_upstream
+    commit = _git(root, 'rev-parse', 'HEAD')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\akt\provenance.py:25: in _git
+    return subprocess.check_output(['git', '-C', str(root), *args], text=True).strip()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:472: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = False, timeout = None, check = True
+popenargs = (['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD'],)
+kwargs = {'stdout': -1, 'text': True}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['git', '-C', 'D:\\Dev\\KLTN\\artifacts\\akt\\dependencies\\upstream', 'rev-parse', 'HEAD']' returned non-zero exit status 128.
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\subprocess.py:577: CalledProcessError
+---------------------------- Captured stderr call -----------------------------
+fatal: detected dubious ownership in repository at 'D:/Dev/KLTN/artifacts/akt/dependencies/upstream'
+'D:/Dev/KLTN/artifacts/akt/dependencies/upstream' is owned by:
+	AMA/CodexSandboxOffline (S-1-5-21-2636143129-606153942-397890897-1011)
+but the current user is:
+	AMA/AmaDev (S-1-5-21-2636143129-606153942-397890897-1006)
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Dev/KLTN/artifacts/akt/dependencies/upstream
+=========================== short test summary info ===========================
+FAILED tests/akt/test_junyi_refit.py::test_refit_preserves_train80_confidence_and_supports_calibration_phase[A1]
+FAILED tests/akt/test_junyi_refit.py::test_refit_preserves_train80_confidence_and_supports_calibration_phase[A2]
+FAILED tests/akt/test_junyi_refit.py::test_refit_preserves_train80_confidence_and_supports_calibration_phase[A3]
+FAILED tests/akt/test_junyi_refit.py::test_native_refit_partial_resume_equals_continuous[A0]
+FAILED tests/akt/test_junyi_refit.py::test_native_refit_partial_resume_equals_continuous[A1]
+FAILED tests/akt/test_junyi_refit.py::test_native_refit_partial_resume_equals_continuous[A2]
+FAILED tests/akt/test_junyi_refit.py::test_native_refit_partial_resume_equals_continuous[A3]
+FAILED tests/akt/test_junyi_refit.py::test_refit_origin_mutation_detected_at_batch_boundary
+FAILED tests/akt/test_junyi_refit.py::test_public_entry_checks_exact_grant_before_constructing_model[True]
+FAILED tests/akt/test_junyi_refit.py::test_completed_refit_export_contract_and_tamper_rejection[A0]
+FAILED tests/akt/test_junyi_refit.py::test_completed_refit_export_contract_and_tamper_rejection[A1]
+FAILED tests/akt/test_junyi_refit.py::test_completed_refit_export_contract_and_tamper_rejection[A2]
+FAILED tests/akt/test_junyi_refit.py::test_completed_refit_export_contract_and_tamper_rejection[A3]
+13 failed, 85 passed in 22.83s

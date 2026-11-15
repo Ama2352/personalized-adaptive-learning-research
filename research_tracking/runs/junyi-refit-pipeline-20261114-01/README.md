@@ -183,3 +183,16 @@ Người dùng cung cấp workspace honguyenminhsang2016 với30USDcredit và y�
 MCP mới nhận T4/kernel405, source và Drive chưa có trong phiên này, mount vẫn lỗi. Không suy ra checkpoint trên Drive đã mất. Người dùng tải LATEST_FROM_DRIVE.json về D; nó trỏ `tranches/colab-junyi-a3-refit-20261115-023/BACKUP_COMPLETE.json`. Chờ bundle023 để kiểmSHA và xem còn cần học tiếp hay đã đủ9epoch. Không coi quan sát cũ7epoch là trạng thái mới nhất.
 
 Lượt kiểm04 bổ sung kiểm đường sổ ngân sách mặc định và sổ workspace mới, tổng70ca đạt theo tests-workspace2016-04.log. Sổ cũ không đổi.
+
+
+## 16/11 — Hoàn tất A3 refit và xuất đủ A0–A3 trên D
+
+Checkpoint Drive023 được nhập với SHA `ddca463e1a2beb152868ed76c528c678fa26bcd438e7969095894e52f2da8b75`, đủ8epoch và epoch9/bước1.874. Lượt H100 workspace2016 học tiếp166bước, hoàn tất9epoch và dừng App trước tải26file/174.500.783byte. `a3-final-acceptance01.json` xác nhận model/Adam hữu hạn, RNG đầy đủ, mỗi epoch14.947.674target/2.040step, tổng134.529.066lượt target/18.360step. `a3-final-copy-inventory01.json` giữ inventory trước/sau chép19file canonical, không ghi đè nội dung lịch sử. Model gọn tại `experiments/akt/results/model-export-a3-refit-20261114-01/`, checkpoint cuối SHA `793c198b209c7fb4daddd21500d1ff97d3dc39697db6c2b702d7083cfb0b19eb`.
+
+`exports-verified-a0-a1-a2-a3-portable-memory-cap-v1.json` kiểm đủ bốn model và identity chung, chỉ tách max_vram_bytes theo comparison_contract. A3 nối H100/L4/T4/H100, thời gian native tích lũy được báo riêng và chưa chứng minh bitwise-equivalence xuyên GPU. Một số checkpoint hết epoch lịch sử không còn trong bundle Drive023, không dùng chúng làm bằng chứng đã tải đầy đủ; checkpoint cuối/history/model/optimizer/RNG đã kiểm thực tế. Hiệu chỉnh và đánh giá độc lập còn thiếu.
+
+`workspace2016-apps-after-a3-02.json` xác nhận4App đã stopped/tasks0. Billing quan sát lúc17:01UTC15/11 (00:01ngày16/11ViệtNam) metered0,22012663USD, billed0, credit tiêu0,22USD. Đây là số workspace có thể trễ, chưa phải hóa đơn riêng lượt cuối. Sổ workspace mới giữ toàn cận0,97USD của các reservation đã đóng và dự phòng5USD, không còn allocation hoạt động. SHA sổ workspace cũ vẫn khớp. Các failure image permission, CPUbuild, importROOT và logs kiểm ban đầu được giữ. Bộ kiểm cuối lượt01 thiếu PYTHONPATH, lượt02 vướng Git ownership upstream. Lượt03 đặt đường src và safe.directory chỉ trong môi trường process cho đúng dependency hiện hữu, không đổi Git global.
+
+`STATE-before-a3-final-20261116.json` và `refit-loop-progress-before-a3-final-20261116.json` giữ trạng thái trước cập nhật, SHA được ghi ở state hiện hành. Hai báo cáo đợt15/11 nối tiếp mốc hoàn tất16/11, figure mới có SVG/PNG/CSV/nguồn riêng. Entrypoint nghiệm thu `accept_a3_final.py` tái kiểm SHA, COMPLETE, identity, model/Adam/RNG rồi xuất gói model. Không có thay đổi hyperparameter/split/native numerical worker hoặc đọc Holdout trong lượt kết thúc.
+
+Kiểm local cuối lượt04 đạt98ca theo `tests-a3-final-20261116-04.log`. Giữ failure03 do Windows chặn hardlink trong môi trường hạn chế; lượt04 chạy đúng quyền tạo hardlink trong fixture test, không sửa numerical code. Compile hai script thành công. Figure PNG đã xem trực tiếp, kiểm SVG/XML, nguồn SHA và link hình Markdown đạt theo `a3-final-report-static-qa01.json`; chưa kiểm lại giao diện trình duyệt trong lượt kết thúc.

@@ -1,0 +1,36 @@
+<modal-server>:0: ServerWarning: Your Modal token ak-c3ifBQ8mgSCnZNvKuAQYVF expires in 11h. Run `modal token new` to create a replacement.
+✓ Initialized. View run at 
+https://modal.com/apps/honguyenminhsang2016/main/ap-I2W2gtU9vSDtTRAFounJka
+Stopping app - uncaught exception raised locally: PermissionDeniedError("You don't have permission to access Image 'im-ldjZsYO21pzaupmQXGLhnS'").
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\experiments\akt\modal_junyi_refit.py", line 110, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\experiments\akt\modal_junyi_refit.py", line 105, in main
+    print(json.dumps(run(args.snapshot, json.loads(args.request.read_text()),
+                     ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        worker_entrypoint='run_junyi_refit_gpu_stage.py', execution_validator=validate_refit_execution)))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\experiments\akt\modal_junyi_staged.py", line 369, in run
+    with modal.enable_output(),app.run(environment_name='main'):
+                               ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\app.py", line 497, in run
+    async with _run_app(
+               ~~~~~~~~^
+        self, name=name, client=client, detach=detach, interactive=interactive, environment_name=environment_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 214, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\runner.py", line 457, in _run_app
+    await _create_all_objects(running_app, local_app_state, load_context)
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\runner.py", line 205, in _create_all_objects
+    await asyncio.gather(*[tc.create_task(_load(tag, obj)) for tag, obj in indexed_objects.items()])
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\runner.py", line 196, in _load
+    await resolver.load(obj, load_context, existing_object_id=existing_object_id)
+modal.exception.PermissionDeniedError: You don't have permission to access Image 'im-ldjZsYO21pzaupmQXGLhnS'

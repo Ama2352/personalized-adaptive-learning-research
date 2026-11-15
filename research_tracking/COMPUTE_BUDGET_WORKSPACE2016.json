@@ -6,10 +6,32 @@
   "extra_payment_allowed": false,
   "automatic_monthly_budget_reset": false,
   "authorization_reference": "Người dùng15/11 cung cấp workspace honguyenminhsang2016 với30USD credit, sau đó yêu cầu tiếp tục H100. Đợt mới có trần30USD riêng, giữ nguyên sổ tài khoản trước.",
-  "historical_usage_reserved_upper_usd": 0,
+  "historical_usage_reserved_upper_usd": 0.97,
   "safety_and_final_inference_reserve_usd": 5,
   "new_allocations": [],
-  "closed_reservations": [],
+  "closed_reservations": [
+    {
+      "id": "junyi-a3-refit-h100-ws2016-20261115-01",
+      "status": "STOPPED_IMAGE_PERMISSION_DENIED_BEFORE_GPU",
+      "reserved_upper_closed_usd": 0.02,
+      "stop_evidence": "experiments/akt/results/modal-junyi-a3-refit-h100-ws2016-20261115-01/app-budget-guard.json",
+      "actual_cost_usd": null
+    },
+    {
+      "id": "workspace2016-runtime-cpu-20261115-01",
+      "status": "CPU_RUNTIME_VERIFIED_APP_STOPPED",
+      "reserved_upper_closed_usd": 0.25,
+      "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/workspace2016-runtime01.json",
+      "actual_cost_usd": null
+    },
+    {
+      "id": "junyi-a3-refit-h100-ws2016-20261115-02",
+      "status": "JUNYI_REFIT90_COMPLETE_GPU_STOPPED",
+      "reserved_upper_closed_usd": 0.7,
+      "actual_cost_usd": null,
+      "stop_evidence": "experiments/akt/results/modal-junyi-a3-refit-h100-ws2016-20261115-02/app-budget-guard.json"
+    }
+  ],
   "provider_cost_basis": "free_credit_consumption_v1",
   "prior_workspace_ledger": {
     "path": "research_tracking/COMPUTE_BUDGET.json",
@@ -18,5 +40,6 @@
   },
   "accounting_scope_vi": "Trường ceiling kế thừa validator là trần đợt workspace mới. Chi lịch sử tài khoản cũ giữ riêng, không đặt lại sổ cũ; tổng hai nguồn được cấp là60USD.",
   "stop_rule": "Dừng khi chi cộng dự phòng/allocation vượt30USD đợt mới hoặc billed_cost>0. Mỗi lượt phải khớp workspace thực tế.",
-  "last_accounting_snapshot": "research_tracking/runs/junyi-refit-pipeline-20261114-01/workspace2016-preflight01.json"
+  "last_accounting_snapshot": "research_tracking/runs/junyi-refit-pipeline-20261114-01/workspace2016-billing-after-a3-02.json",
+  "accounting_limits_vi": "Billing sau stop quan sát metered0,22012663USD/billed0, credit0,22USD. Billing có thể trễ hoặc điều chỉnh, giữ toàn bộ cận0,97USD cho ba reservation và dự phòng5USD. Không coi0,22USD là hóa đơn riêng A3 cuối."
 }

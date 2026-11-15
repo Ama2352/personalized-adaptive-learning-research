@@ -1,5 +1,5 @@
 {
-  "status": "MODAL2016_READY_WAITING_LATEST_CHECKPOINT",
+  "status": "ALL_REFIT_EXPORTS_COMPLETE",
   "started_at_utc": "2026-11-14T19:22:32.785215+00:00",
   "models": {
     "a0": {
@@ -24,29 +24,27 @@
       "model_export": "experiments/akt/results/model-export-a2-refit-20261114-01"
     },
     "a3": {
-      "status": "PARTIAL_JUNYI_REFIT90",
-      "complete_epochs": 7,
-      "partial_epoch": 8,
-      "partial_optimizer_step": 256,
+      "status": "JUNYI_REFIT90_COMPLETE",
+      "complete_epochs": 9,
       "frozen_epochs": 9,
-      "last_request": "a3-refit-execution05.json",
-      "checkpoint_evidence": "a3-colab-monitor.jsonl",
-      "checkpoint_location": "Google Drive cá nhân; checkpoint T4 lượt001 đã kiểm trên D"
+      "last_request": "a3-refit-workspace2016-execution02.json",
+      "model_export": "experiments/akt/results/model-export-a3-refit-20261114-01",
+      "checkpoint_evidence": "a3-final-acceptance01.json"
     }
   },
-  "updated_at_utc": "2026-11-15T11:01:46.127632+00:00",
-  "next_variant": "a3",
+  "updated_at_utc": "2026-11-15T17:04:00.955507+00:00",
+  "next_variant": null,
   "budget_review": "refit-remaining-budget-review.json",
   "active_request": null,
   "modal_current_cap_usd": 0.25,
   "colab_upload_preserved": true,
   "modal_gpu_running": false,
   "a3_latest_checkpoint_evidence": "a3-checkpoint-verified05.json",
-  "next_action_vi": "Đọc LATEST_FROM_DRIVE.json để lấy checkpoint mới nhất; đối chiếu bản sao và SHA trước staging H100 workspace2016. Dùng sổ mới, giữ sổ cũ. Chưa mở GPU.",
+  "next_action_vi": "A0–A3 expert Junyi đã refit và xuất model đủ9epoch. Hiệu chỉnh, đánh giá độc lập và các đối chứng nghiên cứu còn thiếu.",
   "colab_abandoned_by_user": false,
   "colab_bridge_closed": false,
   "colab_runtime_release_verified": false,
-  "active_execution": "colab-junyi-a3-refit-20261115-017-operation",
+  "active_execution": null,
   "observed_remaining_credit_usd": 0.18,
   "drive_folder_id": null,
   "drive_parts_uploaded": 7,
@@ -85,5 +83,16 @@
   "modal_budget_file": "research_tracking/COMPUTE_BUDGET_WORKSPACE2016.json",
   "modal_auth_evidence": "workspace2016-preflight01.json",
   "colab_latest_runtime_kernel_pid": 405,
-  "colab_drive_reconnect_failed": true
+  "colab_drive_reconnect_failed": true,
+  "all_owned_refit_apps_stopped": true,
+  "last_execution": "modal-junyi-a3-refit-h100-ws2016-20261115-02",
+  "last_verified_exports": "exports-verified-a0-a1-a2-a3-portable-memory-cap-v1.json",
+  "prior_state_file": "refit-loop-progress-before-a3-final-20261116.json",
+  "prior_state_sha256": "947480322b8c5481c52f1a1945e9e6f64681de826bf61d48d56f481729915429",
+  "next_steps": [
+    "Hiệu chỉnh xác suất theo protocol bằng nhóm calibration riêng",
+    "Đánh giá độc lập theo protocol và tiếp tục các đối chứng nghiên cứu còn thiếu"
+  ],
+  "limits_vi": "Chưa calibration hoặc đánh giá độc lập. A3 nối H100/L4/T4/H100, thời gian mixed-device không dùng làm so sánh tốc độ đồng nhất.",
+  "completed_at_local": "2026-11-16 Asia/Saigon"
 }

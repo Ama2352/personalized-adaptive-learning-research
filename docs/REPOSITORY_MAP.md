@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 16/11 — A0–A3 expert Junyi đã hoàn tất refit TRAIN90
+
+[Nghiệm thu A3 cuối](../research_tracking/runs/junyi-refit-pipeline-20261114-01/a3-final-acceptance01.json) xác nhận đủ9epoch, mỗi epoch14.947.674target/2.040step, model/Adam hữu hạn và RNG. Model gọn ở `experiments/akt/results/model-export-a3-refit-20261114-01/`. [Đối chiếu bốn model](../research_tracking/runs/junyi-refit-pipeline-20261114-01/exports-verified-a0-a1-a2-a3-portable-memory-cap-v1.json) kiểm identity chung và chỉ tách trần VRAM theo hợp đồng. A3 nối H100/L4/T4/H100, thời gian cần báo riêng. Mọi App workspace mới đã stopped/tasks0. Hai báo cáo trong đợt15/11 đã nối tiếp kết quả16/11. Hiệu chỉnh và đánh giá độc lập còn thiếu. Các mục bên dưới giữ diễn tiến lịch sử.
+
 ## Báo cáo GVHD hiện hành — cập nhật15/11
 
 Cập nhật tiếp theo trong ngày15/11. A3 đã khôi phục và chạy thật trên Colab Tesla T4, Drive cá nhân đã kiểm bản sao sau4epoch và checkpoint epoch5/bước1.202. Checkpoint T4 đầu và11file liên quan đã tải vềD/kiểmSHA. Chuỗi tiếp tục có giới hạn tới9epoch, sao lưu Drive mỗi lượt. Đọc `STATE.json` và `a3-t4-monitor-progress02.json` trong [bundle refit](../research_tracking/runs/junyi-refit-pipeline-20261114-01/README.md) trước tiếp tục. Hai báo cáo GVHD đã cập nhật. Đoạn dưới ghi trạng thái trước lượt T4.

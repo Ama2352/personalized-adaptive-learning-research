@@ -1,5 +1,11 @@
 # Tiến độ nghiên cứu
 
+## Mốc 16/11 — A0–A3 expert Junyi đã refit và xuất đủ bốn model
+
+A3 nối checkpoint Drive023 đã kiểm tại epoch9/bước1.874 sang H100, học tiếp166bước và hoàn tất9epoch. Mỗi model dùng14.947.674target/2.040step mỗi epoch, tổng134.529.066lượt target và18.360step. Model/Adam hữu hạn, RNG đầy đủ, inventory trước/sau chép và export đã kiểm SHA. [Nghiệm thu cuối](runs/junyi-refit-pipeline-20261114-01/a3-final-acceptance01.json) và [đối chiếu A0–A3](runs/junyi-refit-pipeline-20261114-01/exports-verified-a0-a1-a2-a3-portable-memory-cap-v1.json).
+
+A3 nối H100/L4/T4/H100, chỉ tách trần tài nguyên VRAM khi đối chiếu identity, chưa chứng minh bitwise-equivalence xuyên GPU. Mọi App workspace bổ sung đã stopped/tasks0 trước tải artifact. Billing quan sát workspace mới0,22012663USD metered, billed0, còn trễ/điều chỉnh nên sổ giữ cận0,97USD và dự phòng5USD. Sổ workspace cũ giữ nguyên. Hai báo cáo đợt15/11 đã nối tiếp mốc16/11, hiệu chỉnh và đánh giá độc lập còn thiếu.
+
 ## Mốc 15/11 — A0, A1, A2 Junyi đã refit đủ 9 epoch
 
 Ba model refit TRAIN90 đã xuất trên D và kiểm đủ 134.529.066 target qua 9 epoch cùng 18.360 bước optimizer mỗi model. Đối chiếu xác nhận cùng split, mã hóa, cửa sổ, backbone khởi tạo và cấu hình tính toán. A3 refit còn chờ nguồn GPU phù hợp ngân sách. Snapshot Modal lúc 03:18 ghi còn khoảng 1,12 USD credit, billed 0. Mọi App H100 đã dừng. Các thay đổi dự phòng nội bộ, checkpoint/resume, source Gate và log được giữ trong [hồ sơ refit](runs/junyi-refit-pipeline-20261114-01/README.md).

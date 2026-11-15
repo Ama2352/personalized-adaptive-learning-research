@@ -228,6 +228,8 @@ def validate_execution(request, worker):
 
 def validate_resource_budget(request, worker, *, allow_short_final_epoch=False):
     """Dùng chung deadline, tài nguyên và cận chi phí cho selected/refit."""
+    if type(request.get('reuse_local_outputs', True)) is not bool:
+        raise ValueError('Cờ tái dùng artifact local phải là boolean')
     if request.get('status')!='USER_APPROVED' or not request.get('approval_reference'):
         raise PermissionError('Thiếu quyền thực thi lượt chạy')
     if worker['logical_run_id']!=worker['config']['run_id']:
@@ -389,7 +391,7 @@ def run(snapshot, request, *, worker_entrypoint='run_junyi_gpu_stage.py', execut
     # Context guard chỉ trả về sau stop acknowledged. CPU download/zip bắt đầu ở đây.
     guard=json.loads((output/'app-budget-guard.json').read_text())
     previous_output=None
-    if request.get('resume_inventory') is not None:
+    if request.get('resume_inventory') is not None and request.get('reuse_local_outputs', True):
         previous_output=(ROOT/request['resume_inventory']).parent
     result=collect_outputs(receipt,output,volume.read_file,stop_acknowledged=guard['stop_acknowledged'],
                            reuse_from=previous_output)

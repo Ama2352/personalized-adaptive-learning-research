@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-refit-pipeline-20261114-01\build_workspace2016_runtime.py", line 58, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-refit-pipeline-20261114-01\build_workspace2016_runtime.py", line 36, in main
+    function = app.function(image=image, cpu=1, memory=4096, timeout=90,
+        retries=0, max_containers=1, scaledown_window=1)(probe)
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\synchronicity\synchronizer.py", line 827, in f_wrapped
+    f_res = res(*args, **kwargs)
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\app.py", line 1007, in wrapped
+    function = _Function._from_local(
+        info,
+    ...<38 lines>...
+        restrict_output=_experimental_restrict_output,
+    )
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 830, in _from_local
+    raise InvalidError("`scaledown_window` must be between 2 and 3600 (inclusive)")
+modal.exception.InvalidError: `scaledown_window` must be between 2 and 3600 (inclusive)

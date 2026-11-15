@@ -1,0 +1,451 @@
+............FFFF..........FFFFF......................................... [ 73%]
+..........................                                               [100%]
+================================== FAILURES ===================================
+___________ test_native_refit_partial_resume_equals_continuous[A0] ____________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_native_refit_partial_resu0')
+variant = 'A0'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_native_refit_partial_resume_equals_continuous(case, tmp_path, variant):
+        torch.set_num_threads(1)
+        targets = len(case['refit'].users) * 6
+        budget = dict(max_steps=100, max_targets=targets, max_seconds=60.,
+            max_rss_bytes=2 * 1024**3, min_available_ram_bytes=1)
+        def make():
+            adapter = case['adapter'](variant)
+            optimizer = torch.optim.Adam(adapter.native.parameters(), lr=1e-4, foreach=False, fused=False)
+            identity = dict(phase='synthetic_refit90', variant=variant)
+            if variant != 'A0':
+                identity['batch_factory'] = adapter.audit_context_boundary()
+            return adapter, optimizer, identity
+        continuous, optimizer, identity = make()
+        common = dict(epochs=2, targets=targets, max_seconds=120., checkpoint_every_steps=1)
+>       expected = _run_epochs(continuous, lambda: iter(case['entries']), optimizer=optimizer,
+            output=tmp_path / 'continuous', identity=identity, budget=budget, **common)
+
+tests\akt\test_junyi_refit.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_refit.py:180: in _run_epochs
+    stats = train_epoch(adapter, windows_factory, optimizer=optimizer, epoch=epoch, budget=epoch_budget,
+src\knowledge_tracing\akt\training.py:346: in train_epoch
+    if len(pending) >= adapter.config.batch_size and not flush():
+                                                         ^^^^^^^
+src\knowledge_tracing\akt\training.py:326: in flush
+    save_batch()
+src\knowledge_tracing\akt\training.py:219: in save_batch
+    recovery['checkpoint_callback'](path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_native_refit_partial_resu0/continuous/batch-recovery/refit-batch-epoch-1-step-1-adfb4f80f1e94e348001ac0285c6214b.pt')
+
+    def publish(path):
+        directory = output / 'checkpoints' / (path.stem if path.parent == recovery_root else path.parent.name)
+        directory.mkdir(parents=True, exist_ok=True)
+        target = directory / 'state.pt'
+        if path != target:
+>           os.link(path, target)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_native_refit_partial_resu0\\continuous\\batch-recovery\\refit-batch-epoch-1-step-1-adfb4f80f1e94e348001ac0285c6214b.pt' -> 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_native_refit_partial_resu0\\continuous\\checkpoints\\refit-batch-epoch-1-step-1-adfb4f80f1e94e348001ac0285c6214b\\state.pt'
+
+src\knowledge_tracing\akt\research_junyi_refit.py:141: PermissionError
+___________ test_native_refit_partial_resume_equals_continuous[A1] ____________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_native_refit_partial_resu1')
+variant = 'A1'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_native_refit_partial_resume_equals_continuous(case, tmp_path, variant):
+        torch.set_num_threads(1)
+        targets = len(case['refit'].users) * 6
+        budget = dict(max_steps=100, max_targets=targets, max_seconds=60.,
+            max_rss_bytes=2 * 1024**3, min_available_ram_bytes=1)
+        def make():
+            adapter = case['adapter'](variant)
+            optimizer = torch.optim.Adam(adapter.native.parameters(), lr=1e-4, foreach=False, fused=False)
+            identity = dict(phase='synthetic_refit90', variant=variant)
+            if variant != 'A0':
+                identity['batch_factory'] = adapter.audit_context_boundary()
+            return adapter, optimizer, identity
+        continuous, optimizer, identity = make()
+        common = dict(epochs=2, targets=targets, max_seconds=120., checkpoint_every_steps=1)
+>       expected = _run_epochs(continuous, lambda: iter(case['entries']), optimizer=optimizer,
+            output=tmp_path / 'continuous', identity=identity, budget=budget, **common)
+
+tests\akt\test_junyi_refit.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_refit.py:180: in _run_epochs
+    stats = train_epoch(adapter, windows_factory, optimizer=optimizer, epoch=epoch, budget=epoch_budget,
+src\knowledge_tracing\akt\training.py:346: in train_epoch
+    if len(pending) >= adapter.config.batch_size and not flush():
+                                                         ^^^^^^^
+src\knowledge_tracing\akt\training.py:326: in flush
+    save_batch()
+src\knowledge_tracing\akt\training.py:219: in save_batch
+    recovery['checkpoint_callback'](path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_native_refit_partial_resu1/continuous/batch-recovery/refit-batch-epoch-1-step-1-361e64ec87c74d6d8c72268c6582e3dd.pt')
+
+    def publish(path):
+        directory = output / 'checkpoints' / (path.stem if path.parent == recovery_root else path.parent.name)
+        directory.mkdir(parents=True, exist_ok=True)
+        target = directory / 'state.pt'
+        if path != target:
+>           os.link(path, target)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_native_refit_partial_resu1\\continuous\\batch-recovery\\refit-batch-epoch-1-step-1-361e64ec87c74d6d8c72268c6582e3dd.pt' -> 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_native_refit_partial_resu1\\continuous\\checkpoints\\refit-batch-epoch-1-step-1-361e64ec87c74d6d8c72268c6582e3dd\\state.pt'
+
+src\knowledge_tracing\akt\research_junyi_refit.py:141: PermissionError
+___________ test_native_refit_partial_resume_equals_continuous[A2] ____________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_native_refit_partial_resu2')
+variant = 'A2'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_native_refit_partial_resume_equals_continuous(case, tmp_path, variant):
+        torch.set_num_threads(1)
+        targets = len(case['refit'].users) * 6
+        budget = dict(max_steps=100, max_targets=targets, max_seconds=60.,
+            max_rss_bytes=2 * 1024**3, min_available_ram_bytes=1)
+        def make():
+            adapter = case['adapter'](variant)
+            optimizer = torch.optim.Adam(adapter.native.parameters(), lr=1e-4, foreach=False, fused=False)
+            identity = dict(phase='synthetic_refit90', variant=variant)
+            if variant != 'A0':
+                identity['batch_factory'] = adapter.audit_context_boundary()
+            return adapter, optimizer, identity
+        continuous, optimizer, identity = make()
+        common = dict(epochs=2, targets=targets, max_seconds=120., checkpoint_every_steps=1)
+>       expected = _run_epochs(continuous, lambda: iter(case['entries']), optimizer=optimizer,
+            output=tmp_path / 'continuous', identity=identity, budget=budget, **common)
+
+tests\akt\test_junyi_refit.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_refit.py:180: in _run_epochs
+    stats = train_epoch(adapter, windows_factory, optimizer=optimizer, epoch=epoch, budget=epoch_budget,
+src\knowledge_tracing\akt\training.py:346: in train_epoch
+    if len(pending) >= adapter.config.batch_size and not flush():
+                                                         ^^^^^^^
+src\knowledge_tracing\akt\training.py:326: in flush
+    save_batch()
+src\knowledge_tracing\akt\training.py:219: in save_batch
+    recovery['checkpoint_callback'](path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_native_refit_partial_resu2/continuous/batch-recovery/refit-batch-epoch-1-step-1-ec9dd1c973de4f8ebdbe9c976ff42c77.pt')
+
+    def publish(path):
+        directory = output / 'checkpoints' / (path.stem if path.parent == recovery_root else path.parent.name)
+        directory.mkdir(parents=True, exist_ok=True)
+        target = directory / 'state.pt'
+        if path != target:
+>           os.link(path, target)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_native_refit_partial_resu2\\continuous\\batch-recovery\\refit-batch-epoch-1-step-1-ec9dd1c973de4f8ebdbe9c976ff42c77.pt' -> 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_native_refit_partial_resu2\\continuous\\checkpoints\\refit-batch-epoch-1-step-1-ec9dd1c973de4f8ebdbe9c976ff42c77\\state.pt'
+
+src\knowledge_tracing\akt\research_junyi_refit.py:141: PermissionError
+___________ test_native_refit_partial_resume_equals_continuous[A3] ____________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_native_refit_partial_resu3')
+variant = 'A3'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_native_refit_partial_resume_equals_continuous(case, tmp_path, variant):
+        torch.set_num_threads(1)
+        targets = len(case['refit'].users) * 6
+        budget = dict(max_steps=100, max_targets=targets, max_seconds=60.,
+            max_rss_bytes=2 * 1024**3, min_available_ram_bytes=1)
+        def make():
+            adapter = case['adapter'](variant)
+            optimizer = torch.optim.Adam(adapter.native.parameters(), lr=1e-4, foreach=False, fused=False)
+            identity = dict(phase='synthetic_refit90', variant=variant)
+            if variant != 'A0':
+                identity['batch_factory'] = adapter.audit_context_boundary()
+            return adapter, optimizer, identity
+        continuous, optimizer, identity = make()
+        common = dict(epochs=2, targets=targets, max_seconds=120., checkpoint_every_steps=1)
+>       expected = _run_epochs(continuous, lambda: iter(case['entries']), optimizer=optimizer,
+            output=tmp_path / 'continuous', identity=identity, budget=budget, **common)
+
+tests\akt\test_junyi_refit.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_refit.py:180: in _run_epochs
+    stats = train_epoch(adapter, windows_factory, optimizer=optimizer, epoch=epoch, budget=epoch_budget,
+src\knowledge_tracing\akt\training.py:346: in train_epoch
+    if len(pending) >= adapter.config.batch_size and not flush():
+                                                         ^^^^^^^
+src\knowledge_tracing\akt\training.py:326: in flush
+    save_batch()
+src\knowledge_tracing\akt\training.py:219: in save_batch
+    recovery['checkpoint_callback'](path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_native_refit_partial_resu3/continuous/batch-recovery/refit-batch-epoch-1-step-1-c7fc9be09a5645199076977d62be14fc.pt')
+
+    def publish(path):
+        directory = output / 'checkpoints' / (path.stem if path.parent == recovery_root else path.parent.name)
+        directory.mkdir(parents=True, exist_ok=True)
+        target = directory / 'state.pt'
+        if path != target:
+>           os.link(path, target)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_native_refit_partial_resu3\\continuous\\batch-recovery\\refit-batch-epoch-1-step-1-c7fc9be09a5645199076977d62be14fc.pt' -> 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_native_refit_partial_resu3\\continuous\\checkpoints\\refit-batch-epoch-1-step-1-c7fc9be09a5645199076977d62be14fc\\state.pt'
+
+src\knowledge_tracing\akt\research_junyi_refit.py:141: PermissionError
+____ test_public_entry_checks_exact_grant_before_constructing_model[True] _____
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_public_entry_checks_exact1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002047EEB6060>
+valid_grant = True
+
+    @pytest.mark.parametrize('valid_grant', [False, True])
+    def test_public_entry_checks_exact_grant_before_constructing_model(case, tmp_path, monkeypatch, valid_grant):
+        from knowledge_tracing.akt import authorization, research_junyi_refit as refit
+        from knowledge_tracing.akt import research_junyi_window_cache as windows
+        from knowledge_tracing.akt.research_junyi_engineering import file_sha
+        monkeypatch.setattr(windows, 'CACHE_BASE', tmp_path)
+        config = replace(case['config'], output_dir=tmp_path / 'output', run_id='synthetic-refit-public',
+            max_steps=100, max_seconds=60., max_wall_seconds=120., max_rss_bytes=2 * 1024**3,
+            min_available_ram_bytes=1)
+        plan, indices, profile = plan_inputs(case, config)
+        inputs = JunyiRefitInputs(case['refit'], len(case['refit'].users) * 6, 'a' * 64, 'b' * 64)
+        cache_root = tmp_path / 'windows'
+        windows.build_junyi_window_cache(cache_root, iter(case['entries']), view=inputs.view,
+            encoding=case['encoding'], source_data_sha256=inputs.source_identity, expected_target_rows=inputs.targets)
+        cache = windows.JunyiWindowCacheSession(cache_root, inputs.view, case['encoding'], inputs.source_identity,
+            inputs.targets, file_sha(cache_root / 'manifest.json'))
+        runtime = tmp_path / 'runtime.json'
+        runtime.write_text('{}')
+        monkeypatch.setattr(refit, 'validate_config', lambda *args, **kwargs: None)
+        monkeypatch.setattr(authorization, 'require_gate2_evidence', lambda *args, **kwargs: dict(report_sha256='f' * 64))
+        monkeypatch.setattr(authorization, 'preflight', lambda *args, **kwargs: None)
+        calls = []
+        monkeypatch.setattr(native_graph, '_cuda_execution_check', lambda *args, **kwargs: calls.append('cuda-check'))
+        binding = refit.refit_grant_binding(config=config, inputs=inputs, encoding=case['encoding'], variant='A0',
+            plan=plan, window_cache=cache, gate_sha256='f' * 64, runtime_sha256=file_sha(runtime))
+        grant = dict(status='USER_APPROVED', approval_reference='Synthetic CPU mock only', binding=binding)
+        if not valid_grant:
+            grant['binding'] = dict(binding, epochs=3)
+        kwargs = dict(variant='A0', plan=plan, expected_plan_sha256=plan['identity'], grant=grant,
+            selected_index=indices['A0'],
+            runtime_report=runtime, lock_file=tmp_path / 'lock', gate2_report=tmp_path / 'gate', window_cache=cache)
+        if valid_grant:
+>           result = refit.run_junyi_refit(config, profile, inputs, case['encoding'], **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:221: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_refit.py:302: in run_junyi_refit
+    return _run_epochs(adapter, window_cache.iter_windows, optimizer=optimizer, output=config.output_dir,
+src\knowledge_tracing\akt\research_junyi_refit.py:180: in _run_epochs
+    stats = train_epoch(adapter, windows_factory, optimizer=optimizer, epoch=epoch, budget=epoch_budget,
+src\knowledge_tracing\akt\training.py:357: in train_epoch
+    save_batch()
+src\knowledge_tracing\akt\training.py:219: in save_batch
+    recovery['checkpoint_callback'](path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_public_entry_checks_exact1/output/batch-recovery/refit-batch-epoch-1-step-7-8bd7e87ed570480380e2744d1e28302a.pt')
+
+    def publish(path):
+        directory = output / 'checkpoints' / (path.stem if path.parent == recovery_root else path.parent.name)
+        directory.mkdir(parents=True, exist_ok=True)
+        target = directory / 'state.pt'
+        if path != target:
+>           os.link(path, target)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_public_entry_checks_exact1\\output\\batch-recovery\\refit-batch-epoch-1-step-7-8bd7e87ed570480380e2744d1e28302a.pt' -> 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_public_entry_checks_exact1\\output\\checkpoints\\refit-batch-epoch-1-step-7-8bd7e87ed570480380e2744d1e28302a\\state.pt'
+
+src\knowledge_tracing\akt\research_junyi_refit.py:141: PermissionError
+________ test_completed_refit_export_contract_and_tamper_rejection[A0] ________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_completed_refit_export_co0')
+variant = 'A0'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_completed_refit_export_contract_and_tamper_rejection(case, tmp_path, variant):
+        import sys
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts/akt'))
+        from export_junyi_refit_model import verify_completed
+        adapter = case['adapter'](variant)
+        optimizer = torch.optim.Adam(adapter.native.parameters(), lr=1e-4, foreach=False, fused=False)
+        identity = dict(phase='junyi_refit90', variant=variant, plan_sha256='f' * 64)
+        if variant != 'A0':
+            identity['batch_factory'] = adapter.audit_context_boundary()
+        targets = len(case['refit'].users) * 6
+        output = tmp_path / 'complete'
+>       _run_epochs(adapter, lambda: iter(case['entries']), optimizer=optimizer, output=output,
+            identity=identity, epochs=1, targets=targets, max_seconds=120.,
+            budget=dict(max_steps=100, max_targets=targets, max_seconds=60.,
+                        max_rss_bytes=2 * 1024**3, min_available_ram_bytes=1))
+
+tests\akt\test_junyi_refit.py:243: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_refit.py:180: in _run_epochs
+    stats = train_epoch(adapter, windows_factory, optimizer=optimizer, epoch=epoch, budget=epoch_budget,
+src\knowledge_tracing\akt\training.py:357: in train_epoch
+    save_batch()
+src\knowledge_tracing\akt\training.py:219: in save_batch
+    recovery['checkpoint_callback'](path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_completed_refit_export_co0/complete/batch-recovery/refit-batch-epoch-1-step-7-d6280c3547d643e4a8cb89e4b3d7053e.pt')
+
+    def publish(path):
+        directory = output / 'checkpoints' / (path.stem if path.parent == recovery_root else path.parent.name)
+        directory.mkdir(parents=True, exist_ok=True)
+        target = directory / 'state.pt'
+        if path != target:
+>           os.link(path, target)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_completed_refit_export_co0\\complete\\batch-recovery\\refit-batch-epoch-1-step-7-d6280c3547d643e4a8cb89e4b3d7053e.pt' -> 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_completed_refit_export_co0\\complete\\checkpoints\\refit-batch-epoch-1-step-7-d6280c3547d643e4a8cb89e4b3d7053e\\state.pt'
+
+src\knowledge_tracing\akt\research_junyi_refit.py:141: PermissionError
+________ test_completed_refit_export_contract_and_tamper_rejection[A1] ________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_completed_refit_export_co1')
+variant = 'A1'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_completed_refit_export_contract_and_tamper_rejection(case, tmp_path, variant):
+        import sys
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts/akt'))
+        from export_junyi_refit_model import verify_completed
+        adapter = case['adapter'](variant)
+        optimizer = torch.optim.Adam(adapter.native.parameters(), lr=1e-4, foreach=False, fused=False)
+        identity = dict(phase='junyi_refit90', variant=variant, plan_sha256='f' * 64)
+        if variant != 'A0':
+            identity['batch_factory'] = adapter.audit_context_boundary()
+        targets = len(case['refit'].users) * 6
+        output = tmp_path / 'complete'
+>       _run_epochs(adapter, lambda: iter(case['entries']), optimizer=optimizer, output=output,
+            identity=identity, epochs=1, targets=targets, max_seconds=120.,
+            budget=dict(max_steps=100, max_targets=targets, max_seconds=60.,
+                        max_rss_bytes=2 * 1024**3, min_available_ram_bytes=1))
+
+tests\akt\test_junyi_refit.py:243: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_refit.py:180: in _run_epochs
+    stats = train_epoch(adapter, windows_factory, optimizer=optimizer, epoch=epoch, budget=epoch_budget,
+src\knowledge_tracing\akt\training.py:357: in train_epoch
+    save_batch()
+src\knowledge_tracing\akt\training.py:219: in save_batch
+    recovery['checkpoint_callback'](path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_completed_refit_export_co1/complete/batch-recovery/refit-batch-epoch-1-step-7-450fe7862f594529a783d8763d5cfb2e.pt')
+
+    def publish(path):
+        directory = output / 'checkpoints' / (path.stem if path.parent == recovery_root else path.parent.name)
+        directory.mkdir(parents=True, exist_ok=True)
+        target = directory / 'state.pt'
+        if path != target:
+>           os.link(path, target)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_completed_refit_export_co1\\complete\\batch-recovery\\refit-batch-epoch-1-step-7-450fe7862f594529a783d8763d5cfb2e.pt' -> 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_completed_refit_export_co1\\complete\\checkpoints\\refit-batch-epoch-1-step-7-450fe7862f594529a783d8763d5cfb2e\\state.pt'
+
+src\knowledge_tracing\akt\research_junyi_refit.py:141: PermissionError
+________ test_completed_refit_export_contract_and_tamper_rejection[A2] ________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_completed_refit_export_co2')
+variant = 'A2'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_completed_refit_export_contract_and_tamper_rejection(case, tmp_path, variant):
+        import sys
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts/akt'))
+        from export_junyi_refit_model import verify_completed
+        adapter = case['adapter'](variant)
+        optimizer = torch.optim.Adam(adapter.native.parameters(), lr=1e-4, foreach=False, fused=False)
+        identity = dict(phase='junyi_refit90', variant=variant, plan_sha256='f' * 64)
+        if variant != 'A0':
+            identity['batch_factory'] = adapter.audit_context_boundary()
+        targets = len(case['refit'].users) * 6
+        output = tmp_path / 'complete'
+>       _run_epochs(adapter, lambda: iter(case['entries']), optimizer=optimizer, output=output,
+            identity=identity, epochs=1, targets=targets, max_seconds=120.,
+            budget=dict(max_steps=100, max_targets=targets, max_seconds=60.,
+                        max_rss_bytes=2 * 1024**3, min_available_ram_bytes=1))
+
+tests\akt\test_junyi_refit.py:243: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_refit.py:180: in _run_epochs
+    stats = train_epoch(adapter, windows_factory, optimizer=optimizer, epoch=epoch, budget=epoch_budget,
+src\knowledge_tracing\akt\training.py:357: in train_epoch
+    save_batch()
+src\knowledge_tracing\akt\training.py:219: in save_batch
+    recovery['checkpoint_callback'](path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_completed_refit_export_co2/complete/batch-recovery/refit-batch-epoch-1-step-7-f6622b22ad3c481ea14fe79c960d6a53.pt')
+
+    def publish(path):
+        directory = output / 'checkpoints' / (path.stem if path.parent == recovery_root else path.parent.name)
+        directory.mkdir(parents=True, exist_ok=True)
+        target = directory / 'state.pt'
+        if path != target:
+>           os.link(path, target)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_completed_refit_export_co2\\complete\\batch-recovery\\refit-batch-epoch-1-step-7-f6622b22ad3c481ea14fe79c960d6a53.pt' -> 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_completed_refit_export_co2\\complete\\checkpoints\\refit-batch-epoch-1-step-7-f6622b22ad3c481ea14fe79c960d6a53\\state.pt'
+
+src\knowledge_tracing\akt\research_junyi_refit.py:141: PermissionError
+________ test_completed_refit_export_contract_and_tamper_rejection[A3] ________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_completed_refit_export_co3')
+variant = 'A3'
+
+    @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
+    def test_completed_refit_export_contract_and_tamper_rejection(case, tmp_path, variant):
+        import sys
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts/akt'))
+        from export_junyi_refit_model import verify_completed
+        adapter = case['adapter'](variant)
+        optimizer = torch.optim.Adam(adapter.native.parameters(), lr=1e-4, foreach=False, fused=False)
+        identity = dict(phase='junyi_refit90', variant=variant, plan_sha256='f' * 64)
+        if variant != 'A0':
+            identity['batch_factory'] = adapter.audit_context_boundary()
+        targets = len(case['refit'].users) * 6
+        output = tmp_path / 'complete'
+>       _run_epochs(adapter, lambda: iter(case['entries']), optimizer=optimizer, output=output,
+            identity=identity, epochs=1, targets=targets, max_seconds=120.,
+            budget=dict(max_steps=100, max_targets=targets, max_seconds=60.,
+                        max_rss_bytes=2 * 1024**3, min_available_ram_bytes=1))
+
+tests\akt\test_junyi_refit.py:243: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_refit.py:180: in _run_epochs
+    stats = train_epoch(adapter, windows_factory, optimizer=optimizer, epoch=epoch, budget=epoch_budget,
+src\knowledge_tracing\akt\training.py:357: in train_epoch
+    save_batch()
+src\knowledge_tracing\akt\training.py:219: in save_batch
+    recovery['checkpoint_callback'](path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/a3-final-20261116-03/test_completed_refit_export_co3/complete/batch-recovery/refit-batch-epoch-1-step-7-76401dd9c2144128b76135868aac6b57.pt')
+
+    def publish(path):
+        directory = output / 'checkpoints' / (path.stem if path.parent == recovery_root else path.parent.name)
+        directory.mkdir(parents=True, exist_ok=True)
+        target = directory / 'state.pt'
+        if path != target:
+>           os.link(path, target)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_completed_refit_export_co3\\complete\\batch-recovery\\refit-batch-epoch-1-step-7-76401dd9c2144128b76135868aac6b57.pt' -> 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\a3-final-20261116-03\\test_completed_refit_export_co3\\complete\\checkpoints\\refit-batch-epoch-1-step-7-76401dd9c2144128b76135868aac6b57\\state.pt'
+
+src\knowledge_tracing\akt\research_junyi_refit.py:141: PermissionError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_junyi_refit.py::test_native_refit_partial_resume_equals_continuous[A0]
+FAILED tests/akt/test_junyi_refit.py::test_native_refit_partial_resume_equals_continuous[A1]
+FAILED tests/akt/test_junyi_refit.py::test_native_refit_partial_resume_equals_continuous[A2]
+FAILED tests/akt/test_junyi_refit.py::test_native_refit_partial_resume_equals_continuous[A3]
+FAILED tests/akt/test_junyi_refit.py::test_public_entry_checks_exact_grant_before_constructing_model[True]
+FAILED tests/akt/test_junyi_refit.py::test_completed_refit_export_contract_and_tamper_rejection[A0]
+FAILED tests/akt/test_junyi_refit.py::test_completed_refit_export_contract_and_tamper_rejection[A1]
+FAILED tests/akt/test_junyi_refit.py::test_completed_refit_export_contract_and_tamper_rejection[A2]
+FAILED tests/akt/test_junyi_refit.py::test_completed_refit_export_contract_and_tamper_rejection[A3]
+9 failed, 89 passed in 32.73s

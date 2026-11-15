@@ -1,10 +1,10 @@
 {
-  "status": "MODAL2016_READY_WAITING_LATEST_CHECKPOINT",
+  "status": "ALL_REFIT_EXPORTS_COMPLETE",
   "closed": false,
   "requested_scope": "Hoàn thiện pipeline refit A0–A3, ưu tiên local",
   "real_data_training_performed": true,
   "gpu_started": true,
-  "active_execution": "colab-junyi-a3-refit-20261115-017-operation",
+  "active_execution": null,
   "refit_models": {
     "A0": {
       "status": "JUNYI_REFIT90_COMPLETE",
@@ -28,30 +28,31 @@
       "model_export": "experiments/akt/results/model-export-a2-refit-20261114-01"
     },
     "A3": {
-      "status": "PARTIAL_JUNYI_REFIT90",
-      "epochs": 3,
+      "status": "JUNYI_REFIT90_COMPLETE",
+      "epochs": 9,
       "frozen_epochs": 9,
-      "output": "experiments/akt/results/modal-junyi-a3-refit-l4-20261115-05/recovery",
-      "checkpoint_evidence": "a3-checkpoint-verified05.json",
-      "checkpoint_export_pending": true
+      "output": "experiments/akt/results/modal-junyi-a3-refit-h100-ws2016-20261115-02",
+      "checkpoint_evidence": "a3-final-acceptance01.json",
+      "checkpoint_export_pending": false,
+      "model_export": "experiments/akt/results/model-export-a3-refit-20261114-01"
     }
   },
   "next_steps": [
-    "Đối soát hóa đơn giờ12:00 cho lượt A3 đầu và xét đợt H100 tiếp trong30USD credit",
-    "Giữ checkpoint mỗi đợt và tải đủ về D sau khi dừng GPU",
-    "Chuyển nguồn GPU khi khoản hiện tại không đủ, giữ cùng data/recipe/profile và kiểm trước resume"
+    "Hiệu chỉnh xác suất theo protocol bằng nhóm calibration riêng",
+    "Đánh giá độc lập theo protocol và tiếp tục các đối chứng nghiên cứu còn thiếu"
   ],
-  "all_owned_refit_apps_stopped": false,
-  "updated_at_utc": "2026-11-15T11:01:46.127632+00:00",
-  "prior_state_file": "STATE_checkpoint_A2_refit_20261115.json",
-  "prior_state_sha256": "0ba7fd01465f99128061068e4ae55fcc120dc870f8e4791c631ba01d2a96ca4e",
+  "all_owned_refit_apps_stopped": true,
+  "updated_at_utc": "2026-11-15T17:04:00.955507+00:00",
+  "prior_state_file": "STATE-before-a3-final-20261116.json",
+  "prior_state_sha256": "f52d198859e476d4e3b23bed93b46f11c145753d01bad57f9f0e0551642a82c9",
   "refit_models_exported": [
     "A0",
     "A1",
-    "A2"
+    "A2",
+    "A3"
   ],
-  "last_verified_exports": "exports-verified-a0-a1-a2.json",
-  "last_execution": "modal-junyi-a3-refit-l4-20261115-03",
+  "last_verified_exports": "exports-verified-a0-a1-a2-a3-portable-memory-cap-v1.json",
+  "last_execution": "modal-junyi-a3-refit-h100-ws2016-20261115-02",
   "last_terminal_evidence": "experiments/akt/results/modal-junyi-a2-refit-h100-20261114-04/remote-inventory.json",
   "budget_review": "refit-remaining-budget-review.json",
   "loop_progress": "refit-loop-progress.json",
@@ -59,7 +60,7 @@
   "source_gate_passed": 2667,
   "local_host_checks_passed": 85,
   "supervisor_report": "research_tracking/supervisor_reports/2026-11-15/01_tien_do/BAO_CAO_NGHIEN_CUU.html",
-  "limits_vi": "A3 refit còn thiếu. Hiệu chỉnh và đánh giá độc lập chưa thực hiện. Dữ liệu và model gốc giữ ở outputs theo run, file state cũ được chụp lại với SHA để giữ toàn bộ diễn tiến. Đọc bản kiểm export và ngân sách trước khi tiếp tục, không tự reset trần 30 USD.",
+  "limits_vi": "Chưa calibration hoặc đánh giá độc lập. A3 nối H100/L4/T4/H100, thời gian mixed-device không dùng làm so sánh tốc độ đồng nhất.",
   "a3_config_evidence": "a3-short-config-comparison01.json",
   "a3_request": "a3-refit-execution01.json",
   "a3_free_credit_cap_usd": 0.75,
@@ -1889,7 +1890,7 @@
     "independent_evaluation_performed": false
   },
   "a3_latest_checkpoint_evidence": "a3-checkpoint-verified05.json",
-  "next_action_vi": "Đọc LATEST_FROM_DRIVE.json để lấy checkpoint mới nhất; đối chiếu bản sao và SHA trước staging H100 workspace2016. Dùng sổ mới, giữ sổ cũ. Chưa mở GPU.",
+  "next_action_vi": "A0–A3 expert Junyi đã refit và xuất model đủ9epoch. Hiệu chỉnh, đánh giá độc lập và các đối chứng nghiên cứu còn thiếu.",
   "colab_t4_discovered": true,
   "modal_gpu_running": false,
   "active_request": null,
@@ -1936,5 +1937,6 @@
   "modal_budget_file": "research_tracking/COMPUTE_BUDGET_WORKSPACE2016.json",
   "modal_auth_evidence": "workspace2016-preflight01.json",
   "colab_latest_runtime_kernel_pid": 405,
-  "colab_drive_reconnect_failed": true
+  "colab_drive_reconnect_failed": true,
+  "completed_at_local": "2026-11-16 Asia/Saigon"
 }

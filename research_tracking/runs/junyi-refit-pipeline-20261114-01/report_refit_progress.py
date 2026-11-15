@@ -80,6 +80,8 @@ def main():
         additional_times.append(f'{variant.upper()} trung bình {mean(row["resource"]["wall_seconds"] for row in history):.1f} giây/epoch')
     if additional_times:
         timing+=' Các phiên bản refit tiếp theo đã nghiệm thu trên cùng quần thể và số bước cập nhật. '+ '. '.join(additional_times)+'.'
+    if 'a3' in models:
+        timing+=' A3 nối các checkpoint qua H100, L4, Tesla T4 rồi H100. Thời gian A3 là tổng thời gian native tích lũy qua các thiết bị, phụ thuộc cả overhead nối lại, nên không dùng để kết luận tốc độ tương đối giữa các cơ chế đồ thị.'
     limit='Đây là hoàn tất bước học lại mô hình theo số epoch đã chọn. Hiệu chỉnh xác suất, xuất dự đoán trên nhóm đánh giá độc lập và kết luận hiệu quả đồ thị còn chờ. Thời gian trong biểu đồ là thời gian học từng epoch, gồm phần tích lũy khi nối lại; thời gian chuẩn bị, tải artifact và tổng thời gian sử dụng function được theo dõi riêng.'
     if budget_review.get('status')=='A3_REFIT_PENDING_BUDGET':
         limit+=' A3 còn chờ bước refit vì cận cấp phát tiếp theo vượt phần ngân sách còn lại. Đã giữ đầu vào, cache và cấu hình để tiếp tục khi có nguồn GPU phù hợp.'
@@ -107,6 +109,8 @@ def main():
         limit+='. Checkpoint T4 đầu tiên và 11 file nhật ký, cấu hình, metadata đã tải về ổ D và kiểm toàn vẹn. Chuỗi chạy có giới hạn thời gian, dừng khi lỗi hoặc không tiến triển, kiểm bản sao Drive sau mỗi lượt. Giữ cấu hình FP32, batch 128, seed 42, chia tập và confidence TRAIN80 như trước. A3 dùng nhiều loại GPU khi nối lại nên thời gian của nó cần báo cáo riêng. Phần này xác nhận tiến độ huấn luyện và khả năng phục hồi; kết luận hiệu quả của cơ chế đồ thị còn cần hiệu chỉnh và đánh giá độc lập.'
     if progress['status']=='MODAL2016_READY_WAITING_LATEST_CHECKPOINT':
         limit+=' Sau khi kết nối lại, Colab đang là máy mới và chưa đọc được Drive. Lần quan sát trước xác nhận A3 đủ 7 epoch và checkpoint epoch 8, bước 256. Chỉ mục Drive do người dùng tải về trỏ đến lượt sao lưu 023, đang chờ kiểm bundle để xác định tiến độ mới. Workspace Modal mới honguyenminhsang2016 đã xác thực, billing quan sát bằng 0, có 30 USD credit do người dùng cung cấp. Sổ ngân sách mới giữ riêng tài khoản cũ. Chưa mở H100 trong đợt tài khoản mới; cần đối chiếu checkpoint mới nhất trước tiếp tục.'
+    if progress['status']=='ALL_REFIT_EXPORTS_COMPLETE':
+        limit+=' A3 hoàn tất vào ngày 16/11 theo giờ Việt Nam, tiếp nối đợt báo cáo 15/11. Checkpoint Drive lượt 023 đã kiểm trên D ở epoch 9, bước 1.874/2.040. Lượt H100 cuối học tiếp 166 bước, giữ model, Adam, RNG và sampler. App đã xác nhận dừng trước tải artifact. Model cuối và inventory đã kiểm SHA, đủ 9 epoch và optimizer hữu hạn. Đối chiếu A0–A3 giữ các cờ số học và chỉ tách trần tài nguyên VRAM theo comparison_contract. Chưa chứng minh bitwise-equivalence giữa các kiến trúc GPU.'
     figure_caption='Mỗi epoch dùng cùng 142.621 người học, 14.947.674 tương tác và 2.040 bước optimizer. FP32, batch 128, seed 42. Số liệu từ lịch sử refit A0 đã nghiệm thu.'
     if len(models)>1:
         prefix=figures/('refit-epoch-time-'+'-'.join(models)+'-v01')
@@ -129,17 +133,23 @@ def main():
             bars=ax.bar([row['model'] for row in comparison],[row['mean_epoch_seconds'] for row in comparison],color='#3e7184',width=.55)
             ax.bar_label(bars,labels=[f'{row["mean_epoch_seconds"]:.1f}' for row in comparison],padding=6)
             ax.set_ylim(0,max(row['mean_epoch_seconds'] for row in comparison)*1.3)
-            ax.set_ylabel('Giây / epoch');ax.set_title('Refit trên H100 — thời gian học trung bình',loc='left',pad=18)
+            chart_title='Refit TRAIN90 — thời gian học tích lũy qua các thiết bị' if 'a3' in models else 'Refit trên H100 — thời gian học trung bình'
+            ax.set_ylabel('Giây / epoch');ax.set_title(chart_title,loc='left',pad=18)
             ax.set_axisbelow(True);ax.grid(axis='y',alpha=.18)
             fig.savefig(prefix.with_suffix('.svg'));fig.savefig(prefix.with_suffix('.png'),dpi=170);plt.close(fig)
             prefix.with_suffix('.json').write_text(json.dumps(dict(sources=sources,phase='refit90',aggregation='Trung bình đủ 9 epoch của từng model, cộng phần trước/sau resume. Không bao gồm chuẩn bị và tải artifact.',generation_script=(HERE/'report_refit_progress.py').relative_to(ROOT).as_posix(),style_reference='research_tracking/runs/figures4papers-akt-20261112-01/upstream-reference.json',files={p.name:dict(sha256=sha(p),bytes=p.stat().st_size) for p in [prefix.with_suffix('.svg'),prefix.with_suffix('.png'),prefix.with_suffix('.csv')]}),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
         figure_caption='Trung bình đủ 9 epoch của từng model đã nghiệm thu, cùng TRAIN90 với 142.621 người học, 14.947.674 mục tiêu mỗi epoch, FP32, batch 128 và seed 42. Đây là thời gian học, các bước chuẩn bị và thu artifact được theo dõi riêng.'
+        if 'a3' in models:
+            figure_caption+=' A0–A2 dùng H100, A3 nối H100/L4/T4/H100. Số liệu A3 gồm thời gian tích lũy của các lần nối lại và không dùng làm đối chứng tốc độ phần cứng đồng nhất.'
     svg=prefix.with_suffix('.svg').read_text();svg=svg[svg.index('<svg'):svg.rindex('</svg>')+6]
+    svg='\n'.join(line.rstrip() for line in svg.splitlines())
     for identifier in sorted(set(re.findall(r'\bid="([^"]+)"',svg)),key=len,reverse=True):
         new='a0refit_'+identifier
         svg=svg.replace('id="'+identifier+'"','id="'+new+'"').replace('#'+identifier+'"','#'+new+'"').replace('url(#'+identifier+')','url(#'+new+')')
     completed_names=', '.join(v.upper() for v in models)
     heading='15/11 — '+completed_names+' hoàn tất refit'+('; tiếp tục các phiên bản còn lại' if len(models)<4 else '')
+    if len(models)==4:
+        heading='16/11 — A0–A3 hoàn tất refit TRAIN90, model đã xuất và kiểm trên D'
     if budget_review.get('status')=='A3_REFIT_PENDING_BUDGET':
         heading='15/11 — '+completed_names+' hoàn tất refit, A3 chờ nguồn GPU'
     section='<section id="refit-update-20261115"><h2>'+heading+'</h2>'+''.join('<p>'+escape(p)+'</p>' for p in [summary,timing])
@@ -152,6 +162,12 @@ def main():
         'Phần tiếp theo phải ưu tiên hiệu chỉnh, đánh giá độc lập và mô phỏng vòng kín để kết luận các RQ. Hoàn tất refit A3 sẽ đóng đợt training expert Junyi hiện tại; mức hoàn tất toàn khóa luận còn phụ thuộc các đối chứng, thống kê, demo và bản thảo. Chưa có căn cứ nghiệm thu cả ba RQ hoặc toàn khóa luận từ số checkpoint đã có.'
     ]
     scope_heading='15/11 — Đối chiếu phần training còn lại với đề cương'
+    if len(models)==4:
+        scope_paragraphs=[p.replace('ba bản hoàn tất refit', 'cả bốn bản hoàn tất refit')
+                          .replace('sau refit A3 còn', 'sau khi hoàn tất refit A3 còn')
+                          .replace('Hoàn tất refit A3 sẽ đóng đợt training expert Junyi hiện tại',
+                                   'Refit A3 đã hoàn tất đợt training expert Junyi hiện tại')
+                          for p in scope_paragraphs]
     section+='<section id="training-scope-20261115"><h2>'+scope_heading+'</h2>'+''.join('<p>'+escape(p)+'</p>' for p in scope_paragraphs)+'</section>\n'
     html=(BASE/'BAO_CAO_NGHIEN_CUU.html').read_text();html=html.replace('chốt ngày 14/11/2026','cập nhật ngày 15/11/2026').replace('ngày 14/11/2026</title>','ngày 15/11/2026</title>')
     anchor='<section id="ngan-gon">';assert anchor in html;html=html.replace(anchor,section+anchor,1)
