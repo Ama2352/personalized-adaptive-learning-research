@@ -155,3 +155,8 @@ Người dùng chọn Colab và chấp thuận Drive/sao lưu sau mỗi lượt.
 MountDrive banđầu lỗi credential propagation; người dùng cấpđủOAuthquyền theo hướngdẫn maintainerColab#6089 thìMount thànhcông. Colab hiệnthấy thưmụctrống, trongkhi connector có7file. Đangxác nhận tài khoản hoặc cachethưmục trước khi copydữliệu. Không suyra đãmất file hoặc chia sẻ côngkhai.
 
 Backup/restore Drive có8test tổnghợp đạt, đónggói có3test đạt, tổng11theo `tests-colab-drive-package01.log`. Thửđầu phát hiện giới hạn MAX_PATH Windows ởfiletạm; đãrútngắn filetạm, giữlogđầu. Chưa kiểmbackuptrênDrive thật, chưatrainingColab. NativeKT source/config/split giữnguyên.
+
+
+## 15/11 — Xác nhận Drive cá nhân cho Colab
+
+User xác nhận Colab Mount tài khoản cá nhân khác tài khoản connector. Công cụ share_file chỉ nhận file, không nhận folder, nên chưa có thay đổi permission hoặc thông báo email. Chọn upload ZIPgói06 từ D trực tiếp qua webDrive vào thưmục cá nhân đangmount, tránh thayquyền hoặc thêmOAuthconnector. Gói7phần vẫn ởDriveconnector, chưađược dùngtraining. Notebook/bootstrap hiệnđọc một COLAB_RESUME.zip trongMyDrive/KLTN_AKT_RECOVERY và kiểmSHA/identity trướcresume. Trạngthái hiệnchờuserupload, chưaGPU/trainingColab.

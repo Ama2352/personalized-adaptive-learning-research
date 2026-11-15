@@ -2,7 +2,7 @@
 
 ## Báo cáo GVHD hiện hành — cập nhật15/11
 
-[HTML](../research_tracking/supervisor_reports/2026-11-15/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown](../research_tracking/supervisor_reports/2026-11-15/01_tien_do/BAO_CAO.md) nối tiếp ngày 14/11. A0, A1, A2 đã hoàn tất refit 9 epoch mỗi model và xuất gói model trên D. Có figure SVG/PNG/CSV so thời gian cùng TRAIN90, cùng 134.529.066 target qua 9 epoch mỗi model. A3 refit đã nghiệm thu đủ3/9epoch trên D. Các App đã dừng, credit quan sát còn0,18USD; chờ nguồn H100 theo yêu cầu. Colab đã bỏ. Hiệu chỉnh và đánh giá độc lập còn thiếu. Bundle refit giữ `STATE.json`, `exports-verified-a0-a1-a2.json` và `refit-remaining-budget-review.json`. Mọi App H100 của đợt này đã dừng. Các mục bên dưới lưu diễn tiến lịch sử.
+[HTML](../research_tracking/supervisor_reports/2026-11-15/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown](../research_tracking/supervisor_reports/2026-11-15/01_tien_do/BAO_CAO.md) nối tiếp ngày 14/11. A0, A1, A2 đã hoàn tất refit 9 epoch mỗi model và xuất gói model trên D. Có figure SVG/PNG/CSV so thời gian cùng TRAIN90, cùng 134.529.066 target qua 9 epoch mỗi model. A3 refit đã nghiệm thu đủ3/9epoch trên D. Các App Modal đã dừng, credit quan sát còn0,18USD. Đang chuyển Colab theo yêu cầu mới nhất, chờ ZIP gói06 trong Drive cá nhân đã mount. Hiệu chỉnh và đánh giá độc lập còn thiếu. Bundle refit giữ `STATE.json`, `exports-verified-a0-a1-a2.json` và `refit-remaining-budget-review.json`. Mọi App H100 của đợt này đã dừng. Các mục bên dưới lưu diễn tiến lịch sử.
 
 
 ## Báo cáo GVHD hiện hành — chốt ngày14/11
