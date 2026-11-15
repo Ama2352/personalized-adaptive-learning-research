@@ -17,6 +17,39 @@ import time
 ROOT = Path(__file__).resolve().parent.parent.parent
 
 
+def validate_stage_project_budget(ledger, request, billing, validate_budget):
+    """Giữ cách tính cũ, hỗ trợ ledger đã đối soát theo credit thực tiêu thụ.
+
+    Storage/egress miễn phí không tiêu credit. Chỉ ledger có basis rõ ràng
+    mới dùng số sau các điều chỉnh đó. Giữ raw billing và cộng một cent để
+    tránh đánh giá thấp do số credit hiển thị làm tròn.
+    """
+    basis = ledger.get('provider_cost_basis', 'metered_gross')
+    values = billing['billing']
+    if basis == 'metered_gross':
+        return validate_budget(ledger, request, float(values['metered_cost']))
+    if basis != 'free_credit_consumption_v1':
+        raise ValueError('Unknown explicit provider cost basis')
+    from decimal import Decimal
+    gross = Decimal(str(values['metered_cost']))
+    billed = Decimal(str(values['billed_cost']))
+    adjustments = values['adjustments']
+    credits = Decimal(str(adjustments['Credits']))
+    other = [Decimal(str(value)) for key, value in adjustments.items() if key != 'Credits']
+    if any(not value.is_finite() for value in (gross, billed, credits, *other)):
+        raise ValueError('Finite provider billing amounts required')
+    if gross < 0 or billed < 0 or credits > 0:
+        raise ValueError('Invalid provider credit consumption')
+    if billed > 0:
+        raise PermissionError('Free-credit policy forbids additional billed spending')
+    consumption = max(gross + sum(other), billed - credits, Decimal(0)) + Decimal('.01')
+    admission = dict(validate_budget(ledger, request, float(consumption)))
+    admission.pop('provider_metered_usd', None)
+    admission.update(provider_cost_basis=basis, provider_metered_gross_usd=float(gross),
+        provider_credit_consumption_upper_usd=float(consumption))
+    return admission
+
+
 def cpu_mount_preflight(execution_id):
     """Kiểm mount và byte thực tế trên CPU provider trước khi gọi GPU."""
     import hashlib
@@ -245,7 +278,7 @@ def run(snapshot, request, *, worker_entrypoint='run_junyi_gpu_stage.py', execut
     ledger_path=ROOT/'research_tracking/COMPUTE_BUDGET.json'
     ledger=json.loads(ledger_path.read_text())
     billing=asyncio.run(read_billing())
-    admission=validate_project_budget(ledger,request,float(billing['billing']['metered_cost']))
+    admission=validate_stage_project_budget(ledger,request,billing,validate_project_budget)
     output=ROOT/'experiments/akt/results'/request['execution_id']
     output.mkdir(parents=True,exist_ok=False)
     write_new(output/'budget-admission.json',dict(project=admission,resource=resource,billing=billing))

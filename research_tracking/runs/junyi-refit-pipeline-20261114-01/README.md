@@ -98,3 +98,15 @@ Gói bốn file A2 tại `experiments/akt/results/model-export-a2-refit-20261114
 `refit-remaining-budget-review.json` ghi snapshot credit còn khoảng 1,12 USD lúc 03:12, có thể trễ. Cận lịch sử sau đóng đợt cuối 29,61748021 USD, dự phòng riêng 0,20 USD, cận cấp thêm một tranche A3 tiêu chuẩn vượt 30 USD. Mọi App refit đã dừng theo `billing-app-status-20261115-05.json`. Chưa khởi chạy A3 refit, giữ snapshot04 cùng confidence/cache TRAIN80 và plan 9 epoch. Model selected-fit A3 đã có ở run trước. Hiệu chỉnh và đánh giá độc lập của các model refit chưa thực hiện. Bundle vẫn mở cho phần A3 còn thiếu, đọc STATE trước tiếp tục.
 
 `final-timebox-cuda-check01.json` ghi nghiệm thu đợt cuối trên H100 thật. Đã kiểm hai khung báo cáo desktop và hẹp, giữ ảnh phiên bản mới tại `report15-a2-v02-*.png` và biên bản `report-refit15-final-qa04.json`. Edge headless đã thoát, không giữ máy chủ preview. STATE hiện hành đã rút gọn để đọc nhanh, toàn bộ state trước đó giữ nguyên byte tại `STATE_checkpoint_A2_refit_20261115.json` với SHA trong state mới. Bundle còn mở, manifest là ảnh chụp tại thời điểm chốt A0–A2.
+
+## 15/11 buổi trưa — A3 bắt đầu refit bằng credit hiện tại
+
+Đã đăng nhập lại profile `kltn` sau khi token cũ hết hạn, xác nhận workspace `honguyenminhsang2005`. Colab MCP đã kiểm kết nối qua Edge rồi đóng bridge, chưa chạy cell hoặc chuyển dữ liệu. Lượt gọi local đầu thiếu request sau một điều kiện kiểm sai danh sách App rỗng, đã giữ `a3-initial-local-failure01.log`, chưa cấp GPU ở lượt đó.
+
+`a3-short-config-comparison01.json` xác nhận 27 trường training và mọi cờ số học giữ nguyên, vẫn plan 9 epoch. Giới hạn mỗi đợt giảm xuống max wall 300 giây và max train 280 giây. Trần VRAM 12 GiB cao hơn đỉnh đã đo 5.789 MiB, chuẩn bị cho việc tiếp tục T4 bằng cùng profile. Confidence TRAIN80 và cache TRAIN90 giữ đúng nguồn đã nghiệm thu. Snapshot mới kiểm CPU đạt tại `a3-short-snapshot01.json`. `a3-live-identity01.json` xác nhận identity H100 khớp A0 ở data/plan/Gate/backbone và recipe số học. Trần VRAM là giới hạn tài nguyên được protocol cho phép khác nhau.
+
+Lượt `modal-junyi-a3-refit-h100-20261115-01` hoàn tất epoch 1 với đủ 14.947.674 target, 2.040 bước, thời gian epoch 218,08 giây, rồi lưu tại epoch 2 bước 703. GPU function 317,27 giây, App đã dừng trước tải artifact. `a3-checkpoint-verified01.json` kiểm SHA, tensor model/Adam hữu hạn, RNG và sampler/trainer state trên CPU. Còn tiếp tục đến đủ 9 epoch. Snapshot billing sau lượt đầu ghi 29,25 USD credit đã dùng, billed 0.
+
+`tests-credit-basis01.log` đạt 94 ca local, có chồng lặp với các bộ trước. Host admission hỗ trợ ledger khai báo cơ sở free credit thực tiêu thụ, giữ raw billing và một cent biên làm tròn. Storage/egress được miễn phí được loại khỏi chi tiêu credit. Ledger cũ mặc định tiếp tục dùng gross. Chế độ credit mới từ chối billed dương và giữ trần 30 USD. Việc đổi cơ sở ledger chỉ thực hiện sau đối soát App đã dừng và hóa đơn đủ giờ.
+
+`a3-portable-source01.json` giữ gói nguồn/cache 603.557.811 byte và SHA trong `artifacts/akt/staged-archives/`, chưa upload. Gói phục vụ chuyển nguồn GPU khi cần. Checkpoint được quản lý riêng theo outputs của run.
