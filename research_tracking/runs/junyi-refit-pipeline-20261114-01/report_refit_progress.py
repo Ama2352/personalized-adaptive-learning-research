@@ -105,6 +105,8 @@ def main():
         if a3.get('partial_epoch'):
             limit+=f', cùng phần đang học ở epoch {a3["partial_epoch"]}, bước {a3["partial_optimizer_step"]}/2.040'
         limit+='. Checkpoint T4 đầu tiên và 11 file nhật ký, cấu hình, metadata đã tải về ổ D và kiểm toàn vẹn. Chuỗi chạy có giới hạn thời gian, dừng khi lỗi hoặc không tiến triển, kiểm bản sao Drive sau mỗi lượt. Giữ cấu hình FP32, batch 128, seed 42, chia tập và confidence TRAIN80 như trước. A3 dùng nhiều loại GPU khi nối lại nên thời gian của nó cần báo cáo riêng. Phần này xác nhận tiến độ huấn luyện và khả năng phục hồi; kết luận hiệu quả của cơ chế đồ thị còn cần hiệu chỉnh và đánh giá độc lập.'
+    if progress['status']=='MODAL2016_READY_WAITING_LATEST_CHECKPOINT':
+        limit+=' Sau khi kết nối lại, Colab đang là máy mới và chưa đọc được Drive. Lần quan sát trước xác nhận A3 đủ 7 epoch và checkpoint epoch 8, bước 256. Chỉ mục Drive do người dùng tải về trỏ đến lượt sao lưu 023, đang chờ kiểm bundle để xác định tiến độ mới. Workspace Modal mới honguyenminhsang2016 đã xác thực, billing quan sát bằng 0, có 30 USD credit do người dùng cung cấp. Sổ ngân sách mới giữ riêng tài khoản cũ. Chưa mở H100 trong đợt tài khoản mới; cần đối chiếu checkpoint mới nhất trước tiếp tục.'
     figure_caption='Mỗi epoch dùng cùng 142.621 người học, 14.947.674 tương tác và 2.040 bước optimizer. FP32, batch 128, seed 42. Số liệu từ lịch sử refit A0 đã nghiệm thu.'
     if len(models)>1:
         prefix=figures/('refit-epoch-time-'+'-'.join(models)+'-v01')
@@ -143,6 +145,14 @@ def main():
     section='<section id="refit-update-20261115"><h2>'+heading+'</h2>'+''.join('<p>'+escape(p)+'</p>' for p in [summary,timing])
     section+='<div class="table-scroll"><table><thead><tr>'+''.join('<th scope="col">'+c+'</th>' for c in ['Phiên bản','Thành phần','Refit TRAIN90','Hiệu chỉnh và đánh giá độc lập'])+'</tr></thead><tbody>'+''.join('<tr>'+''.join('<td>'+escape(c)+'</td>' for c in row)+'</tr>' for row in table)+'</tbody></table></div>'
     section+='<figure><div class="svg-frame">'+svg+'</div><figcaption>'+escape(figure_caption)+'</figcaption></figure><p>'+escape(limit)+'</p></section>\n'
+    scope_paragraphs=[
+        'Đối chiếu lại đề cương ngày 15/11 cho thấy yêu cầu giữ các mô hình AKT, SAKT, GKT, GAM-KT, Graph-GAM-KT và BKT tham chiếu, hai môi trường Junyi và Grade 10, cùng các đối chứng đồ thị. Đề cương cho phép kiểm độ ổn định qua nhiều phép chia dữ liệu hoặc bootstrap. Protocol development hiện hành chọn một fold Junyi; chưa có yêu cầu bắt buộc chạy đủ 5-fold cho các mô hình mới.',
+        'Bốn phiên bản AKT expert trên Junyi đã hoàn tất chọn checkpoint, ba bản hoàn tất refit. Grade 10 có bảy checkpoint đã chọn cho cấu hình không đồ thị và A1–A3 với đồ thị chuyên gia hoặc học từ dữ liệu; bước refit và hiệu chỉnh còn thiếu. SAKT và GKT đã kiểm trên corpus engineering nhỏ, cần tiếp tục training và đánh giá nghiên cứu. Các kết quả BKT/GAM lịch sử được giữ theo phạm vi gốc.',
+        'Nếu giữ nguyên toàn bộ ma trận development của nhóm, sau refit A3 còn 21 phase training neural gồm selected-fit hoặc refit, phân bổ cho learned graph Junyi, SAKT/GKT và model Grade 10. Đây là số bước của thiết kế phân bổ hiện hành, đề cương không quy định số lượt này. Các bước có kích thước dữ liệu khác nhau nên cần dự toán riêng. Đề xuất thu gọn phần learned graph Junyi chưa được áp dụng.',
+        'Phần tiếp theo phải ưu tiên hiệu chỉnh, đánh giá độc lập và mô phỏng vòng kín để kết luận các RQ. Hoàn tất refit A3 sẽ đóng đợt training expert Junyi hiện tại; mức hoàn tất toàn khóa luận còn phụ thuộc các đối chứng, thống kê, demo và bản thảo. Chưa có căn cứ nghiệm thu cả ba RQ hoặc toàn khóa luận từ số checkpoint đã có.'
+    ]
+    scope_heading='15/11 — Đối chiếu phần training còn lại với đề cương'
+    section+='<section id="training-scope-20261115"><h2>'+scope_heading+'</h2>'+''.join('<p>'+escape(p)+'</p>' for p in scope_paragraphs)+'</section>\n'
     html=(BASE/'BAO_CAO_NGHIEN_CUU.html').read_text();html=html.replace('chốt ngày 14/11/2026','cập nhật ngày 15/11/2026').replace('ngày 14/11/2026</title>','ngày 15/11/2026</title>')
     anchor='<section id="ngan-gon">';assert anchor in html;html=html.replace(anchor,section+anchor,1)
     html=html.replace('Tiến độ chốt ngày 14/11/2026','Tiến độ đến ngày 15/11/2026').replace('2.660','2.667')
@@ -155,6 +165,7 @@ def main():
     html=html.replace(old_intro,f'Bước mới nhất là hoàn tất refit {completed_names} trên TRAIN90.')
     md=(BASE/'BAO_CAO.md').read_text().replace('ngày 14/11/2026','ngày 15/11/2026').replace('2.660','2.667')
     additions='## '+heading+'\n\n'+summary+'\n\n'+timing+'\n\n| Phiên bản | Thành phần | Refit TRAIN90 | Hiệu chỉnh và đánh giá độc lập |\n|---|---|---|---|\n'+'\n'.join('| '+' | '.join(row)+' |' for row in table)+'\n\n![Thời gian học refit](../../../runs/junyi-refit-pipeline-20261114-01/figures/'+prefix.name+'.svg)\n\n'+figure_caption+'\n\n'+limit+'\n\n'
+    additions+='## '+scope_heading+'\n\n'+'\n\n'.join(scope_paragraphs)+'\n\n'
     first=md.index('\n');md=md[:first+1]+'\n'+additions+md[first+1:]
     md=md.replace('Refit dữ liệu thật vẫn chưa bắt đầu. Bước kế tiếp là kiểm tính toán CUDA có giới hạn bằng đường refit mới, rồi đối soát dự toán cho toàn bộ phần còn lại.','Tại bản chốt ngày 14/11, refit dữ liệu thật còn chờ. Ngày 15/11 đã sửa/kiểm guard Volume và allocator CUDA, hoàn tất refit A0 trên H100. Tiếp tục A1–A3 và đối soát ngân sách.')
     md=md.replace('Kiểm CUDA có giới hạn, dự toán chi phí còn lại rồi chạy 36 epoch refit.','A0 đã refit đủ 9 epoch; tiếp tục A1–A3 và đánh giá độc lập.').replace('Refit thật, hiệu chỉnh xác suất, so sánh độc lập và kết quả vòng kín của mô hình mới.','Hoàn tất refit A1–A3, hiệu chỉnh xác suất, so sánh độc lập và kết quả vòng kín của mô hình mới.')

@@ -63,3 +63,19 @@ def test_credit_normalization_preserves_validator_cap_rejection(billing):
     with pytest.raises(PermissionError, match='Total cap exhausted'):
         validate_stage_project_budget(dict(provider_cost_basis='free_credit_consumption_v1'),
             {}, billing, exhausted)
+
+
+def test_workspace_bound_budget_accepts_same_actual_workspace(billing):
+    billing['workspace_name'] = 'workspace-new'
+    result = validate_stage_project_budget(dict(workspace_name='workspace-new'),
+        dict(workspace_name='workspace-new'), billing, capture_amount)
+    assert result['test_amount'] == pytest.approx(29.05668106)
+
+
+@pytest.mark.parametrize('requested,actual', [('workspace-old', 'workspace-new'),
+    ('workspace-new', 'workspace-old'), ('workspace-new', None)])
+def test_workspace_bound_budget_rejects_mismatched_actual_workspace(billing, requested, actual):
+    billing['workspace_name'] = actual
+    with pytest.raises(PermissionError, match='Workspace'):
+        validate_stage_project_budget(dict(workspace_name='workspace-new'),
+            dict(workspace_name=requested), billing, capture_amount)

@@ -24,6 +24,9 @@ def validate_stage_project_budget(ledger, request, billing, validate_budget):
     mới dùng số sau các điều chỉnh đó. Giữ raw billing và cộng một cent để
     tránh đánh giá thấp do số credit hiển thị làm tròn.
     """
+    if ledger.get('workspace_name') is not None:
+        if not ledger['workspace_name'] == request.get('workspace_name') == billing.get('workspace_name'):
+            raise PermissionError('Workspace thực tế khác ngân sách hoặc lượt chạy đã cấp')
     basis = ledger.get('provider_cost_basis', 'metered_gross')
     values = billing['billing']
     if basis == 'metered_gross':
@@ -291,7 +294,8 @@ def run(snapshot, request, *, worker_entrypoint='run_junyi_gpu_stage.py', execut
     if (cpu['status']!='PASS_LOCAL_STAGE_INPUTS' or cpu['inputs_sha256']!=sha(snapshot/'INPUTS.json')
             or cpu['worker_request_sha256']!=sha(snapshot/'project/gpu-stage-request.json')):
         raise PermissionError('Thiếu nghiệm thu CPU trên snapshot chính xác')
-    ledger_path=ROOT/'research_tracking/COMPUTE_BUDGET.json'
+    from junyi_staged_io import owned_input
+    ledger_path=owned_input(ROOT, request.get('project_budget_file', 'research_tracking/COMPUTE_BUDGET.json'))
     ledger=json.loads(ledger_path.read_text())
     billing=asyncio.run(read_billing())
     admission=validate_stage_project_budget(ledger,request,billing,validate_project_budget)

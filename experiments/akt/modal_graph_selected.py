@@ -10,8 +10,8 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 BUNDLE = ROOT / 'research_tracking/runs/modal-akt-graph-selected-20261112-01'
-os.environ['MODAL_CONFIG_PATH'] = str(ROOT / 'artifacts/akt/private/modal.toml')
-os.environ['MODAL_PROFILE'] = 'kltn'
+os.environ.setdefault('MODAL_CONFIG_PATH', str(ROOT / 'artifacts/akt/private/modal.toml'))
+os.environ.setdefault('MODAL_PROFILE', 'kltn')
 import modal
 from modal_a0_gpu_pilot import remote_train, sha
 
@@ -23,11 +23,12 @@ async def read_billing():
     from google.protobuf.json_format import MessageToDict
     client = await _Client.from_env()
     try:
+        workspace = await asyncio.wait_for(client._stub.TokenInfoGet(api_pb2.TokenInfoGetRequest()), 15)
         start = Timestamp()
         start.FromDatetime(datetime.now(timezone.utc).replace(day=1, hour=0, minute=0, second=0, microsecond=0))
         response = await asyncio.wait_for(client._stub.WorkspaceBillingSummary(
             api_pb2.WorkspaceBillingSummaryRequest(start_timestamp=start)), 15)
-        return dict(observed_at_utc=datetime.now(timezone.utc).isoformat(),
+        return dict(observed_at_utc=datetime.now(timezone.utc).isoformat(), workspace_name=workspace.workspace_name,
                     billing=MessageToDict(response, preserving_proto_field_name=True))
     finally:
         await client._close()

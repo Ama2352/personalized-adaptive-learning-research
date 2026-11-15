@@ -97,8 +97,9 @@ def main():
         return
     temporary = ROOT / 'artifacts/akt/runtime/modal-client-temp'
     temporary.mkdir(parents=True, exist_ok=True)
-    os.environ.update(TEMP=str(temporary), TMP=str(temporary), TMPDIR=str(temporary),
-        MODAL_CONFIG_PATH=str(ROOT / 'artifacts/akt/private/modal.toml'), MODAL_PROFILE='kltn')
+    os.environ.update(TEMP=str(temporary), TMP=str(temporary), TMPDIR=str(temporary))
+    os.environ.setdefault('MODAL_CONFIG_PATH', str(ROOT / 'artifacts/akt/private/modal.toml'))
+    os.environ.setdefault('MODAL_PROFILE', 'kltn')
     import tempfile
     tempfile.tempdir = str(temporary)
     print(json.dumps(run(args.snapshot, json.loads(args.request.read_text()),

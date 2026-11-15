@@ -17,7 +17,17 @@ Thời gian học A0 trung bình 128.8 giây/epoch, dao động 122.1–140.8 gi
 
 Trung bình đủ 9 epoch của từng model đã nghiệm thu, cùng TRAIN90 với 142.621 người học, 14.947.674 mục tiêu mỗi epoch, FP32, batch 128 và seed 42. Đây là thời gian học, các bước chuẩn bị và thu artifact được theo dõi riêng.
 
-Đây là hoàn tất bước học lại mô hình theo số epoch đã chọn. Hiệu chỉnh xác suất, xuất dự đoán trên nhóm đánh giá độc lập và kết luận hiệu quả đồ thị còn chờ. Thời gian trong biểu đồ là thời gian học từng epoch, gồm phần tích lũy khi nối lại; thời gian chuẩn bị, tải artifact và tổng thời gian sử dụng function được theo dõi riêng. A3 đang tiếp tục trên Tesla T4 miễn phí của Colab. Drive đã lưu và kiểm checkpoint sau 7/9 epoch hoàn chỉnh, cùng phần đang học ở epoch 8, bước 256/2.040. Checkpoint T4 đầu tiên và 11 file nhật ký, cấu hình, metadata đã tải về ổ D và kiểm toàn vẹn. Chuỗi chạy có giới hạn thời gian, dừng khi lỗi hoặc không tiến triển, kiểm bản sao Drive sau mỗi lượt. Giữ cấu hình FP32, batch 128, seed 42, chia tập và confidence TRAIN80 như trước. A3 dùng nhiều loại GPU khi nối lại nên thời gian của nó cần báo cáo riêng. Phần này xác nhận tiến độ huấn luyện và khả năng phục hồi; kết luận hiệu quả của cơ chế đồ thị còn cần hiệu chỉnh và đánh giá độc lập.
+Đây là hoàn tất bước học lại mô hình theo số epoch đã chọn. Hiệu chỉnh xác suất, xuất dự đoán trên nhóm đánh giá độc lập và kết luận hiệu quả đồ thị còn chờ. Thời gian trong biểu đồ là thời gian học từng epoch, gồm phần tích lũy khi nối lại; thời gian chuẩn bị, tải artifact và tổng thời gian sử dụng function được theo dõi riêng. Sau khi kết nối lại, Colab đang là máy mới và chưa đọc được Drive. Lần quan sát trước xác nhận A3 đủ 7 epoch và checkpoint epoch 8, bước 256. Chỉ mục Drive do người dùng tải về trỏ đến lượt sao lưu 023, đang chờ kiểm bundle để xác định tiến độ mới. Workspace Modal mới honguyenminhsang2016 đã xác thực, billing quan sát bằng 0, có 30 USD credit do người dùng cung cấp. Sổ ngân sách mới giữ riêng tài khoản cũ. Chưa mở H100 trong đợt tài khoản mới; cần đối chiếu checkpoint mới nhất trước tiếp tục.
+
+## 15/11 — Đối chiếu phần training còn lại với đề cương
+
+Đối chiếu lại đề cương ngày 15/11 cho thấy yêu cầu giữ các mô hình AKT, SAKT, GKT, GAM-KT, Graph-GAM-KT và BKT tham chiếu, hai môi trường Junyi và Grade 10, cùng các đối chứng đồ thị. Đề cương cho phép kiểm độ ổn định qua nhiều phép chia dữ liệu hoặc bootstrap. Protocol development hiện hành chọn một fold Junyi; chưa có yêu cầu bắt buộc chạy đủ 5-fold cho các mô hình mới.
+
+Bốn phiên bản AKT expert trên Junyi đã hoàn tất chọn checkpoint, ba bản hoàn tất refit. Grade 10 có bảy checkpoint đã chọn cho cấu hình không đồ thị và A1–A3 với đồ thị chuyên gia hoặc học từ dữ liệu; bước refit và hiệu chỉnh còn thiếu. SAKT và GKT đã kiểm trên corpus engineering nhỏ, cần tiếp tục training và đánh giá nghiên cứu. Các kết quả BKT/GAM lịch sử được giữ theo phạm vi gốc.
+
+Nếu giữ nguyên toàn bộ ma trận development của nhóm, sau refit A3 còn 21 phase training neural gồm selected-fit hoặc refit, phân bổ cho learned graph Junyi, SAKT/GKT và model Grade 10. Đây là số bước của thiết kế phân bổ hiện hành, đề cương không quy định số lượt này. Các bước có kích thước dữ liệu khác nhau nên cần dự toán riêng. Đề xuất thu gọn phần learned graph Junyi chưa được áp dụng.
+
+Phần tiếp theo phải ưu tiên hiệu chỉnh, đánh giá độc lập và mô phỏng vòng kín để kết luận các RQ. Hoàn tất refit A3 sẽ đóng đợt training expert Junyi hiện tại; mức hoàn tất toàn khóa luận còn phụ thuộc các đối chứng, thống kê, demo và bản thảo. Chưa có căn cứ nghiệm thu cả ba RQ hoặc toàn khóa luận từ số checkpoint đã có.
 
 
 

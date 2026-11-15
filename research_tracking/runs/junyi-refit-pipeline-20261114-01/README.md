@@ -173,3 +173,13 @@ Controller có chuỗi hữu hạn tối đa40tranche/3giờ và dừng ở9epoc
 Runtime T4 dựng venv riêng theo lock Torch2.7.1+cu126, kiểm lại1500source và10file phục hồi. Lượt001 tiếp tục từ đủ3epoch đến epoch4/bước584, kiểm model/Adam hữu hạn và RNG/sampler. Checkpoint cùng11file nhật ký/cấu hình/metadata đã tải về D, inventory tại `experiments/akt/results/colab-junyi-a3-refit-20261115-001/COMPLETE.json`. Bản sao Drive đã đối chiếu SHA trước cho chạy lượt tiếp. `a3-t4-first-tranche-acceptance01.json` giữ kiểm thực tế. Bộ18test local đạt theo `tests-colab-sequence03.log`, có hồi quy worker A3 viết hoa và dừng luồng đo NVML.
 
 Lượt001 có62mẫu NVML, trung bình64,84%, đỉnh98%, VRAM đỉnh5.235MiB. Đây là mẫu toàn lượt có giới hạn, chưa phải thời gian toàn epoch T4. Chuỗi đã khởi động hữu hạn tối đa32lượt/3giờ, dừng ở đủ9epoch hoặc lỗi/không tiến triển. `a3-t4-monitor-progress02.json` ghi Drive đã lưu đủ4epoch và checkpoint epoch5/bước1.202. Các checkpoint mới hơn đang ở Drive, bản D hiện xác minh tới checkpoint T4 lượt001. Telemetry các lượt đã đóng được sao lưu riêng lên Drive khi kiểm tiến độ. Native config, seed, split, confidence TRAIN80 giữ nguyên. Chưa hiệu chỉnh hoặc đánh giá độc lập, chưa kết luận RQ3 từ tiến độ refit. Không dùng thêm Modal trong giai đoạn Colab này.
+
+## 15/11 — Nguồn Modal bổ sung và checkpoint Drive mới
+
+Người dùng cung cấp workspace honguyenminhsang2016 với30USDcredit và yêu cầu tiếp tục H100. `workspace2016-preflight01.json` xác nhận đúng workspace qua API, metered/billed đều0. Thông tin đăng nhập riêng trong vùng private trên D. `research_tracking/COMPUTE_BUDGET_WORKSPACE2016.json` giữ trần30USD đợt mới, dự phòng5USD, sổ cũ giữ nguyên. Chưa có allocationGPU mới.
+
+Đã sửa host entrypoint refit và import billing để giữ profile được chỉ định, thay cho ghi đè về workspace cũ. Billing kiểm workspace thực tế phải trùng request và ledger mới. Cho phép request trỏ đến sổ riêng qua project_budget_file với owned_input. Không đổi numerical worker, hyperparameter, split hay snapshot source đã đóng. `tests-workspace2016-03.log` đạt68ca, gồm4ca giữ/default profile,4ca bind workspace và các kiểm ngân sách/tách localGPU. Lượt02 bị dừng khi process local chưa có output, lượt03 chạy phù hợp đạt.
+
+MCP mới nhận T4/kernel405, source và Drive chưa có trong phiên này, mount vẫn lỗi. Không suy ra checkpoint trên Drive đã mất. Người dùng tải LATEST_FROM_DRIVE.json về D; nó trỏ `tranches/colab-junyi-a3-refit-20261115-023/BACKUP_COMPLETE.json`. Chờ bundle023 để kiểmSHA và xem còn cần học tiếp hay đã đủ9epoch. Không coi quan sát cũ7epoch là trạng thái mới nhất.
+
+Lượt kiểm04 bổ sung kiểm đường sổ ngân sách mặc định và sổ workspace mới, tổng70ca đạt theo tests-workspace2016-04.log. Sổ cũ không đổi.
