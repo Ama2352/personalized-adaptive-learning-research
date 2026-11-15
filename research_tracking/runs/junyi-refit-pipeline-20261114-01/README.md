@@ -137,3 +137,10 @@ Lượt04 cap0,25USD được watchdog dừng ở442,77giây kể từApp. Đã 
 Host controller bổ sung cận2CPU/8GiBRAM và cách dự toán theo timeout function/startup cố định, tách thời gian chờ cấp máy. Native source/config/Gate không đổi. L4 mới GPU430+startup60giây, CPUpreflight180+startup60giây, watchdog tổng900giây. Cận0,1988828USD, allocation0,20USD, tổngenvelope30USD. RAM RSS quan sát5,19GB; worker2luồng/maxRSS8GiB, giữ nguyên cấu hình. 76test local đạt theo `tests-staged-resource-caps04.log`. Lượt kiểm02 có43lỗi setup tmpC, lượt03 đổi tmpD đạt74test,04đạt76test; giữ logs lỗi. Lượt05 tiếp tục từ checkpoint đủepoch3.
 
 Người dùng yêu cầu bỏ Colab, bridge đã đóng. MCP đã ngắt trước lệnh trả runtime nên chưa xác minh runtime được giải phóng. Không mở tab hay yêu cầu upload/Drive thêm.
+
+
+## Chốt15/11 — Giữ3epoch, chờ nguồn H100
+
+Người dùng yêu cầu H100. L4 lượt05 đã dừng;45file recovery đã kiểm, checkpoint cuối vẫn đủ3epoch, SHA c9936d5e42dbbdbeb7a0c2fb7c80b8616e363cbfd091169e9d9ca448b8e2baed. Chưa có checkpoint epoch4. Sửa nhận định vận hành trước đó: API call trảPENDING/task_id rỗng vẫn có thể đi cùng telemetryGPU đang ghi, nên không đủ để kết luận GPU chưa được cấp hoặc chưa tiêu credit. Không dùng riêng chỉ báo này để quyết định hủy nữa. Lượt05 đã bị dừng theo yêu cầu đổi H100; phần học sau epoch3 chưa có checkpoint mới để dùng.
+
+Billing cuối điều chỉnh từ29,88xuống29,82USD, billed0, còn0,18USD quan sát. Giữ cap đã đóng30USD khi billing còn biến động. H100 chưa được khởi chạy sau yêu cầu mới: lượt đã kiểm cần dự phòng0,6276328USD; checkpoint native mỗi1.000step, job ngắn hơn không bảo đảm giữ phần học mới. `a3-h100-budget-blocker01.json` giữ điều kiện tiếp tục. Toàn bộApp đã stopped/tasks0. Chờ nguồn credit hợp lệ được cấp thêm; không chuyển lại Colab.

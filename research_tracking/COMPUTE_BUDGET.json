@@ -4,17 +4,11 @@
   "extra_payment_allowed": false,
   "automatic_monthly_budget_reset": false,
   "authorization_reference": "Người dùng ngày 12/11/2026 cho phép tự phân bổ các khoản chi nhỏ, tổng toàn KLTN tối đa 30 USD free credits.",
-  "historical_usage_reserved_upper_usd": 29.8,
+  "historical_usage_reserved_upper_usd": 30,
   "safety_and_final_inference_reserve_usd": 0,
-  "new_allocations": [
-    {
-      "id": "junyi-a3-refit-l4-20261115-05",
-      "cap_usd": 0.2,
-      "scope": "L4 resume A3 từ đủepoch3,2CPU8GiB, functiontimeout430 watchdog900"
-    }
-  ],
+  "new_allocations": [],
   "stop_rule": "Không mở lượt chạy nếu cận chi phí lịch sử, tổng allocation và dự phòng vượt 30 USD. Nếu chưa xác nhận dừng App thì kiểm trạng thái server trước lượt mới.",
-  "historical_upper_note": "Credit thực ổn định cộng0,02USD, xem a3-l4-credit-reconciliation05.json.",
+  "historical_upper_note": "Đóng cap0,20USD lượt05 sau dừng/kiểm recovery, giữ tổng cận30USD. Billing quan sát29,82USD, còn0,18USD; có điều chỉnh29,88xuống29,82 nên chưa dùng số dư để nới thêm grant H100.",
   "provider_metering_note": "Snapshot có thể trễ hoặc được điều chỉnh. Không dùng billing alert làm giới hạn cứng. Mỗi lượt có watchdog, timeout và tối đa một GPU.",
   "last_accounting_snapshot": {
     "observed_at_utc": "2026-11-15T06:09:34.817421+00:00",
@@ -641,6 +635,14 @@
       "cap_usd": 0.25,
       "evidence": "experiments/akt/results/modal-junyi-a3-refit-l4-20261115-04/recovery/COMPLETE.json",
       "settlement_note_vi": "Credit thực đã nằm trong anchor mới, cap chưa dùng giải phóng theo billing ổn định."
+    },
+    {
+      "id": "junyi-a3-refit-l4-20261115-05",
+      "status": "USER_STOPPED_RECOVERY_VERIFIED",
+      "reserved_upper_closed_usd": 0.2,
+      "actual_isolated_cost_usd": null,
+      "evidence": "experiments/akt/results/modal-junyi-a3-refit-l4-20261115-05/recovery/COMPLETE.json",
+      "limits_vi": "Full3checkpoint phục hồi, không có checkpoint epoch4 mới. Giữ cận lượt đã cấp để chờ billing ổn định."
     }
   ],
   "a0_h100_settlement": {

@@ -11,13 +11,13 @@ Thời gian học A0 trung bình 128.8 giây/epoch, dao động 122.1–140.8 gi
 | A0 | AKT không đồ thị | Đã refit 9/9 epoch, model đã xuất trên D | Còn chờ |
 | A1 | Đồ thị cố định | Đã refit 9/9 epoch, model đã xuất trên D | Còn chờ |
 | A2 | Độ tin cậy cạnh | Đã refit 9/9 epoch, model đã xuất trên D | Còn chờ |
-| A3 | Độ tin cậy cạnh và cổng | Đang refit; 3/9 epoch đã nghiệm thu trên D | Còn chờ |
+| A3 | Độ tin cậy cạnh và cổng | Đã lưu checkpoint sau 3/9 epoch; chờ tiếp tục | Còn chờ |
 
 ![Thời gian học refit](../../../runs/junyi-refit-pipeline-20261114-01/figures/refit-epoch-time-a0-a1-a2-v01.svg)
 
 Trung bình đủ 9 epoch của từng model đã nghiệm thu, cùng TRAIN90 với 142.621 người học, 14.947.674 mục tiêu mỗi epoch, FP32, batch 128 và seed 42. Đây là thời gian học, các bước chuẩn bị và thu artifact được theo dõi riêng.
 
-Đây là hoàn tất bước học lại mô hình theo số epoch đã chọn. Hiệu chỉnh xác suất, xuất dự đoán trên nhóm đánh giá độc lập và kết luận hiệu quả đồ thị còn chờ. Thời gian trong biểu đồ là thời gian học từng epoch, gồm phần tích lũy khi nối lại; thời gian chuẩn bị, tải artifact và tổng thời gian sử dụng function được theo dõi riêng. A3 đã nghiệm thu đủ 3/9 epoch, checkpoint trên D có model, optimizer và RNG để tiếp tục epoch 4. Một lượt L4 đang được thực hiện trong phần credit còn lại. Lượt trước bị watchdog dừng sau thời gian chờ cấp máy lớn, đã phục hồi và kiểm đủ checkpoint epoch 3. Controller hiện giới hạn thời gian function GPU/CPU và ngân sách riêng, đồng thời dành thời gian chờ cấp máy. Giữ nguyên source model, split, số epoch và cấu hình số học. Hướng Colab đã dừng theo yêu cầu. A3 chưa hoàn tất refit.
+Đây là hoàn tất bước học lại mô hình theo số epoch đã chọn. Hiệu chỉnh xác suất, xuất dự đoán trên nhóm đánh giá độc lập và kết luận hiệu quả đồ thị còn chờ. Thời gian trong biểu đồ là thời gian học từng epoch, gồm phần tích lũy khi nối lại; thời gian chuẩn bị, tải artifact và tổng thời gian sử dụng function được theo dõi riêng. A3 đã nghiệm thu đủ 3/9 epoch và lưu checkpoint trên D, còn 6 epoch. Các lượt L4 đã dừng, artifact phục hồi đã kiểm. Chưa có checkpoint mới của epoch 4. Billing gần nhất còn khoảng 0,18 USD credit, chưa phát sinh khoản trả thêm; số liệu còn có điều chỉnh nên giữ cận ngân sách cũ. Theo yêu cầu, GPU tiếp theo sẽ là H100 khi có nguồn credit được cấp thêm. Lượt H100 đã có kiểm soát cần cận chi phí khoảng 0,63 USD, vượt số dư hiện tại. Checkpoint giữa epoch lưu mỗi 1.000 bước, tắt quá sớm có thể mất phần học sau checkpoint gần nhất. Hướng Colab đã dừng. Chưa hoàn tất refit A3 và chưa có kết luận đánh giá độc lập.
 
 
 

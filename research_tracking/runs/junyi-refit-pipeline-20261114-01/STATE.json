@@ -1,5 +1,5 @@
 {
-  "status": "A3_MODAL_L4_BOUNDED_EXECUTION_ACTIVE",
+  "status": "A3_H100_BUDGET_BLOCKED",
   "closed": false,
   "requested_scope": "Hoàn thiện pipeline refit A0–A3, ưu tiên local",
   "real_data_training_performed": true,
@@ -29,9 +29,11 @@
     },
     "A3": {
       "status": "PARTIAL_JUNYI_REFIT90",
-      "epochs": 2,
-      "output": "experiments/akt/results/modal-junyi-a3-refit-l4-20261115-03",
-      "checkpoint_export_pending": false
+      "epochs": 3,
+      "frozen_epochs": 9,
+      "output": "experiments/akt/results/modal-junyi-a3-refit-l4-20261115-05/recovery",
+      "checkpoint_evidence": "a3-checkpoint-verified05.json",
+      "checkpoint_export_pending": true
     }
   },
   "next_steps": [
@@ -40,7 +42,7 @@
     "Chuyển nguồn GPU khi khoản hiện tại không đủ, giữ cùng data/recipe/profile và kiểm trước resume"
   ],
   "all_owned_refit_apps_stopped": false,
-  "updated_at_utc": "2026-11-15T06:55:12.288054+00:00",
+  "updated_at_utc": "2026-11-15T07:10:29.352336+00:00",
   "prior_state_file": "STATE_checkpoint_A2_refit_20261115.json",
   "prior_state_sha256": "0ba7fd01465f99128061068e4ae55fcc120dc870f8e4791c631ba01d2a96ca4e",
   "refit_models_exported": [
@@ -1886,14 +1888,15 @@
     "calibration_performed": false,
     "independent_evaluation_performed": false
   },
-  "a3_latest_checkpoint_evidence": "a3-checkpoint-verified04-boundary-v2.json",
-  "next_action_vi": "Xác minh runtime Colab đổi trước khi phục hồi source/cache. Checkpoint mới epoch3 bước1883 đã kiểm trên D; không khởi động từ checkpoint cũ.",
+  "a3_latest_checkpoint_evidence": "a3-checkpoint-verified05.json",
+  "next_action_vi": "A3 đủ3/9epoch, còn6epoch. Giữ H100 làm GPU tiếp theo theo yêu cầu. Cần nguồn credit được cấp thêm để chạy lượt H100 đã kiểm trong giới hạn ngân sách. Colab đã bỏ theo yêu cầu.",
   "colab_t4_discovered": true,
   "modal_gpu_running": false,
-  "active_request": "a3-refit-execution05.json",
+  "active_request": null,
   "modal_current_cap_usd": 0.25,
   "colab_upload_preserved": true,
   "colab_abandoned_by_user": true,
   "colab_bridge_closed": true,
-  "colab_runtime_release_verified": false
+  "colab_runtime_release_verified": false,
+  "observed_remaining_credit_usd": 0.18
 }

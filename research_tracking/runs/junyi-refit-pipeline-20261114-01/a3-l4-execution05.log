@@ -1,0 +1,46 @@
+<modal-server>:0: ServerWarning: Your Modal token ak-As6bopYLDP48tqMzYSZ5R8 expires in 9h. Run `modal token new` to create a replacement.
+✓ Initialized. View run at 
+https://modal.com/apps/honguyenminhsang2005/main/ap-96IGxZUsbZFLm7JnD3Gp8B
+✓ Created objects.
+├── ✓ Uploaded D:\Dev\KLTN\experiments\akt\modal_junyi_staged.py
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\artifacts\akt\staged\junyi-a3-refit-short-20261115-01\project
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\artifacts\akt\staged\junyi-a3-refit-short-20261115-01\INPUTS.js
+│   on
+├── ✓ Created Function gpu_compute.
+└── ✓ Created Function cpu_mount_preflight.
+{"checked_files": 250, "seconds": 0.08839218999999998}
+{"checked_files": 500, "seconds": 2.225339904}
+{"checked_files": 750, "seconds": 2.9765915410000003}
+{"checked_files": 1000, "seconds": 3.8889658330000003}
+{"checked_files": 1250, "seconds": 4.744762422}
+{"checked_files": 1500, "seconds": 6.191848801}
+Stopping app - user stopped from CLI.
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\experiments\akt\modal_junyi_refit.py", line 109, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\experiments\akt\modal_junyi_refit.py", line 104, in main
+    print(json.dumps(run(args.snapshot, json.loads(args.request.read_text()),
+                     ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        worker_entrypoint='run_junyi_refit_gpu_stage.py', execution_validator=validate_refit_execution)))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\experiments\akt\modal_junyi_staged.py", line 371, in run
+    receipt=call.get(timeout=deadline.remaining())
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_object.py", line 49, in wrapped
+    return await method(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 2424, in get
+    return await self._invocation().poll_function(timeout=timeout, index=index)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 350, in poll_function
+    return await _process_result(
+           ^^^^^^^^^^^^^^^^^^^^^^
+        response.outputs[0].result, response.outputs[0].data_format, self.stub, self.client
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_utils\function_utils.py", line 574, in _process_result
+    raise RemoteError(result.exception)
+modal.exception.RemoteError
