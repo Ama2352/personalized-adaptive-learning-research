@@ -121,3 +121,19 @@ Gói phục hồi tại `experiments/akt/results/model-export-a3-refit-recovery-
 Notebook vận hành `notebooks/akt_colab_a3_refit_resume.ipynb` giữ trình tự upload, SHA từng member, venv cô lập theo lock và khởi chạy một tranche tối đa600giây. `colab_a3_tranche.py` gọi worker gốc trong snapshot, giữ khóa tránh chạy trùng và dừng nhóm tiến trình con khi lỗi/timeout. Bốn kiểm mock local đạt theo `a3-colab-controller-tests01.json`; chưa coi mock là xác nhận CUDA. Mọi lần tiếp tục phải nghiệm thu vị trí sampler/checkpoint và sao lưu về D.
 
 Kiểm exports có chế độ `--portable-memory-cap` tạo bằng chứng phiên bản riêng, áp dụng đúng chính sách có sẵn trong comparison_contract về trần VRAM. Bản strict vẫn kiểm đạt A0–A2 và giữ bằng chứng cũ. Bốn kiểm local xác nhận chỉ loại max_vram_bytes, giữ mọi cờ số học. Chưa có export A3 cuối. `exports-verified-a0-a1-a2-portable-memory-cap-v1.json` và `a3-portable-comparison-check01.json` giữ output kiểm. Không suy ra bitwise-equivalence xuyên H100/T4.
+
+
+## 15/11 — L4 tiếp tục A3 và sự cố phiên Colab
+
+Người dùng yêu cầu chuyển lại Modal. Billing trước03 còn0,37USD, billed0. Sau đối soát App đã dừng, cấp đúng một L4 cap0,25USD với envelope29,93000001USD trong trần30USD. Không đổi source/config số học hoặc split. Native328,10giây, App đã xác nhận dừng ở392,76giây. Đã tải70artifact và kiểm archive585.100.593byte trênD. A3 tiến từ epoch3 bước1254đến1883/2040, thêm629bước, đủ2epoch. `a3-checkpoint-verified03.json` kiểm model/Adam hữu hạn và RNG/sampler đầy đủ. Đây là model học dở.
+
+Upload Colab683MB đã hoàn tất/đạt SHA. Bootstrap kiểm1500source+22filephục hồi, venv cô lập PyTorch2.7.1+cu126/T4 đạt. Trong lúc chuyển checkpoint1883qua các phần512KiB, đã xác nhận15.728.640byte rồi MCP timeout. Lượt đọc tiếp trả kernel khác, source/cache/venv/phần file đều không còn ở phiên đang nhận lệnh. Đang xác minh runtime đổi hoặc MCP trỏ sang phiên khác, chưa xác nhận file ở tab cũ đã mất. Không training từ checkpoint cũ, không upload lại gói lớn trước xác minh. Mọi checkpoint mới trênD vẫn an toàn. `a3-colab-runtime-loss01.json` giữ chẩn đoán và giả thuyết. Một lỗi cú pháp khi dựng payload trước đó đã sửa bằng khai báo biến riêng và compile56cell trước gửi, theo `a3-colab-transfer-correction01.json`; lỗi không sửa checkpoint nguồn.
+
+
+## 15/11 — Bỏ Colab theo yêu cầu, tiếp tục Modal
+
+Lượt04 cap0,25USD được watchdog dừng ở442,77giây kể từApp. Đã phục hồi45file/433.899.196byte, nghiệm thu đủepoch3 với14.947.674target/2.040step mỗi epoch. Telemetry function chỉ đến194,14giây, CPUpreflight12,07giây; khoảng còn lại là các overhead/chờ cấp máy chưa tách đủ. Không gán toàn bộ440giây cho tính toán GPU. `a3-checkpoint-verified04-boundary-v2.json` là bằng chứng hiện hành, sửa trường sampler ở bản04đầu: checkpoint hết epoch có RNG, epoch sau dựng sampler mới. Bản04đầu được giữ để truy vết.
+
+Host controller bổ sung cận2CPU/8GiBRAM và cách dự toán theo timeout function/startup cố định, tách thời gian chờ cấp máy. Native source/config/Gate không đổi. L4 mới GPU430+startup60giây, CPUpreflight180+startup60giây, watchdog tổng900giây. Cận0,1988828USD, allocation0,20USD, tổngenvelope30USD. RAM RSS quan sát5,19GB; worker2luồng/maxRSS8GiB, giữ nguyên cấu hình. 76test local đạt theo `tests-staged-resource-caps04.log`. Lượt kiểm02 có43lỗi setup tmpC, lượt03 đổi tmpD đạt74test,04đạt76test; giữ logs lỗi. Lượt05 tiếp tục từ checkpoint đủepoch3.
+
+Người dùng yêu cầu bỏ Colab, bridge đã đóng. MCP đã ngắt trước lệnh trả runtime nên chưa xác minh runtime được giải phóng. Không mở tab hay yêu cầu upload/Drive thêm.

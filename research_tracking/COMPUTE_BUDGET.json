@@ -4,17 +4,23 @@
   "extra_payment_allowed": false,
   "automatic_monthly_budget_reset": false,
   "authorization_reference": "Người dùng ngày 12/11/2026 cho phép tự phân bổ các khoản chi nhỏ, tổng toàn KLTN tối đa 30 USD free credits.",
-  "historical_usage_reserved_upper_usd": 29.812850456127457,
-  "safety_and_final_inference_reserve_usd": 0.03,
-  "new_allocations": [],
+  "historical_usage_reserved_upper_usd": 29.8,
+  "safety_and_final_inference_reserve_usd": 0,
+  "new_allocations": [
+    {
+      "id": "junyi-a3-refit-l4-20261115-05",
+      "cap_usd": 0.2,
+      "scope": "L4 resume A3 từ đủepoch3,2CPU8GiB, functiontimeout430 watchdog900"
+    }
+  ],
   "stop_rule": "Không mở lượt chạy nếu cận chi phí lịch sử, tổng allocation và dự phòng vượt 30 USD. Nếu chưa xác nhận dừng App thì kiểm trạng thái server trước lượt mới.",
-  "historical_upper_note": "Cận credit sau hóa đơn đủ giờ A3 đầu29,28USD, gồm biên settlement0,02USD và làm tròn0,01USD. Giữ0,03USD dự phòng riêng. Ledger dùng free_credit_consumption_v1, raw billing và cơ sở gross cũ được giữ trong hồ sơ migration.",
+  "historical_upper_note": "Credit thực ổn định cộng0,02USD, xem a3-l4-credit-reconciliation05.json.",
   "provider_metering_note": "Snapshot có thể trễ hoặc được điều chỉnh. Không dùng billing alert làm giới hạn cứng. Mỗi lượt có watchdog, timeout và tối đa một GPU.",
   "last_accounting_snapshot": {
-    "observed_at_utc": "2026-11-15T04:21:44.740802+00:00",
-    "metered_cost_usd": 29.05668106,
+    "observed_at_utc": "2026-11-15T06:09:34.817421+00:00",
+    "credit_consumption_usd": 29.63000001,
     "billed_cost_usd": 0,
-    "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/billing-a3-before-20261115-01.json",
+    "evidence": "research_tracking/runs/junyi-refit-pipeline-20261114-01/billing-a3-before03-20261115-01.json",
     "containers_empty": true
   },
   "gpu_specific_holds": {
@@ -618,6 +624,23 @@
       "app_elapsed_seconds": 390.0392655999749,
       "stop_acknowledged": true,
       "evidence": "experiments/akt/results/modal-junyi-a3-refit-h100-20261115-02/remote-inventory.json"
+    },
+    {
+      "id": "junyi-a3-refit-l4-20261115-03",
+      "status": "STOPPED_ARTIFACTS_VERIFIED_PARTIAL_JUNYI_REFIT90",
+      "reserved_upper_closed_usd": 0.25,
+      "actual_isolated_cost_usd": null,
+      "gpu_worker_seconds": 328.10115011600004,
+      "app_elapsed_seconds": 392.76035799999954,
+      "stop_acknowledged": true,
+      "evidence": "experiments/akt/results/modal-junyi-a3-refit-l4-20261115-03/remote-inventory.json"
+    },
+    {
+      "id": "junyi-a3-refit-l4-20261115-04",
+      "status": "DEADLINE_STOPPED_RECOVERY_VERIFIED",
+      "cap_usd": 0.25,
+      "evidence": "experiments/akt/results/modal-junyi-a3-refit-l4-20261115-04/recovery/COMPLETE.json",
+      "settlement_note_vi": "Credit thực đã nằm trong anchor mới, cap chưa dùng giải phóng theo billing ổn định."
     }
   ],
   "a0_h100_settlement": {

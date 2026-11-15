@@ -243,15 +243,31 @@ def validate_resource_budget(request, worker, *, allow_short_final_epoch=False):
             or not 30<=child<function<watchdog<=2100):
         raise ValueError('Thứ tự thời hạn child/function/watchdog không hợp lệ')
     gpu_rate={'T4':.000164,'L4':.000222,'H100':.001097}[request['gpu']]
+    cpu_max=request.get('gpu_cpu_max',4)
+    memory_max=request.get('gpu_memory_max_mib',12288)
+    if (type(cpu_max) is not int or not 2<=cpu_max<=4
+            or cpu_max<worker['config'].get('threads',2)
+            or type(memory_max) is not int or not 8192<=memory_max<=12288
+            or memory_max*1024**2<worker['config'].get('max_rss_bytes',0)):
+        raise ValueError('CPU/RAM GPU function thấp hơn nhu cầu worker hoặc ngoài cận đã kiểm')
     # Cận CPU/RAM 3x giá list để giữ cùng quy tắc bảo thủ của ledger hiện có.
-    rate=gpu_rate+4*.00003942+12*.00000667
+    rate=gpu_rate+cpu_max*.00003942+(memory_max/1024)*.00000667
     upper=(watchdog+60)*rate
+    active_budget=request.get('active_function_budget',False)
+    if type(active_budget) is not bool:
+        raise ValueError('Cơ sở ngân sách active function cần boolean rõ ràng')
+    if active_budget:
+        # CPU preflight có timeout180 + startup60. GPU có timeout function
+        # và startup60 riêng. Thời gian chờ cấp container không thuê GPU.
+        cpu_preflight_rate=2*.00003942+4*.00000667
+        upper=(function+60)*rate+240*cpu_preflight_rate
     if upper>request['reserved_usd_per_run']:
         raise PermissionError('Cap tiền thấp hơn cận thời gian/tài nguyên')
     if ((not allow_short_final_epoch and worker['config']['max_wall_seconds']+120>child)
             or worker['config']['max_seconds']>worker['config']['max_wall_seconds']):
         raise ValueError('Cần chừa thời gian runtime, handoff và checkpoint trong cap GPU')
-    return dict(upper_usd=upper,rate_upper_usd_per_second=rate)
+    return dict(upper_usd=upper,rate_upper_usd_per_second=rate,
+                gpu_cpu_max=cpu_max,gpu_memory_max_mib=memory_max)
 
 
 def run(snapshot, request, *, worker_entrypoint='run_junyi_gpu_stage.py', execution_validator=None):
@@ -322,7 +338,8 @@ def run(snapshot, request, *, worker_entrypoint='run_junyi_gpu_stage.py', execut
     mounts['/opt/kltn/experiments/akt/results']=volume.with_mount_options(sub_path='/outputs')
     gpu_specification='H100!' if request['gpu']=='H100' else request['gpu']
     # Hai luồng Torch cần CPU được bảo đảm để tránh host bận làm GPU chờ.
-    function=app.function(image=image,gpu=gpu_specification,cpu=(2,4),memory=(4096,12288),
+    function=app.function(image=image,gpu=gpu_specification,cpu=(2,resource['gpu_cpu_max']),
+        memory=(4096,resource['gpu_memory_max_mib']),
         timeout=request['function_timeout_seconds'],startup_timeout=60,max_containers=1,retries=0,
         scaledown_window=2,volumes=mounts)(gpu_compute)
     cpu_check=app.function(image=image,cpu=2,memory=4096,timeout=180,

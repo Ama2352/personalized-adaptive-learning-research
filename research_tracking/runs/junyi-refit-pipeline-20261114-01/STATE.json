@@ -1,5 +1,5 @@
 {
-  "status": "A3_COLAB_T4_TRANSFER_PENDING",
+  "status": "A3_MODAL_L4_BOUNDED_EXECUTION_ACTIVE",
   "closed": false,
   "requested_scope": "Hoàn thiện pipeline refit A0–A3, ưu tiên local",
   "real_data_training_performed": true,
@@ -30,7 +30,7 @@
     "A3": {
       "status": "PARTIAL_JUNYI_REFIT90",
       "epochs": 2,
-      "output": "experiments/akt/results/modal-junyi-a3-refit-h100-20261115-02",
+      "output": "experiments/akt/results/modal-junyi-a3-refit-l4-20261115-03",
       "checkpoint_export_pending": false
     }
   },
@@ -40,7 +40,7 @@
     "Chuyển nguồn GPU khi khoản hiện tại không đủ, giữ cùng data/recipe/profile và kiểm trước resume"
   ],
   "all_owned_refit_apps_stopped": false,
-  "updated_at_utc": "2026-11-15T05:30:10.454975+00:00",
+  "updated_at_utc": "2026-11-15T06:55:12.288054+00:00",
   "prior_state_file": "STATE_checkpoint_A2_refit_20261115.json",
   "prior_state_sha256": "0ba7fd01465f99128061068e4ae55fcc120dc870f8e4791c631ba01d2a96ca4e",
   "refit_models_exported": [
@@ -49,7 +49,7 @@
     "A2"
   ],
   "last_verified_exports": "exports-verified-a0-a1-a2.json",
-  "last_execution": "modal-junyi-a3-refit-h100-20261115-02",
+  "last_execution": "modal-junyi-a3-refit-l4-20261115-03",
   "last_terminal_evidence": "experiments/akt/results/modal-junyi-a2-refit-h100-20261114-04/remote-inventory.json",
   "budget_review": "refit-remaining-budget-review.json",
   "loop_progress": "refit-loop-progress.json",
@@ -1886,8 +1886,14 @@
     "calibration_performed": false,
     "independent_evaluation_performed": false
   },
-  "a3_latest_checkpoint_evidence": "a3-checkpoint-verified02.json",
-  "next_action_vi": "Chuyển gói recovery đã được duyệt sang Colab T4, kiểm SHA/runtime trước resume. Chưa training trên Colab.",
+  "a3_latest_checkpoint_evidence": "a3-checkpoint-verified04-boundary-v2.json",
+  "next_action_vi": "Xác minh runtime Colab đổi trước khi phục hồi source/cache. Checkpoint mới epoch3 bước1883 đã kiểm trên D; không khởi động từ checkpoint cũ.",
   "colab_t4_discovered": true,
-  "modal_gpu_running": false
+  "modal_gpu_running": false,
+  "active_request": "a3-refit-execution05.json",
+  "modal_current_cap_usd": 0.25,
+  "colab_upload_preserved": true,
+  "colab_abandoned_by_user": true,
+  "colab_bridge_closed": true,
+  "colab_runtime_release_verified": false
 }

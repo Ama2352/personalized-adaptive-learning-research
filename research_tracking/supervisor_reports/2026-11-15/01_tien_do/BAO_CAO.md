@@ -11,13 +11,13 @@ Thời gian học A0 trung bình 128.8 giây/epoch, dao động 122.1–140.8 gi
 | A0 | AKT không đồ thị | Đã refit 9/9 epoch, model đã xuất trên D | Còn chờ |
 | A1 | Đồ thị cố định | Đã refit 9/9 epoch, model đã xuất trên D | Còn chờ |
 | A2 | Độ tin cậy cạnh | Đã refit 9/9 epoch, model đã xuất trên D | Còn chờ |
-| A3 | Độ tin cậy cạnh và cổng | Đã học đủ 2/9 epoch. Checkpoint mới nhất ở epoch 3, bước 1254 | Còn chờ |
+| A3 | Độ tin cậy cạnh và cổng | Đang refit; 3/9 epoch đã nghiệm thu trên D | Còn chờ |
 
 ![Thời gian học refit](../../../runs/junyi-refit-pipeline-20261114-01/figures/refit-epoch-time-a0-a1-a2-v01.svg)
 
 Trung bình đủ 9 epoch của từng model đã nghiệm thu, cùng TRAIN90 với 142.621 người học, 14.947.674 mục tiêu mỗi epoch, FP32, batch 128 và seed 42. Đây là thời gian học, các bước chuẩn bị và thu artifact được theo dõi riêng.
 
-Đây là hoàn tất bước học lại mô hình theo số epoch đã chọn. Hiệu chỉnh xác suất, xuất dự đoán trên nhóm đánh giá độc lập và kết luận hiệu quả đồ thị còn chờ. Thời gian trong biểu đồ là thời gian học từng epoch, gồm phần tích lũy khi nối lại; thời gian chuẩn bị, tải artifact và tổng thời gian sử dụng function được theo dõi riêng. A3 đã học đủ 2 epoch và lưu thêm checkpoint ở epoch 3, bước 1.254/2.040. Credit Modal quan sát còn 0,32 USD. Hai lượt H100 đã dừng, checkpoint đã tải và kiểm trên D. Đã xác nhận Tesla T4 miễn phí trên Colab; đang chuyển gói phục hồi để tiếp tục. Chưa có epoch A3 nào được nghiệm thu trên T4. Thời gian toàn epoch trên T4 còn cần đo thực tế.
+Đây là hoàn tất bước học lại mô hình theo số epoch đã chọn. Hiệu chỉnh xác suất, xuất dự đoán trên nhóm đánh giá độc lập và kết luận hiệu quả đồ thị còn chờ. Thời gian trong biểu đồ là thời gian học từng epoch, gồm phần tích lũy khi nối lại; thời gian chuẩn bị, tải artifact và tổng thời gian sử dụng function được theo dõi riêng. A3 đã nghiệm thu đủ 3/9 epoch, checkpoint trên D có model, optimizer và RNG để tiếp tục epoch 4. Một lượt L4 đang được thực hiện trong phần credit còn lại. Lượt trước bị watchdog dừng sau thời gian chờ cấp máy lớn, đã phục hồi và kiểm đủ checkpoint epoch 3. Controller hiện giới hạn thời gian function GPU/CPU và ngân sách riêng, đồng thời dành thời gian chờ cấp máy. Giữ nguyên source model, split, số epoch và cấu hình số học. Hướng Colab đã dừng theo yêu cầu. A3 chưa hoàn tất refit.
 
 
 

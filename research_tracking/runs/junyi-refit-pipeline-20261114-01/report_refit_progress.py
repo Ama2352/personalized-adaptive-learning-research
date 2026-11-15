@@ -90,6 +90,10 @@ def main():
             limit+=' Tiến trình đã dừng để kiểm tra lỗi vận hành trước lượt tiếp theo. Chỉ các model đã xuất và kiểm đầy đủ mới được tính hoàn tất.'
     if progress['status']=='A3_COLAB_T4_TRANSFER_PENDING':
         limit+=' A3 đã học đủ 2 epoch và lưu thêm checkpoint ở epoch 3, bước 1.254/2.040. Credit Modal quan sát còn 0,32 USD. Hai lượt H100 đã dừng, checkpoint đã tải và kiểm trên D. Đã xác nhận Tesla T4 miễn phí trên Colab; đang chuyển gói phục hồi để tiếp tục. Chưa có epoch A3 nào được nghiệm thu trên T4. Thời gian toàn epoch trên T4 còn cần đo thực tế.'
+    if progress['status']=='COLAB_RUNTIME_RECOVERY_REQUIRED':
+        limit+=' Lượt Modal L4 tiếp tục từ checkpoint H100, giữ nguyên cấu hình học và tiến đến epoch 3, bước 1.883/2.040. GPU đã dừng, 70 artifact đã tải và kiểm trên D. Số dư Modal quan sát còn 0,28 USD, chưa có khoản trả thêm. Colab đã nhận đủ gói và kiểm đạt source/runtime, sau đó phiên đang nhận lệnh trong lúc chuyển checkpoint mới không còn source, cache và venv. Đang phân biệt runtime bị thay với MCP chuyển sang phiên T4 khác; chưa xác nhận file ở phiên cũ đã mất. Chưa chạy training A3 trên Colab. Checkpoint mới nhất trên D vẫn dùng được để tiếp tục, thời gian giữa H100/L4 phải diễn giải theo từng thiết bị.'
+    if progress['status']=='A3_MODAL_L4_BOUNDED_EXECUTION_ACTIVE':
+        limit+=' A3 đã nghiệm thu đủ 3/9 epoch, checkpoint trên D có model, optimizer và RNG để tiếp tục epoch 4. Một lượt L4 đang được thực hiện trong phần credit còn lại. Lượt trước bị watchdog dừng sau thời gian chờ cấp máy lớn, đã phục hồi và kiểm đủ checkpoint epoch 3. Controller hiện giới hạn thời gian function GPU/CPU và ngân sách riêng, đồng thời dành thời gian chờ cấp máy. Giữ nguyên source model, split, số epoch và cấu hình số học. Hướng Colab đã dừng theo yêu cầu. A3 chưa hoàn tất refit.'
     figure_caption='Mỗi epoch dùng cùng 142.621 người học, 14.947.674 tương tác và 2.040 bước optimizer. FP32, batch 128, seed 42. Số liệu từ lịch sử refit A0 đã nghiệm thu.'
     if len(models)>1:
         prefix=figures/('refit-epoch-time-'+'-'.join(models)+'-v01')

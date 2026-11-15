@@ -1,0 +1,53 @@
+<modal-server>:0: ServerWarning: Your Modal token ak-As6bopYLDP48tqMzYSZ5R8 expires in 9h. Run `modal token new` to create a replacement.
+✓ Initialized. View run at 
+https://modal.com/apps/honguyenminhsang2005/main/ap-ibo150nJnGH3ZjeS5R7gXW
+✓ Created objects.
+├── ✓ Uploaded D:\Dev\KLTN\experiments\akt\modal_junyi_staged.py
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\artifacts\akt\staged\junyi-a3-refit-short-20261115-01\project
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\artifacts\akt\staged\junyi-a3-refit-short-20261115-01\INPUTS.js
+│   on
+├── ✓ Created Function gpu_compute.
+└── ✓ Created Function cpu_mount_preflight.
+{"checked_files": 250, "seconds": 0.06085746399999992}
+{"checked_files": 500, "seconds": 0.677565982}
+{"checked_files": 750, "seconds": 1.421508973}
+{"checked_files": 1000, "seconds": 2.1654110209999997}
+{"checked_files": 1250, "seconds": 2.9142842840000003}
+{"checked_files": 1500, "seconds": 4.0305692010000005}
+Stopping app - uncaught exception raised locally: TimeoutError().
+Stopping app - user stopped from CLI.
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\experiments\akt\modal_junyi_staged.py", line 354, in run
+    diagnostic_path=output/'app-budget-guard.json'):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_object.py", line 49, in wrapped
+    return await method(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 2424, in get
+    return await self._invocation().poll_function(timeout=timeout, index=index)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 348, in poll_function
+    raise TimeoutError()
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\experiments\akt\modal_junyi_refit.py", line 109, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\experiments\akt\modal_junyi_refit.py", line 104, in main
+    print(json.dumps(run(args.snapshot, json.loads(args.request.read_text()),
+                     ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        worker_entrypoint='run_junyi_refit_gpu_stage.py', execution_validator=validate_refit_execution)))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\experiments\akt\modal_junyi_staged.py", line 344, in run
+        execution['worker_entrypoint'] = worker_entrypoint
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    if request.get('resume_checkpoint') is not None:
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\experiments\akt\modal_budget_guard.py", line 227, in __exit__
+    raise ModalDeadlineExceeded('Total Modal startup/execution deadline reached; App stop acknowledged') from error
+modal_budget_guard.ModalDeadlineExceeded: Total Modal startup/execution deadline reached; App stop acknowledged
