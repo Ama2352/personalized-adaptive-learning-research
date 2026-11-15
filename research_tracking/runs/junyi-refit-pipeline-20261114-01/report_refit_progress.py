@@ -59,6 +59,8 @@ def main():
         state='Đã chuẩn bị đầu vào; chờ thực thi'
         if completed:
             state=f'Đã lưu checkpoint sau {completed}/9 epoch; chờ tiếp tục'
+        if record.get('partial_epoch'):
+            state=f'Đã học đủ {completed}/9 epoch. Checkpoint mới nhất ở epoch {record["partial_epoch"]}, bước {record["partial_optimizer_step"]}'
         if any(variant in allocation['id'] for allocation in active):
             state=f'Đang refit; {completed}/9 epoch đã nghiệm thu trên D'
         if variant in models:
@@ -86,6 +88,8 @@ def main():
             limit+=' Lượt tiếp theo đang dừng để đối soát ngân sách còn lại. Checkpoint đã lưu cho phép tiếp tục từ vị trí gần nhất; chưa nghiệm thu các phiên bản còn thiếu.'
         else:
             limit+=' Tiến trình đã dừng để kiểm tra lỗi vận hành trước lượt tiếp theo. Chỉ các model đã xuất và kiểm đầy đủ mới được tính hoàn tất.'
+    if progress['status']=='A3_COLAB_T4_TRANSFER_PENDING':
+        limit+=' A3 đã học đủ 2 epoch và lưu thêm checkpoint ở epoch 3, bước 1.254/2.040. Credit Modal quan sát còn 0,32 USD. Hai lượt H100 đã dừng, checkpoint đã tải và kiểm trên D. Đã xác nhận Tesla T4 miễn phí trên Colab; đang chuyển gói phục hồi để tiếp tục. Chưa có epoch A3 nào được nghiệm thu trên T4. Thời gian toàn epoch trên T4 còn cần đo thực tế.'
     figure_caption='Mỗi epoch dùng cùng 142.621 người học, 14.947.674 tương tác và 2.040 bước optimizer. FP32, batch 128, seed 42. Số liệu từ lịch sử refit A0 đã nghiệm thu.'
     if len(models)>1:
         prefix=figures/('refit-epoch-time-'+'-'.join(models)+'-v01')

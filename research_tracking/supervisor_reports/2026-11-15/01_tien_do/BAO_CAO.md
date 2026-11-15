@@ -1,6 +1,6 @@
 # Báo cáo tiến độ khóa luận — ngày 15/11/2026
 
-## 15/11 — A0, A1, A2 hoàn tất refit, A3 chờ nguồn GPU
+## 15/11 — A0, A1, A2 hoàn tất refit; tiếp tục các phiên bản còn lại
 
 Bước refit khởi tạo mô hình mới và học lại trên hợp nhóm huấn luyện với nhóm đã dùng chọn số epoch. Nhóm hiệu chỉnh xác suất và nhóm đánh giá độc lập tiếp tục được giữ riêng. Đến đợt cập nhật ngày 15/11, đã nghiệm thu và xuất model refit cho 3/4 phiên bản. Mỗi phiên bản đã nghiệm thu hoàn tất 9 epoch trên TRAIN90, tổng cộng 134.529.066 lượt tương tác được dùng làm mục tiêu dự báo qua 9 vòng học, với 18.360 bước cập nhật trọng số. Mỗi tương tác được dùng một lần làm mục tiêu trong mỗi epoch.
 
@@ -11,13 +11,13 @@ Thời gian học A0 trung bình 128.8 giây/epoch, dao động 122.1–140.8 gi
 | A0 | AKT không đồ thị | Đã refit 9/9 epoch, model đã xuất trên D | Còn chờ |
 | A1 | Đồ thị cố định | Đã refit 9/9 epoch, model đã xuất trên D | Còn chờ |
 | A2 | Độ tin cậy cạnh | Đã refit 9/9 epoch, model đã xuất trên D | Còn chờ |
-| A3 | Độ tin cậy cạnh và cổng | Chờ nguồn GPU phù hợp ngân sách, chưa refit | Còn chờ |
+| A3 | Độ tin cậy cạnh và cổng | Đã học đủ 2/9 epoch. Checkpoint mới nhất ở epoch 3, bước 1254 | Còn chờ |
 
 ![Thời gian học refit](../../../runs/junyi-refit-pipeline-20261114-01/figures/refit-epoch-time-a0-a1-a2-v01.svg)
 
 Trung bình đủ 9 epoch của từng model đã nghiệm thu, cùng TRAIN90 với 142.621 người học, 14.947.674 mục tiêu mỗi epoch, FP32, batch 128 và seed 42. Đây là thời gian học, các bước chuẩn bị và thu artifact được theo dõi riêng.
 
-Đây là hoàn tất bước học lại mô hình theo số epoch đã chọn. Hiệu chỉnh xác suất, xuất dự đoán trên nhóm đánh giá độc lập và kết luận hiệu quả đồ thị còn chờ. Thời gian trong biểu đồ là thời gian học từng epoch, gồm phần tích lũy khi nối lại; thời gian chuẩn bị, tải artifact và tổng thời gian sử dụng function được theo dõi riêng. A3 còn chờ bước refit vì cận cấp phát tiếp theo vượt phần ngân sách còn lại. Đã giữ đầu vào, cache và cấu hình để tiếp tục khi có nguồn GPU phù hợp.
+Đây là hoàn tất bước học lại mô hình theo số epoch đã chọn. Hiệu chỉnh xác suất, xuất dự đoán trên nhóm đánh giá độc lập và kết luận hiệu quả đồ thị còn chờ. Thời gian trong biểu đồ là thời gian học từng epoch, gồm phần tích lũy khi nối lại; thời gian chuẩn bị, tải artifact và tổng thời gian sử dụng function được theo dõi riêng. A3 đã học đủ 2 epoch và lưu thêm checkpoint ở epoch 3, bước 1.254/2.040. Credit Modal quan sát còn 0,32 USD. Hai lượt H100 đã dừng, checkpoint đã tải và kiểm trên D. Đã xác nhận Tesla T4 miễn phí trên Colab; đang chuyển gói phục hồi để tiếp tục. Chưa có epoch A3 nào được nghiệm thu trên T4. Thời gian toàn epoch trên T4 còn cần đo thực tế.
 
 
 

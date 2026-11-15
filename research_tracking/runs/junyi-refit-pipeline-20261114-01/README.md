@@ -110,3 +110,10 @@ Lượt `modal-junyi-a3-refit-h100-20261115-01` hoàn tất epoch 1 với đủ 
 `tests-credit-basis01.log` đạt 94 ca local, có chồng lặp với các bộ trước. Host admission hỗ trợ ledger khai báo cơ sở free credit thực tiêu thụ, giữ raw billing và một cent biên làm tròn. Storage/egress được miễn phí được loại khỏi chi tiêu credit. Ledger cũ mặc định tiếp tục dùng gross. Chế độ credit mới từ chối billed dương và giữ trần 30 USD. Việc đổi cơ sở ledger chỉ thực hiện sau đối soát App đã dừng và hóa đơn đủ giờ.
 
 `a3-portable-source01.json` giữ gói nguồn/cache 603.557.811 byte và SHA trong `artifacts/akt/staged-archives/`, chưa upload. Gói phục vụ chuyển nguồn GPU khi cần. Checkpoint được quản lý riêng theo outputs của run.
+
+
+## 15/11 — A3 tiếp tục qua hai lượt H100, chuyển nguồn GPU
+
+Đã nghiệm thu checkpoint lượt02, đủ2/9epoch và epoch3 bước1.254/2.040. Model, Adam, RNG và sampler đã tải/kiểm trên D theo `a3-checkpoint-verified02.json`. Hai App đã dừng. Credit quan sát còn0,32USD, chưa đủ cận lượt H100 kế tiếp. Người dùng đã duyệt chuyển gói recovery683MB chứa source/cache TRAIN90/checkpoint sang Colab T4. `a3-colab-t4-discovery01.json` xác nhận Tesla T4 với15GiB VRAM. Chưa training trên Colab, chưa đo thời gian toàn epoch T4.
+
+Gói phục hồi tại `experiments/akt/results/model-export-a3-refit-recovery-20261115-02/`, giữ index từng member. `package_a3_recovery.py` dựng lại gói, `colab_a3_bootstrap.py` kiểm toàn bộ SHA và giải vào đúng `/opt/kltn`. Giữ nguyên Gate/source/config số học. A3 dùng trần VRAM12GiB đã chốt trước lượt H100 đầu để dùng được T4. Chuyển thiết bị phải ghi rõ, tính tương đương số học xuyên GPU còn cần kiểm thực tế. Đây là checkpoint học dở, model refit9epoch còn thiếu.
