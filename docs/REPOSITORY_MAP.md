@@ -2,6 +2,8 @@
 
 ## Báo cáo GVHD hiện hành — cập nhật15/11
 
+Cập nhật tiếp theo trong ngày15/11. A3 đã khôi phục và chạy thật trên Colab Tesla T4, Drive cá nhân đã kiểm bản sao sau4epoch và checkpoint epoch5/bước1.202. Checkpoint T4 đầu và11file liên quan đã tải vềD/kiểmSHA. Chuỗi tiếp tục có giới hạn tới9epoch, sao lưu Drive mỗi lượt. Đọc `STATE.json` và `a3-t4-monitor-progress02.json` trong [bundle refit](../research_tracking/runs/junyi-refit-pipeline-20261114-01/README.md) trước tiếp tục. Hai báo cáo GVHD đã cập nhật. Đoạn dưới ghi trạng thái trước lượt T4.
+
 [HTML](../research_tracking/supervisor_reports/2026-11-15/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown](../research_tracking/supervisor_reports/2026-11-15/01_tien_do/BAO_CAO.md) nối tiếp ngày 14/11. A0, A1, A2 đã hoàn tất refit 9 epoch mỗi model và xuất gói model trên D. Có figure SVG/PNG/CSV so thời gian cùng TRAIN90, cùng 134.529.066 target qua 9 epoch mỗi model. A3 refit đã nghiệm thu đủ3/9epoch trên D. Các App Modal đã dừng, credit quan sát còn0,18USD. Đang chuyển Colab theo yêu cầu mới nhất, chờ ZIP gói06 trong Drive cá nhân đã mount. Hiệu chỉnh và đánh giá độc lập còn thiếu. Bundle refit giữ `STATE.json`, `exports-verified-a0-a1-a2.json` và `refit-remaining-budget-review.json`. Mọi App H100 của đợt này đã dừng. Các mục bên dưới lưu diễn tiến lịch sử.
 
 

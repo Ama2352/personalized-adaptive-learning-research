@@ -11,13 +11,13 @@ Thời gian học A0 trung bình 128.8 giây/epoch, dao động 122.1–140.8 gi
 | A0 | AKT không đồ thị | Đã refit 9/9 epoch, model đã xuất trên D | Còn chờ |
 | A1 | Đồ thị cố định | Đã refit 9/9 epoch, model đã xuất trên D | Còn chờ |
 | A2 | Độ tin cậy cạnh | Đã refit 9/9 epoch, model đã xuất trên D | Còn chờ |
-| A3 | Độ tin cậy cạnh và cổng | Đã lưu checkpoint sau 3/9 epoch; chờ tiếp tục | Còn chờ |
+| A3 | Độ tin cậy cạnh và cổng | Đã học đủ 4/9 epoch. Checkpoint mới nhất ở epoch 5, bước 1202 | Còn chờ |
 
 ![Thời gian học refit](../../../runs/junyi-refit-pipeline-20261114-01/figures/refit-epoch-time-a0-a1-a2-v01.svg)
 
 Trung bình đủ 9 epoch của từng model đã nghiệm thu, cùng TRAIN90 với 142.621 người học, 14.947.674 mục tiêu mỗi epoch, FP32, batch 128 và seed 42. Đây là thời gian học, các bước chuẩn bị và thu artifact được theo dõi riêng.
 
-Đây là hoàn tất bước học lại mô hình theo số epoch đã chọn. Hiệu chỉnh xác suất, xuất dự đoán trên nhóm đánh giá độc lập và kết luận hiệu quả đồ thị còn chờ. Thời gian trong biểu đồ là thời gian học từng epoch, gồm phần tích lũy khi nối lại; thời gian chuẩn bị, tải artifact và tổng thời gian sử dụng function được theo dõi riêng. A3 đã nghiệm thu đủ 3/9 epoch, còn 6 epoch. Đang chuẩn bị Colab để tiếp tục bằng GPU miễn phí và lưu checkpoint trên Drive. Gói phục hồi gồm source, cache và checkpoint đã kiểm trên D. Cơ chế sao lưu và phục hồi đã kiểm bằng dữ liệu tổng hợp; kiểm trên Drive thật và training tiếp còn chờ. Giữ nguyên cấu hình số học, chia tập và confidence TRAIN80. Chưa có kết quả đánh giá độc lập mới.
+Đây là hoàn tất bước học lại mô hình theo số epoch đã chọn. Hiệu chỉnh xác suất, xuất dự đoán trên nhóm đánh giá độc lập và kết luận hiệu quả đồ thị còn chờ. Thời gian trong biểu đồ là thời gian học từng epoch, gồm phần tích lũy khi nối lại; thời gian chuẩn bị, tải artifact và tổng thời gian sử dụng function được theo dõi riêng. A3 đang tiếp tục trên Tesla T4 miễn phí của Colab. Drive đã lưu và kiểm checkpoint sau 4/9 epoch hoàn chỉnh, cùng phần đang học ở epoch 5, bước 1202/2.040. Checkpoint T4 đầu tiên và 11 file nhật ký, cấu hình, metadata đã tải về ổ D và kiểm toàn vẹn. Chuỗi chạy có giới hạn thời gian, dừng khi lỗi hoặc không tiến triển, kiểm bản sao Drive sau mỗi lượt. Giữ cấu hình FP32, batch 128, seed 42, chia tập và confidence TRAIN80 như trước. A3 dùng nhiều loại GPU khi nối lại nên thời gian của nó cần báo cáo riêng. Phần này xác nhận tiến độ huấn luyện và khả năng phục hồi; kết luận hiệu quả của cơ chế đồ thị còn cần hiệu chỉnh và đánh giá độc lập.
 
 
 

@@ -4,6 +4,9 @@ import importlib.util
 import json
 from pathlib import Path
 import sys
+import threading
+from types import SimpleNamespace
+from contextlib import nullcontext
 
 import pytest
 
@@ -85,3 +88,56 @@ def test_stops_when_training_or_backup_fails(case,monkeypatch):
     with pytest.raises(RuntimeError,match='backup failed'):
         SEQUENCE.run_sequence(1,'checkpoints/epoch-003/state.pt','a'*64,drive,3,10800)
     assert json.loads((drive/'SEQUENCE_STATUS.json').read_text())['status']=='STOPPED_REQUIRES_REVIEW'
+
+
+def test_gpu_sampler_records_actual_fields_and_stops(tmp_path,monkeypatch):
+    sampled = threading.Event()
+    def query(*args,**kwargs):
+        sampled.set()
+        return SimpleNamespace(stdout='38, 5000, 15360, 65\n')
+    monkeypatch.setattr(SEQUENCE.subprocess,'run',query)
+    with SEQUENCE.measure_gpu(tmp_path):
+        assert sampled.wait(2)
+    event = json.loads((tmp_path/'gpu-telemetry.jsonl').read_text().splitlines()[0])
+    assert event['gpu_utilization']==38 and event['vram_used_mib']==5000
+    assert event['vram_total_mib']==15360
+
+
+def test_gpu_sampler_failure_is_logged_without_model_step(tmp_path,monkeypatch):
+    sampled = threading.Event()
+    def query(*args,**kwargs):
+        sampled.set()
+        raise FileNotFoundError('nvidia-smi unavailable')
+    monkeypatch.setattr(SEQUENCE.subprocess,'run',query)
+    with SEQUENCE.measure_gpu(tmp_path):
+        assert sampled.wait(2)
+    event = json.loads((tmp_path/'gpu-telemetry.jsonl').read_text().splitlines()[0])
+    assert event['error_type']=='FileNotFoundError'
+
+
+def test_single_tranche_accepts_exact_prepared_uppercase_variant(case,tmp_path,monkeypatch):
+    transfer,_ = case
+    root = tmp_path/'project'
+    root.mkdir()
+    worker = json.loads((HERE/'stage-inputs-a3-short01.json').read_text())['worker']
+    assert worker['variant']=='A3'
+    (root/'gpu-stage-request.json').write_text(json.dumps(worker))
+    checkpoint = root/'experiments/akt/results'/worker['logical_run_id']/'checkpoints/epoch-003/state.pt'
+    checkpoint.parent.mkdir(parents=True)
+    checkpoint.write_bytes(b'fake state')
+    (transfer/'runtime-verified.json').write_text(json.dumps(dict(status='PASS_ISOLATED_CUDA_RUNTIME')))
+    monkeypatch.setattr(SEQUENCE,'ROOT',root)
+    monkeypatch.setattr(SEQUENCE,'measure_gpu',lambda operation:nullcontext())
+    class Worker:
+        pid=123
+        def __init__(self,command,**kwargs):
+            execution = Path(command[-1])
+            execution.with_name('result.json').write_text(json.dumps(dict(status='PARTIAL_JUNYI_REFIT90')))
+        def wait(self,timeout):
+            return 0
+        def poll(self):
+            return 0
+    monkeypatch.setattr(SEQUENCE.subprocess,'Popen',Worker)
+    result=SEQUENCE.run(1,checkpoint.relative_to(root).as_posix(),SEQUENCE.sha(checkpoint))
+    assert result['status']=='PASS_BOUNDED_NATIVE_WORKER' and not result['child_running']
+    assert not (transfer/'training.lock').exists()

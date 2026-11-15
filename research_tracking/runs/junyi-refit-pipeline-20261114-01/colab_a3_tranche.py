@@ -1,11 +1,14 @@
 """Một lượt tiếp tục A3 có hạn giờ trên T4 miễn phí, dùng worker đã đóng."""
 import argparse
+from contextlib import contextmanager
+import csv
 import hashlib
 import json
 import os
 from pathlib import Path
 import signal
 import subprocess
+import threading
 import time
 
 ROOT = Path('/opt/kltn')
@@ -17,6 +20,37 @@ def sha(path):
         return hashlib.file_digest(stream, 'sha256').hexdigest()
 
 
+@contextmanager
+def measure_gpu(operation):
+    """NVML qua nvidia-smi, không thay Torch/RNG hoặc trọng số."""
+    stop = threading.Event()
+    started = time.monotonic()
+    def sample():
+        with (operation/'gpu-telemetry.jsonl').open('x') as log:
+            while not stop.is_set():
+                try:
+                    query = subprocess.run(['nvidia-smi',
+                        '--query-gpu=utilization.gpu,memory.used,memory.total,power.draw',
+                        '--format=csv,noheader,nounits'],capture_output=True,text=True,check=True,timeout=5)
+                    values = next(csv.reader(query.stdout.splitlines()))
+                    event = dict(seconds=time.monotonic()-started,gpu_utilization=float(values[0]),
+                        vram_used_mib=float(values[1]),vram_total_mib=float(values[2]),power_w=float(values[3]))
+                except Exception as error:
+                    event = dict(seconds=time.monotonic()-started,error_type=type(error).__name__,error=str(error))
+                log.write(json.dumps(event)+'\n')
+                log.flush()
+                if stop.wait(5):
+                    break
+    thread = threading.Thread(target=sample,daemon=True)
+    thread.start()
+    try:
+        yield
+    finally:
+        stop.set()
+        thread.join(timeout=10)
+        assert not thread.is_alive(), 'GPU sampler chưa kết thúc'
+
+
 def run(attempt, checkpoint, checkpoint_sha, backup_root=None):
     assert json.loads((TRANSFER / 'runtime-verified.json').read_text())['status'] == 'PASS_ISOLATED_CUDA_RUNTIME'
     if backup_root is not None:
@@ -25,7 +59,7 @@ def run(attempt, checkpoint, checkpoint_sha, backup_root=None):
         assert backup_root.is_dir(), 'Drive chưa sẵn sàng để lưu checkpoint'
     worker = ROOT / 'gpu-stage-request.json'
     frozen = json.loads(worker.read_text())
-    assert frozen['variant'] == 'a3' and frozen['frozen_epochs'] == 9
+    assert frozen['variant'] == 'A3' and frozen['frozen_epochs'] == 9
     logical = ROOT / 'experiments/akt/results' / frozen['logical_run_id']
     resume = (ROOT / checkpoint).resolve()
     assert resume.is_relative_to((logical / 'checkpoints').resolve())
@@ -47,7 +81,7 @@ def run(attempt, checkpoint, checkpoint_sha, backup_root=None):
     result = dict(status='FAILED', execution_id=execution_id, checkpoint_input_sha256=checkpoint_sha)
     process = None
     try:
-        with (operation / 'console.log').open('x') as output:
+        with measure_gpu(operation), (operation / 'console.log').open('x') as output:
             process = subprocess.Popen([str(ROOT / '.venv/bin/python'), '-u', '-B',
                 str(ROOT / 'scripts/akt/run_junyi_refit_gpu_stage.py'), '--request', str(worker),
                 '--execution', str(execution)], cwd=ROOT, stdout=output, stderr=subprocess.STDOUT,

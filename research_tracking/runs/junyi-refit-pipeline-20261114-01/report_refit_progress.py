@@ -99,6 +99,12 @@ def main():
     if progress['status'] in ('COLAB_DRIVE_ACCOUNT_PENDING','COLAB_PERSONAL_DRIVE_UPLOAD_PENDING',
                              'COLAB_DRIVE_INPUTS_VERIFIED_WAITING_T4'):
         limit+=' A3 đã nghiệm thu đủ 3/9 epoch, còn 6 epoch. Đang chuẩn bị Colab để tiếp tục bằng GPU miễn phí và lưu checkpoint trên Drive. Gói phục hồi gồm source, cache và checkpoint đã kiểm trên D. Cơ chế sao lưu và phục hồi đã kiểm bằng dữ liệu tổng hợp; kiểm trên Drive thật và training tiếp còn chờ. Giữ nguyên cấu hình số học, chia tập và confidence TRAIN80. Chưa có kết quả đánh giá độc lập mới.'
+    if progress['status']=='COLAB_A3_SEQUENCE_RUNNING':
+        a3=progress['models']['a3']
+        limit+=f' A3 đang tiếp tục trên Tesla T4 miễn phí của Colab. Drive đã lưu và kiểm checkpoint sau {a3["complete_epochs"]}/9 epoch hoàn chỉnh'
+        if a3.get('partial_epoch'):
+            limit+=f', cùng phần đang học ở epoch {a3["partial_epoch"]}, bước {a3["partial_optimizer_step"]}/2.040'
+        limit+='. Checkpoint T4 đầu tiên và 11 file nhật ký, cấu hình, metadata đã tải về ổ D và kiểm toàn vẹn. Chuỗi chạy có giới hạn thời gian, dừng khi lỗi hoặc không tiến triển, kiểm bản sao Drive sau mỗi lượt. Giữ cấu hình FP32, batch 128, seed 42, chia tập và confidence TRAIN80 như trước. A3 dùng nhiều loại GPU khi nối lại nên thời gian của nó cần báo cáo riêng. Phần này xác nhận tiến độ huấn luyện và khả năng phục hồi; kết luận hiệu quả của cơ chế đồ thị còn cần hiệu chỉnh và đánh giá độc lập.'
     figure_caption='Mỗi epoch dùng cùng 142.621 người học, 14.947.674 tương tác và 2.040 bước optimizer. FP32, batch 128, seed 42. Số liệu từ lịch sử refit A0 đã nghiệm thu.'
     if len(models)>1:
         prefix=figures/('refit-epoch-time-'+'-'.join(models)+'-v01')
