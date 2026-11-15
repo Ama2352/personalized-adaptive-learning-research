@@ -1,4 +1,5 @@
 """Kiểm model refit đã xuất trên D bằng manifest, không tải tensor vào RAM."""
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -22,8 +23,23 @@ def sha(path):
         return hashlib.file_digest(stream, 'sha256').hexdigest()
 
 
+def shared_identity(identity, *, portable_memory_cap=False):
+    common = {key: identity[key] for key in COMMON_KEYS}
+    if portable_memory_cap:
+        profile = dict(common['profile'])
+        cap = profile.pop('max_vram_bytes')
+        assert type(cap) is int and cap > 0, 'Trần VRAM không hợp lệ'
+        common['profile'] = profile
+    return common
+
+
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--portable-memory-cap', action='store_true',
+                        help='Dùng chính sách so sánh đã có, tách trần VRAM khỏi cờ số học; ghi bằng chứng phiên bản riêng')
+    args = parser.parse_args()
     models = {}
+    resource_caps = {}
     reference = None
     for variant in ('a0', 'a1', 'a2', 'a3'):
         export = ROOT / f'experiments/akt/results/model-export-{variant}-refit-20261114-01'
@@ -38,7 +54,8 @@ def main():
         assert sha(export / 'SUPPORT.zip') == index['support_sha256']
         assert not index['calibration_completed']
         assert not index['independent_evaluation_completed']
-        common = {key: index['identity'][key] for key in COMMON_KEYS}
+        common = shared_identity(index['identity'], portable_memory_cap=args.portable_memory_cap)
+        resource_caps[variant] = index['identity']['profile']['max_vram_bytes']
         if reference is None:
             reference = common
         assert common == reference, 'Các model khác hợp đồng refit chung'
@@ -68,7 +85,12 @@ def main():
         'missing_exports': [v for v in ('a0', 'a1', 'a2', 'a3') if v not in models],
         'limits_vi': 'Kiểm file, số target/step và identity. Chưa hiệu chỉnh hay đánh giá độc lập; không suy ra hiệu quả đồ thị từ việc refit thành công.',
     }
-    output = HERE / ('exports-verified-' + '-'.join(models) + '.json')
+    suffix = ''
+    if args.portable_memory_cap:
+        suffix = '-portable-memory-cap-v1'
+        evidence.update(resource_policy='portable-memory-cap-v1', resource_caps_bytes=resource_caps,
+            hardware_limits_vi='Chỉ tách trần VRAM khỏi identity chung theo comparison_contract. Các cờ số học vẫn phải bằng nhau. Không chứng minh bitwise-equivalence giữa GPU khác kiến trúc; thời gian mixed-H100/T4 cần báo riêng.')
+    output = HERE / ('exports-verified-' + '-'.join(models) + suffix + '.json')
     if output.exists():
         assert read(output) == evidence, 'Bằng chứng cũ thay đổi'
     else:
