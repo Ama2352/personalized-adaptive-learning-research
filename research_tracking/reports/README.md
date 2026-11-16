@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+[16/11 — Uploader phục hồi tiến độ](../runs/drive-history-upload-20261116-01/README.md) là công cụ vận hành sao lưu lịch sử AKT. 29 test offline đạt, còn chờ đăng nhập OAuth và kiểm Drive thật.
+
 [16/11 — Rà bổ sung khi đang upload AKT](../runs/artifact-retention-audit-20261116-01/STORAGE_REVIEW02.md) giữ danh sách 416 file / 3,56 GB đã được duyệt và xóa, hồ sơ đã sao lưu Drive và kiểm SHA. Nhật ký và nghiệm thu giữ trong bundle.
 
 [16/11 — Tiến độ RQ1–RQ2 theo tiêu chí nghiệm thu](RQ12_COMPLETION_REVIEW_20261116.md) phân biệt phần chẩn đoán đã đủ nguồn và thực nghiệm chính còn thiếu, đặc biệt calibration/mastery, vòng kín và đối chứng thứ tự Junyi. [Đối chiếu training với ba RQ](TRAINING_RQ_SCOPE_REVIEW_20261116.md) xác nhận bốn Junyi expert đã refit, bảy Grade10 mới selected-fit và giới hạn so sánh. Hai tài liệu này là rà soát hiện trạng, chưa thêm kết quả thực nghiệm.

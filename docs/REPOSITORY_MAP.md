@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 16/11 — Uploader lịch sử AKT có lưu tiến độ
+
+[Hướng dẫn và bằng chứng](../research_tracking/runs/drive-history-upload-20261116-01/README.md) định vị uploader tại `scripts/akt/drive_resumable_upload.py`, kế hoạch 37 file / 35,15 GB, state/token riêng trên D và 29 ca offline đạt. Chưa kiểm upload Drive thật, đang chờ OAuth Desktop client của người dùng.
+
 ## Báo cáo theo RQ và sprint hiện hành ngày 16/11/2026
 
 [HTML tự chứa, ba trang A4](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown đồng bộ](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO.md) trình bày riêng thành quả/số liệu/phần còn thiếu của ba RQ và đối chiếu sáu sprint theo đề cương. Đợt15/11 giữ báo cáo diễn tiến. Kiểm bản mới nằm trong bundle refit, các file `report-rq-sprints-20261116-*`. Các file `report-summary-20261116-*` giữ nghiệm thu bản một trang trước khi mở rộng.
