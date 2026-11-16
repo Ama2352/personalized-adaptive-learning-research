@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 17/11 — Đầu ra cloud sang Drive Sang
+
+[Probe CPU thực](../research_tracking/runs/drive-cloud-artifacts-20261117-01/ROOT_ACCEPTANCE.md) xác nhận khôi phục upload từ byte262.144 và SHA256 Drive. Policy tại experiments/akt/configs/drive_cloud_artifact_policy.json, CPU worker tại scripts/akt/modal_drive_artifact_worker.py. Nối producer calibration thực còn chờ. [Nguồn calibration](../research_tracking/runs/junyi-calibration-data-20261117-01/README.md) đủ15.847người học/1.621.484target; [builder inference](../research_tracking/runs/junyi-real-calibration-wiring-20261117-01/README.md) đã nạp A0/A1 thật trên đầu vào tổng hợp.
+
 ## 17/11 — Archive lịch sử đã chuyển Drive và dọn local
 
 [Hồ sơ dọn](../research_tracking/runs/history-cleanup-20261117-01/README.md) giữ inventory, nhật ký 70 hardlink thuộc 35 ZIP đã xóa, relocation sang Drive và kiểm SHA sau dọn. 44 file model/metadata đang dùng được kiểm giữ đúng SHA. D tăng trống khoảng 35,15 GB trong lượt. Danh mục duplicates là đợt riêng. `drive_resumable_upload.py --login-only` dùng kế hoạch đã lưu, tiếp tục đăng nhập được sau khi local archive đã chuyển remote.

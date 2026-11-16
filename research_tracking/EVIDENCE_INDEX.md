@@ -1,5 +1,9 @@
 # Chỉ mục bằng chứng
 
+## 17/11 — Drive cloud-first và nguồn calibration thật
+
+[CPU cloud thực](runs/drive-cloud-artifacts-20261117-01/ROOT_ACCEPTANCE.md) lưu artifact đúng Drive Sang, ngắt/resume và SHA server đạt; 22 tests offline giữ riêng. [Nguồn calibration](runs/junyi-calibration-data-20261117-01/README.md) xác nhận toàn bộ1.621.484target. [Model loader](runs/junyi-real-calibration-wiring-20261117-01/README.md) đã kiểm A0/A1 với input tổng hợp. Calibration thật chưa chạy. [RAM fitter](runs/calibration-memory-20261117-01/README.md) và [Modal readonly](runs/junyi-calibration-gpu-readiness-20261117-01/README.md) phục vụ kế hoạch tiếp theo.
+
 ## 17/11 — producer calibration tách CPU/inference
 
 [Hồ sơ API và nguồn](runs/calibration-producer-20261117-01/README.md), [29 ca đã đạt](runs/calibration-producer-20261117-01/ACCEPTANCE.json) và [log cuối](runs/calibration-producer-20261117-01/tests07.txt) là bằng chứng engineering tổng hợp. Khác với kết quả training Junyi, các snapshot native trong gói này chỉ khoảng 77–79 KB và không có bước training. Calibrator từ dữ liệu Junyi thật cùng bảng đánh giá outer vẫn còn thiếu.

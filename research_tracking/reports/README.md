@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+[17/11 — Lưu artifact trực tiếp Drive](../runs/drive-cloud-artifacts-20261117-01/ROOT_ACCEPTANCE.md) đã kiểm CPU cloud ngắt/resume và checksum thật. [Nguồn calibration](../runs/junyi-calibration-data-20261117-01/README.md) đủ15.847người học,1.621.484target. [Builder inference](../runs/junyi-real-calibration-wiring-20261117-01/README.md) nối model thật; inference/calibration đầy đủ còn chờ worker cloud.
+
 [17/11 — Đã dọn 35 GB archive lịch sử](../runs/history-cleanup-20261117-01/README.md) ghi 70 hardlink đã xóa, 44 file bảo vệ còn khớp SHA và 35 ZIP Drive kiểm lại đạt. Có relocation để phục hồi run lịch sử.
 
 [17/11 — Producer calibration A0–A3](CALIBRATION_PRODUCER_20261117.md) nối loader, population/prefix, raw predictions và fit temperature CPU tách riêng. 29 ca trên source hiện hành đạt, gồm bốn backbone native nhỏ. Các lượt trên checkpoint/dữ liệu nghiên cứu thật còn phải thực hiện.
