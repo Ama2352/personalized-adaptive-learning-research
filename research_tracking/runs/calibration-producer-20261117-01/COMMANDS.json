@@ -1,0 +1,46 @@
+{
+  "python": ".venv/Scripts/python.exe",
+  "environment": {
+    "PYTHONPATH": "D:/Dev/KLTN/src",
+    "GIT_CONFIG_COUNT": "1",
+    "GIT_CONFIG_KEY_0": "safe.directory",
+    "GIT_CONFIG_VALUE_0": "D:/Dev/KLTN/artifacts/akt/dependencies/upstream"
+  },
+  "runs": [
+    {
+      "name": "tests05",
+      "tests": [
+        "tests/akt/test_junyi_calibration_producer.py",
+        "tests/akt/test_junyi_calibration_native.py"
+      ],
+      "result": "24 passed, 4 skipped in16.97s",
+      "basetemp": "artifacts/akt/runtime/calibration-producer-tests-20261117-05"
+    },
+    {
+      "name": "native06",
+      "tests": [
+        "tests/akt/test_junyi_calibration_native.py"
+      ],
+      "result": "4 passed in21.27s",
+      "basetemp": "artifacts/akt/runtime/calibration-producer-native-20261117-06"
+    },
+    {
+      "name": "tests07",
+      "tests": [
+        "tests/akt/test_junyi_calibration_producer.py",
+        "tests/akt/test_junyi_calibration_native.py"
+      ],
+      "result": "29 passed in22.96s",
+      "basetemp": "artifacts/akt/runtime/calibration-producer-tests-20261117-07"
+    }
+  ],
+  "common_arguments": [
+    "-B",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider"
+  ],
+  "global_configuration_changed": false
+}

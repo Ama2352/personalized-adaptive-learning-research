@@ -9,6 +9,7 @@ import json
 import math
 import os
 from pathlib import Path
+from typing import TYPE_CHECKING
 import uuid
 
 import duckdb
@@ -18,7 +19,8 @@ import pandas as pd
 from knowledge_tracing.shared_kt import check_prediction_alignment
 from .config import PROJECT_ROOT
 from .filesystem import publish_new_file
-from .model import AKTAdapter
+if TYPE_CHECKING:
+    from .model import AKTAdapter
 from .types import LearnerEvents, PredictionRecord, UnseenTarget
 from .windows import iter_windows
 
