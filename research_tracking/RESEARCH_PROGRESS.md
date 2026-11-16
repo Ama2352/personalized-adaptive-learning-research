@@ -1,5 +1,13 @@
 # Tiến độ nghiên cứu
 
+## Mốc 17/11 — diễn giải RQ1–RQ2 và chuẩn bị đường đánh giá độc lập
+
+Đã đối chiếu lại bằng chứng có sẵn, bổ sung bảng chéo quyết định và kiểm cơ chế lambda trên lịch sử đã lưu. [Kết quả cached](reports/RQ12_EXISTING_EVIDENCE_20261117.md) cho thấy 55/60 cặp đổi tập đủ điều kiện vẫn giữ gợi ý và 17/22 cặp đổi gợi ý giữ tập đủ điều kiện và quyết định thành thạo. Ở mức 1150, 20/20 cặp bật/tắt phạt giữ cùng chuỗi câu hỏi/đáp án/xác suất KT trong 120 bước dù mức tăng năng lực ẩn giảm ở cả 20 cặp. Các số này làm rõ cách đọc pilot và contrast world, là phân tích hậu nghiệm; không thêm model, world hoặc seed độc lập. RQ1 vẫn giữ 9 cụm trong 3 nhóm seed, RQ2 giữ 10 block ghép cặp theo nguồn gốc.
+
+Đã bổ sung boundary phần mềm cho `outer_evaluation`, kiểm encoding refit90 và graph adapters bằng 66 ca CPU tổng hợp. [Hồ sơ engineering](runs/calibration-eval-readiness-20261117-01/README.md) cùng [nghiệm thu](runs/calibration-eval-readiness-20261117-01/ACCEPTANCE.json) và [metadata lineage](runs/calibration-eval-readiness-20261117-01/ROLE_LINEAGE.json) tách rõ phần kiểm view/role với thực thi nghiên cứu.
+
+Bốn refit Junyi tiếp tục là đầu vào đã có theo mốc16/11. Producer calibration và outer inference đang được triển khai riêng. Chưa có nghiệm thu calibration dữ liệu thật hoặc bảng đánh giá độc lập mới trong các gói trên. Các điều kiện còn thiếu gồm runtime/current-source, đầy đủ target/prefix provenance, raw/calibrated predictions, thống kê so sánh ghép tương ứng và liên hệ tới outcome vòng kín. Những thay đổi cached/software này chưa khép RQ1–RQ3 hoặc tạo mức phần trăm hoàn thành mới.
+
 ## Mốc 16/11 — A0–A3 expert Junyi đã refit và xuất đủ bốn model
 
 A3 nối checkpoint Drive023 đã kiểm tại epoch9/bước1.874 sang H100, học tiếp166bước và hoàn tất9epoch. Mỗi model dùng14.947.674target/2.040step mỗi epoch, tổng134.529.066lượt target và18.360step. Model/Adam hữu hạn, RNG đầy đủ, inventory trước/sau chép và export đã kiểm SHA. [Nghiệm thu cuối](runs/junyi-refit-pipeline-20261114-01/a3-final-acceptance01.json) và [đối chiếu A0–A3](runs/junyi-refit-pipeline-20261114-01/exports-verified-a0-a1-a2-a3-portable-memory-cap-v1.json).

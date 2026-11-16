@@ -1,5 +1,11 @@
 # Chỉ mục bằng chứng
 
+## 17/11 — kiểm lại bằng chứng RQ1–RQ2 và ranh giới đánh giá Junyi
+
+[Tổng hợp cached RQ1–RQ2](reports/RQ12_EXISTING_EVIDENCE_20261117.md) cùng [bundle và nguồn](runs/rq12-existing-evidence-20261117-01/README.md), [kiểm số học](runs/rq12-existing-evidence-20261117-01/NUMERIC_ACCEPTANCE.json) và [kiểm phụ toàn chuỗi](runs/rq12-existing-evidence-20261117-01/SECONDARY_CHECK.json) là phân tích hậu nghiệm trên kết quả đã có. RQ1 đối chiếu bảng ready/gợi ý gồm 5/55/17/1.003 cặp. RQ2 kiểm 58/60 cặp bật/tắt phạt giữ nguyên chuỗi query/đáp án/xác suất KT suốt 120 bước. Riêng mức 1150 có 20/20 chuỗi giống nhau trong khi mức tăng năng lực ẩn giảm ở 20/20 cặp. Các phép kiểm giữ nguồn, không thêm world, model fit hoặc seed block. [Figure SVG bảng chéo](runs/rq12-existing-evidence-20261117-01/rq1-ready-preview-v01.svg) có dữ liệu và nguồn dựng lại trong bundle.
+
+[Ranh giới calibration/outer](reports/CALIBRATION_EVAL_READINESS_20261117.md), [nghiệm thu phần mềm](runs/calibration-eval-readiness-20261117-01/ACCEPTANCE.json) và [log 66 ca](runs/calibration-eval-readiness-20261117-01/tests04.txt) xác nhận phase outer fold4, encoding refit90 và ba graph adapter được kiểm bằng dữ liệu tổng hợp. [Đối chiếu lineage](runs/calibration-eval-readiness-20261117-01/ROLE_LINEAGE.json) xác nhận metadata refit 142.621, calibration 15.847 và outer 39.616 người học rời nhau. Đây là bằng chứng engineering và metadata, chưa có calibration hoặc outer prediction thật. Producer/calibration/evaluation thực còn theo dõi riêng, không cộng 66 ca thành mẫu nghiên cứu.
+
 ## 15/11 — A0, A1, A2 đã refit và lưu model trên D
 
 [Hồ sơ refit](runs/junyi-refit-pipeline-20261114-01/README.md), [kiểm gói model và hợp đồng chung](runs/junyi-refit-pipeline-20261114-01/exports-verified-a0-a1-a2.json), [ngân sách còn lại](runs/junyi-refit-pipeline-20261114-01/refit-remaining-budget-review.json). Mỗi model đủ 9 epoch, 18.360 bước, 134.529.066 target qua các epoch. Gói model nằm trong `experiments/akt/results/model-export-a{0,1,2}-refit-20261114-01/`. Các checkpoint và archive gốc theo từng tranche vẫn được lưu. A3 refit, hiệu chỉnh và đánh giá độc lập còn chờ. Đây là bằng chứng thực thi đúng hợp đồng training, chưa phải kết quả chứng minh đồ thị cải thiện dự báo hoặc học tập.
