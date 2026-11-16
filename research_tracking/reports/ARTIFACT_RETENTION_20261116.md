@@ -1,5 +1,27 @@
 # Kiểm kê checkpoint/artifact và gói lưu trữ ngày16/11/2026
 
+## Kết luận cập nhật sau rà lại giá trị audit
+
+Nhãn `UNUSED` ở lượt đầu quá rộng khi diễn giải nhu cầu audit lâu dài. Hoàn tất training chỉ kết thúc nhiệm vụ chạy tiếp của checkpoint. Checkpoint trung gian vẫn lưu trạng thái model, optimizer, RNG và vị trí xử lý tại một thời điểm cụ thể. Model cuối và log không thay thế được toàn bộ trạng thái đó. Căn cứ ở `src/knowledge_tracing/akt/checkpoint.py` và `_run_epochs` trong `src/knowledge_tracing/akt/research_junyi_refit.py`.
+
+Danh mục hiện hành là [RETENTION_REVIEW02.csv](<D:/Dev/KLTN/experiments/akt/results/artifact-offload-20261116-01/RETENTION_REVIEW02.csv>). `UNUSED.csv` và gói catalog 05 được giữ như lịch sử phân loại ban đầu. Bảng dung lượng ở các phần sau vẫn mô tả lượt kiểm đầu.
+
+| Nhóm ban đầu | Kết luận sau rà lại | Điều kiện giữ bằng chứng |
+|---|---|---|
+| 55,78 GB bản trùng | Có thể gộp bản lưu vật lý, có điều kiện | Giữ một bản nội dung đúng SHA, metadata nguồn, ánh xạ đường dẫn và khả năng dựng lại snapshot |
+| 1,37 GB phần chia upload | Có thể dựng lại từ ZIP đầy đủ, có điều kiện | Giữ ZIP đầy đủ và manifest chia phần. Kiểm từng phần dựng lại đúng SHA |
+| 28,94 MB checkpoint trung gian duy nhất | Chuyển sang **giữ audit** | Giữ `state.pt`, `metadata.json` và `COMPLETE.json` cùng nhau |
+
+Checkpoint cần giữ là A3 refit tại epoch 4, bước 584 trong `colab-junyi-a3-refit-20261115-001`. File có SHA riêng và metadata phục hồi tương ứng. Việc refit 9 epoch đã xong không đủ làm căn cứ bỏ trạng thái duy nhất này. Gói [06_AUDIT_RETENTION_REVIEW.zip](<D:/Dev/KLTN/experiments/akt/results/artifact-offload-20261116-01/06_AUDIT_RETENTION_REVIEW.zip>) giữ bản sao checkpoint này cùng metadata và danh mục rà lại.
+
+Các gói 01–05 chỉ giữ model chính, một phần hồ sơ training và catalog. Chúng chưa sao lưu toàn bộ nội dung 57,18 GB trong danh mục cũ. Khi gộp bản trùng, bản giữ có thể là cache dữ liệu, checkpoint lịch sử hoặc thành phần snapshot vẫn cần để audit. Cần bảo toàn cả nội dung lẫn bằng chứng nó thuộc run nào. Có thể phải tải lại bản lưu lạnh nếu kiểm tra lịch sử sau này.
+
+Chưa cho phép dọn file nào qua lượt rà này. Các file gốc, bundle và gói cũ được giữ nguyên. [REVIEW02.json](<D:/Dev/KLTN/research_tracking/runs/artifact-retention-audit-20261116-01/REVIEW02.json>) ghi phạm vi, kết quả kiểm lại và giới hạn.
+
+Lượt rà bổ sung đã kiểm lại đủ 21.614 dòng. Đã hash lại 2.220 bản giữ, tổng 11,54 GB, đối chiếu được 21.004 file snapshot với `INPUTS.json`, quét 8.403 file JSON metadata và dựng lại đủ 9 phần upload từ ZIP theo đúng SHA. Checkpoint A3 duy nhất được tham chiếu trong `a3-t4-first-tranche-acceptance01.json` và các manifest của run Colab đầu. Kết quả kiểm hồi quy đạt 11 ca. Các tham chiếu SHA xác nhận mối liên hệ với hồ sơ lịch sử, còn việc dựng lại toàn bộ mọi snapshot vẫn chưa được thực hiện.
+
+[REVIEW02_KEEPERS.csv](<D:/Dev/KLTN/experiments/akt/results/artifact-offload-20261116-01/REVIEW02_KEEPERS.csv>) định vị 2.220 bản nội dung phải được bảo toàn nếu muốn gộp bản trùng. Danh mục này chưa bao gồm toàn bộ metadata và các file KEEP khác của KLTN. Trong CSV rà lại, cột `review_status` và `required_before_cleanup_vi` là quyết định hiện hành. Các cột phân loại cũ được giữ để thấy vì sao kết luận thay đổi. Gói 06 có dung lượng 28,5 MB, chưa upload. [REVIEW02_ACCEPTANCE.json](<D:/Dev/KLTN/research_tracking/runs/artifact-retention-audit-20261116-01/REVIEW02_ACCEPTANCE.json>) ghi nghiệm thu cuối.
+
 ## Kết quả chính
 
 Đã kiểm kê metadata 252,427 file trong các vùng đọc được và hash thực tế khoảng116,00GB binary. Danh mục UNUSED có 21,614 file, tổng 57.18GB. Các con sốGB trong báo cáo dùng10^9byte. File gốc giữ nguyên. Gói nén mới là bản sao để người dùng chọn nơi upload.

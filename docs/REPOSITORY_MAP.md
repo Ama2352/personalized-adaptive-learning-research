@@ -2,6 +2,8 @@
 
 ## 16/11 — Danh mục giữ/lưu trữ/unused và gói upload
 
+Rà lại giá trị audit trong [báo cáo lưu trữ hiện hành](../research_tracking/reports/ARTIFACT_RETENTION_20261116.md) đã chuyển checkpoint A3 epoch 4/bước 584 sang giữ audit. Danh mục quyết định mới là `RETENTION_REVIEW02.csv`, ghi điều kiện bảo toàn nội dung và lineage cho mọi bản trùng/phần upload. `UNUSED.csv` giữ kết luận lịch sử. Gói 06 giữ checkpoint duy nhất và hồ sơ rà lại. Chưa dọn file gốc.
+
 [Báo cáo lưu trữ](../research_tracking/reports/ARTIFACT_RETENTION_20261116.md) và [hồ sơ kiểm](../research_tracking/runs/artifact-retention-audit-20261116-01/README.md) định vị checkpoint/artifact theo phần việc KLTN còn lại. `experiments/akt/results/artifact-offload-20261116-01/` giữ CSV theo file, các bản giữ/SHA và nămZIP upload khoảng442,8MB. Bản gốc giữ nguyên. UNUSED là danh mục ứng viên thu gọn, các snapshot/bundle đã đóng tiếp tục cần lineage khi xử lý.
 
 ## 16/11 — A0–A3 expert Junyi đã hoàn tất refit TRAIN90

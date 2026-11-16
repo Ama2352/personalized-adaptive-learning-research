@@ -1,5 +1,11 @@
 # Kiểm kê và chuẩn bị lưu trữ checkpoint/artifact
 
+## Rà lại nhu cầu audit — kết luận hiện hành
+
+`REVIEW02.json` và `RETENTION_REVIEW02.csv` bổ sung rà soát giá trị audit theo yêu cầu người dùng. Các kết luận UNUSED trước đây được giữ để truy vết thay đổi. Checkpoint A3 epoch 4/bước 584 duy nhất đã chuyển sang giữ audit. Bản trùng cần giữ nội dung và metadata gắn với run, còn các phần upload cần có ZIP/manifest để dựng lại. Chưa có quyền xóa file từ lượt rà này.
+
+`review_audit_retention.py` hash lại các bản giữ, đối chiếu manifest snapshot và tham chiếu SHA trong metadata. Kiểm phần chia bằng đọc ZIP đầy đủ theo đúng kích thước mỗi phần. Gói 06 giữ checkpoint cần bảo toàn, metadata và danh mục mới. Các gói 01–05 giữ nguyên. `tests-review02.log` có kết quả kiểm hồi quy.
+
 Ngày16/11/2026. Đây là hồ sơ vận hành lưu trữ, không phải kết quả dự báo hay bằng chứng cải thiện RQ.
 
 ## Mở các tài liệu sau

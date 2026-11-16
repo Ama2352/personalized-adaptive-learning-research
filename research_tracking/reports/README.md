@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+[16/11 — Rà lại nhu cầu audit](ARTIFACT_RETENTION_20261116.md) là kết luận lưu trữ hiện hành. Chuyển checkpoint A3 epoch 4/bước 584 sang giữ audit. Bản trùng và phần upload chỉ được gộp sau khi bảo toàn nội dung, manifest và khả năng phục hồi. `RETENTION_REVIEW02.csv` thay kết luận quyết định của `UNUSED.csv` cũ. Gói 06 lưu hồ sơ bổ sung.
+
 [16/11 — Phân loại checkpoint/artifact và gói upload](ARTIFACT_RETENTION_20261116.md) là hồ sơ vận hành. Đã kiểmSHA và lậpUNUSED21.614file/57,18GB, giữ bản gốc; có bốn gói model/audit430,6MB và gói catalog12,2MB. [Hồ sơ kiểm](../runs/artifact-retention-audit-20261116-01/README.md) giữ lý do, bản giữ, giới hạn và các manifest.
 
 [16/11 — Dung lượng và dọn cache](DISK_USAGE_CLEANUP_20261116.md) là hồ sơ vận hành. Đã kiểm kê139,64GiB KLTN, lưuSHA/log trước dọn, nhận xác nhận xóa và giải phóng7,24GB từ37fixture pytest cũ. Các model/bằng chứng nghiên cứu giữ riêng.
