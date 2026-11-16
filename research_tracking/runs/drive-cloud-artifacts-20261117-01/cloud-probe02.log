@@ -1,0 +1,54 @@
+✓ Initialized. View run at 
+https://modal.com/apps/honguyenminhsang2016/main/ap-YyqDeywXrF9E9d8OsZxwxA
+✓ Created objects.
+├── ✓ Uploaded D:\Dev\KLTN\scripts\akt\modal_drive_artifact_probe.py
+├── ✓ Uploaded D:\Dev\KLTN\scripts\akt\drive_resumable_upload.py
+├── ✓ Uploaded D:\Dev\KLTN\scripts\akt\drive_artifact_sink.py
+└── ✓ Created Function probe.
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+  File "/root/modal_drive_artifact_probe.py", line 71, in probe
+    receipt = sink.publish_from_environment(source_root=payloads,
+        files=['config.json', 'probe.bin'], run_id=RUN_ID, tranche_id=TRANCHE,
+        volume_commit=commit, max_total_bytes=1100000, chunk_bytes=262144, retries=2)
+  File "/opt/kltn/scripts/akt/drive_artifact_sink.py", line 246, in publish_from_environment
+    return publish_with_session(session,source_root=source_root,files=files,run_id=run_id,
+        tranche_id=tranche_id,volume_commit=volume_commit,max_total_bytes=max_total_bytes,
+        chunk_bytes=chunk_bytes,retries=retries,cloud_root=CLOUD_ROOT)
+  File "/opt/kltn/scripts/akt/drive_artifact_sink.py", line 176, in publish_with_session
+    base=_physical(cloud_root)
+  File "/opt/kltn/scripts/akt/drive_artifact_sink.py", line 52, in _physical
+    raise ArtifactSinkError('Artifact/state path có alias, cần nguồn vật lý rõ ràng.')
+drive_artifact_sink.ArtifactSinkError: Artifact/state path có alias, cần nguồn vật lý rõ ràng.
+Stopping app - uncaught exception raised in remote container: ArtifactSinkError('Artifact/state path có alias, cần nguồn vật lý rõ ràng.').
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\scripts\akt\modal_drive_artifact_probe.py", line 94, in <module>
+    first = probe.remote(True)
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_object.py", line 49, in wrapped
+    return await method(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 2081, in remote
+    return await self._call_function(args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 2018, in _call_function
+    return await invocation.run_function()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 517, in run_function
+    return await _process_result(
+           ^^^^^^^^^^^^^^^^^^^^^^
+        await_response.output.result, await_response.output.data_format, self.client._stub, self.client
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_utils\function_utils.py", line 572, in _process_result
+    raise exc_with_hints(exc)
+  File "<ta-01M7JV53AR9GBBCJFV83M71HZR>:/root/modal_drive_artifact_probe.py", line 71, in probe
+  File "<ta-01M7JV53AR9GBBCJFV83M71HZR>:/opt/kltn/scripts/akt/drive_artifact_sink.py", line 246, in publish_from_environment
+  File "<ta-01M7JV53AR9GBBCJFV83M71HZR>:/opt/kltn/scripts/akt/drive_artifact_sink.py", line 176, in publish_with_session
+  File "<ta-01M7JV53AR9GBBCJFV83M71HZR>:/opt/kltn/scripts/akt/drive_artifact_sink.py", line 52, in _physical
+drive_artifact_sink.ArtifactSinkError: Artifact/state path có alias, cần nguồn vật lý rõ ràng.
