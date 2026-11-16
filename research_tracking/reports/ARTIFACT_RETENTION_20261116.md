@@ -120,3 +120,8 @@ Nguồn kiểm tại [research_tracking/runs/artifact-retention-audit-20261116-0
 ## Cập nhật sau duyệt dọn
 
 Đã xóa đúng 416 file / 3,56 GB theo xác nhận người dùng. Kiểm sau xóa đạt, bốn ZIP giữ lại vẫn khớp SHA. D trống khoảng 34,25 GB tại thời điểm kết thúc. Hai thư mục upload lớn tiếp tục giữ nguyên. [Nhật ký và giới hạn kiểm](../runs/artifact-retention-audit-20261116-01/STORAGE_REVIEW02.md).
+
+
+## Upload lịch sử đã nghiệm thu ngày 17/11
+
+Thư mục `drive-offload-history-20261116-01` đã sao lưu đủ 35 ZIP cùng hai file hỗ trợ, tổng 35,15 GB. [Thư mục Drive](https://drive.google.com/drive/folders/1V-H0estsyh2oQQ3qnfapU9qSpGZFoF3H) giữ dữ liệu, [biên nhận đọc lại](../runs/drive-history-upload-20261116-01/READBACK_ACCEPTANCE.json) xác nhận SHA-256 server của 37/37 file khớp nguồn, tên/parent/size đúng kế hoạch. Bản local còn trên D; việc dọn các đường dẫn archive và hardlink vẫn cần đúng inventory và điều kiện riêng. Thư mục duplicates là lượt khác, chưa được gán hoàn tất từ kết quả này.

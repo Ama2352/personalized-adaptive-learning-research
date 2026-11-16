@@ -1,6 +1,6 @@
 # Mục lục báo cáo và phân tích KLTN
 
-[16/11 — Uploader phục hồi tiến độ](../runs/drive-history-upload-20261116-01/README.md) là công cụ vận hành sao lưu lịch sử AKT. 29 test offline đạt, probe Drive thật đã xác minh tiếp tục từ byte 262.144 và checksum khớp. Upload lịch sử đang chạy.
+[16/11 — Uploader phục hồi tiến độ](../runs/drive-history-upload-20261116-01/README.md) là công cụ vận hành sao lưu lịch sử AKT. 29 test offline đạt, probe Drive thật đã xác minh tiếp tục từ byte 262.144 và checksum khớp. Upload lịch sử đã đủ 37 file / 35,15 GB, đọc lại SHA-256 server khớp 37/37.
 
 [16/11 — Rà bổ sung khi đang upload AKT](../runs/artifact-retention-audit-20261116-01/STORAGE_REVIEW02.md) giữ danh sách 416 file / 3,56 GB đã được duyệt và xóa, hồ sơ đã sao lưu Drive và kiểm SHA. Nhật ký và nghiệm thu giữ trong bundle.
 

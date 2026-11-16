@@ -69,3 +69,10 @@ Lượt kiểm thật đầu tiên nên giới hạn bằng bản dữ liệu t�
 ## Bước tiếp theo
 
 Nhận client JSON qua file local, mở đăng nhập để người dùng xác nhận Sang. Kiểm thật một file tổng hợp nhỏ cùng việc dừng/mở lại. Sau đó thực hiện lịch sử 35 ZIP theo kế hoạch đã tạo. Chưa có file nào trong nguồn bị đổi hoặc xóa bởi uploader.
+
+
+## Nghiệm thu hoàn tất ngày 17/11/2026
+
+Đã hoàn tất đủ 37 file, gồm 35 ZIP và hai file hỗ trợ, tổng 35.154.236.922 byte. Đọc lại metadata của toàn bộ file và năm thư mục bằng một lượt xác minh riêng sau khi process upload thoát mã 0. Cả 37 SHA-256 server và MD5 khớp pin local, tên/thư mục cha khớp kế hoạch, size/mtime của 37 nguồn còn khớp snapshot. Biên nhận [READBACK_ACCEPTANCE.json](READBACK_ACCEPTANCE.json) giữ ID/link/checksum từng file cùng giới hạn.
+
+[Mở thư mục lịch sử đã sao lưu](https://drive.google.com/drive/folders/1V-H0estsyh2oQQ3qnfapU9qSpGZFoF3H). `EXECUTION_STATE.json` đã chuyển COMPLETE_READBACK_VERIFIED. Lượt này kết thúc lúc 2026-11-17T00:22:16.294571+07:00. Bản local còn nguyên, chưa có thao tác dọn 35 GB trong lượt upload này. Đây là nghiệm thu bằng checksum server sau upload, không có lượt tải lại toàn bộ file về máy.

@@ -2,7 +2,7 @@
 
 ## 16/11 — Uploader lịch sử AKT có lưu tiến độ
 
-[Hướng dẫn và bằng chứng](../research_tracking/runs/drive-history-upload-20261116-01/README.md) định vị uploader tại `scripts/akt/drive_resumable_upload.py`, kế hoạch 37 file / 35,15 GB, state/token riêng trên D và 29 ca offline đạt. Đã đăng nhập Sang và kiểm probe Drive thật, ngắt rồi tiếp tục đúng byte 262.144, checksum khớp. Upload lịch sử 35,15 GB đang chạy; trạng thái và biên nhận theo bundle.
+[Hướng dẫn và bằng chứng](../research_tracking/runs/drive-history-upload-20261116-01/README.md) định vị uploader tại `scripts/akt/drive_resumable_upload.py`, kế hoạch 37 file / 35,15 GB, state/token riêng trên D và 29 ca offline đạt. Đã đăng nhập Sang và kiểm probe Drive thật, ngắt rồi tiếp tục đúng byte 262.144, checksum khớp. Upload đủ 37 file / 35,15 GB đã hoàn tất, đọc lại xác nhận SHA-256 server của cả 37 file khớp pin nguồn; biên nhận READBACK_ACCEPTANCE.json theo bundle.
 
 ## Báo cáo theo RQ và sprint hiện hành ngày 16/11/2026
 
