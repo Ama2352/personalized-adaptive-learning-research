@@ -1,0 +1,43 @@
+{
+  "status": "SYNTHETIC_EXTRAPOLATION_NOT_FULL_MEASUREMENT",
+  "at": "2026-11-16T18:37:39.696778+00:00",
+  "full_targets": 1621484,
+  "ols_bytes_per_target": 1418.3277714285714,
+  "ols_intercept_bytes": 25888768.0,
+  "predicted_peak_bytes": 2325684556.1270857,
+  "predicted_peak_gib": 2.165962528555734,
+  "pairwise_bytes_per_target": [
+    1444.2496,
+    1407.95904
+  ],
+  "existing_unmeasured_estimate_bytes": 6641598464,
+  "existing_unmeasured_estimate_gib": 6.1854705810546875,
+  "guard_required_available_gib": 10.309117635091146,
+  "measured_cases": [
+    {
+      "count": 25000,
+      "peak_mib": 58.2578125,
+      "fit_seconds": 2.419656300000497,
+      "total_seconds": 4.938895600000251
+    },
+    {
+      "count": 50000,
+      "peak_mib": 92.69140625,
+      "fit_seconds": 2.6000358000001142,
+      "total_seconds": 6.3992723999999725
+    },
+    {
+      "count": 100000,
+      "peak_mib": 159.828125,
+      "fit_seconds": 4.511271899998974,
+      "total_seconds": 10.859790399999838
+    }
+  ],
+  "limits_vi": [
+    "Chỉ đo fitter tổng hợp với 4 objective evaluations, chưa gồm reader/export/model và toàn bộ producer.",
+    "Độ dài identifier, mức chia sẻ object và allocator khác có thể đổi peak thật, độ dốc chưa là cận trên.",
+    "Max200evaluations có thêm thời gian CPU, chưa đo runtime đầy đủ.",
+    "Theo yêu cầu cloud-first, không fit full Junyi trên PC."
+  ],
+  "recommendation_vi": "Giữ fitter V1 trên cloudCPU, root chọn 12 GiB/1 core cho lượt thực đầu với watchdog RSS và timeout. Runtime/peak toàn cohort vẫn cần đo."
+}
