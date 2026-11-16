@@ -8,6 +8,16 @@
 
 ## Chuẩn bị upload Drive
 
+### Đã hoàn tất đợt đầu
+
+`DRIVE_UPLOAD_RECEIPT01.json` và `DRIVE_UPLOAD_STATE.json` hiện xác nhận đủ sáu ZIP gốc, tổng 471.339.551 byte, tại [thư mục KLTN người dùng cung cấp](https://drive.google.com/drive/folders/1vaojIEDvwtE-vZgjlybwzrsjrGNE_8O7). Ba ZIP 04–06 lên trực tiếp. Ba ZIP 01–03 lưu thành bảy phần vì giới hạn connector 100 MiB/file. Có thêm manifest, helper và `00_DOC_TRUOC.md`, tổng 13 file và 471.348.196 byte. Đã đọc lại metadata/thư mục và hash SHA-256 qua luồng của cả 13 file từ Drive. Sáu ZIP nguồn trên D được hash lại sau upload và vẫn khớp pin.
+
+`prepare_drive_parts.py` giữ cách chia phần. `DRIVE_PARTS_PREPARED.json` xác nhận đọc nối các phần local khớp SHA ba ZIP gốc. `restore_drive_zips.py` cùng 12 ca kiểm Windows và `DRIVE_RESTORE_VERIFICATION01.json` giữ bằng chứng helper. Lượt kiểm đầu bị môi trường hạn chế từ chối hard link, log lỗi được bảo toàn và lượt kiểm với thao tác file host đạt. Chưa chạy helper trên Linux hoặc ghép lại ZIP nghiên cứu bằng helper. Các phần chia mới giữ trong `drive-transfer-parts-20261116-01/`, thêm 423.896.525 byte local. Bản gốc và các phần chia tiếp tục ở D.
+
+Kết nối thực hiện upload vẫn là tài khoản Dương, thư mục đích là link Drive cá nhân do người dùng cung cấp và đã yêu cầu thử upload lại. File01 nguyên ZIP bị chặn HTTP413 trước action, sau đó chuyển thành phần nhỏ. Trình kiểm JavaScript gặp lỗi khởi tạo nên đã thay bằng đọc luồng qua Python `.venv`. Receipt giữ kết quả an toàn và file ID, URL tải tạm được loại khỏi hồ sơ. Danh mục lịch sử 55,78 GB ứng viên gộp bản trùng còn cần xử lý riêng. Upload đợt này giải phóng 0 byte và chưa cấp quyền xóa local.
+
+Các đoạn dưới giữ diễn tiến trước khi có quyền upload.
+
 `DRIVE_UPLOAD_STATE.json` ghi đợt đầu gồm sáu ZIP có sẵn, tổng 471.339.551 byte. Đã hash lại cả sáu ZIP và ghi manifest `FIRST_DRIVE_UPLOAD_BATCH.json` trong thư mục output. Phương án là upload trực tiếp từ D, giữ tên và cấu trúc theo đợt. Các ZIP lịch sử lớn được xét sau theo danh mục đã có, tránh tạo thêm bản nén khi dung lượng local thấp. Đợt đầu chỉ sao lưu model/hồ sơ cốt lõi, chưa thay thế mọi snapshot lịch sử. Kết nối Drive hiện tại khác tài khoản cá nhân người dùng từng dùng nên đang chờ xác nhận nơi lưu. Chưa upload và chưa cấp quyền xóa local.
 
 Người dùng đã cung cấp thư mục đích `1vaojIEDvwtE-vZgjlybwzrsjrGNE_8O7` trên Drive cá nhân. Kiểm metadata qua connector hiện tại trả HTTP 404. Lệnh liệt kê trả danh sách rỗng nên chưa đủ kết luận thư mục trống. Đang chờ cấp quyền chỉnh sửa hoặc đổi kết nối sang tài khoản cá nhân. `DRIVE_UPLOAD_LOCAL_PINS.json` giữ SHA-256 và MD5 đã tính lại cho cả sáu ZIP để đối chiếu metadata sau upload. Chưa có file nào được upload. Upload cũng chưa giải phóng dung lượng local.

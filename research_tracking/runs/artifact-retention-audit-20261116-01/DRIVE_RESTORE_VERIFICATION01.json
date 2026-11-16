@@ -1,0 +1,64 @@
+{
+  "status": "PASS_SYNTHETIC_LOCAL_RESTORE",
+  "checked_at_utc": "2026-11-16T07:15:26.546190+00:00",
+  "python_executable": "D:\\Dev\\KLTN\\.venv\\Scripts\\python.exe",
+  "python_version": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+  "helper_copies_identical": true,
+  "files": [
+    {
+      "path": "experiments/akt/results/artifact-offload-20261116-01/drive-transfer-parts-20261116-01/restore_drive_zips.py",
+      "bytes": 2187,
+      "sha256": "d7954201e10cb720398166c4d63db4cfea9ce6528767023fc663ee1935082de7"
+    },
+    {
+      "path": "research_tracking/runs/artifact-retention-audit-20261116-01/restore_drive_zips.py",
+      "bytes": 2187,
+      "sha256": "d7954201e10cb720398166c4d63db4cfea9ce6528767023fc663ee1935082de7"
+    },
+    {
+      "path": "research_tracking/runs/artifact-retention-audit-20261116-01/test_restore_drive_zips.py",
+      "bytes": 5187,
+      "sha256": "0433c6f1e279e7df664a39af73c1c646debc87c7bdb742a26b0b0f3d82934809"
+    },
+    {
+      "path": "research_tracking/runs/artifact-retention-audit-20261116-01/tests-drive-restore01.log",
+      "bytes": 4143,
+      "sha256": "da67ed5bb89698a81af014b3d5e1ad16c5b48edd0e35b90b2d3208930f97e735"
+    },
+    {
+      "path": "research_tracking/runs/artifact-retention-audit-20261116-01/tests-drive-restore02.log",
+      "bytes": 101,
+      "sha256": "7f15b0307db944c46188ff5f42948042e5d8a2303f3d10c34a37f571c7353be0"
+    }
+  ],
+  "tests": {
+    "cases": 12,
+    "attempt01": {
+      "passed": 11,
+      "failed": 1,
+      "reason_vi": "Môi trường kiểm thử hạn chế từ chối os.link với WinError 5. Giữ log và fixture lỗi."
+    },
+    "attempt02": {
+      "passed": 12,
+      "failed": 0,
+      "elapsed_seconds": 0.66,
+      "execution_vi": "Chạy với quyền thực thi file của host để kiểm nguyên nhân lỗi môi trường."
+    },
+    "plugin_autoload_disabled": true,
+    "pytest_cache_disabled_attempt02": true,
+    "basetemp_attempt01": "artifacts/akt/runtime/pytest-drive-restore01",
+    "basetemp_attempt02": "artifacts/akt/runtime/pytest-drive-restore01/attempt02",
+    "coverage_vi": [
+      "Ghép đúng thứ tự và mở ZIP tổng hợp hợp lệ.",
+      "Từ chối phần hỏng cùng kích thước.",
+      "Bảo toàn ZIP đích đã tồn tại nhưng khác SHA.",
+      "Từ chối thứ tự phần sai bằng pin ZIP đầy đủ.",
+      "Bảo toàn file đích được tạo ngay trước bước xuất.",
+      "Từ chối tên có đường dẫn cha, đường dẫn con và đường dẫn tuyệt đối."
+    ]
+  },
+  "research_archives_read": 0,
+  "research_archives_reconstructed": 0,
+  "remote_operations": 0,
+  "limits_vi": "Kiểm local bằng dữ liệu ZIP tổng hợp nhỏ trên Windows. Chưa chạy helper trên Linux, chưa dựng lại ba ZIP nghiên cứu và chưa dùng phép kiểm này để xác nhận checksum remote."
+}

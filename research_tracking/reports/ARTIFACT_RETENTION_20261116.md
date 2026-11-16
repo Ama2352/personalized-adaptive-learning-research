@@ -1,5 +1,11 @@
 # Kiểm kê checkpoint/artifact và gói lưu trữ ngày16/11/2026
 
+## Đã sao lưu đợt đầu lên Drive
+
+Sáu gói model/audit đã được sao lưu vào [thư mục KLTN](https://drive.google.com/drive/folders/1vaojIEDvwtE-vZgjlybwzrsjrGNE_8O7). Tổng dữ liệu gốc 471,34 MB. Ba ZIP nhỏ được upload trực tiếp, ba ZIP lớn chia thành bảy phần theo giới hạn 100 MiB của công cụ. `00_DOC_TRUOC.md`, `DRIVE_PARTS_MANIFEST.json` và `restore_drive_zips.py` trong thư mục hướng dẫn ghép lại đúng ZIP gốc. Đã đối chiếu dung lượng, thư mục và SHA-256 đọc lại từ Drive cho đủ 13 file. [Biên nhận](<D:/Dev/KLTN/research_tracking/runs/artifact-retention-audit-20261116-01/DRIVE_UPLOAD_RECEIPT01.json>) giữ ID và pin từng file.
+
+File gốc trên D vẫn khớp SHA. Các phần chia thêm khoảng 423,90 MB local. Dung lượng được giải phóng trong lượt upload là 0 byte. Các snapshot lịch sử và danh mục 55,78 GB bản trùng ứng viên gộp còn cần xử lý tiếp theo điều kiện audit bên dưới. Helper đạt 12 ca tổng hợp trên Windows. Đã kiểm phép nối các phần local bằng SHA, còn việc chạy helper phục hồi ZIP nghiên cứu và kiểm Linux chưa được thực hiện.
+
 ## Kết luận cập nhật sau rà lại giá trị audit
 
 Nhãn `UNUSED` ở lượt đầu quá rộng khi diễn giải nhu cầu audit lâu dài. Hoàn tất training chỉ kết thúc nhiệm vụ chạy tiếp của checkpoint. Checkpoint trung gian vẫn lưu trạng thái model, optimizer, RNG và vị trí xử lý tại một thời điểm cụ thể. Model cuối và log không thay thế được toàn bộ trạng thái đó. Căn cứ ở `src/knowledge_tracing/akt/checkpoint.py` và `_run_epochs` trong `src/knowledge_tracing/akt/research_junyi_refit.py`.

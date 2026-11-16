@@ -1,0 +1,57 @@
+F...........                                                             [100%]
+================================== FAILURES ===================================
+________________________ test_valid_ordered_reassembly ________________________
+
+prepared_run = (<module 'drive_restore_fixture' from 'D:\\Dev\\KLTN\\artifacts\\akt\\runtime\\pytest-drive-restore01\\test_valid_orde...0\x00\x00\x80\x01G\x00\x00\x00tiny.binPK\x05\x06\x00\x00\x00\x00\x02\x00\x02\x00l\x00\x00\x00\xad\x00\x00\x00\x00\x00')
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/runtime/pytest-drive-restore01/test_valid_ordered_reassembly0')
+
+    def test_valid_ordered_reassembly(prepared_run, tmp_path):
+        helper, manifest, archive_bytes = prepared_run
+>       helper.main()
+
+research_tracking\runs\artifact-retention-audit-20261116-01\test_restore_drive_zips.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def main():
+        directory = Path(__file__).resolve().parent
+        manifest = json.loads((directory / 'DRIVE_PARTS_MANIFEST.json').read_text(encoding='utf-8'))
+        for archive in manifest['archives']:
+            target = local_file(directory, archive['name'])
+            if target.exists():
+                if target.stat().st_size != archive['bytes'] or digest(target) != archive['sha256']:
+                    raise ValueError('ZIP đã tồn tại nhưng khác pin: ' + target.name)
+                print('Đã có ZIP đúng SHA: ' + target.name)
+                continue
+            for part in archive['parts']:
+                path = local_file(directory, part['name'])
+                if path.stat().st_size != part['bytes'] or digest(path) != part['sha256']:
+                    raise ValueError('Phần tải về thiếu hoặc khác SHA: ' + path.name)
+            temporary = target.with_suffix(target.suffix + '.rebuilding')
+            total = 0
+            combined = hashlib.sha256()
+            with temporary.open('xb') as output:
+                for part in archive['parts']:
+                    with local_file(directory, part['name']).open('rb') as source:
+                        for block in iter(lambda: source.read(1024**2), b''):
+                            output.write(block)
+                            combined.update(block)
+                            total += len(block)
+            if total != archive['bytes'] or combined.hexdigest() != archive['sha256']:
+                raise ValueError('ZIP ghép lại khác pin, giữ file rebuilding để kiểm tra')
+>           os.link(temporary, target)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\runtime\\pytest-drive-restore01\\test_valid_ordered_reassembly0\\synthetic.zip.rebuilding' -> 'D:\\Dev\\KLTN\\artifacts\\akt\\runtime\\pytest-drive-restore01\\test_valid_ordered_reassembly0\\synthetic.zip'
+
+artifacts\akt\runtime\pytest-drive-restore01\test_valid_ordered_reassembly0\restore_drive_zips.py:45: PermissionError
+============================== warnings summary ===============================
+.venv\Lib\site-packages\_pytest\cacheprovider.py:469
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:469: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\nodeids: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+.venv\Lib\site-packages\_pytest\cacheprovider.py:423
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:423: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\lastfailed: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/lastfailed", self.lastfailed)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED research_tracking/runs/artifact-retention-audit-20261116-01/test_restore_drive_zips.py::test_valid_ordered_reassembly
+1 failed, 11 passed, 2 warnings in 0.56s

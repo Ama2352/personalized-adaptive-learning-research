@@ -2,6 +2,8 @@
 
 ## 16/11 — Danh mục giữ/lưu trữ/unused và gói upload
 
+Đã sao lưu đợt đầu sáu ZIP model/audit lên [Drive KLTN](https://drive.google.com/drive/folders/1vaojIEDvwtE-vZgjlybwzrsjrGNE_8O7), tổng 471,34 MB. Ba ZIP lớn ở dạng bảy phần, kèm manifest/helper/hướng dẫn. `DRIVE_UPLOAD_RECEIPT01.json` trong bundle lưu trữ xác nhận metadata và SHA đọc lại của đủ 13 file. Bản gốc cùng các phần chia còn trên D, danh mục lịch sử 55,78 GB tiếp tục có điều kiện bảo toàn riêng.
+
 Rà lại giá trị audit trong [báo cáo lưu trữ hiện hành](../research_tracking/reports/ARTIFACT_RETENTION_20261116.md) đã chuyển checkpoint A3 epoch 4/bước 584 sang giữ audit. Danh mục quyết định mới là `RETENTION_REVIEW02.csv`, ghi điều kiện bảo toàn nội dung và lineage cho mọi bản trùng/phần upload. `UNUSED.csv` giữ kết luận lịch sử. Gói 06 giữ checkpoint duy nhất và hồ sơ rà lại. Chưa dọn file gốc.
 
 [Báo cáo lưu trữ](../research_tracking/reports/ARTIFACT_RETENTION_20261116.md) và [hồ sơ kiểm](../research_tracking/runs/artifact-retention-audit-20261116-01/README.md) định vị checkpoint/artifact theo phần việc KLTN còn lại. `experiments/akt/results/artifact-offload-20261116-01/` giữ CSV theo file, các bản giữ/SHA và nămZIP upload khoảng442,8MB. Bản gốc giữ nguyên. UNUSED là danh mục ứng viên thu gọn, các snapshot/bundle đã đóng tiếp tục cần lineage khi xử lý.
