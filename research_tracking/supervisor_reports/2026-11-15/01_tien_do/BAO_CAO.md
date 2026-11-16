@@ -1,5 +1,23 @@
 # Báo cáo tiến độ khóa luận — ngày 15/11/2026
 
+## 16/11 — Phạm vi KLTN và phần thực nghiệm còn lại của ba RQ
+
+Đề cương tiếp nối hai paper để giải thích nguyên nhân đồ thị chưa cải thiện thành thạo ổn định trong RQ1, xác định điều kiện hiệu lực trong RQ2 và kiểm cơ chế confidence theo cạnh cùng gate trên nền AKT trong RQ3. PDF Paper1 là nguồn lịch sử chuẩn. Góp ý GVHD do người dùng cung cấp giữ nguyên ba RQ, tập trung vào ba bẫy về quy tắc simulator, năng lực chung và thứ tự luyện Junyi. RQ3 ưu tiên mô phỏng có cạnh thật/nhiễu, với kết quả giảm hoặc tắt graph được chấp nhận. Trọng tâm hiện hành là hoàn thiện KLTN. [Đối chiếu phạm vi training và RQ](../../../reports/TRAINING_RQ_SCOPE_REVIEW_20261116.md).
+
+RQ1 đã có lời giải có điều kiện cho zero re-entry và redundancy của retention14, cùng pilot1.080cặp thời điểm cho thấy thay đổi dự báo thường giữ nguyên lựa chọn. Bỏ ngoại lệ đủ6lần luyện trên cùng trạng thái làm đổi2.557/3.240tập sẵn sàng, nhưng trace thiếu điểm của toàn bộ ứng viên để suy hành động mới. RQ2 đã có factorial120world/10paired blocks kiểm năng lực và cơ chế phạt tiên quyết, cùng audit toàn TRAIN80 cho thấy876/976cạnh có cơ hội xuất hiện đúng thứ tự trong cửa sổ. Khoảng bất định hiện có chưa xác nhận khác biệt hiệu ứng giữa hai mức năng lực thấp. Đối chứng dự báo trực tiếp về thứ tự Junyi còn thiếu. Các kết quả chẩn đoán đã đủ nguồn để viết, còn các phép đánh giá chính cần hoàn tất trước nghiệm thu RQ. [Rà soát từng tiêu chí và artifact](../../../reports/RQ12_COMPLETION_REVIEW_20261116.md).
+
+Training A0–A3 vẫn phục vụ trực tiếp đề cương. Bốn bản expert Junyi đã refit đủ9epoch và xuất model. Grade10 có7selectedcheckpoints, còn refit/calibration và outcome độc lập. Checkpoint mới cho phép cùng đo chất lượng dự báo, reference score/mastery, readiness, hành động và kết quả học. ModelGrade10 cần lifecycle riêng để đánh giá vòng kín. SAKT/GKT và các đối chứng matched vẫn nằm trong kế hoạch. Chưa có cơ sở nghiệm thu toàn bộ RQ hoặc đưa ra phần trăm hoàn thành chỉ từ số checkpoint. [Nghiệm thu bốn refit](../../../runs/junyi-refit-pipeline-20261114-01/exports-verified-a0-a1-a2-a3-portable-memory-cap-v1.json), [Grade10 selected-fit](../../../runs/modal-akt-graph-selected-20261112-01/batch-summary.json).
+
+Thứ tự công việc cốt lõi còn lại được nối chung cho ba RQ.
+
+1. Hiệu chỉnh xác suất trên nhóm riêng và đánh giá độc lập bốn modelJunyi, giữ cùng target, coverage/OOV và bootstrap theo learner. Kiểm thêm system selector đã freeze trước khi dùng fallback.
+2. Hoàn thiện lifecycleGrade10 và baseline nghiên cứu, rồi kiểm calibration/reference quanh ngưỡng thành thạo. Đây là phần C04 của RQ1.
+3. Chạy coreclosed-loop với controller chung và fresh paired seed blocks, ghi đủ mastery→ready→action→gain, censoring và uncertainty. Đây là phần C07 của RQ1, đồng thời kiểm phương pháp RQ3.
+4. Dựng và kiểm exposure của controls đúng TRAIN80outer4, rồi so dự báo graph-free/catalog/matched-null/TRAIN-only order graph trên cùng logged targets. Đây là phần T3b của RQ2. Generator hiện mới kiểm synthetic, chưa tạo controlsJunyi thật.
+5. Tái dùng model/output để kiểm delete/add/reverse, history/support/profile và nội/liên chương, giữ family thống kê/Holm đã chốt. H_dev30 còn thiếu history>50. Sau đó nối các bảng kết quả vào luận văn và demo.
+
+Calibration, outcome độc lập và predictiveordercontrols là các phép thực nghiệm còn thiếu. Phần viết có thể tiến hành song song từ các phát hiện đã nghiệm thu. [Ma trận hoàn tất RQ1–RQ2](../../../reports/RQ12_CLOSURE_MATRIX_20261112.md), [trạng thái controlsTRAIN80](../../../runs/rq2-junyi-train80-controls-20261112-01/README.md).
+
 ## 16/11 — A0–A3 hoàn tất refit TRAIN90, model đã xuất và kiểm trên D
 
 Bước refit khởi tạo mô hình mới và học lại trên hợp nhóm huấn luyện với nhóm đã dùng chọn số epoch. Nhóm hiệu chỉnh xác suất và nhóm đánh giá độc lập tiếp tục được giữ riêng. Đến đợt cập nhật ngày 15/11, đã nghiệm thu và xuất model refit cho 4/4 phiên bản. Mỗi phiên bản đã nghiệm thu hoàn tất 9 epoch trên TRAIN90, tổng cộng 134.529.066 lượt tương tác được dùng làm mục tiêu dự báo qua 9 vòng học, với 18.360 bước cập nhật trọng số. Mỗi tương tác được dùng một lần làm mục tiêu trong mỗi epoch.
@@ -31,7 +49,7 @@ Phần tiếp theo phải ưu tiên hiệu chỉnh, đánh giá độc lập và
 
 
 
-## Tiến độ đến ngày 15/11/2026
+## Tiến độ đến ngày 16/11/2026
 
 
 Đã có các phát hiện chẩn đoán cụ thể cho RQ1–RQ2, đồng thời hoàn tất huấn luyện và chọn checkpoint cho bốn biến thể AKT trên Junyi. Bước mới nhất là hoàn tất refit A0, A1, A2, A3 trên TRAIN90. Khóa luận đang chuyển từ xây dựng mô hình sang hoàn thiện đánh giá độc lập và nối kết quả dự báo với quyết định lộ trình.
@@ -44,8 +62,8 @@ Phần tiến bộ trong ngày 14/11 tập trung vào A2, A3, độ tin cậy c�
 |---|---|---|
 | RQ1 · Nguyên nhân | Đã xác định các kết quả phụ thuộc quy tắc mô phỏng và những điểm thay đổi dự báo thường chưa đổi quyết định. | Hiệu chỉnh xác suất quanh ngưỡng thành thạo và đối chứng tác động đến kết quả học trên đánh giá độc lập. |
 | RQ2 · Điều kiện hiệu lực | Đã kiểm đối chứng cơ chế năng lực trên 120 thế giới mô phỏng và cơ hội quan sát cạnh trong Junyi. | Kiểm dự báo với các đối chứng thứ tự Junyi; điều kiện nhiễu cạnh, lịch sử và nhóm người học theo protocol chính. |
-| RQ3 · CG-AKT | Đã có A0–A3 Junyi, mỗi bản chạy 12 epoch và chọn epoch 9; checkpoint và dự đoán đã lưu. | Hoàn tất refit A1–A3, hiệu chỉnh xác suất, so sánh độc lập và kết quả vòng kín của mô hình mới. |
-| Chuẩn bị refit | Đã kiểm bốn bộ đầu vào thật; cache CPU hoàn tất; source đạt 2.667 ca kiểm Linux. | A0 đã refit đủ 9 epoch; tiếp tục A1–A3 và đánh giá độc lập. |
+| RQ3 · CG-AKT | A0–A3 expertJunyi đã chọn epoch9 và refit đủ9epoch, model đã xuất. Grade10 có7selectedcheckpoints. | Hiệu chỉnh, đánh giá độc lập, ablation confidence/gate và vòng kín trên modelGrade10 phù hợp. |
+| Refit Junyi | Bốn model A0–A3 đã refit đầy đủ, checkpoint/model xuất trên D được nghiệm thu. | Calibration10, evaluation độc lập và các đối chứng nghiên cứu. |
 
 
 ## 1. Từ hai nghiên cứu trước đến ba câu hỏi của khóa luận
@@ -125,13 +143,13 @@ Sau khi chọn số epoch, mỗi mô hình được khởi tạo mới và học
 Pipeline refit đã có lưu checkpoint từng epoch, trạng thái optimizer và nguồn ngẫu nhiên, phục hồi khi ngắt, giới hạn thời gian/tài nguyên và xuất model gọn. Kiểm tổng hợp trên CPU xác nhận model, Adam và trạng thái ngẫu nhiên khớp giữa chạy liên tục và nối lại cho cả bốn phiên bản. Source hiện tại đạt 2.667 ca kiểm Linux, với 0 lỗi và 0 ca bỏ qua. Snapshot A0 đã được đóng gói và kiểm đầu vào trên local; A1–A3 đã có đặc tả đóng gói.
 
 
-Tại bản chốt ngày 14/11, refit dữ liệu thật còn chờ. Ngày 15/11 đã sửa/kiểm guard Volume và allocator CUDA, hoàn tất refit A0 trên H100. Tiếp tục A1–A3 và đối soát ngân sách. Kết quả kiểm phần mềm được dùng làm điều kiện thực thi; kết luận RQ3 cần kết quả đánh giá mô hình sau các bước này.
+Tại bản chốt ngày 14/11, refit dữ liệu thật còn chờ. Ngày 15/11 đã sửa/kiểm guard Volume và allocator CUDA, hoàn tất refit A0 trên H100. Đến cập nhật16/11, cả A0–A3 đã refit đủ9epoch và xuất model. Kết quả kiểm phần mềm được dùng làm điều kiện thực thi; kết luận RQ3 cần hiệu chỉnh và đánh giá mô hình độc lập sau refit.
 
 
 ## 6. Tài nguyên, mô hình đã lưu và công việc tiếp theo
 
 
-Các lượt huấn luyện Junyi đã dùng Modal, đồng thời các phép kiểm kỹ thuật đã tận dụng T4 Colab. Riêng A3 có tổng 52,25 phút trong function GPU qua hai lượt, thời gian train trung bình khoảng 200,2 giây/epoch. Trung bình các mẫu đo mức sử dụng GPU là 28,82%, VRAM đỉnh khoảng 5,65 GiB. Mức sử dụng GPU trung bình trên 50% còn chưa đạt.
+Ở mốc selected-fit ngày14/11, các lượt huấn luyện Junyi đã dùng Modal, đồng thời các phép kiểm kỹ thuật đã tận dụng T4 Colab. Riêng A3 selected-fit có tổng52,25phút trong functionGPU qua hai lượt, thời gian train trung bình khoảng200,2giây/epoch. Trung bình các mẫu đo mức sử dụngGPU là28,82%, VRAM đỉnh khoảng5,65GiB. Các số liệu này thuộc selected-fit lịch sử. Thời gian refit cập nhật16/11 được trình bày ở đầu báo cáo.
 
 
 Checkpoint, dự đoán, telemetry và figure của các lượt đã nghiệm thu được giữ trên ổ D. A3 đã phục hồi được từ checkpoint giữa epoch 7 khi kết nối local gián đoạn. Các App được xác nhận dừng trước bước tải và nén artifact.
@@ -142,10 +160,10 @@ Hai lượt kiểm Linux cho pipeline refit dùng CPU, mỗi lượt có trần 
 
 | Thứ tự tiếp theo | Mục tiêu | Bằng chứng cần có |
 |---|---|---|
-| 1. Kiểm CUDA refit ngắn | Xác nhận đường chạy mới hoạt động và đo chi phí xử lý thực tế. | Checkpoint có thể nạp lại, số mục tiêu/bước học, thời gian, VRAM và xác nhận dừng GPU. |
-| 2. Refit A0–A3 | Học lại từng phiên bản đúng 9 epoch, cùng dữ liệu và recipe số học. | Checkpoint cuối, đủ quần thể mỗi epoch, inventory và model xuất trên D. |
-| 3. Hiệu chỉnh và đánh giá độc lập | Đánh giá dự báo và độ tin cậy quanh ngưỡng thành thạo. | AUC, Log Loss, Brier, calibration và khoảng bất định trên đúng tập đã giữ riêng. |
-| 4. Nối với hệ thống chọn bài | Kiểm khi nào cải thiện dự báo làm thay đổi quyết định và kết quả học. | Nhật ký thành thạo, tập sẵn sàng, lựa chọn, gain và retention trong mô phỏng phù hợp. |
+| 1. Hiệu chỉnh và đánh giá Junyi | Tận dụng bốn model refit đã nghiệm thu, kiểm dự báo độc lập. | Raw/calibrated LL, Brier, AUC, ECE, coverage và khoảng bất định theo learner. |
+| 2. Hoàn thiện lifecycle Grade10 | Tận dụng7selectedcheckpoints và tiếp tục baseline nghiên cứu. | Epoch/freeze, refit, calibration riêng và đủ84reference items/28concepts. |
+| 3. Nối với hệ thống chọn bài | Kiểm chuỗi quyết định và outcome trên fresh paired blocks. | Reference/mastery/ready/action traces, net gain, censoring, ablation và uncertainty. |
+| 4. Khép điều kiện và ordercontrols | Kiểm noise/history/support/profile cùng đối chứng thứ tự Junyi. | Controls có exposure hợp lệ, cùng target, thống kê theo family và bảng coverage. |
 
 
 ## 7. Điều đã có thể báo cáo và giới hạn kết luận

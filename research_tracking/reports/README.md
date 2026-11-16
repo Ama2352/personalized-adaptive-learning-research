@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+[16/11 — Tiến độ RQ1–RQ2 theo tiêu chí nghiệm thu](RQ12_COMPLETION_REVIEW_20261116.md) phân biệt phần chẩn đoán đã đủ nguồn và thực nghiệm chính còn thiếu, đặc biệt calibration/mastery, vòng kín và đối chứng thứ tự Junyi. [Đối chiếu training với ba RQ](TRAINING_RQ_SCOPE_REVIEW_20261116.md) xác nhận bốn Junyi expert đã refit, bảy Grade10 mới selected-fit và giới hạn so sánh. Hai tài liệu này là rà soát hiện trạng, chưa thêm kết quả thực nghiệm.
+
+[16/11 — Thư mục cho người dùng upload](ARTIFACT_RETENTION_20261116.md) đã gom khoảng10,88GB nội dung/metadata đại diện55,78GB đường dẫn trùng, dùng hardlink trênD. Gói đã kiểmSHA và ánh xạ, chờ upload thủ công và nghiệm thu trước dọn.
+
 [16/11 — Đã sao lưu đợt đầu lên Drive](ARTIFACT_RETENTION_20261116.md) ghi sáu gói model/audit 471,34 MB và hướng dẫn phục hồi ba ZIP lớn chia phần. Đã đọc lại SHA-256 khớp toàn bộ 13 file dữ liệu/hỗ trợ trên Drive. Biên nhận và bằng chứng helper theo [bundle lưu trữ](../runs/artifact-retention-audit-20261116-01/README.md). Các bản local vẫn giữ.
 
 [16/11 — Rà lại nhu cầu audit](ARTIFACT_RETENTION_20261116.md) là kết luận lưu trữ hiện hành. Chuyển checkpoint A3 epoch 4/bước 584 sang giữ audit. Bản trùng và phần upload chỉ được gộp sau khi bảo toàn nội dung, manifest và khả năng phục hồi. `RETENTION_REVIEW02.csv` thay kết luận quyết định của `UNUSED.csv` cũ. Gói 06 lưu hồ sơ bổ sung.
