@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+[16/11 — Rà bổ sung khi đang upload AKT](../runs/artifact-retention-audit-20261116-01/STORAGE_REVIEW02.md) giữ danh sách 416 file / 3,56 GB đề xuất dọn, hồ sơ đã sao lưu Drive và kiểm SHA, chưa xóa.
+
 [16/11 — Tiến độ RQ1–RQ2 theo tiêu chí nghiệm thu](RQ12_COMPLETION_REVIEW_20261116.md) phân biệt phần chẩn đoán đã đủ nguồn và thực nghiệm chính còn thiếu, đặc biệt calibration/mastery, vòng kín và đối chứng thứ tự Junyi. [Đối chiếu training với ba RQ](TRAINING_RQ_SCOPE_REVIEW_20261116.md) xác nhận bốn Junyi expert đã refit, bảy Grade10 mới selected-fit và giới hạn so sánh. Hai tài liệu này là rà soát hiện trạng, chưa thêm kết quả thực nghiệm.
 
 [16/11 — Thư mục cho người dùng upload](ARTIFACT_RETENTION_20261116.md) đã gom khoảng10,88GB nội dung/metadata đại diện55,78GB đường dẫn trùng, dùng hardlink trênD. Gói đã kiểmSHA và ánh xạ, chờ upload thủ công và nghiệm thu trước dọn.

@@ -110,3 +110,8 @@ Kiểm cuối đạt đối với SHA của cả năm ZIP, SHA các catalog, 21.
 4. Duyệt từng nhóm UNUSED khi cần thu gọn, đối chiếu bản giữ và giữ đường dẫn manifest có thể truy vết.
 
 Nguồn kiểm tại [research_tracking/runs/artifact-retention-audit-20261116-01/SUMMARY.json](<D:/Dev/KLTN/research_tracking/runs/artifact-retention-audit-20261116-01/SUMMARY.json>) và [research_tracking/runs/artifact-retention-audit-20261116-01/CLASSIFICATION_REVIEW.json](<D:/Dev/KLTN/research_tracking/runs/artifact-retention-audit-20261116-01/CLASSIFICATION_REVIEW.json>).
+
+
+## Rà bổ sung trong lúc upload hai thư mục lớn
+
+Đã kiểm riêng 416 file, tổng 3,56 GB có thể đề xuất dọn. Gồm 16 phần truyền tạm 1,79 GB có ZIP/Drive đối chiếu và 400 checkpoint pytest tổng hợp 1,77 GB. Đã lưu hồ sơ nhỏ lên Drive và đọc lại SHA khớp. Chưa xóa, đang chờ duyệt danh sách cụ thể. Hai thư mục upload cùng các inode liên quan được loại khỏi danh sách. [Chi tiết, giới hạn và nguồn kiểm](../runs/artifact-retention-audit-20261116-01/STORAGE_REVIEW02.md).

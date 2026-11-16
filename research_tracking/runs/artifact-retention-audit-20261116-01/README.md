@@ -73,3 +73,8 @@ Lượt audit01 trong môi trường mặc định đã được ngắt khi chư
 Dùng `.venv/Scripts/python.exe -B` với các script trong thư mục này. Script đóng gói dùng output mới và từ chối ghi đè gói đã tạo. Khi cần tái kiểm gói hiện có, dùng pin trong PACKAGES/CATALOG_PACKAGE và manifest bên trongZIP. Các bản summary/catalog là kết quả phân loại theo thời điểm, cần cập nhật bằng run mới nếu phạm vi nghiên cứu thay đổi.
 
 Các file nặng và CSV đầy đủ nằm trong `experiments/akt/results/artifact-offload-20261116-01/`. Git chỉ giữ script, chỉ mục, summary, test log và manifest nhỏ.
+
+
+## Lượt rà bổ sung khi upload đang chạy
+
+Xem [STORAGE_REVIEW02.md](STORAGE_REVIEW02.md) cho 416 ứng viên dọn / 3,56 GB, trạng thái Drive đã đọc lại SHA và giới hạn metadata/hardlink. Chưa xóa file. Thông tin upload ở các đoạn lịch sử trên phản ánh thời điểm viết, các biên nhận Drive mới là trạng thái hiện hành.
