@@ -1,8 +1,8 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
-## Báo cáo cô đọng hiện hành ngày 16/11/2026
+## Báo cáo theo RQ và sprint hiện hành ngày 16/11/2026
 
-[HTML tự chứa, một trang A4](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown đồng bộ](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO.md) giải thích ngữ cảnh, kết quả chẩn đoán có số liệu, training đã hoàn tất và phần còn thiếu. Đợt15/11 giữ báo cáo chi tiết. Kiểm nội dung/nguồn và render nằm trong bundle refit, các file `report-summary-20261116-*`.
+[HTML tự chứa, ba trang A4](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown đồng bộ](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO.md) trình bày riêng thành quả/số liệu/phần còn thiếu của ba RQ và đối chiếu sáu sprint theo đề cương. Đợt15/11 giữ báo cáo diễn tiến. Kiểm bản mới nằm trong bundle refit, các file `report-rq-sprints-20261116-*`. Các file `report-summary-20261116-*` giữ nghiệm thu bản một trang trước khi mở rộng.
 
 ## 16/11 — Danh mục giữ/lưu trữ/unused và gói upload
 

@@ -1,8 +1,8 @@
 # Báo cáo tiến độ theo ngày
 
-## Bản cô đọng hiện hành ngày 16/11/2026
+## Báo cáo theo RQ và sprint hiện hành ngày 16/11/2026
 
-[Báo cáo HTML một trang](2026-11-16/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown đồng bộ](2026-11-16/01_tien_do/BAO_CAO.md) trình bày ngữ cảnh hai paper, các phát hiện có số liệu, phần AKT đã huấn luyện và thực nghiệm còn thiếu. Bản HTML tự chứa, in vừa một trang A4. Đã kiểm desktop/mobile và số liệu theo hồ sơ hiện có. Bản dài ngày15/11 tiếp tục giữ diễn tiến và số liệu chi tiết.
+[Báo cáo HTML](2026-11-16/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown đồng bộ](2026-11-16/01_tien_do/BAO_CAO.md) đã mở rộng thành ba trang A4 để làm rõ thành quả, số liệu và phần còn thiếu của từng RQ. Bảng sáu sprint đối chiếu trực tiếp đề cương trang5, ghi đầu ra đã có và mốc còn thiếu. Bản HTML tự chứa, có bố cục desktop/mobile. Đợt15/11 giữ diễn tiến chi tiết. Kiểm bản mới theo `report-rq-sprints-20261116-*` trong bundle refit.
 
 ## Đợt báo cáo ngày 15/11/2026, cập nhật đến 16/11
 
