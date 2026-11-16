@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 17/11 — Bằng chứng cached RQ1–RQ2 và ranh giới đánh giá
+
+[RQ1–RQ2](../research_tracking/reports/RQ12_EXISTING_EVIDENCE_20261117.md) định vị bảng chéo và phát hiện khi thay cơ chế phạt: ở mức1150,20cặp giữ chuỗi quan sát nhưng gainẩn giảm. Bundle giữ CSV/SVG/checker; 9cụm RQ1 thuộc3seedfamilies, RQ2 có10pairedblocks. [Readiness calibration/evaluation](../research_tracking/reports/CALIBRATION_EVAL_READINESS_20261117.md) giữ66testssynthetic và kiểmmetadata4exports. Source hỗ trợ outer phase, producer thực thi thật còn cần hoàn thiện.
+
 ## 16/11 — Uploader lịch sử AKT có lưu tiến độ
 
 [Hướng dẫn và bằng chứng](../research_tracking/runs/drive-history-upload-20261116-01/README.md) định vị uploader tại `scripts/akt/drive_resumable_upload.py`, kế hoạch 37 file / 35,15 GB, state/token riêng trên D và 29 ca offline đạt. Đã đăng nhập Sang và kiểm probe Drive thật, ngắt rồi tiếp tục đúng byte 262.144, checksum khớp. Upload đủ 37 file / 35,15 GB đã hoàn tất, đọc lại xác nhận SHA-256 server của cả 37 file khớp pin nguồn; biên nhận READBACK_ACCEPTANCE.json theo bundle.
