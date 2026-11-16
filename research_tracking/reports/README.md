@@ -1,8 +1,8 @@
 # Mục lục báo cáo và phân tích KLTN
 
-[17/11 — Kiểm lại bằng chứng RQ1–RQ2](RQ12_EXISTING_EVIDENCE_20261117.md) bổ sung bảng chéo quyết định và kiểm chuỗi120bước trên cachedtraces:58/60cặplambda giữ cùng quan sát, ởmức1150gainẩn giảm dùquan sátgiữ. Cócheckerđộc lập, nguồnSHA,CSVvàSVG; đây là phân tích hậu nghiệm, chưa khépRQ.
+[17/11 — Kiểm lại bằng chứng RQ1–RQ2](RQ12_EXISTING_EVIDENCE_20261117.md) bổ sung bảng chéo quyết định và kiểm chuỗi120bước trên traces đã lưu. Có 58/60 cặp bật/tắt phạt giữ cùng chuỗi quan sát. Ở mức 1150, mức tăng năng lực ẩn giảm dù chuỗi quan sát giữ nguyên. Có kiểm độc lập, nguồn SHA, CSV và SVG; đây là phân tích hậu nghiệm, còn tiêu chí nghiệm thu RQ.
 
-[17/11 — Ranh giới calibration/evaluation](CALIBRATION_EVAL_READINESS_20261117.md) ghi66synthetictestsđạt vàlineagemetadatarefit/calibration/outerrời nhau. Chưa chạy calibration hoặcouterpredictionthật.
+[17/11 — Ranh giới calibration/evaluation](CALIBRATION_EVAL_READINESS_20261117.md) ghi 66 kiểm thử tổng hợp đạt và metadata xác nhận các tập refit, calibration và outer rời nhau. Các lượt calibration và outer prediction thật còn phải thực hiện.
 
 [16/11 — Uploader phục hồi tiến độ](../runs/drive-history-upload-20261116-01/README.md) là công cụ vận hành sao lưu lịch sử AKT. 29 test offline đạt, probe Drive thật đã xác minh tiếp tục từ byte 262.144 và checksum khớp. Upload lịch sử đã đủ 37 file / 35,15 GB, đọc lại SHA-256 server khớp 37/37.
 

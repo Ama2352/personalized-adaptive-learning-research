@@ -2,7 +2,7 @@
 
 ## 17/11 — Bằng chứng cached RQ1–RQ2 và ranh giới đánh giá
 
-[RQ1–RQ2](../research_tracking/reports/RQ12_EXISTING_EVIDENCE_20261117.md) định vị bảng chéo và phát hiện khi thay cơ chế phạt: ở mức1150,20cặp giữ chuỗi quan sát nhưng gainẩn giảm. Bundle giữ CSV/SVG/checker; 9cụm RQ1 thuộc3seedfamilies, RQ2 có10pairedblocks. [Readiness calibration/evaluation](../research_tracking/reports/CALIBRATION_EVAL_READINESS_20261117.md) giữ66testssynthetic và kiểmmetadata4exports. Source hỗ trợ outer phase, producer thực thi thật còn cần hoàn thiện.
+[RQ1–RQ2](../research_tracking/reports/RQ12_EXISTING_EVIDENCE_20261117.md) định vị bảng chéo và phát hiện khi thay cơ chế phạt: ở mức 1150, 20 cặp giữ chuỗi quan sát nhưng mức tăng năng lực ẩn giảm. Bundle giữ CSV/SVG/checker; 9 cụm RQ1 thuộc 3 nhóm seed, RQ2 có 10 block ghép cặp. [Readiness calibration/evaluation](../research_tracking/reports/CALIBRATION_EVAL_READINESS_20261117.md) giữ 66 kiểm thử tổng hợp và đối chiếu metadata của 4 model export. Source hỗ trợ outer phase, producer thực thi thật còn cần hoàn thiện.
 
 ## 16/11 — Uploader lịch sử AKT có lưu tiến độ
 
@@ -10,7 +10,7 @@
 
 ## Báo cáo theo RQ và sprint hiện hành ngày 16/11/2026
 
-[HTML tự chứa, ba trang A4](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown đồng bộ](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO.md) trình bày riêng thành quả/số liệu/phần còn thiếu của ba RQ và đối chiếu sáu sprint theo đề cương. Đợt15/11 giữ báo cáo diễn tiến. Kiểm bản mới nằm trong bundle refit, các file `report-rq-sprints-20261116-*`. Các file `report-summary-20261116-*` giữ nghiệm thu bản một trang trước khi mở rộng.
+[HTML tự chứa](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown đồng bộ](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO.md) trình bày riêng thành quả/số liệu/phần còn thiếu của ba RQ và đối chiếu sáu sprint theo đề cương. Đợt15/11 giữ báo cáo diễn tiến. Kiểm bản mới nằm trong bundle refit, các file `report-rq-sprints-20261116-*`. Các file `report-summary-20261116-*` giữ nghiệm thu bản một trang trước khi mở rộng.
 
 ## 16/11 — Danh mục giữ/lưu trữ/unused và gói upload
 
