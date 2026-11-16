@@ -1,5 +1,11 @@
 # Upload lịch sử AKT có phục hồi tiến độ
 
+## Cập nhật sau đăng nhập và kiểm Drive thật
+
+Đã đăng nhập đúng Sang, kiểm thư mục đích và quota Drive. Probe thật dùng file tổng hợp 1.048.593 byte, dừng process sau server ack 262.144 byte rồi chạy process khác. Lượt phục hồi gửi tiếp từ `bytes 262144-524287/1048593`, checksum server khớp nguồn. [Nghiệm thu probe](real-probe/RECOVERY_ACCEPTANCE.json) và `real-probe/NETWORK.jsonl` giữ bằng chứng. Đây là ngắt client có chủ ý, chưa cắt mạng vật lý.
+
+Người dùng xác nhận đã dừng upload thư mục history trên trình duyệt. Uploader chính đang gửi 37 file / 35,15 GB theo inventory; `EXECUTION_STATE.json` và `events.jsonl` giữ diễn tiến, `RECEIPTS.json` chỉ ghi những file đã kiểm xong. Các đoạn chuẩn bị bên dưới phản ánh thời điểm chưa đăng nhập. Probe giữ hai file tổng hợp nhỏ trong thư mục Drive riêng `KLTN_UPLOAD_RECOVERY_CHECK_20261116`. Không dùng probe làm bằng chứng hoàn tất sao lưu 35 GB.
+
 ## Hiện trạng
 
 Đã chuẩn bị uploader và kế hoạch 37 file, gồm 35 ZIP cùng hai file hướng dẫn/manifest, tổng 35.154.236.922 byte. Nguồn là `experiments/akt/results/drive-offload-history-20261116-01/`. Đích là thư mục cùng tên bên trong [Drive KLTN](https://drive.google.com/drive/folders/1vaojIEDvwtE-vZgjlybwzrsjrGNE_8O7), bằng tài khoản Sang `honguyenminhsang2005@gmail.com`.
