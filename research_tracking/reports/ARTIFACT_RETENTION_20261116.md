@@ -1,5 +1,13 @@
 # Kiểm kê checkpoint/artifact và gói lưu trữ ngày16/11/2026
 
+## Thư mục gom cho người dùng upload trực tiếp
+
+[drive-offload-duplicates-20261116-01](<D:/Dev/KLTN/experiments/akt/results/drive-offload-duplicates-20261116-01/>) đã gom 2.219 nội dung duy nhất đại diện cho 21.604 đường dẫn trùng, tổng logic 55,78 GB. Cần upload nguyên thư mục khoảng 10,88 GB bằng Drive trên trình duyệt. `CONTENT` dùng hardlink tới các bản giữ trên D, nên dữ liệu nhị phân tiếp tục dùng chung với nguồn. Các file được giữ nguyên trong lúc chờ xác nhận upload. `MANIFEST.json` giữ ánh xạ đầy đủ, `AUDIT_METADATA.zip` giữ 869 metadata gồm 21 manifest snapshot, helper và hướng dẫn nằm cùng thư mục.
+
+Đã chạy helper kiểm đủ SHA 2.219 nội dung và toàn bộ 21.604 ánh xạ, kiểm metadata ZIP và 9 ca tổng hợp. [MANUAL_OFFLOAD_STATE.json](<D:/Dev/KLTN/research_tracking/runs/artifact-retention-audit-20261116-01/MANUAL_OFFLOAD_STATE.json>) giữ nghiệm thu. Chưa phục hồi toàn bộ đường dẫn lịch sử vào thư mục độc lập. Sau khi người dùng báo upload xong sẽ kiểm bản Drive và điều kiện phục hồi trước dọn đúng danh mục.
+
+Kiểm file identity cho thấy 55,78 GB logic gồm các bản đã dùng chung dữ liệu qua hardlink. Nhóm có thể hết liên kết sau dọn tương ứng khoảng 46,00 GB logic. Dung lượng thực giải phóng phải đo sau thao tác. Thư mục gom làm thay đổi số link filesystem của các bản giữ, nội dung và đường dẫn nguồn được bảo toàn. Bản gốc tiếp tục còn trên D.
+
 ## Đã sao lưu đợt đầu lên Drive
 
 Sáu gói model/audit đã được sao lưu vào [thư mục KLTN](https://drive.google.com/drive/folders/1vaojIEDvwtE-vZgjlybwzrsjrGNE_8O7). Tổng dữ liệu gốc 471,34 MB. Ba ZIP nhỏ được upload trực tiếp, ba ZIP lớn chia thành bảy phần theo giới hạn 100 MiB của công cụ. `00_DOC_TRUOC.md`, `DRIVE_PARTS_MANIFEST.json` và `restore_drive_zips.py` trong thư mục hướng dẫn ghép lại đúng ZIP gốc. Đã đối chiếu dung lượng, thư mục và SHA-256 đọc lại từ Drive cho đủ 13 file. [Biên nhận](<D:/Dev/KLTN/research_tracking/runs/artifact-retention-audit-20261116-01/DRIVE_UPLOAD_RECEIPT01.json>) giữ ID và pin từng file.

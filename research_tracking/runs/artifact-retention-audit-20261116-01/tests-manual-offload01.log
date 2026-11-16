@@ -1,0 +1,53 @@
+..F.....                                                                 [100%]
+================================== FAILURES ===================================
+_______________ test_restore_preserves_content_mtime_and_retry ________________
+
+backup = (<module 'audit_backup_fixture' from 'D:\\Dev\\KLTN\\research_tracking\\runs\\artifact-retention-audit-20261116-01\\au...t': 'CONTENT/714420ac18e0bcb218e955ea7df03824adf52271b1b29613611078c26a132afe.bin', ...}]}, b'noi dung tong hop nho\n')
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/runtime/pytest-manual-offload01/test_restore_preserves_content0')
+
+    def test_restore_preserves_content_mtime_and_retry(backup, tmp_path):
+        helper, package, manifest, data = backup
+        target = tmp_path / 'restored'
+>       assert helper.run(package, target)['files_restored'] == 2
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+research_tracking\runs\artifact-retention-audit-20261116-01\test_audit_backup.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+research_tracking\runs\artifact-retention-audit-20261116-01\audit_backup.py:123: in run
+    restored += restore_file(source, target, row)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = WindowsPath('D:/Dev/KLTN/artifacts/akt/runtime/pytest-manual-offload01/test_restore_preserves_content0/package/CONTENT/714420ac18e0bcb218e955ea7df03824adf52271b1b29613611078c26a132afe.bin')
+target = WindowsPath('D:/Dev/KLTN/artifacts/akt/runtime/pytest-manual-offload01/test_restore_preserves_content0/restored/snapshot/a.bin')
+row = {'bytes': 22, 'sha256': '714420ac18e0bcb218e955ea7df03824adf52271b1b29613611078c26a132afe', 'path': 'snapshot/a.bin', 'content': 'CONTENT/714420ac18e0bcb218e955ea7df03824adf52271b1b29613611078c26a132afe.bin', ...}
+
+    def restore_file(source, target, row):
+        if target.exists():
+            check_file(target, row)
+            return False
+        target.parent.mkdir(parents=True, exist_ok=True)
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile(mode='wb', dir=target.parent, prefix='.audit-restore-', delete=False) as output:
+                temporary = Path(output.name)
+                combined = hashlib.sha256()
+                total = 0
+                with source.open('rb') as stream:
+                    for block in iter(lambda: stream.read(1024**2), b''):
+                        output.write(block)
+                        combined.update(block)
+                        total += len(block)
+                output.flush()
+                os.fsync(output.fileno())
+            if total != row['bytes'] or combined.hexdigest() != row['sha256']:
+                raise ValueError('Nội dung thay đổi trong lúc phục hồi: ' + str(source))
+            os.utime(temporary, ns=(temporary.stat().st_atime_ns, row['modified_ns']))
+            # Công bố file hoàn chỉnh, từ chối ghi đè kể cả khi đích vừa được tạo.
+>           os.link(temporary, target)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\artifacts\\akt\\runtime\\pytest-manual-offload01\\test_restore_preserves_content0\\restored\\snapshot\\.audit-restore-41utz5h7' -> 'D:\\Dev\\KLTN\\artifacts\\akt\\runtime\\pytest-manual-offload01\\test_restore_preserves_content0\\restored\\snapshot\\a.bin'
+
+research_tracking\runs\artifact-retention-audit-20261116-01\audit_backup.py:73: PermissionError
+=========================== short test summary info ===========================
+FAILED research_tracking/runs/artifact-retention-audit-20261116-01/test_audit_backup.py::test_restore_preserves_content_mtime_and_retry
+1 failed, 7 passed in 11.50s

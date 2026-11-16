@@ -1,5 +1,11 @@
 # Kiểm kê và chuẩn bị lưu trữ checkpoint/artifact
 
+## Gói upload thủ công hiện hành
+
+`prepare_manual_offload.py` gom nội dung SHA duy nhất của danh mục duplicate vào `experiments/akt/results/drive-offload-duplicates-20261116-01/`, dùng hardlink NTFS cùng volume. `MANUAL_OFFLOAD_STATE.json` ghi READY_FOR_MANUAL_UPLOAD sau full verify 2.219 nội dung và 21.604 ánh xạ. Manifest gói giữ đường dẫn/mtime/file identity/nlink của ứng viên, bản giữ và snapshot pins. Metadata ZIP giữ 869 file. `audit_backup.py`, 9 ca kiểm đạt và logs01–03 giữ cách kiểm/phục hồi. Lượt lỗi hardlink ở runtime hạn chế được giữ, helper dùng Windows rename từ chối đích hiện hữu và POSIX link cho xuất file an toàn.
+
+Người dùng đã yêu cầu tự upload nguyên thư mục và dọn sau upload. Phần dọn chờ link/xác nhận hoàn tất cùng nghiệm thu remote và phục hồi. Các canonical keepers và vùng bảo vệ vẫn cần giữ. Dung lượng 55,78 GB là tổng đường dẫn logic. Kiểm inode/nlink hiện chỉ xác định khoảng 46,00 GB logic có thể hết liên kết khi dọn nhóm ứng viên. Phải đo dung lượng thực sau dọn. Gói gom khoảng10,88GB logic, trước/sau lượt gom chênh khoảng20MB free space vì dùng chung dữ liệu. Không chỉnh thuộc tính hoặc nội dung qua các hardlink CONTENT.
+
 ## Rà lại nhu cầu audit — kết luận hiện hành
 
 `REVIEW02.json` và `RETENTION_REVIEW02.csv` bổ sung rà soát giá trị audit theo yêu cầu người dùng. Các kết luận UNUSED trước đây được giữ để truy vết thay đổi. Checkpoint A3 epoch 4/bước 584 duy nhất đã chuyển sang giữ audit. Bản trùng cần giữ nội dung và metadata gắn với run, còn các phần upload cần có ZIP/manifest để dựng lại. Chưa có quyền xóa file từ lượt rà này.
