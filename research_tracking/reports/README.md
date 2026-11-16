@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+[17/11 — Đã dọn 35 GB archive lịch sử](../runs/history-cleanup-20261117-01/README.md) ghi 70 hardlink đã xóa, 44 file bảo vệ còn khớp SHA và 35 ZIP Drive kiểm lại đạt. Có relocation để phục hồi run lịch sử.
+
 [17/11 — Producer calibration A0–A3](CALIBRATION_PRODUCER_20261117.md) nối loader, population/prefix, raw predictions và fit temperature CPU tách riêng. 29 ca trên source hiện hành đạt, gồm bốn backbone native nhỏ. Các lượt trên checkpoint/dữ liệu nghiên cứu thật còn phải thực hiện.
 
 [17/11 — Kiểm lại bằng chứng RQ1–RQ2](RQ12_EXISTING_EVIDENCE_20261117.md) bổ sung bảng chéo quyết định và kiểm chuỗi120bước trên traces đã lưu. Có 58/60 cặp bật/tắt phạt giữ cùng chuỗi quan sát. Ở mức 1150, mức tăng năng lực ẩn giảm dù chuỗi quan sát giữ nguyên. Có kiểm độc lập, nguồn SHA, CSV và SVG; đây là phân tích hậu nghiệm, còn tiêu chí nghiệm thu RQ.

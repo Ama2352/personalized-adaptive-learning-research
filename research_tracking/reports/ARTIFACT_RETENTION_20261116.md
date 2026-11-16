@@ -125,3 +125,8 @@ Nguồn kiểm tại [research_tracking/runs/artifact-retention-audit-20261116-0
 ## Upload lịch sử đã nghiệm thu ngày 17/11
 
 Thư mục `drive-offload-history-20261116-01` đã sao lưu đủ 35 ZIP cùng hai file hỗ trợ, tổng 35,15 GB. [Thư mục Drive](https://drive.google.com/drive/folders/1V-H0estsyh2oQQ3qnfapU9qSpGZFoF3H) giữ dữ liệu, [biên nhận đọc lại](../runs/drive-history-upload-20261116-01/READBACK_ACCEPTANCE.json) xác nhận SHA-256 server của 37/37 file khớp nguồn, tên/parent/size đúng kế hoạch. Bản local còn trên D; việc dọn các đường dẫn archive và hardlink vẫn cần đúng inventory và điều kiện riêng. Thư mục duplicates là lượt khác, chưa được gán hoàn tất từ kết quả này.
+
+
+## Archive lịch sử đã dọn theo xác nhận ngày 17/11
+
+Đã xóa 70 hardlink của 35 ZIP lịch sử sau khi hashlocal và recheckDrive. Giải phóng quan sát 35,145 GB, D trống 69,342 GB (khoảng64,58GiB) tại cuối lượt. Bốn mươi bốn file bảo vệ được kiểm SHA sau dọn, 35 bản Drive vẫn đúng SHA. [Inventory, nhật ký, relocation và giới hạn](../runs/history-cleanup-20261117-01/README.md). Các bản model/checkpoint/cache nằm ngoài allowlist; gói duplicates được xử lý riêng.

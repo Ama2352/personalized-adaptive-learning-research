@@ -2,6 +2,7 @@
 import importlib.util
 import json
 from pathlib import Path
+import sys
 
 import pytest
 import requests
@@ -281,3 +282,20 @@ def test_prepare_only_keeps_historical_manifest_unmodified(tmp_path):
     plan = upload.build_plan(tmp_path, 'parent', 'example@example.com')
     assert len(plan['files']) == 2
     assert (tmp_path / 'MANIFEST.json').read_bytes() == manifest
+
+
+def test_login_only_uses_saved_plan_after_archives_removed(tmp_path, monkeypatch):
+    evidence = tmp_path / 'evidence'
+    source = tmp_path / 'archived-source'
+    plan = dict(source=str(source.resolve()), parent_id='parent', account='sang@example.com',
+                files=[dict(path='removed.zip')], bytes=1024)
+    upload.atomic_json(evidence / 'UPLOAD_PLAN.json', plan)
+    before = (evidence / 'UPLOAD_PLAN.json').read_bytes()
+    monkeypatch.setattr(upload, 'EVIDENCE', evidence)
+    monkeypatch.setattr(upload, 'PRIVATE', tmp_path / 'private')
+    monkeypatch.setattr(upload, 'build_plan', lambda *a: pytest.fail('Must reuse saved plan for login'))
+    monkeypatch.setattr(sys, 'argv', ['uploader', '--login-only', '--source', str(source),
+                                     '--parent-id', 'parent', '--account', 'sang@example.com'])
+    with pytest.raises(RuntimeError, match='OAuth Desktop client'):
+        upload.main()
+    assert (evidence / 'UPLOAD_PLAN.json').read_bytes() == before

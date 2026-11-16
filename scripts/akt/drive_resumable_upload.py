@@ -394,11 +394,19 @@ def main():
     args = parser.parse_args()
     if not 1 <= args.chunk_mib <= 64:
         parser.error('chunk-mib từ 1 đến 64.')
-    plan = build_plan(args.source, args.parent_id, args.account)
     plan_path = EVIDENCE / 'UPLOAD_PLAN.json'
+    if args.login_only and plan_path.exists():
+        # Đăng nhập tiếp tục dùng được sau khi archive đã chuyển sang Drive.
+        plan = read_json(plan_path)
+        if (plan['source'] != str(args.source.resolve()) or plan['parent_id'] != args.parent_id
+                or plan['account'].lower() != args.account.lower()):
+            raise RuntimeError('Tham số đăng nhập khác kế hoạch Drive đã lưu.')
+    else:
+        plan = build_plan(args.source, args.parent_id, args.account)
     if plan_path.exists() and read_json(plan_path) != plan:
         raise RuntimeError('Kế hoạch đã có và khác inventory hiện tại, cần rà thay đổi trước.')
-    atomic_json(plan_path, plan)
+    if not plan_path.exists():
+        atomic_json(plan_path, plan)
     print(f"Kế hoạch {len(plan['files'])} file, {plan['bytes']/1e9:.2f} GB.", flush=True)
     if args.prepare:
         return

@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 17/11 — Archive lịch sử đã chuyển Drive và dọn local
+
+[Hồ sơ dọn](../research_tracking/runs/history-cleanup-20261117-01/README.md) giữ inventory, nhật ký 70 hardlink thuộc 35 ZIP đã xóa, relocation sang Drive và kiểm SHA sau dọn. 44 file model/metadata đang dùng được kiểm giữ đúng SHA. D tăng trống khoảng 35,15 GB trong lượt. Danh mục duplicates là đợt riêng. `drive_resumable_upload.py --login-only` dùng kế hoạch đã lưu, tiếp tục đăng nhập được sau khi local archive đã chuyển remote.
+
 ## 17/11 — API producer calibration và kiểm báo cáo
 
 [Producer](../research_tracking/reports/CALIBRATION_PRODUCER_20261117.md) định vị `research_junyi_calibration.py`, đường inference/export và fit temperature CPU riêng, 29 kiểm thử gồm bốn native A0–A3 nhỏ. Builder từ model nghiên cứu, source calibration10 và lượt inference thực còn phải nối. [Kiểm hiển thị báo cáo](../research_tracking/runs/supervisor-report-ui-20261117-01/README.md) giữ screenshot desktop gốc, pin HTML và xác nhận tab/server đã đóng.
