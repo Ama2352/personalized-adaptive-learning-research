@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## Báo cáo cô đọng hiện hành ngày 16/11/2026
+
+[HTML tự chứa, một trang A4](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown đồng bộ](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO.md) giải thích ngữ cảnh, kết quả chẩn đoán có số liệu, training đã hoàn tất và phần còn thiếu. Đợt15/11 giữ báo cáo chi tiết. Kiểm nội dung/nguồn và render nằm trong bundle refit, các file `report-summary-20261116-*`.
+
 ## 16/11 — Danh mục giữ/lưu trữ/unused và gói upload
 
 Thư mục [drive-offload-history-20261116-01](../experiments/akt/results/drive-offload-history-20261116-01/) gom35ZIP lịch sử bằng hardlink, tổng35,15GB, chia bốn nhóm có thể chọn upload. Đây là archive lịch sử có thể chồng lặp member với gói dedup. `COLD_ARCHIVE_FOLDER_STATE.json` lưu ánh xạ và trạng thái chờ upload, chưa dọn nguồn.

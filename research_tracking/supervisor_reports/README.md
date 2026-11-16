@@ -1,8 +1,12 @@
 # Báo cáo tiến độ theo ngày
 
-## Bản cập nhật hiện hành ngày 15/11/2026
+## Bản cô đọng hiện hành ngày 16/11/2026
 
-[HTML ngày 15/11](2026-11-15/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown](2026-11-15/01_tien_do/BAO_CAO.md) nối tiếp bản 14/11, ghi A0, A1, A2 đã refit đủ 9 epoch và lưu model. Có figure thời gian học trên cùng TRAIN90, cùng nguồn số liệu CSV và các phần còn thiếu. A3 refit chờ nguồn GPU phù hợp ngân sách. Hiệu chỉnh và đánh giá độc lập còn chờ. Bằng chứng nghiệm thu theo bundle `junyi-refit-pipeline-20261114-01`, báo cáo đọc vẫn gồm hai file.
+[Báo cáo HTML một trang](2026-11-16/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown đồng bộ](2026-11-16/01_tien_do/BAO_CAO.md) trình bày ngữ cảnh hai paper, các phát hiện có số liệu, phần AKT đã huấn luyện và thực nghiệm còn thiếu. Bản HTML tự chứa, in vừa một trang A4. Đã kiểm desktop/mobile và số liệu theo hồ sơ hiện có. Bản dài ngày15/11 tiếp tục giữ diễn tiến và số liệu chi tiết.
+
+## Đợt báo cáo ngày 15/11/2026, cập nhật đến 16/11
+
+[HTML ngày 15/11](2026-11-15/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown](2026-11-15/01_tien_do/BAO_CAO.md) nối tiếp bản14/11. Cập nhật16/11 ghi đủ A0–A3 đã refit9epoch và xuất model, có figure thời gian học trên cùng TRAIN90. Hiệu chỉnh và đánh giá độc lập còn chờ. Bằng chứng theo bundle `junyi-refit-pipeline-20261114-01`.
 
 
 ## Bản chốt hiện hành ngày 14/11/2026
