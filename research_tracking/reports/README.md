@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+[17/11 — Producer calibration A0–A3](CALIBRATION_PRODUCER_20261117.md) nối loader, population/prefix, raw predictions và fit temperature CPU tách riêng. 29 ca trên source hiện hành đạt, gồm bốn backbone native nhỏ. Các lượt trên checkpoint/dữ liệu nghiên cứu thật còn phải thực hiện.
+
 [17/11 — Kiểm lại bằng chứng RQ1–RQ2](RQ12_EXISTING_EVIDENCE_20261117.md) bổ sung bảng chéo quyết định và kiểm chuỗi120bước trên traces đã lưu. Có 58/60 cặp bật/tắt phạt giữ cùng chuỗi quan sát. Ở mức 1150, mức tăng năng lực ẩn giảm dù chuỗi quan sát giữ nguyên. Có kiểm độc lập, nguồn SHA, CSV và SVG; đây là phân tích hậu nghiệm, còn tiêu chí nghiệm thu RQ.
 
 [17/11 — Ranh giới calibration/evaluation](CALIBRATION_EVAL_READINESS_20261117.md) ghi 66 kiểm thử tổng hợp đạt và metadata xác nhận các tập refit, calibration và outer rời nhau. Các lượt calibration và outer prediction thật còn phải thực hiện.

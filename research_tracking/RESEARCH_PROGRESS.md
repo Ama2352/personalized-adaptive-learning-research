@@ -1,5 +1,9 @@
 # Tiến độ nghiên cứu
 
+## Mốc 17/11 — producer calibration đã qua kiểm tổng hợp
+
+[Producer calibration](reports/CALIBRATION_PRODUCER_20261117.md) đã có API attach refit export, population/prefix độc lập, raw inference/export và fit temperature từ Parquet trên CPU riêng. 29 ca source hiện hành đạt, gồm bốn snapshot/native backbone A0–A3 nhỏ; peak working set khoảng 369,5 MB trong lượt toy. Đây là kiểm phần mềm, chưa nạp checkpoint nghiên cứu hoặc chạy calibration/outer thật. Bước tiếp theo là nối builder/entrypoint từ export thật, nguồn calibration10 và population manifest, current-source runtime, rồi inference có giới hạn trước lượt đầy đủ. Fit CPU và raw inference tiếp tục tách để trả GPU sau export. [Nghiệm thu](runs/calibration-producer-20261117-01/ACCEPTANCE.json).
+
 ## Mốc 17/11 — diễn giải RQ1–RQ2 và chuẩn bị đường đánh giá độc lập
 
 Đã đối chiếu lại bằng chứng có sẵn, bổ sung bảng chéo quyết định và kiểm cơ chế lambda trên lịch sử đã lưu. [Kết quả cached](reports/RQ12_EXISTING_EVIDENCE_20261117.md) cho thấy 55/60 cặp đổi tập đủ điều kiện vẫn giữ gợi ý và 17/22 cặp đổi gợi ý giữ tập đủ điều kiện và quyết định thành thạo. Ở mức 1150, 20/20 cặp bật/tắt phạt giữ cùng chuỗi câu hỏi/đáp án/xác suất KT trong 120 bước dù mức tăng năng lực ẩn giảm ở cả 20 cặp. Các số này làm rõ cách đọc pilot và contrast world, là phân tích hậu nghiệm; không thêm model, world hoặc seed độc lập. RQ1 vẫn giữ 9 cụm trong 3 nhóm seed, RQ2 giữ 10 block ghép cặp theo nguồn gốc.

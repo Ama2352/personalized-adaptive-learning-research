@@ -1,5 +1,9 @@
 # Chỉ mục bằng chứng
 
+## 17/11 — producer calibration tách CPU/inference
+
+[Hồ sơ API và nguồn](runs/calibration-producer-20261117-01/README.md), [29 ca đã đạt](runs/calibration-producer-20261117-01/ACCEPTANCE.json) và [log cuối](runs/calibration-producer-20261117-01/tests07.txt) là bằng chứng engineering tổng hợp. Khác với kết quả training Junyi, các snapshot native trong gói này chỉ khoảng 77–79 KB và không có bước training. Calibrator từ dữ liệu Junyi thật cùng bảng đánh giá outer vẫn còn thiếu.
+
 ## 17/11 — kiểm lại bằng chứng RQ1–RQ2 và ranh giới đánh giá Junyi
 
 [Tổng hợp cached RQ1–RQ2](reports/RQ12_EXISTING_EVIDENCE_20261117.md) cùng [bundle và nguồn](runs/rq12-existing-evidence-20261117-01/README.md), [kiểm số học](runs/rq12-existing-evidence-20261117-01/NUMERIC_ACCEPTANCE.json) và [kiểm phụ toàn chuỗi](runs/rq12-existing-evidence-20261117-01/SECONDARY_CHECK.json) là phân tích hậu nghiệm trên kết quả đã có. RQ1 đối chiếu bảng ready/gợi ý gồm 5/55/17/1.003 cặp. RQ2 kiểm 58/60 cặp bật/tắt phạt giữ nguyên chuỗi query/đáp án/xác suất KT suốt 120 bước. Riêng mức 1150 có 20/20 chuỗi giống nhau trong khi mức tăng năng lực ẩn giảm ở 20/20 cặp. Các phép kiểm giữ nguồn, không thêm world, model fit hoặc seed block. [Figure SVG bảng chéo](runs/rq12-existing-evidence-20261117-01/rq1-ready-preview-v01.svg) có dữ liệu và nguồn dựng lại trong bundle.

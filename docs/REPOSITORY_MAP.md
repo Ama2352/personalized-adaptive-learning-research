@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 17/11 — API producer calibration và kiểm báo cáo
+
+[Producer](../research_tracking/reports/CALIBRATION_PRODUCER_20261117.md) định vị `research_junyi_calibration.py`, đường inference/export và fit temperature CPU riêng, 29 kiểm thử gồm bốn native A0–A3 nhỏ. Builder từ model nghiên cứu, source calibration10 và lượt inference thực còn phải nối. [Kiểm hiển thị báo cáo](../research_tracking/runs/supervisor-report-ui-20261117-01/README.md) giữ screenshot desktop gốc, pin HTML và xác nhận tab/server đã đóng.
+
 ## 17/11 — Bằng chứng cached RQ1–RQ2 và ranh giới đánh giá
 
 [RQ1–RQ2](../research_tracking/reports/RQ12_EXISTING_EVIDENCE_20261117.md) định vị bảng chéo và phát hiện khi thay cơ chế phạt: ở mức 1150, 20 cặp giữ chuỗi quan sát nhưng mức tăng năng lực ẩn giảm. Bundle giữ CSV/SVG/checker; 9 cụm RQ1 thuộc 3 nhóm seed, RQ2 có 10 block ghép cặp. [Readiness calibration/evaluation](../research_tracking/reports/CALIBRATION_EVAL_READINESS_20261117.md) giữ 66 kiểm thử tổng hợp và đối chiếu metadata của 4 model export. Source hỗ trợ outer phase, producer thực thi thật còn cần hoàn thiện.
@@ -10,7 +14,7 @@
 
 ## Báo cáo theo RQ và sprint hiện hành ngày 16/11/2026
 
-[HTML tự chứa](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown đồng bộ](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO.md) trình bày riêng thành quả/số liệu/phần còn thiếu của ba RQ và đối chiếu sáu sprint theo đề cương. Đợt15/11 giữ báo cáo diễn tiến. Kiểm bản mới nằm trong bundle refit, các file `report-rq-sprints-20261116-*`. Các file `report-summary-20261116-*` giữ nghiệm thu bản một trang trước khi mở rộng.
+[HTML tự chứa](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO_NGHIEN_CUU.html) và [Markdown đồng bộ](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO.md) trình bày riêng thành quả/số liệu/phần còn thiếu của ba RQ và đối chiếu sáu sprint theo đề cương. Đợt15/11 giữ báo cáo diễn tiến. Kiểm nguồn bản17/11 tại `supervisor-report-refresh-20261117-01/QA03.json`, kiểm hiển thị desktop tại `supervisor-report-ui-20261117-01/`. Các nghiệm thu bản16/11 và bản một trang trước đó tiếp tục nằm trong bundle refit.
 
 ## 16/11 — Danh mục giữ/lưu trữ/unused và gói upload
 
