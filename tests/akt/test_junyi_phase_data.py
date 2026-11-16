@@ -114,3 +114,64 @@ def test_bounded_cohort_is_not_labeled_full_role(case):
     roles,view,train,*_=case
     assert not train.full_role_coverage
     assert view('select_train80',roles.train_users).full_role_coverage
+
+
+def test_outer_view_is_read_only_and_rejects_inner_learners(case):
+    roles,view,*_=case
+    outer=view('outer_evaluation',roles.outer_validation_users)
+    assert outer.full_role_coverage and not outer.optimization
+    assert outer.allowed_folds==(4,)
+    for user in (*roles.train_users,*roles.selection_users,*roles.calibration_users):
+        with pytest.raises(ValueError,match='scope'):
+            view('outer_evaluation',[user])
+    with pytest.raises(ValueError,match='vocabulary'):
+        fit_junyi_research_encoding(None,outer)
+
+
+def test_outer_reader_uses_only_fold4_and_refit90_encoding(case):
+    roles,view,train,selection,calibration,refit,paths,learner,stream=case
+    outer=view('outer_evaluation',roles.outer_validation_users[:1])
+    with patch('knowledge_tracing.akt.data.iter_development_learners',side_effect=stream):
+        train_encoding=fit_junyi_research_encoding(paths,train)
+        refit_encoding=fit_junyi_research_encoding(paths,refit)
+    with pytest.raises(ValueError,match='phase'):
+        list(iter_junyi_research_windows(paths,outer,train_encoding))
+    row=learner(outer.users[0])
+    row=replace(row,fold=4,events=tuple(replace(event,fold=4) for event in row.events))
+    with patch('knowledge_tracing.akt.data.iter_development_learners',return_value=iter([row])) as reader:
+        windows=list(iter_junyi_research_windows(paths,outer,refit_encoding))
+    assert windows and all(isinstance(window,WindowInputs) for window in windows)
+    assert reader.call_args.kwargs['allowed_folds']==(4,)
+
+
+@pytest.mark.parametrize('mode',['inner_fold','mixed_event_fold','wrong_user','missing'])
+def test_outer_reader_rejects_foreign_or_incomplete_stream(case,mode):
+    roles,view,train,selection,calibration,refit,paths,learner,stream=case
+    outer=view('outer_evaluation',roles.outer_validation_users[:1])
+    row=learner(outer.users[0])
+    row=replace(row,fold=4,events=tuple(replace(event,fold=4) for event in row.events))
+    rows={'inner_fold':[replace(row,fold=0)],
+          'mixed_event_fold':[replace(row,events=(replace(row.events[0],fold=0),*row.events[1:]))],
+          'wrong_user':[learner(train.users[0])], 'missing':[]}[mode]
+    with patch('knowledge_tracing.akt.data.iter_development_learners',return_value=iter(rows)):
+        with pytest.raises(ValueError):
+            list(iter_junyi_phase_learners(paths,outer))
+
+
+def test_outer_evaluation_cannot_reuse_engineering_cohort_cache(case):
+    roles,view,*_=case
+    outer=view('outer_evaluation',roles.outer_validation_users[:1])
+    with pytest.raises(ValueError,match='engineering cohort'):
+        list(iter_junyi_phase_learners(None,outer,cache_root=Path('unused')))
+
+
+@pytest.mark.parametrize('field,value', [('expected_roles_identity','0'*64),
+                                       ('identity','0'*64),('scope','select_train80')])
+def test_outer_content_drift_rejected_before_reader_access(case,field,value):
+    roles,view,*_=case
+    outer=view('outer_evaluation',roles.outer_validation_users[:1])
+    object.__setattr__(outer,field,value)
+    with patch('knowledge_tracing.akt.data.iter_development_learners') as reader:
+        with pytest.raises(ValueError,match='identity'):
+            list(iter_junyi_phase_learners(None,outer))
+        reader.assert_not_called()

@@ -1,0 +1,25 @@
+{
+  "python": ".venv/Scripts/python.exe",
+  "environment": {
+    "PYTHONPATH": "D:/Dev/KLTN/src",
+    "GIT_CONFIG_COUNT": "1",
+    "GIT_CONFIG_KEY_0": "safe.directory",
+    "GIT_CONFIG_VALUE_0": "D:/Dev/KLTN/artifacts/akt/dependencies/upstream"
+  },
+  "arguments": [
+    "-B",
+    "-m",
+    "pytest",
+    "tests/akt/test_junyi_phase_data.py",
+    "tests/akt/test_junyi_refit.py::test_refit_graph_adapter_outer_phase_is_prediction_only",
+    "tests/akt/test_junyi_cache.py",
+    "tests/akt/test_junyi_encoding_lineage.py",
+    "tests/akt/test_calibrated_evaluation.py",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp=artifacts/akt/runtime/calibration-eval-tests-20261117-04",
+    "--junitxml=research_tracking/runs/calibration-eval-readiness-20261117-01/tests04.xml"
+  ],
+  "global_configuration_changed": false
+}

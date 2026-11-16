@@ -110,7 +110,7 @@ class JunyiGraphAKTAdapter:
               and phase.condition.encoding.identity==self._encoding_sha,
               'Phase condition/encoding mismatch')
         allowed = (('select_train80', 'raw_selection10') if self.condition.train80_origin is None
-                   else ('refit_union90', 'calibration_predict'))
+                   else ('refit_union90', 'calibration_predict', 'outer_evaluation'))
         _need(phase.view.scope in allowed, 'Junyi adapter phase differs from fitted encoding lineage')
         _need(phase.condition.encoding.native.vocabulary.values==self.encoding.vocabulary.values,
               'Phase/native vocabulary mismatch')

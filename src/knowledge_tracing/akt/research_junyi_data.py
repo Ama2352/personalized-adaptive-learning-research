@@ -19,6 +19,7 @@ PHASE_ROLES = {
     'raw_selection10': ('selection_users',),
     'refit_union90': ('train_users', 'selection_users'),
     'calibration_predict': ('calibration_users',),
+    'outer_evaluation': ('outer_validation_users',),
 }
 
 
@@ -56,6 +57,15 @@ class JunyiPhaseView:
     def optimization(self):
         return self.scope in ('select_train80','refit_union90')
 
+    def assert_integrity(self):
+        _need(self.scope in PHASE_ROLES and self.roles.identity == self.expected_roles_identity
+              and self.identity == _hash(dict(roles=self.roles.identity,scope=self.scope,users=self.users)),
+              'phase roles/content identity changed')
+
+    @property
+    def allowed_folds(self):
+        return (self.roles.outer_fold,) if self.scope == 'outer_evaluation' else (0, 1, 2, 3)
+
     @property
     def full_role_coverage(self):
         return set(self.users)==set().union(*(set(getattr(self.roles,name)) for name in PHASE_ROLES[self.scope]))
@@ -76,6 +86,8 @@ class JunyiResearchEncoding:
         object.__setattr__(self,'identity',_hash(self._payload()))
 
     def assert_for(self, view):
+        self.fit_view.assert_integrity()
+        view.assert_integrity()
         _need(self.identity==_hash(self._payload()), 'encoding changed after fit')
         _need(self.fit_view.roles.identity==view.roles.identity,'encoding/split mismatch')
         expected='select_train80' if view.scope in ('select_train80','raw_selection10') else 'refit_union90'
@@ -88,18 +100,21 @@ def iter_junyi_phase_learners(paths: DataPaths, view: JunyiPhaseView, *, fetch_r
                              temp_dir=None, stats=None, cache_root=None,
                              expected_cache_manifest_sha256=None) -> Iterator[LearnerEvents]:
     _need(type(view) is JunyiPhaseView,'typed Junyi phase required')
+    view.assert_integrity()
     expected=set(view.users)
     seen=set()
     if cache_root is None:
         from .data import iter_development_learners
-        stream=iter_development_learners(paths,user_ids=view.users,allowed_folds=(0,1,2,3),
+        stream=iter_development_learners(paths,user_ids=view.users,allowed_folds=view.allowed_folds,
             fetch_rows=fetch_rows,temp_dir=temp_dir,preserve_user_order=True,stats=stats)
     else:
+        _need(view.scope != 'outer_evaluation',
+              'Bounded engineering cohort cache cannot serve outer evaluation')
         from .research_junyi_cache import iter_cached_phase_learners
         stream=iter_cached_phase_learners(cache_root,view,expected_cache_manifest_sha256)
     for learner in stream:
-        _need(learner.user_id in expected and learner.user_id not in seen and learner.fold in (0,1,2,3),
-              'foreign/duplicate learner or outer fold exposure')
+        _need(learner.user_id in expected and learner.user_id not in seen and learner.fold in view.allowed_folds,
+              'foreign/duplicate learner or phase fold exposure')
         _need(learner.events and all(event.user_id==learner.user_id and event.fold==learner.fold for event in learner.events),
               'event learner/fold mismatch')
         _need(all((left.time_done,left.source_row)<(right.time_done,right.source_row)
@@ -107,6 +122,7 @@ def iter_junyi_phase_learners(paths: DataPaths, view: JunyiPhaseView, *, fetch_r
         seen.add(learner.user_id)
         yield learner
     _need(seen==expected,'incomplete phase learner coverage')
+    view.assert_integrity()
 
 
 def fit_junyi_research_encoding(paths: DataPaths, view: JunyiPhaseView, **reader_options):

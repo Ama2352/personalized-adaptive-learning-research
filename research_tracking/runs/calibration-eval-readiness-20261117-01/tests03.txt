@@ -1,0 +1,35 @@
+.....................F................                                   [100%]
+================================== FAILURES ===================================
+_________ test_refit_graph_adapter_outer_phase_is_prediction_only[A2] _________
+
+case = {'config': AKTConfig(project_root=WindowsPath('D:/Dev/KLTN'), output_dir=WindowsPath('D:/Dev/KLTN/experiments/akt/resu...aa7d4519b2f88bf14292e02366817f34f2', identity='3e2fb0644bc544d47bf9e7ef65a52c3c5974a056f24662213d4e86bae3a49b87'), ...}
+variant = 'A2'
+
+    @pytest.mark.parametrize('variant', ['A1', 'A2', 'A3'])
+    def test_refit_graph_adapter_outer_phase_is_prediction_only(case, variant):
+        outer=JunyiPhaseView(case['roles'], 'outer_evaluation',
+            case['roles'].outer_validation_users, case['roles'].identity)
+>       adapter=case['adapter'](variant)
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_junyi_refit.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_junyi_refit.py:56: in adapter
+    return graph_model.JunyiGraphAKTAdapter(config=config, encoding=encoding, condition=cond,
+src\knowledge_tracing\akt\research_junyi_graph_model.py:93: in __init__
+    self.audit_context_boundary()
+src\knowledge_tracing\akt\research_junyi_graph_model.py:158: in audit_context_boundary
+    _need(_source_inventory()==self._sources, 'Junyi graph model source changed')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = False, message = 'Junyi graph model source changed'
+
+    def _need(value, message):
+        if not value:
+>           raise ValueError(message)
+E           ValueError: Junyi graph model source changed
+
+src\knowledge_tracing\akt\research_junyi_graph_model.py:28: ValueError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_junyi_refit.py::test_refit_graph_adapter_outer_phase_is_prediction_only[A2]
+1 failed, 37 passed in 40.97s

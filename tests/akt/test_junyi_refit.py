@@ -79,6 +79,23 @@ def test_refit_rejects_missing_selection_users(case):
         JunyiRefitInputs(partial, 5, 'a' * 64, 'b' * 64)
 
 
+@pytest.mark.parametrize('variant', ['A1', 'A2', 'A3'])
+def test_refit_graph_adapter_outer_phase_is_prediction_only(case, variant):
+    outer=JunyiPhaseView(case['roles'], 'outer_evaluation',
+        case['roles'].outer_validation_users, case['roles'].identity)
+    adapter=case['adapter'](variant)
+    adapter.set_phase(JunyiGraphPhaseSession(adapter.condition,outer))
+    with pytest.raises(ValueError,match='optimization'):
+        adapter.collate_training(case['entries'][:1])
+    user=outer.users[0]
+    learner=LearnerEvents(user,4,tuple(KTEvent(user,item,i+1,i+1,i%2,0,4)
+        for i,item in enumerate(('A','C','B'))))
+    windows=tuple(iter_windows(learner,case['encoding'].native,training=False))
+    prediction=adapter.predict_window(windows[0])
+    assert prediction.shape==windows[0].target_mask.shape
+    assert adapter.condition.train80_origin is case['origin']
+
+
 @pytest.mark.parametrize('variant', ['A0', 'A1', 'A2', 'A3'])
 def test_native_refit_partial_resume_equals_continuous(case, tmp_path, variant):
     torch.set_num_threads(1)
