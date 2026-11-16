@@ -78,3 +78,8 @@ Các file nặng và CSV đầy đủ nằm trong `experiments/akt/results/artif
 ## Lượt rà bổ sung khi upload đang chạy
 
 Xem [STORAGE_REVIEW02.md](STORAGE_REVIEW02.md) cho 416 ứng viên dọn / 3,56 GB, trạng thái Drive đã đọc lại SHA và giới hạn metadata/hardlink. Chưa xóa file. Thông tin upload ở các đoạn lịch sử trên phản ánh thời điểm viết, các biên nhận Drive mới là trạng thái hiện hành.
+
+
+## Dọn đã hoàn tất theo duyệt
+
+Lượt 04 đã xóa 416 file / 3,56 GB theo xác nhận người dùng. Nhật ký, preflight và nghiệm thu giữ tại `STORAGE_DELETE04_*`. Bốn ZIP giữ lại đã kiểm SHA sau xóa. Xem phần cuối [STORAGE_REVIEW02.md](STORAGE_REVIEW02.md) cho số đo dung lượng và đối chiếu LF/CRLF manifest lịch sử.

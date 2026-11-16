@@ -40,3 +40,12 @@ Dung lượng trống biến động trong lúc kiểm, từ khoảng 2,67 GB đ
 - `STORAGE_SMALL_PACKAGE02.json` giữ pin bản gói tại thời điểm tạo, cờ uploaded trong file này phản ánh lúc đóng gói. Biên nhận Drive mới xác nhận trạng thái upload sau đó.
 
 Sau khi duyệt, phải kiểm lại SHA/định danh, xác nhận ZIP nguồn còn nguyên và ghi nhật ký từng file trước khi xóa. Chỉ xóa đúng đường dẫn được duyệt. Hai thư mục upload lớn tiếp tục chờ người dùng báo hoàn tất rồi nghiệm thu riêng.
+
+
+## Đã dọn theo xác nhận của người dùng
+
+Người dùng xác nhận “vậy bạn xóa đi”. Lượt 04 đã xóa đúng 416 file / 3.564.916.775 byte sau kiểm lại SHA, file identity, số liên kết, phạm vi đường dẫn và bản giữ. Nhật ký ghi 416 intent và 416 xác nhận xóa. Kiểm sau xác nhận toàn bộ đường dẫn đã mất và bốn ZIP giữ lại vẫn khớp SHA. Dung lượng trống D tăng từ 30,72 GB lên 34,25 GB, chênh khoảng 3,53 GB trong lượt chạy; các hoạt động khác trên ổ đĩa có thể ảnh hưởng số đo.
+
+Hai thư mục đang upload không nằm trong lệnh xóa. Kiểm manifest lịch sử ban đầu không khớp raw SHA của pin cũ, sau đối chiếu xác nhận khác quy ước LF/CRLF. File thực có SHA `3c177da78400b23bb4092a9e2e6bc621b0918a35bd4f405124af5f5c6e9396f1`, bản chuẩn hóa LF khớp pin cũ. Không sửa manifest. Đây chưa là nghiệm thu upload lịch sử.
+
+Nguồn hiện hành gồm `STORAGE_DELETE04_PREFLIGHT.json`, `STORAGE_DELETE04_JOURNAL.jsonl`, `STORAGE_DELETE04_RESULT.json`, `STORAGE_DELETE04_ACCEPTANCE.json` và script `execute_cleanup04.ps1`. Những đoạn “chưa xóa” phía trên giữ diễn tiến trước khi được duyệt.

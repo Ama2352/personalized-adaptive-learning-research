@@ -115,3 +115,8 @@ Nguồn kiểm tại [research_tracking/runs/artifact-retention-audit-20261116-0
 ## Rà bổ sung trong lúc upload hai thư mục lớn
 
 Đã kiểm riêng 416 file, tổng 3,56 GB có thể đề xuất dọn. Gồm 16 phần truyền tạm 1,79 GB có ZIP/Drive đối chiếu và 400 checkpoint pytest tổng hợp 1,77 GB. Đã lưu hồ sơ nhỏ lên Drive và đọc lại SHA khớp. Chưa xóa, đang chờ duyệt danh sách cụ thể. Hai thư mục upload cùng các inode liên quan được loại khỏi danh sách. [Chi tiết, giới hạn và nguồn kiểm](../runs/artifact-retention-audit-20261116-01/STORAGE_REVIEW02.md).
+
+
+## Cập nhật sau duyệt dọn
+
+Đã xóa đúng 416 file / 3,56 GB theo xác nhận người dùng. Kiểm sau xóa đạt, bốn ZIP giữ lại vẫn khớp SHA. D trống khoảng 34,25 GB tại thời điểm kết thúc. Hai thư mục upload lớn tiếp tục giữ nguyên. [Nhật ký và giới hạn kiểm](../runs/artifact-retention-audit-20261116-01/STORAGE_REVIEW02.md).
