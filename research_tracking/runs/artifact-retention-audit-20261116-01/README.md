@@ -10,6 +10,8 @@
 
 `DRIVE_UPLOAD_STATE.json` ghi đợt đầu gồm sáu ZIP có sẵn, tổng 471.339.551 byte. Đã hash lại cả sáu ZIP và ghi manifest `FIRST_DRIVE_UPLOAD_BATCH.json` trong thư mục output. Phương án là upload trực tiếp từ D, giữ tên và cấu trúc theo đợt. Các ZIP lịch sử lớn được xét sau theo danh mục đã có, tránh tạo thêm bản nén khi dung lượng local thấp. Đợt đầu chỉ sao lưu model/hồ sơ cốt lõi, chưa thay thế mọi snapshot lịch sử. Kết nối Drive hiện tại khác tài khoản cá nhân người dùng từng dùng nên đang chờ xác nhận nơi lưu. Chưa upload và chưa cấp quyền xóa local.
 
+Người dùng đã cung cấp thư mục đích `1vaojIEDvwtE-vZgjlybwzrsjrGNE_8O7` trên Drive cá nhân. Kiểm metadata qua connector hiện tại trả HTTP 404. Lệnh liệt kê trả danh sách rỗng nên chưa đủ kết luận thư mục trống. Đang chờ cấp quyền chỉnh sửa hoặc đổi kết nối sang tài khoản cá nhân. `DRIVE_UPLOAD_LOCAL_PINS.json` giữ SHA-256 và MD5 đã tính lại cho cả sáu ZIP để đối chiếu metadata sau upload. Chưa có file nào được upload. Upload cũng chưa giải phóng dung lượng local.
+
 Ngày16/11/2026. Đây là hồ sơ vận hành lưu trữ, không phải kết quả dự báo hay bằng chứng cải thiện RQ.
 
 ## Mở các tài liệu sau
