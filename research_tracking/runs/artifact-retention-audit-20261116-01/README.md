@@ -6,6 +6,10 @@
 
 `review_audit_retention.py` hash lại các bản giữ, đối chiếu manifest snapshot và tham chiếu SHA trong metadata. Kiểm phần chia bằng đọc ZIP đầy đủ theo đúng kích thước mỗi phần. Gói 06 giữ checkpoint cần bảo toàn, metadata và danh mục mới. Các gói 01–05 giữ nguyên. `tests-review02.log` có kết quả kiểm hồi quy.
 
+## Chuẩn bị upload Drive
+
+`DRIVE_UPLOAD_STATE.json` ghi đợt đầu gồm sáu ZIP có sẵn, tổng 471.339.551 byte. Đã hash lại cả sáu ZIP và ghi manifest `FIRST_DRIVE_UPLOAD_BATCH.json` trong thư mục output. Phương án là upload trực tiếp từ D, giữ tên và cấu trúc theo đợt. Các ZIP lịch sử lớn được xét sau theo danh mục đã có, tránh tạo thêm bản nén khi dung lượng local thấp. Đợt đầu chỉ sao lưu model/hồ sơ cốt lõi, chưa thay thế mọi snapshot lịch sử. Kết nối Drive hiện tại khác tài khoản cá nhân người dùng từng dùng nên đang chờ xác nhận nơi lưu. Chưa upload và chưa cấp quyền xóa local.
+
 Ngày16/11/2026. Đây là hồ sơ vận hành lưu trữ, không phải kết quả dự báo hay bằng chứng cải thiện RQ.
 
 ## Mở các tài liệu sau
