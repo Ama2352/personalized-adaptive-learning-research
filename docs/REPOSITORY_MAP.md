@@ -2,6 +2,8 @@
 
 ## 16/11 — Danh mục giữ/lưu trữ/unused và gói upload
 
+Thư mục [drive-offload-history-20261116-01](../experiments/akt/results/drive-offload-history-20261116-01/) gom35ZIP lịch sử bằng hardlink, tổng35,15GB, chia bốn nhóm có thể chọn upload. Đây là archive lịch sử có thể chồng lặp member với gói dedup. `COLD_ARCHIVE_FOLDER_STATE.json` lưu ánh xạ và trạng thái chờ upload, chưa dọn nguồn.
+
 Người dùng tự upload gói [drive-offload-duplicates-20261116-01](../experiments/akt/results/drive-offload-duplicates-20261116-01/), khoảng10,88GB, gồm CONTENT dùng hardlink, ánh xạ21.604đường dẫn và metadata869file. Gói đã kiểm đủSHA2.219nội dung. `MANUAL_OFFLOAD_STATE.json` trong bundle audit lưu trạng thái chờ upload. Dung lượng dọn thực cần kiểm file identity/nlink và đo riêng, tổng55,78GB là logic.
 
 Đã sao lưu đợt đầu sáu ZIP model/audit lên [Drive KLTN](https://drive.google.com/drive/folders/1vaojIEDvwtE-vZgjlybwzrsjrGNE_8O7), tổng 471,34 MB. Ba ZIP lớn ở dạng bảy phần, kèm manifest/helper/hướng dẫn. `DRIVE_UPLOAD_RECEIPT01.json` trong bundle lưu trữ xác nhận metadata và SHA đọc lại của đủ 13 file. Bản gốc cùng các phần chia còn trên D, danh mục lịch sử 55,78 GB tiếp tục có điều kiện bảo toàn riêng.

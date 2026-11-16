@@ -1,5 +1,9 @@
 # Kiểm kê và chuẩn bị lưu trữ checkpoint/artifact
 
+## Thư mục lịch sử upload thêm
+
+`COLD_ARCHIVE_FOLDER_STATE.json` định vị35ZIP lịch sử tại `experiments/akt/results/drive-offload-history-20261116-01/`, chia bốn nhóm để người dùng chọn. Các file được gom bằng hardlink, giữ manifest tên nguồn/tên upload, SHA audit trước và size/mtime/file identity hiện hành. Chưa hash lại35GB hoặc kiểm hết member overlap giữa các ZIP. Nguồn còn trênD và chờ nghiệm thu upload trước dọn. Số free bytes đầu/cuối lượt gom được ghi để phân biệt dung lượng logic với chỗ thực dùng.
+
 ## Gói upload thủ công hiện hành
 
 `prepare_manual_offload.py` gom nội dung SHA duy nhất của danh mục duplicate vào `experiments/akt/results/drive-offload-duplicates-20261116-01/`, dùng hardlink NTFS cùng volume. `MANUAL_OFFLOAD_STATE.json` ghi READY_FOR_MANUAL_UPLOAD sau full verify 2.219 nội dung và 21.604 ánh xạ. Manifest gói giữ đường dẫn/mtime/file identity/nlink của ứng viên, bản giữ và snapshot pins. Metadata ZIP giữ 869 file. `audit_backup.py`, 9 ca kiểm đạt và logs01–03 giữ cách kiểm/phục hồi. Lượt lỗi hardlink ở runtime hạn chế được giữ, helper dùng Windows rename từ chối đích hiện hữu và POSIX link cho xuất file an toàn.

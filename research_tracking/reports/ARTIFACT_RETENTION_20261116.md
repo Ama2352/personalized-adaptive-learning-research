@@ -1,5 +1,11 @@
 # Kiểm kê checkpoint/artifact và gói lưu trữ ngày16/11/2026
 
+## Các nhóm lịch sử có thể upload thêm
+
+Đã gom 35 ZIP có sẵn vào [drive-offload-history-20261116-01](<D:/Dev/KLTN/experiments/akt/results/drive-offload-history-20261116-01/>), tổng35,15GB, chia A3 recovery2,73GB, refit history14,86GB, T4 history8,94GB và pilot history8,62GB. Dùng hardlink cùng volume, lượt gom phát sinh khoảng49KB metadata trước khi thêm hướng dẫn. Nguồn ZIP giữ nguyên. `MANIFEST.json` giữ ánh xạ tên upload và SHA từ audit trước; lượt gom xác nhận size/mtime cùng file identity, chưa hash lại toàn bộ35GB. `COLD_ARCHIVE_FOLDER_STATE.json` giữ trạng thái.
+
+Các ZIP có thể chứa nội dung chồng lặp với gói dedup10,88GB. Việc chọn lưu toàn bộ cần cân nhắc dung lượng Drive. Nhóm nào được người dùng upload và nghiệm thu thì mới duyệt dọn tương ứng. Dung lượng trống D quan sát đầu lượt gom còn2,67GB. Không có thao tác dọn trong lượt chuẩn bị này.
+
 ## Thư mục gom cho người dùng upload trực tiếp
 
 [drive-offload-duplicates-20261116-01](<D:/Dev/KLTN/experiments/akt/results/drive-offload-duplicates-20261116-01/>) đã gom 2.219 nội dung duy nhất đại diện cho 21.604 đường dẫn trùng, tổng logic 55,78 GB. Cần upload nguyên thư mục khoảng 10,88 GB bằng Drive trên trình duyệt. `CONTENT` dùng hardlink tới các bản giữ trên D, nên dữ liệu nhị phân tiếp tục dùng chung với nguồn. Các file được giữ nguyên trong lúc chờ xác nhận upload. `MANIFEST.json` giữ ánh xạ đầy đủ, `AUDIT_METADATA.zip` giữ 869 metadata gồm 21 manifest snapshot, helper và hướng dẫn nằm cùng thư mục.
