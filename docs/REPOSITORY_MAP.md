@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 16/11 — Danh mục giữ/lưu trữ/unused và gói upload
+
+[Báo cáo lưu trữ](../research_tracking/reports/ARTIFACT_RETENTION_20261116.md) và [hồ sơ kiểm](../research_tracking/runs/artifact-retention-audit-20261116-01/README.md) định vị checkpoint/artifact theo phần việc KLTN còn lại. `experiments/akt/results/artifact-offload-20261116-01/` giữ CSV theo file, các bản giữ/SHA và nămZIP upload khoảng442,8MB. Bản gốc giữ nguyên. UNUSED là danh mục ứng viên thu gọn, các snapshot/bundle đã đóng tiếp tục cần lineage khi xử lý.
+
 ## 16/11 — A0–A3 expert Junyi đã hoàn tất refit TRAIN90
 
 [Nghiệm thu A3 cuối](../research_tracking/runs/junyi-refit-pipeline-20261114-01/a3-final-acceptance01.json) xác nhận đủ9epoch, mỗi epoch14.947.674target/2.040step, model/Adam hữu hạn và RNG. Model gọn ở `experiments/akt/results/model-export-a3-refit-20261114-01/`. [Đối chiếu bốn model](../research_tracking/runs/junyi-refit-pipeline-20261114-01/exports-verified-a0-a1-a2-a3-portable-memory-cap-v1.json) kiểm identity chung và chỉ tách trần VRAM theo hợp đồng. A3 nối H100/L4/T4/H100, thời gian cần báo riêng. Mọi App workspace mới đã stopped/tasks0. Hai báo cáo trong đợt15/11 đã nối tiếp kết quả16/11. Hiệu chỉnh và đánh giá độc lập còn thiếu. Các mục bên dưới giữ diễn tiến lịch sử.
