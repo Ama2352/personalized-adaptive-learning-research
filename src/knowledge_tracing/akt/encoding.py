@@ -51,7 +51,11 @@ def save_encoding(encoding: ExerciseEncoding, path: Path) -> str:
 
 
 def load_encoding(path: Path) -> ExerciseEncoding:
-    payload = json.loads(path.read_text(encoding='utf-8'))
+    return encoding_from_payload(json.loads(path.read_text(encoding='utf-8')))
+
+
+def encoding_from_payload(payload: dict) -> ExerciseEncoding:
+    """Giữ cùng validation cho file và member trong SUPPORT.zip."""
     values = payload['values']
     support = payload['train_support_students']
     if (payload.get('schema_version') != 1 or not values

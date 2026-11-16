@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\scripts\akt\run_junyi_calibration.py", line 183, in <module>
+    main()
+    ~~~~^^
+  File "D:\Dev\KLTN\scripts\akt\run_junyi_calibration.py", line 178, in main
+    result=execute(request) if args.worker else run_guarded(request,args.request.resolve(),digest)
+                                                ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\scripts\akt\run_junyi_calibration.py", line 151, in run_guarded
+    _need(result['status']=='WORKER_COMPLETE','CPU worker stopped; inspect owned logs and receipt')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\scripts\akt\run_junyi_calibration.py", line 16, in _need
+    raise ValueError(message)
+ValueError: CPU worker stopped; inspect owned logs and receipt

@@ -74,6 +74,33 @@ class RefitCalibrationPredictor:
               'frozen predictor parameters/buffers changed')
 
 
+def read_refit_export_package(export, *, expected_index_sha256):
+    """Đọc metadata đã ghim trong RAM, không extract hoặc nạp tensor model."""
+    export=Path(export)
+    index_path=export/'MODEL_INDEX.json'
+    _need(sha256_file(index_path)==expected_index_sha256,'refit export index changed')
+    index=json.loads(index_path.read_text(encoding='utf-8'))
+    _need(index['phase']=='refit90' and index['identity']['phase']=='junyi_refit90',
+          'completed refit export required')
+    support=export/'SUPPORT.zip'
+    _need(sha256_file(support)==index['support_sha256'],'refit support archive changed')
+    with zipfile.ZipFile(support) as archive:
+        info=archive.infolist()
+        _need(len({row.filename for row in info})==len(info)
+              and sum(row.file_size for row in info)<=32*1024**2,'bounded unique support members required')
+        inventory=json.loads(archive.read('INVENTORY.json'))
+        _need(set(archive.namelist())==set(inventory)|{'INVENTORY.json'},'support inventory coverage mismatch')
+        members={}
+        for name,pin in inventory.items():
+            raw=archive.read(name)
+            _need(len(raw)==pin['bytes'] and hashlib.sha256(raw).hexdigest()==pin['sha256'],
+                  'support member pin mismatch')
+            if name.endswith('.json'):
+                members[name]=json.loads(raw)
+    members['INVENTORY.json']=inventory
+    return index,members
+
+
 def attach_refit_export(adapter, encoding, export, *, expected_index_sha256, binding,
                         max_checkpoint_bytes):
     """Tái dùng snapshot loader, chỉ gắn model weights, giữ training identity cũ.
@@ -82,9 +109,7 @@ def attach_refit_export(adapter, encoding, export, *, expected_index_sha256, bin
     Inference source được ghi riêng, không sửa identity bên trong snapshot.
     """
     export=Path(export)
-    index_path=export/'MODEL_INDEX.json'
-    _need(sha256_file(index_path)==expected_index_sha256,'refit export index changed')
-    index=json.loads(index_path.read_text(encoding='utf-8'))
+    index,members=read_refit_export_package(export,expected_index_sha256=expected_index_sha256)
     _need(type(encoding) is JunyiResearchEncoding and encoding.fit_view.scope=='refit_union90'
           and encoding.fit_view.full_role_coverage,'full refit90 encoding required')
     encoding.assert_for(encoding.fit_view)
@@ -94,29 +119,15 @@ def attach_refit_export(adapter, encoding, export, *, expected_index_sha256, bin
     filename=index['checkpoint_file']
     _need('/' not in filename and '\\' not in filename and filename not in ('','.','..'),'checkpoint basename required')
     checkpoint=export/filename
-    _need(index['phase']=='refit90' and index['identity']['phase']=='junyi_refit90'
-          and checkpoint.stat().st_size==index['checkpoint_bytes']<=max_checkpoint_bytes
+    _need(checkpoint.stat().st_size==index['checkpoint_bytes']<=max_checkpoint_bytes
           and index['checkpoint_sha256']==binding.checkpoint_sha256==sha256_file(checkpoint),
           'completed refit checkpoint pin mismatch')
     _need(index['identity']['encoding']==encoding.identity,'refit export encoding mismatch')
-    support=export/'SUPPORT.zip'
-    _need(sha256_file(support)==index['support_sha256'],'refit support archive changed')
-    with zipfile.ZipFile(support) as archive:
-        info=archive.infolist()
-        _need(len({row.filename for row in info})==len(info)
-              and sum(row.file_size for row in info)<=32*1024**2,'bounded unique support members required')
-        inventory=json.loads(archive.read('INVENTORY.json'))
-        _need(set(archive.namelist())==set(inventory)|{'INVENTORY.json'},'support inventory coverage mismatch')
-        for name,pin in inventory.items():
-            raw=archive.read(name)
-            _need(len(raw)==pin['bytes'] and hashlib.sha256(raw).hexdigest()==pin['sha256'],
-                  'support member pin mismatch')
-        load=lambda name:json.loads(archive.read(name))
-        training_config=load('inputs/config.json')
-        training_identity=load('run-manifest.json')
-        complete=load('COMPLETE.json')
-        metadata=load('metadata.json')
-        roles=load('inputs/roles.json')
+    training_config=members['inputs/config.json']
+    training_identity=members['run-manifest.json']
+    complete=members['COMPLETE.json']
+    metadata=members['metadata.json']
+    roles=members['inputs/roles.json']
     _need(_identity(roles)==encoding.fit_view.roles.identity,'support roles differ from fitted encoding')
     _need(training_identity==index['identity']==metadata['identity']
           and metadata['checkpoint_sha256']==index['checkpoint_sha256']

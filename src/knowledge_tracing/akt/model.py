@@ -22,6 +22,8 @@ class AKTAdapter:
         self.native = build_native(config, n_items=len(encoding.vocabulary.values))
 
     def step(self, batch: AKTBatch, optimizer: torch.optim.Optimizer) -> dict:
+        if self.config.phase=='junyi-inference':
+            raise ValueError('inference-only adapter cannot optimize weights')
         if not torch.isin(batch.loss_targets, torch.tensor([-1., 0., 1.], device=batch.loss_targets.device)).all():
             raise ValueError('invalid loss target values')
         valid_targets = batch.loss_targets >= 0
@@ -67,6 +69,8 @@ class AKTAdapter:
                 'optimizer_seconds': optimizer_seconds}
 
     def fit(self, inputs: CausalSequenceInputs, targets: np.ndarray) -> 'AKTAdapter':
+        if self.config.phase=='junyi-inference':
+            raise ValueError('inference-only adapter cannot fit weights')
         labels = np.asarray(targets)
         if labels.shape != inputs.item_ids.shape or not np.isin(labels, (0, 1)).all():
             raise ValueError('invalid training targets')

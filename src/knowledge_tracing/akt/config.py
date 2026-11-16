@@ -136,7 +136,7 @@ def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionPro
         validate_options(config)
     if config.project_root.resolve() != PROJECT_ROOT.resolve():
         raise ValueError('project root must be the trusted repository root')
-    if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold', 'simulator-research', 'junyi-research'}:
+    if config.phase not in {'preflight', 'smoke', 'cuda-smoke', 'pilot', 'fold-readiness', 'fold', 'simulator-research', 'junyi-research', 'junyi-inference'}:
         raise ValueError('invalid phase')
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,79}', config.run_id):
         raise ValueError('invalid run_id')
@@ -208,7 +208,10 @@ def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionPro
                 or config.max_rss_bytes is None or config.max_rss_bytes > 2 * 1024**3
                 or config.min_available_ram_bytes is None or config.min_available_ram_bytes < 1024**3):
             raise ValueError('pilot cap or architecture exceeded')
-    if config.phase in {'simulator-research','junyi-research'}:
+    if config.phase in {'simulator-research','junyi-research','junyi-inference'}:
+        inference_only=config.phase=='junyi-inference'
+        if inference_only and (config.device!='cpu' or cuda_profile is not None):
+            raise ValueError('Junyi local inference requires CPU and no CUDA training profile')
         if config.phase=='junyi-research' and cuda_profile is None:
             raise ValueError('Junyi research requires an explicit typed CUDA profile')
         # New scope only; no dataclass/default/hash change for historical phases.
@@ -217,10 +220,10 @@ def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionPro
                   'dropout': 0.05, 'kq_same': 1, 'separate_qa': False, 'n_pid': 0, 'graph': False,
                   'batch_size': 4, 'lr': 1e-4, 'betas': (0.9, 0.999), 'eps': 1e-8,
                   'weight_decay': 0.0, 'max_grad_norm': 1.0, 'max_epochs': 20,
-                  'patience': 3, 'min_delta': 0.0001, 'outer_fold': 4 if config.phase=='junyi-research' else 0}
+                  'patience': 3, 'min_delta': 0.0001, 'outer_fold': 4 if config.phase in ('junyi-research','junyi-inference') else 0}
         if config.protocol_version == 'akt-nr-exercise-v2-batch128':
-            if (config.phase != 'junyi-research' or cuda_profile is None
-                    or cuda_profile.recipe_id != 'cgakt-cuda-fp32-batch128-v2'):
+            if (not inference_only and (config.phase != 'junyi-research' or cuda_profile is None
+                    or cuda_profile.recipe_id != 'cgakt-cuda-fp32-batch128-v2')):
                 raise ValueError('batch128 protocol requires Junyi CUDA research')
             frozen['batch_size'] = 128
         if (any(type(getattr(config, name)) is not type(value) or getattr(config, name) != value
@@ -244,7 +247,12 @@ def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionPro
 
 
 def load_config(path: Path, *, cuda_profile: ResearchCUDAExecutionProfile | None = None) -> AKTConfig:
-    data = json.loads(path.read_text(encoding='utf-8'))
+    return config_from_payload(json.loads(path.read_text(encoding='utf-8')),cuda_profile=cuda_profile)
+
+
+def config_from_payload(data: dict, *, cuda_profile: ResearchCUDAExecutionProfile | None = None) -> AKTConfig:
+    """Cùng parser cho JSON file và cấu hình đã ghim trong portable export."""
+    data=dict(data)
     for key in ('project_root', 'output_dir', 'source_root'):
         if key in data:
             data[key] = Path(data[key])

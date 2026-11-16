@@ -55,7 +55,7 @@ class JunyiGraphAKTAdapter:
                  cuda_profile: ResearchCUDAExecutionProfile | None = None,
                  graph_enabled: bool = True, compact_context: bool = False,
                  context_cache: GraphContextCache | None = None):
-        _need(type(config) is AKTConfig and config.phase=='junyi-research',
+        _need(type(config) is AKTConfig and config.phase in ('junyi-research','junyi-inference'),
               'Explicit Junyi research config required')
         validate_config(config,cuda_profile=cuda_profile)
         _need(type(encoding) is JunyiResearchEncoding and type(condition) is JunyiGraphCondition,
@@ -182,6 +182,7 @@ class JunyiGraphAKTAdapter:
         return batch,evidence
 
     def collate_training(self, entries: Sequence[TrainingWindow]) -> AKTBatch:
+        _need(self.config.phase!='junyi-inference','inference-only adapter cannot optimize weights')
         self._integrity()
         _need(self._ticket is None and self.phase.view.optimization,
               'Fresh train80 or refit90 optimization phase required for optimizer batches')
@@ -192,6 +193,7 @@ class JunyiGraphAKTAdapter:
         return batch
 
     def step(self, batch: AKTBatch, optimizer: torch.optim.Optimizer) -> dict:
+        _need(self.config.phase!='junyi-inference','inference-only adapter cannot optimize weights')
         self._integrity()
         ticket,self._ticket = self._ticket,None
         _need(ticket is not None and batch is ticket.batch

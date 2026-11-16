@@ -104,7 +104,11 @@ def load_binding(path, *, expected_sha256):
     raw = path.read_bytes()
     if hashlib.sha256(raw).hexdigest() != expected_sha256:
         raise ValueError('Confidence artifact SHA256 mismatch')
-    payload = json.loads(raw)
+    return binding_from_payload(json.loads(raw))
+
+
+def binding_from_payload(payload):
+    """Giữ nguyên validation khi binding nằm trong archive đã kiểm SHA."""
     if set(payload) != {'schema', 'identity', 'binding'} or payload['schema'] != 'junyi-confidence-binding-v1':
         raise ValueError('Confidence artifact schema mismatch')
     fields = dict(payload['binding'])
