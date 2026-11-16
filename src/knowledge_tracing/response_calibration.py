@@ -246,8 +246,22 @@ def fit_temperature(targets, *, binding: PredictionBinding, partition: Calibrati
 
 
 def calibrate_probability(probability, *, calibration, binding):
+    return bind_probability_calibrator(calibration=calibration, binding=binding)(probability)
+
+
+def bind_probability_calibrator(*, calibration, binding):
+    """Kiểm provenance một lần cho một stream frozen, giữ số học scalar V1.
+
+    Caller tạo lại transform khi mở stream/checkpoint mới. Giá trị temperature
+    được chụp từ calibrator immutable sau kiểm, không đọc label hay fit lại.
+    """
     _validate_calibration(calibration, binding)
-    return _sigmoid(_logit(probability) / calibration.temperature)
+    temperature = calibration.temperature
+
+    def transform(probability):
+        return _sigmoid(_logit(probability) / temperature)
+
+    return transform
 
 
 def reference_bank_v1(bank: SimulatorBank):

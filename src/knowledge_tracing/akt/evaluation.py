@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 import duckdb
@@ -16,6 +16,27 @@ from knowledge_tracing.paired_bootstrap import PairedFoldSufficientStats
 _MODEL_COLUMNS = {'akt': 'akt_prediction', 'bkt': 'bkt_prediction', 'gam': 'gam_prediction'}
 _IDENTITY = ('user_id', 'exercise', 'correct', 'suggested')
 _ECE_BINS = 15
+
+
+def iter_calibrated_predictions(records, *, calibration, binding):
+    """Hiệu chỉnh stream đã dự báo bằng checkpoint cố định, giữ đủ null/OOV.
+
+    Caller giữ manifest raw/calibrated và population/role admission riêng.
+    Hàm này không fit temperature, chọn model hoặc cấp quyền đọc dữ liệu.
+    Kiểm calibrator/source một lần trước stream, tái dùng số học scalar V1.
+    """
+    from knowledge_tracing.response_calibration import bind_probability_calibrator
+    from .prediction import _validate_record
+
+    transform = bind_probability_calibrator(calibration=calibration, binding=binding)
+    for record in records:
+        _validate_record(record)
+        if record.checkpoint_id != binding.checkpoint_sha256:
+            raise ValueError('calibrated prediction checkpoint binding mismatch')
+        if record.prediction is None:
+            yield record
+        else:
+            yield replace(record, prediction=transform(record.prediction))
 
 
 @dataclass(frozen=True)
