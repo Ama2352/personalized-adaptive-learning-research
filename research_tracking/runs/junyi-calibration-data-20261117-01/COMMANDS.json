@@ -1,0 +1,69 @@
+{
+  "preprocessing": [
+    [
+      ".venv/Scripts/python.exe",
+      "-B",
+      "scripts\\akt\\prepare_junyi_calibration_data.py",
+      "--mode",
+      "count",
+      "--output",
+      "artifacts/akt/junyi-cohorts/outer4-calibration-full-20261117-01",
+      "--max-targets",
+      "3000000",
+      "--max-seconds",
+      "180",
+      "--max-rss-mib",
+      "640"
+    ],
+    [
+      ".venv/Scripts/python.exe",
+      "-B",
+      "scripts\\akt\\prepare_junyi_calibration_data.py",
+      "--mode",
+      "prepare",
+      "--output",
+      "artifacts/akt/junyi-cohorts/outer4-calibration-full-20261117-01",
+      "--max-targets",
+      "3000000",
+      "--max-seconds",
+      "180",
+      "--max-rss-mib",
+      "640"
+    ],
+    [
+      ".venv/Scripts/python.exe",
+      "-B",
+      "scripts\\akt\\prepare_junyi_calibration_data.py",
+      "--mode",
+      "population",
+      "--output",
+      "artifacts/akt/junyi-cohorts/outer4-calibration-full-20261117-01",
+      "--max-targets",
+      "1621484",
+      "--max-seconds",
+      "180",
+      "--max-rss-mib",
+      "640"
+    ],
+    [
+      ".venv/Scripts/python.exe",
+      "-B",
+      "scripts\\akt\\prepare_junyi_calibration_data.py",
+      "--mode",
+      "population",
+      "--output",
+      "artifacts/akt/junyi-cohorts/outer4-calibration-full-20261117-01",
+      "--max-targets",
+      "1621484",
+      "--max-seconds",
+      "600",
+      "--max-rss-mib",
+      "640",
+      "--attempt",
+      "02"
+    ]
+  ],
+  "tests": " .venv/Scripts/python.exe -B -m pytest tests/akt/test_junyi_calibration_data_preparation.py -q -p no:cacheprovider --basetemp=artifacts/akt/runtime/junyi-calibration-data-tests-20261117-02",
+  "profile": ".venv/Scripts/python.exe -B research_tracking/runs/junyi-calibration-data-20261117-01/profile_population.py",
+  "semantic_audit": ".venv/Scripts/python.exe -B research_tracking/runs/junyi-calibration-data-20261117-01/verify_prepared_source.py"
+}

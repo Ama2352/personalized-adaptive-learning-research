@@ -1,0 +1,2938 @@
+{
+  "status": "CALIBRATION10_SOURCE_COUNTS_VERIFIED",
+  "counts": {
+    "targets": 1621484,
+    "learners": 15847,
+    "unique_source_rows": 1621484,
+    "positive_labels": 1343648,
+    "negative_labels": 277836,
+    "invalid_rows": 0,
+    "oov_targets": 0,
+    "exercises": 693,
+    "max_learner_events": 13491
+  },
+  "roles_identity": "7c9a8102e399bdbc6569fc5a929faae525480c86fe0c60d2d805244a80b8e45a",
+  "phase_identity": "93f5e449e2c47dbd8e0744b094ac1c1a0b8e5d82c9b9cda8b8b5f85d557308a7",
+  "refit_encoding_identity": "4b8eb3e6bc5be9abd1419cf4e818b2e75dc86b82e59a0fe94e837c5f3299734f",
+  "source_pins": {
+    "artifacts/bkt_baseline/splits/assignments.parquet": "ee588c5b72fc214295e6eef1839b5110c884f43ab52ab4a792ca82e35812be20",
+    "artifacts/bkt_baseline/derived/manifest.json": "035fb113fcbbd0f433fcda210d43ef279f6eb8163e0b3b4b72c9d4f066a02fb7",
+    "artifacts/bkt_baseline/splits/manifest.json": "a69c0b440ef7d206133470f13696e853cb237c35c56c2b9015c175edaa89f94c",
+    "artifacts/akt/junyi-roles/outer4-research-v1-20261112-01/roles.json": "b0ca8f6949edd226e48d1cdb24e34ea34a042a385467e1650755994e96567ba3",
+    "artifacts/akt/junyi-roles/outer4-research-v1-20261112-01/manifest.json": "b7eb0a2df7902b5ed3caa2c3f02a3d2424b397162827ccb3aaae5e48f06984e3",
+    "artifacts/akt/window-cache/full-refit90-20261114-01.encoding.json": "0a244a22665c4cec6cabf12e6444cf7bbb820af3a87762438722f4893c5aba0d",
+    "artifacts/akt/window-cache/full-refit90-20261114-01.encoding.receipt.json": "fcd35f8b0a44b36f5f4bd2fef1d35c4494984e91f6df1081251e6bee4c552993",
+    "artifacts/akt/junyi-cohorts/outer4-selected-full-20261112-03/manifest.json": "f42afe12c9566ba334dec68c1ebb22a4bfc6b2e5b673b629c9a2724c8d74db14"
+  },
+  "canonical_files": 726,
+  "canonical_bytes": 249372459,
+  "holdout_or_outer_events_returned": false,
+  "train_or_selection_events_returned": false,
+  "labels_used_for_model_selection": false,
+  "source_stats": {
+    "artifacts/bkt_baseline/derived/canonical/exercise=absolute_value/data_0.parquet": {
+      "bytes": 960394,
+      "mtime_ns": 1791906578123761400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=absolute_value_add_sub/data_0.parquet": {
+      "bytes": 161768,
+      "mtime_ns": 1791906578296353800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=absolute_value_add_sub_properties/data_0.parquet": {
+      "bytes": 96089,
+      "mtime_ns": 1791906578216353500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=absolute_value_equations/data_0.parquet": {
+      "bytes": 30350,
+      "mtime_ns": 1791906578079612100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=absolute_value_of_complex_numbers/data_0.parquet": {
+      "bytes": 32367,
+      "mtime_ns": 1791906578247935300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=absolute_values_meaning/data_0.parquet": {
+      "bytes": 288708,
+      "mtime_ns": 1791906578160034400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=add_subtract_negative_fractions/data_0.parquet": {
+      "bytes": 223049,
+      "mtime_ns": 1791906578327614500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_and_subtracting_centimeter_and_millimeter/data_0.parquet": {
+      "bytes": 54323,
+      "mtime_ns": 1791906578342591400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_and_subtracting_complex_numbers/data_0.parquet": {
+      "bytes": 38382,
+      "mtime_ns": 1791906578363385400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_and_subtracting_decimals_word_problems/data_0.parquet": {
+      "bytes": 328718,
+      "mtime_ns": 1791906578388200500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_and_subtracting_fractions/data_0.parquet": {
+      "bytes": 248554,
+      "mtime_ns": 1791906578206857700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_and_subtracting_negative_numbers/data_0.parquet": {
+      "bytes": 1607013,
+      "mtime_ns": 1791906578183728300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_and_subtracting_polynomials/data_0.parquet": {
+      "bytes": 444537,
+      "mtime_ns": 1791906578528373500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_and_subtracting_radicals/data_0.parquet": {
+      "bytes": 189378,
+      "mtime_ns": 1791906578446406800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_and_subtracting_within_20/data_0.parquet": {
+      "bytes": 847585,
+      "mtime_ns": 1791906578479559100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_decimals/data_0.parquet": {
+      "bytes": 776081,
+      "mtime_ns": 1791906578660289000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_decimals_0.5/data_0.parquet": {
+      "bytes": 946103,
+      "mtime_ns": 1791906578477692700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_decimals_2/data_0.parquet": {
+      "bytes": 437033,
+      "mtime_ns": 1791906578559673100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_fractions/data_0.parquet": {
+      "bytes": 371092,
+      "mtime_ns": 1791906578658348700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_fractions_with_common_denominators/data_0.parquet": {
+      "bytes": 621005,
+      "mtime_ns": 1791906578498908600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_negative_numbers/data_0.parquet": {
+      "bytes": 1174436,
+      "mtime_ns": 1791906578662224600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_subtracting_carry_2/data_0.parquet": {
+      "bytes": 110879,
+      "mtime_ns": 1791906578277190300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_subtracting_carry_3/data_0.parquet": {
+      "bytes": 1003285,
+      "mtime_ns": 1791906578496876000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_subtracting_mixed_numbers_0.5/data_0.parquet": {
+      "bytes": 71899,
+      "mtime_ns": 1791906578677123000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_subtracting_mixed_numbers_1/data_0.parquet": {
+      "bytes": 74895,
+      "mtime_ns": 1791906578732370000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_subtracting_no_carry_3/data_0.parquet": {
+      "bytes": 252885,
+      "mtime_ns": 1791906578771372200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=adding_vectors/data_0.parquet": {
+      "bytes": 100691,
+      "mtime_ns": 1791906578791917000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=addition_1/data_0.parquet": {
+      "bytes": 8271701,
+      "mtime_ns": 1791906578530295300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=addition_2/data_0.parquet": {
+      "bytes": 2568022,
+      "mtime_ns": 1791906578843809800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=addition_3/data_0.parquet": {
+      "bytes": 450477,
+      "mtime_ns": 1791906578884783500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=addition_4/data_0.parquet": {
+      "bytes": 2262182,
+      "mtime_ns": 1791906578896813800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=addition_of_vary_denominator_fraction/data_0.parquet": {
+      "bytes": 103217,
+      "mtime_ns": 1791906578181729900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=addition_two_numbers/data_0.parquet": {
+      "bytes": 407348,
+      "mtime_ns": 1791906578928439900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=addition_within_20/data_0.parquet": {
+      "bytes": 141151,
+      "mtime_ns": 1791906578950573800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=advanced_fraction/data_0.parquet": {
+      "bytes": 31609,
+      "mtime_ns": 1791906578333611000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=age_problems/data_0.parquet": {
+      "bytes": 50739,
+      "mtime_ns": 1791906578237079200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=age_problems_new/data_0.parquet": {
+      "bytes": 39641,
+      "mtime_ns": 1791906579018327700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=age_word_problems/data_0.parquet": {
+      "bytes": 153906,
+      "mtime_ns": 1791906578494904700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=alternate_exterior_angles/data_0.parquet": {
+      "bytes": 426229,
+      "mtime_ns": 1791906578718297000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=alternate_exterior_angles_2/data_0.parquet": {
+      "bytes": 55997,
+      "mtime_ns": 1791906579256147500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=alternate_interior_angles/data_0.parquet": {
+      "bytes": 482762,
+      "mtime_ns": 1791906579294042400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=alternate_interior_angles_2/data_0.parquet": {
+      "bytes": 84689,
+      "mtime_ns": 1791906578304300600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=altitude_and_hypotenuse/data_0.parquet": {
+      "bytes": 41296,
+      "mtime_ns": 1791906579044879800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=angle_addition_postulate/data_0.parquet": {
+      "bytes": 47653,
+      "mtime_ns": 1791906579126874200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=angle_bisector_theorem/data_0.parquet": {
+      "bytes": 44753,
+      "mtime_ns": 1791906579145580300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=angle_of_osculation/data_0.parquet": {
+      "bytes": 30511,
+      "mtime_ns": 1791906578061601100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=angle_rotation/data_0.parquet": {
+      "bytes": 154620,
+      "mtime_ns": 1791906580210904900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=angle_types/data_0.parquet": {
+      "bytes": 878045,
+      "mtime_ns": 1791906578411224400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=angles_1/data_0.parquet": {
+      "bytes": 220571,
+      "mtime_ns": 1791906578841821100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=angles_2/data_0.parquet": {
+      "bytes": 138497,
+      "mtime_ns": 1791906578356386700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=angles_of_a_polygon/data_0.parquet": {
+      "bytes": 247560,
+      "mtime_ns": 1791906578627929600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=application_add_large_nums/data_0.parquet": {
+      "bytes": 616895,
+      "mtime_ns": 1791906580181965400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=application_division_large_nums/data_0.parquet": {
+      "bytes": 286881,
+      "mtime_ns": 1791906578980124700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=application_of_linear_equations_1/data_0.parquet": {
+      "bytes": 86942,
+      "mtime_ns": 1791906578893779100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=application_of_linear_equations_2/data_0.parquet": {
+      "bytes": 1674,
+      "mtime_ns": 1791906578987600400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=application_of_scientific_notation/data_0.parquet": {
+      "bytes": 129950,
+      "mtime_ns": 1791906579012169600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=application_of_scientific_notation_2/data_0.parquet": {
+      "bytes": 72233,
+      "mtime_ns": 1791906578171033700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=applications_of_index/data_0.parquet": {
+      "bytes": 188667,
+      "mtime_ns": 1791906579036890700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=approximate_number/data_0.parquet": {
+      "bytes": 32838,
+      "mtime_ns": 1791906579156104600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=arc_length_and_circular_sector_area/data_0.parquet": {
+      "bytes": 8192,
+      "mtime_ns": 1791906579246925100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=area_1/data_0.parquet": {
+      "bytes": 821240,
+      "mtime_ns": 1791906578064583800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=area_of_a_circle/data_0.parquet": {
+      "bytes": 331524,
+      "mtime_ns": 1791906580477698400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=area_of_a_circle2/data_0.parquet": {
+      "bytes": 85532,
+      "mtime_ns": 1791906580507406200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=area_of_fans/data_0.parquet": {
+      "bytes": 9482,
+      "mtime_ns": 1791906580513260200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=area_of_parallelograms/data_0.parquet": {
+      "bytes": 1177466,
+      "mtime_ns": 1791906580121269400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=area_of_squares_and_rectangles/data_0.parquet": {
+      "bytes": 417740,
+      "mtime_ns": 1791906580254982800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=area_of_triangles_1/data_0.parquet": {
+      "bytes": 545632,
+      "mtime_ns": 1791906580305041800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=area_of_triangular_shapes/data_0.parquet": {
+      "bytes": 22666,
+      "mtime_ns": 1791906580338311500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=area_relationship_larger_narrow_graph/data_0.parquet": {
+      "bytes": 39807,
+      "mtime_ns": 1791906580367540500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=area_relationship_larger_narrow_num/data_0.parquet": {
+      "bytes": 34741,
+      "mtime_ns": 1791906580386427600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=area_unit_cm_square/data_0.parquet": {
+      "bytes": 88175,
+      "mtime_ns": 1791906580443679700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=areas_of_circles_and_sectors/data_0.parquet": {
+      "bytes": 96600,
+      "mtime_ns": 1791906580451755900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=areas_of_kites/data_0.parquet": {
+      "bytes": 443997,
+      "mtime_ns": 1791906578121872600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=areas_of_rhombi/data_0.parquet": {
+      "bytes": 302358,
+      "mtime_ns": 1791906579326912000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=areas_of_trapezoids/data_0.parquet": {
+      "bytes": 695761,
+      "mtime_ns": 1791906578749947000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=areas_of_trapezoids_rhombi_and_kites/data_0.parquet": {
+      "bytes": 99909,
+      "mtime_ns": 1791906580315308000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=arithmetic_means/data_0.parquet": {
+      "bytes": 11174,
+      "mtime_ns": 1791906578224010900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=arithmetic_reasoning/data_0.parquet": {
+      "bytes": 67937,
+      "mtime_ns": 1791906580358640000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=arithmetic_sequences_3/data_0.parquet": {
+      "bytes": 46665,
+      "mtime_ns": 1791906580376650600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=arithmetic_series/data_0.parquet": {
+      "bytes": 6773,
+      "mtime_ns": 1791906580518912400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=arithmetic_series_1/data_0.parquet": {
+      "bytes": 31068,
+      "mtime_ns": 1791906580524863300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=arithmetic_word_problems/data_0.parquet": {
+      "bytes": 675672,
+      "mtime_ns": 1791906580526886300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=arithmetic_word_problems_1/data_0.parquet": {
+      "bytes": 3502283,
+      "mtime_ns": 1791906580431730400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=arithmetic_word_problems_2/data_0.parquet": {
+      "bytes": 1150966,
+      "mtime_ns": 1791906580576044400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=average_word_problems/data_0.parquet": {
+      "bytes": 46958,
+      "mtime_ns": 1791906582146468400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=axis_of_symmetry/data_0.parquet": {
+      "bytes": 1441516,
+      "mtime_ns": 1791906580527983100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=baseline_compareline/data_0.parquet": {
+      "bytes": 5804,
+      "mtime_ns": 1791906580824437400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=baseline_compareline_application/data_0.parquet": {
+      "bytes": 4041,
+      "mtime_ns": 1791906580832518000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=basic_compared_with_the_reference_quantity/data_0.parquet": {
+      "bytes": 3580,
+      "mtime_ns": 1791906580846154000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=basic_concept_of_circumcenter/data_0.parquet": {
+      "bytes": 39144,
+      "mtime_ns": 1791906580860245200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=basic_concept_of_congruent_triangles/data_0.parquet": {
+      "bytes": 51157,
+      "mtime_ns": 1791906581716349000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=basic_concept_of_similar_shapes/data_0.parquet": {
+      "bytes": 20300,
+      "mtime_ns": 1791906581910519600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=basic_concepts_of_probability_1/data_0.parquet": {
+      "bytes": 15529,
+      "mtime_ns": 1791906581919320800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=basic_concepts_of_probability_2/data_0.parquet": {
+      "bytes": 13883,
+      "mtime_ns": 1791906581927160300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=basic_graph_and_composite_graph_area/data_0.parquet": {
+      "bytes": 8081,
+      "mtime_ns": 1791906578685315900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=calculating_averages_advanced/data_0.parquet": {
+      "bytes": 6560,
+      "mtime_ns": 1791906581931253800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=calculation_of_proportions/data_0.parquet": {
+      "bytes": 13620,
+      "mtime_ns": 1791906581967217800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=calculations_using_similar_shapes/data_0.parquet": {
+      "bytes": 13100,
+      "mtime_ns": 1791906581985164900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=chain_rule_1/data_0.parquet": {
+      "bytes": 29248,
+      "mtime_ns": 1791906582028023400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=chickens_and_rabbits_questions/data_0.parquet": {
+      "bytes": 43171,
+      "mtime_ns": 1791906582051759500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=circles_and_arcs/data_0.parquet": {
+      "bytes": 103187,
+      "mtime_ns": 1791906581979691400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=circumferential_angle/data_0.parquet": {
+      "bytes": 31494,
+      "mtime_ns": 1791906582099374300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=combinations_of_polynomials/data_0.parquet": {
+      "bytes": 66743,
+      "mtime_ns": 1791906580349233800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=combining_like_terms_1/data_0.parquet": {
+      "bytes": 511541,
+      "mtime_ns": 1791906582181325300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=combining_like_terms_2/data_0.parquet": {
+      "bytes": 272166,
+      "mtime_ns": 1791906580646759200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=combining_like_terms_with_two_variables/data_0.parquet": {
+      "bytes": 61847,
+      "mtime_ns": 1791906580661309700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=common_factor/data_0.parquet": {
+      "bytes": 47421,
+      "mtime_ns": 1791906580668318000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=common_factor_advance/data_0.parquet": {
+      "bytes": 1645,
+      "mtime_ns": 1791906580672307100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=common_factors_of_a_polynomial_2/data_0.parquet": {
+      "bytes": 877,
+      "mtime_ns": 1791906580676319200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=common_form_for_life/data_0.parquet": {
+      "bytes": 174031,
+      "mtime_ns": 1791906580699531300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=comparing_absolute_values/data_0.parquet": {
+      "bytes": 688551,
+      "mtime_ns": 1791906580790177300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=comparing_fractions_1/data_0.parquet": {
+      "bytes": 408363,
+      "mtime_ns": 1791906578600374800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=comparing_fractions_2/data_0.parquet": {
+      "bytes": 410556,
+      "mtime_ns": 1791906581963278700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=comparing_improper_fractions_and_mixed_numbers/data_0.parquet": {
+      "bytes": 315075,
+      "mtime_ns": 1791906580500210300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=comparing_with_multiplication/data_0.parquet": {
+      "bytes": 42166,
+      "mtime_ns": 1791906578398154400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=comparison_between_numbers_within_ten/data_0.parquet": {
+      "bytes": 932570,
+      "mtime_ns": 1791906582017002600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=comparison_between_numbers_within_ten_0.5/data_0.parquet": {
+      "bytes": 69577,
+      "mtime_ns": 1791906582330089100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=complementary_and_supplementary_angles/data_0.parquet": {
+      "bytes": 105917,
+      "mtime_ns": 1791906579093187300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=complementary_angles/data_0.parquet": {
+      "bytes": 147188,
+      "mtime_ns": 1791906582450542600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=completing_the_square_1/data_0.parquet": {
+      "bytes": 84063,
+      "mtime_ns": 1791906582461652100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=completing_the_square_1_new/data_0.parquet": {
+      "bytes": 1164,
+      "mtime_ns": 1791906582522799500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=completing_the_square_2/data_0.parquet": {
+      "bytes": 45437,
+      "mtime_ns": 1791906578804917900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=complex_fraction/data_0.parquet": {
+      "bytes": 10897,
+      "mtime_ns": 1791906582236923600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=composite_numbers/data_0.parquet": {
+      "bytes": 1312253,
+      "mtime_ns": 1791906582003801300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=compound_inequalities/data_0.parquet": {
+      "bytes": 80816,
+      "mtime_ns": 1791906582044962600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=computing_law_with_power/data_0.parquet": {
+      "bytes": 63332,
+      "mtime_ns": 1791906582062197200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=concepts_related_to_diamond/data_0.parquet": {
+      "bytes": 4944,
+      "mtime_ns": 1791906582068106100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=concepts_related_to_kite/data_0.parquet": {
+      "bytes": 5893,
+      "mtime_ns": 1791906582116370100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=concepts_related_to_parallelogram/data_0.parquet": {
+      "bytes": 4191,
+      "mtime_ns": 1791906580390345100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=conditional_statements_2/data_0.parquet": {
+      "bytes": 94491,
+      "mtime_ns": 1791906580730899100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=conditional_statements_and_truth_value/data_0.parquet": {
+      "bytes": 26703,
+      "mtime_ns": 1791906582190331000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=cone_surface_arc/data_0.parquet": {
+      "bytes": 24527,
+      "mtime_ns": 1791906582223551600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=congruency_postulates/data_0.parquet": {
+      "bytes": 531277,
+      "mtime_ns": 1791906582374448400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=congruent_angles/data_0.parquet": {
+      "bytes": 205161,
+      "mtime_ns": 1791906582087414600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=congruent_segments/data_0.parquet": {
+      "bytes": 278857,
+      "mtime_ns": 1791906582140002900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=congruent_triangles_1/data_0.parquet": {
+      "bytes": 678819,
+      "mtime_ns": 1791906582148684500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=congruent_triangles_2/data_0.parquet": {
+      "bytes": 176282,
+      "mtime_ns": 1791906582270085100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=constant_function_and_a_fuction/data_0.parquet": {
+      "bytes": 10215,
+      "mtime_ns": 1791906582335122100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=converse_inverse_and_contrapositive/data_0.parquet": {
+      "bytes": 147239,
+      "mtime_ns": 1791906582212256500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=converting_between_point_slope_and_slope_intercept/data_0.parquet": {
+      "bytes": 5820,
+      "mtime_ns": 1791906582617264600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=converting_between_slope_intercept_and_standard_form/data_0.parquet": {
+      "bytes": 6184,
+      "mtime_ns": 1791906582108379200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=converting_decimals_to_fractions_1/data_0.parquet": {
+      "bytes": 152329,
+      "mtime_ns": 1791906582639263800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=converting_decimals_to_fractions_2/data_0.parquet": {
+      "bytes": 86173,
+      "mtime_ns": 1791906582613070200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=converting_decimals_to_percents/data_0.parquet": {
+      "bytes": 777624,
+      "mtime_ns": 1791906582707569000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=converting_fractions_to_decimals/data_0.parquet": {
+      "bytes": 304890,
+      "mtime_ns": 1791906582437852200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=converting_mixed_numbers_and_improper_fractions/data_0.parquet": {
+      "bytes": 358321,
+      "mtime_ns": 1791906582496465800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=converting_percents_to_decimals/data_0.parquet": {
+      "bytes": 634471,
+      "mtime_ns": 1791906578998210900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=converting_repeating_decimals_to_fractions_1/data_0.parquet": {
+      "bytes": 16746,
+      "mtime_ns": 1791906582507423000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=converting_repeating_decimals_to_fractions_2/data_0.parquet": {
+      "bytes": 14271,
+      "mtime_ns": 1791906582553112600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=coordination_bctest_cap/data_0.parquet": {
+      "bytes": 271197,
+      "mtime_ns": 1791906582598042800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=corresponding_angles/data_0.parquet": {
+      "bytes": 493231,
+      "mtime_ns": 1791906582672079500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=corresponding_angles_2/data_0.parquet": {
+      "bytes": 71986,
+      "mtime_ns": 1791906582701365900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=count_number_to_100/data_0.parquet": {
+      "bytes": 986203,
+      "mtime_ns": 1791906582423554500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=count_number_to_20/data_0.parquet": {
+      "bytes": 1080,
+      "mtime_ns": 1791906582539769200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=count_number_to_20_2/data_0.parquet": {
+      "bytes": 158124,
+      "mtime_ns": 1791906580331309600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=count_number_to_50/data_0.parquet": {
+      "bytes": 1734,
+      "mtime_ns": 1791906582623248100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=count_numbers/data_0.parquet": {
+      "bytes": 996643,
+      "mtime_ns": 1791906582577167700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=count_one_by_one_1/data_0.parquet": {
+      "bytes": 2546232,
+      "mtime_ns": 1791906582619190300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=counting_1/data_0.parquet": {
+      "bytes": 591354,
+      "mtime_ns": 1791906582675094000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=counting_2/data_0.parquet": {
+      "bytes": 198219,
+      "mtime_ns": 1791906582691886600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=creating_bar_charts_1/data_0.parquet": {
+      "bytes": 294617,
+      "mtime_ns": 1791906582734934700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=creating_box_and_whisker_plots/data_0.parquet": {
+      "bytes": 57540,
+      "mtime_ns": 1791906582742748400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=cross_multiplication_advanced/data_0.parquet": {
+      "bytes": 97027,
+      "mtime_ns": 1791906582753031200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=cube_roots/data_0.parquet": {
+      "bytes": 126864,
+      "mtime_ns": 1791906582822378700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=date_and_weekday/data_0.parquet": {
+      "bytes": 502869,
+      "mtime_ns": 1791906582808225400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=decimal_multiplier_calculation/data_0.parquet": {
+      "bytes": 33048,
+      "mtime_ns": 1791906582828465000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=decimal_two_steps/data_0.parquet": {
+      "bytes": 17342,
+      "mtime_ns": 1791906583508554800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=decimals_distributive_law_of_multiplication/data_0.parquet": {
+      "bytes": 40613,
+      "mtime_ns": 1791906583519489600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=decimals_on_the_number_line_1/data_0.parquet": {
+      "bytes": 1941902,
+      "mtime_ns": 1791906583561808500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=decimals_on_the_number_line_2/data_0.parquet": {
+      "bytes": 1340769,
+      "mtime_ns": 1791906583594790200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=define_one_function/data_0.parquet": {
+      "bytes": 14086,
+      "mtime_ns": 1791906583674152000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=definition_opposite_number/data_0.parquet": {
+      "bytes": 333154,
+      "mtime_ns": 1791906583650801100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=degrees_to_radians/data_0.parquet": {
+      "bytes": 61853,
+      "mtime_ns": 1791906583659795300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=denominator_comparison/data_0.parquet": {
+      "bytes": 89210,
+      "mtime_ns": 1791906583669888400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dependent_probability/data_0.parquet": {
+      "bytes": 12397,
+      "mtime_ns": 1791906583704009500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=derivative_intuition/data_0.parquet": {
+      "bytes": 27791,
+      "mtime_ns": 1791906583782523000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=derivatives_1/data_0.parquet": {
+      "bytes": 28784,
+      "mtime_ns": 1791906583843559100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=direct_and_inverse_variation/data_0.parquet": {
+      "bytes": 297065,
+      "mtime_ns": 1791906583886253600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=discount_tax_and_tip_word_problems/data_0.parquet": {
+      "bytes": 142016,
+      "mtime_ns": 1791906583950811700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=distance_between_point_and_line/data_0.parquet": {
+      "bytes": 13572,
+      "mtime_ns": 1791906583911580200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=distance_formula/data_0.parquet": {
+      "bytes": 217490,
+      "mtime_ns": 1791906584018678000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=distributive_property/data_0.parquet": {
+      "bytes": 1526144,
+      "mtime_ns": 1791906581885564400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=distributive_property_with_variables/data_0.parquet": {
+      "bytes": 1137,
+      "mtime_ns": 1791906583846557400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dividing_complex_numbers/data_0.parquet": {
+      "bytes": 20333,
+      "mtime_ns": 1791906583858471500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dividing_decimals/data_0.parquet": {
+      "bytes": 340968,
+      "mtime_ns": 1791906583936721200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dividing_decimals_0.5/data_0.parquet": {
+      "bytes": 1237001,
+      "mtime_ns": 1791906583751751100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dividing_decimals_1/data_0.parquet": {
+      "bytes": 567542,
+      "mtime_ns": 1791906584065131300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dividing_decimals_2/data_0.parquet": {
+      "bytes": 319760,
+      "mtime_ns": 1791906583700052300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dividing_decimals_int_to_int_0.5/data_0.parquet": {
+      "bytes": 1205,
+      "mtime_ns": 1791906583709073400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dividing_decimals_int_to_int_0.7/data_0.parquet": {
+      "bytes": 1182,
+      "mtime_ns": 1791906583756766600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dividing_fractions/data_0.parquet": {
+      "bytes": 400393,
+      "mtime_ns": 1791906583822639100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dividing_fractions_0.5/data_0.parquet": {
+      "bytes": 515143,
+      "mtime_ns": 1791906582319130300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dividing_fractions_word_problems/data_0.parquet": {
+      "bytes": 326854,
+      "mtime_ns": 1791906580623832600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dividing_polynomials/data_0.parquet": {
+      "bytes": 36459,
+      "mtime_ns": 1791906583766765000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dividing_polynomials_1/data_0.parquet": {
+      "bytes": 34727,
+      "mtime_ns": 1791906583834574300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dividing_polynomials_2/data_0.parquet": {
+      "bytes": 33777,
+      "mtime_ns": 1791906583852539100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dividing_polynomials_3/data_0.parquet": {
+      "bytes": 14626,
+      "mtime_ns": 1791906582705558600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dividing_polynomials_4/data_0.parquet": {
+      "bytes": 12281,
+      "mtime_ns": 1791906583907502100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dividing_polynomials_5/data_0.parquet": {
+      "bytes": 15953,
+      "mtime_ns": 1791906583956903300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=dividing_polynomials_6/data_0.parquet": {
+      "bytes": 10328,
+      "mtime_ns": 1791906584025647600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=divisibility/data_0.parquet": {
+      "bytes": 871456,
+      "mtime_ns": 1791906583963898500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=divisibility_0.5/data_0.parquet": {
+      "bytes": 1495837,
+      "mtime_ns": 1791906582402188200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=divisibility_intuition/data_0.parquet": {
+      "bytes": 2249835,
+      "mtime_ns": 1791906583902497600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=divisibility_tests/data_0.parquet": {
+      "bytes": 1625724,
+      "mtime_ns": 1791906584120120900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=division_0.5/data_0.parquet": {
+      "bytes": 2659715,
+      "mtime_ns": 1791906584000758500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=division_0.9/data_0.parquet": {
+      "bytes": 1976300,
+      "mtime_ns": 1791906584087365300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=division_1/data_0.parquet": {
+      "bytes": 1873022,
+      "mtime_ns": 1791906584068014900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=division_1.4/data_0.parquet": {
+      "bytes": 1311580,
+      "mtime_ns": 1791906584118056700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=division_1.5/data_0.parquet": {
+      "bytes": 1303909,
+      "mtime_ns": 1791906584177924900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=division_2/data_0.parquet": {
+      "bytes": 953255,
+      "mtime_ns": 1791906584181099600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=division_2.9/data_0.parquet": {
+      "bytes": 832850,
+      "mtime_ns": 1791906584224201200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=division_3/data_0.parquet": {
+      "bytes": 754885,
+      "mtime_ns": 1791906582624303900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=division_4/data_0.parquet": {
+      "bytes": 465954,
+      "mtime_ns": 1791906584291388100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=division_word_problems_1/data_0.parquet": {
+      "bytes": 851147,
+      "mtime_ns": 1791906584312911200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=division_word_problems_2/data_0.parquet": {
+      "bytes": 458287,
+      "mtime_ns": 1791906584214228900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=domain_and_range_0.5/data_0.parquet": {
+      "bytes": 56287,
+      "mtime_ns": 1791906584232281100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=domain_of_a_function/data_0.parquet": {
+      "bytes": 24549,
+      "mtime_ns": 1791906584242246600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=draw_a_pie_chart/data_0.parquet": {
+      "bytes": 45493,
+      "mtime_ns": 1791906584310955000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=empirical_rule/data_0.parquet": {
+      "bytes": 15743,
+      "mtime_ns": 1791906584322195600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=equation_of_a_circle_1/data_0.parquet": {
+      "bytes": 21668,
+      "mtime_ns": 1791906584331064100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=equation_of_a_circle_2/data_0.parquet": {
+      "bytes": 25170,
+      "mtime_ns": 1791906584374006200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=equation_of_a_hyperbola/data_0.parquet": {
+      "bytes": 4469,
+      "mtime_ns": 1791906584448369100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=equation_of_a_line/data_0.parquet": {
+      "bytes": 10937,
+      "mtime_ns": 1791906584460434800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=equation_of_an_ellipse/data_0.parquet": {
+      "bytes": 8139,
+      "mtime_ns": 1791906583862540000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=equivalent_fractions/data_0.parquet": {
+      "bytes": 694813,
+      "mtime_ns": 1791906584599096100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=equivalent_fractions_2/data_0.parquet": {
+      "bytes": 475690,
+      "mtime_ns": 1791906584429372600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=equivalent_fractions_conversion/data_0.parquet": {
+      "bytes": 74864,
+      "mtime_ns": 1791906584506821200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=estimation_three-digit_add_sub/data_0.parquet": {
+      "bytes": 615674,
+      "mtime_ns": 1791906584565648500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=estimation_with_decimals/data_0.parquet": {
+      "bytes": 339681,
+      "mtime_ns": 1791906584367492300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=eval_expressions_w_two_var/data_0.parquet": {
+      "bytes": 13902,
+      "mtime_ns": 1791906584391273400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=evaluating_expressions_1/data_0.parquet": {
+      "bytes": 631812,
+      "mtime_ns": 1791906584448369100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=evaluating_expressions_2/data_0.parquet": {
+      "bytes": 128171,
+      "mtime_ns": 1791906584554645300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=even_and_odd_functions/data_0.parquet": {
+      "bytes": 51217,
+      "mtime_ns": 1791906584629014100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=exploring_angle_pairs_1/data_0.parquet": {
+      "bytes": 130847,
+      "mtime_ns": 1791906584692821400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=exploring_mean_and_median/data_0.parquet": {
+      "bytes": 265089,
+      "mtime_ns": 1791906584481762700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=exploring_standard_deviation_1/data_0.parquet": {
+      "bytes": 11864,
+      "mtime_ns": 1791906584540632300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=exponent_rules/data_0.parquet": {
+      "bytes": 228350,
+      "mtime_ns": 1791906584596091400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=exponents_1/data_0.parquet": {
+      "bytes": 1269557,
+      "mtime_ns": 1791906584674616600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=exponents_2/data_0.parquet": {
+      "bytes": 431352,
+      "mtime_ns": 1791906584160954600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=exponents_3/data_0.parquet": {
+      "bytes": 206234,
+      "mtime_ns": 1791906584723401800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=exponents_4/data_0.parquet": {
+      "bytes": 100675,
+      "mtime_ns": 1791906584804562900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=expressing_ratios_as_fractions/data_0.parquet": {
+      "bytes": 937984,
+      "mtime_ns": 1791906584899350000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=expressions_with_unknown_variables/data_0.parquet": {
+      "bytes": 61624,
+      "mtime_ns": 1791906584957248400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=expressions_with_unknown_variables_2/data_0.parquet": {
+      "bytes": 25305,
+      "mtime_ns": 1791906584975370900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=factor_word_problems/data_0.parquet": {
+      "bytes": 16416,
+      "mtime_ns": 1791906584999242300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=factoring_difference_of_squares_1/data_0.parquet": {
+      "bytes": 116719,
+      "mtime_ns": 1791906584706806300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=factoring_difference_of_squares_2/data_0.parquet": {
+      "bytes": 80290,
+      "mtime_ns": 1791906584734855700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=factoring_difference_of_squares_3/data_0.parquet": {
+      "bytes": 66787,
+      "mtime_ns": 1791906584754170600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=factoring_polynomials_1/data_0.parquet": {
+      "bytes": 199616,
+      "mtime_ns": 1791906584897349100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=factoring_polynomials_2/data_0.parquet": {
+      "bytes": 92595,
+      "mtime_ns": 1791906584970374000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=factoring_polynomials_by_grouping_1/data_0.parquet": {
+      "bytes": 46248,
+      "mtime_ns": 1791906584681820700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=factoring_polynomials_with_two_variables/data_0.parquet": {
+      "bytes": 25254,
+      "mtime_ns": 1791906585018774500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=factorization_by_add_sub_square/data_0.parquet": {
+      "bytes": 20271,
+      "mtime_ns": 1791906585064974800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=factorization_quadratic_polynomial/data_0.parquet": {
+      "bytes": 61339,
+      "mtime_ns": 1791906585074122200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=finding_axis_of_symmetry/data_0.parquet": {
+      "bytes": 864437,
+      "mtime_ns": 1791906584737851000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=four_operations_and_decimal_fraction/data_0.parquet": {
+      "bytes": 1555,
+      "mtime_ns": 1791906584817420300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=fraction_integer/data_0.parquet": {
+      "bytes": 47761,
+      "mtime_ns": 1791906584907010900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=fraction_of_one_step_to_unknow_formula/data_0.parquet": {
+      "bytes": 22287,
+      "mtime_ns": 1791906584911006000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=fraction_word_problems_1/data_0.parquet": {
+      "bytes": 344810,
+      "mtime_ns": 1791906584938206600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=fractional_division_life_problem/data_0.parquet": {
+      "bytes": 38918,
+      "mtime_ns": 1791906584949220700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=fractions_cut_and_copy_1/data_0.parquet": {
+      "bytes": 69546,
+      "mtime_ns": 1791906584992240800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=fractions_cut_and_copy_2/data_0.parquet": {
+      "bytes": 32007,
+      "mtime_ns": 1791906585008242100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=fractions_on_the_number_line_1/data_0.parquet": {
+      "bytes": 628577,
+      "mtime_ns": 1791906584941124000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=fractions_on_the_number_line_2/data_0.parquet": {
+      "bytes": 207463,
+      "mtime_ns": 1791906585182816400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=fractions_on_the_number_line_3/data_0.parquet": {
+      "bytes": 134241,
+      "mtime_ns": 1791906585198910400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=fractions_word_problem/data_0.parquet": {
+      "bytes": 31562,
+      "mtime_ns": 1791906585209767700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=functions_1/data_0.parquet": {
+      "bytes": 347263,
+      "mtime_ns": 1791906585286228200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=functions_2/data_0.parquet": {
+      "bytes": 187951,
+      "mtime_ns": 1791906584523715000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=functions_3/data_0.parquet": {
+      "bytes": 48091,
+      "mtime_ns": 1791906585088991600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=gcd_and_lcm_word_problems/data_0.parquet": {
+      "bytes": 173010,
+      "mtime_ns": 1791906585119203200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=gcd_of_life/data_0.parquet": {
+      "bytes": 235999,
+      "mtime_ns": 1791906585145154100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=geometric_construction/data_0.parquet": {
+      "bytes": 21295,
+      "mtime_ns": 1791906585094987300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=geometry_1/data_0.parquet": {
+      "bytes": 1468,
+      "mtime_ns": 1791906586403445900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=geometry_about_circle_concept/data_0.parquet": {
+      "bytes": 46211,
+      "mtime_ns": 1791906586448594900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=geometry_categorial_proposition/data_0.parquet": {
+      "bytes": 9965,
+      "mtime_ns": 1791906586480032000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=geometry_identification_concept/data_0.parquet": {
+      "bytes": 9054,
+      "mtime_ns": 1791906586724508900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=geometry_proofs_1/data_0.parquet": {
+      "bytes": 12107,
+      "mtime_ns": 1791906587594014300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=geometry_proofs_2/data_0.parquet": {
+      "bytes": 12559,
+      "mtime_ns": 1791906586248636900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=geometry_proofs_intro/data_0.parquet": {
+      "bytes": 1682,
+      "mtime_ns": 1791906585157801400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=get_gcd_and_lcm/data_0.parquet": {
+      "bytes": 185317,
+      "mtime_ns": 1791906587979469200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=graphing_inequalities/data_0.parquet": {
+      "bytes": 16175,
+      "mtime_ns": 1791906585124208600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=graphing_inequalities_2/data_0.parquet": {
+      "bytes": 6763,
+      "mtime_ns": 1791906588160318400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=graphing_linear_equations/data_0.parquet": {
+      "bytes": 45262,
+      "mtime_ns": 1791906588173511200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=graphing_parabolas_0.5/data_0.parquet": {
+      "bytes": 57368,
+      "mtime_ns": 1791906585153765300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=graphing_parabolas_1/data_0.parquet": {
+      "bytes": 13780,
+      "mtime_ns": 1791906588413075800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=graphing_parabolas_2/data_0.parquet": {
+      "bytes": 11349,
+      "mtime_ns": 1791906588501028200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=graphing_points/data_0.parquet": {
+      "bytes": 313833,
+      "mtime_ns": 1791906585050067700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=graphing_points_2/data_0.parquet": {
+      "bytes": 212612,
+      "mtime_ns": 1791906582773081000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=graphing_points_fraction_1/data_0.parquet": {
+      "bytes": 15104,
+      "mtime_ns": 1791906585079645800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=graphing_points_fraction_2/data_0.parquet": {
+      "bytes": 6868,
+      "mtime_ns": 1791906585097899200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=graphing_scaling/data_0.parquet": {
+      "bytes": 37580,
+      "mtime_ns": 1791906584612650700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=graphing_systems_of_equations/data_0.parquet": {
+      "bytes": 118063,
+      "mtime_ns": 1791906586378090200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=graphing_systems_of_inequalities/data_0.parquet": {
+      "bytes": 5371,
+      "mtime_ns": 1791906586397487800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=graphing_systems_of_inequalities_2/data_0.parquet": {
+      "bytes": 4730,
+      "mtime_ns": 1791906586435684100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=graphs_of_linear_equations/data_0.parquet": {
+      "bytes": 8857,
+      "mtime_ns": 1791906586473079900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=graphs_of_sine_and_cosine/data_0.parquet": {
+      "bytes": 22422,
+      "mtime_ns": 1791906586503520200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=greatest_common_divisor/data_0.parquet": {
+      "bytes": 1204254,
+      "mtime_ns": 1791906585052011900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=halves_and_fourths/data_0.parquet": {
+      "bytes": 36854,
+      "mtime_ns": 1791906585465088200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=herons_formula/data_0.parquet": {
+      "bytes": 14951,
+      "mtime_ns": 1791906585779301800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=hundred_million_adding_and_subtracting/data_0.parquet": {
+      "bytes": 237981,
+      "mtime_ns": 1791906586111404800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=identifying_points_1/data_0.parquet": {
+      "bytes": 120360,
+      "mtime_ns": 1791906586218313500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=identifying_points_2/data_0.parquet": {
+      "bytes": 84206,
+      "mtime_ns": 1791906586235316200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=imaginary_unit_powers/data_0.parquet": {
+      "bytes": 300457,
+      "mtime_ns": 1791906585425821800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=independent_probability/data_0.parquet": {
+      "bytes": 28675,
+      "mtime_ns": 1791906585473022600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=inequalities_and_expressions/data_0.parquet": {
+      "bytes": 16047,
+      "mtime_ns": 1791906585926615400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=inequalities_on_a_number_line/data_0.parquet": {
+      "bytes": 170613,
+      "mtime_ns": 1791906586205108100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=inequality_properties/data_0.parquet": {
+      "bytes": 6270,
+      "mtime_ns": 1791906586224317300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=inequality_symbol_word_problems/data_0.parquet": {
+      "bytes": 5988,
+      "mtime_ns": 1791906586244270900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=inscribed_angles_1/data_0.parquet": {
+      "bytes": 238480,
+      "mtime_ns": 1791906586289458000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=inscribed_angles_2/data_0.parquet": {
+      "bytes": 78114,
+      "mtime_ns": 1791906586390307700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=inscribed_angles_3/data_0.parquet": {
+      "bytes": 58706,
+      "mtime_ns": 1791906586426687300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=integer_arithmetic/data_0.parquet": {
+      "bytes": 164786,
+      "mtime_ns": 1791906586467080300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=integers_multiply_decimals/data_0.parquet": {
+      "bytes": 221848,
+      "mtime_ns": 1791906586267589500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=integers_multiply_decimals2/data_0.parquet": {
+      "bytes": 302360,
+      "mtime_ns": 1791906586316443500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=interpreting_linear_equations/data_0.parquet": {
+      "bytes": 77899,
+      "mtime_ns": 1791906586494134800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=inverse_proportional_calculation/data_0.parquet": {
+      "bytes": 15348,
+      "mtime_ns": 1791906586559654900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=inverse_trig_functions/data_0.parquet": {
+      "bytes": 15775,
+      "mtime_ns": 1791906586738728700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=inverses_of_functions/data_0.parquet": {
+      "bytes": 11538,
+      "mtime_ns": 1791906587577925400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=judging_axis_of_symmetry/data_0.parquet": {
+      "bytes": 1024262,
+      "mtime_ns": 1791906586550732900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=kg_g_arithmatic/data_0.parquet": {
+      "bytes": 65339,
+      "mtime_ns": 1791906586734508900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=kg_g_time_div/data_0.parquet": {
+      "bytes": 43115,
+      "mtime_ns": 1791906587550633400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=kg_g_unit_transform/data_0.parquet": {
+      "bytes": 173176,
+      "mtime_ns": 1791906587707420900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=kg_g_unit_transform2/data_0.parquet": {
+      "bytes": 122839,
+      "mtime_ns": 1791906587905183500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=km_m_unit_transform/data_0.parquet": {
+      "bytes": 1408,
+      "mtime_ns": 1791906587993805500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=l_ml_arithmatic/data_0.parquet": {
+      "bytes": 69788,
+      "mtime_ns": 1791906588131644700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=l_ml_time_div/data_0.parquet": {
+      "bytes": 48186,
+      "mtime_ns": 1791906587561963300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=l_ml_transform/data_0.parquet": {
+      "bytes": 326676,
+      "mtime_ns": 1791906587768716000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=l_ml_word_problem/data_0.parquet": {
+      "bytes": 129704,
+      "mtime_ns": 1791906587795903600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=large_angle_long_edge/data_0.parquet": {
+      "bytes": 18214,
+      "mtime_ns": 1791906588783108400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=lcm_word_problems/data_0.parquet": {
+      "bytes": 260308,
+      "mtime_ns": 1791906589008286400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=least_common_multiple/data_0.parquet": {
+      "bytes": 1011012,
+      "mtime_ns": 1791906586586049500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=least_common_multiple_and_greatest_common_divisor_word_problems/data_0.parquet": {
+      "bytes": 618937,
+      "mtime_ns": 1791906587508882300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=lhopitals_rule/data_0.parquet": {
+      "bytes": 53380,
+      "mtime_ns": 1791906587817161000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=life_1/data_0.parquet": {
+      "bytes": 3989,
+      "mtime_ns": 1791906585230535400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=limits_1/data_0.parquet": {
+      "bytes": 1142231,
+      "mtime_ns": 1791906587741165200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=limits_2/data_0.parquet": {
+      "bytes": 128165,
+      "mtime_ns": 1791906584854600400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=line_graph_intuition/data_0.parquet": {
+      "bytes": 12613,
+      "mtime_ns": 1791906588393280900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=line_relationships/data_0.parquet": {
+      "bytes": 9897,
+      "mtime_ns": 1791906588492137600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=linear_equations_1/data_0.parquet": {
+      "bytes": 528300,
+      "mtime_ns": 1791906588236776900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=linear_equations_2/data_0.parquet": {
+      "bytes": 363376,
+      "mtime_ns": 1791906588461468100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=linear_equations_3/data_0.parquet": {
+      "bytes": 250340,
+      "mtime_ns": 1791906588765230900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=linear_equations_4/data_0.parquet": {
+      "bytes": 119737,
+      "mtime_ns": 1791906587331450700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=linear_equations_word_problems_2/data_0.parquet": {
+      "bytes": 39621,
+      "mtime_ns": 1791906585104904700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=linear_inequalities/data_0.parquet": {
+      "bytes": 58656,
+      "mtime_ns": 1791906586749626300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=lines_plane_vertical_parallel/data_0.parquet": {
+      "bytes": 26974,
+      "mtime_ns": 1791906585058975400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=logarithms_1/data_0.parquet": {
+      "bytes": 97810,
+      "mtime_ns": 1791906589024278100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=logarithms_2/data_0.parquet": {
+      "bytes": 71177,
+      "mtime_ns": 1791906589043333200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=logical_arguments_deductive_reasoning/data_0.parquet": {
+      "bytes": 106665,
+      "mtime_ns": 1791906586415341700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=make_a_line_by_ruler_and_compasses/data_0.parquet": {
+      "bytes": 29959,
+      "mtime_ns": 1791906589063555400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=marking_inequalities_range_on_a_number_line/data_0.parquet": {
+      "bytes": 10151,
+      "mtime_ns": 1791906589066657700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=markup_and_commission_word_problems/data_0.parquet": {
+      "bytes": 93375,
+      "mtime_ns": 1791906589077536700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=matrix_add_sub_2/data_0.parquet": {
+      "bytes": 9734,
+      "mtime_ns": 1791906589083106900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=matrix_add_sub_3/data_0.parquet": {
+      "bytes": 6278,
+      "mtime_ns": 1791906589229043100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=matrix_add_zero_negative/data_0.parquet": {
+      "bytes": 8777,
+      "mtime_ns": 1791906589236999800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=matrix_app_fruit_oil/data_0.parquet": {
+      "bytes": 943,
+      "mtime_ns": 1791906589288039500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=matrix_basic_distance/data_0.parquet": {
+      "bytes": 7394,
+      "mtime_ns": 1791906589296022500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=matrix_basic_percentage/data_0.parquet": {
+      "bytes": 9941,
+      "mtime_ns": 1791906589321037000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=matrix_basic_product/data_0.parquet": {
+      "bytes": 7969,
+      "mtime_ns": 1791906586363392400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=matrix_gaussian_elimination/data_0.parquet": {
+      "bytes": 5014,
+      "mtime_ns": 1791906589369335400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=matrix_mul_scalar/data_0.parquet": {
+      "bytes": 3582,
+      "mtime_ns": 1791906589278053200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=matrix_mul_two/data_0.parquet": {
+      "bytes": 1206,
+      "mtime_ns": 1791906589376334900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=matrix_mul_two_2/data_0.parquet": {
+      "bytes": 2295,
+      "mtime_ns": 1791906589384894900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=matrix_mul_zero_one/data_0.parquet": {
+      "bytes": 4422,
+      "mtime_ns": 1791906588140608800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=matrix_row_echelon/data_0.parquet": {
+      "bytes": 12198,
+      "mtime_ns": 1791906589407516000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=matrix_row_operation/data_0.parquet": {
+      "bytes": 4151,
+      "mtime_ns": 1791906589415310300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=matrix_submatrix/data_0.parquet": {
+      "bytes": 3758,
+      "mtime_ns": 1791906589420307600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=matrix_transpose/data_0.parquet": {
+      "bytes": 4044,
+      "mtime_ns": 1791906589446317000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=matrix_triangular_and_symmetric/data_0.parquet": {
+      "bytes": 4440,
+      "mtime_ns": 1791906589453589000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=mean_median_and_mode/data_0.parquet": {
+      "bytes": 85144,
+      "mtime_ns": 1791906589464570000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=meaning_congruent_planar_graph/data_0.parquet": {
+      "bytes": 208203,
+      "mtime_ns": 1791906589487321000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=measuring_and_comparing_angles/data_0.parquet": {
+      "bytes": 300965,
+      "mtime_ns": 1791906588016231000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=measuring_angles/data_0.parquet": {
+      "bytes": 1754800,
+      "mtime_ns": 1791906588382216300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=measuring_segments/data_0.parquet": {
+      "bytes": 305586,
+      "mtime_ns": 1791906588878225100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=meters_and_centimeters/data_0.parquet": {
+      "bytes": 316963,
+      "mtime_ns": 1791906588902876900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=metric_area_unit_comparison/data_0.parquet": {
+      "bytes": 271762,
+      "mtime_ns": 1791906588820574200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=metric_area_unit_conversion/data_0.parquet": {
+      "bytes": 379144,
+      "mtime_ns": 1791906585458027800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=metric_weight_unit_conversion/data_0.parquet": {
+      "bytes": 289191,
+      "mtime_ns": 1791906588941743500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=metric_weight_unit_selection/data_0.parquet": {
+      "bytes": 463691,
+      "mtime_ns": 1791906589523044100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=metric_weight_unit_word_problem/data_0.parquet": {
+      "bytes": 148344,
+      "mtime_ns": 1791906589537932200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=midpoint_coordinates/data_0.parquet": {
+      "bytes": 11092,
+      "mtime_ns": 1791906589548655700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=midpoint_formula/data_0.parquet": {
+      "bytes": 69936,
+      "mtime_ns": 1791906589558347800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=midpoint_of_a_segment/data_0.parquet": {
+      "bytes": 71846,
+      "mtime_ns": 1791906589569507000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=millimeter_and_centimeter/data_0.parquet": {
+      "bytes": 257363,
+      "mtime_ns": 1791906589602996400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=morning_afternoon_night/data_0.parquet": {
+      "bytes": 441532,
+      "mtime_ns": 1791906586067980700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=moving_points/data_0.parquet": {
+      "bytes": 11579,
+      "mtime_ns": 1791906589012165300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiple_brackets/data_0.parquet": {
+      "bytes": 70109,
+      "mtime_ns": 1791906589031276600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiple_proportions_reasoning/data_0.parquet": {
+      "bytes": 8638,
+      "mtime_ns": 1791906589048466800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiple_unit_transate/data_0.parquet": {
+      "bytes": 50835,
+      "mtime_ns": 1791906589057419700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplication_0.5/data_0.parquet": {
+      "bytes": 4716064,
+      "mtime_ns": 1791906588857328600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplication_1/data_0.parquet": {
+      "bytes": 3941985,
+      "mtime_ns": 1791906589610997700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplication_1.5/data_0.parquet": {
+      "bytes": 2222487,
+      "mtime_ns": 1791906589630297300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplication_2/data_0.parquet": {
+      "bytes": 2124952,
+      "mtime_ns": 1791906589312778100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplication_3/data_0.parquet": {
+      "bytes": 1322463,
+      "mtime_ns": 1791906589633297200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplication_4/data_0.parquet": {
+      "bytes": 808426,
+      "mtime_ns": 1791906589634240700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplication_and_division_order/data_0.parquet": {
+      "bytes": 74682,
+      "mtime_ns": 1791906589646484300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplication_and_division_word_problems/data_0.parquet": {
+      "bytes": 1156,
+      "mtime_ns": 1791906589671615000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplication_association_word_problems/data_0.parquet": {
+      "bytes": 113332,
+      "mtime_ns": 1791906586517503200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplication_formula_1/data_0.parquet": {
+      "bytes": 193068,
+      "mtime_ns": 1791906589707637000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplication_formula_add/data_0.parquet": {
+      "bytes": 164417,
+      "mtime_ns": 1791906588917733100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplication_formula_minus/data_0.parquet": {
+      "bytes": 72085,
+      "mtime_ns": 1791906589100179300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplication_formula_sub/data_0.parquet": {
+      "bytes": 49324,
+      "mtime_ns": 1791906589742069200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplication_word_problems/data_0.parquet": {
+      "bytes": 222985,
+      "mtime_ns": 1791906589361332200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplicative_problems/data_0.parquet": {
+      "bytes": 17650,
+      "mtime_ns": 1791906590932897400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiply_by_tens/data_0.parquet": {
+      "bytes": 50943,
+      "mtime_ns": 1791906586348385400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiply_by_tens/data_1.parquet": {
+      "bytes": 27683,
+      "mtime_ns": 1791906590846090700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplying_and_dividing/data_0.parquet": {
+      "bytes": 136058,
+      "mtime_ns": 1791906589660693500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplying_and_dividing_negative_numbers/data_0.parquet": {
+      "bytes": 769674,
+      "mtime_ns": 1791906589697709300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplying_and_dividing_scientific_notation/data_0.parquet": {
+      "bytes": 301718,
+      "mtime_ns": 1791906589694708300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplying_complex_numbers/data_0.parquet": {
+      "bytes": 26142,
+      "mtime_ns": 1791906589714826000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplying_decimal_integer/data_0.parquet": {
+      "bytes": 60611,
+      "mtime_ns": 1791906589722846500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplying_decimals/data_0.parquet": {
+      "bytes": 550058,
+      "mtime_ns": 1791906589781764300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplying_expressions_0.5/data_0.parquet": {
+      "bytes": 159877,
+      "mtime_ns": 1791906588968545800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplying_expressions_1/data_0.parquet": {
+      "bytes": 126188,
+      "mtime_ns": 1791906589881640400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplying_fractions/data_0.parquet": {
+      "bytes": 371837,
+      "mtime_ns": 1791906589823511100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplying_fractions_0.5/data_0.parquet": {
+      "bytes": 503017,
+      "mtime_ns": 1791906589857524000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplying_fractions_and_whole_numbers_word_problems/data_0.parquet": {
+      "bytes": 915,
+      "mtime_ns": 1791906586718546900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplying_fractions_word_problems/data_0.parquet": {
+      "bytes": 333373,
+      "mtime_ns": 1791906589974714900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplying_mixed_numbers_1/data_0.parquet": {
+      "bytes": 230462,
+      "mtime_ns": 1791906590100683400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplying_polynomials/data_0.parquet": {
+      "bytes": 133998,
+      "mtime_ns": 1791906590141712100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=multiplying_radicals/data_0.parquet": {
+      "bytes": 179629,
+      "mtime_ns": 1791906590161642900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=narrative_and_opposite_narrative/data_0.parquet": {
+      "bytes": 162166,
+      "mtime_ns": 1791906590191168000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=nature_of_isosceles_triangle/data_0.parquet": {
+      "bytes": 6577,
+      "mtime_ns": 1791906590269031700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=negative_number_word_problems/data_0.parquet": {
+      "bytes": 922108,
+      "mtime_ns": 1791906590272026400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=negative_numbers_multiply_divide/data_0.parquet": {
+      "bytes": 26668,
+      "mtime_ns": 1791906590383445800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=new_definitions_1/data_0.parquet": {
+      "bytes": 178706,
+      "mtime_ns": 1791906590623639000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=new_definitions_2/data_0.parquet": {
+      "bytes": 39399,
+      "mtime_ns": 1791906590666567200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=notation_calculation_type/data_0.parquet": {
+      "bytes": 50879,
+      "mtime_ns": 1791906590774639800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=number_line/data_0.parquet": {
+      "bytes": 7285558,
+      "mtime_ns": 1791906590838481400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=number_line_0.5/data_0.parquet": {
+      "bytes": 106073,
+      "mtime_ns": 1791906590948531700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=number_line_0.7/data_0.parquet": {
+      "bytes": 48717,
+      "mtime_ns": 1791906590973943100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=number_line_2/data_0.parquet": {
+      "bytes": 2558394,
+      "mtime_ns": 1791906590882116900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=number_line_3/data_0.parquet": {
+      "bytes": 2064971,
+      "mtime_ns": 1791906590990757200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=number_line_4/data_0.parquet": {
+      "bytes": 818079,
+      "mtime_ns": 1791906590994183900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=number_properties_terminology_1/data_0.parquet": {
+      "bytes": 1796346,
+      "mtime_ns": 1791906590998181800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=number_sequence_within_ten/data_0.parquet": {
+      "bytes": 954588,
+      "mtime_ns": 1791906591028552300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=number_within_fifty/data_0.parquet": {
+      "bytes": 1109603,
+      "mtime_ns": 1791906591035553800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=one_more_one_less/data_0.parquet": {
+      "bytes": 1096918,
+      "mtime_ns": 1791906591179136000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=one_step_equation_problems/data_0.parquet": {
+      "bytes": 128200,
+      "mtime_ns": 1791906591496054900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=one_step_equations/data_0.parquet": {
+      "bytes": 371500,
+      "mtime_ns": 1791906591529949300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=one_step_equations_0.5/data_0.parquet": {
+      "bytes": 882,
+      "mtime_ns": 1791906591543616800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=one_step_inequalities/data_0.parquet": {
+      "bytes": 97917,
+      "mtime_ns": 1791906591615068000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=operations_with_negative_numbers/data_0.parquet": {
+      "bytes": 248769,
+      "mtime_ns": 1791906591267915100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=order_of_operations/data_0.parquet": {
+      "bytes": 918811,
+      "mtime_ns": 1791906591220810300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=ordering_fractions/data_0.parquet": {
+      "bytes": 167370,
+      "mtime_ns": 1791906591237710300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=ordering_improper_fractions_and_mixed_numbers/data_0.parquet": {
+      "bytes": 83310,
+      "mtime_ns": 1791906591718142700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=ordering_negative_numbers/data_0.parquet": {
+      "bytes": 1360173,
+      "mtime_ns": 1791906591211644100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=ordering_numbers/data_0.parquet": {
+      "bytes": 89082,
+      "mtime_ns": 1791906591539739700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=parabola_intuition_1/data_0.parquet": {
+      "bytes": 27637,
+      "mtime_ns": 1791906591601152600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=parabola_intuition_2/data_0.parquet": {
+      "bytes": 12355,
+      "mtime_ns": 1791906591626253600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=parabola_intuition_3/data_0.parquet": {
+      "bytes": 15655,
+      "mtime_ns": 1791906591666276200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=parallel_and_perpendicular/data_0.parquet": {
+      "bytes": 48390,
+      "mtime_ns": 1791906589091050300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=parallel_lines_1/data_0.parquet": {
+      "bytes": 237933,
+      "mtime_ns": 1791906591692401500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=parallel_lines_2/data_0.parquet": {
+      "bytes": 66989,
+      "mtime_ns": 1791906590249584700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=parallel_lines_proportion/data_0.parquet": {
+      "bytes": 10588,
+      "mtime_ns": 1791906589430306400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=parallelogram_concept_and_application/data_0.parquet": {
+      "bytes": 7035,
+      "mtime_ns": 1791906591738586900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=parts_of_circles/data_0.parquet": {
+      "bytes": 418004,
+      "mtime_ns": 1791906591308053500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=percentage_concept/data_0.parquet": {
+      "bytes": 22530,
+      "mtime_ns": 1791906591315332300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=percentage_word_problems_1/data_0.parquet": {
+      "bytes": 166986,
+      "mtime_ns": 1791906591328286700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=percentage_word_problems_2/data_0.parquet": {
+      "bytes": 34578,
+      "mtime_ns": 1791906591335232900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=perimeter_1/data_0.parquet": {
+      "bytes": 926721,
+      "mtime_ns": 1791906591335232900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=perimeter_deduction/data_0.parquet": {
+      "bytes": 219763,
+      "mtime_ns": 1791906591369096400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=perimeter_of_combined_shapes/data_0.parquet": {
+      "bytes": 406732,
+      "mtime_ns": 1791906591405470900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=perimeter_of_sector/data_0.parquet": {
+      "bytes": 32089,
+      "mtime_ns": 1791906591415562000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=perimeter_of_squares_and_rectangles/data_0.parquet": {
+      "bytes": 445187,
+      "mtime_ns": 1791906591447433800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=permutations_1/data_0.parquet": {
+      "bytes": 84459,
+      "mtime_ns": 1791906591459332200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=place_value/data_0.parquet": {
+      "bytes": 608568,
+      "mtime_ns": 1791906591461321900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=place_value_big_number/data_0.parquet": {
+      "bytes": 57999,
+      "mtime_ns": 1791906592032229700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=place_value_concept/data_0.parquet": {
+      "bytes": 56573,
+      "mtime_ns": 1791906592069438800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=planar_graph_resizing/data_0.parquet": {
+      "bytes": 16090,
+      "mtime_ns": 1791906592094333400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=planting_problems/data_0.parquet": {
+      "bytes": 20723,
+      "mtime_ns": 1791906592158604400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=plotting_the_line_of_best_fit/data_0.parquet": {
+      "bytes": 121695,
+      "mtime_ns": 1791906592264284900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=plugging_in_values/data_0.parquet": {
+      "bytes": 18220,
+      "mtime_ns": 1791906593136142500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=point_slope_form/data_0.parquet": {
+      "bytes": 13430,
+      "mtime_ns": 1791906592191518800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=points_lines_and_planes/data_0.parquet": {
+      "bytes": 445382,
+      "mtime_ns": 1791906591661166200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=polygon_geometry_characteristic/data_0.parquet": {
+      "bytes": 5676,
+      "mtime_ns": 1791906591672264400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=polygon_similarity/data_0.parquet": {
+      "bytes": 17873,
+      "mtime_ns": 1791906589542928400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=polynomial_concept_and_proper_noun/data_0.parquet": {
+      "bytes": 123453,
+      "mtime_ns": 1791906591708290300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=position_relation_between_circle_point/data_0.parquet": {
+      "bytes": 116356,
+      "mtime_ns": 1791906590216729600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=power_rule/data_0.parquet": {
+      "bytes": 15040,
+      "mtime_ns": 1791906589745607500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=prime_factorization/data_0.parquet": {
+      "bytes": 1450890,
+      "mtime_ns": 1791906591741693300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=prime_numbers/data_0.parquet": {
+      "bytes": 2078716,
+      "mtime_ns": 1791906591585087200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=probability_1/data_0.parquet": {
+      "bytes": 100454,
+      "mtime_ns": 1791906591812897000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=product_rule/data_0.parquet": {
+      "bytes": 11820,
+      "mtime_ns": 1791906591828160000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=properties_of_incenters/data_0.parquet": {
+      "bytes": 19018,
+      "mtime_ns": 1791906591863976300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=properties_of_numbers_1/data_0.parquet": {
+      "bytes": 1565246,
+      "mtime_ns": 1791906591781588700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=properties_of_numbers_2/data_0.parquet": {
+      "bytes": 735942,
+      "mtime_ns": 1791906591793597700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=proportional_calculation/data_0.parquet": {
+      "bytes": 23395,
+      "mtime_ns": 1791906591930633800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=proportional_life_problems/data_0.parquet": {
+      "bytes": 7301,
+      "mtime_ns": 1791906589608998100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=proportional_or_inverse_proportional/data_0.parquet": {
+      "bytes": 106298,
+      "mtime_ns": 1791906591940619200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=proportions_1/data_0.parquet": {
+      "bytes": 158447,
+      "mtime_ns": 1791906591972770300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=proportions_2/data_0.parquet": {
+      "bytes": 83246,
+      "mtime_ns": 1791906591983999100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=proportions_inner_outer_product/data_0.parquet": {
+      "bytes": 16239,
+      "mtime_ns": 1791906592015196200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=pyramidal_prism/data_0.parquet": {
+      "bytes": 119405,
+      "mtime_ns": 1791906592048472800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=pythagorean_theorem_1/data_0.parquet": {
+      "bytes": 796880,
+      "mtime_ns": 1791906591923603600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=quadratic_equation/data_0.parquet": {
+      "bytes": 36013,
+      "mtime_ns": 1791906592005820900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=quadratic_function_concept/data_0.parquet": {
+      "bytes": 8149,
+      "mtime_ns": 1791906592075449600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=quadratic_function_graphing/data_0.parquet": {
+      "bytes": 4848,
+      "mtime_ns": 1791906592116369300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=quadratic_function_maximum_and_minimum/data_0.parquet": {
+      "bytes": 4232,
+      "mtime_ns": 1791906592133372500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=quadratic_function_word_problem/data_0.parquet": {
+      "bytes": 2947,
+      "mtime_ns": 1791906590850003300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=quadratic_polynomial_word_problem/data_0.parquet": {
+      "bytes": 46394,
+      "mtime_ns": 1791906592671515400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=quadratics_word_problems/data_0.parquet": {
+      "bytes": 5623,
+      "mtime_ns": 1791906589732829100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=quadrilateral_angles/data_0.parquet": {
+      "bytes": 178069,
+      "mtime_ns": 1791906593229780100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=quadrilateral_types/data_0.parquet": {
+      "bytes": 1095502,
+      "mtime_ns": 1791906591957746600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=quotient_rule/data_0.parquet": {
+      "bytes": 16802,
+      "mtime_ns": 1791906592126370800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=radians_and_degrees/data_0.parquet": {
+      "bytes": 15196,
+      "mtime_ns": 1791906592139367100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=radians_to_degrees/data_0.parquet": {
+      "bytes": 79934,
+      "mtime_ns": 1791906592215693100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=radical_equations/data_0.parquet": {
+      "bytes": 145862,
+      "mtime_ns": 1791906592090256100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=radical_multiplication_and_division/data_0.parquet": {
+      "bytes": 31845,
+      "mtime_ns": 1791906592111255200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=radius_and_diameter/data_0.parquet": {
+      "bytes": 888425,
+      "mtime_ns": 1791906592130364000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=radius_angle/data_0.parquet": {
+      "bytes": 90811,
+      "mtime_ns": 1791906593390690200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=radius_diameter_and_circumference/data_0.parquet": {
+      "bytes": 215139,
+      "mtime_ns": 1791906591734487300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=radius_diameter_and_circumference_1/data_0.parquet": {
+      "bytes": 126671,
+      "mtime_ns": 1791906590964554400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=radius_diameter_and_circumference_314_1/data_0.parquet": {
+      "bytes": 216186,
+      "mtime_ns": 1791906593460958500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=range_of_a_function/data_0.parquet": {
+      "bytes": 9647,
+      "mtime_ns": 1791906591747464100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=range_of_triangle_sides_2/data_0.parquet": {
+      "bytes": 9399,
+      "mtime_ns": 1791906591823161800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=range_quarter_case_chart/data_0.parquet": {
+      "bytes": 8690,
+      "mtime_ns": 1791906594119479100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=rate_problems_0.5/data_0.parquet": {
+      "bytes": 386630,
+      "mtime_ns": 1791906594500938500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=rate_problems_1/data_0.parquet": {
+      "bytes": 68276,
+      "mtime_ns": 1791906594516439900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=rate_problems_2/data_0.parquet": {
+      "bytes": 35327,
+      "mtime_ns": 1791906591801608300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=rate_unit_transform/data_0.parquet": {
+      "bytes": 48794,
+      "mtime_ns": 1791906594696223800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=rates_and_ratios/data_0.parquet": {
+      "bytes": 5276,
+      "mtime_ns": 1791906594795447400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=ratio/data_0.parquet": {
+      "bytes": 9259,
+      "mtime_ns": 1791906594911950800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=ratio_and_the_ratio_of/data_0.parquet": {
+      "bytes": 37060,
+      "mtime_ns": 1791906594963001400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=ratio_discount/data_0.parquet": {
+      "bytes": 32054,
+      "mtime_ns": 1791906595017645100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=ratio_money/data_0.parquet": {
+      "bytes": 24911,
+      "mtime_ns": 1791906595027463300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=ratio_word_problems/data_0.parquet": {
+      "bytes": 443658,
+      "mtime_ns": 1791906593378919400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=re_graphics/data_0.parquet": {
+      "bytes": 19374,
+      "mtime_ns": 1791906593432051800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=reading_bar_charts_1/data_0.parquet": {
+      "bytes": 650678,
+      "mtime_ns": 1791906593472421800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=reading_bar_charts_2/data_0.parquet": {
+      "bytes": 474830,
+      "mtime_ns": 1791906593070057800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=reading_bar_charts_3/data_0.parquet": {
+      "bytes": 159773,
+      "mtime_ns": 1791906593184554200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=reading_fractions_in_chinese/data_0.parquet": {
+      "bytes": 624182,
+      "mtime_ns": 1791906591918635200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=reading_line_charts_1/data_0.parquet": {
+      "bytes": 445779,
+      "mtime_ns": 1791906593424075100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=reading_pictographs_1/data_0.parquet": {
+      "bytes": 64236,
+      "mtime_ns": 1791906590783547100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=reading_pictographs_1/data_1.parquet": {
+      "bytes": 219032,
+      "mtime_ns": 1791906594255565500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=reading_pictographs_2/data_0.parquet": {
+      "bytes": 276208,
+      "mtime_ns": 1791906594552942200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=reading_stem_and_leaf_plots/data_0.parquet": {
+      "bytes": 198331,
+      "mtime_ns": 1791906594726402300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=reading_tables_1/data_0.parquet": {
+      "bytes": 783541,
+      "mtime_ns": 1791906593485479300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=reading_tables_2/data_0.parquet": {
+      "bytes": 345959,
+      "mtime_ns": 1791906593543112100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=realizing_inequalities/data_0.parquet": {
+      "bytes": 6427,
+      "mtime_ns": 1791906593591285000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=recognize_decimal_percentile_position/data_0.parquet": {
+      "bytes": 105346,
+      "mtime_ns": 1791906593602229000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=recognize_graph_zoom_effect/data_0.parquet": {
+      "bytes": 143571,
+      "mtime_ns": 1791906593616051000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=recognize_num_less_than_10000/data_0.parquet": {
+      "bytes": 371202,
+      "mtime_ns": 1791906593646515700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=recognizing_conic_sections/data_0.parquet": {
+      "bytes": 110063,
+      "mtime_ns": 1791906593801063600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=recognizing_factoring/data_0.parquet": {
+      "bytes": 62360,
+      "mtime_ns": 1791906591063018900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=recognizing_fractions/data_0.parquet": {
+      "bytes": 674473,
+      "mtime_ns": 1791906593803928400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=recognizing_fractions_0.5/data_0.parquet": {
+      "bytes": 990626,
+      "mtime_ns": 1791906593876770500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=recognizing_rays_lines_and_line_segments/data_0.parquet": {
+      "bytes": 1626424,
+      "mtime_ns": 1791906593918327200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=recognizing_shapes/data_0.parquet": {
+      "bytes": 24399,
+      "mtime_ns": 1791906594940504100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=recording_life_problem_by_expressions/data_0.parquet": {
+      "bytes": 66175,
+      "mtime_ns": 1791906591991926100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=regrouping_decimals/data_0.parquet": {
+      "bytes": 23910,
+      "mtime_ns": 1791906595101127700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=regular_number_of_columns/data_0.parquet": {
+      "bytes": 13588,
+      "mtime_ns": 1791906594894063900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=relationships_linear_equations/data_0.parquet": {
+      "bytes": 6133,
+      "mtime_ns": 1791906595115077600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=represent_by_symbol_addend/data_0.parquet": {
+      "bytes": 31060,
+      "mtime_ns": 1791906595151406600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=represent_by_symbol_dividend/data_0.parquet": {
+      "bytes": 9641,
+      "mtime_ns": 1791906595193839300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=represent_by_symbol_multiplier/data_0.parquet": {
+      "bytes": 300676,
+      "mtime_ns": 1791906595241948800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=represent_by_symbol_subtrahend/data_0.parquet": {
+      "bytes": 17247,
+      "mtime_ns": 1791906594920994000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=representing_numbers/data_0.parquet": {
+      "bytes": 5765537,
+      "mtime_ns": 1791906594340360600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=rounding_numbers/data_0.parquet": {
+      "bytes": 584461,
+      "mtime_ns": 1791906595083924300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=rounding_whole_numbers/data_0.parquet": {
+      "bytes": 470753,
+      "mtime_ns": 1791906595187870900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=same_side_exterior_angles/data_0.parquet": {
+      "bytes": 328102,
+      "mtime_ns": 1791906595268655000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=same_side_exterior_angles_2/data_0.parquet": {
+      "bytes": 51322,
+      "mtime_ns": 1791906592104325600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=same_side_interior_angles/data_0.parquet": {
+      "bytes": 431678,
+      "mtime_ns": 1791906595147315600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=same_side_interior_angles_2/data_0.parquet": {
+      "bytes": 76467,
+      "mtime_ns": 1791906595349687100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=scale/data_0.parquet": {
+      "bytes": 43760,
+      "mtime_ns": 1791906594786127700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=scaling_vectors/data_0.parquet": {
+      "bytes": 75013,
+      "mtime_ns": 1791906595359443300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=scientific_notation/data_0.parquet": {
+      "bytes": 442293,
+      "mtime_ns": 1791906595418170400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=scientific_notation_decimals/data_0.parquet": {
+      "bytes": 178371,
+      "mtime_ns": 1791906595510884700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=scientific_notation_intuition/data_0.parquet": {
+      "bytes": 574220,
+      "mtime_ns": 1791906592129336700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=sectors_as_fraction_of_circles_1/data_0.parquet": {
+      "bytes": 263313,
+      "mtime_ns": 1791906591858966100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=sectors_as_fraction_of_circles_2/data_0.parquet": {
+      "bytes": 101573,
+      "mtime_ns": 1791906595112255800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=segment_addition/data_0.parquet": {
+      "bytes": 65069,
+      "mtime_ns": 1791906595933634800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=separation_and_union/data_0.parquet": {
+      "bytes": 980137,
+      "mtime_ns": 1791906595219246600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=sequences_word_problems/data_0.parquet": {
+      "bytes": 15799,
+      "mtime_ns": 1791906595316297100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=shaded_areas/data_0.parquet": {
+      "bytes": 15841,
+      "mtime_ns": 1791906595324027200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=shifting_and_reflecting_functions/data_0.parquet": {
+      "bytes": 26527,
+      "mtime_ns": 1791906595332357800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=sides_and_angles_of_simple_shapes/data_0.parquet": {
+      "bytes": 1078857,
+      "mtime_ns": 1791906593584048800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=significant_figures_1/data_0.parquet": {
+      "bytes": 113329,
+      "mtime_ns": 1791906595373208400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=similar_triangles_1/data_0.parquet": {
+      "bytes": 538243,
+      "mtime_ns": 1791906595551309200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=similar_triangles_2/data_0.parquet": {
+      "bytes": 231149,
+      "mtime_ns": 1791906595436395000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=similar_triangles_review/data_0.parquet": {
+      "bytes": 35275,
+      "mtime_ns": 1791906595606255900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=simple_hologram_concept/data_0.parquet": {
+      "bytes": 9355,
+      "mtime_ns": 1791906595661418600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=simple_hologram_surface_area/data_0.parquet": {
+      "bytes": 14559,
+      "mtime_ns": 1791906595708306200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=simplificate_ractional_formula/data_0.parquet": {
+      "bytes": 69602,
+      "mtime_ns": 1791906595732727500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=simplify_expressions_w_two_var_1/data_0.parquet": {
+      "bytes": 15087,
+      "mtime_ns": 1791906595748627200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=simplify_expressions_w_two_var_2/data_0.parquet": {
+      "bytes": 12799,
+      "mtime_ns": 1791906595775704500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=simplify_expressions_w_two_var_3/data_0.parquet": {
+      "bytes": 9692,
+      "mtime_ns": 1791906595799638500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=simplify_the_root_type/data_0.parquet": {
+      "bytes": 148063,
+      "mtime_ns": 1791906595827531700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=simplifying_expressions_with_exponents/data_0.parquet": {
+      "bytes": 106737,
+      "mtime_ns": 1791906595870661700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=simplifying_fractions/data_0.parquet": {
+      "bytes": 712078,
+      "mtime_ns": 1791906593426080400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=simplifying_radicals/data_0.parquet": {
+      "bytes": 405600,
+      "mtime_ns": 1791906595473496300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=skip_counting_by_10s/data_0.parquet": {
+      "bytes": 877,
+      "mtime_ns": 1791906595513733000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=slope_intercept_form/data_0.parquet": {
+      "bytes": 11571,
+      "mtime_ns": 1791906595555304100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=slope_of_a_line/data_0.parquet": {
+      "bytes": 41930,
+      "mtime_ns": 1791906595570543400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=solid_geometry/data_0.parquet": {
+      "bytes": 153837,
+      "mtime_ns": 1791906595579586800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=solutions_to_systems_of_equations/data_0.parquet": {
+      "bytes": 156318,
+      "mtime_ns": 1791906595641429400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=solving_for_a_variable/data_0.parquet": {
+      "bytes": 12570,
+      "mtime_ns": 1791906595700959800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=solving_for_the_x-intercept/data_0.parquet": {
+      "bytes": 17151,
+      "mtime_ns": 1791906595716650900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=solving_for_the_y-intercept/data_0.parquet": {
+      "bytes": 14862,
+      "mtime_ns": 1791906595339354700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=solving_linear_equations/data_0.parquet": {
+      "bytes": 114609,
+      "mtime_ns": 1791906595770689900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=solving_linear_inequalities/data_0.parquet": {
+      "bytes": 12662,
+      "mtime_ns": 1791906592237675900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=solving_quadratics_by_factoring/data_0.parquet": {
+      "bytes": 155483,
+      "mtime_ns": 1791906595814696500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=solving_quadratics_by_factoring_2/data_0.parquet": {
+      "bytes": 61533,
+      "mtime_ns": 1791906595835629200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=solving_quadratics_by_taking_the_square_root/data_0.parquet": {
+      "bytes": 102403,
+      "mtime_ns": 1791906595894332700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=solving_similar_triangles_1/data_0.parquet": {
+      "bytes": 53989,
+      "mtime_ns": 1791906595723659100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=solving_similar_triangles_2/data_0.parquet": {
+      "bytes": 22316,
+      "mtime_ns": 1791906595899326100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=special_derivatives/data_0.parquet": {
+      "bytes": 22954,
+      "mtime_ns": 1791906595909279500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=special_right_triangles/data_0.parquet": {
+      "bytes": 80569,
+      "mtime_ns": 1791906594757382600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=special_triangle_and_quadrilateral_concept/data_0.parquet": {
+      "bytes": 3682,
+      "mtime_ns": 1791906595913013700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=speed_applying/data_0.parquet": {
+      "bytes": 48461,
+      "mtime_ns": 1791906595481090100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=speed_equal_to_distance_divide_time/data_0.parquet": {
+      "bytes": 147925,
+      "mtime_ns": 1791906594995928800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=square_cm_square_m_unit_transform/data_0.parquet": {
+      "bytes": 57836,
+      "mtime_ns": 1791906595920247100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=square_root_calculation_3/data_0.parquet": {
+      "bytes": 74345,
+      "mtime_ns": 1791906595759631400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=square_roots/data_0.parquet": {
+      "bytes": 742394,
+      "mtime_ns": 1791906596029314700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=square_roots_2/data_0.parquet": {
+      "bytes": 267437,
+      "mtime_ns": 1791906596080795600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=standard_deviation/data_0.parquet": {
+      "bytes": 11734,
+      "mtime_ns": 1791906596116335600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=statistical_table_and_chart/data_0.parquet": {
+      "bytes": 42254,
+      "mtime_ns": 1791906596120335200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=subtract_of_positive_negative_fraction/data_0.parquet": {
+      "bytes": 38778,
+      "mtime_ns": 1791906596124298900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=subtracting_decimals/data_0.parquet": {
+      "bytes": 377566,
+      "mtime_ns": 1791906596053722500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=subtracting_decimals_0.5/data_0.parquet": {
+      "bytes": 462640,
+      "mtime_ns": 1791906595690878300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=subtracting_fractions/data_0.parquet": {
+      "bytes": 163444,
+      "mtime_ns": 1791906593161976200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=subtracting_fractions_with_common_denominators/data_0.parquet": {
+      "bytes": 509354,
+      "mtime_ns": 1791906593846677800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=subtraction_1/data_0.parquet": {
+      "bytes": 4742477,
+      "mtime_ns": 1791906596101532200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=subtraction_2/data_0.parquet": {
+      "bytes": 3794207,
+      "mtime_ns": 1791906596114339500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=subtraction_3/data_0.parquet": {
+      "bytes": 2202133,
+      "mtime_ns": 1791906595384744900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=subtraction_4/data_0.parquet": {
+      "bytes": 1725800,
+      "mtime_ns": 1791906595935562800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=subtraction_and_addition/data_0.parquet": {
+      "bytes": 171698,
+      "mtime_ns": 1791906595859644000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=subtraction_of_vary_denominator_fraction/data_0.parquet": {
+      "bytes": 88361,
+      "mtime_ns": 1791906596133338900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=subtraction_within_20/data_0.parquet": {
+      "bytes": 1171,
+      "mtime_ns": 1791906596140101800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=supplementary_angles/data_0.parquet": {
+      "bytes": 146415,
+      "mtime_ns": 1791906596179686500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=surface_area_of_cylinders/data_0.parquet": {
+      "bytes": 60639,
+      "mtime_ns": 1791906596185121300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=surface_area_of_rectangular_boxes/data_0.parquet": {
+      "bytes": 313689,
+      "mtime_ns": 1791906596205112900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=symmetry_concept_and_application/data_0.parquet": {
+      "bytes": 230115,
+      "mtime_ns": 1791906596221304400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=systems_of_equ_elimination_1/data_0.parquet": {
+      "bytes": 9341,
+      "mtime_ns": 1791906596223276900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=systems_of_equ_substitution_1/data_0.parquet": {
+      "bytes": 11405,
+      "mtime_ns": 1791906596226312200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=systems_of_equ_substitution_2/data_0.parquet": {
+      "bytes": 5855,
+      "mtime_ns": 1791906596227328900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=systems_of_equations/data_0.parquet": {
+      "bytes": 31177,
+      "mtime_ns": 1791906596231316000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=systems_of_equations_with_elimination/data_0.parquet": {
+      "bytes": 80483,
+      "mtime_ns": 1791906595794633200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=systems_of_equations_with_elimination_0.5/data_0.parquet": {
+      "bytes": 98471,
+      "mtime_ns": 1791906596060709300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=systems_of_equations_with_elimination_2/data_0.parquet": {
+      "bytes": 2370,
+      "mtime_ns": 1791906596239697600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=systems_of_equations_with_elimination_3/data_0.parquet": {
+      "bytes": 5297,
+      "mtime_ns": 1791906596241675800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=systems_of_equations_with_substitution/data_0.parquet": {
+      "bytes": 139878,
+      "mtime_ns": 1791906596250920300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=systems_of_equations_word_problems/data_0.parquet": {
+      "bytes": 70016,
+      "mtime_ns": 1791906596139099100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=telling_time/data_0.parquet": {
+      "bytes": 3609088,
+      "mtime_ns": 1791906596168814200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=telling_time_0.5/data_0.parquet": {
+      "bytes": 5280933,
+      "mtime_ns": 1791906596237664500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=telling_time_2/data_0.parquet": {
+      "bytes": 2577914,
+      "mtime_ns": 1791906596302893300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=telling_time_comparing/data_0.parquet": {
+      "bytes": 1299238,
+      "mtime_ns": 1791906596282352200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=the_complex_plane/data_0.parquet": {
+      "bytes": 54080,
+      "mtime_ns": 1791906596618257500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=the_four_arithmetic_exponentially/data_0.parquet": {
+      "bytes": 98595,
+      "mtime_ns": 1791906596637292500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=the_fundamental_theorem_of_arithmetic/data_0.parquet": {
+      "bytes": 379809,
+      "mtime_ns": 1791906596357346600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=time_terminology/data_0.parquet": {
+      "bytes": 1681225,
+      "mtime_ns": 1791906596221304400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=time_units_transformation_1/data_0.parquet": {
+      "bytes": 502250,
+      "mtime_ns": 1791906596333592700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=time_units_transformation_2/data_0.parquet": {
+      "bytes": 342346,
+      "mtime_ns": 1791906596380486100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=time_units_transformation_3/data_0.parquet": {
+      "bytes": 304017,
+      "mtime_ns": 1791906596399522300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=time_word_problem_1/data_0.parquet": {
+      "bytes": 1017962,
+      "mtime_ns": 1791906596333592700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=time_word_problem_2/data_0.parquet": {
+      "bytes": 1030009,
+      "mtime_ns": 1791906596399522300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=time_word_problem_3/data_0.parquet": {
+      "bytes": 686692,
+      "mtime_ns": 1791906596400526900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=time_word_problem_4/data_0.parquet": {
+      "bytes": 546157,
+      "mtime_ns": 1791906595309725500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=time_word_problem_5/data_0.parquet": {
+      "bytes": 179885,
+      "mtime_ns": 1791906596456568500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=trapezoid_concept_and_application/data_0.parquet": {
+      "bytes": 4439,
+      "mtime_ns": 1791906596458591900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=triangle_angles_1/data_0.parquet": {
+      "bytes": 220966,
+      "mtime_ns": 1791906595625099500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=triangle_angles_sum/data_0.parquet": {
+      "bytes": 198890,
+      "mtime_ns": 1791906596474587800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=triangle_central_core_concept/data_0.parquet": {
+      "bytes": 15867,
+      "mtime_ns": 1791906596501488000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=triangle_inequality_theorem/data_0.parquet": {
+      "bytes": 123116,
+      "mtime_ns": 1791906595097272100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=triangle_inequality_theorem/data_1.parquet": {
+      "bytes": 58175,
+      "mtime_ns": 1791906596529104000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=triangle_length_of_side/data_0.parquet": {
+      "bytes": 17841,
+      "mtime_ns": 1791906596402541000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=triangle_types/data_0.parquet": {
+      "bytes": 1005573,
+      "mtime_ns": 1791906596404546200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=triangles_congruent_nature_aas/data_0.parquet": {
+      "bytes": 5035,
+      "mtime_ns": 1791906595602325900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=triangles_congruent_nature_asa/data_0.parquet": {
+      "bytes": 3412,
+      "mtime_ns": 1791906596126351300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=triangles_congruent_nature_rhs/data_0.parquet": {
+      "bytes": 4365,
+      "mtime_ns": 1791906596620257800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=triangles_congruent_nature_sas/data_0.parquet": {
+      "bytes": 5106,
+      "mtime_ns": 1791906596693394700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=triangles_congruent_nature_sss/data_0.parquet": {
+      "bytes": 6972,
+      "mtime_ns": 1791906596707384900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=triangles_similar_nature/data_0.parquet": {
+      "bytes": 27472,
+      "mtime_ns": 1791906596710377700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=trig_identities_1/data_0.parquet": {
+      "bytes": 24297,
+      "mtime_ns": 1791906596722688100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=trigonometry_0.5/data_0.parquet": {
+      "bytes": 39987,
+      "mtime_ns": 1791906596737638900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=trigonometry_1/data_0.parquet": {
+      "bytes": 61605,
+      "mtime_ns": 1791906596753316000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=trigonometry_1.5/data_0.parquet": {
+      "bytes": 21997,
+      "mtime_ns": 1791906596763296700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=trigonometry_2/data_0.parquet": {
+      "bytes": 39195,
+      "mtime_ns": 1791906596766308100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=understand_circle/data_0.parquet": {
+      "bytes": 201897,
+      "mtime_ns": 1791906596154814400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=understand_coins/data_0.parquet": {
+      "bytes": 1541715,
+      "mtime_ns": 1791906596657187200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=understand_equivalent_axiom/data_0.parquet": {
+      "bytes": 109719,
+      "mtime_ns": 1791906596719691900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=understand_large_numbers_and_conversion/data_0.parquet": {
+      "bytes": 144730,
+      "mtime_ns": 1791906596733641200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=understand_length_unit/data_0.parquet": {
+      "bytes": 99987,
+      "mtime_ns": 1791906596747312400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=understand_range_of_graphie/data_0.parquet": {
+      "bytes": 74146,
+      "mtime_ns": 1791906596760309100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=understanding_comparing_angle/data_0.parquet": {
+      "bytes": 170099,
+      "mtime_ns": 1791906596524117100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=understanding_decimals_place_value/data_0.parquet": {
+      "bytes": 580822,
+      "mtime_ns": 1791906596589700000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=understanding_km/data_0.parquet": {
+      "bytes": 134858,
+      "mtime_ns": 1791906596705320700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=understanding_moving_the_decimal/data_0.parquet": {
+      "bytes": 406866,
+      "mtime_ns": 1791906596691380100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=understanding_square_rectangular/data_0.parquet": {
+      "bytes": 57918,
+      "mtime_ns": 1791906596828179700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=ungroup_median/data_0.parquet": {
+      "bytes": 7039,
+      "mtime_ns": 1791906596665249100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=unit_circle/data_0.parquet": {
+      "bytes": 29235,
+      "mtime_ns": 1791906596533111400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=unit_conversion_rate/data_0.parquet": {
+      "bytes": 32708,
+      "mtime_ns": 1791906596832183300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=units/data_0.parquet": {
+      "bytes": 58328,
+      "mtime_ns": 1791906596836599200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=variables_word_problems_1/data_0.parquet": {
+      "bytes": 41262,
+      "mtime_ns": 1791906596841605200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=variables_word_problems_2/data_0.parquet": {
+      "bytes": 1925,
+      "mtime_ns": 1791906596842625300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=variance/data_0.parquet": {
+      "bytes": 18723,
+      "mtime_ns": 1791906595904331600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=vector_add_sub_two/data_0.parquet": {
+      "bytes": 4732,
+      "mtime_ns": 1791906596843607600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=vertex_of_a_parabola/data_0.parquet": {
+      "bytes": 29961,
+      "mtime_ns": 1791906596846618600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=vertical_and_parallel/data_0.parquet": {
+      "bytes": 30678,
+      "mtime_ns": 1791906596849708800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=vertical_angles/data_0.parquet": {
+      "bytes": 222524,
+      "mtime_ns": 1791906596876705900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=vertical_angles_2/data_0.parquet": {
+      "bytes": 70260,
+      "mtime_ns": 1791906596881599300
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=vertical_concepts/data_0.parquet": {
+      "bytes": 81881,
+      "mtime_ns": 1791906596891609900
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=volume_and_cc/data_0.parquet": {
+      "bytes": 138882,
+      "mtime_ns": 1791906596902603100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=volume_box/data_0.parquet": {
+      "bytes": 207535,
+      "mtime_ns": 1791906596920259600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=volume_box_cover/data_0.parquet": {
+      "bytes": 72920,
+      "mtime_ns": 1791906596931254700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=volume_box_nocover/data_0.parquet": {
+      "bytes": 35035,
+      "mtime_ns": 1791906595741647800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=volume_box_nocover/data_1.parquet": {
+      "bytes": 56871,
+      "mtime_ns": 1791906596925261100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=volume_container/data_0.parquet": {
+      "bytes": 70615,
+      "mtime_ns": 1791906596773311800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=volume_container_hight/data_0.parquet": {
+      "bytes": 72886,
+      "mtime_ns": 1791906595784539100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=volume_of_cylinders/data_0.parquet": {
+      "bytes": 51135,
+      "mtime_ns": 1791906596778857100
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=volume_of_rectangular_boxes/data_0.parquet": {
+      "bytes": 275841,
+      "mtime_ns": 1791906596796159600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=volume_of_rectangular_boxes_2/data_0.parquet": {
+      "bytes": 125792,
+      "mtime_ns": 1791906596805153000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=volume_of_rectangular_boxes_3/data_0.parquet": {
+      "bytes": 262156,
+      "mtime_ns": 1791906596822187200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=volume_of_triangular_prisms/data_0.parquet": {
+      "bytes": 57983,
+      "mtime_ns": 1791906596499549600
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=volume_space/data_0.parquet": {
+      "bytes": 123096,
+      "mtime_ns": 1791906596859708000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=volume_unit_conversion/data_0.parquet": {
+      "bytes": 260728,
+      "mtime_ns": 1791906596493538800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=word_problem_formula_translate/data_0.parquet": {
+      "bytes": 106591,
+      "mtime_ns": 1791906596510547400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=writing_and_interpreting_decimals/data_0.parquet": {
+      "bytes": 53772,
+      "mtime_ns": 1791906596538111200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=writing_expressions_1/data_0.parquet": {
+      "bytes": 430514,
+      "mtime_ns": 1791906596611840000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=writing_expressions_2/data_0.parquet": {
+      "bytes": 90696,
+      "mtime_ns": 1791906596629259500
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=writing_expressions_3/data_0.parquet": {
+      "bytes": 64426,
+      "mtime_ns": 1791906596663262700
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=writing_expressions_w_two_var/data_0.parquet": {
+      "bytes": 21324,
+      "mtime_ns": 1791906596695389800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=writing_fractions_1/data_0.parquet": {
+      "bytes": 2257257,
+      "mtime_ns": 1791906596657187200
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=writing_proportions/data_0.parquet": {
+      "bytes": 334824,
+      "mtime_ns": 1791906596560736000
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=z_scores_1/data_0.parquet": {
+      "bytes": 11159,
+      "mtime_ns": 1791906596884608400
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=z_scores_2/data_0.parquet": {
+      "bytes": 6623,
+      "mtime_ns": 1791906596893558800
+    },
+    "artifacts/bkt_baseline/derived/canonical/exercise=z_scores_3/data_0.parquet": {
+      "bytes": 8810,
+      "mtime_ns": 1791906596904558500
+    }
+  }
+}
