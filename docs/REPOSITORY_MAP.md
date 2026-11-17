@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 18/11 — Tiếp quản toàn project cần source và đầu vào riêng
+
+[Rà toàn repository](../research_tracking/runs/full-project-handoff-audit-20261118-01/README.md) giữ metadata336.044file,234quyết định thư mục và allowlist790file/611,79MB. Phát hiện Method24Grade10 thật trong local-tests, đã sao lưu32file cùng support170member của5selectedrun. Bộ output trước chưa thay được541,96MB input còn lại, source/hồ sơ đầy đủ và coldrestore trên máy người nhận.
+
 ## 18/11 — Bàn giao training và rà phạm vi nghiên cứu
 
 [Chỉ mục bàn giao](../research_tracking/runs/training-handoff-20261117-01/README.md) giữ toàn bộ nhóm đầu ra đã định vị, SHA/inventory và biên nhận Drive Sang. [Rà tính đúng và phạm vi](../research_tracking/reports/SCOPE_AND_RESULT_INTEGRITY_REVIEW_20261118.md) nêu bằng chứng hiện hành, khoảng trống quyết định/vòng kín và vai trò của21phase còn lại trong protocol nhóm. Các kết luận dương, âm hoặc bất định được diễn giải theo điều kiện thực nghiệm.
