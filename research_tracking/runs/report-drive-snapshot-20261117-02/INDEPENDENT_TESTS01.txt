@@ -1,0 +1,352 @@
+.........FFFF                                                            [100%]
+================================== FAILURES ===================================
+_____ test_run_variant_joins_numeric_and_calls_v1_without_model[False-A2] _____
+
+cloud_case = {'roles': JunyiResearchRoles(train_users=('0', '1', '10', '11', '12', '13', '16', '2', '3', '5', '6', '8'), selection_...KLTN/artifacts/akt/test-temp/free-cpu-independent-final-20261117-01/test_run_variant_joins_numeric0/roles.json')), ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000016DFF393530>
+variant = 'A2', interrupt_fit_upload = False
+
+    @pytest.mark.parametrize('variant', ['A2', 'A3'])
+    @pytest.mark.parametrize('interrupt_fit_upload', [False, True])
+    def test_run_variant_joins_numeric_and_calls_v1_without_model(cloud_case, monkeypatch, variant, interrupt_fit_upload):
+        from knowledge_tracing.akt import research_junyi_inference as inference
+        from knowledge_tracing.akt import research_junyi_calibration as producer
+        from knowledge_tracing.akt.research_junyi_graph_cache import _digest, FORMAT
+        value = cloud_case
+        kwargs = numeric_case(value, variant)
+        root = kwargs['artifact_root'].root
+        monkeypatch.setattr(free, 'VOLUME', root)
+        monkeypatch.setattr(producer, 'inference_source_identity', lambda: kwargs['binding'].model_source_sha256)
+        assets = dict(index={'model': variant + '_JUNYI_REFIT', 'checkpoint_sha256': kwargs['binding'].checkpoint_sha256},
+                      encoding=value['encoding'], calibration=value['phase'])
+        monkeypatch.setattr(inference, 'inspect_cpu_refit_export', lambda *args, **options: assets)
+        population_path = root / 'population.json'
+        population_path.write_text(json.dumps(value['population']))
+        windows = root / 'windows'
+        windows.mkdir()
+        (windows / 'manifest.json').write_bytes(kwargs['window_manifest'].read_bytes())
+        graph = {'sha256': 'f' * 64, 'binding': {}}
+        cache = dict(population=value['population'], source_data_sha256=free.sha(value['paths'].canonical),
+            graphs={variant: graph}, windows=dict(path=str(windows), admission_path=str(kwargs['window_admission']),
+            admission_sha256=kwargs['expected_window_admission_sha256']))
+        receipt = json.loads(kwargs['gpu_receipt'].read_text())
+        receipt['graph_cache_identity'] = _digest((FORMAT, graph['sha256'], json.dumps(graph['binding'], sort_keys=True)))
+        kwargs['gpu_receipt'].write_text(json.dumps(receipt))
+        dummy = dict(path=str(population_path), sha256=free.sha(population_path))
+        request = dict(variant=variant, mode='full', full_cohort_approved=True,
+            source_identity=kwargs['binding'].model_source_sha256, exports={v: dummy for v in ('A0','A1','A2','A3')},
+            data_paths={name:dict(path=str(getattr(value['paths'], name)), sha256=free.sha(getattr(value['paths'], name)))
+                        for name in ('canonical','assignments','canonical_manifest','split_manifest')},
+            population=dummy, source_pins=value['pins'],
+            cache_receipt=dict(sha256=hashlib.sha256(json.dumps(cache).encode()).hexdigest()),
+            cpu_budget=dict(max_targets=20,max_learner_events=10,max_users=2,max_seconds=60,
+                max_rss_bytes=1024**3,min_available_ram_bytes=1,prediction_batch_size=128))
+        gpu = dict(receipt_path=str(kwargs['gpu_receipt']), receipt_sha256=free.sha(kwargs['gpu_receipt']))
+        state_root = root / 'private-state'
+        state_root.mkdir()
+        publications = []
+        def publisher(session, publication, state_root):
+            publications.append(publication)
+            if interrupt_fit_upload and len(publications) == 2:
+                raise ConnectionError('Synthetic interruption after fit completed')
+            return dict(status='DRIVE_SHA256_VERIFIED', tranche_id=publication['tranche_id'], files=[])
+        monkeypatch.setattr(free, 'publish', publisher)
+        checked = []
+        monkeypatch.setattr(free, 'verify_publication', lambda session, receipt: checked.append(receipt))
+        if interrupt_fit_upload:
+            with pytest.raises(ConnectionError):
+                free.run_variant(request, gpu, cache, object(), state_root)
+            saved = json.loads((state_root / (variant + '_PROGRESS.json')).read_text())
+            assert saved['raw_verified'] and saved['pending_fit']
+            from knowledge_tracing.akt import cloud_calibration_fit as fit_module
+            from knowledge_tracing.akt import cloud_calibration_numeric_join as join_module
+            def cannot_repeat_fit(*args, **kwargs):
+                raise AssertionError('Completed fit must not be repeated')
+            monkeypatch.setattr(fit_module, 'fit_volume_calibration', cannot_repeat_fit)
+            monkeypatch.setattr(join_module, 'fit_volume_calibration', cannot_repeat_fit)
+>       state = free.run_variant(request, gpu, cache, object(), state_root)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_free_cpu_calibration.py:204: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+request = {'variant': 'A2', 'mode': 'full', 'full_cohort_approved': True, 'source_identity': '16f97eb396fb0202a1e250ec59d2b3a9cb170070b3f0f8b8575488ad0cf20764', ...}
+gpu_result = {'receipt_path': 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\free-cpu-independent-final-20261117-01\\test_run_variant_j...gpu-snapshot\\GPU_COMPLETE.json', 'receipt_sha256': '545fee99b55100eeadd04922333944b7b03c4352dab71a7cd37cb306fdd875cb'}
+cache = {'population': {'schema': 'junyi-calibration-population-v1', 'roles_identity': '796f1bc61f8dfeed3a88dc4c6bffbbaa7d4519...pshot\\window-admission.json', 'admission_sha256': '48a9f7653d9ea44ed4f0dc2496196a0220624f3e08df634a0b6b3015e39455cf'}}
+session = <object object at 0x0000016DFF32C770>
+state_root = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/free-cpu-independent-final-20261117-01/test_run_variant_joins_numeric0/private-state')
+
+    def run_variant(request, gpu_result, cache, session, state_root):
+        """Nối/audit/fit V1, tiếp tục từ raw đã kiểm và lưu trên Drive."""
+        from dataclasses import asdict
+        from knowledge_tracing.akt.config import DataPaths, PROJECT_ROOT
+        from knowledge_tracing.akt.research_junyi_inference import JunyiCPUInferenceBudget, inspect_cpu_refit_export, _identity
+        from knowledge_tracing.akt.research_junyi_calibration import CalibrationFitArtifactRoot, inference_source_identity
+        from knowledge_tracing.akt.research_junyi_numeric_predictions import NumericBinding
+        from knowledge_tracing.akt.cloud_calibration_numeric_join import join_numeric_calibration_snapshot
+        from knowledge_tracing.akt.cloud_calibration_fit import fit_volume_calibration
+        from knowledge_tracing.akt.research_junyi_graph_cache import _digest, FORMAT
+        from knowledge_tracing.response_calibration import PredictionBinding
+>       from calibration_audit_transaction import transactional_expected_insert
+E       ModuleNotFoundError: No module named 'calibration_audit_transaction'
+
+scripts\akt\free_cpu_calibration.py:203: ModuleNotFoundError
+_____ test_run_variant_joins_numeric_and_calls_v1_without_model[False-A3] _____
+
+cloud_case = {'roles': JunyiResearchRoles(train_users=('0', '1', '10', '11', '12', '13', '16', '2', '3', '5', '6', '8'), selection_...KLTN/artifacts/akt/test-temp/free-cpu-independent-final-20261117-01/test_run_variant_joins_numeric1/roles.json')), ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000016DFF39BAC0>
+variant = 'A3', interrupt_fit_upload = False
+
+    @pytest.mark.parametrize('variant', ['A2', 'A3'])
+    @pytest.mark.parametrize('interrupt_fit_upload', [False, True])
+    def test_run_variant_joins_numeric_and_calls_v1_without_model(cloud_case, monkeypatch, variant, interrupt_fit_upload):
+        from knowledge_tracing.akt import research_junyi_inference as inference
+        from knowledge_tracing.akt import research_junyi_calibration as producer
+        from knowledge_tracing.akt.research_junyi_graph_cache import _digest, FORMAT
+        value = cloud_case
+        kwargs = numeric_case(value, variant)
+        root = kwargs['artifact_root'].root
+        monkeypatch.setattr(free, 'VOLUME', root)
+        monkeypatch.setattr(producer, 'inference_source_identity', lambda: kwargs['binding'].model_source_sha256)
+        assets = dict(index={'model': variant + '_JUNYI_REFIT', 'checkpoint_sha256': kwargs['binding'].checkpoint_sha256},
+                      encoding=value['encoding'], calibration=value['phase'])
+        monkeypatch.setattr(inference, 'inspect_cpu_refit_export', lambda *args, **options: assets)
+        population_path = root / 'population.json'
+        population_path.write_text(json.dumps(value['population']))
+        windows = root / 'windows'
+        windows.mkdir()
+        (windows / 'manifest.json').write_bytes(kwargs['window_manifest'].read_bytes())
+        graph = {'sha256': 'f' * 64, 'binding': {}}
+        cache = dict(population=value['population'], source_data_sha256=free.sha(value['paths'].canonical),
+            graphs={variant: graph}, windows=dict(path=str(windows), admission_path=str(kwargs['window_admission']),
+            admission_sha256=kwargs['expected_window_admission_sha256']))
+        receipt = json.loads(kwargs['gpu_receipt'].read_text())
+        receipt['graph_cache_identity'] = _digest((FORMAT, graph['sha256'], json.dumps(graph['binding'], sort_keys=True)))
+        kwargs['gpu_receipt'].write_text(json.dumps(receipt))
+        dummy = dict(path=str(population_path), sha256=free.sha(population_path))
+        request = dict(variant=variant, mode='full', full_cohort_approved=True,
+            source_identity=kwargs['binding'].model_source_sha256, exports={v: dummy for v in ('A0','A1','A2','A3')},
+            data_paths={name:dict(path=str(getattr(value['paths'], name)), sha256=free.sha(getattr(value['paths'], name)))
+                        for name in ('canonical','assignments','canonical_manifest','split_manifest')},
+            population=dummy, source_pins=value['pins'],
+            cache_receipt=dict(sha256=hashlib.sha256(json.dumps(cache).encode()).hexdigest()),
+            cpu_budget=dict(max_targets=20,max_learner_events=10,max_users=2,max_seconds=60,
+                max_rss_bytes=1024**3,min_available_ram_bytes=1,prediction_batch_size=128))
+        gpu = dict(receipt_path=str(kwargs['gpu_receipt']), receipt_sha256=free.sha(kwargs['gpu_receipt']))
+        state_root = root / 'private-state'
+        state_root.mkdir()
+        publications = []
+        def publisher(session, publication, state_root):
+            publications.append(publication)
+            if interrupt_fit_upload and len(publications) == 2:
+                raise ConnectionError('Synthetic interruption after fit completed')
+            return dict(status='DRIVE_SHA256_VERIFIED', tranche_id=publication['tranche_id'], files=[])
+        monkeypatch.setattr(free, 'publish', publisher)
+        checked = []
+        monkeypatch.setattr(free, 'verify_publication', lambda session, receipt: checked.append(receipt))
+        if interrupt_fit_upload:
+            with pytest.raises(ConnectionError):
+                free.run_variant(request, gpu, cache, object(), state_root)
+            saved = json.loads((state_root / (variant + '_PROGRESS.json')).read_text())
+            assert saved['raw_verified'] and saved['pending_fit']
+            from knowledge_tracing.akt import cloud_calibration_fit as fit_module
+            from knowledge_tracing.akt import cloud_calibration_numeric_join as join_module
+            def cannot_repeat_fit(*args, **kwargs):
+                raise AssertionError('Completed fit must not be repeated')
+            monkeypatch.setattr(fit_module, 'fit_volume_calibration', cannot_repeat_fit)
+            monkeypatch.setattr(join_module, 'fit_volume_calibration', cannot_repeat_fit)
+>       state = free.run_variant(request, gpu, cache, object(), state_root)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_free_cpu_calibration.py:204: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+request = {'variant': 'A3', 'mode': 'full', 'full_cohort_approved': True, 'source_identity': '16f97eb396fb0202a1e250ec59d2b3a9cb170070b3f0f8b8575488ad0cf20764', ...}
+gpu_result = {'receipt_path': 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\free-cpu-independent-final-20261117-01\\test_run_variant_j...gpu-snapshot\\GPU_COMPLETE.json', 'receipt_sha256': 'cca0e03ee0f713e41533b0dc4d3f10a52e2499a73423509e4908c3290238024c'}
+cache = {'population': {'schema': 'junyi-calibration-population-v1', 'roles_identity': '796f1bc61f8dfeed3a88dc4c6bffbbaa7d4519...pshot\\window-admission.json', 'admission_sha256': '48a9f7653d9ea44ed4f0dc2496196a0220624f3e08df634a0b6b3015e39455cf'}}
+session = <object object at 0x0000016DFF32D910>
+state_root = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/free-cpu-independent-final-20261117-01/test_run_variant_joins_numeric1/private-state')
+
+    def run_variant(request, gpu_result, cache, session, state_root):
+        """Nối/audit/fit V1, tiếp tục từ raw đã kiểm và lưu trên Drive."""
+        from dataclasses import asdict
+        from knowledge_tracing.akt.config import DataPaths, PROJECT_ROOT
+        from knowledge_tracing.akt.research_junyi_inference import JunyiCPUInferenceBudget, inspect_cpu_refit_export, _identity
+        from knowledge_tracing.akt.research_junyi_calibration import CalibrationFitArtifactRoot, inference_source_identity
+        from knowledge_tracing.akt.research_junyi_numeric_predictions import NumericBinding
+        from knowledge_tracing.akt.cloud_calibration_numeric_join import join_numeric_calibration_snapshot
+        from knowledge_tracing.akt.cloud_calibration_fit import fit_volume_calibration
+        from knowledge_tracing.akt.research_junyi_graph_cache import _digest, FORMAT
+        from knowledge_tracing.response_calibration import PredictionBinding
+>       from calibration_audit_transaction import transactional_expected_insert
+E       ModuleNotFoundError: No module named 'calibration_audit_transaction'
+
+scripts\akt\free_cpu_calibration.py:203: ModuleNotFoundError
+_____ test_run_variant_joins_numeric_and_calls_v1_without_model[True-A2] ______
+
+cloud_case = {'roles': JunyiResearchRoles(train_users=('0', '1', '10', '11', '12', '13', '16', '2', '3', '5', '6', '8'), selection_...KLTN/artifacts/akt/test-temp/free-cpu-independent-final-20261117-01/test_run_variant_joins_numeric2/roles.json')), ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000016E40570050>
+variant = 'A2', interrupt_fit_upload = True
+
+    @pytest.mark.parametrize('variant', ['A2', 'A3'])
+    @pytest.mark.parametrize('interrupt_fit_upload', [False, True])
+    def test_run_variant_joins_numeric_and_calls_v1_without_model(cloud_case, monkeypatch, variant, interrupt_fit_upload):
+        from knowledge_tracing.akt import research_junyi_inference as inference
+        from knowledge_tracing.akt import research_junyi_calibration as producer
+        from knowledge_tracing.akt.research_junyi_graph_cache import _digest, FORMAT
+        value = cloud_case
+        kwargs = numeric_case(value, variant)
+        root = kwargs['artifact_root'].root
+        monkeypatch.setattr(free, 'VOLUME', root)
+        monkeypatch.setattr(producer, 'inference_source_identity', lambda: kwargs['binding'].model_source_sha256)
+        assets = dict(index={'model': variant + '_JUNYI_REFIT', 'checkpoint_sha256': kwargs['binding'].checkpoint_sha256},
+                      encoding=value['encoding'], calibration=value['phase'])
+        monkeypatch.setattr(inference, 'inspect_cpu_refit_export', lambda *args, **options: assets)
+        population_path = root / 'population.json'
+        population_path.write_text(json.dumps(value['population']))
+        windows = root / 'windows'
+        windows.mkdir()
+        (windows / 'manifest.json').write_bytes(kwargs['window_manifest'].read_bytes())
+        graph = {'sha256': 'f' * 64, 'binding': {}}
+        cache = dict(population=value['population'], source_data_sha256=free.sha(value['paths'].canonical),
+            graphs={variant: graph}, windows=dict(path=str(windows), admission_path=str(kwargs['window_admission']),
+            admission_sha256=kwargs['expected_window_admission_sha256']))
+        receipt = json.loads(kwargs['gpu_receipt'].read_text())
+        receipt['graph_cache_identity'] = _digest((FORMAT, graph['sha256'], json.dumps(graph['binding'], sort_keys=True)))
+        kwargs['gpu_receipt'].write_text(json.dumps(receipt))
+        dummy = dict(path=str(population_path), sha256=free.sha(population_path))
+        request = dict(variant=variant, mode='full', full_cohort_approved=True,
+            source_identity=kwargs['binding'].model_source_sha256, exports={v: dummy for v in ('A0','A1','A2','A3')},
+            data_paths={name:dict(path=str(getattr(value['paths'], name)), sha256=free.sha(getattr(value['paths'], name)))
+                        for name in ('canonical','assignments','canonical_manifest','split_manifest')},
+            population=dummy, source_pins=value['pins'],
+            cache_receipt=dict(sha256=hashlib.sha256(json.dumps(cache).encode()).hexdigest()),
+            cpu_budget=dict(max_targets=20,max_learner_events=10,max_users=2,max_seconds=60,
+                max_rss_bytes=1024**3,min_available_ram_bytes=1,prediction_batch_size=128))
+        gpu = dict(receipt_path=str(kwargs['gpu_receipt']), receipt_sha256=free.sha(kwargs['gpu_receipt']))
+        state_root = root / 'private-state'
+        state_root.mkdir()
+        publications = []
+        def publisher(session, publication, state_root):
+            publications.append(publication)
+            if interrupt_fit_upload and len(publications) == 2:
+                raise ConnectionError('Synthetic interruption after fit completed')
+            return dict(status='DRIVE_SHA256_VERIFIED', tranche_id=publication['tranche_id'], files=[])
+        monkeypatch.setattr(free, 'publish', publisher)
+        checked = []
+        monkeypatch.setattr(free, 'verify_publication', lambda session, receipt: checked.append(receipt))
+        if interrupt_fit_upload:
+            with pytest.raises(ConnectionError):
+>               free.run_variant(request, gpu, cache, object(), state_root)
+
+tests\akt\test_free_cpu_calibration.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+request = {'variant': 'A2', 'mode': 'full', 'full_cohort_approved': True, 'source_identity': '16f97eb396fb0202a1e250ec59d2b3a9cb170070b3f0f8b8575488ad0cf20764', ...}
+gpu_result = {'receipt_path': 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\free-cpu-independent-final-20261117-01\\test_run_variant_j...gpu-snapshot\\GPU_COMPLETE.json', 'receipt_sha256': '58a82ef3da5c0677c1af329f1e7d75641d78101f9e29eb662e0ffbd546ba9214'}
+cache = {'population': {'schema': 'junyi-calibration-population-v1', 'roles_identity': '796f1bc61f8dfeed3a88dc4c6bffbbaa7d4519...pshot\\window-admission.json', 'admission_sha256': '48a9f7653d9ea44ed4f0dc2496196a0220624f3e08df634a0b6b3015e39455cf'}}
+session = <object object at 0x0000016DFF32ECB0>
+state_root = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/free-cpu-independent-final-20261117-01/test_run_variant_joins_numeric2/private-state')
+
+    def run_variant(request, gpu_result, cache, session, state_root):
+        """Nối/audit/fit V1, tiếp tục từ raw đã kiểm và lưu trên Drive."""
+        from dataclasses import asdict
+        from knowledge_tracing.akt.config import DataPaths, PROJECT_ROOT
+        from knowledge_tracing.akt.research_junyi_inference import JunyiCPUInferenceBudget, inspect_cpu_refit_export, _identity
+        from knowledge_tracing.akt.research_junyi_calibration import CalibrationFitArtifactRoot, inference_source_identity
+        from knowledge_tracing.akt.research_junyi_numeric_predictions import NumericBinding
+        from knowledge_tracing.akt.cloud_calibration_numeric_join import join_numeric_calibration_snapshot
+        from knowledge_tracing.akt.cloud_calibration_fit import fit_volume_calibration
+        from knowledge_tracing.akt.research_junyi_graph_cache import _digest, FORMAT
+        from knowledge_tracing.response_calibration import PredictionBinding
+>       from calibration_audit_transaction import transactional_expected_insert
+E       ModuleNotFoundError: No module named 'calibration_audit_transaction'
+
+scripts\akt\free_cpu_calibration.py:203: ModuleNotFoundError
+_____ test_run_variant_joins_numeric_and_calls_v1_without_model[True-A3] ______
+
+cloud_case = {'roles': JunyiResearchRoles(train_users=('0', '1', '10', '11', '12', '13', '16', '2', '3', '5', '6', '8'), selection_...KLTN/artifacts/akt/test-temp/free-cpu-independent-final-20261117-01/test_run_variant_joins_numeric3/roles.json')), ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000016E40568050>
+variant = 'A3', interrupt_fit_upload = True
+
+    @pytest.mark.parametrize('variant', ['A2', 'A3'])
+    @pytest.mark.parametrize('interrupt_fit_upload', [False, True])
+    def test_run_variant_joins_numeric_and_calls_v1_without_model(cloud_case, monkeypatch, variant, interrupt_fit_upload):
+        from knowledge_tracing.akt import research_junyi_inference as inference
+        from knowledge_tracing.akt import research_junyi_calibration as producer
+        from knowledge_tracing.akt.research_junyi_graph_cache import _digest, FORMAT
+        value = cloud_case
+        kwargs = numeric_case(value, variant)
+        root = kwargs['artifact_root'].root
+        monkeypatch.setattr(free, 'VOLUME', root)
+        monkeypatch.setattr(producer, 'inference_source_identity', lambda: kwargs['binding'].model_source_sha256)
+        assets = dict(index={'model': variant + '_JUNYI_REFIT', 'checkpoint_sha256': kwargs['binding'].checkpoint_sha256},
+                      encoding=value['encoding'], calibration=value['phase'])
+        monkeypatch.setattr(inference, 'inspect_cpu_refit_export', lambda *args, **options: assets)
+        population_path = root / 'population.json'
+        population_path.write_text(json.dumps(value['population']))
+        windows = root / 'windows'
+        windows.mkdir()
+        (windows / 'manifest.json').write_bytes(kwargs['window_manifest'].read_bytes())
+        graph = {'sha256': 'f' * 64, 'binding': {}}
+        cache = dict(population=value['population'], source_data_sha256=free.sha(value['paths'].canonical),
+            graphs={variant: graph}, windows=dict(path=str(windows), admission_path=str(kwargs['window_admission']),
+            admission_sha256=kwargs['expected_window_admission_sha256']))
+        receipt = json.loads(kwargs['gpu_receipt'].read_text())
+        receipt['graph_cache_identity'] = _digest((FORMAT, graph['sha256'], json.dumps(graph['binding'], sort_keys=True)))
+        kwargs['gpu_receipt'].write_text(json.dumps(receipt))
+        dummy = dict(path=str(population_path), sha256=free.sha(population_path))
+        request = dict(variant=variant, mode='full', full_cohort_approved=True,
+            source_identity=kwargs['binding'].model_source_sha256, exports={v: dummy for v in ('A0','A1','A2','A3')},
+            data_paths={name:dict(path=str(getattr(value['paths'], name)), sha256=free.sha(getattr(value['paths'], name)))
+                        for name in ('canonical','assignments','canonical_manifest','split_manifest')},
+            population=dummy, source_pins=value['pins'],
+            cache_receipt=dict(sha256=hashlib.sha256(json.dumps(cache).encode()).hexdigest()),
+            cpu_budget=dict(max_targets=20,max_learner_events=10,max_users=2,max_seconds=60,
+                max_rss_bytes=1024**3,min_available_ram_bytes=1,prediction_batch_size=128))
+        gpu = dict(receipt_path=str(kwargs['gpu_receipt']), receipt_sha256=free.sha(kwargs['gpu_receipt']))
+        state_root = root / 'private-state'
+        state_root.mkdir()
+        publications = []
+        def publisher(session, publication, state_root):
+            publications.append(publication)
+            if interrupt_fit_upload and len(publications) == 2:
+                raise ConnectionError('Synthetic interruption after fit completed')
+            return dict(status='DRIVE_SHA256_VERIFIED', tranche_id=publication['tranche_id'], files=[])
+        monkeypatch.setattr(free, 'publish', publisher)
+        checked = []
+        monkeypatch.setattr(free, 'verify_publication', lambda session, receipt: checked.append(receipt))
+        if interrupt_fit_upload:
+            with pytest.raises(ConnectionError):
+>               free.run_variant(request, gpu, cache, object(), state_root)
+
+tests\akt\test_free_cpu_calibration.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+request = {'variant': 'A3', 'mode': 'full', 'full_cohort_approved': True, 'source_identity': '16f97eb396fb0202a1e250ec59d2b3a9cb170070b3f0f8b8575488ad0cf20764', ...}
+gpu_result = {'receipt_path': 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\free-cpu-independent-final-20261117-01\\test_run_variant_j...gpu-snapshot\\GPU_COMPLETE.json', 'receipt_sha256': '46d2122a32304f7d27dd2ceeb2378014d7094393060631b453cbb6340a678482'}
+cache = {'population': {'schema': 'junyi-calibration-population-v1', 'roles_identity': '796f1bc61f8dfeed3a88dc4c6bffbbaa7d4519...pshot\\window-admission.json', 'admission_sha256': '48a9f7653d9ea44ed4f0dc2496196a0220624f3e08df634a0b6b3015e39455cf'}}
+session = <object object at 0x0000016DFF32CE40>
+state_root = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/free-cpu-independent-final-20261117-01/test_run_variant_joins_numeric3/private-state')
+
+    def run_variant(request, gpu_result, cache, session, state_root):
+        """Nối/audit/fit V1, tiếp tục từ raw đã kiểm và lưu trên Drive."""
+        from dataclasses import asdict
+        from knowledge_tracing.akt.config import DataPaths, PROJECT_ROOT
+        from knowledge_tracing.akt.research_junyi_inference import JunyiCPUInferenceBudget, inspect_cpu_refit_export, _identity
+        from knowledge_tracing.akt.research_junyi_calibration import CalibrationFitArtifactRoot, inference_source_identity
+        from knowledge_tracing.akt.research_junyi_numeric_predictions import NumericBinding
+        from knowledge_tracing.akt.cloud_calibration_numeric_join import join_numeric_calibration_snapshot
+        from knowledge_tracing.akt.cloud_calibration_fit import fit_volume_calibration
+        from knowledge_tracing.akt.research_junyi_graph_cache import _digest, FORMAT
+        from knowledge_tracing.response_calibration import PredictionBinding
+>       from calibration_audit_transaction import transactional_expected_insert
+E       ModuleNotFoundError: No module named 'calibration_audit_transaction'
+
+scripts\akt\free_cpu_calibration.py:203: ModuleNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_free_cpu_calibration.py::test_run_variant_joins_numeric_and_calls_v1_without_model[False-A2]
+FAILED tests/akt/test_free_cpu_calibration.py::test_run_variant_joins_numeric_and_calls_v1_without_model[False-A3]
+FAILED tests/akt/test_free_cpu_calibration.py::test_run_variant_joins_numeric_and_calls_v1_without_model[True-A2]
+FAILED tests/akt/test_free_cpu_calibration.py::test_run_variant_joins_numeric_and_calls_v1_without_model[True-A3]
+4 failed, 9 passed in 6.43s

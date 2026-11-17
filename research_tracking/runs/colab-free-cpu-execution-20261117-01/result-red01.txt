@@ -1,0 +1,26 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_____________ test_bad_runtime_response_is_never_marked_complete ______________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-cpu-execution-20261117-02/test_bad_runtime_response_is_n0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001B67DB7E190>
+
+    def test_bad_runtime_response_is_never_marked_complete(tmp_path, monkeypatch):
+        state = context(tmp_path, monkeypatch)
+        calls = []
+        def mutation(*args):
+            calls.append(args)
+            return {'name':'runtimes/incorrect','runtimeSpec':dict(SPEC,accelerator='H100')}
+        monkeypatch.setattr(cpu, '_mutate', mutation)
+        with pytest.raises(auth.ColabSessionError):
+            cpu.ensure_cpu_runtime(Client(existing=False), state)
+>       assert json.loads(state.read_text())['runtime_request']['status'] == 'FAILED'
+E       AssertionError: assert 'COMPLETE' == 'FAILED'
+E         
+E         - FAILED
+E         + COMPLETE
+
+tests\akt\test_colab_cpu_execution.py:127: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_colab_cpu_execution.py::test_bad_runtime_response_is_never_marked_complete
+1 failed, 7 deselected in 0.16s

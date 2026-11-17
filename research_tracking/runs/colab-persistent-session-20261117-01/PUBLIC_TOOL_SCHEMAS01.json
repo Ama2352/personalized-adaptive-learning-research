@@ -1,0 +1,843 @@
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "result": {
+    "tools": [
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false,
+          "readOnlyHint": false
+        },
+        "description": "Creates a Colab runtime and waits until it's ready.\n\nCreation is slow and quota-limited, so reuse a runtime from `list_runtimes` when you can, and use a new session (`create_session`) rather than a new runtime to isolate state.\n\nSet `runtime.runtimeSpec` to a spec from `list_runtime_specs` that the user is eligible for. Pass a new UUID as `requestId` for each runtime you create. If the call fails with DEADLINE_EXCEEDED, the runtime is still being created, and repeating the identical call waits for it instead of creating another.\n\nFAILED_PRECONDITION means the user can't get this runtime now, for example because there's no capacity for the accelerator, their usage quota is used up, or they have too many active runtimes. Try another eligible spec, reuse a runtime, or retry later. On RESOURCE_EXHAUSTED (rate limit), nothing was created; retry with exponential backoff.\n",
+        "inputSchema": {
+          "$defs": {
+            "ConnectionInfo": {
+              "description": "Connection info used to authenticate to the runtime.",
+              "properties": {
+                "expireTime": {
+                  "description": "Required. Output only. The expiration time of the runtime proxy token.",
+                  "format": "date-time",
+                  "readOnly": true,
+                  "type": "string"
+                },
+                "token": {
+                  "description": "Required. Output only. The runtime proxy token. This is a short-lived credential used to authenticate to the runtime. Clients should set this token as the value of the `X-Colab-Runtime-Proxy-Token` HTTP header when connecting to the runtime, and call the GetRuntime API to refresh this token when approaching `expire_time`.",
+                  "readOnly": true,
+                  "type": "string"
+                },
+                "url": {
+                  "description": "Required. Output only. The authenticated URL that can be used to connect to the runtime.",
+                  "readOnly": true,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "token",
+                "expireTime",
+                "url"
+              ],
+              "type": "object"
+            },
+            "Key": {
+              "description": "Key fields that uniquely identify a runtime spec.",
+              "properties": {
+                "accelerator": {
+                  "description": "Required. Runtime accelerator model name (e.g., \"T4\", \"L4\", \"A100\"). For CPU runtime specs, this field will be \"NONE\".",
+                  "type": "string"
+                },
+                "shape": {
+                  "description": "Required. Runtime shape.",
+                  "enum": [
+                    "SHAPE_UNSPECIFIED",
+                    "SHAPE_STANDARD",
+                    "SHAPE_HIGHMEM"
+                  ],
+                  "type": "string",
+                  "x-google-enum-descriptions": [
+                    "Default value. This value is unused.",
+                    "Standard shape.",
+                    "High memory shape."
+                  ]
+                },
+                "variant": {
+                  "description": "Required. Runtime variant.",
+                  "enum": [
+                    "VARIANT_UNSPECIFIED",
+                    "VARIANT_CPU",
+                    "VARIANT_GPU",
+                    "VARIANT_TPU"
+                  ],
+                  "type": "string",
+                  "x-google-enum-descriptions": [
+                    "Default value. This value is unused.",
+                    "CPU variant.",
+                    "GPU variant.",
+                    "TPU variant."
+                  ]
+                }
+              },
+              "required": [
+                "variant",
+                "accelerator",
+                "shape"
+              ],
+              "type": "object"
+            },
+            "Runtime": {
+              "description": "A Colab managed runtime. This is essentially a Jupyter server that runs on Google infrastructure. Clients should use the connection_info provided to connect to the runtime, and leverage the standard Jupyter [REST API](https://jupyter-server.readthedocs.io/en/stable/developers/rest-api.html) and/or [client library](https://jupyter-client.readthedocs.io/en/stable/api/jupyter_client.html) to interact with the runtime.",
+              "properties": {
+                "connectionInfo": {
+                  "$ref": "#/$defs/ConnectionInfo",
+                  "description": "Output only. The connection info used to authenticate to the runtime.",
+                  "readOnly": true
+                },
+                "name": {
+                  "description": "Identifier. The name of the runtime in the format `runtimes/{runtime_id}`, where `runtime_id` is either the value supplied via CreateRuntimeRequest.runtime_id or, if none was supplied, a random ID generated by the backend.",
+                  "type": "string",
+                  "x-google-identifier": true
+                },
+                "runtimeSpec": {
+                  "$ref": "#/$defs/Key",
+                  "description": "Required. The specification of the runtime. When calling `CreateRuntime`, this field should be set to an eligible runtime spec obtained from the ListRuntimeSpecsResponse."
+                },
+                "version": {
+                  "description": "Optional. The version of the runtime image. See [Colab Runtime Version FAQ](https://research.google.com/colaboratory/runtime-version-faq.html) for supported runtime versions. If omitted (empty), the latest runtime image is used.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "runtimeSpec"
+              ],
+              "type": "object"
+            }
+          },
+          "description": "Request message for `CreateRuntime`.",
+          "properties": {
+            "requestId": {
+              "description": "Optional. A unique identifier for this request. This request is only idempotent if a `request_id` is provided. See [AIP-155](https://google.aip.dev/155) for more details. If provided, the request ID must be in UUID4 format per https://linter.aip.dev/155/request-id-format.",
+              "type": "string"
+            },
+            "runtime": {
+              "$ref": "#/$defs/Runtime",
+              "description": "Required. Specifications for the runtime to assign."
+            },
+            "runtimeId": {
+              "description": "Optional. A unique identifier for the runtime. If not supplied, a random ID will be generated. If a runtime with the given ID owned by the requesting user already exists, a completed Operation with an [`ALREADY_EXISTS` (code: 6)](https://github.com/googleapis/googleapis/blob/437254f595a380cd9323111700ce0fcf9d6d2c21/google/rpc/code.proto#L84) error will be returned. See [AIP-133](https://google.aip.dev/133#user-specified-ids) for more details. The ID must conform to [RFC-1034](https://datatracker.ietf.org/doc/html/rfc1034), specifically: - 1 to 63 characters - Lower-case letters, digits, and hyphens - Start with a letter - End with a letter or digit",
+              "type": "string"
+            }
+          },
+          "required": [
+            "runtime"
+          ],
+          "type": "object"
+        },
+        "name": "create_runtime",
+        "outputSchema": {
+          "$defs": {
+            "ConnectionInfo": {
+              "description": "Connection info used to authenticate to the runtime.",
+              "properties": {
+                "expireTime": {
+                  "description": "Required. Output only. The expiration time of the runtime proxy token.",
+                  "format": "date-time",
+                  "readOnly": true,
+                  "type": "string"
+                },
+                "token": {
+                  "description": "Required. Output only. The runtime proxy token. This is a short-lived credential used to authenticate to the runtime. Clients should set this token as the value of the `X-Colab-Runtime-Proxy-Token` HTTP header when connecting to the runtime, and call the GetRuntime API to refresh this token when approaching `expire_time`.",
+                  "readOnly": true,
+                  "type": "string"
+                },
+                "url": {
+                  "description": "Required. Output only. The authenticated URL that can be used to connect to the runtime.",
+                  "readOnly": true,
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "Key": {
+              "description": "Key fields that uniquely identify a runtime spec.",
+              "properties": {
+                "accelerator": {
+                  "description": "Required. Runtime accelerator model name (e.g., \"T4\", \"L4\", \"A100\"). For CPU runtime specs, this field will be \"NONE\".",
+                  "type": "string"
+                },
+                "shape": {
+                  "description": "Required. Runtime shape.",
+                  "enum": [
+                    "SHAPE_UNSPECIFIED",
+                    "SHAPE_STANDARD",
+                    "SHAPE_HIGHMEM"
+                  ],
+                  "type": "string",
+                  "x-google-enum-descriptions": [
+                    "Default value. This value is unused.",
+                    "Standard shape.",
+                    "High memory shape."
+                  ]
+                },
+                "variant": {
+                  "description": "Required. Runtime variant.",
+                  "enum": [
+                    "VARIANT_UNSPECIFIED",
+                    "VARIANT_CPU",
+                    "VARIANT_GPU",
+                    "VARIANT_TPU"
+                  ],
+                  "type": "string",
+                  "x-google-enum-descriptions": [
+                    "Default value. This value is unused.",
+                    "CPU variant.",
+                    "GPU variant.",
+                    "TPU variant."
+                  ]
+                }
+              },
+              "type": "object"
+            }
+          },
+          "description": "A Colab managed runtime. This is essentially a Jupyter server that runs on Google infrastructure. Clients should use the connection_info provided to connect to the runtime, and leverage the standard Jupyter [REST API](https://jupyter-server.readthedocs.io/en/stable/developers/rest-api.html) and/or [client library](https://jupyter-client.readthedocs.io/en/stable/api/jupyter_client.html) to interact with the runtime.",
+          "properties": {
+            "connectionInfo": {
+              "$ref": "#/$defs/ConnectionInfo",
+              "description": "Output only. The connection info used to authenticate to the runtime.",
+              "readOnly": true
+            },
+            "name": {
+              "description": "Identifier. The name of the runtime in the format `runtimes/{runtime_id}`, where `runtime_id` is either the value supplied via CreateRuntimeRequest.runtime_id or, if none was supplied, a random ID generated by the backend.",
+              "type": "string",
+              "x-google-identifier": true
+            },
+            "runtimeSpec": {
+              "$ref": "#/$defs/Key",
+              "description": "Required. The specification of the runtime. When calling `CreateRuntime`, this field should be set to an eligible runtime spec obtained from the ListRuntimeSpecsResponse."
+            },
+            "version": {
+              "description": "Optional. The version of the runtime image. See [Colab Runtime Version FAQ](https://research.google.com/colaboratory/runtime-version-faq.html) for supported runtime versions. If omitted (empty), the latest runtime image is used.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false,
+          "readOnlyHint": false
+        },
+        "description": "Opens a Jupyter kernel session on a runtime (`runtimes/{runtime_id}`) and returns its name (`runtimes/{runtime_id}/sessions/{session_id}`).\n\n`execute_code` calls that target the session share its kernel state (variables, imports). Reuse a session you opened rather than opening another, and close it with `delete_session` when you're done, because each open session holds kernel memory. Opening a session with the ID of an open one returns that session.\n",
+        "inputSchema": {
+          "$defs": {
+            "Session": {
+              "description": "A Jupyter kernel session on a Colab runtime. Deleting the runtime closes its sessions.",
+              "properties": {
+                "name": {
+                  "description": "Identifier. The name of the session. Format: `runtimes/{runtime}/sessions/{session}`.",
+                  "type": "string",
+                  "x-google-identifier": true
+                }
+              },
+              "type": "object"
+            }
+          },
+          "description": "Request message for `CreateSession`.",
+          "properties": {
+            "parent": {
+              "description": "Required. The runtime on which to open the session. Format: `runtimes/{runtime}`.",
+              "type": "string"
+            },
+            "session": {
+              "$ref": "#/$defs/Session",
+              "description": "Optional. Leave unset. The server ignores it, because a session has no fields to set."
+            },
+            "sessionId": {
+              "description": "Optional. The ID of the session, unique within the runtime. If unset, the server generates one. If a session with this ID is already open, it is returned, so retrying with the same ID is safe. 1-63 characters of lowercase letters, digits and hyphens, starting with a letter and ending with a letter or digit ([AIP-122](https://google.aip.dev/122#resource-id-segments)).",
+              "type": "string"
+            }
+          },
+          "required": [
+            "parent"
+          ],
+          "type": "object"
+        },
+        "name": "create_session",
+        "outputSchema": {
+          "description": "A Jupyter kernel session on a Colab runtime. Deleting the runtime closes its sessions.",
+          "properties": {
+            "name": {
+              "description": "Identifier. The name of the session. Format: `runtimes/{runtime}/sessions/{session}`.",
+              "type": "string",
+              "x-google-identifier": true
+            }
+          },
+          "type": "object"
+        }
+      },
+      {
+        "annotations": {
+          "destructiveHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false,
+          "readOnlyHint": false
+        },
+        "description": "Closes a session (`runtimes/{runtime_id}/sessions/{session_id}`), discarding its kernel state and aborting any `execute_code` call running in it. Files it wrote stay on the runtime, and the runtime keeps running.",
+        "inputSchema": {
+          "description": "Request message for `DeleteSession`.",
+          "properties": {
+            "name": {
+              "description": "Required. The name of the session to close. Format: `runtimes/{runtime}/sessions/{session}`.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "type": "object"
+        },
+        "name": "delete_session",
+        "outputSchema": {
+          "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }",
+          "properties": {},
+          "type": "object"
+        }
+      },
+      {
+        "annotations": {
+          "destructiveHint": true,
+          "idempotentHint": false,
+          "openWorldHint": true,
+          "readOnlyHint": false
+        },
+        "description": "Runs Python in a Colab runtime's Jupyter kernel. Returns stdout, stderr, the value of the last expression (`result`), and any exception (`executionError`). Only text is returned, not images or plots. Output over the size limit is truncated and flagged with `outputTruncated`.\n\nSet exactly one target:\n\n- `session` (`runtimes/{runtime_id}/sessions/{session_id}`) runs in that session's kernel, sharing variables and imports with its other calls. The session is created if it doesn't exist. Use this for anything stateful or multi-step.\n- `runtime` (`runtimes/{runtime_id}`) runs in a new session, which stays open. The result's `session` names it: reuse it, or close it with `delete_session`.\n\nCalls to one session run one at a time, so parallel calls to it only queue and can time out. For parallel work, use a session per task and close each when it's done.\n\nFor code that may run long, pass a new UUID as `executionId` with a `session` target. A call is cut off after 600s with DEADLINE_EXCEEDED, but the code keeps running. After that, or if the call fails with UNAVAILABLE, repeat the identical call (same `session` and `executionId`). It reattaches and returns the output and result if the code had started, and otherwise runs it. Prefer this to running code in the background and polling it. Use a new UUID for each new execution, because once the result has been returned the same `executionId` runs the code again. Without an `executionId`, or with a `runtime` target, a timed-out execution can't be reattached, and a retry may run the code twice.\n\nCancelling a call (`notifications/cancelled`) interrupts whatever the session's kernel is running, which may be another call's code.\n\nNOT_FOUND means the runtime doesn't exist, or has stopped. Find one with `list_runtimes`, and create one only if there's none. RESOURCE_EXHAUSTED (rate limit) means the code didn't run; retry with exponential backoff.\n\nTo move files between your machine and the runtime, use HTTP as described in `get_runtime`, not base64 through this tool, because the bytes fill your context. Files persist on the runtime across sessions.\n",
+        "inputSchema": {
+          "description": "Request message for `ExecuteCode`.",
+          "properties": {
+            "code": {
+              "description": "Required. The Python source to execute.",
+              "type": "string"
+            },
+            "executionId": {
+              "description": "Optional. A UUID that makes the execution resumable. Repeating the call with the same `session` and `execution_id` reattaches to the execution and returns its output instead of running the code again. Once the result has been returned, the same `execution_id` runs the code again.",
+              "type": "string"
+            },
+            "runtime": {
+              "description": "The runtime to execute on, in a new session that stays open. Format: `runtimes/{runtime}`. Only one of this field or session should be set.",
+              "type": "string"
+            },
+            "session": {
+              "description": "The session to execute in. Format: `runtimes/{runtime}/sessions/{session}`. Only one of this field or runtime should be set.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "code"
+          ],
+          "type": "object"
+        },
+        "name": "execute_code",
+        "outputSchema": {
+          "$defs": {
+            "Error": {
+              "description": "A Python exception raised during execution.",
+              "properties": {
+                "name": {
+                  "description": "The exception class name, e.g. \"NameError\".",
+                  "type": "string"
+                },
+                "traceback": {
+                  "description": "The formatted traceback, one frame per entry.",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "value": {
+                  "description": "The exception message, e.g. \"name 'foo' is not defined\".",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "description": "The result of an `ExecuteCode` call, returned as the terminal `structured_content` of the response stream.",
+          "properties": {
+            "executionCount": {
+              "description": "The Jupyter `In[N]` execution count assigned by the kernel. Informational only. Not for addressing executions, for that use `execution_id`.",
+              "format": "int32",
+              "type": "integer"
+            },
+            "executionError": {
+              "$ref": "#/$defs/Error",
+              "description": "Populated when the execution raised. Mutually exclusive with a successful completion."
+            },
+            "executionId": {
+              "description": "The execution identifier this result is for, echoed from the request. Empty when the request supplied no `execution_id` (such an execution is not resumable). Use it to resume.",
+              "type": "string"
+            },
+            "outputTruncated": {
+              "description": "Whether the runtime truncated buffered output (size or line caps hit). When true, `stdout`/`stderr` are tail-truncated.",
+              "type": "boolean"
+            },
+            "result": {
+              "description": "The `text/plain` representation of the last expression's value, if the execution ended on an expression. Empty otherwise.",
+              "type": "string"
+            },
+            "session": {
+              "description": "The session the execution ran in. Format: `runtimes/{runtime}/sessions/{session}`.",
+              "type": "string"
+            },
+            "stderr": {
+              "description": "Aggregated stderr across the execution.",
+              "type": "string"
+            },
+            "stdout": {
+              "description": "Aggregated stdout across the execution.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false,
+          "readOnlyHint": true
+        },
+        "description": "Gets the user's Colab subscription tier: free, Pro or Pro+. https://colab.research.google.com/signup compares the tiers.",
+        "inputSchema": {
+          "description": "Request message for `GetSubscription`.",
+          "properties": {},
+          "type": "object"
+        },
+        "name": "get_subscription",
+        "outputSchema": {
+          "description": "Colab user subscription information.",
+          "properties": {
+            "name": {
+              "description": "Identifier. Name of the subscription. This will always be \"subscription\".",
+              "type": "string",
+              "x-google-identifier": true
+            },
+            "tier": {
+              "description": "Required. User's Colab subscription tier.",
+              "enum": [
+                "SUBSCRIPTION_TIER_UNSPECIFIED",
+                "SUBSCRIPTION_TIER_FREE",
+                "SUBSCRIPTION_TIER_PRO",
+                "SUBSCRIPTION_TIER_PRO_PLUS"
+              ],
+              "type": "string",
+              "x-google-enum-descriptions": [
+                "Default value. This value is unused.",
+                "User is not subscribed to any paid tier.",
+                "User is subscribed to Colab Pro.",
+                "User is subscribed to Colab Pro+."
+              ]
+            }
+          },
+          "type": "object"
+        }
+      },
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false,
+          "readOnlyHint": true
+        },
+        "description": "Lists the open sessions on a runtime (`runtimes/{runtime_id}`), including ones you didn't open, such as the user's notebooks. Use it to find a session of yours to reuse or close. Close only sessions you opened. It returns names only, not what is running in them.",
+        "inputSchema": {
+          "description": "Request message for `ListSessions`.",
+          "properties": {
+            "parent": {
+              "description": "Required. The runtime whose sessions should be listed. Format: `runtimes/{runtime}`.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "parent"
+          ],
+          "type": "object"
+        },
+        "name": "list_sessions",
+        "outputSchema": {
+          "$defs": {
+            "Session": {
+              "description": "A Jupyter kernel session on a Colab runtime. Deleting the runtime closes its sessions.",
+              "properties": {
+                "name": {
+                  "description": "Identifier. The name of the session. Format: `runtimes/{runtime}/sessions/{session}`.",
+                  "type": "string",
+                  "x-google-identifier": true
+                }
+              },
+              "type": "object"
+            }
+          },
+          "description": "Response message for `ListSessions`.",
+          "properties": {
+            "sessions": {
+              "description": "The sessions currently open on the runtime.",
+              "items": {
+                "$ref": "#/$defs/Session"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object"
+        }
+      },
+      {
+        "annotations": {
+          "destructiveHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false,
+          "readOnlyHint": false
+        },
+        "description": "Deletes a runtime (`runtimes/{runtime_id}`) and everything on it: files, sessions and their state. This can't be undone.\n\nDelete a runtime only when the user asks, or to free up one you created when `create_runtime` fails because the user has too many active runtimes. To reset or isolate state, close a session with `delete_session` instead.\n",
+        "inputSchema": {
+          "description": "Request message for `DeleteRuntime`.",
+          "properties": {
+            "allowMissing": {
+              "description": "Optional. If set to `true`, and the runtime is not found, the request will succeed but no action will be taken on the server.",
+              "type": "boolean"
+            },
+            "name": {
+              "description": "Required. The name of the runtime to unassign. Format: `runtimes/{runtime_id}`.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "type": "object"
+        },
+        "name": "delete_runtime",
+        "outputSchema": {
+          "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }",
+          "properties": {},
+          "type": "object"
+        }
+      },
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false,
+          "readOnlyHint": true
+        },
+        "description": "Gets a runtime (`runtimes/{runtime_id}`), including its spec and `connectionInfo`.\n\nTo transfer files without passing their bytes through tool calls, send HTTP requests to `connectionInfo.url` with the header `X-Colab-Runtime-Proxy-Token: {connectionInfo.token}`. Paths are absolute without the leading slash, e.g. `content/data.csv` for `/content/data.csv`.\n\nDownload: `GET {url}/files/{path}` returns raw bytes and supports `Range`.\n\nUpload: `PUT {url}/api/contents/{path}` with JSON `{\"type\":\"file\",\"format\":\"base64\",\"content\":\"...\"}`, or `\"format\":\"text\"` for text. The parent directory must exist. Create it with `{\"type\":\"directory\"}`, one level per request. Keep each request under 50 MB of file data. For larger files, send pieces to the same path with `\"chunk\": 1`, `2`, and so on, and `\"chunk\": -1` on the last piece.\n\nThe token expires at `connectionInfo.expireTime`, about an hour after it's issued. Call this tool again for a new one. A missing or expired token returns 404.\n",
+        "inputSchema": {
+          "description": "Request message for `GetRuntime`.",
+          "properties": {
+            "name": {
+              "description": "Required. The name of the runtime to retrieve. Format: `runtimes/{runtime_id}`.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "type": "object"
+        },
+        "name": "get_runtime",
+        "outputSchema": {
+          "$defs": {
+            "ConnectionInfo": {
+              "description": "Connection info used to authenticate to the runtime.",
+              "properties": {
+                "expireTime": {
+                  "description": "Required. Output only. The expiration time of the runtime proxy token.",
+                  "format": "date-time",
+                  "readOnly": true,
+                  "type": "string"
+                },
+                "token": {
+                  "description": "Required. Output only. The runtime proxy token. This is a short-lived credential used to authenticate to the runtime. Clients should set this token as the value of the `X-Colab-Runtime-Proxy-Token` HTTP header when connecting to the runtime, and call the GetRuntime API to refresh this token when approaching `expire_time`.",
+                  "readOnly": true,
+                  "type": "string"
+                },
+                "url": {
+                  "description": "Required. Output only. The authenticated URL that can be used to connect to the runtime.",
+                  "readOnly": true,
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "Key": {
+              "description": "Key fields that uniquely identify a runtime spec.",
+              "properties": {
+                "accelerator": {
+                  "description": "Required. Runtime accelerator model name (e.g., \"T4\", \"L4\", \"A100\"). For CPU runtime specs, this field will be \"NONE\".",
+                  "type": "string"
+                },
+                "shape": {
+                  "description": "Required. Runtime shape.",
+                  "enum": [
+                    "SHAPE_UNSPECIFIED",
+                    "SHAPE_STANDARD",
+                    "SHAPE_HIGHMEM"
+                  ],
+                  "type": "string",
+                  "x-google-enum-descriptions": [
+                    "Default value. This value is unused.",
+                    "Standard shape.",
+                    "High memory shape."
+                  ]
+                },
+                "variant": {
+                  "description": "Required. Runtime variant.",
+                  "enum": [
+                    "VARIANT_UNSPECIFIED",
+                    "VARIANT_CPU",
+                    "VARIANT_GPU",
+                    "VARIANT_TPU"
+                  ],
+                  "type": "string",
+                  "x-google-enum-descriptions": [
+                    "Default value. This value is unused.",
+                    "CPU variant.",
+                    "GPU variant.",
+                    "TPU variant."
+                  ]
+                }
+              },
+              "type": "object"
+            }
+          },
+          "description": "A Colab managed runtime. This is essentially a Jupyter server that runs on Google infrastructure. Clients should use the connection_info provided to connect to the runtime, and leverage the standard Jupyter [REST API](https://jupyter-server.readthedocs.io/en/stable/developers/rest-api.html) and/or [client library](https://jupyter-client.readthedocs.io/en/stable/api/jupyter_client.html) to interact with the runtime.",
+          "properties": {
+            "connectionInfo": {
+              "$ref": "#/$defs/ConnectionInfo",
+              "description": "Output only. The connection info used to authenticate to the runtime.",
+              "readOnly": true
+            },
+            "name": {
+              "description": "Identifier. The name of the runtime in the format `runtimes/{runtime_id}`, where `runtime_id` is either the value supplied via CreateRuntimeRequest.runtime_id or, if none was supplied, a random ID generated by the backend.",
+              "type": "string",
+              "x-google-identifier": true
+            },
+            "runtimeSpec": {
+              "$ref": "#/$defs/Key",
+              "description": "Required. The specification of the runtime. When calling `CreateRuntime`, this field should be set to an eligible runtime spec obtained from the ListRuntimeSpecsResponse."
+            },
+            "version": {
+              "description": "Optional. The version of the runtime image. See [Colab Runtime Version FAQ](https://research.google.com/colaboratory/runtime-version-faq.html) for supported runtime versions. If omitted (empty), the latest runtime image is used.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false,
+          "readOnlyHint": true
+        },
+        "description": "Lists the user's Colab runtimes, with their specs and `connectionInfo`. Check here for a runtime to reuse before calling `create_runtime`.",
+        "inputSchema": {
+          "description": "Request message for `ListRuntimes`.",
+          "properties": {},
+          "type": "object"
+        },
+        "name": "list_runtimes",
+        "outputSchema": {
+          "$defs": {
+            "ConnectionInfo": {
+              "description": "Connection info used to authenticate to the runtime.",
+              "properties": {
+                "expireTime": {
+                  "description": "Required. Output only. The expiration time of the runtime proxy token.",
+                  "format": "date-time",
+                  "readOnly": true,
+                  "type": "string"
+                },
+                "token": {
+                  "description": "Required. Output only. The runtime proxy token. This is a short-lived credential used to authenticate to the runtime. Clients should set this token as the value of the `X-Colab-Runtime-Proxy-Token` HTTP header when connecting to the runtime, and call the GetRuntime API to refresh this token when approaching `expire_time`.",
+                  "readOnly": true,
+                  "type": "string"
+                },
+                "url": {
+                  "description": "Required. Output only. The authenticated URL that can be used to connect to the runtime.",
+                  "readOnly": true,
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "Key": {
+              "description": "Key fields that uniquely identify a runtime spec.",
+              "properties": {
+                "accelerator": {
+                  "description": "Required. Runtime accelerator model name (e.g., \"T4\", \"L4\", \"A100\"). For CPU runtime specs, this field will be \"NONE\".",
+                  "type": "string"
+                },
+                "shape": {
+                  "description": "Required. Runtime shape.",
+                  "enum": [
+                    "SHAPE_UNSPECIFIED",
+                    "SHAPE_STANDARD",
+                    "SHAPE_HIGHMEM"
+                  ],
+                  "type": "string",
+                  "x-google-enum-descriptions": [
+                    "Default value. This value is unused.",
+                    "Standard shape.",
+                    "High memory shape."
+                  ]
+                },
+                "variant": {
+                  "description": "Required. Runtime variant.",
+                  "enum": [
+                    "VARIANT_UNSPECIFIED",
+                    "VARIANT_CPU",
+                    "VARIANT_GPU",
+                    "VARIANT_TPU"
+                  ],
+                  "type": "string",
+                  "x-google-enum-descriptions": [
+                    "Default value. This value is unused.",
+                    "CPU variant.",
+                    "GPU variant.",
+                    "TPU variant."
+                  ]
+                }
+              },
+              "type": "object"
+            },
+            "Runtime": {
+              "description": "A Colab managed runtime. This is essentially a Jupyter server that runs on Google infrastructure. Clients should use the connection_info provided to connect to the runtime, and leverage the standard Jupyter [REST API](https://jupyter-server.readthedocs.io/en/stable/developers/rest-api.html) and/or [client library](https://jupyter-client.readthedocs.io/en/stable/api/jupyter_client.html) to interact with the runtime.",
+              "properties": {
+                "connectionInfo": {
+                  "$ref": "#/$defs/ConnectionInfo",
+                  "description": "Output only. The connection info used to authenticate to the runtime.",
+                  "readOnly": true
+                },
+                "name": {
+                  "description": "Identifier. The name of the runtime in the format `runtimes/{runtime_id}`, where `runtime_id` is either the value supplied via CreateRuntimeRequest.runtime_id or, if none was supplied, a random ID generated by the backend.",
+                  "type": "string",
+                  "x-google-identifier": true
+                },
+                "runtimeSpec": {
+                  "$ref": "#/$defs/Key",
+                  "description": "Required. The specification of the runtime. When calling `CreateRuntime`, this field should be set to an eligible runtime spec obtained from the ListRuntimeSpecsResponse."
+                },
+                "version": {
+                  "description": "Optional. The version of the runtime image. See [Colab Runtime Version FAQ](https://research.google.com/colaboratory/runtime-version-faq.html) for supported runtime versions. If omitted (empty), the latest runtime image is used.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "description": "Response message for `ListRuntimes`.",
+          "properties": {
+            "runtimes": {
+              "description": "The list of runtimes assigned to the requesting user.",
+              "items": {
+                "$ref": "#/$defs/Runtime"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object"
+        }
+      },
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false,
+          "readOnlyHint": true
+        },
+        "description": "Lists the runtime specs (variant, accelerator and shape) and whether the user is eligible for each. Call it before `create_runtime` to pick a spec.",
+        "inputSchema": {
+          "description": "Request message for `ListRuntimeSpecs`.",
+          "properties": {},
+          "type": "object"
+        },
+        "name": "list_runtime_specs",
+        "outputSchema": {
+          "$defs": {
+            "Key": {
+              "description": "Key fields that uniquely identify a runtime spec.",
+              "properties": {
+                "accelerator": {
+                  "description": "Required. Runtime accelerator model name (e.g., \"T4\", \"L4\", \"A100\"). For CPU runtime specs, this field will be \"NONE\".",
+                  "type": "string"
+                },
+                "shape": {
+                  "description": "Required. Runtime shape.",
+                  "enum": [
+                    "SHAPE_UNSPECIFIED",
+                    "SHAPE_STANDARD",
+                    "SHAPE_HIGHMEM"
+                  ],
+                  "type": "string",
+                  "x-google-enum-descriptions": [
+                    "Default value. This value is unused.",
+                    "Standard shape.",
+                    "High memory shape."
+                  ]
+                },
+                "variant": {
+                  "description": "Required. Runtime variant.",
+                  "enum": [
+                    "VARIANT_UNSPECIFIED",
+                    "VARIANT_CPU",
+                    "VARIANT_GPU",
+                    "VARIANT_TPU"
+                  ],
+                  "type": "string",
+                  "x-google-enum-descriptions": [
+                    "Default value. This value is unused.",
+                    "CPU variant.",
+                    "GPU variant.",
+                    "TPU variant."
+                  ]
+                }
+              },
+              "type": "object"
+            },
+            "RuntimeSpec": {
+              "description": "A specification of a runtime.",
+              "properties": {
+                "eligible": {
+                  "description": "Output only. Whether the requesting user is eligible for the runtime spec.",
+                  "readOnly": true,
+                  "type": "boolean"
+                },
+                "key": {
+                  "$ref": "#/$defs/Key",
+                  "description": "Required. The key of the runtime spec."
+                }
+              },
+              "type": "object"
+            }
+          },
+          "description": "Response message for `ListRuntimeSpecs`.",
+          "properties": {
+            "runtimeSpecs": {
+              "description": "The list of runtime specs available to the requesting user.",
+              "items": {
+                "$ref": "#/$defs/RuntimeSpec"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object"
+        }
+      }
+    ]
+  }
+}

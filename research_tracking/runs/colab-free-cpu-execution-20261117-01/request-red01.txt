@@ -1,0 +1,35 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_______________ test_tampered_pending_create_cannot_change_tool _______________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-cpu-execution-20261117-04/test_tampered_pending_create_c0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002228F40E2C0>
+
+    def test_tampered_pending_create_cannot_change_tool(tmp_path, monkeypatch):
+        state = context(tmp_path, monkeypatch)
+        state.write_text(json.dumps({'version':1,'executions':{},'runtime_request':{
+            'tool':'execute_code','status':'PENDING','arguments':{'runtime':{'runtimeSpec':SPEC},'requestId':'wrong'}}}))
+        monkeypatch.setattr(cpu, '_mutate', lambda *args: pytest.fail('mutation forbidden'))
+        with pytest.raises(auth.ColabSessionError):
+>           cpu.ensure_cpu_runtime(Client(existing=False), state)
+
+tests\akt\test_colab_cpu_execution.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\akt\colab_cpu_execution.py:118: in ensure_cpu_runtime
+    result = _send(client, state_path, state, pending)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts\akt\colab_cpu_execution.py:72: in _send
+    result = _mutate(client, request['tool'], request['arguments'])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (<test_colab_cpu_execution.Client object at 0x000002228F423380>, 'execute_code', {'runtime': {'runtimeSpec': {'variant': 'VARIANT_CPU', 'accelerator': 'NONE', 'shape': 'SHAPE_STANDARD'}}, 'requestId': 'wrong'})
+
+>   monkeypatch.setattr(cpu, '_mutate', lambda *args: pytest.fail('mutation forbidden'))
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: mutation forbidden
+
+tests\akt\test_colab_cpu_execution.py:160: Failed
+=========================== short test summary info ===========================
+FAILED tests/akt/test_colab_cpu_execution.py::test_tampered_pending_create_cannot_change_tool
+1 failed, 9 deselected in 0.18s

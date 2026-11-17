@@ -1,0 +1,23 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+________ test_partial_automatic_refresh_is_not_persisted_as_full_scope ________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-session-consent-20261117-03/test_partial_automatic_refresh0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001DF5236E780>
+
+    def test_partial_automatic_refresh_is_not_persisted_as_full_scope(tmp_path, monkeypatch):
+        token, proxy = setup(tmp_path, monkeypatch)
+        credentials = Credentials()
+        class PartialSession(Session):
+            def post(self, *args, **kwargs):
+                credentials.granted_scopes = ['openid','email']
+                return super().post(*args, **kwargs)
+        client = colab.ColabClient(PartialSession([{'id':1,'result':{'structuredContent':{}}}]), credentials, token, proxy)
+>       with pytest.raises(colab.ColabSessionError, match='COLAB_RUNTIME'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ColabSessionError
+
+tests\akt\test_colab_session.py:275: Failed
+=========================== short test summary info ===========================
+FAILED tests/akt/test_colab_session.py::test_partial_automatic_refresh_is_not_persisted_as_full_scope
+1 failed, 15 deselected in 0.16s

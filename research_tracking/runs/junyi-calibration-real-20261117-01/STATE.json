@@ -105,7 +105,7 @@
     "helper_sha256": "09a3fcb2d7ae1f4875351336591c554a593d22240bd046ebc04a36f815c72347",
     "frozen_preflight": "PREFLIGHT06.json choA1/A2/A3appsđãkhởiđộng;PREFLIGHT07.jsonsẽdùngchoA0sourceisolation"
   },
-  "next_action": "Chuẩn bị launcher Colab CPU miễn phí dùng frozen V1 và numeric archive Drive, audit rồi fit A2/A3. Giữ nguyên nguồn KT đến khi nghiệm thu calibration.",
+  "next_action": "Đợi xác thực OAuth Colab đủ quyền, kiểm subscription/specs/runtime bằng API chính thức, sau đó chạy calibration CPU A2/A3 và đọc lại kết quả trên Drive.",
   "token_expires_at": "2026-11-17T17:44:01Z",
   "parallel_agents": {
     "calibration": "Free CPU launcher A2/A3 ngoài frozen KT",
@@ -128,7 +128,13 @@
     "9199a71f",
     "7a6abc07",
     "91a2fb7e",
-    "d76f7e71"
+    "d76f7e71",
+    "96886a69",
+    "d6a24cee",
+    "df489259",
+    "c1b32637",
+    "12a71bd7",
+    "b2899df0"
   ],
   "numeric_drive_backup": {
     "variants": [
@@ -139,5 +145,31 @@
     "total_bytes": 71546486,
     "local_peak_rss_bytes": 127397888,
     "modal_compute_used": false
+  },
+  "free_cpu_notebook": {
+    "local": "notebooks/akt_colab_response_calibration_cpu.ipynb",
+    "drive_url": "https://colab.research.google.com/drive/1y8QBqsHZ52jQ624eQii9bwsRZnYcwxmt",
+    "execution_accepted": false,
+    "tests": 13,
+    "drive_receipt": "research_tracking/runs/report-drive-snapshot-20261117-02/DRIVE_READBACK.json"
+  },
+  "colab_connection": {
+    "client": "scripts/akt/colab_session.py",
+    "scope": "https://www.googleapis.com/auth/colaboratory",
+    "credentials_location": "artifacts/akt/private/colab-session/credentials.json",
+    "first_consent": "Warning scope mismatch; no token saved",
+    "retry_exec_session_id": 1791,
+    "retry_status": "WAITING_USER_CONSENT",
+    "runtime_created": false,
+    "code_executed": false,
+    "session_limits_vi": "Tự làm mới OAuth/proxy khi còn quyền. Không giữ VM miễn phí vô hạn hoặc tạo hoạt động giả."
+  },
+  "outer_preparation": {
+    "oov_targets": 144,
+    "oov_exercises": 3,
+    "count_receipt": "research_tracking/runs/junyi-outer-count-20261117-03/OOV_COUNTS03.json",
+    "wrapper": "scripts/akt/free_outer_evaluation.py",
+    "actual_outer_execution": false,
+    "cache_oov_fold4_known_limit": true
   }
 }

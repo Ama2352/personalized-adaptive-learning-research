@@ -1,0 +1,137 @@
+FFF                                                                      [100%]
+================================== FAILURES ===================================
+_____ test_partial_consent_never_saves_requested_scopes_as_granted[False] _____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-session-consent-20261117-01/test_partial_consent_never_sav0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021B09C1E650>
+capsys = <_pytest.capture.CaptureFixture object at 0x0000021B09C2EA50>
+warning = False
+
+    @pytest.mark.parametrize('warning', [False, True])
+    def test_partial_consent_never_saves_requested_scopes_as_granted(tmp_path, monkeypatch, capsys, warning):
+        token, _ = setup(tmp_path, monkeypatch)
+        config = tmp_path / 'client.json'
+        config.write_text('{}')
+        monkeypatch.setattr(colab, 'edge_browser', lambda: 'kltn-edge')
+        credentials = Credentials()
+        credentials.valid = True
+        credentials.granted_scopes = ['openid','https://www.googleapis.com/auth/userinfo.email']
+        class Flow:
+            oauth2session = SimpleNamespace(token={'scope':credentials.granted_scopes})
+            @classmethod
+            def from_client_secrets_file(cls, *args, **kwargs):
+                return cls()
+            def run_local_server(self, **kwargs):
+                if warning:
+                    error = Warning('SECRET https://private.example/')
+                    error.new_scope = credentials.granted_scopes
+                    error.token = {'access_token':'SECRET','scope':credentials.granted_scopes}
+                    raise error
+                return credentials
+>       with pytest.raises(colab.ColabSessionError, match='COLAB_RUNTIME') as error:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ColabSessionError
+
+tests\akt\test_colab_session.py:231: Failed
+_____ test_partial_consent_never_saves_requested_scopes_as_granted[True] ______
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-session-consent-20261117-01/test_partial_consent_never_sav1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021B09C1D810>
+capsys = <_pytest.capture.CaptureFixture object at 0x0000021B0A34C050>
+warning = True
+
+    @pytest.mark.parametrize('warning', [False, True])
+    def test_partial_consent_never_saves_requested_scopes_as_granted(tmp_path, monkeypatch, capsys, warning):
+        token, _ = setup(tmp_path, monkeypatch)
+        config = tmp_path / 'client.json'
+        config.write_text('{}')
+        monkeypatch.setattr(colab, 'edge_browser', lambda: 'kltn-edge')
+        credentials = Credentials()
+        credentials.valid = True
+        credentials.granted_scopes = ['openid','https://www.googleapis.com/auth/userinfo.email']
+        class Flow:
+            oauth2session = SimpleNamespace(token={'scope':credentials.granted_scopes})
+            @classmethod
+            def from_client_secrets_file(cls, *args, **kwargs):
+                return cls()
+            def run_local_server(self, **kwargs):
+                if warning:
+                    error = Warning('SECRET https://private.example/')
+                    error.new_scope = credentials.granted_scopes
+                    error.token = {'access_token':'SECRET','scope':credentials.granted_scopes}
+                    raise error
+                return credentials
+        with pytest.raises(colab.ColabSessionError, match='COLAB_RUNTIME') as error:
+>           colab.load_credentials(token, config, interactive=True, flow_type=Flow)
+
+tests\akt\test_colab_session.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\akt\colab_session.py:87: in load_credentials
+    credentials = flow.run_local_server(host='localhost', port=0, open_browser=True,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_colab_session.test_partial_consent_never_saves_requested_scopes_as_granted.<locals>.Flow object at 0x0000021B09FA6660>
+kwargs = {'host': 'localhost', 'port': 0, 'open_browser': True, 'browser': 'kltn-edge', ...}
+
+    def run_local_server(self, **kwargs):
+        if warning:
+            error = Warning('SECRET https://private.example/')
+            error.new_scope = credentials.granted_scopes
+            error.token = {'access_token':'SECRET','scope':credentials.granted_scopes}
+>           raise error
+E           Warning: SECRET https://private.example/
+
+tests\akt\test_colab_session.py:229: Warning
+______ test_full_grants_with_extra_scope_warning_can_be_saved_as_actual _______
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-session-consent-20261117-01/test_full_grants_with_extra_sc0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021B0A253650>
+
+    def test_full_grants_with_extra_scope_warning_can_be_saved_as_actual(tmp_path, monkeypatch):
+        token, _ = setup(tmp_path, monkeypatch)
+        config = tmp_path / 'client.json'
+        config.write_text('{}')
+        monkeypatch.setattr(colab, 'edge_browser', lambda: 'kltn-edge')
+        actual = ['openid','email',colab.COLAB_SCOPE,'https://www.googleapis.com/auth/drive.file']
+        credentials = Credentials()
+        credentials.valid = True
+        credentials.granted_scopes = actual
+        class Flow:
+            oauth2session = SimpleNamespace(token={})
+            @classmethod
+            def from_client_secrets_file(cls, *args, **kwargs):
+                return cls()
+            def run_local_server(self, **kwargs):
+                error = Warning('Scope changed, private token not logged')
+                error.new_scope = actual
+                error.token = {'access_token':'SECRET','scope':actual}
+                raise error
+            @property
+            def credentials(self):
+                assert self.oauth2session.token['scope'] == actual
+                return credentials
+>       loaded = colab.load_credentials(token, config, interactive=True, flow_type=Flow)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_colab_session.py:261: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\akt\colab_session.py:87: in load_credentials
+    credentials = flow.run_local_server(host='localhost', port=0, open_browser=True,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_colab_session.test_full_grants_with_extra_scope_warning_can_be_saved_as_actual.<locals>.Flow object at 0x0000021B0A256E40>
+kwargs = {'host': 'localhost', 'port': 0, 'open_browser': True, 'browser': 'kltn-edge', ...}
+
+    def run_local_server(self, **kwargs):
+        error = Warning('Scope changed, private token not logged')
+        error.new_scope = actual
+        error.token = {'access_token':'SECRET','scope':actual}
+>       raise error
+E       Warning: Scope changed, private token not logged
+
+tests\akt\test_colab_session.py:256: Warning
+=========================== short test summary info ===========================
+FAILED tests/akt/test_colab_session.py::test_partial_consent_never_saves_requested_scopes_as_granted[False]
+FAILED tests/akt/test_colab_session.py::test_partial_consent_never_saves_requested_scopes_as_granted[True]
+FAILED tests/akt/test_colab_session.py::test_full_grants_with_extra_scope_warning_can_be_saved_as_actual
+3 failed, 12 deselected in 0.45s
