@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+[17/11 — Đường cache outer và release guardfold](JUNYI_OUTER_PUBLIC_API_PATH_20261117.md) nối kiểm OOV/rank với sourcepacket riêng,75kiểm thử và compatibility A2 theo file thật. Cache toàn cohort, model/numericaladmission và GPUouter còn chờ.
+
 [17/11 — Calibration A2/A3 chuyển CPU local](LOCAL_CALIBRATION_MIGRATION_20261117.md) giữ cache tạm tối đa4GB đã duyệt, snapshot A2 kiểm từng SHA và26kiểm thử parity/resume. Colab đã trả runtime. Lượt local thật còn cần nghiệm thu, calibration hiện2/4.
 
 [17/11 — Tái tính p-value và bootstrap CI Paper2](../runs/paper2-statistical-reproduction-20261117-02/README.md) chạy nguyên4functions nguồn với50pairedseeds,3.000draws/hypothesis và family45/72. Cả117hypotheses khớp exactfloat cho mean/delta/Wilcoxon/rank-biserial/CI/Holm, không đổi quyết định. CPU5,57giây/peak140,56MiB,3CLI/ASTtests đạt. Khép phần thống kê còn kế thừa của gói01, chưa rerun simulator/model hoặc khôi phục historical library environment.

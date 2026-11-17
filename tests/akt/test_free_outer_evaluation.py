@@ -1,6 +1,7 @@
 """Hợp đồng outer ở ngoài nguồn KT frozen, chỉ dữ liệu tổng hợp."""
 from dataclasses import replace
 import importlib.util
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -135,3 +136,53 @@ def test_same_calibration_and_outer_domain_refused(wrapper, case):
     with pytest.raises(ValueError, match='separate outer/calibration'):
         list(wrapper.iter_outer_predictions(predictor, lambda: iter((learner,)),
              calibration=None, receipt={}, **kwargs))
+
+
+@pytest.fixture
+def cross_source_case(wrapper, case, monkeypatch):
+    predictor, learner, calibration, kwargs = case
+    payload = json.loads((SCRIPT.parents[2]/'research_tracking/runs/junyi-outer-cache-release-20261117-01/SOURCE_DELTA01.json').read_text())
+    calibration = replace(calibration, binding=replace(calibration.binding,
+        model_source_sha256=wrapper.OLD_SOURCE))
+    predictor = replace(predictor, binding=replace(predictor.binding,
+        model_source_sha256=wrapper.NEW_SOURCE))
+    kwargs['expected_source_sha256'] = wrapper.NEW_SOURCE
+    monkeypatch.setattr(wrapper, 'inference_source_identity', lambda: wrapper.NEW_SOURCE)
+    monkeypatch.setattr(wrapper, 'runtime_source_files', lambda: payload['proposed_frozen_plus_one_guard_files'])
+    compatibility = wrapper.build_compatibility_receipt(payload['frozen_files'],
+        payload['proposed_frozen_plus_one_guard_files'],
+        checkpoint_sha256=predictor.binding.checkpoint_sha256,
+        calibration_identity=calibration.identity)
+    return predictor, learner, calibration, kwargs, compatibility
+
+
+def test_approved_guard_release_preserves_original_calibrator_and_probability(wrapper, cross_source_case):
+    predictor, learner, calibration, kwargs, compatibility = cross_source_case
+    original = calibration.to_payload()
+    receipt = {}
+    rows = list(wrapper.iter_outer_predictions(predictor, lambda: iter((learner,)),
+        calibration=calibration, compatibility=compatibility, receipt=receipt, **kwargs))
+    assert rows[0].prediction == pytest.approx(.5505102572168219)
+    assert rows[1].prediction is None
+    assert calibration.to_payload() == original
+    provenance = receipt['admission']['source_compatibility']
+    assert provenance['calibration_source_sha256'] == wrapper.OLD_SOURCE
+    assert provenance['inference_source_sha256'] == wrapper.NEW_SOURCE
+    assert receipt['status'] == 'COMPLETE'
+
+
+def test_default_strict_still_refuses_old_calibrator_new_source(wrapper, cross_source_case):
+    predictor, learner, calibration, kwargs, _ = cross_source_case
+    with pytest.raises(ValueError, match='calibrator binding'):
+        list(wrapper.iter_outer_predictions(predictor, lambda: iter((learner,)),
+            calibration=calibration, receipt={}, **kwargs))
+
+
+@pytest.mark.parametrize('field', ['split_sha256', 'domain_sha256'])
+def test_compatibility_never_relaxes_calibration_roles_or_domain(wrapper, cross_source_case, field):
+    predictor, learner, calibration, kwargs, compatibility = cross_source_case
+    calibration = replace(calibration, binding=replace(calibration.binding, **{field:'9'*64}))
+    compatibility['calibration_identity'] = calibration.identity
+    with pytest.raises(ValueError, match='calibrator binding'):
+        list(wrapper.iter_outer_predictions(predictor, lambda: iter((learner,)),
+            calibration=calibration, compatibility=compatibility, receipt={}, **kwargs))

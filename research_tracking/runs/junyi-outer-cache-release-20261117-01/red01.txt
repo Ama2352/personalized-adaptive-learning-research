@@ -1,0 +1,71 @@
+.FFF....                                                                 [100%]
+================================== FAILURES ===================================
+__________________ test_cache_accepts_valid_outer_oov_record __________________
+
+    def test_cache_accepts_valid_outer_oov_record():
+        view, encoding = fixture_assets()
+        encoding.assert_for(view)
+        assert view.allowed_folds == (4,)
+        record = UnseenTarget(KTEvent('outer', 'unknown', 11, 2, 0, 0, 4), 1)
+>       metadata, arrays, targets = _parts(record, view, encoding, {'outer'})
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_outer_frozen_cache_readiness.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\akt\research_junyi_window_cache.py:96: in _parts
+    _need(not view.optimization and type(event) is KTEvent and event.user_id in allowed_users
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, message = 'Invalid unseen target'
+
+    def _need(condition, message):
+        if not condition:
+>           raise ValueError(message)
+E           ValueError: Invalid unseen target
+
+src\knowledge_tracing\akt\research_junyi_window_cache.py:36: ValueError
+__ test_oov_guard_rejects_foreign_fold_or_learner[outer_evaluation-outer-0] ___
+
+scope = 'outer_evaluation', user = 'outer', fold = 0
+
+    @pytest.mark.parametrize('scope,user,fold', [
+        ('outer_evaluation', 'outer', 0),
+        ('outer_evaluation', 'outer', 3),
+        ('calibration_predict', 'calibration', 4),
+        ('outer_evaluation', 'foreign', 4),
+    ])
+    def test_oov_guard_rejects_foreign_fold_or_learner(scope, user, fold):
+        outer, encoding = fixture_assets()
+        view = outer if scope == 'outer_evaluation' else JunyiPhaseView(
+            outer.roles, scope, ('calibration',), outer.roles.identity)
+        record = UnseenTarget(KTEvent(user, 'unknown', 11, 2, 0, 0, fold), 1)
+>       with pytest.raises(ValueError, match='Invalid unseen target'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_outer_frozen_cache_readiness.py:61: Failed
+__ test_oov_guard_rejects_foreign_fold_or_learner[outer_evaluation-outer-3] ___
+
+scope = 'outer_evaluation', user = 'outer', fold = 3
+
+    @pytest.mark.parametrize('scope,user,fold', [
+        ('outer_evaluation', 'outer', 0),
+        ('outer_evaluation', 'outer', 3),
+        ('calibration_predict', 'calibration', 4),
+        ('outer_evaluation', 'foreign', 4),
+    ])
+    def test_oov_guard_rejects_foreign_fold_or_learner(scope, user, fold):
+        outer, encoding = fixture_assets()
+        view = outer if scope == 'outer_evaluation' else JunyiPhaseView(
+            outer.roles, scope, ('calibration',), outer.roles.identity)
+        record = UnseenTarget(KTEvent(user, 'unknown', 11, 2, 0, 0, fold), 1)
+>       with pytest.raises(ValueError, match='Invalid unseen target'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_outer_frozen_cache_readiness.py:61: Failed
+=========================== short test summary info ===========================
+FAILED tests/akt/test_outer_frozen_cache_readiness.py::test_cache_accepts_valid_outer_oov_record
+FAILED tests/akt/test_outer_frozen_cache_readiness.py::test_oov_guard_rejects_foreign_fold_or_learner[outer_evaluation-outer-0]
+FAILED tests/akt/test_outer_frozen_cache_readiness.py::test_oov_guard_rejects_foreign_fold_or_learner[outer_evaluation-outer-3]
+3 failed, 5 passed in 0.78s

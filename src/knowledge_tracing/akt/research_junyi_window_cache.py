@@ -97,7 +97,7 @@ def _parts(record, view, encoding, allowed_users):
               and type(record.global_rank) is int and record.global_rank >= 0
               and type(event.correct) is int and event.correct in (0, 1)
               and type(event.suggested) is int and event.suggested in (0, 1)
-              and type(event.fold) is int and event.fold in (0, 1, 2, 3)
+              and type(event.fold) is int and event.fold in view.allowed_folds
               and type(event.source_row) is int and event.source_row > 0
               and type(event.time_done) is int and event.time_done >= 0
               and type(event.exercise) is str and event.exercise

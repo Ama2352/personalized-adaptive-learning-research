@@ -1,0 +1,133 @@
+FFFFFFFF                                                                 [100%]
+================================== FAILURES ===================================
+________________ test_missing_variant_pins_produces_draft_only ________________
+
+helper = <module 'outer_guard_compatibility' from 'D:\\Dev\\KLTN\\scripts\\akt\\free_outer_evaluation.py'>
+release = ({'src/knowledge_tracing/akt/__init__.py': '03a3e9c1a2030b62b050c846fccb4349066ff247864484683f4acf8f5b725986', 'src/kn...', 'src/knowledge_tracing/akt/checkpoint.py': 'a58a97f983fa85e75105a67fdc7a71997f251b48dd3cad6d5305ecf36bbb3db9', ...})
+
+    def test_missing_variant_pins_produces_draft_only(helper, release):
+        before, after = release
+>       receipt = helper.build_compatibility_receipt(before, after)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'outer_guard_compatibility' has no attribute 'build_compatibility_receipt'
+
+tests\akt\test_outer_guard_source_compatibility.py:30: AttributeError
+________________ test_valid_release_full_maps_and_exact_patch _________________
+
+helper = <module 'outer_guard_compatibility' from 'D:\\Dev\\KLTN\\scripts\\akt\\free_outer_evaluation.py'>
+release = ({'src/knowledge_tracing/akt/__init__.py': '03a3e9c1a2030b62b050c846fccb4349066ff247864484683f4acf8f5b725986', 'src/kn...', 'src/knowledge_tracing/akt/checkpoint.py': 'a58a97f983fa85e75105a67fdc7a71997f251b48dd3cad6d5305ecf36bbb3db9', ...})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002E540D710F0>
+
+    def test_valid_release_full_maps_and_exact_patch(helper, release, monkeypatch):
+        before, after = release
+>       receipt = helper.build_compatibility_receipt(before, after,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            checkpoint_sha256='a'*64, calibration_identity='b'*64)
+E       AttributeError: module 'outer_guard_compatibility' has no attribute 'build_compatibility_receipt'
+
+tests\akt\test_outer_guard_source_compatibility.py:40: AttributeError
+______________________ test_any_mismatch_rejects[source] ______________________
+
+helper = <module 'outer_guard_compatibility' from 'D:\\Dev\\KLTN\\scripts\\akt\\free_outer_evaluation.py'>
+release = ({'src/knowledge_tracing/akt/__init__.py': '03a3e9c1a2030b62b050c846fccb4349066ff247864484683f4acf8f5b725986', 'src/kn...', 'src/knowledge_tracing/akt/checkpoint.py': 'a58a97f983fa85e75105a67fdc7a71997f251b48dd3cad6d5305ecf36bbb3db9', ...})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002E57E5116E0>
+damage = 'source'
+
+    @pytest.mark.parametrize('damage', ['source', 'extra_delta', 'checkpoint', 'calibrator', 'runtime'])
+    def test_any_mismatch_rejects(helper, release, monkeypatch, damage):
+        before, after = release
+>       receipt = helper.build_compatibility_receipt(before, after,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            checkpoint_sha256='a'*64, calibration_identity='b'*64)
+E       AttributeError: module 'outer_guard_compatibility' has no attribute 'build_compatibility_receipt'
+
+tests\akt\test_outer_guard_source_compatibility.py:54: AttributeError
+___________________ test_any_mismatch_rejects[extra_delta] ____________________
+
+helper = <module 'outer_guard_compatibility' from 'D:\\Dev\\KLTN\\scripts\\akt\\free_outer_evaluation.py'>
+release = ({'src/knowledge_tracing/akt/__init__.py': '03a3e9c1a2030b62b050c846fccb4349066ff247864484683f4acf8f5b725986', 'src/kn...', 'src/knowledge_tracing/akt/checkpoint.py': 'a58a97f983fa85e75105a67fdc7a71997f251b48dd3cad6d5305ecf36bbb3db9', ...})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002E540CFA450>
+damage = 'extra_delta'
+
+    @pytest.mark.parametrize('damage', ['source', 'extra_delta', 'checkpoint', 'calibrator', 'runtime'])
+    def test_any_mismatch_rejects(helper, release, monkeypatch, damage):
+        before, after = release
+>       receipt = helper.build_compatibility_receipt(before, after,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            checkpoint_sha256='a'*64, calibration_identity='b'*64)
+E       AttributeError: module 'outer_guard_compatibility' has no attribute 'build_compatibility_receipt'
+
+tests\akt\test_outer_guard_source_compatibility.py:54: AttributeError
+____________________ test_any_mismatch_rejects[checkpoint] ____________________
+
+helper = <module 'outer_guard_compatibility' from 'D:\\Dev\\KLTN\\scripts\\akt\\free_outer_evaluation.py'>
+release = ({'src/knowledge_tracing/akt/__init__.py': '03a3e9c1a2030b62b050c846fccb4349066ff247864484683f4acf8f5b725986', 'src/kn...', 'src/knowledge_tracing/akt/checkpoint.py': 'a58a97f983fa85e75105a67fdc7a71997f251b48dd3cad6d5305ecf36bbb3db9', ...})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002E540CC79B0>
+damage = 'checkpoint'
+
+    @pytest.mark.parametrize('damage', ['source', 'extra_delta', 'checkpoint', 'calibrator', 'runtime'])
+    def test_any_mismatch_rejects(helper, release, monkeypatch, damage):
+        before, after = release
+>       receipt = helper.build_compatibility_receipt(before, after,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            checkpoint_sha256='a'*64, calibration_identity='b'*64)
+E       AttributeError: module 'outer_guard_compatibility' has no attribute 'build_compatibility_receipt'
+
+tests\akt\test_outer_guard_source_compatibility.py:54: AttributeError
+____________________ test_any_mismatch_rejects[calibrator] ____________________
+
+helper = <module 'outer_guard_compatibility' from 'D:\\Dev\\KLTN\\scripts\\akt\\free_outer_evaluation.py'>
+release = ({'src/knowledge_tracing/akt/__init__.py': '03a3e9c1a2030b62b050c846fccb4349066ff247864484683f4acf8f5b725986', 'src/kn...', 'src/knowledge_tracing/akt/checkpoint.py': 'a58a97f983fa85e75105a67fdc7a71997f251b48dd3cad6d5305ecf36bbb3db9', ...})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002E540CC7CE0>
+damage = 'calibrator'
+
+    @pytest.mark.parametrize('damage', ['source', 'extra_delta', 'checkpoint', 'calibrator', 'runtime'])
+    def test_any_mismatch_rejects(helper, release, monkeypatch, damage):
+        before, after = release
+>       receipt = helper.build_compatibility_receipt(before, after,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            checkpoint_sha256='a'*64, calibration_identity='b'*64)
+E       AttributeError: module 'outer_guard_compatibility' has no attribute 'build_compatibility_receipt'
+
+tests\akt\test_outer_guard_source_compatibility.py:54: AttributeError
+_____________________ test_any_mismatch_rejects[runtime] ______________________
+
+helper = <module 'outer_guard_compatibility' from 'D:\\Dev\\KLTN\\scripts\\akt\\free_outer_evaluation.py'>
+release = ({'src/knowledge_tracing/akt/__init__.py': '03a3e9c1a2030b62b050c846fccb4349066ff247864484683f4acf8f5b725986', 'src/kn...', 'src/knowledge_tracing/akt/checkpoint.py': 'a58a97f983fa85e75105a67fdc7a71997f251b48dd3cad6d5305ecf36bbb3db9', ...})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002E57E539450>
+damage = 'runtime'
+
+    @pytest.mark.parametrize('damage', ['source', 'extra_delta', 'checkpoint', 'calibrator', 'runtime'])
+    def test_any_mismatch_rejects(helper, release, monkeypatch, damage):
+        before, after = release
+>       receipt = helper.build_compatibility_receipt(before, after,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            checkpoint_sha256='a'*64, calibration_identity='b'*64)
+E       AttributeError: module 'outer_guard_compatibility' has no attribute 'build_compatibility_receipt'
+
+tests\akt\test_outer_guard_source_compatibility.py:54: AttributeError
+______________ test_builder_refuses_checkout_crlf_upstream_delta ______________
+
+helper = <module 'outer_guard_compatibility' from 'D:\\Dev\\KLTN\\scripts\\akt\\free_outer_evaluation.py'>
+release = ({'src/knowledge_tracing/akt/__init__.py': '03a3e9c1a2030b62b050c846fccb4349066ff247864484683f4acf8f5b725986', 'src/kn...', 'src/knowledge_tracing/akt/checkpoint.py': 'a58a97f983fa85e75105a67fdc7a71997f251b48dd3cad6d5305ecf36bbb3db9', ...})
+
+    def test_builder_refuses_checkout_crlf_upstream_delta(helper, release):
+        before, after = release
+        after = dict(after)
+        after['artifacts/akt/dependencies/upstream/akt.py'] = 'be2788c20cac602e86ef3a51e5294b37dd7b200f818be4e173dbd69069a3ec6d'
+        with pytest.raises(ValueError):
+>           helper.build_compatibility_receipt(before, after)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'outer_guard_compatibility' has no attribute 'build_compatibility_receipt'
+
+tests\akt\test_outer_guard_source_compatibility.py:80: AttributeError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_outer_guard_source_compatibility.py::test_missing_variant_pins_produces_draft_only
+FAILED tests/akt/test_outer_guard_source_compatibility.py::test_valid_release_full_maps_and_exact_patch
+FAILED tests/akt/test_outer_guard_source_compatibility.py::test_any_mismatch_rejects[source]
+FAILED tests/akt/test_outer_guard_source_compatibility.py::test_any_mismatch_rejects[extra_delta]
+FAILED tests/akt/test_outer_guard_source_compatibility.py::test_any_mismatch_rejects[checkpoint]
+FAILED tests/akt/test_outer_guard_source_compatibility.py::test_any_mismatch_rejects[calibrator]
+FAILED tests/akt/test_outer_guard_source_compatibility.py::test_any_mismatch_rejects[runtime]
+FAILED tests/akt/test_outer_guard_source_compatibility.py::test_builder_refuses_checkout_crlf_upstream_delta
+8 failed in 5.81s
