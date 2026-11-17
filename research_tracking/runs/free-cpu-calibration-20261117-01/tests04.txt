@@ -1,0 +1,33 @@
+.......F...                                                              [100%]
+================================== FAILURES ===================================
+________________ test_notebook_cells_and_embedded_runner_parse ________________
+
+    def test_notebook_cells_and_embedded_runner_parse():
+        notebook = Path(__file__).resolve().parents[2] / 'notebooks/akt_colab_response_calibration_cpu.ipynb'
+        document = json.loads(notebook.read_text(encoding='utf-8'))
+        assert all(not cell.get('outputs') for cell in document['cells'])
+        for cell in document['cells']:
+            if cell['cell_type'] != 'code':
+                continue
+            tree = ast.parse(''.join(cell['source']))
+            for node in tree.body:
+                if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'FILES' for t in node.targets):
+                    embedded = ast.literal_eval(node.value)
+                    for name, text in embedded.items():
+                        actual = notebook.parents[1] / 'scripts/akt' / name
+>                       assert actual.read_text(encoding='utf-8') == text
+E                       assert '"""Launcher ...eturn state\n' == '"""Launcher ...eturn state\n'
+E                         
+E                         Skipping 13676 identical leading characters in diff, use -v to show
+E                           :
+E                         +         verify_publication(session, state['raw_publication'])
+E                                   state.update(fit_verified=True, fit_publication=publish(session, state['pending_fit'], state_root))
+E                                   state.pop('pending_fit')
+E                                   state.pop('pending_fit_files')...
+E                         
+E                         ...Full output truncated (55 lines hidden), use '-vv' to show
+
+tests\akt\test_free_cpu_calibration.py:131: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_free_cpu_calibration.py::test_notebook_cells_and_embedded_runner_parse
+1 failed, 10 passed in 12.58s

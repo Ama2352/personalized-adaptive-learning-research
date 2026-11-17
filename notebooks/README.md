@@ -1,5 +1,9 @@
 # Notebook nghiên cứu
 
+## 17/11 — calibration A2/A3 bằng Colab CPU miễn phí
+
+[akt_colab_response_calibration_cpu.ipynb](akt_colab_response_calibration_cpu.ipynb) dùng numeric A2/A3 đã sao lưu trên Drive, source/split/encoding frozen và fitter V1. Notebook có `.venv` riêng, không Torch/GPU/Modal compute. Raw và fit được upload Drive, state URI riêng trong MyDrive chưa chia sẻ. Cần người dùng xác thực và Mount Drive Sang. Đã có kiểm tổng hợp entrypoint, chưa có full-calibration Colab thật. [Cách chạy, resume và giới hạn](../research_tracking/runs/free-cpu-calibration-20261117-01/README.md).
+
 ## 13/11 — validation theo batch
 
 [Hồ sơ](../research_tracking/runs/junyi-validation-batch-20261113-01/README.md) giữ 126 ca Linux đạt, hai phép kiểm T4, log và figure. Trên 12.800 target tổng hợp có tín hiệu đồ thị, A0 tăng tốc 3,88 lần, A1 2,01 lần. Chưa kiểm lại toàn selection bằng checkpoint A0. Không train epoch, không dùng Modal.

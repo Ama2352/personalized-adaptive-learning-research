@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="11" time="12.573" timestamp="2026-11-17T15:52:21.796018+07:00" hostname="Ama"><testcase classname="tests.akt.test_free_cpu_calibration" name="test_download_range_resume_and_sha" time="0.020" /><testcase classname="tests.akt.test_free_cpu_calibration" name="test_download_bad_sha_keeps_partial" time="0.011" /><testcase classname="tests.akt.test_free_cpu_calibration" name="test_numeric_zip_safe_restore" time="0.055" /><testcase classname="tests.akt.test_free_cpu_calibration" name="test_numeric_zip_rejects_traversal" time="0.028" /><testcase classname="tests.akt.test_free_cpu_calibration" name="test_completed_publication_rechecked_on_drive[False]" time="0.002" /><testcase classname="tests.akt.test_free_cpu_calibration" name="test_completed_publication_rechecked_on_drive[True]" time="0.002" /><testcase classname="tests.akt.test_free_cpu_calibration" name="test_pending_output_changed_fails_closed" time="0.070" /><testcase classname="tests.akt.test_free_cpu_calibration" name="test_notebook_cells_and_embedded_runner_parse" time="0.015"><failure message="assert '&quot;&quot;&quot;Launcher ...eturn state\n' == '&quot;&quot;&quot;Launcher ...eturn state\n'&#10;  &#10;  Skipping 13676 identical leading characters in diff, use -v to show&#10;    :&#10;  +         verify_publication(session, state['raw_publication'])&#10;            state.update(fit_verified=True, fit_publication=publish(session, state['pending_fit'], state_root))&#10;            state.pop('pending_fit')&#10;            state.pop('pending_fit_files')...&#10;  &#10;  ...Full output truncated (55 lines hidden), use '-vv' to show">def test_notebook_cells_and_embedded_runner_parse():
+        notebook = Path(__file__).resolve().parents[2] / 'notebooks/akt_colab_response_calibration_cpu.ipynb'
+        document = json.loads(notebook.read_text(encoding='utf-8'))
+        assert all(not cell.get('outputs') for cell in document['cells'])
+        for cell in document['cells']:
+            if cell['cell_type'] != 'code':
+                continue
+            tree = ast.parse(''.join(cell['source']))
+            for node in tree.body:
+                if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'FILES' for t in node.targets):
+                    embedded = ast.literal_eval(node.value)
+                    for name, text in embedded.items():
+                        actual = notebook.parents[1] / 'scripts/akt' / name
+&gt;                       assert actual.read_text(encoding='utf-8') == text
+E                       assert '"""Launcher ...eturn state\n' == '"""Launcher ...eturn state\n'
+E                         
+E                         Skipping 13676 identical leading characters in diff, use -v to show
+E                           :
+E                         +         verify_publication(session, state['raw_publication'])
+E                                   state.update(fit_verified=True, fit_publication=publish(session, state['pending_fit'], state_root))
+E                                   state.pop('pending_fit')
+E                                   state.pop('pending_fit_files')...
+E                         
+E                         ...Full output truncated (55 lines hidden), use '-vv' to show
+
+tests\akt\test_free_cpu_calibration.py:131: AssertionError</failure></testcase><testcase classname="tests.akt.test_free_cpu_calibration" name="test_publication_cannot_hash_arbitrary_path" time="0.008" /><testcase classname="tests.akt.test_free_cpu_calibration" name="test_run_variant_joins_numeric_and_calls_v1_without_model[A2]" time="3.456" /><testcase classname="tests.akt.test_free_cpu_calibration" name="test_run_variant_joins_numeric_and_calls_v1_without_model[A3]" time="1.599" /></testsuite></testsuites>
