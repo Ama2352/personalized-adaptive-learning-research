@@ -8,6 +8,29 @@ Từ đó, KLTN đặt ba bước tiếp nối. RQ1 tìm mắt xích khiến d�
 
 **Mốc đã đạt** gồm các chẩn đoán RQ1–RQ2 và chuỗi chọn vòng, học lại, hiệu chỉnh, đánh giá dự báo độc lập của bốn mô hình Junyi. **Mốc còn thiếu** tập trung ở các đối chứng bắt buộc, điều kiện hiệu lực, quyết định lộ trình và mô phỏng vòng kín Grade10, cùng luận văn và demo hoàn chỉnh.
 
+## 17/11 — Đối chiếu lại toàn bộ phần training còn lại
+
+
+Đối chiếu Protocol21 đã adopt và bảng rà phạm vi15/11. Có **15/36 phase neural chính đã có bằng chứng** gồm8phase Junyi expert và7selected Grade10. Một phase là selected-fit hoặc refit; số này không đo phần trăm hoàn thành RQ hay toàn KLTN.
+
+| Phần còn thiếu | Phase selected-fit/refit | Mục đích nghiên cứu |
+|---|---:|---|
+| Junyi learned-graph A1/A2/A3 |6|Kiểm kết luận có phụ thuộc cách xây đồ thị từ dữ liệu hay không; predictive evidence có giới hạn thứ tự luyện quan sát|
+| Junyi SAKT/GKT |4|Đối chứng KT bổ sung theo đề cương, cùng ranh giới thông tin|
+| Grade10 bảy điều kiện AKT đã chọn |7|Tạo bản refit cho calibration, quyết định lộ trình và vòng kín trên môi trường biết cạnh thật/nhiễu|
+| Grade10 SAKT/GKT main |4|Hoàn tất đối chứng cùng cohort và gate đầy đủ trước refit/evaluation chính|
+| Tổng |**21**|Chưa gồm matched GAM/Graph-GAM, ước lượng graph/confidence bổ sung, calibration và inference|
+
+Đề xuất hoãn sáu phase Junyi learned-graph trong báo cáo15/11 **chưa được áp dụng**. Nhận định trước rằng chỉ còn Grade10 là hết AKT thiếu phần này. Giữ đầy đủ nghĩa vụ hiện hành trong bàn giao. Gate chọn chung chín ứng viên Grade10 còn cần SAKT/GKT main trên cohort phù hợp. Không tự lấy engineering10 thay main60.
+
+## 18/11 — Nghiệm thu theo tính đúng của bằng chứng
+
+Kết quả âm hoặc chưa rõ khác biệt được giữ làm kết quả nghiên cứu. Mỗi RQ được diễn giải theo độ lớn hiệu ứng, khoảng bất định và điều kiện áp dụng; mức kết luận có thể hỗ trợ một phần hoặc còn thiếu bằng chứng. Outer Junyi hiện tại chưa phát hiện ưu thế rõ của graph sau calibration trên các so sánh LogLoss/Brier đã hiệu chỉnh Holm. Kết luận còn có điều kiện mộtfold/mộtseed. Phần tiếp tục ưu tiên phép đo ngưỡng mastery, thay đổi lựa chọn và vòng kín Grade10 cùng ba bẫy đánh giá.
+
+Con số21phase còn lại là ma trận triển khai của nhóm; đề cương chưa ấn định tích đầy đủ mọi model×graph×environment. Đề xuất hoãn learnedJunyi chưa áp dụng. SAKT/GKT và matched GAM/Graph-GAM tiếp tục là đối chứng cần theo dõi. Mỗi lượt bổ sung cần có câu hỏi còn thiếu và đầu ra sử dụng trong luận văn.
+
+Giới hạn phương pháp gồm A0 selection theo validation batch1 lịch sử chưa replay ranking đủ12epoch, A3 refit mixed hardware và family thống kê khóa sau inference nhưng trước xem metric. Outer đã xem, thiết kế thay đổi từ đây cần ghi là hậu kiểm/thăm dò. Hồ sơ rà phạm vi và liêm chính kết quả ngày18/11 được lưu trong gói bàn giao.
+
 <a id="history"></a>
 
 ## Quá trình nghiên cứu đến hiện tại

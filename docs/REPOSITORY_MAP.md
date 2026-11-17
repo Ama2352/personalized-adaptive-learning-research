@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 18/11 — Bàn giao training và rà phạm vi nghiên cứu
+
+[Chỉ mục bàn giao](../research_tracking/runs/training-handoff-20261117-01/README.md) giữ toàn bộ nhóm đầu ra đã định vị, SHA/inventory và biên nhận Drive Sang. [Rà tính đúng và phạm vi](../research_tracking/reports/SCOPE_AND_RESULT_INTEGRITY_REVIEW_20261118.md) nêu bằng chứng hiện hành, khoảng trống quyết định/vòng kín và vai trò của21phase còn lại trong protocol nhóm. Các kết luận dương, âm hoặc bất định được diễn giải theo điều kiện thực nghiệm.
+
 ## 17/11 — Đã nghiệm thu benchmark outer Junyi A0–A3
 
 [Bundle thực](../research_tracking/runs/junyi-outer-real-20261117-01/README.md) giữ input/source/compatibility, bốn GPUresult, bốn CPUexport, metric/pairedbootstrap2000/Holm24, CSV và SVG/PNG/PDF. [Hai báo cáo GVHD](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO_NGHIEN_CUU.html) đã nối kết quả trước/sau hiệu chỉnh, giới hạn mộtfold/mộtseed và ngoại lệ thời điểm khóa family. Tám archive và nguồn/figure đã lưu Drive Sang. [Kiểm dung lượng hiện hành](../research_tracking/runs/junyi-outer-real-20261117-01/STORAGE_CURRENT_REVIEW01.md) phân biệt35GBhistory đã dọn với55,78GBduplicate còn giữ.

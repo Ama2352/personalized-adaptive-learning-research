@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+[18/11 — Rà phạm vi và tính đúng của kết quả](SCOPE_AND_RESULT_INTEGRITY_REVIEW_20261118.md) phân biệt bằng chứng dự báo đã có với chuỗi quyết định/vòng kín còn thiếu. Kết luận theo độ lớn hiệu ứng, bất định và điều kiện áp dụng, chấp nhận kết quả âm. Con số21phase thuộc ma trận triển khai nhóm, cần đọc cùng yêu cầu đề cương.
+
+[18/11 — Bàn giao toàn bộ nhóm đầu ra training](../runs/training-handoff-20261117-01/README.md) thống kê BKT/GAM, Graph-GAM lịch sử, AKT Junyi/Grade10, SAKT/GKT engineering và confidence. Inventory theo file, gói Drive và source/protocol tách rõ model nghiên cứu với lượt kiểm kỹ thuật.
+
 [17/11 — Benchmark outer Junyi A0–A3 đã nghiệm thu](../runs/junyi-outer-real-20261117-01/README.md) có4.137.050target/model, bảng chỉ số và phân tích ghép theo người học. Sau hiệu chỉnh chưa xác lập ưu thế của graph variants soA0 trongfold này. CóCSV/SVG/PNG/PDF, nguồn frozen và8archive Drive. Ngoại lệ khóa family sau inference được ghi rõ.
 
 [17/11 — Đường cache outer và release guardfold](JUNYI_OUTER_PUBLIC_API_PATH_20261117.md) nối kiểm OOV/rank với sourcepacket riêng,75kiểm thử và compatibility A2 theo file thật. Cache toàn cohort, model/numericaladmission và GPUouter còn chờ.
