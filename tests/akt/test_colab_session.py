@@ -72,6 +72,43 @@ def test_expired_credential_refresh_persists_without_browser(tmp_path, monkeypat
     assert json.loads(token.read_text())['refresh_token'] == 'private-refresh'
 
 
+def test_transient_refresh_error_keeps_login_and_recovers(tmp_path, monkeypatch):
+    from google.auth.exceptions import TransportError
+    token, _ = setup(tmp_path, monkeypatch)
+    token.write_text('{}')
+    credentials = Credentials()
+    original = credentials.refresh
+    def refresh(request):
+        if credentials.refreshed == 0:
+            credentials.refreshed += 1
+            raise TransportError('synthetic network failure')
+        original(request)
+    credentials.refresh = refresh
+    factory = SimpleNamespace(from_authorized_user_file=lambda path: credentials)
+    loaded = colab.load_credentials(token, credentials_type=factory,
+                                    request_factory=lambda: object())
+    assert loaded is credentials and credentials.refreshed == 2
+
+
+def test_network_failure_never_reopens_consent_or_replaces_saved_token(tmp_path, monkeypatch):
+    from google.auth.exceptions import TransportError
+    token, _ = setup(tmp_path, monkeypatch)
+    token.write_text('{}')
+    client = tmp_path/'client.json'
+    client.write_text('{}')
+    credentials = Credentials()
+    def refresh(request):
+        credentials.refreshed += 1
+        raise TransportError('synthetic network failure')
+    credentials.refresh = refresh
+    factory = SimpleNamespace(from_authorized_user_file=lambda path: credentials)
+    flow = SimpleNamespace(from_client_secrets_file=lambda *args, **kwargs: pytest.fail('Consent reopened'))
+    with pytest.raises(colab.ColabSessionError, match='COLAB_AUTH_NETWORK_UNAVAILABLE'):
+        colab.load_credentials(token, client, interactive=True, credentials_type=factory,
+                               flow_type=flow, request_factory=lambda: object())
+    assert credentials.refreshed == 3 and token.read_text() == '{}'
+
+
 def test_missing_token_requires_explicit_login(tmp_path, monkeypatch):
     token, _ = setup(tmp_path, monkeypatch)
     with pytest.raises(colab.ColabSessionError, match='LOGIN_REQUIRED'):
@@ -160,7 +197,7 @@ def test_explicit_login_requests_offline_without_logging_auth_url(tmp_path, monk
     assert loaded.has_scopes(colab.SCOPES)
     assert calls['access_type'] == 'offline' and calls['open_browser']
     assert calls['host'] == 'localhost' and calls['port'] == 0
-    assert calls['browser'] == 'kltn-edge' and calls['timeout_seconds'] == 600
+    assert calls['browser'] == 'kltn-edge' and calls['timeout_seconds'] == 1800
     assert colab.COLAB_SCOPE in calls['scopes']
     assert 'https://' not in calls['authorization_prompt_message']
     assert capsys.readouterr().out == ''

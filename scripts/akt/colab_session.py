@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 import re
+import time
 import uuid
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -86,6 +87,24 @@ def save_credentials(path, credentials):
     save_private(path, info)
 
 
+def refresh_credentials(credentials, request_factory=None):
+    """Thử lại lỗi truyền tải hữu hạn, giữ nguyên quyền đã được cấp."""
+    from google.auth.exceptions import TransportError
+    from google.auth.transport.requests import Request
+    request = (request_factory or Request)()
+    def bounded_request(*args, **kwargs):
+        kwargs['timeout'] = (5, 15)
+        return request(*args, **kwargs)
+    for attempt in range(3):
+        try:
+            credentials.refresh(bounded_request)
+            return
+        except TransportError:
+            if attempt == 2:
+                raise ColabSessionError('COLAB_AUTH_NETWORK_UNAVAILABLE') from None
+            time.sleep(attempt+1)
+
+
 def load_credentials(token_path, client_config=CLIENT_CONFIG, *, interactive=False,
                      credentials_type=None, flow_type=None, request_factory=None):
     from google.oauth2.credentials import Credentials
@@ -100,7 +119,9 @@ def load_credentials(token_path, client_config=CLIENT_CONFIG, *, interactive=Fal
             credentials = None
     if credentials is not None and not credentials.valid and credentials.refresh_token:
         try:
-            credentials.refresh(request_factory())
+            refresh_credentials(credentials, request_factory)
+        except ColabSessionError:
+            raise
         except Exception:
             if not interactive:
                 raise ColabSessionError('LOGIN_REQUIRED_REFRESH_FAILED') from None
@@ -116,7 +137,7 @@ def load_credentials(token_path, client_config=CLIENT_CONFIG, *, interactive=Fal
         flow = flow_type.from_client_secrets_file(str(client_config), scopes=SCOPES)
         try:
             credentials = flow.run_local_server(host='localhost', port=0, open_browser=True,
-                browser=edge_browser(), timeout_seconds=600,
+                browser=edge_browser(), timeout_seconds=1800,
                 access_type='offline', prompt='consent',
                 authorization_prompt_message='Trình duyệt Google đã mở để xác nhận quyền Colab.',
                 success_message='Đã xác nhận quyền Colab. Có thể đóng tab này.')
@@ -262,7 +283,7 @@ def main():
     credentials = load_credentials(PRIVATE/'credentials.json', args.client_config, interactive=args.command == 'login')
     from google.auth.transport.requests import AuthorizedSession
     with AuthorizedSession(credentials) as session:
-        identity = session.get('https://openidconnect.googleapis.com/v1/userinfo', timeout=30, allow_redirects=False)
+        identity = session.get('https://www.googleapis.com/oauth2/v3/userinfo', timeout=30, allow_redirects=False)
         if identity.status_code != 200 or identity.json().get('email') != ACCOUNT:
             raise ColabSessionError('COLAB_ACCOUNT_MISMATCH')
         if args.command == 'login':

@@ -230,7 +230,7 @@ def main():
     except ImportError:
         from drive_resumable_upload import single_writer
     with single_writer(auth.PRIVATE/'cpu-execution.lock'), AuthorizedSession(credentials) as session:
-        identity = session.get('https://openidconnect.googleapis.com/v1/userinfo',timeout=30,allow_redirects=False)
+        identity = session.get('https://www.googleapis.com/oauth2/v3/userinfo',timeout=30,allow_redirects=False)
         _need(identity.status_code == 200 and identity.json().get('email') == auth.ACCOUNT, 'COLAB_ACCOUNT_MISMATCH')
         client = auth.ColabClient(session,credentials,auth.PRIVATE/'credentials.json',auth.PRIVATE/'runtime-proxies.json')
         path = auth.PRIVATE/'cpu-execution.json'
