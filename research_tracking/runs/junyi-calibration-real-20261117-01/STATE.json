@@ -1,5 +1,5 @@
 {
-  "status": "FOUR_GPU_SNAPSHOTS_COMPLETE_CPU_JOINS_RUNNING",
+  "status": "A0_A1_CALIBRATED_A2_A3_NUMERIC_DRIVE_VERIFIED_FREE_CPU_PENDING",
   "updated": "2026-11-17",
   "run_id": "junyi-calibration-real-20261117-01",
   "workspace": "honguyenminhsang2016",
@@ -45,10 +45,11 @@
     "Timing/input local regression 61 tests passed with short repo test path"
   ],
   "pending": [
-    "Nghiệm thu raw join và temperature V1 A0–A3 trên Drive",
-    "Đánh giá outer độc lập và so sánh thống kê vẫn chờ"
+    "Calibration A2/A3 trên CPU local hoặc Colab miễn phí",
+    "Đánh giá outer độc lập cùng protocol A0–A3",
+    "So sánh thống kê và vòng kín Grade10 theo đề cương"
   ],
-  "next_budget_vi": "Ba lượt GPU A1–A3 đã giữ cận0,75USD/lượt, một GPU mỗi lúc; tổng cùng dự phòng5USD dưới30USD. Billing đọc11:30local metered0.25056089USD/billed0, có độ trễ.",
+  "next_budget_vi": "Không có compute Modal đang chạy. CPU chỉ local/Colab miễn phí. Mọi lượt H100 tiếp theo cần dự toán từ đầu vào và bước đánh giá thực tế, giữ trần workspace30USD.",
   "agents": {
     "input_staging": "/root/rq12_evidence_completion",
     "controller": "/root/supervisor_report_refresh",
@@ -92,8 +93,51 @@
     "A3": 47.977622744
   },
   "cpu_progress": {
-    "A0": "15.847shard/1.621.484predictions đã xuất; audit đang chạy lúc11:39, chưa temperature",
-    "A1_A2_A3": "CPU launcher tuần tự đã chạy, xem a1-a3-cpu-join01.log",
-    "probe": "A0_CPU_PROGRESS_PROBE01.json"
+    "A0": "CalibrationfitxongvàDriveverified,T1.03018345,1.621.484targets.",
+    "A1": "Calibrationfitxongtrướcstop,vàDriveđãindependentreadbackverified,T1.02635362,1.621.484targets.",
+    "A2": "Rawđủ15.847shardstrênVolume,chưaacceptfit. PaidCPUAppđãstop.",
+    "A3": "GPUinferencesnapshotcomplete,cònCPUjoin/fittrênfreeCPU."
+  },
+  "cpu_audit_optimization": {
+    "reason_vi": "DuckDBexpectedrowsautocommit/WALchậm,kếthừahelpergốcnhưngbọctransactionbằngscriptsngoàiKT. KhôngđổiKTsourceidentityd22 hoặc4GPUoutputs.",
+    "local_tests": "73passed25.11s TESTS_TRANSACTION_RECOVERY01.txt",
+    "linux_tests": "197passed18.04s LINUX_CPU_GATE06.json,DriveSHAverified",
+    "helper_sha256": "09a3fcb2d7ae1f4875351336591c554a593d22240bd046ebc04a36f815c72347",
+    "frozen_preflight": "PREFLIGHT06.json choA1/A2/A3appsđãkhởiđộng;PREFLIGHT07.jsonsẽdùngchoA0sourceisolation"
+  },
+  "next_action": "Chuẩn bị launcher Colab CPU miễn phí dùng frozen V1 và numeric archive Drive, audit rồi fit A2/A3. Giữ nguyên nguồn KT đến khi nghiệm thu calibration.",
+  "token_expires_at": "2026-11-17T17:44:01Z",
+  "parallel_agents": {
+    "calibration": "Free CPU launcher A2/A3 ngoài frozen KT",
+    "outer_evaluation": "Audit split/target/OOV và reuse consumers",
+    "report": "Cập nhật hai báo cáo hiện hành với bằng chứng và phase% có mẫu số"
+  },
+  "human_report_commits": [
+    "a5593b3c",
+    "7244cd3e",
+    "d6c9f484"
+  ],
+  "resource_policy": {
+    "modal": "ChỉH100GPU;khôngCPU-onlyworker/probe/finalizer",
+    "cpu": "Local.venvhoặcColabCPUmiễnphí",
+    "all_cpu_apps_stopped_zero_tasks_evidence": "APPS_CPU_STOP_USER_GPU_ONLY02.json",
+    "current_modal_metered_snapshot": "MODAL_AFTER_GPU_ONLY_STOP.json,0.84466589USDtotalworkspace12:47,CPU/GPUchưatóchriêng,billingcótrễ"
+  },
+  "completed_package_commits": [
+    "a62c1ed8",
+    "9199a71f",
+    "7a6abc07",
+    "91a2fb7e",
+    "d76f7e71"
+  ],
+  "numeric_drive_backup": {
+    "variants": [
+      "A2",
+      "A3"
+    ],
+    "acceptance": "NUMERIC_BACKUP_READBACK01.json",
+    "total_bytes": 71546486,
+    "local_peak_rss_bytes": 127397888,
+    "modal_compute_used": false
   }
 }

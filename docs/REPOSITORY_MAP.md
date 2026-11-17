@@ -1,8 +1,20 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 17/11 — Calibration, lưu trữ Drive và chính sách tài nguyên hiện hành
+
+[Biên nhận numeric A2/A3](../research_tracking/runs/junyi-calibration-real-20261117-01/NUMERIC_BACKUP_ACCEPTANCE01.md) định vị hai archive trên Drive Sang, tổng71.546.486byte, checksum/owner/parent đã đọc lại độc lập. Truyền bằng CPU local và API lưu trữ, peakRSS khoảng121,5MiB, không tạo ZIP/model binary trên máy. [Hai calibrator](../research_tracking/runs/junyi-calibration-real-20261117-01/POSTSTOP_CALIBRATION_METADATA_ACCEPTANCE01.json) xác nhận A0/A1 đã fit, A2/A3 fit còn chờ. [Model và checkpoint](../research_tracking/runs/junyi-calibration-real-20261117-01/MODEL_DRIVE_COVERAGE01.md) định vị bản sao Drive Sang và nguồn phục hồi.
+
+Chính sách hiện hành trong `AGENTS.md` và `research_tracking/COMPUTE_BUDGET_WORKSPACE2016.json` chỉ cho Modal H100. CPU dùng local `.venv` hoặc Colab miễn phí. Các worker CPU Modal cũ đã dừng, bằng chứng `APPS_CPU_STOP_USER_GPU_ONLY02.json`. Hồ sơ probe/worker CPU dưới đây giữ vai trò lịch sử.
+
+## 17/11 — Thống kê và bản thảo kết quả trong phạm vi KLTN
+
+[Tái tính Paper2 v2](../research_tracking/runs/paper2-statistical-reproduction-20261117-02/README.md) dùng chính hàm gốc trên kết quả đã lưu, khớp117phép so sánh gồm Wilcoxon/bootstrap/Holm. [Cơ chế RQ1/RQ2](../research_tracking/reports/RQ12_MECHANISM_CLAIMS_20261117.md) ghi rõ điều kiện của phép kiểm duy trì, không thay kết quả lịch sử. [Bản thảo kết quả và thảo luận](../research_tracking/reports/THESIS_RESULTS_DISCUSSION_DRAFT_20261117.md) có nguồn cho từng luận điểm và phần chưa kết luận. [Mốc tiến độ](../research_tracking/runs/thesis-results-discussion-writing-20261117-01/PUBLIC_MILESTONES_20261117.json) giữ mẫu số theo checklist và từng phase, không quy đổi thành tỷ lệ hoàn thành toàn luận văn.
+
+[Đánh giá baseline](../research_tracking/runs/baseline-evaluation-readiness-20261117-01/README.md) tái dùng bộ chỉ số chung cho dự đoán cached SAKT/GKT Grade10. Các lượt main/refit/calibration còn chờ. [Kiểm demo trên trình duyệt](../research_tracking/runs/demo-browser-review-20261117-01/README.md) lưu ảnh gốc desktop/mobile của7điều kiện AKT; tab và máy chủ kiểm đã đóng.
+
 ## 17/11 — Bốn model đã suy luận calibration Junyi thật
 
-[Nghiệm thu A0–A3](../research_tracking/runs/junyi-calibration-real-20261117-01/GPU_OUTPUT_ACCEPTANCE01.json) xác nhận mỗi model có1.621.484target/28.653cửa sổ,0OOV cùng cohort15.847người học. GPU worker lần lượt57,91/42,06/41,88/47,98giây, App GPU đã dừng. Cấu hình/log/NVML được kiểmSHA trên Drive Sang; CPU nối nhãn, audit và fit temperature đang chạy riêng. [Figure tài nguyên](../research_tracking/runs/junyi-calibration-real-20261117-01/GPU_USAGE_COMPARISON01.svg) giữ nguồnCSV/SHA/cách dựng trong cùng bundle. Utilization trung bình6–10%, chưa đạt50%. Đây là suy luận calibration sau refit đã hoàn tất, đánh giá outer độc lập và so sánh thống kê còn chờ. `STATE.json` của bundle giữ điểm tiếp tục.
+[Nghiệm thu A0–A3](../research_tracking/runs/junyi-calibration-real-20261117-01/GPU_OUTPUT_ACCEPTANCE01.json) xác nhận mỗi model có1.621.484target/28.653cửa sổ,0OOV cùng cohort15.847người học. GPU worker lần lượt57,91/42,06/41,88/47,98giây, App GPU đã dừng. Cấu hình/log/NVML được kiểm SHA trên Drive Sang. A0/A1 đã fit temperature và đọc lại Drive xác nhận. A2/A3 còn CPU nối nhãn/audit/fit trên local hoặc Colab miễn phí. [Figure tài nguyên](../research_tracking/runs/junyi-calibration-real-20261117-01/GPU_USAGE_COMPARISON01.svg) giữ nguồnCSV/SHA/cách dựng trong cùng bundle. Utilization trung bình6–10%, chưa đạt50%. Đây là suy luận calibration sau refit đã hoàn tất, đánh giá outer độc lập và so sánh thống kê còn chờ. `STATE.json` của bundle giữ điểm tiếp tục.
 
 ## 17/11 — Đầu ra cloud sang Drive Sang
 
