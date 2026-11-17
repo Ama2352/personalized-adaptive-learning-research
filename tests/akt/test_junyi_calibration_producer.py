@@ -76,6 +76,21 @@ def observations(case,records=None,**kwargs):
         binding=case['binding'],population=case['population'],max_targets=20,max_learner_events=10,**kwargs)
 
 
+def test_raw_export_preserves_explicit_graph_context_cache_on_phase_transition(case,monkeypatch):
+    from knowledge_tracing.akt import research_junyi_graph
+    cache=object()
+    phase=object()
+    seen=[]
+    case['adapter'].condition=SimpleNamespace(identity=None)
+    case['adapter'].set_phase=lambda value,**kwargs:seen.append((value,kwargs))
+    monkeypatch.setattr(research_junyi_graph,'JunyiGraphPhaseSession',lambda *_:phase)
+    producer.export_refit_calibration_predictions(case['attached'],case['paths'],case['phase'],
+        population=case['population'],expected_population_identity=case['population']['identity'],
+        source_pins=case['pins'],max_targets=20,max_learner_events=10,prediction_batch_size=2,
+        output=case['output']/'cached-raw',context_cache=cache)
+    assert seen==[(phase,dict(context_cache=cache))]
+
+
 def test_raw_targets_keep_oov_and_warmup(case):
     rows=list(observations(case))
     assert len(rows)==20

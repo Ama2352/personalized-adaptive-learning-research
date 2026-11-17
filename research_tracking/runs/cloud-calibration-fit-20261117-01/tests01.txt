@@ -1,0 +1,29 @@
+F.....                                                                   [100%]
+================================== FAILURES ===================================
+_____ test_cloud_fit_uses_actual_v1_math_and_returns_explicit_drive_files _____
+
+cloud_case = {'roles': JunyiResearchRoles(train_users=('0', '1', '10', '11', '12', '13', '16', '2', '3', '5', '6', '8'), selection_.../KLTN/artifacts/akt/runtime/cloud-calibration-fit-tests-20261117-01/test_cloud_fit_uses_actual_v1_0/roles.json')), ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F272E91810>
+
+    def test_cloud_fit_uses_actual_v1_math_and_returns_explicit_drive_files(cloud_case, monkeypatch):
+        case = cloud_case
+        arguments = {key: value for key, value in case['arguments'].items()
+                     if key not in ('artifact_root', 'run_id', 'tranche_id')}
+        baseline = producer.fit_response_temperature_from_raw_export(case['raw'], case['paths'], case['phase'],
+            **arguments, output=case['output'] / 'baseline')
+        monkeypatch.setattr(producer, 'iter_predictions', lambda *_: pytest.fail('CPU fit cannot invoke model'))
+        result = run(case)
+        payloads = Path(result['payloads'])
+>       assert json.loads((payloads / 'fit/temperature.json').read_text()) == baseline.to_payload()
+E       AssertionError: assert {'binding': {...': 1e-06, ...} == {'recipe': 'r...2', ...}, ...}
+E         
+E         Omitting 14 identical items, use -vv to show
+E         Differing items:
+E         {'class_counts': [8, 10]} != {'class_counts': (8, 10)}
+E         {'unsupported_counts': [['unseen', 2]]} != {'unsupported_counts': (('unseen', 2),)}
+E         Use -v to get more diff
+
+tests\akt\test_cloud_calibration_fit.py:55: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_cloud_calibration_fit.py::test_cloud_fit_uses_actual_v1_math_and_returns_explicit_drive_files
+1 failed, 5 passed in 25.12s

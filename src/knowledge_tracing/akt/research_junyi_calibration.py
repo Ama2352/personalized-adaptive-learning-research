@@ -280,7 +280,7 @@ def iter_calibration_observations(records, expected_learners, *, view, binding, 
 
 def export_refit_calibration_predictions(predictor, paths, view, *, population,
         expected_population_identity, source_pins, max_targets, max_learner_events,
-        prediction_batch_size, output):
+        prediction_batch_size, output, artifact_root=None, context_cache=None):
     """Xuất raw predictions với predictor đã attach, không fit temperature.
 
     Caller chọn CPU/GPU stage và prepared reader/context đúng run contract.
@@ -295,7 +295,10 @@ def export_refit_calibration_predictions(predictor, paths, view, *, population,
     _source_pins(paths,source_pins)
     from .research_junyi_graph import JunyiGraphPhaseSession
     if hasattr(predictor.adapter,'set_phase'):
-        predictor.adapter.set_phase(JunyiGraphPhaseSession(predictor.adapter.condition,view))
+        predictor.adapter.set_phase(JunyiGraphPhaseSession(predictor.adapter.condition,view),
+                                    context_cache=context_cache)
+    else:
+        _need(context_cache is None,'graph context cache requires graph adapter')
     factory=lambda:iter_junyi_phase_learners(paths,view)
     if prediction_batch_size is None:
         records=iter_predictions(predictor.adapter,factory())
@@ -312,7 +315,8 @@ def export_refit_calibration_predictions(predictor, paths, view, *, population,
     identity=dict(phase='junyi_response_calibration',population=expected_population_identity,
                   checkpoint=predictor.binding.checkpoint_sha256,inference_source=predictor.receipt['inference_source_sha256'],
                   prediction_batch_size=prediction_batch_size)
-    result=export_predictions(raw_records(),Path(output),expected_learners_factory=factory,identity=identity)
+    result=export_predictions(raw_records(),Path(output),expected_learners_factory=factory,
+                              identity=identity,artifact_root=artifact_root)
     _write_json_atomic(Path(output)/'predictor-receipt.json',predictor.receipt)
     return result
 
@@ -360,9 +364,34 @@ def _fit_memory_budget(population, max_targets, max_learner_events):
     return estimate
 
 
+CLOUD_CALIBRATION_ARTIFACT_ROOT = Path('/artifacts')
+
+
+@dataclass(frozen=True)
+class CalibrationFitArtifactRoot:
+    """Root cloud khai báo rõ, giới hạn ở Volume của worker."""
+    root: Path
+
+    def validate_output(self, output):
+        root = Path(self.root)
+        expected = CLOUD_CALIBRATION_ARTIFACT_ROOT.resolve(strict=True)
+        _need(root.is_absolute() and root == expected and root.is_dir()
+              and not root.is_symlink(), 'physical mounted calibration artifact root required')
+        root = root.resolve(strict=True)
+        output = Path(output).absolute()
+        _need(output != root and output.is_relative_to(root), 'output outside calibration artifact root')
+        for component in (output, *output.parents):
+            if component == root:
+                break
+            _need(not component.is_symlink()
+                  and not getattr(component, 'is_junction', lambda: False)(), 'artifact output alias rejected')
+        _need(output.resolve() == output and not output.exists(), 'new physical calibration-fit output required')
+        return output
+
+
 def fit_response_temperature_from_raw_export(raw, paths, view, *, binding, population,
         expected_population_identity, expected_manifest_sha256, shard_sha256,
-        source_pins, max_targets, max_learner_events, output):
+        source_pins, max_targets, max_learner_events, output, artifact_root=None):
     """Fit scalar T trên local CPU từ raw export đã có, không cần GPU adapter.
 
     Heuristic 4 KiB/target là estimate bảo thủ chưa đo, không là phương pháp
@@ -374,10 +403,14 @@ def fit_response_temperature_from_raw_export(raw, paths, view, *, binding, popul
           'pinned calibration population/source changed')
     estimate=_fit_memory_budget(population,max_targets,max_learner_events)
     _source_pins(paths,source_pins)
-    output=Path(output).resolve()
-    allowed=(prediction.PROJECT_ROOT/'experiments/akt/results').resolve()
-    _need(output!=allowed and output.is_relative_to(allowed) and not output.exists(),
-          'new owned calibration-fit output required')
+    if artifact_root is None:
+        output=Path(output).resolve()
+        allowed=(prediction.PROJECT_ROOT/'experiments/akt/results').resolve()
+        _need(output!=allowed and output.is_relative_to(allowed) and not output.exists(),
+              'new owned calibration-fit output required')
+    else:
+        _need(type(artifact_root) is CalibrationFitArtifactRoot, 'typed calibration artifact root required')
+        output=artifact_root.validate_output(output)
     raw=Path(raw)
     manifest_path=raw/'manifest.json'
     _need(sha256_file(manifest_path)==expected_manifest_sha256,'raw export manifest changed')
@@ -418,7 +451,7 @@ def fit_refit_response_calibration(predictor, paths, view, *, population,
         prediction_batch_size, output):
     """Convenience local/toy nối hai API; không phải entrypoint thuê GPU Modal.
 
-    Run thật có thể trả GPU ngay sau export, chuyển raw artifact về D rồi gọi
+    Run thật trả GPU ngay sau export vào cloud Volume rồi gọi
     fit_response_temperature_from_raw_export bằng process CPU riêng.
     """
     _fit_memory_budget(population,max_targets,max_learner_events)

@@ -1,0 +1,52 @@
+{
+  "status": "SYNTHETIC_CLOUD_CPU_FIT_V1_PARITY_VERIFIED",
+  "tests": {
+    "passed": 33,
+    "skipped": 1,
+    "seconds": 23.25,
+    "skipped_reason": "Windows directory symlink permission",
+    "log": "tests02.txt"
+  },
+  "actual_junyi_calibration": false,
+  "cloud_execution": false,
+  "gpu_execution": false,
+  "source": [
+    {
+      "path": "src/knowledge_tracing/akt/research_junyi_calibration.py",
+      "bytes": 27388,
+      "sha256": "4cc794204471b6ce8e2af4b8fdeb2b1e95f5c8ae501166734fc4b6fce7be11f7"
+    },
+    {
+      "path": "src/knowledge_tracing/akt/cloud_calibration_fit.py",
+      "bytes": 5725,
+      "sha256": "124dacebf272b4004f903aafb252c61abc9e504261c6242f2ce89573fb7e0570"
+    },
+    {
+      "path": "tests/akt/test_cloud_calibration_fit.py",
+      "bytes": 7081,
+      "sha256": "7ff3680c8ff7417d6309bd9b1062f1fa75c27f3c8ccc7a1679dbeb70e3d20760"
+    },
+    {
+      "path": "src/knowledge_tracing/akt/prediction.py",
+      "bytes": 18835,
+      "sha256": "192d341478884b40c6d173be32b3794c394fc667775f0fe7452e3724554a70eb"
+    }
+  ],
+  "ownership": {
+    "agent": [
+      "research_junyi_calibration.py typed root/fit output policy",
+      "cloud_calibration_fit.py",
+      "test_cloud_calibration_fit.py"
+    ],
+    "root": [
+      "research_junyi_calibration.py raw export optional root",
+      "prediction.py export output policy"
+    ]
+  },
+  "limits": [
+    "Modal worker and durable Volume commit supplied by caller",
+    "Drive upload supplied by separate CPU worker",
+    "Cloud mount trusted symlink test requires Linux or Windows symlink permission",
+    "Full V1 memory guard needs at least about10.31GiB available for1621484targets"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "exit_code": 1,
+  "receipt": {
+    "status": "DRIVE_SHA256_VERIFIED",
+    "run_id": "cloud-calibration-linux-20261117-01",
+    "tranche_id": "cpu-tests02",
+    "account": "honguyenminhsang2005@gmail.com",
+    "parent_id": "1vaojIEDvwtE-vZgjlybwzrsjrGNE_8O7",
+    "folder_id": "1xgCxBmsgrgtkkrr8YmcvYmrvH8koUAEh",
+    "plan_identity": "b44467797d29bb6e793616875fa11e8280597edf9780ec86612a95b1d21eeefa",
+    "files": [
+      {
+        "path": "config.json",
+        "file_id": "1w43a81AR8K4J2ZlnvOs9-dcK3qoDNOqM",
+        "bytes": 449,
+        "sha256": "41d2be5b704b996e517bfbe4da7549655edbd54da410ed80daad5790e6664034"
+      },
+      {
+        "path": "result.json",
+        "file_id": "1-9tKbfoFrhNHjV4AUnEJuGRM3hEQfDvh",
+        "bytes": 85,
+        "sha256": "2b4e0eebd59c965031ae3314a6eac17cb1788a00909a0ae334108893f5f01e89"
+      },
+      {
+        "path": "tests.txt",
+        "file_id": "1BRFS51Ny2w5I85OrDcMW3MOlBXzgBTGq",
+        "bytes": 3125,
+        "sha256": "e94a090b4dc0ee8878c8dc881d365cb7643ec393fd14d048bca29ba41587fdd6"
+      }
+    ],
+    "bytes": 3659,
+    "verified_at": "2026-11-17T02:31:07.275380+00:00",
+    "plan_sha256": "3f5bdbdc8e856e4386266e9b230d28c3eb299a7e81271f29e6d150e7f7f40851",
+    "receipt_sha256": "7a2ac673395bd988cf7c7f37c778732efe102fb993c0cf66184c8d4ec462184b"
+  },
+  "test_summary": "===================================\n___________ test_synthetic_parquet_reader_through_normal_entrypoint ____________\n\ncase = {'roles': JunyiResearchRoles(train_users=('0', '1', '10', '11', '12', '13', '16', '2', '3', '5', '6', '8'), selection_...ifest.json'), split_manifest=PosixPath('/tmp/kltn-calibration-tests/test_synthetic_parquet_reader_0/roles.json')), ...}\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x2af331828440>\n\n    def test_synthetic_parquet_reader_through_normal_entrypoint(case,monkeypatch):\n        import pandas as pd\n        from knowledge_tracing.akt import data\n        frame=pd.DataFrame([asdict(event) for learner in case['learners'] for event in learner.events])\n>       frame.to_parquet(case['paths'].canonical,index=False)\n\ntests/akt/test_junyi_calibration_producer.py:265: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.13/site-packages/pandas/core/frame.py:3135: in to_parquet\n    return to_parquet(\n/usr/local/lib/python3.13/site-packages/pandas/io/parquet.py:486: in to_parquet\n    impl = get_engine(engine)\n           ^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nengine = 'auto'\n\n    def get_engine(engine: str) -> BaseImpl:\n        \"\"\"return our implementation\"\"\"\n        if engine == \"auto\":\n            engine = get_option(\"io.parquet.engine\")\n    \n        if engine == \"auto\":\n            # try engines in this order\n            engine_classes = [PyArrowImpl, FastParquetImpl]\n    \n            error_msgs = \"\"\n            for engine_class in engine_classes:\n                try:\n                    return engine_class()\n                except ImportError as err:\n                    error_msgs += \"\\n - \" + str(err)\n    \n>           raise ImportError(\n                \"Unable to find a usable engine; \"\n                \"tried using: 'pyarrow', 'fastparquet'.\\n\"\n                \"A suitable version of \"\n                \"pyarrow or fastparquet is required for parquet \"\n                \"support.\\n\"\n                \"Trying to import the above resulted in these errors:\"\n                f\"{error_msgs}\"\n            )\nE           ImportError: Unable to find a usable engine; tried using: 'pyarrow', 'fastparquet'.\nE           A suitable version of pyarrow or fastparquet is required for parquet support.\nE           Trying to import the above resulted in these errors:\nE            - `Import pyarrow` failed. pyarrow is required for parquet support. Use pip or conda to install the pyarrow package.\nE            - `Import fastparquet` failed. fastparquet is required for parquet support. Use pip or conda to install the fastparquet package.\n\n/usr/local/lib/python3.13/site-packages/pandas/io/parquet.py:68: ImportError\n=========================== short test summary info ============================\nFAILED tests/akt/test_junyi_calibration_producer.py::test_synthetic_parquet_reader_through_normal_entrypoint\n1 failed, 56 passed in 5.30s\n"
+}

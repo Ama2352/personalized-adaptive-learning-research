@@ -1,0 +1,141 @@
+✓ Initialized. View run at 
+https://modal.com/apps/honguyenminhsang2016/main/ap-XvlsPZaTMFJ4w1cKvYRbHW
+Building image im-sfIZq1rLYaOLjaAbkdnEJj
+
+=> Step 0: FROM base
+
+=> Step 1: RUN python -m pip install duckdb==1.5.6 google-auth==2.62.1 numpy==2.5.4 pandas==3.0.6 psutil==7.2.2 pyarrow==26.0.1 pytest==9.1.1 requests==2.34.2 scikit-learn==1.9.1 scipy==1.18.1
+Looking in indexes: http://pypi-mirror.modal.local:5555/simple
+Collecting duckdb==1.5.6
+  Downloading duckdb-1.5.6-cp313-cp313-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl.metadata (4.2 kB)
+Collecting google-auth==2.62.1
+  Downloading google_auth-2.62.1-py3-none-any.whl.metadata (6.0 kB)
+Collecting numpy==2.5.4
+  Downloading numpy-2.5.4-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+Collecting pandas==3.0.6
+  Downloading pandas-3.0.6-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (79 kB)
+Collecting psutil==7.2.2
+  Downloading psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl.metadata (22 kB)
+Collecting pyarrow==26.0.1
+  Downloading pyarrow-26.0.1-cp313-cp313-manylinux_2_28_x86_64.whl.metadata (3.0 kB)
+Collecting pytest==9.1.1
+  Downloading pytest-9.1.1-py3-none-any.whl.metadata (7.6 kB)
+Collecting requests==2.34.2
+  Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting scikit-learn==1.9.1
+  Downloading scikit_learn-1.9.1-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.3 kB)
+Collecting scipy==1.18.1
+  Downloading scipy-1.18.1-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+Collecting pyasn1-modules>=0.2.1 (from google-auth==2.62.1)
+  Downloading pyasn1_modules-0.4.2-py3-none-any.whl.metadata (3.5 kB)
+Collecting cryptography>=38.0.3 (from google-auth==2.62.1)
+  Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (4.4 kB)
+Collecting python-dateutil>=2.8.2 (from pandas==3.0.6)
+  Downloading python_dateutil-4.0.0-py3-none-any.whl.metadata (7.3 kB)
+Collecting iniconfig>=1.0.1 (from pytest==9.1.1)
+  Downloading iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+Requirement already satisfied: packaging>=22 in ./usr/local/lib/python3.13/site-packages (from pytest==9.1.1) (26.3)
+Collecting pluggy<2,>=1.5 (from pytest==9.1.1)
+  Downloading pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+Collecting pygments>=2.7.2 (from pytest==9.1.1)
+  Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting charset_normalizer<4,>=2 (from requests==2.34.2)
+  Downloading charset_normalizer-3.5.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+Collecting idna<4,>=2.5 (from requests==2.34.2)
+  Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting urllib3<3,>=1.26 (from requests==2.34.2)
+  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting certifi>=2023.5.7 (from requests==2.34.2)
+  Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+Collecting joblib>=1.4.0 (from scikit-learn==1.9.1)
+  Downloading joblib-1.6.0-py3-none-any.whl.metadata (6.5 kB)
+Collecting narwhals>=2.0.1 (from scikit-learn==1.9.1)
+  Downloading narwhals-2.28.0-py3-none-any.whl.metadata (15 kB)
+Collecting threadpoolctl>=3.5.0 (from scikit-learn==1.9.1)
+  Downloading threadpoolctl-3.8.0-py3-none-any.whl.metadata (29 kB)
+Collecting cffi>=2.0.0 (from cryptography>=38.0.3->google-auth==2.62.1)
+  Downloading cffi-2.1.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.5 kB)
+Collecting pycparser (from cffi>=2.0.0->cryptography>=38.0.3->google-auth==2.62.1)
+  Downloading pycparser-3.12-py3-none-any.whl.metadata (9.7 kB)
+Collecting cloudpickle>=3.0 (from joblib>=1.4.0->scikit-learn==1.9.1)
+  Downloading cloudpickle-3.1.2-py3-none-any.whl.metadata (7.1 kB)
+Collecting pyasn1<0.7.0,>=0.6.1 (from pyasn1-modules>=0.2.1->google-auth==2.62.1)
+  Downloading pyasn1-0.6.5-py3-none-any.whl.metadata (8.4 kB)
+Collecting tzdata (from python-dateutil>=2.8.2->pandas==3.0.6)
+  Downloading tzdata-2026.6-py2.py3-none-any.whl.metadata (1.4 kB)
+Downloading duckdb-1.5.6-cp313-cp313-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl (21.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 21.6/21.6 MB 216.8 MB/s  0:00:00
+Downloading google_auth-2.62.1-py3-none-any.whl (267 kB)
+Downloading numpy-2.5.4-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.7/16.7 MB 285.0 MB/s  0:00:00
+Downloading pandas-3.0.6-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (10.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.8/10.8 MB 219.7 MB/s  0:00:00
+Downloading psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl (155 kB)
+Downloading pyarrow-26.0.1-cp313-cp313-manylinux_2_28_x86_64.whl (55.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 55.0/55.0 MB 202.0 MB/s  0:00:00
+Downloading pytest-9.1.1-py3-none-any.whl (386 kB)
+Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+Downloading scikit_learn-1.9.1-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (9.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 9.1/9.1 MB 198.6 MB/s  0:00:00
+Downloading scipy-1.18.1-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (35.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.3/35.3 MB 275.9 MB/s  0:00:00
+Downloading charset_normalizer-3.5.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (254 kB)
+Downloading idna-3.20-py3-none-any.whl (69 kB)
+Downloading pluggy-1.7.0-py3-none-any.whl (27 kB)
+Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
+Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl (4.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.8/4.8 MB 256.1 MB/s  0:00:00
+Downloading cffi-2.1.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (221 kB)
+Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+Downloading joblib-1.6.0-py3-none-any.whl (306 kB)
+Downloading cloudpickle-3.1.2-py3-none-any.whl (22 kB)
+Downloading narwhals-2.28.0-py3-none-any.whl (490 kB)
+Downloading pyasn1_modules-0.4.2-py3-none-any.whl (181 kB)
+Downloading pyasn1-0.6.5-py3-none-any.whl (84 kB)
+Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 301.5 MB/s  0:00:00
+Downloading python_dateutil-4.0.0-py3-none-any.whl (92 kB)
+Downloading threadpoolctl-3.8.0-py3-none-any.whl (32 kB)
+Downloading pycparser-3.12-py3-none-any.whl (62 kB)
+Downloading tzdata-2026.6-py2.py3-none-any.whl (348 kB)
+Installing collected packages: urllib3, tzdata, threadpoolctl, pygments, pycparser, pyasn1, pyarrow, psutil, pluggy, numpy, narwhals, iniconfig, idna, duckdb, cloudpickle, charset_normalizer, certifi, scipy, requests, python-dateutil, pytest, pyasn1-modules, joblib, cffi, scikit-learn, pandas, cryptography, google-auth
+
+Successfully installed certifi-2026.10.23 cffi-2.1.1 charset_normalizer-3.5.2 cloudpickle-3.1.2 cryptography-50.0.2 duckdb-1.5.6 google-auth-2.62.1 idna-3.20 iniconfig-2.3.1 joblib-1.6.0 narwhals-2.28.0 numpy-2.5.4 pandas-3.0.6 pluggy-1.7.0 psutil-7.2.2 pyarrow-26.0.1 pyasn1-0.6.5 pyasn1-modules-0.4.2 pycparser-3.12 pygments-2.21.0 pytest-9.1.1 python-dateutil-4.0.0 requests-2.34.2 scikit-learn-1.9.1 scipy-1.18.1 threadpoolctl-3.8.0 tzdata-2026.6 urllib3-2.8.0
+
+[notice] A new release of pip is available: 26.2.2 -> 26.3
+[notice] To update, run: pip install --upgrade pip
+Saving image...
+Image saved, took 2.63s
+
+Built image im-sfIZq1rLYaOLjaAbkdnEJj in 27.34s
+
+
+✓ Created objects.
+├── ✓ Uploaded D:\Dev\KLTN\scripts\akt\modal_calibration_cpu_gate.py
+├── ✓ Uploaded D:\Dev\KLTN\scripts\akt\drive_resumable_upload.py
+├── ✓ Uploaded D:\Dev\KLTN\scripts\akt\drive_artifact_sink.py
+├── ✓ Uploaded D:\Dev\KLTN\tests\akt\test_research_junyi_numeric_predictions.py
+├── ✓ Uploaded D:\Dev\KLTN\tests\akt\test_drive_artifact_sink.py
+├── ✓ Uploaded D:\Dev\KLTN\tests\akt\test_junyi_calibration_producer.py
+├── ✓ Uploaded D:\Dev\KLTN\tests\akt\test_cloud_calibration_fit.py
+├── ✓ Uploaded D:\Dev\KLTN\artifacts\akt\dependencies\upstream\akt.py
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\docs\thesis_recovery\21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md
+├── ✓ Uploaded D:\Dev\KLTN\src\knowledge_tracing
+└── ✓ Created Function gate.
+Drive đang còn 5438.83 GB trống.
+Đã kiểm đúng tài khoản và quyền đọc thư mục đích.
+Kiểm SHA nguồn config.json
+config.json: 0.0%
+Đã kiểm xong config.json
+Kiểm SHA nguồn result.json
+result.json: 0.0%
+Đã kiểm xong result.json
+Kiểm SHA nguồn tests.txt
+tests.txt: 0.0%
+Đã kiểm xong tests.txt
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/honguyenminhsang2016/main/ap-XvlsPZaTMFJ4w1cKvYRbHW
+{"exit_code": 0, "receipt": {"status": "DRIVE_SHA256_VERIFIED", "run_id": "cloud-calibration-linux-20261117-01", "tranche_id": "cpu-tests03", "account": "honguyenminhsang2005@gmail.com", "parent_id": "1vaojIEDvwtE-vZgjlybwzrsjrGNE_8O7", "folder_id": "1YLEly32aj8ZB8yUjJggWnZ9_9glH-m0S", "plan_identity": "251474fb6072b2977e782adbcb19bf7029e85e91a1a7f8ee5b034e1e091975c1", "files": [{"path": "config.json", "file_id": "1fAwliCsAQYSDHtZ_N4p0q1HdAQHHS2Ow", "bytes": 20121, "sha256": "a4b88a628ad8931caae88d8cacd5fc7372281e4ab0c89d3dd430677ffa035feb"}, {"path": "result.json", "file_id": "10P4KdrelS2g1tET1WIVfmlH0lht4hdJp", "bytes": 92, "sha256": "e494cd48ef689aff3571b32fc669eb3822c4ddd53070d57a031cf2cf3c89846a"}, {"path": "tests.txt", "file_id": "1VZmIs9vaG2LGk8XXyssQG8FAkbO7XVI-", "bytes": 179, "sha256": "bda11424a4e4e539b74603de59dc2e4166359e2f5024b4b38682a5f5805d32c1"}], "bytes": 20392, "verified_at": "2026-11-17T02:35:09.383366+00:00", "plan_sha256": "85e3b406e857e73190fb2fd87c8d41d11a424f2c6b73b659bd894e4cebf51897", "receipt_sha256": "d78dce785d00e0c7156fa9e6f9cc0aad6ac29ced52a7c43ae886bc4699b7424e"}, "test_summary": "........................................................................ [ 73%]\n..........................                                               [100%]\n98 passed in 5.97s\n"}

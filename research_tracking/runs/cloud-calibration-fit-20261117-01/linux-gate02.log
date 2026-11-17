@@ -1,0 +1,120 @@
+✓ Initialized. View run at 
+https://modal.com/apps/honguyenminhsang2016/main/ap-RuyHhV3OKfLZKxlryJjIJK
+✓ Created objects.
+├── ✓ Uploaded D:\Dev\KLTN\scripts\akt\modal_calibration_cpu_gate.py
+├── ✓ Uploaded D:\Dev\KLTN\scripts\akt\drive_resumable_upload.py
+├── ✓ Uploaded D:\Dev\KLTN\scripts\akt\drive_artifact_sink.py
+├── ✓ Uploaded D:\Dev\KLTN\tests\akt\test_drive_artifact_sink.py
+├── ✓ Uploaded D:\Dev\KLTN\tests\akt\test_junyi_calibration_producer.py
+├── ✓ Uploaded D:\Dev\KLTN\artifacts\akt\dependencies\upstream\akt.py
+├── ✓ Uploaded D:\Dev\KLTN\tests\akt\test_cloud_calibration_fit.py
+├── ✓ Uploaded 
+│   D:\Dev\KLTN\docs\thesis_recovery\21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md
+├── ✓ Uploaded D:\Dev\KLTN\src\knowledge_tracing
+└── ✓ Created Function gate.
+Drive đang còn 5438.83 GB trống.
+Đã kiểm đúng tài khoản và quyền đọc thư mục đích.
+Kiểm SHA nguồn config.json
+config.json: 0.0%
+[modal-client] 2026-11-17T09:21:30+0700 Loop attempt for _run_app.<locals>.heartbeat failed
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_grpc_client.py", line 164, in direct
+    return await self.client._call_unary(self.wrapped_method, req, timeout=timeout, metadata=metadata)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\client.py", line 563, in _call_unary
+    return await self._call_safely(coro, grpclib_method.name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\client.py", line 519, in _call_safely
+    return await request_task
+           ^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\grpclib\client.py", line 912, in __call__
+    await stream.send_message(message, end=True)
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\grpclib\client.py", line 242, in send_message
+    await self.send_request()
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\grpclib\client.py", line 174, in send_request
+    protocol = await self._channel.__connect__()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_utils\grpc_utils.py", line 137, in __connect__
+    return await super().__connect__()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\grpclib\client.py", line 748, in __connect__
+    self._protocol = await self._create_connection()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_utils\grpc_utils.py", line 147, in _create_connection
+    protocol = await self._open_connection()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_utils\grpc_utils.py", line 169, in _open_connection
+    return await super()._create_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\grpclib\client.py", line 725, in _create_connection
+    _, protocol = await self._loop.create_connection(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<8 lines>...
+    )
+    ^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 1117, in create_connection
+    infos = await self._ensure_resolved(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        (host, port), family=family,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        type=socket.SOCK_STREAM, proto=proto, flags=flags, loop=self)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 1500, in _ensure_resolved
+    return await loop.getaddrinfo(host, port, family=family, type=type,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                  proto=proto, flags=flags)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 939, in getaddrinfo
+    return await self.run_in_executor(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        None, getaddr_func, host, port, family, type, proto, flags)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\socket.py", line 977, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11002] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_utils\async_utils.py", line 590, in loop_coro
+    await asyncio.wait_for(async_f(), timeout=timeout)
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\tasks.py", line 507, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\runner.py", line 68, in _heartbeat
+    await client._stub.AppHeartbeat(request, retry=Retry(attempt_timeout=HEARTBEAT_TIMEOUT))
+modal.exception.ConnectionError: [Errno 11002] getaddrinfo failed
+Đã kiểm xong config.json
+Kiểm SHA nguồn result.json
+result.json: 0.0%
+Đã kiểm xong result.json
+Kiểm SHA nguồn tests.txt
+Task's current input(s) ["in-01M7KMT91D2FJ3FKWG6DXHTCXC:1794881954862-0"] cancelled because: Task's current input in-01M7KMT91D2FJ3FKWG6DXHTCXC:1794881954862-0 hit its timeout of 180s
+[modal-client] 2026-11-17T02:22:28+0000 Received a cancellation signal while processing input ('in-01M7KMT91D2FJ3FKWG6DXHTCXC:1794881954862-0',)
+[modal-client] 2026-11-17T02:22:28+0000 Successfully canceled input ('in-01M7KMT91D2FJ3FKWG6DXHTCXC:1794881954862-0',)
+Stopping app - uncaught exception raised locally: FunctionTimeoutError("Task's current input in-01M7KMT91D2FJ3FKWG6DXHTCXC:1794881954862-0 hit its timeout of 180s").
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\scripts\akt\modal_calibration_cpu_gate.py", line 75, in <module>
+    result=gate.remote()
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_object.py", line 49, in wrapped
+    return await method(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 2081, in remote
+    return await self._call_function(args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 2018, in _call_function
+    return await invocation.run_function()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_functions.py", line 517, in run_function
+    return await _process_result(
+           ^^^^^^^^^^^^^^^^^^^^^^
+        await_response.output.result, await_response.output.data_format, self.client._stub, self.client
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Dev\KLTN\.venv\Lib\site-packages\modal\_utils\function_utils.py", line 534, in _process_result
+    raise FunctionTimeoutError(result.exception)
+modal.exception.FunctionTimeoutError: Task's current input in-01M7KMT91D2FJ3FKWG6DXHTCXC:1794881954862-0 hit its timeout of 180s

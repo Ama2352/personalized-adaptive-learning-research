@@ -134,7 +134,15 @@ def _write_json_atomic(path: Path, payload: dict) -> None:
             temp.unlink()
 
 
-def _prepare_output(output_dir: Path) -> tuple[Path, Path]:
+def _prepare_output(output_dir: Path, *, artifact_root=None) -> tuple[Path, Path]:
+    if artifact_root is not None:
+        from .research_junyi_calibration import CalibrationFitArtifactRoot
+        if type(artifact_root) is not CalibrationFitArtifactRoot:
+            raise ValueError('typed cloud calibration artifact root required')
+        output = artifact_root.validate_output(output_dir)
+        output.mkdir(parents=True, exist_ok=False)
+        (output / '.pending').mkdir()
+        return output, output / 'manifest.json'
     root = PROJECT_ROOT.resolve()
     output = output_dir.resolve()
     allowed = root / 'experiments/akt/results'
@@ -207,11 +215,11 @@ def _expected_insert(con, factory: Callable[[], Iterator[LearnerEvents]]) -> int
 
 def export_predictions(records: Iterable[PredictionRecord], output_dir: Path, *,
                        expected_learners_factory: Callable[[], Iterator[LearnerEvents]],
-                       identity: dict, shard_rows: int = 50000) -> dict:
+                       identity: dict, shard_rows: int = 50000, artifact_root=None) -> dict:
     """Write complete learner-atomic shards, resume exact identities, then audit all rows."""
     if shard_rows <= 0 or not isinstance(identity, dict) or not identity:
         raise ValueError('invalid prediction export configuration')
-    output, manifest_path = _prepare_output(Path(output_dir))
+    output, manifest_path = _prepare_output(Path(output_dir), artifact_root=artifact_root)
     if manifest_path.exists():
         manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
         if manifest.get('identity') != identity:
