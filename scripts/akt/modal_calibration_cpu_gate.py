@@ -87,6 +87,8 @@ def gate():
 
 if __name__=='__main__':
     import json
+    from modal_junyi_calibration import require_cpu_orchestration_authorization
+    require_cpu_orchestration_authorization()
     destination=ROOT/'research_tracking/runs/cloud-calibration-fit-20261117-01/LINUX_CPU_GATE06.json'
     if destination.exists():
         raise SystemExit('Đã có receipt, kiểm trạng thái trước khi chạy lại.')

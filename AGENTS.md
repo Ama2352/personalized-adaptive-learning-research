@@ -11,6 +11,8 @@
 
 ## Cấu trúc và lưu bằng chứng
 
+- Theo yêu cầu ngày 17/11/2026, Modal chỉ dùng cho GPU H100. Phần CPU riêng, preflight CPU, audit, calibration và đồng bộ Drive chạy local hoặc Colab CPU miễn phí. Không gọi thêm CPU-only worker/probe/finalizer trên Modal. Giữ checkpoint/Volume/Drive và chỉ đọc API trạng thái/billing khi kiểm tra; đọc API không cấp container.
+
 - Bắt đầu ở `docs/REPOSITORY_MAP.md`; cập nhật bản đồ và tham chiếu khi đổi cấu trúc. Không tạo thêm thư mục top-level tương đương `reports_new`, `results_latest`, `final_v2` nếu chưa có vai trò riêng rõ ràng.
 - Báo cáo/phân tích tổng hợp mới dùng `research_tracking/reports/`, cập nhật mục lục `research_tracking/reports/README.md`. Phân biệt kết quả nghiên cứu, pilot, kiểm kỹ thuật, draft protocol và hồ sơ vận hành; không coi chúng là cùng mức bằng chứng.
 - Bằng chứng nhỏ theo run dùng `research_tracking/runs/<run-id>/` với README tiếng Việt, manifest nguồn/input/output SHA-256, logs và giới hạn. Giữ cả failure quan trọng. Không sửa hoặc di chuyển bundle đã đóng; trỏ bằng chỉ mục/relocation manifest nếu cần.

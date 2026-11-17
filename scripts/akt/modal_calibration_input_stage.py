@@ -220,6 +220,8 @@ def extract_verified_input(archive_path, target, *, expected_zip_sha=ZIP_SHA, ex
 
 def create_app():
     """Định nghĩa CPU worker; root quyết định app.run và hạn mức riêng."""
+    from modal_junyi_calibration import require_cpu_orchestration_authorization
+    require_cpu_orchestration_authorization()
     import modal
     volume = modal.Volume.from_name('kltn-junyi-calibration-artifacts-v1', environment_name='main', version=2)
     image = (modal.Image.debian_slim(python_version='3.13')

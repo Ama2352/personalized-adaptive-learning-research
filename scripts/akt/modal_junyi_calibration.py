@@ -278,8 +278,18 @@ def _run(stage, request_entry, worker_sha256, authorization, *, gpu_result_entry
         raise
 
 
+def require_cpu_orchestration_authorization():
+    """Chặn workflow CPU Modal cũ theo chính sách tài nguyên hiện hành."""
+    ledger = json.loads((ROOT/'research_tracking/COMPUTE_BUDGET_WORKSPACE2016.json').read_text(encoding='utf-8'))
+    policy = ledger.get('execution_policy', {})
+    if policy.get('modal_dedicated_cpu_allowed') is not True:
+        raise PermissionError('Workflow calibration CPU Modal đã dừng theo yêu cầu chỉ dùng Modal cho H100. '
+                              'Chuyển phần CPU sang local hoặc Colab miễn phí.')
+
+
 def create_app():
     """Định nghĩa resource, không tự gọi remote function hoặc tạo Volume."""
+    require_cpu_orchestration_authorization()
     if os.name == 'nt':
         os.environ['MODAL_CONFIG_PATH'] = str(ROOT/'artifacts/akt/private/modal2016.toml')
         os.environ['MODAL_PROFILE'] = 'kltn2016'

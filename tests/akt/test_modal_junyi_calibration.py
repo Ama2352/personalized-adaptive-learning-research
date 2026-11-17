@@ -87,6 +87,8 @@ def test_budget_requires_external_matching_allocation(mode):
 
 def test_modal_secrets_only_cpu_join_and_bounded_gpu(monkeypatch):
     controller=load('modal_junyi_calibration')
+    # Chỉ kiểm định nghĩa function bằng SDK giả, không cấp quyền CPU thật.
+    monkeypatch.setattr(controller,'require_cpu_orchestration_authorization',lambda:None)
     functions=[];image_calls=[]
     class Image:
         @classmethod
@@ -455,3 +457,17 @@ def test_gpu_host_timings_partition_and_preserve_numeric_contract(tmp_path,monke
     assert received[0]['graph_cache']==(None if variant=='A0' else 'graph-cache')
     assert received[0]['budget'].batch_size==128 and committed==[True]
     assert json.loads((tmp_path/value['gpu_output']/'config.json').read_text())==value
+
+
+@pytest.mark.parametrize('policy', [{}, {'modal_dedicated_cpu_allowed': False}])
+def test_h100_only_policy_blocks_cpu_controller_before_sdk(tmp_path, monkeypatch, policy):
+    import json
+    controller = load('modal_junyi_calibration')
+    monkeypatch.setattr(controller, 'ROOT', tmp_path)
+    ledger = tmp_path/'research_tracking/COMPUTE_BUDGET_WORKSPACE2016.json'
+    ledger.parent.mkdir()
+    ledger.write_text(json.dumps({'execution_policy': policy}), encoding='utf-8')
+    fake_sdk = SimpleNamespace(App=lambda *args: pytest.fail('SDK app must not be created'))
+    monkeypatch.setitem(sys.modules, 'modal', fake_sdk)
+    with pytest.raises(PermissionError, match='H100'):
+        controller.create_app()
