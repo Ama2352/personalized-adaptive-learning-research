@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-outer-real-20261117-01\stage_modal01.py", line 56, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-outer-real-20261117-01\stage_modal01.py", line 31, in main
+    volume = await modal.Volume.from_name.aio('kltn-junyi-calibration-artifacts-v1',environment_name='main')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'function' object has no attribute 'aio'

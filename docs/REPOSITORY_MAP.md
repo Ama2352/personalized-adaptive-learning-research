@@ -1,5 +1,13 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 17/11 — Đã nghiệm thu benchmark outer Junyi A0–A3
+
+[Bundle thực](../research_tracking/runs/junyi-outer-real-20261117-01/README.md) giữ input/source/compatibility, bốn GPUresult, bốn CPUexport, metric/pairedbootstrap2000/Holm24, CSV và SVG/PNG/PDF. [Hai báo cáo GVHD](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO_NGHIEN_CUU.html) đã nối kết quả trước/sau hiệu chỉnh, giới hạn mộtfold/mộtseed và ngoại lệ thời điểm khóa family. Tám archive và nguồn/figure đã lưu Drive Sang. [Kiểm dung lượng hiện hành](../research_tracking/runs/junyi-outer-real-20261117-01/STORAGE_CURRENT_REVIEW01.md) phân biệt35GBhistory đã dọn với55,78GBduplicate còn giữ.
+
+## 17/11 — Calibration Junyi4/4 và cache outer đã sẵn sàng
+
+[Nghiệm thu A3](../research_tracking/runs/junyi-calibration-real-20261117-01/LOCAL_A3_FIT_ACCEPTANCE101.json) khép bước hiệu chỉnh xác suất cả bốn model trên cùng cohort, đã đọc lại Drive Sang. [Cache outer](../research_tracking/runs/junyi-outer-real-20261117-01/CACHE_RESULT01.json) có72.423cửa sổ,4.137.050target/39.616người học và144OOV. Ba cache đồ thị được kiểm riêng. Lượt H100 outer và phân tích so sánh còn chờ. Các mốc bên dưới là lịch sử.
+
 ## 17/11 — Calibration Junyi đã nghiệm thu3/4
 
 [Nghiệm thu A2 local](../research_tracking/runs/junyi-calibration-real-20261117-01/LOCAL_A2_FIT_ACCEPTANCE100.json) kiểm lại nămartifact Drive Sang và binding/cohort1.621.484target. A0/A1/A2 đã có hệ số, A3 đang tiếp tụcCPUlocal; outer độc lập0/4. [Báo cáo GVHD](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO_NGHIEN_CUU.html) đã thêm mốcA2 và nguồn số liệu tải được. Colab đã trảruntime. Các mốc bên dưới giữ diễn tiến trước nghiệm thuA2.

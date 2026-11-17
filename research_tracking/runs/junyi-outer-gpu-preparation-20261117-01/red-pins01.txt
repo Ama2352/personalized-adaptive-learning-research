@@ -1,0 +1,30 @@
+.........FF...                                                           [100%]
+================================== FAILURES ===================================
+__________________ test_null_calibrator_pins_fail_before_gpu __________________
+
+worker = <module 'outer_gpu_worker_test' from 'D:\\Dev\\KLTN\\scripts\\akt\\outer_gpu_worker.py'>
+outer_request = {'kind': 'JUNYI_OUTER_GPU_REQUEST_V1', 'workspace': 'honguyenminhsang2016', 'run_id': 'junyi-outer-real-20261117-01', 'variant': 'A2', ...}
+
+    def test_null_calibrator_pins_fail_before_gpu(worker,outer_request):
+        outer_request['calibrators']['A3']['sha256']=None
+>       with pytest.raises(ValueError):worker.validate_outer_request(outer_request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_outer_gpu_worker.py:62: Failed
+____________________ test_cpu_budget_cannot_mismatch_outer ____________________
+
+worker = <module 'outer_gpu_worker_test' from 'D:\\Dev\\KLTN\\scripts\\akt\\outer_gpu_worker.py'>
+outer_request = {'kind': 'JUNYI_OUTER_GPU_REQUEST_V1', 'workspace': 'honguyenminhsang2016', 'run_id': 'junyi-outer-real-20261117-01', 'variant': 'A2', ...}
+
+    def test_cpu_budget_cannot_mismatch_outer(worker,outer_request):
+        outer_request['cpu_budget']['max_users']=15847
+>       with pytest.raises(ValueError):worker.validate_outer_request(outer_request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\akt\test_outer_gpu_worker.py:67: Failed
+=========================== short test summary info ===========================
+FAILED tests/akt/test_outer_gpu_worker.py::test_null_calibrator_pins_fail_before_gpu
+FAILED tests/akt/test_outer_gpu_worker.py::test_cpu_budget_cannot_mismatch_outer
+2 failed, 12 passed in 0.19s

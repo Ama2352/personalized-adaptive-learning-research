@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-outer-real-20261117-01\stage_modal01.py", line 58, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "D:\Dev\KLTN\research_tracking\runs\junyi-outer-real-20261117-01\stage_modal01.py", line 22, in main
+    objects = await client._stub.AppGetObjects(api_pb2.AppGetObjectsRequest(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        app_id='ap-JJO3w6IYYlGJavth8Iqeni',include_unindexed=True))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+modal.exception.UnimplementedError: Unexpected <class 'NotImplementedError'>: Method not implemented!

@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+[17/11 — Benchmark outer Junyi A0–A3 đã nghiệm thu](../runs/junyi-outer-real-20261117-01/README.md) có4.137.050target/model, bảng chỉ số và phân tích ghép theo người học. Sau hiệu chỉnh chưa xác lập ưu thế của graph variants soA0 trongfold này. CóCSV/SVG/PNG/PDF, nguồn frozen và8archive Drive. Ngoại lệ khóa family sau inference được ghi rõ.
+
 [17/11 — Đường cache outer và release guardfold](JUNYI_OUTER_PUBLIC_API_PATH_20261117.md) nối kiểm OOV/rank với sourcepacket riêng,75kiểm thử và compatibility A2 theo file thật. Cache toàn cohort, model/numericaladmission và GPUouter còn chờ.
 
 [17/11 — Calibration A2/A3 chuyển CPU local](LOCAL_CALIBRATION_MIGRATION_20261117.md) giữ cache tạm tối đa4GB đã duyệt, snapshot A2 kiểm từng SHA và26kiểm thử parity/resume. Colab đã trả runtime. Lượt local thật còn cần nghiệm thu, calibration hiện2/4.

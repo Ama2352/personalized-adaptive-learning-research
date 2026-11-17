@@ -1,0 +1,73 @@
+F...                                                                     [100%]
+================================== FAILURES ===================================
+______________ test_only_outer_rows_exported_in_canonical_order _______________
+
+writer = <module 'prepare_outer_source_test' from 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_source.py'>
+case = {'paths': DataPaths(canonical=WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/outer-source-writer-20261117-01/test_on...indowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/outer-source-writer-20261117-01/test_only_outer_rows_exported_0'), ...}
+
+    def test_only_outer_rows_exported_in_canonical_order(writer, case):
+>       result = run(writer, case)
+                 ^^^^^^^^^^^^^^^^^
+
+tests\akt\test_prepare_junyi_outer_source.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_prepare_junyi_outer_source.py:63: in run
+    return writer.prepare_outer_source(case['assets'], case['paths'],
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+assets_by_variant = {'A0': {'encoding': JunyiResearchEncoding(native=ExerciseEncoding(vocabulary=StableVocabulary(values=('A',)), train_su...cc3633ccfa142931e966a17e6fc91d1ea605a'), identity='fcf1e72c1dd023f8439aced0e943c3cab870ad79451f67e37c68d9c151933bfe')}}
+paths = DataPaths(canonical=WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/outer-source-writer-20261117-01/test_only_outer_r...:/Dev/KLTN/artifacts/akt/test-temp/outer-source-writer-20261117-01/test_only_outer_rows_exported_0/source/split.json'))
+source_repo_root = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/outer-source-writer-20261117-01/test_only_outer_rows_exported_0')
+inventory_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/outer-source-writer-20261117-01/test_only_outer_rows_exported_0/source/inventory.json')
+inventory_sha256 = '4286462e8715343819768af4fdf9b58b7c34861b9c0e78b7707bc24051b9bb11'
+output_root = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/outer-source-writer-20261117-01/test_only_outer_rows_exported_0/cache/outer')
+disk_budget_root = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/outer-source-writer-20261117-01/test_only_outer_rows_exported_0/cache')
+expected_targets = 2, expected_learners = 1, expected_oov_targets = 1
+max_seconds = 30, max_rss_bytes = 1073741824, max_disk_bytes = 16777216
+
+    def prepare_outer_source(assets_by_variant, paths, *, source_repo_root, inventory_path,
+            inventory_sha256, output_root, disk_budget_root, expected_targets, expected_learners,
+            expected_oov_targets, max_seconds, max_rss_bytes, max_disk_bytes):
+        """Nguyên bảnSQL/ordering như writercalibration, đổi explicitrole/purposeouter.
+    
+    Expectedcounts là dự kiến cần xác minh, không phải bằng chứng đã có. Hashfull
+    inventorytrước/sau, SQLchỉtrảDevelopmentfold4. GuardRAM/disk/wallcooperative;
+    caller cần subprocess/watchdog ngoài cho tác vụ thật. Không tự phátGPU/Drive.
+    """
+        import duckdb
+        import psutil
+        from knowledge_tracing.akt.research_junyi_data import JunyiPhaseView
+        if set(assets_by_variant) != {'A0','A1','A2','A3'}:
+            raise ValueError('Four frozen metadata exports required')
+        encoding = assets_by_variant['A0']['encoding']
+        roles = encoding.fit_view.roles
+        view = JunyiPhaseView(roles, 'outer_evaluation', roles.outer_validation_users, roles.identity)
+        if encoding.fit_view.scope != 'refit_union90' or any(
+                asset['encoding'].identity != encoding.identity for asset in assets_by_variant.values()):
+            raise ValueError('Shared full refit90 encoding required')
+        if (any(type(value) is not int or value <= 0 for value in
+                (expected_targets, expected_learners, max_rss_bytes, max_disk_bytes))
+                or type(expected_oov_targets) is not int or not 0 <= expected_oov_targets < expected_targets
+                or expected_learners != len(view.users) or not 0 < max_disk_bytes <= 4*1024**3
+                or max_seconds <= 0):
+            raise ValueError('Explicit bounded counts and resource limits required')
+        source_repo_root, inventory_path = Path(source_repo_root), Path(inventory_path)
+        output_root, disk_budget_root = Path(output_root), Path(disk_budget_root)
+        if (not output_root.is_absolute() or output_root.resolve() != output_root
+                or output_root.exists() or not disk_budget_root.is_dir()
+                or disk_budget_root.resolve() != disk_budget_root
+                or output_root == disk_budget_root or not output_root.is_relative_to(disk_budget_root)):
+            raise ValueError('New physical output inside existing bounded cache required')
+        if _sha(inventory_path) != inventory_sha256:
+            raise ValueError('Frozen source inventory changed')
+        source_inventory = json.loads(inventory_path.read_text(encoding='utf-8'))['source_sha256']
+        canonical_files = sorted(paths.canonical.rglob('*.parquet')) if paths.canonical.is_dir() else [paths.canonical]
+        required = canonical_files + [paths.assignments, paths.canonical_manifest, paths.split_manifest]
+        if any(path.relative_to(source_repo_root).as_posix() not in source_inventory for path in required):
+>           raise ValueError('Canonical/assignments/manifests missing from source inventory')
+E           ValueError: Canonical/assignments/manifests missing from source inventory
+
+scripts\akt\prepare_junyi_outer_source.py:63: ValueError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_prepare_junyi_outer_source.py::test_only_outer_rows_exported_in_canonical_order
+1 failed, 3 passed in 4.64s

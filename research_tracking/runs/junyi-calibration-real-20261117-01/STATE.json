@@ -1,5 +1,5 @@
 {
-  "status": "A0_A1_A2_CALIBRATION_ACCEPTED_A3_JOIN_AUDIT_PENDING",
+  "status": "JUNYI_CALIBRATION_ALL_FOUR_ACCEPTED_OUTER_EVALUATION_COMPLETE",
   "updated": "2026-11-17",
   "run_id": "junyi-calibration-real-20261117-01",
   "workspace": "honguyenminhsang2016",
@@ -180,21 +180,18 @@
     "cache_oov_fold4_known_limit": true
   },
   "active_cpu_job": {
-    "variant": "A2",
+    "variant": "A3",
     "phase": "fit_accepted",
-    "local_exec_session_id": 38468,
-    "driver": "scripts/akt/local_calibration_migration.py",
-    "attempt": 100,
-    "log": "local-a2-fit100.txt",
+    "local_exec_session_id": 5346,
+    "attempt": 101,
+    "log": "local-a3-fit101.txt",
     "accepted": true,
-    "partial_snapshot_receipt": "LOCAL_A2_SNAPSHOT01.json",
-    "cache_limit_bytes": 4000000000,
-    "cache_bytes_after_staging": 546461091,
-    "authoritative_output": "Drive Sang",
-    "synthetic_tests": 26,
-    "synthetic_tests_log": "../local-calibration-migration-20261117-02/tests-root03.txt",
-    "raw_acceptance": "LOCAL_A2_RAW_ACCEPTANCE100.json",
-    "acceptance": "LOCAL_A2_FIT_ACCEPTANCE100.json"
+    "raw_acceptance": "LOCAL_A3_RAW_ACCEPTANCE101.json",
+    "compact_acceptance": "COMPACT_A3_FULL_PARITY101.json",
+    "raw_path": "D:\\Dev\\KLTN\\artifacts\\akt\\local-calibration\\20261117\\a3-compact101",
+    "drive_publication": true,
+    "max_fit_seconds": 7200,
+    "acceptance": "LOCAL_A3_FIT_ACCEPTANCE101.json"
   },
   "software_review": {
     "data_binding_partition": "Independent review found no binding/partition/label-join defect in examined code",
@@ -207,32 +204,65 @@
       "monitoring": "avoid reading live manifest while writer active"
     }
   },
-  "parallel_cpu_job": {
-    "variant": "A3",
-    "phase": "local_join",
-    "attempt": 101,
-    "exec_session_id": 77932,
-    "log": "local-a3-join101.txt",
-    "accepted": false,
-    "publication": "Local scratch until sequential Drive publish",
-    "reason": "A2 audit CPU busy, available RAM measured2.27GB; separate process and output",
-    "status": "RESUME_101_RUNNING",
-    "failure_log": "local-a3-join100.txt",
-    "recovery_stage_session": 75712,
-    "recovery": "LOCAL_A3_RECOVERY100.json"
-  },
+  "parallel_cpu_job": null,
   "calibration_acceptance_current": {
     "accepted": [
       "A0",
       "A1",
-      "A2"
-    ],
-    "pending": [
+      "A2",
       "A3"
     ],
-    "count": 3,
+    "pending": [],
+    "count": 4,
     "total": 4,
-    "percentage_of_phase": 75,
+    "percentage_of_phase": 100,
     "scope": "Junyi fold4 calibration10"
-  }
+  },
+  "optimization_checks": {
+    "synthetic_tests": 43,
+    "tests_log": "TESTS_THIN_COMPACT_LINEAGE_GREEN01.txt",
+    "full_A2_compact": "COMPACT_A2_FULL_PARITY100.json",
+    "full_A2_solver": "THIN_LOGITS_A2_FULL_PARITY100.json",
+    "production_A3_fit_started": true
+  },
+  "outer_source_release": {
+    "source_identity": "7c72414eedf9507d514430aed4734f0a192ab14914a4984b17fdfcbfebd39123",
+    "tests": 75,
+    "tests_log": "TESTS_OUTER_RELEASE_ROOT04.txt",
+    "actual_source_verify": "OUTER_SOURCE_ROOT_VERIFY02.json",
+    "A2_compatibility": "A2_OUTER_SOURCE_COMPATIBILITY01.json",
+    "actual_outer_model_or_GPU_verified": false
+  },
+  "supervisor_report_drive": {
+    "folder": "https://drive.google.com/drive/folders/1w5Al9Kd5WcnnFNaNIcHePXx47gQNcZg2",
+    "receipt": "../report-drive-snapshot-20261117-03/DRIVE_READBACK.json",
+    "calibration_accepted": 3
+  },
+  "completed_cpu_jobs": [
+    {
+      "variant": "A2",
+      "phase": "fit_accepted",
+      "local_exec_session_id": 38468,
+      "driver": "scripts/akt/local_calibration_migration.py",
+      "attempt": 100,
+      "log": "local-a2-fit100.txt",
+      "accepted": true,
+      "partial_snapshot_receipt": "LOCAL_A2_SNAPSHOT01.json",
+      "cache_limit_bytes": 4000000000,
+      "cache_bytes_after_staging": 546461091,
+      "authoritative_output": "Drive Sang",
+      "synthetic_tests": 26,
+      "synthetic_tests_log": "../local-calibration-migration-20261117-02/tests-root03.txt",
+      "raw_acceptance": "LOCAL_A2_RAW_ACCEPTANCE100.json",
+      "acceptance": "LOCAL_A2_FIT_ACCEPTANCE100.json"
+    }
+  ],
+  "last_cache_usage": "LOCAL_CACHE_USAGE103.json",
+  "cache_cleanup": {
+    "receipt": "CACHE_A2_SQLITE_CLEANUP_RECEIPT100.json",
+    "logical_bytes_removed": 1185062912,
+    "temporary_only": true
+  },
+  "next_execution": "Fresh verify sourcewriter, approve bounded local outer-only data request, build full window/3graph caches, audit before H100 inference",
+  "next": "research_tracking/runs/junyi-outer-real-20261117-01/STATE.json"
 }

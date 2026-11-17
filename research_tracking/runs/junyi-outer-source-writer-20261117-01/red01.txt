@@ -1,0 +1,104 @@
+EEEE                                                                     [100%]
+=================================== ERRORS ====================================
+_____ ERROR at setup of test_only_outer_rows_exported_in_canonical_order ______
+
+    @pytest.fixture
+    def writer():
+        path = Path(__file__).resolve().parents[2]/'scripts/akt/prepare_junyi_outer_source.py'
+        spec = importlib.util.spec_from_file_location('prepare_outer_source_test', path)
+        result = importlib.util.module_from_spec(spec)
+>       spec.loader.exec_module(result)
+
+tests\akt\test_prepare_junyi_outer_source.py:22: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<frozen importlib._bootstrap_external>:1022: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:1159: in get_code
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <_frozen_importlib_external.SourceFileLoader object at 0x0000024C04862D50>
+path = 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_source.py'
+
+>   ???
+E   FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_source.py'
+
+<frozen importlib._bootstrap_external>:1217: FileNotFoundError
+___ ERROR at setup of test_invalid_outer_or_assignment_rejected[duplicate] ____
+
+    @pytest.fixture
+    def writer():
+        path = Path(__file__).resolve().parents[2]/'scripts/akt/prepare_junyi_outer_source.py'
+        spec = importlib.util.spec_from_file_location('prepare_outer_source_test', path)
+        result = importlib.util.module_from_spec(spec)
+>       spec.loader.exec_module(result)
+
+tests\akt\test_prepare_junyi_outer_source.py:22: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<frozen importlib._bootstrap_external>:1022: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:1159: in get_code
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <_frozen_importlib_external.SourceFileLoader object at 0x0000024C0491B9B0>
+path = 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_source.py'
+
+>   ???
+E   FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_source.py'
+
+<frozen importlib._bootstrap_external>:1217: FileNotFoundError
+_____ ERROR at setup of test_invalid_outer_or_assignment_rejected[label] ______
+
+    @pytest.fixture
+    def writer():
+        path = Path(__file__).resolve().parents[2]/'scripts/akt/prepare_junyi_outer_source.py'
+        spec = importlib.util.spec_from_file_location('prepare_outer_source_test', path)
+        result = importlib.util.module_from_spec(spec)
+>       spec.loader.exec_module(result)
+
+tests\akt\test_prepare_junyi_outer_source.py:22: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<frozen importlib._bootstrap_external>:1022: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:1159: in get_code
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <_frozen_importlib_external.SourceFileLoader object at 0x0000024C0491BE90>
+path = 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_source.py'
+
+>   ???
+E   FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_source.py'
+
+<frozen importlib._bootstrap_external>:1217: FileNotFoundError
+______ ERROR at setup of test_invalid_outer_or_assignment_rejected[fold] ______
+
+    @pytest.fixture
+    def writer():
+        path = Path(__file__).resolve().parents[2]/'scripts/akt/prepare_junyi_outer_source.py'
+        spec = importlib.util.spec_from_file_location('prepare_outer_source_test', path)
+        result = importlib.util.module_from_spec(spec)
+>       spec.loader.exec_module(result)
+
+tests\akt\test_prepare_junyi_outer_source.py:22: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<frozen importlib._bootstrap_external>:1022: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:1159: in get_code
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <_frozen_importlib_external.SourceFileLoader object at 0x0000024C0491B830>
+path = 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_source.py'
+
+>   ???
+E   FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_source.py'
+
+<frozen importlib._bootstrap_external>:1217: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR tests/akt/test_prepare_junyi_outer_source.py::test_only_outer_rows_exported_in_canonical_order
+ERROR tests/akt/test_prepare_junyi_outer_source.py::test_invalid_outer_or_assignment_rejected[duplicate]
+ERROR tests/akt/test_prepare_junyi_outer_source.py::test_invalid_outer_or_assignment_rejected[label]
+ERROR tests/akt/test_prepare_junyi_outer_source.py::test_invalid_outer_or_assignment_rejected[fold]
+4 errors in 1.40s

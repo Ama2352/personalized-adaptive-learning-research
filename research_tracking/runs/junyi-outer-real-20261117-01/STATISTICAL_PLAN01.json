@@ -1,0 +1,22 @@
+{
+  "status": "LOCKED_BEFORE_OUTER_METRIC_INSPECTION_AFTER_NUMERIC_INFERENCE",
+  "scope": "Junyi Development fold4, expert graph, one frozen training seed",
+  "reference_protocol": "docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md F1",
+  "process_deviation": "Cardinality và p-value recipe chưa khóa trước GPU như checklist yêu cầu. Khóa ở đây sau numeric inference, trước khi mở bất kỳ METRICS outer hoặc aggregate loss. Không đổi checkpoint, calibrator, cohort hoặc training. Giữ mốc này để audit, không mô tả là preregistration trước thu thập dữ liệu.",
+  "models": ["A0", "A1", "A2", "A3"],
+  "contrasts_candidate_minus_reference": [["A1", "A0"], ["A2", "A0"], ["A3", "A0"], ["A2", "A1"], ["A3", "A1"], ["A3", "A2"]],
+  "probabilities": ["raw", "calibrated"],
+  "primary_endpoints": ["log_loss", "brier"],
+  "family_size": 24,
+  "population": "Same source keys and same train-supported exercises across all four variants; report full coverage and 144 OOV separately",
+  "estimand": "Response-weighted loss difference on common-supported targets",
+  "resampling_unit": "Whole learner, paired across all models/endpoints/states",
+  "replicates": 2000,
+  "seed": 42,
+  "learner_order": "Sorted user_id",
+  "confidence_interval": "Two-sided percentile cluster-bootstrap quantiles 0.025 and 0.975; marginal intervals, not multiplicity-adjusted",
+  "p_value": "Approximate two-sided centered cluster-bootstrap null test: (1 + count(abs(draw-point) >= abs(point))) / 2001. Computed from draws, not inferred from CI. Conditional fixed-model iid-learner approximation.",
+  "multiple_comparison": "Holm across all24 primary contrasts/endpoints/probability states together, alpha0.05",
+  "secondary_descriptive": ["AUC", "ECE15", "accuracy", "coverage"],
+  "limits": ["One outer fold and one training seed", "No training-seed variance", "No instructional causal effect from Junyi logs", "Bootstrap p-values are approximate and finite-resolution", "No final performance-based model selection or retuning"]
+}

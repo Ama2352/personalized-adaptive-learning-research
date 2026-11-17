@@ -1,5 +1,17 @@
 # Tiến độ nghiên cứu
 
+## Mốc 17/11 — Junyi A0–A3 hoàn tất đánh giá outer fold4
+
+Cả bốn model đã khép chọn vòng, refit, calibration và đánh giá dự báo trên39.616người học/4.137.050target. Cùng4.136.906target fitted,144OOVnull. Sau hiệu chỉnh, A3 Log Loss0,360432824 so A0 0,360452822, CI95% của chênh lệch chứa0 và pHolm1,0. Trước hiệu chỉnh có lợi thế nhỏ của A1/A3. Phân tích giới hạn mộtfold/một lần khởi tạo và family thống kê khóa sau inference, trước xem metric, nên được báo mức thăm dò. [Kết quả và bằng chứng](runs/junyi-outer-real-20261117-01/README.md). Tám archive trên Drive Sang đã kiểm độc lập metadata SHA, hai báo cáo đã đọc lại toàn body. [Báo cáo Drive hiện hành](https://drive.google.com/drive/folders/1z14kGbUw_9Veo-frvufYai2Eeix_bGn1). H100 đã trả, các bước CPU chạy local. Grade10 vòng kín và các baseline còn thiếu tiếp tục là công việc mở. Các mốc dưới là lịch sử.
+
+## Mốc 17/11 — Calibration Junyi fold4 đạt3/4
+
+A2 đã fit temperature trên1.621.484tương tác của15.847người học và đọc lại nămartifact Drive Sang để đối chiếu binding, cohort và SHA. [Nghiệm thu A2](runs/junyi-calibration-real-20261117-01/LOCAL_A2_FIT_ACCEPTANCE100.json). Cùng A0/A1, calibration hiện3/4=75% theo chặng; outer độc lập0/4. A3 tiếp tục join/audit/fit bằng CPU local. Selected-fit và refit A0–A3 đã hoàn tất trong giao thức một phép chia phát triển hiện hành.
+
+Hai báo cáo GVHD đã nối mốcA2. [Snapshot Drive phiên bản3](https://drive.google.com/drive/folders/1w5Al9Kd5WcnnFNaNIcHePXx47gQNcZg2) đã kiểm đọc lại báo cáo và ZIP nguồn. Colab đã trả runtime, cachelocal được duyệt tối đa4GB. Modal chỉ dùng H100 cho lượt GPU sau khi nghiệm thu đầu vào.
+
+[Đường cache outer](reports/JUNYI_OUTER_PUBLIC_API_PATH_20261117.md) đã sửa guardfold bằng75kiểm thử, gói nguồn mới giữ một delta và kiểm pin A2 bằng file thực. Bảng logits hẹp đã tái tính toàn1.621.484target A2, cho toàn payload và identity calibrator khớp exact. Đây là kiểm triển khai/tài nguyên; so sánh dự báo độc lập và kết quả học vòng kín còn thiếu. Các mục dưới giữ diễn tiến trước mốcA2.
+
 ## Mốc 17/11 — Calibration thật 2/4, dự báo A2/A3 đã có trên Drive
 
 Junyi A0–A3 đã hoàn tất selected-fit và refit, tương ứng4/4model ở mỗi chặng. Cả4model đã suy luận calibration trên cùng15.847người học và1.621.484target,0OOV. A0/A1 đã fit temperature và được đọc lại từ Drive để kiểm source/partition/binding. A2/A3 đã có archive numeric trên Drive Sang với checksum khớp, còn bước CPU nối nhãn/audit/fit. [Trạng thái tiếp tục](runs/junyi-calibration-real-20261117-01/STATE.json), [nghiệm thu sao lưu](runs/junyi-calibration-real-20261117-01/NUMERIC_BACKUP_ACCEPTANCE01.md), [hai calibrator đã nhận](runs/junyi-calibration-real-20261117-01/POSTSTOP_CALIBRATION_METADATA_ACCEPTANCE01.json).

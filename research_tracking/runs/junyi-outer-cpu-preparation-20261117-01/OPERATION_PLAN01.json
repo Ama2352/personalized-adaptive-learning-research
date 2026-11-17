@@ -1,0 +1,55 @@
+{
+  "status": "PARTIALLY_IMPLEMENTED_OUTER_WRITER_AND_JOIN_LAUNCH_PENDING",
+  "source_scope": {
+    "physical_partition": "exercise, mixedlearner partitions",
+    "logical_filter": "assignments.partition=development AND assignments.fold=4 AND user_id IN fullroles.outer_validation_users",
+    "no_holdout_test_artifacts": true
+  },
+  "required_prepared_manifest": {
+    "status": "FULL_OUTER_SOURCE_PREPARED",
+    "purpose": "JUNYI_REFIT90_OUTER_EVALUATION_SOURCE",
+    "phase_identity": "b33db239bb2bed5b2666ad454b37d949a2724a131e76db33d180ed536390e669",
+    "roles_identity": "7c9a8102e399bdbc6569fc5a929faae525480c86fe0c60d2d805244a80b8e45a",
+    "encoding_identity": "4b8eb3e6bc5be9abd1419cf4e818b2e75dc86b82e59a0fe94e837c5f3299734f",
+    "counts": {
+      "learners": 39616,
+      "targets_candidate_verify": 4137050,
+      "oov_targets": 144,
+      "max_learner_events": "MEASURE_REQUIRED"
+    },
+    "outputs": "canonical.parquet,assignments.parquet with bytes+SHA256"
+  },
+  "reuse": {
+    "window": "build_junyi_window_cache/JunyiWindowCacheSession/write_cpu_admission",
+    "graph": "JunyiGraphPhaseSession/build_graph_context_cache/GraphContextCache.open",
+    "numeric": "run_cuda_cached_numeric",
+    "cpu_replay": "prepare_prediction_windows/iter_numeric_prediction_records",
+    "calibration": "iter_calibrated_predictions with explicitcompatibility and originalbinding"
+  },
+  "estimated_bytes": {
+    "outer_only_parquet": "roughly35–40MB if calibration density holds, unmeasured",
+    "window_and_three_graphs": "not measured; must check real cache bytes before H100/input upload",
+    "whole_local_temporary_cap": 4294967296
+  },
+  "remaining": [
+    "outsideKT outer-only sourcewriter+admitted input manifest",
+    "actual maxhistory/windowcounts and sourceSHA",
+    "H100request wrapper and outer numericCPUjoin orchestration",
+    "4calibrator acceptance+compatibility receipts",
+    "final statistical family/pvalue request"
+  ],
+  "sourcewriter_sql_blueprint": {
+    "selection": "WITH development_outer AS (SELECT user_id,fold FROM read_parquet($assignments) WHERE partition='development' AND fold=4) SELECT c.user_id,c.exercise,c.time_done,c.source_row,c.correct,c.suggested FROM read_parquet($source,hive_partitioning=true) c JOIN development_outer a ON c.user_id=a.user_id JOIN requested_outer_users u ON c.user_id=u.user_id",
+    "copy_order": "user_id,time_done,source_row",
+    "prepared_assignments": "only fullroles.outer_validation_users, fold=4,partition=development",
+    "count_checks": [
+      "COUNT(*) equals independentlyverifiedtargets",
+      "COUNT(DISTINCT user_id)=39616",
+      "COUNT(DISTINCT source_row)=targets",
+      "OOV against frozenrefit90encoding=144",
+      "MAX perlearnercount for budget",
+      "labels must be binary; no metrics/selection"
+    ],
+    "source_integrity": "frozen original canonicalinventory SHA before/after; manifest/split/roles/encodingSHA; do not mutate originals"
+  }
+}

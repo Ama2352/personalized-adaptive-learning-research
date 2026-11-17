@@ -46,7 +46,7 @@ def main(variant):
     for directory in (numeric,operation):
         for item in volume.iterdir(directory,recursive=False):
             path=PurePosixPath(item.path).as_posix().lstrip('/')
-            assert path.startswith(directory+'/') and 0<item.size<=4*1024**2
+            assert path.startswith(directory+'/') and 0<=item.size<=4*1024**2
             entries.append(dict(path=path,bytes=item.size))
     assert len(entries)<=1300 and sum(x['bytes'] for x in entries)<=180*1024**2
     used=sum(path.stat().st_size for path in CACHE.rglob('*') if path.is_file())
@@ -88,9 +88,9 @@ def main(variant):
     save(B/(variant+'_NUMERIC_INVENTORY01.json'),inventory)
     buffer=io.BytesIO()
     with zipfile.ZipFile(buffer,'w',compression=zipfile.ZIP_STORED) as archive:
-        archive.writestr('INVENTORY.json',json.dumps(inventory,sort_keys=True))
+        archive.writestr(zipfile.ZipInfo('INVENTORY.json',(1980,1,1,0,0,0)),json.dumps(inventory,sort_keys=True))
         for entry in inventory['files']:
-            archive.write(destination/entry['path'],entry['path'])
+            archive.writestr(zipfile.ZipInfo(entry['path'],(1980,1,1,0,0,0)),(destination/entry['path']).read_bytes())
     assert buffer.tell()<=200*1024**2
     credentials=Credentials.from_authorized_user_file(str(ROOT/'artifacts/akt/private/drive-upload/token.json'))
     session=AuthorizedSession(credentials)

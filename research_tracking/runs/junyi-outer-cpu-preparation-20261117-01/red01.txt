@@ -1,0 +1,104 @@
+EEEE                                                                     [100%]
+=================================== ERRORS ====================================
+_ ERROR at setup of test_full_outer_cache_keeps_oov_and_three_graphs_exclude_oov _
+
+    @pytest.fixture
+    def module():
+        path = Path(__file__).resolve().parents[2]/'scripts/akt/prepare_junyi_outer_caches.py'
+        spec = importlib.util.spec_from_file_location('prepare_outer_cache_test', path)
+        result = importlib.util.module_from_spec(spec)
+>       spec.loader.exec_module(result)
+
+tests\akt\test_prepare_junyi_outer_caches.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<frozen importlib._bootstrap_external>:1022: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:1159: in get_code
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <_frozen_importlib_external.SourceFileLoader object at 0x000001CD627979B0>
+path = 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_caches.py'
+
+>   ???
+E   FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_caches.py'
+
+<frozen importlib._bootstrap_external>:1217: FileNotFoundError
+_ ERROR at setup of test_phase_count_or_source_mismatch_cannot_publish[calibration_phase] _
+
+    @pytest.fixture
+    def module():
+        path = Path(__file__).resolve().parents[2]/'scripts/akt/prepare_junyi_outer_caches.py'
+        spec = importlib.util.spec_from_file_location('prepare_outer_cache_test', path)
+        result = importlib.util.module_from_spec(spec)
+>       spec.loader.exec_module(result)
+
+tests\akt\test_prepare_junyi_outer_caches.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<frozen importlib._bootstrap_external>:1022: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:1159: in get_code
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <_frozen_importlib_external.SourceFileLoader object at 0x000001CD665799D0>
+path = 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_caches.py'
+
+>   ???
+E   FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_caches.py'
+
+<frozen importlib._bootstrap_external>:1217: FileNotFoundError
+_ ERROR at setup of test_phase_count_or_source_mismatch_cannot_publish[oov_count] _
+
+    @pytest.fixture
+    def module():
+        path = Path(__file__).resolve().parents[2]/'scripts/akt/prepare_junyi_outer_caches.py'
+        spec = importlib.util.spec_from_file_location('prepare_outer_cache_test', path)
+        result = importlib.util.module_from_spec(spec)
+>       spec.loader.exec_module(result)
+
+tests\akt\test_prepare_junyi_outer_caches.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<frozen importlib._bootstrap_external>:1022: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:1159: in get_code
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <_frozen_importlib_external.SourceFileLoader object at 0x000001CD66579AF0>
+path = 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_caches.py'
+
+>   ???
+E   FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_caches.py'
+
+<frozen importlib._bootstrap_external>:1217: FileNotFoundError
+_ ERROR at setup of test_phase_count_or_source_mismatch_cannot_publish[source_sha] _
+
+    @pytest.fixture
+    def module():
+        path = Path(__file__).resolve().parents[2]/'scripts/akt/prepare_junyi_outer_caches.py'
+        spec = importlib.util.spec_from_file_location('prepare_outer_cache_test', path)
+        result = importlib.util.module_from_spec(spec)
+>       spec.loader.exec_module(result)
+
+tests\akt\test_prepare_junyi_outer_caches.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<frozen importlib._bootstrap_external>:1022: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:1159: in get_code
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <_frozen_importlib_external.SourceFileLoader object at 0x000001CD66579C10>
+path = 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_caches.py'
+
+>   ???
+E   FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_caches.py'
+
+<frozen importlib._bootstrap_external>:1217: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR tests/akt/test_prepare_junyi_outer_caches.py::test_full_outer_cache_keeps_oov_and_three_graphs_exclude_oov
+ERROR tests/akt/test_prepare_junyi_outer_caches.py::test_phase_count_or_source_mismatch_cannot_publish[calibration_phase]
+ERROR tests/akt/test_prepare_junyi_outer_caches.py::test_phase_count_or_source_mismatch_cannot_publish[oov_count]
+ERROR tests/akt/test_prepare_junyi_outer_caches.py::test_phase_count_or_source_mismatch_cannot_publish[source_sha]
+4 errors in 0.98s

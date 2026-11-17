@@ -1,0 +1,21 @@
+F....                                                                    [100%]
+================================== FAILURES ===================================
+______________ test_only_outer_rows_exported_in_canonical_order _______________
+
+writer = <module 'prepare_outer_source_test' from 'D:\\Dev\\KLTN\\scripts\\akt\\prepare_junyi_outer_source.py'>
+case = {'paths': DataPaths(canonical=WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/outer-source-writer-20261117-05/test_on...indowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/outer-source-writer-20261117-05/test_only_outer_rows_exported_0'), ...}
+
+    def test_only_outer_rows_exported_in_canonical_order(writer, case):
+        result = run(writer, case)
+        assert result['status'] == 'FULL_OUTER_SOURCE_PREPARED'
+        assert result['counts']['targets'] == 2
+        assert result['counts']['oov_targets'] == 1
+        assert result['counts']['max_learner_events'] == 2
+>       assert set(result['portable_export_pins']) == {'A0','A1','A2','A3'}
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'portable_export_pins'
+
+tests\akt\test_prepare_junyi_outer_source.py:79: KeyError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_prepare_junyi_outer_source.py::test_only_outer_rows_exported_in_canonical_order
+1 failed, 4 passed in 6.63s
