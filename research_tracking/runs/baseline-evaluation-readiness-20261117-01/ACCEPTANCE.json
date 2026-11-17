@@ -1,0 +1,140 @@
+{
+  "status": "GRADE10_CACHED_BASELINE_METRICS_AND_SYNTHETIC_LIFECYCLE_VERIFIED",
+  "scope": "individual selected-only cached SAKT/GKT; not independent final performance",
+  "tests": [
+    {
+      "log": "tests02.txt",
+      "passed": 76,
+      "seconds": 5.89
+    },
+    {
+      "log": "native-causal-tests01.txt",
+      "passed": 4,
+      "seconds": 5.79
+    },
+    {
+      "log": "native-checkpoint-tests01.txt",
+      "passed": 1,
+      "errors": 1,
+      "meaning": "SAKT pass; GKT test resource reserve rejected"
+    },
+    {
+      "log": "native-checkpoint-tests02.txt",
+      "passed": 1,
+      "seconds": 10.34,
+      "meaning": "GKT checkpoint restore pass"
+    }
+  ],
+  "normal_cli": {
+    "log": "cli01.txt",
+    "targets": 10,
+    "supported": 4,
+    "synthetic": true
+  },
+  "actual_checkpoint_blobs_hash_verified": 2,
+  "actual_weights_loaded": false,
+  "actual_main_experiment_run": false,
+  "junyi_baseline_qualified": false,
+  "gpu_or_cloud_used": false,
+  "source": [
+    {
+      "path": "src/knowledge_tracing/research_baseline_evaluation.py",
+      "bytes": 9015,
+      "sha256": "3734f7abf378af3176ec31ee76310db08b5f43467706aef3ae695d24a17230c6"
+    },
+    {
+      "path": "scripts/evaluate_selected_baseline.py",
+      "bytes": 3524,
+      "sha256": "30c02245f2ce50aba5ff60bad083eeb61f71b683e2a66ccff8f72f888b29fc39"
+    },
+    {
+      "path": "tests/shared_kt/test_research_baseline_evaluation.py",
+      "bytes": 10035,
+      "sha256": "8b1deffc13014de814e292d11dacee8b61eef771947b4c464c0910b783df718b"
+    },
+    {
+      "path": "tests/gkt/test_research_checkpoint.py",
+      "bytes": 14770,
+      "sha256": "77fcd222c2bf9829fdeb25d2237d254090be91513ec338c432e878fca7945c21"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "src/knowledge_tracing/research_selected_rows.py",
+      "bytes": 4819,
+      "sha256": "cc614db08a072789eb82fc3e49d07a555a0438010cf71ae2445d464d41b0d7f0"
+    },
+    {
+      "path": "src/knowledge_tracing/research_selection_io.py",
+      "bytes": 15884,
+      "sha256": "0dd81b40e46dc67dc64d22197bbd478a30f929993ca213011a30a97d9ffd75a3"
+    },
+    {
+      "path": "src/knowledge_tracing/research_population.py",
+      "bytes": 9106,
+      "sha256": "8709f62a4aeed14bb3bfd8581e419205a0e8695d7eb3312832c96d7b64ef1906"
+    },
+    {
+      "path": "src/knowledge_tracing/research_admission.py",
+      "bytes": 18412,
+      "sha256": "b8601da03a972834cfd2f5596ea6a6b9c5759437796b4f4b65720f7abc1a92f2"
+    },
+    {
+      "path": "src/knowledge_tracing/simulator_research_data.py",
+      "bytes": 12626,
+      "sha256": "51eb7275a6a4a6b26b763a21a8fe6dc15b0973fc19b3c5557175eaa298db7e53"
+    },
+    {
+      "path": "src/knowledge_tracing/gam_kt/evaluation.py",
+      "bytes": 3589,
+      "sha256": "c39b6ca9c87dc92f9e3a6dc7636f5249c7c33f69549284bdcf844c4958acaa65"
+    },
+    {
+      "path": "src/knowledge_tracing/bkt_baseline/metrics.py",
+      "bytes": 7533,
+      "sha256": "359502d7e7a4ee822841dbf603206d84ec5a5d2f85a4cd012e5ec7fd5495158b"
+    },
+    {
+      "path": "src/knowledge_tracing/sakt/research_runner.py",
+      "bytes": 28144,
+      "sha256": "2d6ec4f6f0be78013c610964479ee085d9effecace83259ba525bd066ae8de7f"
+    },
+    {
+      "path": "src/knowledge_tracing/gkt/research_runner.py",
+      "bytes": 33388,
+      "sha256": "173fbf7cea845a649da4a79f92394883210de239743e4f8f6c687e0730530d30"
+    },
+    {
+      "path": "docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md",
+      "bytes": 18993,
+      "sha256": "c0d6e8a698d7d5083986e9848898a643390fc5e76100fc0b8c6286c306e6bea6"
+    },
+    {
+      "path": "docs/thesis_recovery/29_GKT_RESEARCH_NUMERICAL_RECIPE_V1.md",
+      "bytes": 7899,
+      "sha256": "059c98909c38856afd830d1cd296ce8875682ba9c7c226ad923c432e4328ce64"
+    },
+    {
+      "path": "docs/thesis_recovery/30_SAKT_RESEARCH_NUMERICAL_RECIPE_V1.md",
+      "bytes": 5652,
+      "sha256": "b1029ac40184c373d3396ec887e86877e8e3a1b14f72b14dc666133ed21b4777"
+    }
+  ],
+  "akt_local_inference_source_identity_unchanged": "16f97eb396fb0202a1e250ec59d2b3a9cb170070b3f0f8b8575488ad0cf20764",
+  "decisions": [
+    {
+      "item": "GKT checkpoint synthetic fixture RAM reserve",
+      "before_bytes": 2147483648,
+      "after_bytes": 268435456,
+      "scope": "test fixture only; production recipe unchanged",
+      "retained_rss_cap_bytes": 1073741824,
+      "retained_wall_seconds": 60
+    }
+  ],
+  "pending": [
+    "Main Grade10 selection cohort and full-nine admission",
+    "SAKT/GKT refit90 and calibration lifecycle",
+    "Junyi model/domain/mapping qualification and experiment execution",
+    "Independent evaluation and statistics"
+  ]
+}

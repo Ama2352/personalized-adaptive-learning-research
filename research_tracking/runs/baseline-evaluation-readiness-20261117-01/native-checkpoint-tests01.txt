@@ -1,0 +1,64 @@
+.E                                                                       [100%]
+=================================== ERRORS ====================================
+___ ERROR at setup of test_restore_dropout_bn_adam_and_complete_next_epoch ____
+
+tmp_path_factory = TempPathFactory(_given_basetemp=WindowsPath('D:/Dev/KLTN/artifacts/akt/runtime/baseline-checkpoint-tests-20261117-01')...D:/Dev/KLTN/artifacts/akt/runtime/baseline-checkpoint-tests-20261117-01'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope='module')
+    def completed(tmp_path_factory):
+        prepared = helper.view(handmade_public())
+        root = tmp_path_factory.mktemp('gktcp')
+        own = root/'artifacts/akt/local-tests/handmade'; own.mkdir(parents=True)
+        doc = root/'docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md'
+        doc.parent.mkdir(parents=True)
+        doc.write_bytes((ROOT/'docs/thesis_recovery/21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md').read_bytes())
+        previous_root, threads = cp.ROOT, torch.get_num_threads()
+        cp.ROOT = root
+        try:
+            torch.set_num_threads(2)
+            with torch.random.fork_rng(devices=[]):
+                native = helper.model(prepared)
+                initial = cp._clone(dict(native.state_dict()))
+                native.eval()
+                optimizer, used, budget = helper.adam(native), helper.progress(native), helper.budget()
+                spec = helper.rt.GKTResearchSpec(1, 4, 1.)
+                profile = cp.GKTCheckpointProfile(prepared.phase.shards[0].plan.protocol_sha256,
+                    'b'*64, 'c'*64, cp.state_digest(native), 'HANDMADE_NOT_RUNTIME_OR_FIT_AUTHORITY')
+                limits = cp.GKTCheckpointLimits(8*2**20, 2**18, 8*2**20)
+                before = caller_rng()
+>               result = helper.rt.train_research_epoch(native, prepared, optimizer=optimizer,
+                    spec=spec, budget=budget, progress=used)
+
+tests\gkt\test_research_checkpoint.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\knowledge_tracing\gkt\research_training.py:478: in train_research_epoch
+    return _run(model, view, optimizer=optimizer, spec=spec, budget=budget, progress=progress, training=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\knowledge_tracing\gkt\research_training.py:297: in _run
+    _check(budget, resources)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+budget = GKTResearchBudget(started_at=54651.7901937, max_seconds=60.0, max_rss_bytes=1073741824, min_available_ram_bytes=214748...max_prefix_events=10000, max_model_calls=100, max_optimizer_steps=8, max_optimized_targets=256, max_scored_targets=256)
+resources = {'samples': 1, 'peak_rss_bytes': 291794944, 'min_available_bytes': 2099908608}
+
+    def _check(budget, resources):
+        elapsed = _now()-budget.started_at
+        _need(math.isfinite(elapsed) and elapsed >= 0, 'Invalid monotonic budget origin')
+        if elapsed >= budget.max_seconds:
+            raise _Limit('cumulative_deadline')
+        snapshot = memory_snapshot()
+        rss, peak, available = (snapshot[name] for name in
+                               ('process_rss_bytes', 'process_peak_rss_bytes', 'system_available_ram_bytes'))
+        _need(type(rss) is int and rss >= 0 and type(available) is int and available >= 0
+              and (peak is None or type(peak) is int and peak >= 0), 'Unknown resource telemetry')
+        resources['samples'] += 1
+        resources['peak_rss_bytes'] = max(resources['peak_rss_bytes'], rss, peak or 0)
+        resources['min_available_bytes'] = min(resources.get('min_available_bytes', available), available)
+        if max(rss, peak or 0) > budget.max_rss_bytes or available < budget.min_available_ram_bytes:
+>           raise _Limit('memory_budget')
+E           knowledge_tracing.gkt.research_training._Limit: memory_budget
+
+src\knowledge_tracing\gkt\research_training.py:143: _Limit
+=========================== short test summary info ===========================
+ERROR tests/gkt/test_research_checkpoint.py::test_restore_dropout_bn_adam_and_complete_next_epoch
+1 passed, 1 error in 18.60s

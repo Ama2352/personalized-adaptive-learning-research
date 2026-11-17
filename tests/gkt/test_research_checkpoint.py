@@ -80,7 +80,9 @@ def completed(tmp_path_factory):
             native = helper.model(prepared)
             initial = cp._clone(dict(native.state_dict()))
             native.eval()
-            optimizer, used, budget = helper.adam(native), helper.progress(native), helper.budget()
+            optimizer, used = helper.adam(native), helper.progress(native)
+            # Reserve 256 MiB cho fixture 8 learner × 4 event.
+            budget = helper.budget(min_available_ram_bytes=256*1024**2)
             spec = helper.rt.GKTResearchSpec(1, 4, 1.)
             profile = cp.GKTCheckpointProfile(prepared.phase.shards[0].plan.protocol_sha256,
                 'b'*64, 'c'*64, cp.state_digest(native), 'HANDMADE_NOT_RUNTIME_OR_FIT_AUTHORITY')
