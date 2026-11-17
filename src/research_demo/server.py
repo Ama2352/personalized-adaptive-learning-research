@@ -9,7 +9,9 @@ from urllib.parse import parse_qs, urlsplit
 from .evidence import EvidenceError, EvidenceStore
 
 STATIC = Path(__file__).with_name("static")
-ROUTES = {"/": ("index.html", "text/html"), "/assets/demo.css": ("demo.css", "text/css"), "/assets/demo.js": ("demo.js", "text/javascript")}
+ROUTES = {"/": ("index.html", "text/html"), "/assets/demo.css": ("demo.css", "text/css"),
+          "/assets/demo.js": ("demo.js", "text/javascript"),
+          "/assets/selected-demo.js": ("selected-demo.js", "text/javascript")}
 DOCUMENT_ROUTES = {"/evidence/closed-loop/report":"report", "/evidence/closed-loop/sources":"sources",
                    "/evidence/fresh-source/sources":"fresh_sources"}
 
@@ -74,6 +76,17 @@ def make_server(port=8765, *, store=None, host="127.0.0.1"):
                 return self.respond(200, data, mime)
             if url.path == "/api/catalog" and not url.query:
                 return self.respond(200, evidence.catalog())
+            if url.path == "/api/selected-replay":
+                try:
+                    q = parse_qs(url.query, keep_blank_values=True, strict_parsing=True, max_num_fields=3)
+                    if set(q) != {"model", "learner", "step"} or any(len(v) != 1 for v in q.values()):
+                        raise ValueError("query")
+                    step = int(q["step"][0])
+                    if not q["step"][0].isascii() or str(step) != q["step"][0]:
+                        raise ValueError("canonical step")
+                    return self.respond(200, evidence.selected.snapshot(q["model"][0], q["learner"][0], step))
+                except (ValueError, KeyError):
+                    return self.respond(400, {"error": "Model/người học/bước phải thuộc replay Grade10 đã ghim"})
             if url.path == "/api/rq2-source-contrast":
                 try:
                     q = parse_qs(url.query, keep_blank_values=True, strict_parsing=True, max_num_fields=3)

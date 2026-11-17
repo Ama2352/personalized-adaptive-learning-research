@@ -16,6 +16,13 @@ def main():
         parser.exit(2, "Không khởi động demo: " + str(exc) + "\n")
     manifests = len({row["run"] for row in evidence.provenance})
     print(f"Đã kiểm SHA {manifests} manifest + {len(evidence.provenance)} selected outputs. http://127.0.0.1:{server.server_port} • Ctrl+C để đóng", flush=True)
+    selected = evidence.selected.catalog()
+    print(
+        f"Grade10: {len(selected['models'])} mô hình selected-fit, "
+        f"{selected['cohort']['targets']} tương tác mô phỏng dùng chung. "
+        "Đây là replay dự báo đã lưu trên tập chọn vòng.",
+        flush=True,
+    )
     try:
         server.serve_forever()
     except KeyboardInterrupt:

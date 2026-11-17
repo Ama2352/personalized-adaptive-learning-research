@@ -154,6 +154,8 @@ class EvidenceStore:
         self.limits = rq1["limits_vi"] + rq2["limits_vi"]
         self._load_closed_loop()
         self._load_fresh_source()
+        from .selected import SelectedReplay
+        self.selected = SelectedReplay()
 
     def _load_fresh_source(self):
         """Schema riêng của recovery bundle, không nới loader completed cũ."""
@@ -503,22 +505,22 @@ class EvidenceStore:
         return indexed
 
     def catalog(self):
-        graph_status = "Core graph có kiểm kỹ thuật CPU. Chưa có artifact nghiên cứu được phục vụ trong demo."
+        graph_status = "Grade10 có replay xác suất selected-fit ở phần mô hình đã học. Refit, hiệu chỉnh và vòng kín còn chờ nghiệm thu."
         return {
             "profiles": PROFILES, "seeds": SEEDS, "variants": VARIANTS, "steps": STEPS,
             "status": "Demo một phần E11 • chỉ đọc artifact synthetic đã lưu",
             "replay_model": "GAM-KT / Paper2 diagnostic; không phải replay AKT",
             "models": [
                 {"id": "A0", "name": "AKT · không graph", "replay_available": False,
-                 "status": "Đã có fit engineering CPU nhỏ qua public entry. Chưa là mô hình nghiên cứu chính hoặc replay ở demo. CUDA lifecycle còn thiếu."},
+                 "status": "Grade10 có replay xác suất selected-fit. Junyi có bản refit riêng, ngoài replay Grade10 này."},
                 *[{"id": f"{variant}_{source}", "name": f"{label} · {graph}", "replay_available": False,
                    "status": graph_status}
                   for variant, label in (("A1", "Graph-AKT"), ("A2", "Confidence-AKT"), ("A3", "CG-AKT có gate"))
                   for source, graph in (("EXPERT", "graph chuyên gia"), ("LEARNED", "graph học từ TRAIN"))],
                 {"id": "SAKT", "name": "SAKT", "replay_available": False,
-                 "status": "Core/trainer/persistence đã có kiểm kỹ thuật. Main producer và export nghiên cứu còn thiếu."},
+                 "status": "Có mã và selected-fit kiểm kỹ thuật84target. Đánh giá đối chứng trên quần thể nghiên cứu còn thiếu."},
                 {"id": "GKT", "name": "GKT", "replay_available": False,
-                 "status": "Data/core/trainer/checkpoint đã có kiểm kỹ thuật. Producer, export và adapter nghiên cứu còn thiếu."},
+                 "status": "Có mã và selected-fit kiểm kỹ thuật84target. Đánh giá đối chứng trên quần thể nghiên cứu còn thiếu."},
             ],
             "replay_models": [{"name": "GAM-KT / Graph-GAM-KT", "replay_available": True,
                                "status": "Hai chế độ replay bên trên đọc trace simulator đã lưu, không tính dự báo mới."}],
@@ -535,6 +537,7 @@ class EvidenceStore:
             "fresh_source": {"blocks": FRESH_BLOCKS, "abilities": FRESH_ABILITIES, "mechanisms": ("0", "0.55"),
                 "paired_blocks": 10, "worlds": 120, "model_family": "Graph-GAM-KT · S=P bật, L tắt",
                 "limits_vi": FRESH_LIMITS, "sources_url": "/evidence/fresh-source/sources"},
+            "selected_model_results": self.selected.catalog(),
         }
 
     def fresh_source_snapshot(self, block: int, ability: int, strength: str):
