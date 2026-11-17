@@ -218,7 +218,8 @@ def test_cpu_preflight_uses_real_verifier_contract_and_no_cuda_probe(tmp_path, m
     import knowledge_tracing.akt.config as config
     scripts=tmp_path/'scripts/akt';scripts.mkdir(parents=True)
     for name in ('calibration_cloud_worker.py','modal_junyi_calibration.py','prepare_junyi_calibration_caches.py',
-                 'run_junyi_refit.py','drive_artifact_sink.py','drive_resumable_upload.py'):
+                 'run_junyi_refit.py','drive_artifact_sink.py','drive_resumable_upload.py',
+                 'calibration_audit_transaction.py'):
         (scripts/name).write_text('synthetic-source')
     calls=[]
     def verify(path,commit):
@@ -232,7 +233,7 @@ def test_cpu_preflight_uses_real_verifier_contract_and_no_cuda_probe(tmp_path, m
     monkeypatch.setitem(sys.modules,'torch',fake)
     result=worker.runtime_preflight(tmp_path)
     assert calls==[(tmp_path/'artifacts/akt/dependencies/upstream',config.SOURCE_COMMIT)]
-    assert result['source_identity']=='b'*64 and len(result['worker_sources'])==6
+    assert result['source_identity']=='b'*64 and len(result['worker_sources'])==7
     assert result['gpu_started'] is False and result['cuda_initialized'] is False
     fake.cuda.is_initialized=lambda:True
     with pytest.raises(ValueError,match='runtime'):

@@ -22,7 +22,8 @@ VOLUME_NAME = 'kltn-junyi-calibration-artifacts-v1'
 SECRET_NAME = 'kltn-drive-artifacts-sang2005-20261117'
 SOURCE_COMMIT = '01b7e8d7d7c862cabc9467108e3e7f2555653a88'
 WORKER_SCRIPTS = ('calibration_cloud_worker.py', 'prepare_junyi_calibration_caches.py',
-                  'run_junyi_refit.py', 'drive_artifact_sink.py', 'drive_resumable_upload.py')
+                  'run_junyi_refit.py', 'drive_artifact_sink.py', 'drive_resumable_upload.py',
+                  'calibration_audit_transaction.py')
 
 
 def put_request_atomic(request, relative_path, root):
@@ -205,7 +206,7 @@ def publish_operation_metadata(root, run_id, operation_names, *, publish, volume
     return dict(status='OPERATION_METADATA_PUBLISHED', publications=results)
 
 
-def _run(stage, request_entry, worker_sha256, authorization, *, gpu_result_entry=None):
+def _run(stage, request_entry, worker_sha256, authorization, *, gpu_result_entry=None, recovery=None):
     """Worker con giữ log/receipt trên Volume; không tải binary về PC."""
     request_entry = request_pin(request_entry)
     validate_authorization(authorization, request_entry, stage)
@@ -222,14 +223,26 @@ def _run(stage, request_entry, worker_sha256, authorization, *, gpu_result_entry
     attempt_id = authorization['allocation_id']
     operation = root/request['run_id']/operation_tranche(request['variant'], stage, attempt_id)/'payloads'
     operation.mkdir(parents=True, exist_ok=False)
-    (operation/'config.json').write_text(json.dumps(dict(request=request, authorization=authorization,
-        worker_sha256=worker_sha256, stage=stage), sort_keys=True), encoding='utf-8')
+    config = dict(request=request, authorization=authorization,
+                  worker_sha256=worker_sha256, stage=stage)
+    if recovery is not None:
+        if stage != 'cpu-join' or set(recovery) != {'raw_source_pin', 'closed_marker_pin'}:
+            raise ValueError('CPU-only raw recovery pins required')
+        config['recovery'] = recovery
+    if stage == 'cpu-join':
+        config['cpu_audit_policy'] = dict(
+            method='original_expected_insert_single_transaction',
+            source_sha256=sha(Path('/opt/kltn/scripts/akt/calibration_audit_transaction.py')))
+    (operation/'config.json').write_text(json.dumps(config, sort_keys=True), encoding='utf-8')
     result = operation/'result.json'
     command = ['/opt/kltn/.venv/bin/python', '-B', str(worker), '--stage', stage,
         '--request', str(request_path), '--request-sha256', request_entry['sha256'], '--result', str(result),
         '--attempt-id', attempt_id]
     if gpu_result_entry is not None:
         command.extend(('--gpu-result', json.dumps(gpu_result_entry)))
+    if recovery is not None:
+        command.extend(('--raw-source', json.dumps(recovery['raw_source_pin']),
+                        '--writer-closed', json.dumps(recovery['closed_marker_pin'])))
     started = time.monotonic()
     import modal
     volume = modal.Volume.from_name(VOLUME_NAME, environment_name='main')
@@ -285,8 +298,9 @@ def create_app():
         '/opt/kltn/.venv/bin/python -m ensurepip --upgrade',
         '/opt/kltn/.venv/bin/python -m pip install modal==1.6.3 requests==2.34.2 google-auth==2.62.1')
     image = image.env({'PYTHONPATH': '/opt/kltn/src:/opt/kltn/scripts/akt:/opt/kltn/.venv/lib/python3.13/site-packages'})
-    image = image.add_local_dir(str(ROOT/'src'), '/opt/kltn/src', copy=True,
-                                ignore=['**/__pycache__/**', '**/*.pyc'])
+    # Demo và consumer baseline chạy độc lập, không tham gia image calibration.
+    image = image.add_local_dir(str(ROOT/'src/knowledge_tracing'), '/opt/kltn/src/knowledge_tracing', copy=True,
+        ignore=['**/__pycache__/**', '**/*.pyc', 'research_baseline_evaluation.py'])
     for name in ('21_ADOPTED_DEVELOPMENT_PROTOCOL_V1.md', '26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md'):
         image = image.add_local_file(str(ROOT/'docs/thesis_recovery'/name), '/opt/kltn/docs/thesis_recovery/'+name, copy=True)
     for name in (*WORKER_SCRIPTS, 'modal_junyi_calibration.py'):
@@ -363,8 +377,42 @@ def create_app():
         volume.reload()
         return controller._run('cpu-join', request_entry, worker_sha256, authorization, gpu_result_entry=gpu_result_entry)
 
+    @app.function(**common, cpu=1, memory=16384, timeout=3600,
+        secrets=[modal.Secret.from_name(SECRET_NAME, environment_name='main', required_keys=['KLTN_DRIVE_OAUTH_JSON'])])
+    def recover_fit(request_entry, worker_sha256, authorization, gpu_result_entry, raw_source_pin, writer_stop_receipt):
+        from knowledge_tracing.akt.filesystem import publish_new_file
+        sys.path.insert(0, '/opt/kltn/scripts/akt')
+        import modal_junyi_calibration as controller
+        from calibration_cloud_worker import sha
+        controller.validate_authorization(authorization, request_entry, 'cpu-join')
+        if (writer_stop_receipt.get('kind') != 'MODAL_CPU_WRITER_STOPPED_V1'
+                or writer_stop_receipt.get('status') != 'APP_STOPPED'
+                or type(writer_stop_receipt.get('tasks')) is not int or writer_stop_receipt['tasks'] != 0):
+            raise ValueError('externally verified stopped CPU writer required')
+        volume.reload()
+        root = Path('/artifacts').resolve(strict=True)
+        destination = root/'requests'/('closed-'+authorization['allocation_id']+'.json')
+        encoded = (json.dumps(writer_stop_receipt, sort_keys=True)+'\n').encode()
+        if len(encoded) > 8192:
+            raise ValueError('closed writer receipt exceeds8KiB')
+        if destination.exists():
+            if destination.read_bytes() != encoded:
+                raise FileExistsError('closed writer receipt is immutable')
+        else:
+            temporary = destination.with_name(destination.name+'.'+uuid.uuid4().hex+'.partial')
+            with temporary.open('xb') as stream:
+                stream.write(encoded)
+                stream.flush()
+                os.fsync(stream.fileno())
+            publish_new_file(temporary, destination)
+        volume.commit()
+        recovery = dict(raw_source_pin=raw_source_pin,
+                        closed_marker_pin=dict(path=str(destination), sha256=sha(destination)))
+        return controller._run('cpu-join', request_entry, worker_sha256, authorization,
+                               gpu_result_entry=gpu_result_entry, recovery=recovery)
+
     return app, dict(preflight=preflight, put_request=put_request, publish_metadata=publish_metadata,
-                    prepare=prepare, predict=predict, join_fit=join_fit)
+                    prepare=prepare, predict=predict, join_fit=join_fit, recover_fit=recover_fit)
 
 
 def main():

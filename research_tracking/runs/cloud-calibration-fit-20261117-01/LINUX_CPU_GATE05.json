@@ -1,0 +1,37 @@
+{
+  "exit_code": 1,
+  "receipt": {
+    "status": "DRIVE_SHA256_VERIFIED",
+    "run_id": "cloud-calibration-linux-20261117-01",
+    "tranche_id": "cpu-tests05",
+    "account": "honguyenminhsang2005@gmail.com",
+    "parent_id": "1vaojIEDvwtE-vZgjlybwzrsjrGNE_8O7",
+    "folder_id": "1W-JvcKhRrz8Ba5lnhjCBAexbEhj8pLPJ",
+    "plan_identity": "95d1151690be844d87eeaa1fe1a1918a70ab46280615c972bf756e61aeb984fd",
+    "files": [
+      {
+        "path": "config.json",
+        "file_id": "1LQADimrLbe_cdsyKYd5izQHK-O-zj4Y4",
+        "bytes": 21790,
+        "sha256": "1c6832332965fbddea2379b8b79b0c944bad6cac8dcd0a0d6641e698455914b2"
+      },
+      {
+        "path": "result.json",
+        "file_id": "1WeoDMlG18hH5lAXEX1vRhDU3El03m5eN",
+        "bytes": 92,
+        "sha256": "8a98c9231a0f4eba9a1002213b7e0693ca5426f4818903dbd767b5e1e5939646"
+      },
+      {
+        "path": "tests.txt",
+        "file_id": "1V2SqgGQz1IGQzEVDJjhIADzW1W9FW93I",
+        "bytes": 2365,
+        "sha256": "dd8ff3daffa0fbf51d2f6113283fa98d5d19b4c5928c04a1734016baf2f4f4fa"
+      }
+    ],
+    "bytes": 24247,
+    "verified_at": "2026-11-17T05:11:36.992824+00:00",
+    "plan_sha256": "0dc6ec93aa564a6115af0e5a181a270d6c3c9a816929ddf0808111a4591c6c19",
+    "receipt_sha256": "c801ef60c952184caaf4b3467d51baa577a97fc35d5b762002b28c08a4168421"
+  },
+  "test_summary": "........................................................................ [ 36%]\n........................................................................ [ 73%]\n..................................................EE.                    [100%]\n==================================== ERRORS ====================================\n_ ERROR at setup of test_full_cpu_recovery_reuses_raw_then_archives_fits_and_publishes _\n\nfailed_raw = {'roles': JunyiResearchRoles(train_users=('0', '1', '10', '11', '12', '13', '16', '2', '3', '5', '6', '8'), selection_...ifest.json'), split_manifest=PosixPath('/tmp/kltn-calibration-tests/test_full_cpu_recovery_reuses_0/roles.json')), ...}\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x2b9f2ffe0ad0>\n\n    @pytest.fixture\n    def pipeline_case(failed_raw,monkeypatch):\n        import sys,shutil\n        from dataclasses import asdict,replace\n        from test_cloud_calibration_numeric_join import numeric_case\n>       from test_modal_junyi_calibration import request as make_request\nE       ModuleNotFoundError: No module named 'test_modal_junyi_calibration'\n\ntests/akt/test_calibration_audit_transaction.py:137: ModuleNotFoundError\n_ ERROR at setup of test_full_cpu_recovery_rejects_original_raw_binding_mismatch _\n\nfailed_raw = {'roles': JunyiResearchRoles(train_users=('0', '1', '10', '11', '12', '13', '16', '2', '3', '5', '6', '8'), selection_...ifest.json'), split_manifest=PosixPath('/tmp/kltn-calibration-tests/test_full_cpu_recovery_rejects0/roles.json')), ...}\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x2b9f80039940>\n\n    @pytest.fixture\n    def pipeline_case(failed_raw,monkeypatch):\n        import sys,shutil\n        from dataclasses import asdict,replace\n        from test_cloud_calibration_numeric_join import numeric_case\n>       from test_modal_junyi_calibration import request as make_request\nE       ModuleNotFoundError: No module named 'test_modal_junyi_calibration'\n\ntests/akt/test_calibration_audit_transaction.py:137: ModuleNotFoundError\n=========================== short test summary info ============================\nERROR tests/akt/test_calibration_audit_transaction.py::test_full_cpu_recovery_reuses_raw_then_archives_fits_and_publishes\nERROR tests/akt/test_calibration_audit_transaction.py::test_full_cpu_recovery_rejects_original_raw_binding_mismatch\n195 passed, 2 errors in 13.44s\n"
+}

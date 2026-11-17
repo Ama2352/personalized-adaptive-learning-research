@@ -21,7 +21,7 @@ def runtime_preflight(project):
     upstream = verify_upstream(project/'artifacts/akt/dependencies/upstream', SOURCE_COMMIT)
     scripts = ('calibration_cloud_worker.py', 'modal_junyi_calibration.py',
         'prepare_junyi_calibration_caches.py', 'run_junyi_refit.py',
-        'drive_artifact_sink.py', 'drive_resumable_upload.py')
+        'drive_artifact_sink.py', 'drive_resumable_upload.py', 'calibration_audit_transaction.py')
     sources = {name: sha(project/'scripts/akt'/name) for name in scripts}
     import torch
     if (platform.python_version() != '3.13.18' or str(torch.__version__) != '2.7.1+cu126'
@@ -337,6 +337,8 @@ def main():
     parser.add_argument('--result', required=True)
     parser.add_argument('--attempt-id', required=True)
     parser.add_argument('--gpu-result')
+    parser.add_argument('--raw-source')
+    parser.add_argument('--writer-closed')
     args = parser.parse_args()
     attempt_identifier(args.attempt_id)
     root = Path('/artifacts').resolve(strict=True)
@@ -369,8 +371,17 @@ def main():
                 files=publication['files'], run_id=publication['run_id'], tranche_id=publication['tranche_id'],
                 max_total_bytes=publication['max_total_bytes'], volume_commit=volume.commit,
                 chunk_bytes=32*1024**2, retries=2)
-        result = cpu_join_fit(request, root, gpu_result=gpu_result, volume_commit=volume.commit,
-                              publish=publish, attempt_id=args.attempt_id)
+        if bool(args.raw_source) != bool(args.writer_closed):
+            raise ValueError('raw recovery requires both source and closed writer pins')
+        from calibration_audit_transaction import transactional_expected_insert, recover_cpu_calibration
+        if args.raw_source:
+            result = recover_cpu_calibration(request, root, gpu_result=gpu_result,
+                raw_source_pin=json.loads(args.raw_source), closed_marker_pin=json.loads(args.writer_closed),
+                attempt_id=args.attempt_id, publish=publish, volume_commit=volume.commit)
+        else:
+            with transactional_expected_insert():
+                result = cpu_join_fit(request, root, gpu_result=gpu_result, volume_commit=volume.commit,
+                                      publish=publish, attempt_id=args.attempt_id)
     result_path.parent.mkdir(parents=True, exist_ok=True)
     with result_path.open('x', encoding='utf-8') as stream:
         json.dump(result, stream, sort_keys=True, allow_nan=False)
