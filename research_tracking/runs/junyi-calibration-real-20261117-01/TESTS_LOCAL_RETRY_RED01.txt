@@ -1,0 +1,77 @@
+.....FFF.                                                                [100%]
+================================== FAILURES ===================================
+__________ test_prediction_json_retry_only_transient_windows_errors ___________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A451F155B0>
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/retry-red01/test_prediction_json_retry_onl0')
+
+    def test_prediction_json_retry_only_transient_windows_errors(monkeypatch,tmp_path):
+        from knowledge_tracing.akt import prediction
+        calls=[]
+        error=PermissionError('transient sharing denial');error.winerror=5
+        original=prediction._write_json_atomic
+        def flaky(path,payload):
+            calls.append(path)
+            if len(calls)<3: raise error
+            return original(path,payload)
+        monkeypatch.setattr(prediction,'_write_json_atomic',flaky)
+>       monkeypatch.setattr(local.time,'sleep',lambda seconds:None)
+                            ^^^^^^^^^^
+E       AttributeError: module 'scripts.akt.local_calibration_migration' has no attribute 'time'
+
+tests\akt\test_local_calibration_migration.py:80: AttributeError
+______ test_prediction_json_retry_is_bounded_and_preserves_failure[None] ______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A451DFECF0>
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/retry-red01/test_prediction_json_retry_is_0')
+winerror = None
+
+    @pytest.mark.parametrize('winerror',[None,5])
+    def test_prediction_json_retry_is_bounded_and_preserves_failure(monkeypatch,tmp_path,winerror):
+        from knowledge_tracing.akt import prediction
+        calls=[]
+        error=PermissionError('persistent denial')
+        if winerror is not None:error.winerror=winerror
+        def denied(*args):
+            calls.append(1);raise error
+        monkeypatch.setattr(prediction,'_write_json_atomic',denied)
+>       monkeypatch.setattr(local.time,'sleep',lambda seconds:None)
+                            ^^^^^^^^^^
+E       AttributeError: module 'scripts.akt.local_calibration_migration' has no attribute 'time'
+
+tests\akt\test_local_calibration_migration.py:96: AttributeError
+_______ test_prediction_json_retry_is_bounded_and_preserves_failure[5] ________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A451DFF8A0>
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/retry-red01/test_prediction_json_retry_is_1')
+winerror = 5
+
+    @pytest.mark.parametrize('winerror',[None,5])
+    def test_prediction_json_retry_is_bounded_and_preserves_failure(monkeypatch,tmp_path,winerror):
+        from knowledge_tracing.akt import prediction
+        calls=[]
+        error=PermissionError('persistent denial')
+        if winerror is not None:error.winerror=winerror
+        def denied(*args):
+            calls.append(1);raise error
+        monkeypatch.setattr(prediction,'_write_json_atomic',denied)
+>       monkeypatch.setattr(local.time,'sleep',lambda seconds:None)
+                            ^^^^^^^^^^
+E       AttributeError: module 'scripts.akt.local_calibration_migration' has no attribute 'time'
+
+tests\akt\test_local_calibration_migration.py:96: AttributeError
+============================== warnings summary ===============================
+.venv\Lib\site-packages\_pytest\cacheprovider.py:469
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:469: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\nodeids: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+.venv\Lib\site-packages\_pytest\cacheprovider.py:423
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:423: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\lastfailed: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/lastfailed", self.lastfailed)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/akt/test_local_calibration_migration.py::test_prediction_json_retry_only_transient_windows_errors
+FAILED tests/akt/test_local_calibration_migration.py::test_prediction_json_retry_is_bounded_and_preserves_failure[None]
+FAILED tests/akt/test_local_calibration_migration.py::test_prediction_json_retry_is_bounded_and_preserves_failure[5]
+3 failed, 6 passed, 2 warnings in 24.37s

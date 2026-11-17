@@ -1,0 +1,30 @@
+{
+  "observed": "2026-11-17T04:55:22.468038+00:00",
+  "gpu": false,
+  "raw_complete": false,
+  "original_files": {
+    ".audit.tmp.duckdb": {
+      "bytes": 58732544,
+      "mtime_ns": 1794891308538840043
+    },
+    ".audit.tmp.duckdb.wal": {
+      "bytes": 2163249,
+      "mtime_ns": 1794891318445829733
+    }
+  },
+  "original_files_after_copy": {
+    ".audit.tmp.duckdb": {
+      "bytes": 58732544,
+      "mtime_ns": 1794891308538840043
+    },
+    ".audit.tmp.duckdb.wal": {
+      "bytes": 2163249,
+      "mtime_ns": 1794891318445829733
+    }
+  },
+  "unchanged_during_copy": true,
+  "query_returncode": 1,
+  "status": "COPIED_SNAPSHOT_QUERY_FAILED",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import duckdb,json,sys; c=duckdb.connect(sys.argv[1],config={\"threads\":\"1\",\"memory_limit\":\"128MB\",\"temp_directory\":\"\"}); r=c.execute(\"SELECT count(*),min(source_row),max(source_row) FROM expected\").fetchone(); print(json.dumps({\"expected_rows\":r[0],\"min_source_row\":r[1],\"max_source_row\":r[2],\"duckdb\":duckdb.__version__})); c.close()\n                              ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n_duckdb.IOException: IO Error: Failure while replaying WAL file \"/tmp/kltn-a0-audit-w1rje4ar/snapshot.duckdb.wal\": Corrupt WAL file: entry at byte position 1837972 computed checksum 5381 does not match stored checksum 0\n",
+  "probe_seconds": 1.524889978
+}

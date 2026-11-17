@@ -1,0 +1,105 @@
+FF                                                                       [100%]
+================================== FAILURES ===================================
+____________ test_transient_refresh_error_keeps_login_and_recovers ____________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-refresh-red-20261117-01/test_transient_refresh_error_k0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000247EA0A96E0>
+
+    def test_transient_refresh_error_keeps_login_and_recovers(tmp_path, monkeypatch):
+        from google.auth.exceptions import TransportError
+        token, _ = setup(tmp_path, monkeypatch)
+        token.write_text('{}')
+        credentials = Credentials()
+        original = credentials.refresh
+        def refresh(request):
+            if credentials.refreshed == 0:
+                credentials.refreshed += 1
+                raise TransportError('synthetic network failure')
+            original(request)
+        credentials.refresh = refresh
+        factory = SimpleNamespace(from_authorized_user_file=lambda path: credentials)
+>       loaded = colab.load_credentials(token, credentials_type=factory,
+                                        request_factory=lambda: object())
+
+tests\akt\test_colab_session.py:88: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+token_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-refresh-red-20261117-01/test_transient_refresh_error_k0/token.json')
+client_config = WindowsPath('D:/Dev/KLTN/artifacts/akt/private/drive-upload/client_secret.json')
+interactive = False
+credentials_type = namespace(from_authorized_user_file=<function test_transient_refresh_error_keeps_login_and_recovers.<locals>.<lambda> at 0x00000247EA1AAE80>)
+flow_type = None
+request_factory = <function test_transient_refresh_error_keeps_login_and_recovers.<locals>.<lambda> at 0x00000247EA1AB240>
+
+    def load_credentials(token_path, client_config=CLIENT_CONFIG, *, interactive=False,
+                         credentials_type=None, flow_type=None, request_factory=None):
+        from google.oauth2.credentials import Credentials
+        from google.auth.transport.requests import Request
+        token_path = private_path(token_path)
+        credentials_type = credentials_type or Credentials
+        request_factory = request_factory or Request
+        credentials = None
+        if token_path.exists():
+            credentials = credentials_type.from_authorized_user_file(str(token_path))
+            if not credentials.has_scopes([COLAB_SCOPE]):
+                credentials = None
+        if credentials is not None and not credentials.valid and credentials.refresh_token:
+            try:
+                credentials.refresh(request_factory())
+            except Exception:
+                if not interactive:
+>                   raise ColabSessionError('LOGIN_REQUIRED_REFRESH_FAILED') from None
+E                   scripts.akt.colab_session.ColabSessionError: LOGIN_REQUIRED_REFRESH_FAILED
+
+scripts\akt\colab_session.py:106: ColabSessionError
+_____ test_network_failure_never_reopens_consent_or_replaces_saved_token ______
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-refresh-red-20261117-01/test_network_failure_never_reo0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000247EA0A9CD0>
+
+    def test_network_failure_never_reopens_consent_or_replaces_saved_token(tmp_path, monkeypatch):
+        from google.auth.exceptions import TransportError
+        token, _ = setup(tmp_path, monkeypatch)
+        token.write_text('{}')
+        client = tmp_path/'client.json'
+        client.write_text('{}')
+        credentials = Credentials()
+        def refresh(request):
+            credentials.refreshed += 1
+            raise TransportError('synthetic network failure')
+        credentials.refresh = refresh
+        factory = SimpleNamespace(from_authorized_user_file=lambda path: credentials)
+        flow = SimpleNamespace(from_client_secrets_file=lambda *args, **kwargs: pytest.fail('Consent reopened'))
+        with pytest.raises(colab.ColabSessionError, match='COLAB_AUTH_NETWORK_UNAVAILABLE'):
+>           colab.load_credentials(token, client, interactive=True, credentials_type=factory,
+                                   flow_type=flow, request_factory=lambda: object())
+
+tests\akt\test_colab_session.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\akt\colab_session.py:116: in load_credentials
+    flow = flow_type.from_client_secrets_file(str(client_config), scopes=SCOPES)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = ('D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\colab-refresh-red-20261117-01\\test_network_failure_never_reo0\\client.json',)
+kwargs = {'scopes': ('openid', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/colaboratory')}
+
+>   flow = SimpleNamespace(from_client_secrets_file=lambda *args, **kwargs: pytest.fail('Consent reopened'))
+                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: Consent reopened
+
+tests\akt\test_colab_session.py:105: Failed
+============================== warnings summary ===============================
+.venv\Lib\site-packages\_pytest\cacheprovider.py:469
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:469: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\nodeids: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+.venv\Lib\site-packages\_pytest\cacheprovider.py:423
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:423: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\lastfailed: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/lastfailed", self.lastfailed)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/akt/test_colab_session.py::test_transient_refresh_error_keeps_login_and_recovers
+FAILED tests/akt/test_colab_session.py::test_network_failure_never_reopens_consent_or_replaces_saved_token
+2 failed, 16 deselected, 2 warnings in 0.42s

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="5" time="0.206" timestamp="2026-11-17T16:39:39.604900+07:00" hostname="Ama"><testcase classname="tests.akt.test_colab_cli_session" name="test_cpu_assignment_pins_before_post_and_reuses" time="0.053" /><testcase classname="tests.akt.test_colab_cli_session" name="test_nonzero_consumption_stops_before_assign" time="0.003" /><testcase classname="tests.akt.test_colab_cli_session" name="test_error_does_not_disclose_body_or_private_url" time="0.000" /><testcase classname="tests.akt.test_colab_cli_session" name="test_kernel_session_is_owned_and_reused_without_deleting_user_session" time="0.005"><failure message="scripts.akt.colab_session.ColabSessionError: OWN_NOTEBOOK_REQUEST_CHANGED">tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-cli-session-20261117-04/test_kernel_session_is_owned_a0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002392304C3B0&gt;
+
+    def test_kernel_session_is_owned_and_reused_without_deleting_user_session(tmp_path, monkeypatch):
+        monkeypatch.setattr(auth, 'PRIVATE', tmp_path)
+        state = tmp_path/'cli.json'
+        assignment = dict(endpoint='cpu-owned',runtimeProxyInfo={'url':'https://fake.googleusercontent.com/','token':'PRIVATE'})
+        monkeypatch.setattr(cli, 'ensure_cpu_assignment', lambda *args: assignment)
+        sessions = [{'id':'user-session','path':'content/user.ipynb','kernel':{'id':'user-kernel','name':'python3'}}]
+        calls = []
+        def proxy_call(proxy, assignment, method, path, **kwargs):
+            calls.append((method,path,kwargs))
+            if path == 'api/sessions' and method == 'GET':
+                return list(sessions)
+            if path == 'api/sessions':
+                request = kwargs['json']
+                saved = json.loads(state.read_text())
+                assert saved['kernel_request']['path'] == request['path']
+                result = dict(id='own-session',path=request['path'],kernel={'id':'own-kernel','name':'python3'})
+                sessions.append(result)
+                return result
+            return {}
+        monkeypatch.setattr(cli, '_proxy_request', proxy_call)
+&gt;       first = cli.ensure_kernel(object(),state,proxy_session=object())
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_colab_cli_session.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\akt\colab_cli_session.py:125: in ensure_kernel
+    need(re.fullmatch(r'content/kltn-agent-[0-9a-f]{32}\.ipynb',request['path'])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = False, message = 'OWN_NOTEBOOK_REQUEST_CHANGED'
+
+    def need(value, message):
+        if not value:
+&gt;           raise auth.ColabSessionError(message)
+E           scripts.akt.colab_session.ColabSessionError: OWN_NOTEBOOK_REQUEST_CHANGED
+
+scripts\akt\colab_cli_session.py:20: ColabSessionError</failure></testcase><testcase classname="tests.akt.test_colab_cli_session" name="test_discovery_closes_transport_without_shutdown" time="0.002" /></testsuite></testsuites>

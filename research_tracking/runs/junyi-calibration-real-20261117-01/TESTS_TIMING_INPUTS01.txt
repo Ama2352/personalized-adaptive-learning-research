@@ -1,0 +1,77 @@
+................................F............................            [100%]
+================================== FAILURES ===================================
+________ test_attempt_paths_reuse_exact_gpu_request_without_overwrite _________
+
+tmp_path = WindowsPath('C:/Users/AmaDev/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/AC/#!sandbox.{ffdc2cd9-339c-4185-a590-9d87147e14b1}/Temp/pytest-of-AmaDev/pytest-0/test_attempt_paths_reuse_exact0')
+
+    def test_attempt_paths_reuse_exact_gpu_request_without_overwrite(tmp_path):
+        import json
+        controller=load('modal_junyi_calibration');worker=load('calibration_cloud_worker')
+        value=request();before=json.dumps(value,sort_keys=True)
+        numeric_root=tmp_path/value['gpu_output'];numeric_root.mkdir(parents=True)
+        (numeric_root/'config.json').write_text(json.dumps(value))
+        numeric=dict(shards=[]);receipt=numeric_root/'RECEIPT.json';receipt.write_text(json.dumps(numeric))
+        outputs=[]
+        for attempt in ('allocation-first','allocation-retry'):
+>           publication=worker.archive_numeric_snapshot(value,numeric,receipt,tmp_path,attempt_id=attempt)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_modal_junyi_calibration.py:293: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\akt\calibration_cloud_worker.py:259: in archive_numeric_snapshot
+    with zipfile.ZipFile(partial, 'x', compression=zipfile.ZIP_STORED, allowZip64=True) as archive:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <zipfile.ZipFile [closed]>
+file = 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\OpenAI.Codex_2p2nqsd0c76g0\\AC\\#!sandbox.{ffdc2cd9-339c-4185-a590-9d871...0\\test_attempt_paths_reuse_exact0\\calib-20261117\\a0-numeric-archive-allocation-first\\payloads\\NUMERIC.zip.partial'
+mode = 'x', compression = 0, allowZip64 = True, compresslevel = None
+strict_timestamps = True, metadata_encoding = None
+
+    def __init__(self, file, mode="r", compression=ZIP_STORED, allowZip64=True,
+                 compresslevel=None, *, strict_timestamps=True, metadata_encoding=None):
+        """Open the ZIP file with mode read 'r', write 'w', exclusive create 'x',
+        or append 'a'."""
+        if mode not in ('r', 'w', 'x', 'a'):
+            raise ValueError("ZipFile requires mode 'r', 'w', 'x', or 'a'")
+    
+        _check_compression(compression)
+    
+        self._allowZip64 = allowZip64
+        self._didModify = False
+        self.debug = 0  # Level of printing: 0 through 3
+        self.NameToInfo = {}    # Find file info given name
+        self.filelist = []      # List of ZipInfo instances for archive
+        self.compression = compression  # Method of compression
+        self.compresslevel = compresslevel
+        self.mode = mode
+        self.pwd = None
+        self._comment = b''
+        self._strict_timestamps = strict_timestamps
+        self.metadata_encoding = metadata_encoding
+    
+        # Check that we don't try to write with nonconforming codecs
+        if self.metadata_encoding and mode != 'r':
+            raise ValueError(
+                "metadata_encoding is only supported for reading files")
+    
+        # Check if we were passed a file-like object
+        if isinstance(file, os.PathLike):
+            file = os.fspath(file)
+        if isinstance(file, str):
+            # No, it's a filename
+            self._filePassed = 0
+            self.filename = file
+            modeDict = {'r' : 'rb', 'w': 'w+b', 'x': 'x+b', 'a' : 'r+b',
+                        'r+b': 'w+b', 'w+b': 'wb', 'x+b': 'xb'}
+            filemode = modeDict[mode]
+            while True:
+                try:
+>                   self.fp = io.open(file, filemode)
+                              ^^^^^^^^^^^^^^^^^^^^^^^
+E                   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\AmaDev\\AppData\\Local\\Packages\\OpenAI.Codex_2p2nqsd0c76g0\\AC\\#!sandbox.{ffdc2cd9-339c-4185-a590-9d87147e14b1}\\Temp\\pytest-of-AmaDev\\pytest-0\\test_attempt_paths_reuse_exact0\\calib-20261117\\a0-numeric-archive-allocation-first\\payloads\\NUMERIC.zip.partial'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\zipfile\__init__.py:1367: FileNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_modal_junyi_calibration.py::test_attempt_paths_reuse_exact_gpu_request_without_overwrite
+1 failed, 60 passed in 6.35s

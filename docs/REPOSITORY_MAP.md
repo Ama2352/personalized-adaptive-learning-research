@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 18/11 — Bộ bàn giao riêng, lưu lạnh riêng và thu gọn local
+
+[Hướng dẫn vận hành](operations/STORAGE_AND_HANDOFF.md) tách thư mục Drive bàn giao khỏi kho lịch sử/audit. [Catalog lưu trữ](../research_tracking/storage/README.md) ánh xạ226.534đường dẫn cũ sang nội dung Drive theo SHA. [Bundle dọn](../research_tracking/runs/workspace-cleanup-20261118-01/README.md) giữ inventory, log, relocation và kiểm805đầu vào/model. Source/config/docs/reports và bằng chứng nhỏ vẫn theo cấu trúc hiện hành; nhiều payload lớn trong artifacts/akt và experiments/akt/results đã chuyển lạnh. Các đoạn bên dưới giữ trạng thái lịch sử tại từng mốc.
+
 ## 18/11 — Tiếp quản toàn project cần source và đầu vào riêng
 
 [Rà toàn repository](../research_tracking/runs/full-project-handoff-audit-20261118-01/README.md) giữ metadata336.044file,234quyết định thư mục và allowlist790file/611,79MB. Phát hiện Method24Grade10 thật trong local-tests, đã sao lưu32file cùng support170member của5selectedrun. Bộ output trước chưa thay được541,96MB input còn lại, source/hồ sơ đầy đủ và coldrestore trên máy người nhận.

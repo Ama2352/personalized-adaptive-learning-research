@@ -1,0 +1,35 @@
+Kiểm kỹ thuật driver A3 CPU03 ngày 17/11/2026
+
+Phát hiện P2
+Driver CPU02 giới hạn subprocess bootstrap ở 10.800 giây nhưng prepared worker
+là tiến trình con riêng. Timeout chỉ kill bootstrap có thể để worker tiếp tục.
+
+Thay đổi
+Driver mới run_colab_a3_cpu03.py mở session/process group riêng cho bootstrap.
+Khi timeout, gửi SIGTERM tới đúng group có ID bằng PID Popen vừa tạo, chờ2giây,
+gửi SIGKILL tới cùng group và reap bootstrap. ProcessLookupError được bỏ qua.
+finally xóa file access token kể cả khi Popen thất bại hoặc exit code khác0.
+Nguồn runner và payload lấy pin từ COLAB_CPU_STAGING02.json.
+
+TDD
+RED trước khi tạo driver, 8 failed in0.35s, FileNotFoundError cho driver mới.
+GREEN sau triển khai, 8 passed in0.31s.
+Sau thêm đối chiếu staging pins, kiểm regression bằng Python trong .venv
+python -B -m pytest tests/akt/test_colab_cpu_process_group.py tests/akt/test_colab_calibration_token_runner.py tests/akt/test_colab_session.py tests/akt/test_colab_cli_session.py -q -p no:cacheprovider
+Output xác nhận
+.................................................... [100%]
+52 passed in5.29s
+
+SHA-256
+run_colab_a3_cpu03.py
+4383fe13a6094b1852a340db3f401be5c512a4dc90474e9bf9effd8d9e1be3e7
+tests/akt/test_colab_cpu_process_group.py
+06e48c1312be7f7a69554841f334720e25a138b119ec91cf89df879f07037546
+
+Giới hạn và sử dụng
+Kiểm offline trên Windows dùng AST trích hàm main và fake Popen/killpg/sleep.
+Chưa thực thi driver mới trên Colab hay kiểm signal bằng Linux thật.
+Khuyến nghị dùng CPU03 cho A3 sau khi A2 hoàn tất và được đối chiếu trạng thái.
+A2 đang JOIN_AUDIT theo handoff tại thời điểm làm việc, chưa chạm3giờ.
+Lượt này không truy cập network, không dừng/sửa live A2, không sửa runner CPU,
+source KT, payload, STATE hay báo cáo gốc. Không ghi .git hoặc commit.

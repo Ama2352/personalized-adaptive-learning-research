@@ -1,0 +1,178 @@
+FFF                                                                      [100%]
+================================== FAILURES ===================================
+______________ test_discovery_closes_transport_without_shutdown _______________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-cli-session-20261117-09/test_discovery_closes_transpor0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000285A765E520>
+
+    def test_discovery_closes_transport_without_shutdown(tmp_path, monkeypatch):
+        assignment = dict(endpoint='cpu-owned',runtimeProxyInfo={'url':'https://fake.googleusercontent.com/','token':'PRIVATE'})
+        kernel = dict(kernel_id='own-kernel',wire_session_id='own-wire')
+        monkeypatch.setattr(cli, 'ensure_kernel', lambda *args,**kwargs:(assignment,kernel))
+        seen = {}
+        class Kernel:
+            def __init__(self, **kwargs):
+                seen['kwargs'] = kwargs
+                self._manager = type('Manager',(),{'client':type('Wire',(),{
+                    'stop_channels':lambda wire:seen.update(channels_closed=True),
+                    'kernel_socket':type('Socket',(),{'close':lambda socket:seen.update(socket_closed=True)})()})()})()
+            def start(self, **kwargs):
+                assert self._own_kernel is False
+            def execute(self, code, **kwargs):
+                assert kwargs['allow_stdin'] is False
+                return {'status':'ok','outputs':[{'output_type':'stream','text':'{"python":"3.test","executable":"/usr/bin/python3","available_memory_bytes":10000000000}\n'}]}
+            def stop(self, **kwargs):
+                raise AssertionError('Manager stop must never run')
+>       result = cli.discover_cpu(object(),tmp_path/'state.json',kernel_factory=Kernel)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_colab_cli_session.py:135: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\akt\colab_cli_session.py:200: in discover_cpu
+    client.stop(shutdown_kernel=False)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_colab_cli_session.test_discovery_closes_transport_without_shutdown.<locals>.Kernel object at 0x00000285A7673620>
+kwargs = {'shutdown_kernel': False}
+
+    def stop(self, **kwargs):
+>       raise AssertionError('Manager stop must never run')
+E       AssertionError: Manager stop must never run
+
+tests\akt\test_colab_cli_session.py:134: AssertionError
+______ test_cleanup_failure_never_hides_primary_discovery_result[False] _______
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-cli-session-20261117-09/test_cleanup_failure_never_hid0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000285A765DF30>
+primary_failure = False
+
+    @pytest.mark.parametrize('primary_failure', [False, True])
+    def test_cleanup_failure_never_hides_primary_discovery_result(tmp_path, monkeypatch, primary_failure):
+        assignment = dict(endpoint='cpu-owned',runtimeProxyInfo={'url':'https://fake.googleusercontent.com/','token':'PRIVATE'})
+        kernel = dict(kernel_id='own-kernel',wire_session_id='own-wire')
+        monkeypatch.setattr(cli,'ensure_kernel',lambda *args,**kwargs:(assignment,kernel))
+        class Kernel:
+            def __init__(self,**kwargs):
+                class Wire:
+                    kernel_socket = None
+                    def stop_channels(self):
+                        raise TimeoutError('Private cleanup failed')
+                self._manager = type('Manager',(),{'client':Wire()})()
+            def start(self,**kwargs):
+                if primary_failure:
+                    raise ConnectionError('Private primary failed')
+            def execute(self,*args,**kwargs):
+                return {'status':'ok','outputs':[{'output_type':'stream','text':'{"python":"test","executable":"python","available_memory_bytes":1000}'}]}
+            def stop(self,**kwargs):
+                raise TimeoutError('Forbidden manager cleanup')
+        if primary_failure:
+            with pytest.raises(auth.ColabSessionError,match='CPU_DISCOVERY_ConnectionError'):
+                cli.discover_cpu(object(),tmp_path/'state.json',kernel_factory=Kernel)
+        else:
+>           assert cli.discover_cpu(object(),tmp_path/'state.json',kernel_factory=Kernel)['python'] == 'test'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_colab_cli_session.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\akt\colab_cli_session.py:200: in discover_cpu
+    client.stop(shutdown_kernel=False)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_colab_cli_session.test_cleanup_failure_never_hides_primary_discovery_result.<locals>.Kernel object at 0x00000285A7DBD7F0>
+kwargs = {'shutdown_kernel': False}
+
+    def stop(self,**kwargs):
+>       raise TimeoutError('Forbidden manager cleanup')
+E       TimeoutError: Forbidden manager cleanup
+
+tests\akt\test_colab_cli_session.py:160: TimeoutError
+_______ test_cleanup_failure_never_hides_primary_discovery_result[True] _______
+
+session = <object object at 0x00000285A3E22770>
+state_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-cli-session-20261117-09/test_cleanup_failure_never_hid1/state.json')
+kernel_factory = <class 'test_colab_cli_session.test_cleanup_failure_never_hides_primary_discovery_result.<locals>.Kernel'>
+
+    def discover_cpu(session, state_path, *, kernel_factory=None):
+        """Một lượt đọc Python/RAM, đóng socket nhưng giữ own kernel/session."""
+        import logging
+        for name in ('jupyter_kernel_client','websocket'):
+            logging.getLogger(name).setLevel(logging.CRITICAL+1)
+        assignment,kernel = ensure_kernel(session,state_path)
+        from jupyter_kernel_client import JupyterSubprotocol
+        if kernel_factory is None:
+            from jupyter_kernel_client import JupyterKernelClient
+            kernel_factory = JupyterKernelClient
+        proxy = assignment['runtimeProxyInfo']
+        client = kernel_factory(server_url=proxy['url'],token=proxy['token'],kernel_id=kernel['kernel_id'],
+            client_kwargs={'session':kernel['wire_session_id'],'subprotocol':JupyterSubprotocol.DEFAULT,
+                          'extra_params':{'colab-runtime-proxy-token':proxy['token']}},
+            headers={'X-Colab-Client-Agent':'colab-cli','X-Colab-Runtime-Proxy-Token':proxy['token']})
+        client._own_kernel = False
+        try:
+            client.start(timeout=30)
+            code = ("import json,sys\n"
+                    "_mem={r.split(':')[0]:r.split(':')[1].strip() for r in open('/proc/meminfo')}\n"
+                    "print(json.dumps({'python':sys.version,'executable':sys.executable,"
+                    "'available_memory_bytes':int(_mem['MemAvailable'].split()[0])*1024}))")
+            result = client.execute(code,allow_stdin=False,timeout=60)
+            need(result.get('status') == 'ok', 'CPU_DISCOVERY_EXECUTION_FAILED')
+            text = ''.join(row.get('text','') for row in result.get('outputs',[]) if row.get('output_type') == 'stream')
+            data = json.loads(text.strip())
+            need(set(data) == {'python','executable','available_memory_bytes'}, 'CPU_DISCOVERY_SCHEMA_CHANGED')
+            return dict(status='CPU_KERNEL_DISCOVERY_COMPLETE',endpoint=assignment['endpoint'],**data)
+        except auth.ColabSessionError:
+            raise
+        except Exception as error:
+>           raise auth.ColabSessionError('CPU_DISCOVERY_'+type(error).__name__) from None
+E           scripts.akt.colab_session.ColabSessionError: CPU_DISCOVERY_ConnectionError
+
+scripts\akt\colab_cli_session.py:198: ColabSessionError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-cli-session-20261117-09/test_cleanup_failure_never_hid1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000285A7DA7890>
+primary_failure = True
+
+    @pytest.mark.parametrize('primary_failure', [False, True])
+    def test_cleanup_failure_never_hides_primary_discovery_result(tmp_path, monkeypatch, primary_failure):
+        assignment = dict(endpoint='cpu-owned',runtimeProxyInfo={'url':'https://fake.googleusercontent.com/','token':'PRIVATE'})
+        kernel = dict(kernel_id='own-kernel',wire_session_id='own-wire')
+        monkeypatch.setattr(cli,'ensure_kernel',lambda *args,**kwargs:(assignment,kernel))
+        class Kernel:
+            def __init__(self,**kwargs):
+                class Wire:
+                    kernel_socket = None
+                    def stop_channels(self):
+                        raise TimeoutError('Private cleanup failed')
+                self._manager = type('Manager',(),{'client':Wire()})()
+            def start(self,**kwargs):
+                if primary_failure:
+                    raise ConnectionError('Private primary failed')
+            def execute(self,*args,**kwargs):
+                return {'status':'ok','outputs':[{'output_type':'stream','text':'{"python":"test","executable":"python","available_memory_bytes":1000}'}]}
+            def stop(self,**kwargs):
+                raise TimeoutError('Forbidden manager cleanup')
+        if primary_failure:
+            with pytest.raises(auth.ColabSessionError,match='CPU_DISCOVERY_ConnectionError'):
+>               cli.discover_cpu(object(),tmp_path/'state.json',kernel_factory=Kernel)
+
+tests\akt\test_colab_cli_session.py:163: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\akt\colab_cli_session.py:200: in discover_cpu
+    client.stop(shutdown_kernel=False)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_colab_cli_session.test_cleanup_failure_never_hides_primary_discovery_result.<locals>.Kernel object at 0x00000285A7DBE3C0>
+kwargs = {'shutdown_kernel': False}
+
+    def stop(self,**kwargs):
+>       raise TimeoutError('Forbidden manager cleanup')
+E       TimeoutError: Forbidden manager cleanup
+
+tests\akt\test_colab_cli_session.py:160: TimeoutError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_colab_cli_session.py::test_discovery_closes_transport_without_shutdown
+FAILED tests/akt/test_colab_cli_session.py::test_cleanup_failure_never_hides_primary_discovery_result[False]
+FAILED tests/akt/test_colab_cli_session.py::test_cleanup_failure_never_hides_primary_discovery_result[True]
+3 failed, 5 deselected in 0.48s

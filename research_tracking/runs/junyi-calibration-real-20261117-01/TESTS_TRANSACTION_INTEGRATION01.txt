@@ -1,0 +1,59 @@
+......................F......................................            [100%]
+================================== FAILURES ===================================
+______ test_cpu_preflight_uses_real_verifier_contract_and_no_cuda_probe _______
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/calib-root-1117-02/test_cpu_preflight_uses_real_v0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002270FC6EF90>
+
+    def test_cpu_preflight_uses_real_verifier_contract_and_no_cuda_probe(tmp_path, monkeypatch):
+        worker=load('calibration_cloud_worker')
+        import platform
+        import knowledge_tracing.akt.provenance as provenance
+        import knowledge_tracing.akt.research_junyi_calibration as calibration
+        import knowledge_tracing.akt.config as config
+        scripts=tmp_path/'scripts/akt';scripts.mkdir(parents=True)
+        for name in ('calibration_cloud_worker.py','modal_junyi_calibration.py','prepare_junyi_calibration_caches.py',
+                     'run_junyi_refit.py','drive_artifact_sink.py','drive_resumable_upload.py'):
+            (scripts/name).write_text('synthetic-source')
+        calls=[]
+        def verify(path,commit):
+            calls.append((path,commit))
+            return dict(commit=commit,files={'akt.py':'a'*64})
+        monkeypatch.setattr(provenance,'verify_upstream',verify)
+        monkeypatch.setattr(calibration,'inference_source_identity',lambda:'b'*64)
+        monkeypatch.setattr(platform,'python_version',lambda:'3.13.18')
+        fake=SimpleNamespace(__version__='2.7.1+cu126',version=SimpleNamespace(cuda='12.6'),
+            cuda=SimpleNamespace(is_initialized=lambda:False))
+        monkeypatch.setitem(sys.modules,'torch',fake)
+>       result=worker.runtime_preflight(tmp_path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_modal_junyi_calibration.py:233: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\akt\calibration_cloud_worker.py:25: in runtime_preflight
+    sources = {name: sha(project/'scripts/akt'/name) for name in scripts}
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts\akt\calibration_cloud_worker.py:40: in sha
+    with Path(path).open('rb') as stream:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/calib-root-1117-02/test_cpu_preflight_uses_real_v0/scripts/akt/calibration_audit_transaction.py')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Dev\\KLTN\\artifacts\\akt\\test-temp\\calib-root-1117-02\\test_cpu_preflight_uses_real_v0\\scripts\\akt\\calibration_audit_transaction.py'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_modal_junyi_calibration.py::test_cpu_preflight_uses_real_verifier_contract_and_no_cuda_probe
+1 failed, 60 passed in 10.42s

@@ -1,0 +1,23 @@
+{
+  "kind": "junyi_outer4_train80_degree_topic_area_support_control_v1",
+  "status": "DRAFT_FROZEN_FOR_SYNTHETIC_REVIEW_NOT_ADOPTED",
+  "seeds": [0, 1, 2],
+  "swaps": 10,
+  "expected_changed_entries": 40,
+  "support_bins": ["0", "1-9", "10-99", "100-999", "1000-9999", "10000+"],
+  "support_source": "TRAIN80 distinct learner support in pinned native encoding",
+  "static_strata": ["catalog_topic", "catalog_area"],
+  "constraints": ["all_nodes_preserved", "in_out_degree_exact", "DAG", "joint_topic_area_support_pairs_exact", "original_edge_used_once", "no_original_edge_reintroduced"],
+  "candidate_exposure": "UNKNOWN_UNTIL_SEPARATE_NATIVE_WINDOW_SCAN",
+  "exposure_audit_target": {
+    "new_edge_min_train_learners": 20,
+    "min_added_edges_meeting_learner_support": 10,
+    "min_removed_edges_meeting_learner_support": 10,
+    "changed_edge_union_min_train_learners": 1000,
+    "failure_status": "INCONCLUSIVE_EXPOSURE_TOO_LOW",
+    "scope": "diagnostic coverage target, not statistical power or efficacy threshold"
+  },
+  "selection_rule": "keep_all_fixed_seeds_and_failures_no_resample_no_prediction_metric_search",
+  "prediction_metrics_used_in_construction": [],
+  "order_only_graph": "SEPARATE_PROPOSED_CONTROL_NOT_GENERATED_HERE"
+}

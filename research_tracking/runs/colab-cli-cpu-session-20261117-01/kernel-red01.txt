@@ -1,0 +1,46 @@
+FF                                                                       [100%]
+================================== FAILURES ===================================
+____ test_kernel_session_is_owned_and_reused_without_deleting_user_session ____
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-cli-session-20261117-03/test_kernel_session_is_owned_a0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000012430C5E520>
+
+    def test_kernel_session_is_owned_and_reused_without_deleting_user_session(tmp_path, monkeypatch):
+        monkeypatch.setattr(auth, 'PRIVATE', tmp_path)
+        state = tmp_path/'cli.json'
+        assignment = dict(endpoint='cpu-owned',runtimeProxyInfo={'url':'https://fake.googleusercontent.com/','token':'PRIVATE'})
+        monkeypatch.setattr(cli, 'ensure_cpu_assignment', lambda *args: assignment)
+        sessions = [{'id':'user-session','path':'content/user.ipynb','kernel':{'id':'user-kernel','name':'python3'}}]
+        calls = []
+        def proxy_call(proxy, assignment, method, path, **kwargs):
+            calls.append((method,path,kwargs))
+            if path == 'api/sessions' and method == 'GET':
+                return list(sessions)
+            if path == 'api/sessions':
+                request = kwargs['json']
+                saved = json.loads(state.read_text())
+                assert saved['kernel_request']['path'] == request['path']
+                result = dict(id='own-session',path=request['path'],kernel={'id':'own-kernel','name':'python3'})
+                sessions.append(result)
+                return result
+            return {}
+>       monkeypatch.setattr(cli, '_proxy_request', proxy_call)
+E       AttributeError: <module 'scripts.akt.colab_cli_session' from 'D:\\Dev\\KLTN\\scripts\\akt\\colab_cli_session.py'> has no attribute '_proxy_request'
+
+tests\akt\test_colab_cli_session.py:95: AttributeError
+______________ test_discovery_closes_transport_without_shutdown _______________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-cli-session-20261117-03/test_discovery_closes_transpor0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000012430C5E2C0>
+
+    def test_discovery_closes_transport_without_shutdown(tmp_path, monkeypatch):
+        assignment = dict(endpoint='cpu-owned',runtimeProxyInfo={'url':'https://fake.googleusercontent.com/','token':'PRIVATE'})
+        kernel = dict(kernel_id='own-kernel',wire_session_id='own-wire')
+>       monkeypatch.setattr(cli, 'ensure_kernel', lambda *args,**kwargs:(assignment,kernel))
+E       AttributeError: <module 'scripts.akt.colab_cli_session' from 'D:\\Dev\\KLTN\\scripts\\akt\\colab_cli_session.py'> has no attribute 'ensure_kernel'
+
+tests\akt\test_colab_cli_session.py:107: AttributeError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_colab_cli_session.py::test_kernel_session_is_owned_and_reused_without_deleting_user_session
+FAILED tests/akt/test_colab_cli_session.py::test_discovery_closes_transport_without_shutdown
+2 failed, 3 deselected in 0.15s

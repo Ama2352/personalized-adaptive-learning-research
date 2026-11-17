@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+[18/11 — Bàn giao, lưu trữ và thu gọn workspace](WORKSPACE_STORAGE_HANDOFF_20261118.md) là hồ sơ vận hành: hai nơi Drive tách biệt, catalog phục hồi107.466đường dẫn, kiểm SHA và dung lượng local sau dọn. Không thay kết luận nghiên cứu hoặc nâng mức bằng chứng RQ.
+
 [18/11 — Kiểm đủ điều kiện bàn giao toàn phần việc còn lại](../runs/full-project-handoff-audit-20261118-01/README.md) phân biệt model/output đã có Drive với source/input cần chuyển. Có234nhóm thư mục,790file input đã hash, hồ sơGrade10selected và Method24 bổ sung. Nhánh local-tests có phụ thuộc nghiên cứu thật. Trạng thái fullhandoff còn điều kiện về input/source và khôi phục trên máy nhận.
 
 [18/11 — Rà phạm vi và tính đúng của kết quả](SCOPE_AND_RESULT_INTEGRITY_REVIEW_20261118.md) phân biệt bằng chứng dự báo đã có với chuỗi quyết định/vòng kín còn thiếu. Kết luận theo độ lớn hiệu ứng, bất định và điều kiện áp dụng, chấp nhận kết quả âm. Con số21phase thuộc ma trận triển khai nhóm, cần đọc cùng yêu cầu đề cương.

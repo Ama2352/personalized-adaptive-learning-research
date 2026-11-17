@@ -1,0 +1,90 @@
+FF                                                                       [100%]
+================================== FAILURES ===================================
+_ test_trusted_phase_is_pinned_before_execute_and_never_auto_repeated[False] __
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-cli-session-20261117-14/test_trusted_phase_is_pinned_b0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000025EE51CA650>
+drop_connection = False
+
+    @pytest.mark.parametrize('drop_connection',[False,True])
+    def test_trusted_phase_is_pinned_before_execute_and_never_auto_repeated(tmp_path,monkeypatch,drop_connection):
+        import hashlib
+        monkeypatch.setattr(auth,'PRIVATE',tmp_path)
+        repo = tmp_path/'repo'
+        script = repo/'scripts/akt/approved_phase.py'
+        script.parent.mkdir(parents=True)
+        script.write_text("print('phase')\n")
+        monkeypatch.setattr(auth,'ROOT',repo)
+        assignment = dict(endpoint='cpu-owned',runtimeProxyInfo={'url':'https://fake.googleusercontent.com/','token':'PRIVATE'})
+        kernel = dict(kernel_id='known',wire_session_id='wire')
+        monkeypatch.setattr(cli,'ensure_kernel',lambda *args,**kwargs:(assignment,kernel))
+        state = tmp_path/'state.json'
+        calls = []
+        class Kernel:
+            def execute(self,code,**kwargs):
+                calls.append(code)
+                phase = json.loads(state.read_text())['phases']['calibration-a2']
+                assert phase['status'] == 'RUNNING_OR_UNCERTAIN'
+                assert phase['phase_id'] in code
+                assert kwargs['timeout'] == 3600 and kwargs['allow_stdin'] is False
+                if drop_connection:
+                    raise ConnectionError('private URL must stay hidden')
+                return {'status':'ok','outputs':[{'output_type':'stream','text':'PRIVATE OUTPUT'}]}
+        monkeypatch.setattr(cli,'_connect_kernel',lambda *args,**kwargs:Kernel())
+        monkeypatch.setattr(cli,'_close_kernel_transport',lambda *args:None)
+        digest = hashlib.sha256(script.read_bytes()).hexdigest()
+        if drop_connection:
+            with pytest.raises(auth.ColabSessionError,match='UNCERTAIN'):
+                cli.execute_phase(object(),state,script,digest,'calibration-a2')
+            with pytest.raises(auth.ColabSessionError,match='ALREADY_SENT'):
+                cli.execute_phase(object(),state,script,digest,'calibration-a2')
+        else:
+>           result = cli.execute_phase(object(),state,script,digest,'calibration-a2')
+                     ^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'scripts.akt.colab_cli_session' has no attribute 'execute_phase'
+
+tests\akt\test_colab_cli_session.py:225: AttributeError
+__ test_trusted_phase_is_pinned_before_execute_and_never_auto_repeated[True] __
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-cli-session-20261117-14/test_trusted_phase_is_pinned_b1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000025EE51C9810>
+drop_connection = True
+
+    @pytest.mark.parametrize('drop_connection',[False,True])
+    def test_trusted_phase_is_pinned_before_execute_and_never_auto_repeated(tmp_path,monkeypatch,drop_connection):
+        import hashlib
+        monkeypatch.setattr(auth,'PRIVATE',tmp_path)
+        repo = tmp_path/'repo'
+        script = repo/'scripts/akt/approved_phase.py'
+        script.parent.mkdir(parents=True)
+        script.write_text("print('phase')\n")
+        monkeypatch.setattr(auth,'ROOT',repo)
+        assignment = dict(endpoint='cpu-owned',runtimeProxyInfo={'url':'https://fake.googleusercontent.com/','token':'PRIVATE'})
+        kernel = dict(kernel_id='known',wire_session_id='wire')
+        monkeypatch.setattr(cli,'ensure_kernel',lambda *args,**kwargs:(assignment,kernel))
+        state = tmp_path/'state.json'
+        calls = []
+        class Kernel:
+            def execute(self,code,**kwargs):
+                calls.append(code)
+                phase = json.loads(state.read_text())['phases']['calibration-a2']
+                assert phase['status'] == 'RUNNING_OR_UNCERTAIN'
+                assert phase['phase_id'] in code
+                assert kwargs['timeout'] == 3600 and kwargs['allow_stdin'] is False
+                if drop_connection:
+                    raise ConnectionError('private URL must stay hidden')
+                return {'status':'ok','outputs':[{'output_type':'stream','text':'PRIVATE OUTPUT'}]}
+        monkeypatch.setattr(cli,'_connect_kernel',lambda *args,**kwargs:Kernel())
+        monkeypatch.setattr(cli,'_close_kernel_transport',lambda *args:None)
+        digest = hashlib.sha256(script.read_bytes()).hexdigest()
+        if drop_connection:
+            with pytest.raises(auth.ColabSessionError,match='UNCERTAIN'):
+>               cli.execute_phase(object(),state,script,digest,'calibration-a2')
+                ^^^^^^^^^^^^^^^^^
+E               AttributeError: module 'scripts.akt.colab_cli_session' has no attribute 'execute_phase'
+
+tests\akt\test_colab_cli_session.py:221: AttributeError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_colab_cli_session.py::test_trusted_phase_is_pinned_before_execute_and_never_auto_repeated[False]
+FAILED tests/akt/test_colab_cli_session.py::test_trusted_phase_is_pinned_before_execute_and_never_auto_repeated[True]
+2 failed, 9 deselected in 0.23s

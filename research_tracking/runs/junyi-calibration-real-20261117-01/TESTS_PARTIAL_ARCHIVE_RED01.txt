@@ -1,0 +1,97 @@
+FF                                                                       [100%]
+================================== FAILURES ===================================
+______________ test_native_partial_manifest_without_shard_hashes ______________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/partial-archive-red-20261117-01/test_native_partial_manifest_w0')
+
+    def test_native_partial_manifest_without_shard_hashes(tmp_path):
+        manifest = {'shards':[{'path':'part-00000.parquet','rows':2,'user_id':'synthetic'}]}
+        (tmp_path/'manifest.json').write_text(json.dumps(manifest))
+        (tmp_path/'part-00000.parquet').write_bytes(b'synthetic-parquet-bytes')
+>       result = inventory_function()(tmp_path, manifest)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_partial_raw_archive_inventory.py:22: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_partial_raw_archive_inventory.py:11: in inventory_function
+    tree = ast.parse(source.read_text(encoding='utf-8'))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('research_tracking/runs/junyi-calibration-real-20261117-01/archive_colab_a2_partial02.py')
+mode = 'r', buffering = -1, encoding = 'utf-8', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'research_tracking\\runs\\junyi-calibration-real-20261117-01\\archive_colab_a2_partial02.py'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError
+_____________ test_partial_manifest_existing_bad_hash_is_rejected _____________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/partial-archive-red-20261117-01/test_partial_manifest_existing0')
+
+    def test_partial_manifest_existing_bad_hash_is_rejected(tmp_path):
+        manifest = {'shards':[{'path':'part-00000.parquet','sha256':'0'*64}]}
+        (tmp_path/'manifest.json').write_text(json.dumps(manifest))
+        (tmp_path/'part-00000.parquet').write_bytes(b'synthetic-parquet-bytes')
+        with pytest.raises(ValueError, match='SHA'):
+>           inventory_function()(tmp_path, manifest)
+            ^^^^^^^^^^^^^^^^^^^^
+
+tests\akt\test_partial_raw_archive_inventory.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\akt\test_partial_raw_archive_inventory.py:11: in inventory_function
+    tree = ast.parse(source.read_text(encoding='utf-8'))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('research_tracking/runs/junyi-calibration-real-20261117-01/archive_colab_a2_partial02.py')
+mode = 'r', buffering = -1, encoding = 'utf-8', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'research_tracking\\runs\\junyi-calibration-real-20261117-01\\archive_colab_a2_partial02.py'
+
+C:\Users\AmaDev\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: FileNotFoundError
+============================== warnings summary ===============================
+.venv\Lib\site-packages\_pytest\cacheprovider.py:469
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:469: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\nodeids: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+.venv\Lib\site-packages\_pytest\cacheprovider.py:423
+  D:\Dev\KLTN\.venv\Lib\site-packages\_pytest\cacheprovider.py:423: PytestCacheWarning: could not create cache path D:\Dev\KLTN\.pytest_cache\v\cache\lastfailed: [WinError 5] Access is denied: 'D:\\Dev\\KLTN\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/lastfailed", self.lastfailed)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/akt/test_partial_raw_archive_inventory.py::test_native_partial_manifest_without_shard_hashes
+FAILED tests/akt/test_partial_raw_archive_inventory.py::test_partial_manifest_existing_bad_hash_is_rejected
+2 failed, 2 warnings in 0.14s

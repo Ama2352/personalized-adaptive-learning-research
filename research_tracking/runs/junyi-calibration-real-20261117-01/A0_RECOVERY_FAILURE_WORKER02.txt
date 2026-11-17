@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/opt/kltn/scripts/akt/calibration_cloud_worker.py", line 392, in <module>
+    main()
+    ~~~~^^
+  File "/opt/kltn/scripts/akt/calibration_cloud_worker.py", line 378, in main
+    result = recover_cpu_calibration(request, root, gpu_result=gpu_result,
+        raw_source_pin=json.loads(args.raw_source), closed_marker_pin=json.loads(args.writer_closed),
+        attempt_id=args.attempt_id, publish=publish, volume_commit=volume.commit)
+  File "/opt/kltn/scripts/akt/calibration_audit_transaction.py", line 196, in recover_cpu_calibration
+    raw_manifest = pinned(raw_source_pin, root)
+  File "/opt/kltn/scripts/akt/calibration_cloud_worker.py", line 53, in pinned
+    raise ValueError('staged input SHA changed')
+ValueError: staged input SHA changed

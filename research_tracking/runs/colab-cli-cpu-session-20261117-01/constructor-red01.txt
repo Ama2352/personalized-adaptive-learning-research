@@ -1,0 +1,21 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+___________ test_constructor_timeout_retries_only_same_known_kernel ___________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/colab-cli-session-20261117-11/test_constructor_timeout_retri0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002126D7CE520>
+
+    def test_constructor_timeout_retries_only_same_known_kernel(tmp_path, monkeypatch):
+        import requests
+        assignment = dict(endpoint='cpu-owned',runtimeProxyInfo={'url':'https://fake.googleusercontent.com/','token':'PRIVATE'})
+        kernel = dict(kernel_id='same-kernel',wire_session_id='same-wire')
+        monkeypatch.setattr(cli,'ensure_kernel',lambda *args,**kwargs:(assignment,kernel))
+        delays = []
+>       monkeypatch.setattr(cli.time,'sleep',lambda seconds:delays.append(seconds),raising=False)
+                            ^^^^^^^^
+E       AttributeError: module 'scripts.akt.colab_cli_session' has no attribute 'time'
+
+tests\akt\test_colab_cli_session.py:174: AttributeError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_colab_cli_session.py::test_constructor_timeout_retries_only_same_known_kernel
+1 failed, 8 deselected in 0.31s

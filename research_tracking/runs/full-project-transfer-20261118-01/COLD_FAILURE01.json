@@ -1,0 +1,8 @@
+{
+  "stage": "source snapshot extraction into fresh cold-project",
+  "finding": "Đường dẫn lồng sâu cộng hậu tố.handoff-part vượt Win32MAX_PATH và báo FileNotFoundError.",
+  "correction": "local_path chuyển đường dẫn dài sang Win32extended-length sau kiểm containment; bổ sung hồi quy đường dẫn sâu.",
+  "originals_preserved": true,
+  "global_windows_settings_changed": false,
+  "recovery": "Giữ thư mục khôi phục đang có; chạy lại idempotent và kiểm SHA các file đã giải nén."
+}

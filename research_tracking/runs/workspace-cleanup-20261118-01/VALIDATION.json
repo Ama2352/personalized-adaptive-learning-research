@@ -1,0 +1,64 @@
+{
+  "checks": [
+    {
+      "command": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_storage_restore.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_corrupt_download_never_publishes (test_storage_restore.RestoreTests.test_corrupt_download_never_publishes) ... ok\ntest_direct_file_and_existing_identical (test_storage_restore.RestoreTests.test_direct_file_and_existing_identical) ... ok\ntest_existing_different_is_preserved (test_storage_restore.RestoreTests.test_existing_different_is_preserved) ... ok\ntest_member_size_is_bounded_before_publication (test_storage_restore.RestoreTests.test_member_size_is_bounded_before_publication) ... ok\ntest_multipart_preserves_full_archive_bytes (test_storage_restore.RestoreTests.test_multipart_preserves_full_archive_bytes) ... ok\ntest_parent_escape_is_rejected (test_storage_restore.RestoreTests.test_parent_escape_is_rejected) ... ok\ntest_restore_exact_member (test_storage_restore.RestoreTests.test_restore_exact_member) ... ok\ntest_windows_device_name_is_rejected (test_storage_restore.RestoreTests.test_windows_device_name_is_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.155s\n\nOK\n"
+    },
+    {
+      "command": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_handoff_source_package.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_interruption_keeps_final_absent_and_retry_succeeds (test_handoff_source_package.SourcePackageTests.test_interruption_keeps_final_absent_and_retry_succeeds) ... ok\ntest_tracked_public_corpus_is_allowed_and_private_is_not (test_handoff_source_package.SourcePackageTests.test_tracked_public_corpus_is_allowed_and_private_is_not) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.046s\n\nOK\n"
+    },
+    {
+      "command": [
+        "research_tracking/runs/full-project-transfer-20261118-01/test_restore01.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_deep_windows_path (__main__.RestoreTests.test_deep_windows_path) ... ok\ntest_existing_different_content_is_preserved (__main__.RestoreTests.test_existing_different_content_is_preserved) ... ok\ntest_member_digest_rejected_before_target_publication (__main__.RestoreTests.test_member_digest_rejected_before_target_publication) ... ok\ntest_parent_escape_rejected (__main__.RestoreTests.test_parent_escape_rejected) ... ok\ntest_restore_twice_is_idempotent (__main__.RestoreTests.test_restore_twice_is_idempotent) ... ok\ntest_two_model_packages_keep_independent_root_documents (__main__.RestoreTests.test_two_model_packages_keep_independent_root_documents) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.127s\n\nOK\n"
+    },
+    {
+      "command": [
+        "-c",
+        "import knowledge_tracing; import knowledge_tracing.bkt_baseline; import knowledge_tracing.akt.config; import knowledge_tracing.sakt; import knowledge_tracing.gkt; print(\"KT_IMPORT_SMOKE_OK\")"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import knowledge_tracing; import knowledge_tracing.bkt_baseline; import knowledge_tracing.akt.config; import knowledge_tracing.sakt; import knowledge_tracing.gkt; print(\"KT_IMPORT_SMOKE_OK\")\n    ^^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'knowledge_tracing'\n"
+    },
+    {
+      "command": [
+        "-c",
+        "import knowledge_tracing; import knowledge_tracing.bkt_baseline; import knowledge_tracing.akt.config; import knowledge_tracing.sakt; import knowledge_tracing.gkt; print(\"KT_IMPORT_SMOKE_OK\")"
+      ],
+      "PYTHONPATH": "src",
+      "exit_code": 0,
+      "stdout": "KT_IMPORT_SMOKE_OK\n",
+      "stderr": ""
+    }
+  ],
+  "status": "TESTS_AND_CORRECT_SOURCE_PATH_IMPORT_PASSED",
+  "limits_vi": "L?n import ??u thi?u PYTHONPATH khi project ch?a c?i editable; gi? failure, ki?m l?i ??ng source path. Kh?ng ch?y training.",
+  "notebook_ast_no_outputs": true
+}

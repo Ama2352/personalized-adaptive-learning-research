@@ -2,6 +2,8 @@
 
 Dự án KLTN về Knowledge Tracing, thông tin tiên quyết và lựa chọn lộ trình học, dùng Junyi Academy và môi trường mô phỏng. Repository khởi đầu từ baseline BKT; phần hướng dẫn chạy bên dưới vẫn dành cho baseline đó.
 
+Đợt bàn giao18/11: [hướng dẫn tiếp quản và bố cục local](docs/operations/STORAGE_AND_HANDOFF.md), [chỉ mục Drive và phục hồi](research_tracking/storage/README.md). Source, cấu hình, tài liệu và model/input gọn còn local; payload/cache lịch sử lớn đã chuyển lạnh có checksum và locator. Trước khi chạy request cũ, tra catalog để phục hồi đúng file cần dùng.
+
 ## Tìm báo cáo và bằng chứng
 
 Bắt đầu tại **[Bản đồ repository và bằng chứng KLTN](docs/REPOSITORY_MAP.md)**: vai trò từng thư mục, kết quả gốc ở đâu, báo cáo nào dùng để viết và cách truy ngược run/hash.
