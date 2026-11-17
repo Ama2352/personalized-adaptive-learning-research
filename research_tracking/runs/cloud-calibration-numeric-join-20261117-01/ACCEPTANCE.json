@@ -1,0 +1,72 @@
+{
+  "status": "SYNTHETIC_CPU_NUMERIC_RAW_V1_JOIN_VERIFIED",
+  "tests": [
+    {
+      "log": "tests02.txt",
+      "passed": 13,
+      "seconds": 35.66,
+      "coverage": "A0-A3 V1 parity and negative contract tests"
+    },
+    {
+      "log": "tests03.txt",
+      "passed": 2,
+      "deselected": 13,
+      "seconds": 4.46,
+      "coverage": "raw checkpoint callback ordering and failure"
+    }
+  ],
+  "actual_junyi": false,
+  "native_model": false,
+  "gpu": false,
+  "cloud_execution": false,
+  "source": [
+    {
+      "path": "src/knowledge_tracing/akt/cloud_calibration_numeric_join.py",
+      "bytes": 12189,
+      "sha256": "15081365921bf22c0b62cfe132ac561392d87feba3c39ee6559688565ece5d6a"
+    },
+    {
+      "path": "tests/akt/test_cloud_calibration_numeric_join.py",
+      "bytes": 9300,
+      "sha256": "9680e1851276538d18ecdca7bc107275e7cd50e7961569152d36eca2a8d10a6e"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "src/knowledge_tracing/akt/cloud_calibration_fit.py",
+      "bytes": 5725,
+      "sha256": "124dacebf272b4004f903aafb252c61abc9e504261c6242f2ce89573fb7e0570"
+    },
+    {
+      "path": "src/knowledge_tracing/akt/research_junyi_numeric_predictions.py",
+      "bytes": 9918,
+      "sha256": "c956a9df96085fbb93f63370d5b46c634f1b4050de09d43f91f55a7d47d2cc84"
+    },
+    {
+      "path": "src/knowledge_tracing/akt/research_junyi_calibration.py",
+      "bytes": 27568,
+      "sha256": "075013fa0311e5357ec65e870d45a478a3ba27201bd81585cdd33a87cc9d2ecf"
+    },
+    {
+      "path": "src/knowledge_tracing/akt/prediction.py",
+      "bytes": 18835,
+      "sha256": "192d341478884b40c6d173be32b3794c394fc667775f0fe7452e3724554a70eb"
+    },
+    {
+      "path": "src/knowledge_tracing/akt/prediction_batch.py",
+      "bytes": 7900,
+      "sha256": "c983e9629718427a9124f0fd76ad1af335f710cc1549085a5387322b9626cbff"
+    },
+    {
+      "path": "src/knowledge_tracing/akt/research_junyi_window_cache.py",
+      "bytes": 29942,
+      "sha256": "8e3331894fa490c16586b3157f725d26f42c77c185cae985dce8ee1d305e2687"
+    }
+  ],
+  "limits": [
+    "Full cohort raw join and V1 fit not executed",
+    "Caller supplies Volume commit callback and CPU Drive publisher",
+    "Worker needs measured resource budget; full V1 runtime not measured",
+    "Raw archive cap2GiB and explicit3file publish list; rawParquet remains onVolume"
+  ]
+}
