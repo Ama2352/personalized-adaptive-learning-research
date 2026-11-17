@@ -33,7 +33,7 @@ Các số 964 thay đổi xác suất, 90 thay đổi mastery, 60 thay đổi re
 
 ### Đã tính lại phần nào của kết quả thống kê Paper2
 
-Để xác nhận nền số liệu trước khi phát triển chẩn đoán, nhóm đã tính lại model means, mean paired delta và Holm từ outcome frozen của Paper2. Mỗi phase có600dòng model×profile×seed, mỗi hồ sơ có50seed ghép cặp. Toàn45hypotheses fixed-replay và72hypotheses closed-loop khớp bảng lịch sử, kể cả quyết định Holm. Raw Wilcoxon p-value và CI95% từ3.000bootstrap draws được kế thừa. Lượt này chưa chạy lại simulator, signed-rank hoặc bootstrap. [Nghiệm thu117dòng và phạm vi tái lập](../runs/paper2-statistical-reproduction-20261117-01/ACCEPTANCE.json)
+Để xác nhận nền số liệu trước khi phát triển chẩn đoán, nhóm đã tính lại model means, mean paired delta và Holm từ outcome frozen của Paper2. Mỗi phase có600dòng model×profile×seed, mỗi hồ sơ có50seed ghép cặp. Toàn45hypotheses fixed-replay và72hypotheses closed-loop khớp bảng lịch sử. Lượt đầu còn kế thừa raw p-value/CI, sau đó followup02 chạy nguyên functions nguồn để tính lại Wilcoxon, rank-biserial,3.000paired-bootstrap draws mỗi hypothesis và Holm. Cả10trường số của117hypotheses khớp chính xác giá trị float đã lưu, không đổi cờ quyết định nào. Không chạy lại simulator hoặc model. [Nghiệm thu bảng mean/Holm ban đầu](../runs/paper2-statistical-reproduction-20261117-01/ACCEPTANCE.json), [kết quả tái tính p-value và CI](../runs/paper2-statistical-reproduction-20261117-02/attempt01/RESULT.json)
 
 | Hồ sơ Paper2 | Δ Log Loss cùng luồng, graph package−GAM | Qua Holm family45 | Δ learning gain mỗi bước | Δ retained theta gain14ngày |
 | --- | ---: | --- | ---: | ---: |
@@ -43,7 +43,7 @@ Các số 964 thay đổi xác suất, 90 thay đổi mastery, 60 thay đổi re
 
 Hai outcome gain ở cả ba hồ sơ đều chưa qua Holm trong family72, pHolm bằng1 cho sáu contrast này. Phần tái lập cho phép đặt câu hỏi RQ1 trên số liệu đã đối chiếu rõ, dự báo tốt hơn ở Low/Function-weak vẫn chưa dẫn đến bằng chứng cải thiện outcome chính theo family đã chốt. Độ bất định và các đường tác động còn cần được phân tích tiếp. Contrast này tác động cả gói context/adaptation, nên câu hỏi về đóng góp riêng của cạnh vẫn mở. [Bảng39contrast chính](../runs/paper2-statistical-reproduction-20261117-01/PRIMARY_PACKAGE_CONTRAST.csv), [SVG độc lập và dữ liệu dựng](../runs/paper2-statistical-reproduction-20261117-01/paper2-prediction-outcome-v01.svg)
 
-Đây là một phần hoàn thiện Sprint1 về tái lập và thực hành thống kê của Sprint5 theo đề cương. 13kiểm thử hồi quy tổng hợp đạt, bao gồm ghép seed đầy đủ và giữ đúng family Holm. Kết quả không tăng số sample nghiên cứu hoặc xác nhận hoàn tất RQ. [Quy trình, log và giới hạn](../runs/paper2-statistical-reproduction-20261117-01/README.md)
+Đây là một phần hoàn thiện Sprint1 về tái lập và thực hành thống kê của Sprint5 theo đề cương. Gói đầu có13kiểm thử hồi quy tổng hợp đạt, followup có3kiểm CLI/AST đạt. Lượt tính lại đầy đủ dùng5,57giây CPU và peak140,56MiB trong trần180giây/256MiB. Phiên bản thư viện historical chưa được pin đủ, còn runtime local hiện hành tái hiện đúng toàn bộ số thống kê từ outcomes đã lưu. Chưa tái chạy trajectory để xác nhận việc sinh outcomes. Kết quả không tăng số sample nghiên cứu hoặc xác nhận hoàn tất RQ. [Quy trình p/CI, versions và giới hạn](../runs/paper2-statistical-reproduction-20261117-02/README.md), [receipt tài nguyên](../runs/paper2-statistical-reproduction-20261117-02/attempt01/RESOURCE_RECEIPT.json)
 
 ## 2. RQ1 — tập đủ điều kiện đổi thường vẫn giữ cùng gợi ý
 

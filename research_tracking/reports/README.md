@@ -1,5 +1,9 @@
 # Mục lục báo cáo và phân tích KLTN
 
+[17/11 — Tái tính p-value và bootstrap CI Paper2](../runs/paper2-statistical-reproduction-20261117-02/README.md) chạy nguyên4functions nguồn với50pairedseeds,3.000draws/hypothesis và family45/72. Cả117hypotheses khớp exactfloat cho mean/delta/Wilcoxon/rank-biserial/CI/Holm, không đổi quyết định. CPU5,57giây/peak140,56MiB,3CLI/ASTtests đạt. Khép phần thống kê còn kế thừa của gói01, chưa rerun simulator/model hoặc khôi phục historical library environment.
+
+[17/11 — Bản thảo chương kết quả và thảo luận RQ1–RQ3](THESIS_RESULTS_DISCUSSION_DRAFT_20261117.md) nối ngữ cảnh hai paper, các phát hiện cơ chế, bảng lifecycle 11 cấu hình và kết quả temperature A0/A1 trên cohort calibration. Có caption và liên kết ba SVG nghiên cứu, giải thích mục đích chỉ tiêu trước diễn giải. Đây là bản thảo học thuật từ nguồn đã nghiệm thu; đánh giá độc lập, A2/A3 calibration và các phần vòng kín còn mở. [Kiểm nguồn bản thảo](../runs/thesis-results-discussion-writing-20261117-01/README.md)
+
 [17/11 — Tái lập bảng thống kê Paper2](../runs/paper2-statistical-reproduction-20261117-01/README.md) tính lại mean/paired delta/Holm cho117hypotheses từ600seedrows mỗi phase, giữ đúng family45/72 và50pairedseeds/hồ sơ. Số học và quyết định Holm khớp nguồn. Wilcoxon p-value/CIbootstrap được kế thừa. Có13hồi quy tổng hợp, bảng39contrast chính, CSV/SVG/PNG và giới hạn tái lập rõ. Phần này được nối trong [tổng hợp RQ1–RQ2](RQ12_EXISTING_EVIDENCE_20261117.md).
 
 [17/11 — Lưu artifact trực tiếp Drive](../runs/drive-cloud-artifacts-20261117-01/ROOT_ACCEPTANCE.md) đã kiểm CPU cloud ngắt/resume và checksum thật. [Nguồn calibration](../runs/junyi-calibration-data-20261117-01/README.md) đủ15.847người học,1.621.484target. [Builder inference](../runs/junyi-real-calibration-wiring-20261117-01/README.md) nối model thật; inference/calibration đầy đủ còn chờ worker cloud.
