@@ -8,6 +8,8 @@ Từ đó, KLTN đặt ba bước tiếp nối. RQ1 tìm mắt xích khiến d�
 
 **Mốc đã đạt** gồm chẩn đoán một phần nguyên nhân ở RQ1, các đối chứng thăm dò ở RQ2, cùng bốn mô hình AKT/CG-AKT đã chọn bản và học lại trên Junyi. Ngày 17/11, cả A0–A3 đã tính đủ dự báo cho cùng 15.847 người học trong phần hiệu chỉnh riêng. **Mốc còn thiếu** là hoàn tất hiệu chỉnh xác suất, đánh giá độc lập và mô phỏng vòng kín để kiểm hiệu quả của giải pháp. Cả ba RQ còn các tiêu chí nghiệm thu thực nghiệm.
 
+<a id="history"></a>
+
 ## Quá trình nghiên cứu đến hiện tại
 
 1. **Kế thừa hai paper.** Giữ kết quả đã công bố làm điểm xuất phát, rồi đặt câu hỏi vì sao dự báo tốt hơn chưa đi cùng kết quả học tốt hơn.
@@ -15,6 +17,8 @@ Từ đó, KLTN đặt ba bước tiếp nối. RQ1 tìm mắt xích khiến d�
 3. **12–16/11 — tạo các mô hình để kiểm giải pháp.** Đã chọn bản cho bảy điều kiện Grade10 và hoàn tất chọn bản/học lại bốn phiên bản Junyi. Bước kế tiếp dùng các mô hình này để tạo bảng đánh giá độc lập và kết quả vòng kín dùng chung ba RQ.
 4. **17/11 — kiểm chéo các lịch sử đã lưu.** Đã đối chiếu bảng thay đổi quyết định và chuỗi quan sát của pilot. Ở mức khởi tạo 1150, mức tăng năng lực ẩn đổi khi bật phạt trong khi chuỗi câu hỏi, đáp án và xác suất KT giữ nguyên. Đây là phân tích lại các thí nghiệm đã có.
 5. **17/11 — đưa mô hình đã học vào bước hiệu chỉnh thực tế.** Cả A0–A3 đã tính đủ 1.621.484 xác suất dự báo mỗi mô hình trên cùng phần hiệu chỉnh Junyi. Bước ghép dự báo với đáp án và tìm mức hiệu chỉnh đang được thực hiện trên CPU, trước khi đánh giá trên nhóm người học độc lập.
+
+<a id="rq1"></a>
 
 ## RQ1 — Vì sao đồ thị chưa giúp người học tiến bộ?
 
@@ -42,6 +46,8 @@ Bốn số đo được đếm riêng trên cùng 1.080 cặp. Trong 964 cặp �
 
 **Còn thiếu để kết thúc RQ1** — hiệu chỉnh để độ tự tin dự báo khớp tỷ lệ trả lời đúng, đặc biệt quanh ngưỡng thành thạo, kiểm đánh giá thành thạo so với trạng thái thật trong mô phỏng, rồi nối quyết định chọn bài với mức tiến bộ trên các lượt đánh giá độc lập.
 
+<a id="rq2"></a>
+
 ## RQ2 — Đồ thị hữu ích, trung tính hoặc có hại trong điều kiện nào?
 
 Cần xét chất lượng đồ thị, lượng lịch sử đã quan sát và đặc điểm người học, đồng thời tránh nhầm lợi ích của đồ thị với năng lực hoặc thứ tự luyện sẵn có.
@@ -64,21 +70,34 @@ Kiểm **13.347.331 tương tác** của **126.774 người học** trong phần
 
 **Còn thiếu để kết thúc RQ2** — đối chứng dự báo Junyi kiểm soát thứ tự luyện, thí nghiệm nhiễu thêm/xóa/đảo cạnh, lịch sử ngắn/dài, khái niệm ít dữ liệu, nhóm người học và quan hệ nội/liên chương, kèm bất định thống kê trên đánh giá chính.
 
+<a id="rq3"></a>
+
 ## RQ3 — CG-AKT có cải thiện dự báo và kết quả học?
 
 Giải pháp dùng độ tin cậy cho từng quan hệ và một cổng điều tiết để giảm hoặc tắt ảnh hưởng của đồ thị khi cần.
 
 ### Đã cài đặt và huấn luyện các biến thể cần so sánh
 
-| Phiên bản | Vai trò nghiên cứu | Junyi · đồ thị chuyên gia |
-| --- | --- | --- |
-| A0 | AKT không đồ thị, làm đối chứng | Đã chọn bản, học lại 9 vòng và tính đủ dự báo trên phần hiệu chỉnh |
-| A1 | Đồ thị cố định | Đã chọn bản, học lại 9 vòng và tính đủ dự báo trên phần hiệu chỉnh |
-| A2 | Trọng số tin cậy từng cạnh | Đã chọn bản, học lại 9 vòng và tính đủ dự báo trên phần hiệu chỉnh |
-| A3 · CG-AKT | Độ tin cậy cạnh và cổng có thể tắt đồ thị | Đã chọn bản, học lại 9 vòng và tính đủ dự báo trên phần hiệu chỉnh |
+| Phiên bản | Vai trò nghiên cứu |
+| --- | --- |
+| A0 | AKT không đồ thị, làm đối chứng |
+| A1 | AKT kết hợp đồ thị cố định |
+| A2 | AKT kết hợp trọng số tin cậy từng cạnh |
+| A3 · CG-AKT | Độ tin cậy cạnh và cổng điều tiết có thể tắt đồ thị |
 
 
 Mỗi biến thể Junyi đã chạy 12 vòng để chọn bản mô hình, chọn vòng 9 rồi học lại đủ 9 vòng trên **142.621 người học**, với **14.947.674 tương tác mục tiêu mỗi vòng**. Các bản lưu mô hình và nhật ký đã được lưu và nghiệm thu. Phạm vi hiện có là một phép chia dữ liệu phát triển, một lần khởi tạo huấn luyện và nhóm đồ thị chuyên gia.
+
+### Từ chọn vòng học đến kết luận trên dữ liệu độc lập
+
+**Chọn vòng** xác định số vòng huấn luyện phù hợp bằng nhóm phát triển dành cho lựa chọn. **Học lại** dùng số vòng đã chọn để huấn luyện lại mạng KT trên nhóm người học lớn hơn. **Hiệu chỉnh** tìm mức điều chỉnh độ tự tin dự báo trên một nhóm riêng. **Đánh giá độc lập** mới kiểm chất lượng trên nhóm người học hoặc lượt mô phỏng dành riêng để đánh giá.
+
+| Bước | Junyi · bốn mô hình A0–A3 với đồ thị chuyên gia | Grade10 · bảy điều kiện mô hình/đồ thị |
+| --- | --- | --- |
+| Chọn vòng | Đã chọn vòng 9 cho cả bốn mô hình | Đã chọn vòng 4 hoặc 5 |
+| Học lại | Đã hoàn tất 9 vòng mỗi mô hình | Còn phải học lại theo số vòng đã chọn |
+| Hiệu chỉnh | Đã tính đủ dự báo. Ghép đáp án và tìm mức hiệu chỉnh trên CPU còn chờ nghiệm thu | Còn phải thực hiện |
+| Đánh giá độc lập | Còn bảng kết quả trên nhóm người học đánh giá riêng | Còn dự báo, quyết định và kết quả vòng kín trên các lượt đánh giá mới |
 
 ### Cả bốn mô hình đã tính đủ dự báo để hiệu chỉnh xác suất
 
@@ -98,17 +117,20 @@ Benchmark BKT/GAM-KT qua 5 phép chia ở Sprint 2 cần được lấy ra phầ
 
 ## Đối chiếu sáu sprint trong đề cương
 
-Đối chiếu theo đầu ra đã có và mốc còn thiếu. Các sprint đang được thực hiện đan xen. Hoàn tất huấn luyện mới khép một phần yêu cầu của Sprint 2 và Sprint 4.
+Đã đối chiếu lại trực tiếp đề cương PDF, đặc biệt phương pháp ở trang 3–4 và đầu ra/sáu sprint ở trang 5. Các sprint đang được thực hiện đan xen. Hoàn tất huấn luyện khép một phần yêu cầu của Sprint 2 và Sprint 4.
 
-| Sprint theo đề cương | Đầu ra đã có đến 17/11 | Mốc còn thiếu để khép sprint |
+| Sprint theo đề cương | Đầu ra đã có đến 17/11 | Đầu ra bắt buộc còn phải nghiệm thu |
 | --- | --- | --- |
-| 1 · Khảo sát và tái lập | Có nguồn hai paper, đề cương, giả thuyết/quy trình. Đã kế thừa kết quả và tái kiểm chọn lọc các cơ chế mô phỏng. | Khép bảng đối chiếu từng kết quả chính của hai paper với đầu ra tái lập đã nghiệm thu. |
-| 2 · Dữ liệu và mô hình đối chứng | Junyi, Grade10 và phép chia đã chuẩn hóa. BKT/GAM-KT có benchmark 5-fold với 20.706.014 dự đoán ghép tương ứng, AKT đã huấn luyện. SAKT/GKT có cài đặt và kiểm trên bộ nhỏ. | SAKT/GKT và các đối chứng cần huấn luyện/đánh giá trên quần thể nghiên cứu phù hợp, hoàn thiện bảng so sánh chung. |
-| 3 · Chẩn đoán nguyên nhân | Có các phát hiện RQ1 về mô phỏng, dự báo/thành thạo/gợi ý và ảnh hưởng bộ chọn bài. | Hiệu chỉnh quanh ngưỡng, kiểm quyết định chọn bài đầy đủ và kết quả trên lượt độc lập. |
-| 4 · Phát triển phương pháp | Đã triển khai A0–A3, độ tin cậy cạnh, cổng và nhánh tắt đồ thị. Bốn bản Junyi đã học lại và tính đủ dự báo của phần hiệu chỉnh. Grade10 có 7 bản mô hình đã chọn. | Hoàn tất hiệu chỉnh/đánh giá độc lập A0–A3, chốt cấu hình hệ thống, tách đóng góp từng thành phần và hoàn thiện huấn luyện/hiệu chỉnh Grade10. |
-| 5 · Điều kiện hiệu lực | Có 120 lượt đối chứng mô phỏng, kiểm độ phủ Junyi và bất định thăm dò. | Ma trận nhiễu/lịch sử/ít dữ liệu/hồ sơ người học, vòng kín, thống kê và Holm cho đánh giá chính. |
-| 6 · Hoàn thiện | Có báo cáo, bằng chứng/bản lưu mô hình và demo xem lại kết quả mô phỏng đã lưu. | Demo dùng mô hình mới, luận văn, gói tái lập cuối, bản thảo bài báo theo đề cương (sau phần KLTN), phản hồi GVHD và chuẩn bị bảo vệ. |
+| 1 · Khảo sát và tái lập | Có hai paper, đề cương, quy trình và các kiểm cơ chế đã nêu ở [diễn tiến](#history). | Khép đối chiếu/tái lập các kết quả chính của hai paper trên phạm vi đã chốt, kèm bằng chứng và giới hạn của từng bảng. |
+| 2 · Dữ liệu và mô hình đối chứng | Junyi/Grade10 và phép chia đã chuẩn hóa. BKT/GAM-KT có benchmark 5-fold với 20.706.014 dự đoán ghép tương ứng. [AKT](#rq3) có mô hình đã học. SAKT/GKT có mã và bản chọn mô hình trên 84 tương tác kiểm kỹ thuật. | Khép đánh giá SAKT, GKT, GAM-KT, Graph-GAM-KT và AKT trên phạm vi đối chứng đã chốt, dùng cùng quần thể so sánh và giới hạn thông tin. |
+| 3 · Chẩn đoán nguyên nhân | [RQ1](#rq1) đã có giải thích cơ chế và bảng dự báo/quyết định. | Hiệu chỉnh quanh ngưỡng thành thạo, kiểm đúng/sai của đánh giá thành thạo và nối tới quyết định chọn bài, kết quả học trên lượt độc lập. |
+| 4 · Phát triển phương pháp | [A0–A3](#rq3) đã triển khai. Junyi đã học lại và tính đủ dự báo hiệu chỉnh. Grade10 có 7 bản mô hình đã chọn. | Khép hiệu chỉnh và đánh giá độc lập, kiểm riêng đóng góp cạnh/trọng số/cổng, độ ổn định chọn cấu hình và phương án chuyển về A0. |
+| 5 · Điều kiện hiệu lực | [RQ2](#rq2) có 120 lượt đối chứng và phân tích thứ tự/độ phủ Junyi. | Đồ thị chuyên gia/học/nhiễu thêm–xóa–đảo cạnh, lịch sử ngắn/dài, ít/nhiều dữ liệu, hồ sơ người học, nội/liên chương. Cần kết quả vòng kín, khoảng tin cậy và hiệu chỉnh Holm cho các phép so chính. |
+| 6 · Hoàn thiện | Có các phần bản thảo phương pháp/kết quả chẩn đoán, báo cáo này và demo xem lại thí nghiệm đã lưu. | Demo thể hiện mô hình đã học, lựa chọn hồ sơ/mô hình/đồ thị, trạng thái/độ tin cậy/lộ trình/chỉ số. Cần luận văn hoàn chỉnh, mã/cấu hình/seed/gói tái lập, phản hồi GVHD và chuẩn bị bảo vệ. |
 
+**Phân loại phạm vi.** Các đầu ra ở bảng là yêu cầu của đề cương. BKT đóng vai trò tham chiếu để kiểm tra tính hợp lý và tiếp tục được kế thừa theo protocol đã lưu. Dataset bổ sung và các kiến trúc mở rộng là phần có thể hoãn. Việc bỏ SAKT/GKT hoặc một nhóm thí nghiệm, demo hay đầu ra bắt buộc cần GVHD xác nhận. Bản thảo bài báo có trong deliverables đề cương, công bố sau KLTN và phạm vi nghiệm thu cần GVHD xác nhận.
+
+Để đánh giá dự báo, Log Loss và Brier Score đo mức sai của xác suất. AUC kiểm khả năng phân biệt đáp án đúng/sai. ECE đối chiếu độ tự tin với tỷ lệ đúng thực tế. Đánh giá vòng kín tiếp tục kiểm tăng thành thạo, duy trì 14 ngày, số tương tác đạt ngưỡng, vi phạm tiên quyết và chuyển/quay lại chương. Khoảng tin cậy theo người học hoặc bộ khởi tạo mô phỏng và hiệu chỉnh Holm giúp hạn chế kết luận nhầm khi so sánh nhiều cấu hình.
 
 **Các mốc hoàn tất rõ nhất** gồm dữ liệu/phép chia, baseline BKT/GAM-KT, một số chẩn đoán cơ chế, cài đặt CG-AKT và huấn luyện bốn bản Junyi với đồ thị chuyên gia. Những mốc nghiệm thu còn thiếu tập trung ở đánh giá của Sprint 3–5 và phần hoàn thiện Sprint 6.
 
@@ -120,7 +142,7 @@ Benchmark BKT/GAM-KT qua 5 phép chia ở Sprint 2 cần được lấy ra phầ
 
 **Cơ sở báo cáo** · Đề cương KLTN trang 5 về sáu sprint, kết luận hai paper RIVF 2026, các thí nghiệm chẩn đoán 07–12/11, nghiệm thu huấn luyện 12–16/11 và đầu ra dự báo A0–A3 ngày 17/11/2026. Kết quả thăm dò, huấn luyện và hiệu chỉnh được ghi theo phạm vi thực tế. Báo cáo chưa kết luận CG-AKT cải thiện kết quả học.
 
-Nguồn chi tiết ở [rà soát RQ1–RQ2](../../../reports/RQ12_COMPLETION_REVIEW_20261116.md), [đối chiếu training](../../../reports/TRAINING_RQ_SCOPE_REVIEW_20261116.md) và [đề cương trang 5](../../../../docs/thesis_recovery/evidence/user_documents_20261108_proposal.txt).
+Nguồn chi tiết ở [tổng hợp RQ1–RQ2](../../../reports/RQ12_EXISTING_EVIDENCE_20261117.md), [đối chiếu training](../../../reports/TRAINING_RQ_SCOPE_REVIEW_20261116.md) và [đề cương PDF đã duyệt, trang 3–5](<../../../../paper2/DC KLTN0127 23520355&23521338_LeVanTuan.pdf>). Bản HTML chứa sẵn PDF để tải về khi đọc độc lập.
 
 
 Hai công trình làm nền gồm “Separating Graph and Policy Effects in Adaptive Mathematics Sequencing: A Simulation Study” (Paper 1) và “Auditing Prerequisite Context in Online Knowledge Tracing: Shared-Stream Prediction, Development Gating, and Closed-Loop Simulation” (Paper 2).
