@@ -1,5 +1,5 @@
 {
-  "status": "A0_A1_CALIBRATED_A2_A3_NUMERIC_DRIVE_VERIFIED_FREE_CPU_PENDING",
+  "status": "LOCAL_A2_JOIN_RESUME_RUNNING_A0_A1_ACCEPTED_A3_PENDING",
   "updated": "2026-11-17",
   "run_id": "junyi-calibration-real-20261117-01",
   "workspace": "honguyenminhsang2016",
@@ -20,7 +20,7 @@
     "refit_already_complete": true,
     "holdout_allowed": false
   },
-  "cloud_outputs": "Drive chính, Volume staging/resume; PC chỉ nhận receipt nhỏ",
+  "cloud_outputs": "Drive Sang là kết quả chính; cache CPU local tối đa4GB đã được duyệt tại artifacts/akt/local-calibration/20261117",
   "input_zip": {
     "file_id": "1GlPhrWOLwFNeUiv1unYaEATypWmV9_Vy",
     "sha256": "a34cee8e961baf7056e8f16159d2b9a25afcca72f3c19b3a37bd0d711aab2d6a",
@@ -95,7 +95,7 @@
   "cpu_progress": {
     "A0": "CalibrationfitxongvàDriveverified,T1.03018345,1.621.484targets.",
     "A1": "Calibrationfitxongtrướcstop,vàDriveđãindependentreadbackverified,T1.02635362,1.621.484targets.",
-    "A2": "Rawđủ15.847shardstrênVolume,chưaacceptfit. PaidCPUAppđãstop.",
+    "A2": "Colab CPU thực đang JOIN_AUDIT 1.621.484 target; chưa nghiệm thu fit. Bootstrap UV đã qua, 9 dependency pins đúng .venv.",
     "A3": "GPUinferencesnapshotcomplete,cònCPUjoin/fittrênfreeCPU."
   },
   "cpu_audit_optimization": {
@@ -105,7 +105,7 @@
     "helper_sha256": "09a3fcb2d7ae1f4875351336591c554a593d22240bd046ebc04a36f815c72347",
     "frozen_preflight": "PREFLIGHT06.json choA1/A2/A3appsđãkhởiđộng;PREFLIGHT07.jsonsẽdùngchoA0sourceisolation"
   },
-  "next_action": "Đợi xác thực OAuth Colab đủ quyền, kiểm subscription/specs/runtime bằng API chính thức, sau đó chạy calibration CPU A2/A3 và đọc lại kết quả trên Drive.",
+  "next_action": "Theo dõi phase a2-calibration-free-cpu-20261117-02 (exec29301), observer observe_colab_cpu01.py; đọc metadata fit trên Drive khi hoàn tất. Sau đó làm mới access token local, staging03 và A3 bằng driver process-group đã kiểm.",
   "token_expires_at": "2026-11-17T17:44:01Z",
   "parallel_agents": {
     "calibration": "Free CPU launcher A2/A3 ngoài frozen KT",
@@ -158,11 +158,18 @@
     "scope": "https://www.googleapis.com/auth/colaboratory",
     "credentials_location": "artifacts/akt/private/colab-session/credentials.json",
     "first_consent": "Warning scope mismatch; no token saved",
-    "retry_exec_session_id": 1791,
-    "retry_status": "WAITING_USER_CONSENT",
-    "runtime_created": false,
-    "code_executed": false,
-    "session_limits_vi": "Tự làm mới OAuth/proxy khi còn quyền. Không giữ VM miễn phí vô hạn hoặc tạo hoạt động giả."
+    "retry_exec_session_id": 60495,
+    "retry_status": "OWN_RUNTIME_RELEASED_AFTER_VERIFIED_DRIVE_PARTIAL_BACKUP",
+    "runtime_created": true,
+    "code_executed": "A2 bootstrap and JOIN_AUDIT",
+    "session_limits_vi": "Tự làm mới OAuth/proxy khi còn quyền. Không giữ VM miễn phí vô hạn hoặc tạo hoạt động giả.",
+    "connection_receipt": "COLAB_CONNECTION_READBACK01.json",
+    "official_cli_read_access_verified": true,
+    "mcp_api_disabled_in_oauth_project": true,
+    "active_assignments": 0,
+    "cpu_discovery_receipt": "COLAB_CPU_DISCOVERY01.json",
+    "ephemeral_drive_token_authorized": "COLAB_EPHEMERAL_DRIVE_AUTHORIZATION01.json",
+    "release_receipt": "COLAB_RELEASE_AFTER_MIGRATION01.json"
   },
   "outer_preparation": {
     "oov_targets": 144,
@@ -171,5 +178,24 @@
     "wrapper": "scripts/akt/free_outer_evaluation.py",
     "actual_outer_execution": false,
     "cache_oov_fold4_known_limit": true
+  },
+  "active_cpu_job": {
+    "variant": "A2",
+    "phase": "local_join_resume",
+    "local_exec_session_id": 73954,
+    "driver": "scripts/akt/local_calibration_migration.py",
+    "attempt": 100,
+    "log": "local-a2-join100.txt",
+    "accepted": false,
+    "partial_snapshot_receipt": "LOCAL_A2_SNAPSHOT01.json",
+    "cache_limit_bytes": 4000000000,
+    "cache_bytes_after_staging": 546461091,
+    "authoritative_output": "Drive Sang",
+    "synthetic_tests": 26,
+    "synthetic_tests_log": "../local-calibration-migration-20261117-02/tests-root03.txt"
+  },
+  "software_review": {
+    "data_binding_partition": "Independent review found no binding/partition/label-join defect in examined code",
+    "timeout_process_tree": "Unused Colab A3 driver corrected and synthetic tested; CPU location changed to local before execution"
   }
 }
