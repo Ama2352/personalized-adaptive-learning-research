@@ -1,0 +1,99 @@
+{
+  "status": "FOUR_GPU_SNAPSHOTS_COMPLETE_CPU_JOINS_RUNNING",
+  "updated": "2026-11-17",
+  "run_id": "junyi-calibration-real-20261117-01",
+  "workspace": "honguyenminhsang2016",
+  "drive_account": "honguyenminhsang2005@gmail.com",
+  "drive_parent": "1vaojIEDvwtE-vZgjlybwzrsjrGNE_8O7",
+  "volume": "kltn-junyi-calibration-artifacts-v1",
+  "scope": {
+    "phase": "calibration_predict",
+    "learners": 15847,
+    "targets": 1621484,
+    "outer_fold": 4,
+    "variants": [
+      "A0",
+      "A1",
+      "A2",
+      "A3"
+    ],
+    "refit_already_complete": true,
+    "holdout_allowed": false
+  },
+  "cloud_outputs": "Drive chính, Volume staging/resume; PC chỉ nhận receipt nhỏ",
+  "input_zip": {
+    "file_id": "1GlPhrWOLwFNeUiv1unYaEATypWmV9_Vy",
+    "sha256": "a34cee8e961baf7056e8f16159d2b9a25afcca72f3c19b3a37bd0d711aab2d6a",
+    "bytes": 134525060,
+    "source": "research_tracking/runs/cloud-calibration-input-upload-20261117-01/STRICT_ACCEPTANCE.json",
+    "local_plan_file_sha256": "a552518a231ee5d432e88080220e22ab161c196150b42addea08f0f94aed64dc",
+    "embedded_plan_sha256": "0a5aea93f57206d04ee3094f1c13ae6d64aaa0864c95cf67f4e9ebcca7a7baef",
+    "plan_identity_sha256": "8dba580d618146929c885c3a7a3ee85c47eb6d1a2367109890619bd07a94d9c6",
+    "plan_file_sha256": "a552518a231ee5d432e88080220e22ab161c196150b42addea08f0f94aed64dc"
+  },
+  "runtime": {
+    "image_id": "im-FLsPV1Te1DGul7RBdUy5HH",
+    "torch": "2.7.1+cu126",
+    "python": "3.13.18",
+    "upstream_commit": "01b7e8d7d7c862cabc9467108e3e7f2555653a88"
+  },
+  "completed": [
+    "Linux185 tests passed and Drive SHA verified",
+    "CPU cache 28653 windows/1621484 targets committed",
+    "A0 GPU inference full calibration committed, 57.913s, zero OOV",
+    "A0 metadata/config/NVML uploaded Sang Drive SHA verified",
+    "Timing/input local regression 61 tests passed with short repo test path"
+  ],
+  "pending": [
+    "Nghiệm thu raw join và temperature V1 A0–A3 trên Drive",
+    "Đánh giá outer độc lập và so sánh thống kê vẫn chờ"
+  ],
+  "next_budget_vi": "Ba lượt GPU A1–A3 đã giữ cận0,75USD/lượt, một GPU mỗi lúc; tổng cùng dự phòng5USD dưới30USD. Billing đọc11:30local metered0.25056089USD/billed0, có độ trễ.",
+  "agents": {
+    "input_staging": "/root/rq12_evidence_completion",
+    "controller": "/root/supervisor_report_refresh",
+    "join": "/root/calibration_eval_completion"
+  },
+  "user_decisions": [
+    "SecretCPUonly đượcduyệt, Drive bắtbuộc Sang2005",
+    "Kết quả/artifactlarge giữDrive, khôngdownloadPC",
+    "Giữcheckpoint/modelrefitđangdùng",
+    "Commitgóixong, khôngpush"
+  ],
+  "important_limits": [
+    "V1fullfitguardđòiavailable>=10.31GiB, worker16GiB",
+    "CPUfullprefixaudit~230s/pass, CPUjoin+fit>=2passes",
+    "GPUloadSupportZIP1lần+keyedSQLitecache/collate vẫnCPUhost, khôngclaimzeroCPUwait",
+    "Sinkmax256files nênCPUnumericZIP3files+rawZIP3files",
+    "Inputplan04 sourceKTfrozen; worker ngoàiKT pinriêng",
+    "Routingap-south ổn hơndefaultinputplane lúcDNSlỗi; ModalstoragehostlocalDNSfailed, DriveAPIreadworks"
+  ],
+  "cpu_cache_app": "ap-20HxwMC2OBEUSVqJV1IAps",
+  "cpu_cache_image": "im-HYtUuyWH9hslrwqviVh9Br",
+  "cpu_cache_log": "cpu-cache02.log",
+  "source_identity_linux": "d22f6d2e3d6bb4a6c2d7f72da748e55c5c647ce8b41a7ab46b25c82290a4c96c",
+  "current_gpu_running": false,
+  "cache_seconds": 81.071776397,
+  "cache_windows": 28653,
+  "cache_targets": 1621484,
+  "a0_gpu_usage": {
+    "mean_percent": 6.236363636,
+    "max_percent": 43,
+    "goal_50_percent_met": false,
+    "core_inference_seconds": 6.876391602,
+    "gpu_worker_seconds": 57.913445522
+  },
+  "gpu_app_stopped": "ap-JJO3w6IYYlGJavth8Iqeni",
+  "gpu_acceptance": "GPU_OUTPUT_ACCEPTANCE01.json",
+  "gpu_seconds": {
+    "A0": 57.913445522,
+    "A1": 42.056423766,
+    "A2": 41.880519207,
+    "A3": 47.977622744
+  },
+  "cpu_progress": {
+    "A0": "15.847shard/1.621.484predictions đã xuất; audit đang chạy lúc11:39, chưa temperature",
+    "A1_A2_A3": "CPU launcher tuần tự đã chạy, xem a1-a3-cpu-join01.log",
+    "probe": "A0_CPU_PROGRESS_PROBE01.json"
+  }
+}

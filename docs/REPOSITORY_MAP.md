@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 17/11 — Bốn model đã suy luận calibration Junyi thật
+
+[Nghiệm thu A0–A3](../research_tracking/runs/junyi-calibration-real-20261117-01/GPU_OUTPUT_ACCEPTANCE01.json) xác nhận mỗi model có1.621.484target/28.653cửa sổ,0OOV cùng cohort15.847người học. GPU worker lần lượt57,91/42,06/41,88/47,98giây, App GPU đã dừng. Cấu hình/log/NVML được kiểmSHA trên Drive Sang; CPU nối nhãn, audit và fit temperature đang chạy riêng. [Figure tài nguyên](../research_tracking/runs/junyi-calibration-real-20261117-01/GPU_USAGE_COMPARISON01.svg) giữ nguồnCSV/SHA/cách dựng trong cùng bundle. Utilization trung bình6–10%, chưa đạt50%. Đây là suy luận calibration sau refit đã hoàn tất, đánh giá outer độc lập và so sánh thống kê còn chờ. `STATE.json` của bundle giữ điểm tiếp tục.
+
 ## 17/11 — Đầu ra cloud sang Drive Sang
 
 [Probe CPU thực](../research_tracking/runs/drive-cloud-artifacts-20261117-01/ROOT_ACCEPTANCE.md) xác nhận khôi phục upload từ byte262.144 và SHA256 Drive. Policy tại experiments/akt/configs/drive_cloud_artifact_policy.json, CPU worker tại scripts/akt/modal_drive_artifact_worker.py. Nối producer calibration thực còn chờ. [Nguồn calibration](../research_tracking/runs/junyi-calibration-data-20261117-01/README.md) đủ15.847người học/1.621.484target; [builder inference](../research_tracking/runs/junyi-real-calibration-wiring-20261117-01/README.md) đã nạp A0/A1 thật trên đầu vào tổng hợp.
