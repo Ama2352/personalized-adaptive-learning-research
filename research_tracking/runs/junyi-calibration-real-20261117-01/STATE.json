@@ -1,5 +1,5 @@
 {
-  "status": "LOCAL_A2_JOIN_RESUME_RUNNING_A0_A1_ACCEPTED_A3_PENDING",
+  "status": "LOCAL_A2_FIT_RUNNING_A3_JOIN_RECOVERED_A0_A1_ACCEPTED",
   "updated": "2026-11-17",
   "run_id": "junyi-calibration-real-20261117-01",
   "workspace": "honguyenminhsang2016",
@@ -181,21 +181,43 @@
   },
   "active_cpu_job": {
     "variant": "A2",
-    "phase": "local_join_resume",
-    "local_exec_session_id": 73954,
+    "phase": "local_fit",
+    "local_exec_session_id": 38468,
     "driver": "scripts/akt/local_calibration_migration.py",
     "attempt": 100,
-    "log": "local-a2-join100.txt",
+    "log": "local-a2-fit100.txt",
     "accepted": false,
     "partial_snapshot_receipt": "LOCAL_A2_SNAPSHOT01.json",
     "cache_limit_bytes": 4000000000,
     "cache_bytes_after_staging": 546461091,
     "authoritative_output": "Drive Sang",
     "synthetic_tests": 26,
-    "synthetic_tests_log": "../local-calibration-migration-20261117-02/tests-root03.txt"
+    "synthetic_tests_log": "../local-calibration-migration-20261117-02/tests-root03.txt",
+    "raw_acceptance": "LOCAL_A2_RAW_ACCEPTANCE100.json"
   },
   "software_review": {
     "data_binding_partition": "Independent review found no binding/partition/label-join defect in examined code",
-    "timeout_process_tree": "Unused Colab A3 driver corrected and synthetic tested; CPU location changed to local before execution"
+    "timeout_process_tree": "Unused Colab A3 driver corrected and synthetic tested; CPU location changed to local before execution",
+    "windows_atomic_retry": {
+      "tests": 31,
+      "log": "TESTS_LOCAL_RETRY_GREEN02.txt",
+      "probe": "WINDOWS_SHARE_PROBE01.json",
+      "scope": "external local adapter; frozen KT source unchanged",
+      "monitoring": "avoid reading live manifest while writer active"
+    }
+  },
+  "parallel_cpu_job": {
+    "variant": "A3",
+    "phase": "local_join",
+    "attempt": 101,
+    "exec_session_id": 77932,
+    "log": "local-a3-join101.txt",
+    "accepted": false,
+    "publication": "Local scratch until sequential Drive publish",
+    "reason": "A2 audit CPU busy, available RAM measured2.27GB; separate process and output",
+    "status": "RESUME_101_RUNNING",
+    "failure_log": "local-a3-join100.txt",
+    "recovery_stage_session": 75712,
+    "recovery": "LOCAL_A3_RECOVERY100.json"
   }
 }

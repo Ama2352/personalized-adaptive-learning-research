@@ -7,6 +7,7 @@ import json
 from pathlib import Path, PurePosixPath
 import shutil
 import sys
+import time
 
 LINUX_VOLUME='/__modal/volumes/vo-dv1975utRQbmagCjA0brSe'
 
@@ -53,6 +54,27 @@ class _RawReady(Exception):
         self.publication=publication
 
 
+@contextmanager
+def prediction_json_retry():
+    """Giữ serializer gốc, dùng lịch retry Windows của runner đã có."""
+    from knowledge_tracing.akt import prediction
+    original=prediction._write_json_atomic
+    def write(path,payload):
+        for delay in (0.05,0.1,0.2,0.4,None):
+            try:
+                return original(path,payload)
+            except PermissionError as error:
+                if getattr(error,'winerror',None) not in (5,32,33) or delay is None:
+                    raise
+                print('WINDOWS_JSON_RETRY',str(path),getattr(error,'winerror',None),flush=True)
+                time.sleep(delay)
+    prediction._write_json_atomic=write
+    try:
+        yield
+    finally:
+        prediction._write_json_atomic=original
+
+
 def _restore_partial(snapshot,destination,identity):
     """Sao chép snapshot đã đóng sang output mới, không sửa bản khôi phục."""
     source=Path(snapshot['path']).absolute()
@@ -60,8 +82,9 @@ def _restore_partial(snapshot,destination,identity):
     marker=snapshot['writer_stop_receipt']
     need(sha(marker['path'])==marker['sha256'],'writer-stop receipt changed')
     closed=json.loads(Path(marker['path']).read_text(encoding='utf-8'))
-    need(closed.get('status')=='COLAB_CPU_WRITER_STOPPED'
-         and closed.get('remote_process_absent') is True
+    writer_stopped=(closed.get('status')=='COLAB_CPU_WRITER_STOPPED' and closed.get('remote_process_absent') is True
+        or closed.get('status')=='LOCAL_CPU_WRITER_STOPPED' and closed.get('local_process_absent') is True)
+    need(writer_stopped
          and closed.get('raw_manifest_sha256')==snapshot['manifest_sha256'],
          'old partial writer must be stopped for this snapshot')
     manifest_path=source/'manifest.json'
@@ -109,7 +132,7 @@ def join_raw_only(paths,view,encoding,*,partial_snapshot=None,publish=None,**arg
     if partial_snapshot is not None:
         prediction._prepare_output=prepare_partial
     try:
-        with transactional_expected_insert():
+        with prediction_json_retry(),transactional_expected_insert():
             join_numeric_calibration_snapshot(paths,view,encoding,on_raw_ready=raw_ready,**arguments)
         raise RuntimeError('raw-ready callback was not reached')
     except _RawReady as completed:
@@ -189,7 +212,7 @@ def prepare_context(payload,volume,variant):
     receipt_path=Path(relocate(old_gpu['receipt_path'],volume))
     need(sha(receipt_path)==old_gpu['receipt_sha256'],'original numeric receipt pin changed')
     numeric=relocate(json.loads(receipt_path.read_text(encoding='utf-8')),volume)
-    metadata=Path(volume)/'local-migration-metadata'/variant
+    metadata=Path(volume)/'local-migration-metadata'/variant/sha(__file__)[:16]
     metadata.mkdir(parents=True,exist_ok=True)
     derived=metadata/'GPU_RELOCATED.json'
     derived_text=json.dumps(numeric,indent=2)+'\n'

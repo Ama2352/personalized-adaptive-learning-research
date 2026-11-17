@@ -16,3 +16,11 @@ Lượt A2 local attempt100 tiếp tục join/audit từ snapshot đã đóng. N
 Calibration được nghiệm thu vẫn2/4model, tương ứng A0/A1. A2/A3 chỉ được tính hoàn thành sau khi fit đầy đủ, đọc lại output trên Drive và đối chiếu binding, số target và SHA. Đánh giá outer độc lập vẫn0/4. Lượt này chưa tạo kết luận so sánh mới hoặc tiêu thụ Modal.
 
 Sau nghiệm thu Drive sẽ ghi inventory và dọn cache theo quyền đã cấp. SQLite không được đưa vào gói kết quả chính.
+
+## Khôi phục lỗi ghi manifest A3
+
+Lượt A3 attempt100 gặp `WinError5` khi thay manifest. Phép kiểm `WINDOWS_SHARE_PROBE01.json` xác nhận reader thông thường đang mở file có thể gây đúng lỗi này, và thay file thành công ngay sau đóng reader. Vì vậy việc theo dõi đã chuyển sang log và metadata kích thước, tránh đọc manifest đang được ghi. Đây là cơ chế gây lỗi đã tái hiện, chưa xác định độc lập tiến trình giữ handle đúng thời điểm lỗi thật.
+
+Adapter bổ sung retry có giới hạn0,05/0,1/0,2/0,4giây cho lỗi Windows5/32/33, theo lịch sẵn có trong `src/knowledge_tracing/akt/runner.py`. Serializer gốc và nguồn KT frozen giữ nguyên. Có31kiểm thử đạt10,37giây, gồm ca mở reader thật trên Windows rồi đóng để kiểm retry. Log `TESTS_LOCAL_RETRY_GREEN02.txt` giữ trong bundle thực thi. Lỗi quyền tồn tại sau năm lần gọi tiếp tục được trả ra.
+
+Toàn bộ file của attempt100 được giữ. Snapshot phục hồi chỉ dùng shard được manifest liệt kê, kiểm SHA từng file. File chưa được manifest xác nhận được liệt kê riêng, tiếp tục giữ tại output lỗi. Metadata relocation phiên bản mới đặt theo SHA adapter để giữ hồ sơ phiên bản trước.
