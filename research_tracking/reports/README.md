@@ -6,7 +6,7 @@
 
 [17/11 — Producer calibration A0–A3](CALIBRATION_PRODUCER_20261117.md) nối loader, population/prefix, raw predictions và fit temperature CPU tách riêng. 29 ca trên source hiện hành đạt, gồm bốn backbone native nhỏ. Các lượt trên checkpoint/dữ liệu nghiên cứu thật còn phải thực hiện.
 
-[17/11 — Kiểm lại bằng chứng RQ1–RQ2](RQ12_EXISTING_EVIDENCE_20261117.md) bổ sung bảng chéo quyết định và kiểm chuỗi120bước trên traces đã lưu. Có 58/60 cặp bật/tắt phạt giữ cùng chuỗi quan sát. Ở mức 1150, mức tăng năng lực ẩn giảm dù chuỗi quan sát giữ nguyên. Có kiểm độc lập, nguồn SHA, CSV và SVG; đây là phân tích hậu nghiệm, còn tiêu chí nghiệm thu RQ.
+[17/11 — Tổng hợp RQ1–RQ2 từ hai paper đến ba bẫy đánh giá](RQ12_EXISTING_EVIDENCE_20261117.md) nối ngữ cảnh PDF Paper1/Paper2 với proof simulator, bảng chéo quyết định, paired knob và Junyi exposure. Có58/60cặp bật/tắt phạt giữ cùng chuỗi quan sát. Ở mức1150, gain ẩn giảm dù20/20cặp giữ nguyên quan sát. Báo cáo chỉ rõ kết quả kế thừa, chẩn đoán/pilot, nguồn CSV/SVG và năm bước thực nghiệm còn thiếu. Chưa nghiệm thu RQ1 hoặc RQ2 hoàn tất toàn phạm vi.
 
 [17/11 — Ranh giới calibration/evaluation](CALIBRATION_EVAL_READINESS_20261117.md) ghi 66 kiểm thử tổng hợp đạt và metadata xác nhận các tập refit, calibration và outer rời nhau. Các lượt calibration và outer prediction thật còn phải thực hiện.
 

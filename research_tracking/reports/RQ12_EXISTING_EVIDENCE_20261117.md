@@ -1,10 +1,31 @@
-# RQ1–RQ2 — làm rõ cơ chế từ bằng chứng đã có
+# RQ1–RQ2 — từ kết quả hai paper đến các nguyên nhân và điều kiện đã xác định
 
-Ngày 17/11/2026. Lượt này đọc lại các phép chạy đã nghiệm thu, giữ nguyên simulator và model. Nguồn gồm pilot GAM/graph package của RQ1 và fresh120 của RQ2. Các kết quả mới là kiểm chéo và diễn giải hậu nghiệm, chưa bổ sung người học, seed block hoặc phép chạy độc lập.
+Ngày 17/11/2026. Báo cáo tổng hợp bằng chứng đã nghiệm thu và kiểm chéo hậu nghiệm, giữ nguyên simulator, model và kết quả lịch sử. Phần số học mới của lượt17/11 dùng pilot GAM/graph package và fresh120 đã lưu. Bản tổng hợp mở rộng nối chúng với các chứng minh Paper1, cơ chế retention và kiểm exposure Junyi. Không bổ sung người học, seed block hoặc phép chạy độc lập trong lượt tổng hợp này.
+
+## Kết luận tiến độ hiện tại
+
+RQ1 đã xác định được các cơ chế cụ thể khiến một thay đổi dự báo không dẫn đến thay đổi gợi ý, đồng thời chỉ ra một số kết quả đường học có thể suy ra từ controller. RQ2 đã có đối chứng mô phỏng tách được ảnh hưởng của núm phạt tiên quyết khỏi lịch sử mà KT quan sát, cùng phép đo cho thấy một graph control có thể rất ít làm thay đổi thông tin thực sự xuất hiện trong log Junyi. Các phát hiện này đủ nguồn để trình bày thành phần chẩn đoán của luận văn. Kết quả về chất lượng dự báo độc lập, hiệu chỉnh quanh ngưỡng thành thạo và lợi ích học tập của model fitted vẫn cần được nối thành thực nghiệm chính.
+
+| Câu hỏi | Đã làm được gì | Phần còn mở |
+| --- | --- | --- |
+| RQ1 — vì sao graph chưa cải thiện mastery | Chứng minh zero re-entry có điều kiện, kiểm tính bất biến của chuyển trạng thái concept-local, đo đường dự báo/quyết định và vai trò ngoại lệ controller | So prediction/calibration/mastery/action/outcome trên checkpoint fitted với cùng target và controller |
+| RQ2 — khi nào graph hữu ích hoặc bất lợi | Thực nghiệm paired ability×graph×phạt, đối chứng bất hoạt, phân biệt retention readouts, đo exposure và hạn chế của graph controls Junyi | Noise/history/support theo protocol chính, predictive order-controls và bất định trên mẫu xác nhận độc lập |
+
+Trạng thái được đối chiếu theo các tiêu chí C01–C07 và T1–T3 trong ma trận hoàn tất. Hai RQ còn các đường thực nghiệm cần khép, nên báo cáo không gán tỷ lệ phần trăm hoàn thành. [Ma trận nghiệm thu](RQ12_CLOSURE_MATRIX_20261112.md)
 
 ## 1. Vì sao cần đọc lại các kết quả này
 
-Paper 1 đặt vấn đề tác động của đồ thị có thể bị chính sách chọn bài che khuất. Paper 2 cho thấy thay đổi dự báo nhỏ chưa dẫn đến lợi ích vòng kín rõ ràng. RQ1 cần xác định tác động dừng ở đâu, còn RQ2 cần tách đóng góp của đồ thị khỏi điều kiện người học và giả định môi trường.
+### Bước đầu — hai paper đã để lại câu hỏi gì
+
+Paper1 nghiên cứu thứ tự luyện trong mô phỏng toán Grade10 có28khái niệm. Bài báo so đồ thị rỗng, đồ thị nội chương25cạnh và đồ thị mở rộng31cạnh, với50seed cho mỗi hồ sơ trong3hồ sơ người học, đồng thời thay chính sách chọn bài. Ở hồ sơ thấp và yếu hàm số, hai điều kiện graph giảm số lần đổi chương trung bình11→2 và re-entry9→0. Tuy vậy, đồ thị mở rộng chưa có lợi thế nhất quán so với đồ thị nội chương, còn ablation cho thấy controller giữ chương đóng vai trò quan trọng. Câu hỏi còn lại là lợi ích nào đến từ cạnh tiên quyết, lợi ích nào đến từ cách chọn bài và chỉ tiêu nào đã được quy tắc bảo đảm. PDF Paper1 là nguồn lịch sử có thẩm quyền của phần này. [Paper1 PDF](../../paper1/Paper1_RIVF_2026_Graph_vs_Policy_Adaptive_Sequencing.pdf), [bản trích để tìm nội dung](../../docs/thesis_recovery/evidence/user_documents_20261108_paper1.txt)
+
+Paper2 chuyển sang knowledge tracing và so cùng luồng tương tác trước khi xét vòng kín. Gói graph/context/adaptation cải thiện Log Loss ở nhóm Low và Function-weak, nhưng kết quả vòng kín ở hai nhóm này chưa có khác biệt sau hiệu chỉnh Holm. Development Junyi chọn cấu hình all-pathways-off. Bài báo cũng giới hạn rằng contrast của cả gói chưa quy được cải thiện cho riêng các cạnh. Từ đó, luận văn cần theo dõi sự chuyển tiếp từ dự báo đến quyết định, rồi đến kết quả học trong môi trường có cơ chế được kiểm soát. [Paper2, phần kết quả và giới hạn](../../docs/thesis_recovery/evidence/user_documents_20261108_paper2.txt)
+
+### Bước tiếp — RQ1 và RQ2 phát triển từ các kết quả đó
+
+RQ1 hỏi nguyên nhân. Đầu tiên cần biết dự báo có cải thiện đủ hay không, tiếp đến xác suất quanh ngưỡng thành thạo có đáng tin cậy hay không, rồi kiểm bộ chọn bài có thực sự đổi hoạt động. RQ2 hỏi phạm vi hiệu lực. Cần giữ được các yếu tố khác khi thay chất lượng graph, lượng lịch sử và đặc điểm người học, đồng thời kiểm ba bẫy GVHD đã chỉ ra. [Đề cương, ba RQ](../../docs/thesis_recovery/evidence/user_documents_20261108_proposal.txt), [phản hồi GVHD đã lưu](../runs/akt-protocol-audit-20261112-01/advisor-context.md)
+
+Các chỉ tiêu dự báo LL/Brier/AUC/ECE tiếp tục phục vụ so sánh KT như baseline. Số lần đổi nhãn mastery, tập đủ điều kiện và gợi ý giúp giải thích vì sao cải thiện dự báo có hoặc chưa có tác dụng lên hệ thống. Các số đếm này được dùng để kiểm cơ chế truyền ảnh hưởng. Bảng dự báo và bảng quyết định cần được đọc cùng nhau khi trả lời RQ1.
 
 Các số 964 thay đổi xác suất, 90 thay đổi mastery, 60 thay đổi ready và 22 thay đổi gợi ý đã được lưu. Chúng cùng dùng 1.080 cặp trạng thái pilot nhưng đo các biến khác nhau. Lần này đối chiếu từng dòng CSV với bảng joint PMRA để hiểu chính xác những thay đổi nào cùng xuất hiện. Nguồn theo [pilot transitions](../runs/cpu-rq1-transitions-20261108-01/README.md).
 
@@ -62,7 +83,56 @@ Q1300 khác0 cả10block dù K1300 bằng0. Expert/learned vẫn có thể tạo
 
 Các output mới chỉ bổ sung phân tích trên bằng chứng đã có. Chưa khép RQ1 hoặc RQ2. Những việc còn nằm trên đường chính gồm hiệu chỉnh và đánh giá độc lập trên fitted checkpoint, reference/mastery quanh ngưỡng, controller/action/outcome cùng trace, đối chứng Junyi kiểm soát thứ tự và khảo sát graph/history/support theo protocol. Giữ trạng thái theo [ma trận hoàn tất hiện hành](RQ12_CLOSURE_MATRIX_20261112.md) và [rà soát16/11](RQ12_COMPLETION_REVIEW_20261116.md).
 
-## 5. Phạm vi tài nguyên và lưu bằng chứng
+## 5. Ba bẫy GVHD — phát hiện nào đã có bằng chứng
+
+### Bẫy1 — outcome có thể xuất phát từ thiết kế mô phỏng
+
+Sau khi lấy PDF Paper1 làm nền, nhóm đã chứng minh rằng nếu graph là DAG nội chương, mastery đã đạt không bị mất và controller tiếp tục ở chương hiện tại khi còn bài đủ điều kiện, mỗi chương xuất hiện tối đa một khối liên tiếp. Re-entry bằng0 khi các giả thiết ấy giữ. Bốn tình huống dựng tay đã kiểm đúng cơ chế và cho phản ví dụ A→B→A khi có cạnh liên chương. Điều này giải thích vì sao zero re-entry tự nó chưa xác nhận chất lượng dự báo hoặc lợi ích học tập. [Chứng minh và phản ví dụ](paper1_reentry_mechanism_20261109.md), [receipt bốn tình huống](../runs/paper1-reentry-mechanism-20261109-01/result.json)
+
+Phân tích tiếp theo xác định rằng với chuyển trạng thái chỉ phụ thuộc concept đang luyện, cùng trạng thái đầu và cùng random tape theo concept, khi hai nhánh đều hoàn tất thì đổi thứ tự có thể giữ nguyên trạng thái cuối. Đây là mệnh đề có điều kiện về cơ chế và cách ghép randomness. Finite horizon hoặc thay tương tác liên concept có thể thay kết luận. Các fixture mới phục vụ chẩn đoán cấu trúc, chưa tái hiện các random draws lịch sử của PDF. [Bất biến concept-local và sáu fixture](paper1_concept_local_invariance_20261109.md)
+
+Ở Paper2, dưới cùng luật quên đồng nhất0,06/ngày và không luyện sau kết thúc, retained net mean-theta gain sau14ngày bằng khoảng43,17% gain khi kết thúc. Chỉ tiêu này giữ thứ tự xếp hạng final gain. Tuy nhiên, phép đo mastery phi tuyến có thể đổi thứ tự. Fixture đã lưu cho soft-mastery gain đổi B>A tại kết thúc thành A>B sau14ngày. Vì vậy, kết luận dư thừa cần ghi đúng readout. Fixture là trạng thái dựng để kiểm phép đo, chưa chứng minh policy nào tạo được trạng thái đó. [Công thức và số liệu retention](rq2_retention_metric_separation_20261108.md)
+
+### Bẫy2 — chênh lệch graph có thể đi qua cơ chế năng lực chung
+
+Nhóm đã bổ sung núm bật/tắt phạt thiếu tiên quyết, giữ world/controller graph cố định và ghép cùng block trạng thái/ngẫu nhiên. Contrast K ở mục3 lấy chênh lệch expert–learned khi bật phạt trừ chênh lệch ấy khi tắt phạt. Đây là can thiệp điều khiển trực tiếp trong simulator. Phạm vi diễn giải phụ thuộc việc núm chỉ thay pathway đã khai báo, cùng cách ghép trạng thái và randomness giữa các nhánh.
+
+Kết quả fresh120 và kiểm chuỗi hậu nghiệm chỉ ra giới hạn cụ thể của câu “graph giúp”. Ở mức1150, cả20cặp giữ cùng lịch sử quan sát nhưng gain ẩn giảm khi bật phạt. K dương8/10block phản ánh tương tác trong phương trình môi trường ở các lượt ấy. K1300 bằng0 ở10block cung cấp đối chứng bất hoạt. Khoảng bootstrap thăm dò của chênh lệch K1150−K1000 chứa0, nên khác biệt theo năng lực còn bất định. Đơn vị suy luận là10paired blocks, mỗi block chứa toàn bộ ability×graph×lambda. [Bất định10block](rq2_fresh_block_uncertainty_20261110.md), [kiểm chuỗi trực tiếp](../runs/rq12-existing-evidence-20261117-01/LAMBDA_OBSERVABLES.json)
+
+### Bẫy3 — thay graph trên Junyi có thể vẫn giữ gần như nguyên thông tin người học đã thấy
+
+Vì log Junyi chịu ảnh hưởng của bản đồ kiến thức, một cạnh có thể trùng với thứ tự luyện sẵn có. Nhóm đã kiểm khả năng đối chứng trước khi so predictive metrics. Trong pilot256learner/12.575event, common population có239learner đủ điều kiện và1.361cơ hội cố định. Ba graph controls chỉ làm đổi exposure score ở1,7và1learner tương ứng. Phần common-coobserved chỉ giữ khoảng41% cơ hội. Đây là bằng chứng rằng perturbation topology có thể rất yếu khi đi qua lịch sử cụ thể. [Aggregate common population](../runs/cpu-junyi-common-20261107-01/common_population.json)
+
+Sau đó, phép đọc label-free toàn TRAIN80 đúng cửa sổ AKT đã bao phủ126.774learner,13.347.331target và232.662window. Trong976cạnh catalog,876cạnh có ít nhất một parent xuất hiện trước childtarget. Có58cạnh thiếu child trong vocabulary TRAIN,28cạnh thiếu parent và14cạnh có đủ hai endpoint nhưng chưa gặp parent trước child trong native prefix. Tổng100cạnh thiếu dạng exposure đang xét đã được tách nguyên nhân. [Kết quả fullTRAIN80 và kiểm độc lập](../runs/rq2-junyi-window-exposure-preflight-20261112-01/FINDINGS.md), [CSV976cạnh](../runs/rq2-junyi-window-exposure-preflight-20261112-01/full01/edge-exposure.csv), [SVG đã lưu](../runs/rq2-junyi-window-exposure-preflight-20261112-01/junyi-native-window-edge-coverage.svg)
+
+Hai phép đo này chưa có bảng prediction treatment/control đi kèm để xác nhận false positive dự báo. Các controls pilot dùng outer0, còn AKT hiện hành dùng outer4, nên cần dựng đối chứng đúng TRAIN80 hiện hành. So graph-free, catalog, matched-null và graph học từ thứ tự TRAIN trên cùng target, báo changed-edge exposure và coverage, là phần còn thiếu để khép bẫy3. Những kết quả Junyi sẽ được diễn giải theo khả năng dự báo trên logged sequence.
+
+## 6. Từ chẩn đoán đến thực nghiệm chính còn thiếu
+
+Controller Paper2 còn có cơ chế làm đường graph khó nhận diện. Trong2.740served actions có tiên quyết,2.041cần ngoại lệ visits≥6. Same-state strict-frontier làm đổi2.557/3.240frontiers và loại18.520/30.572memberships. Strict frontier còn concept ở3.240snapshot, nhưng số này được đo trước anti-repeat/coverage/ranking. Shadow action và learning outcome chưa được suy ra từ thay eligibility. [Nghiệm thu strict readiness](../runs/rq1-strict-readiness-shadow-20261112-01/README.md)
+
+| Thứ tự nghiên cứu tiếp | Mục đích cần trả lời | Bằng chứng nghiệm thu cần có |
+| --- | --- | --- |
+| 1. Nối prediction độc lập và calibrator fitted | Dự báo có tốt hơn, và xác suất quanh ngưỡng có đáng tin hơn không | Cùng exact target, coverage/OOV, LL/Brier/AUC/ECE raw và calibrated, reliability quanh ngưỡng, paired learner uncertainty |
+| 2. Đo reference/mastery/readiness/action trên cùng trace | Ảnh hưởng của graph dừng ở prediction, threshold hay controller | Reference/query probabilities đúng phase, nhãn mastery, tập ready, candidate và hành động được ghi cùng state trước observe |
+| 3. Một core batch Grade10 dùng chung RQ1–RQ3 | Những thay đổi quyết định có dẫn đến học tốt hơn ở điều kiện nào | Checkpoint Grade10 fitted/calibrated, fresh paired blocks, true-state evaluator, gain/censoring/path metrics và family thống kê đã freeze |
+| 4. Tái dùng batch ấy cho graph noise/history/support | Xác định điều kiện lợi, trung tính, bất lợi và giới hạn support | Perturbation/type/history đã chốt, strata TRAIN-only, đủ mẫu số và khoảng bất định, confidence/gate ablation |
+| 5. Predictive Junyi order-controls | Lợi thế graph còn tồn tại sau đối chứng thứ tự và exposure không | Controls đúng TRAIN80 outer4, sequence/targets chung, âm tính kiểm soát được và inference unit theo learner |
+
+Junyi có thể cung cấp bằng chứng dự báo và hiệu chỉnh đáp án. Grade10 có28khái niệm,84item và trạng thái thật đã biết, phục vụ kiểm mastery và vòng kín. Hai miền dùng vocabulary/corpus riêng. Refit hoặc calibration Junyi không tự tạo ra kết quả học tập Grade10. Các lifecycle và baseline còn thiếu được giữ trong ma trận phạm vi đề cương. [Vai trò training đối với ba RQ](TRAINING_RQ_SCOPE_REVIEW_20261116.md), [Recipe26](../../docs/thesis_recovery/26_ADOPTED_MINIMAL_CGAKT_RECIPE_V1.md)
+
+## 7. Phân loại thành quả để dùng trong luận văn
+
+| Loại công việc | Thành quả đã có | Cách trình bày đúng phạm vi |
+| --- | --- | --- |
+| Kế thừa và tái hiện | Kế thừa kết quả lịch sử theo PDF Paper1/Paper2, dựng source prospective theo PDF và kiểm primitive/parity ở phạm vi đã ghi | Ghi rõ điều gì lấy từ paper và điều gì chạy mới, giữ thiết kế/đơn vị gốc khi trích số lịch sử |
+| Chẩn đoán | Proof re-entry, concept-local và retention, PMRA pilot, strict-readiness, paired knob/observable checks và Junyi exposure | Trình bày giả thiết, mẫu số, version, đơn vị ghép cặp và phản ví dụ. Các proof không thay thế outcome của model fitted |
+| Nghiên cứu mới đã thăm dò | Factorial fresh120 và các phân tích điều kiện từ artifact đã lưu | Giữ nhãn exploratory/pilot và một learned graph cố định, không nâng10block hậu nghiệm thành mẫu xác nhận độc lập |
+| Nghiên cứu chính còn mở | Fitted prediction/mastery/outcome, graph-confidence/gate và order-controls đã khớp protocol | Đóng bằng thực nghiệm và uncertainty theo các tiêu chí ở mục6, kết quả âm hoặc bất định vẫn cần được báo đầy đủ |
+
+Báo cáo này khép phần tổng hợp các phát hiện đã đủ nguồn, đồng thời định vị rõ phần còn đòi thí nghiệm. Không có kết luận mới rằng RQ1 hoặc RQ2 đã hoàn tất toàn phạm vi.
+
+## 8. Phạm vi tài nguyên và lưu bằng chứng
 
 Phân tích dùng `.venv`, đọc CSV/JSON tổng hợp đã lưu và khoảng4,22MB trace/ledger simulator. Không nạp checkpoint, chạy simulator, fit, bootstrap mới, dùng GPU/cloud, đọc Junyi gốc hoặc Holdout. Tất cả nguồn đã hash trước/sau, giữ nguyên bytes. Raw traces của parent61complete cộng child59complete được ghép theo hồ sơ recovery, loại30dòng partialF062 ở parent để tránh đếm lặp.
 
