@@ -84,3 +84,18 @@ def test_unicode_order_unsupported_reasons_and_nearby_probabilities_exact(tmp_pa
     with sqlite3.connect(tmp_path/'unicode.sqlite') as connection:
         plans=connection.execute('EXPLAIN QUERY PLAN SELECT reason,COUNT(*) FROM targets INDEXED BY unsupported_reasons WHERE probability IS NULL GROUP BY reason ORDER BY reason').fetchall()
     assert not any('TEMP B-TREE' in str(plan) for plan in plans)
+
+
+def test_solver_reads_exact_canonical_thin_logits(tmp_path):
+    import sqlite3
+    binding,partition,rows,keys=fixture()
+    database=tmp_path/'thin.sqlite'
+    fit_temperature_spooled(reversed(rows),binding=binding,partition=partition,expected_target_keys=keys,
+        database=database,budget=LocalCalibrationBudget(max_targets=100),max_evaluations=4)
+    with sqlite3.connect(database) as connection:
+        expected=connection.execute('SELECT logit,correct FROM targets WHERE probability IS NOT NULL ORDER BY learner,event,item,history').fetchall()
+        actual=connection.execute('SELECT ordinal,logit,correct FROM logits ORDER BY ordinal').fetchall()
+        plans=connection.execute('EXPLAIN QUERY PLAN SELECT logit,correct FROM logits ORDER BY ordinal').fetchall()
+    assert [row[0] for row in actual]==list(range(1,len(expected)+1))
+    assert [row[1:] for row in actual]==expected
+    assert not any('TEMP B-TREE' in str(plan) for plan in plans)

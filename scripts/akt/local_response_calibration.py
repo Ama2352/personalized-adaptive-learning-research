@@ -75,7 +75,7 @@ class _Logits:
         return self.count
 
     def __iter__(self):
-        cursor=self.connection.execute('SELECT logit,correct FROM targets WHERE probability IS NOT NULL ORDER BY learner,event,item,history')
+        cursor=self.connection.execute('SELECT logit,correct FROM logits ORDER BY ordinal')
         for index,row in enumerate(cursor):
             if index%1024==0:
                 self.monitor.check()
@@ -160,6 +160,10 @@ def fit_temperature_spooled(targets, *, binding, partition, expected_target_keys
         common=dict(binding=binding,partition_sha256=partition.identity,targets_sha256=digest.hexdigest(),
             implementation_sha256=v1.implementation_identity(),total_targets=count,
             supported_targets=sum(counts),class_counts=counts,unsupported_counts=unsupported)
+        with connection:
+            connection.execute('CREATE TABLE logits(ordinal INTEGER PRIMARY KEY,logit REAL NOT NULL,correct INTEGER NOT NULL)')
+            connection.execute('INSERT INTO logits(logit,correct) SELECT logit,correct FROM targets WHERE probability IS NOT NULL ORDER BY learner,event,item,history')
+        monitor.check()
         solve,solver_sha=_solver()
         if not sum(counts) or min(counts)==0:
             result=v1.TemperatureCalibration(**common,status='unsupported_no_predictions' if not sum(counts) else 'unsupported_two_class_labels_required',

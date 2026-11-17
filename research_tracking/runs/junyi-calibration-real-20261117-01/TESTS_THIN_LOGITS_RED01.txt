@@ -1,0 +1,22 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+________________ test_solver_reads_exact_canonical_thin_logits ________________
+
+tmp_path = WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/thin-red01/test_solver_reads_exact_canoni0')
+
+    def test_solver_reads_exact_canonical_thin_logits(tmp_path):
+        import sqlite3
+        binding,partition,rows,keys=fixture()
+        database=tmp_path/'thin.sqlite'
+        fit_temperature_spooled(reversed(rows),binding=binding,partition=partition,expected_target_keys=keys,
+            database=database,budget=LocalCalibrationBudget(max_targets=100),max_evaluations=4)
+        with sqlite3.connect(database) as connection:
+            expected=connection.execute('SELECT logit,correct FROM targets WHERE probability IS NOT NULL ORDER BY learner,event,item,history').fetchall()
+>           actual=connection.execute('SELECT ordinal,logit,correct FROM logits ORDER BY ordinal').fetchall()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           sqlite3.OperationalError: no such table: logits
+
+tests\akt\test_local_response_calibration.py:97: OperationalError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_local_response_calibration.py::test_solver_reads_exact_canonical_thin_logits
+1 failed in 0.47s

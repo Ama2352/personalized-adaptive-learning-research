@@ -1,0 +1,40 @@
+FFF                                                                      [100%]
+================================== FAILURES ===================================
+____________ test_compact_fit_requires_completed_provenance[None] _____________
+
+cloud_case = {'roles': JunyiResearchRoles(train_users=('0', '1', '10', '11', '12', '13', '16', '2', '3', '5', '6', '8'), selection_...st=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/lineage-red01/test_compact_fit_requires_comp0/roles.json')), ...}
+failure = None
+
+    @pytest.mark.parametrize('failure',[None,'missing_complete','changed_pin'])
+    def test_compact_fit_requires_completed_provenance(cloud_case,failure):
+>       from scripts.akt.local_calibration_migration import raw_storage_lineage
+E       ImportError: cannot import name 'raw_storage_lineage' from 'scripts.akt.local_calibration_migration' (D:\Dev\KLTN\scripts\akt\local_calibration_migration.py)
+
+tests\akt\test_local_calibration_compact.py:87: ImportError
+______ test_compact_fit_requires_completed_provenance[missing_complete] _______
+
+cloud_case = {'roles': JunyiResearchRoles(train_users=('0', '1', '10', '11', '12', '13', '16', '2', '3', '5', '6', '8'), selection_...st=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/lineage-red01/test_compact_fit_requires_comp1/roles.json')), ...}
+failure = 'missing_complete'
+
+    @pytest.mark.parametrize('failure',[None,'missing_complete','changed_pin'])
+    def test_compact_fit_requires_completed_provenance(cloud_case,failure):
+>       from scripts.akt.local_calibration_migration import raw_storage_lineage
+E       ImportError: cannot import name 'raw_storage_lineage' from 'scripts.akt.local_calibration_migration' (D:\Dev\KLTN\scripts\akt\local_calibration_migration.py)
+
+tests\akt\test_local_calibration_compact.py:87: ImportError
+_________ test_compact_fit_requires_completed_provenance[changed_pin] _________
+
+cloud_case = {'roles': JunyiResearchRoles(train_users=('0', '1', '10', '11', '12', '13', '16', '2', '3', '5', '6', '8'), selection_...st=WindowsPath('D:/Dev/KLTN/artifacts/akt/local-tests/lineage-red01/test_compact_fit_requires_comp2/roles.json')), ...}
+failure = 'changed_pin'
+
+    @pytest.mark.parametrize('failure',[None,'missing_complete','changed_pin'])
+    def test_compact_fit_requires_completed_provenance(cloud_case,failure):
+>       from scripts.akt.local_calibration_migration import raw_storage_lineage
+E       ImportError: cannot import name 'raw_storage_lineage' from 'scripts.akt.local_calibration_migration' (D:\Dev\KLTN\scripts\akt\local_calibration_migration.py)
+
+tests\akt\test_local_calibration_compact.py:87: ImportError
+=========================== short test summary info ===========================
+FAILED tests/akt/test_local_calibration_compact.py::test_compact_fit_requires_completed_provenance[None]
+FAILED tests/akt/test_local_calibration_compact.py::test_compact_fit_requires_completed_provenance[missing_complete]
+FAILED tests/akt/test_local_calibration_compact.py::test_compact_fit_requires_completed_provenance[changed_pin]
+3 failed in 11.47s

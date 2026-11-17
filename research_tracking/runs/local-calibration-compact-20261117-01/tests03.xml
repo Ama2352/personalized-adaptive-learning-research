@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="8" time="2602.116" timestamp="2026-11-17T19:33:04.867229+07:00" hostname="Ama"><testcase classname="tests.akt.test_local_calibration_compact" name="test_public_record_stream_and_full_fit_payload_exact[32768]" time="1090.281"><failure message="TimeoutError: local calibration wall budget exceeded">cloud_case = {'roles': JunyiResearchRoles(train_users=('0', '1', '10', '11', '12', '13', '16', '2', '3', '5', '6', '8'), selection_...st=WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/local-compact03/test_public_record_stream_and_0/roles.json')), ...}
+shard_rows = 32768
+
+    @pytest.mark.parametrize('shard_rows',[32768,7])
+    def test_public_record_stream_and_full_fit_payload_exact(cloud_case,shard_rows):
+        value=cloud_case;raw=value['raw']
+        before=arguments(raw)
+        destination=value['output']/'compact'
+        result=compact_raw_export(raw,destination,**before,min_free_bytes=1,max_rows_per_shard=shard_rows)
+        after=arguments(destination)
+        left=list(iter_pinned_prediction_export(raw,**before))
+        right=list(iter_pinned_prediction_export(destination,**after))
+        assert left==right and len(left)==20
+        assert len({row.user_id for row in right})==2
+        assert sum(row.prediction is None for row in right)==2
+        assert arguments(raw)==before
+        results=[]
+        for index,(directory,pins) in enumerate(((raw,before),(destination,after))):
+&gt;           results.append(fit_raw_spooled(directory,value['paths'],value['phase'],binding=value['binding'],
+                population=value['population'],source_pins=value['pins'],max_learner_events=10,
+                output=value['output']/('fit'+str(index)),budget=LocalCalibrationBudget(max_targets=20),**pins))
+
+tests\akt\test_local_calibration_compact.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\akt\local_calibration_migration.py:175: in fit_raw_spooled
+    calibration=fit_temperature_spooled((target for _,target,_ in observations()),binding=binding,partition=partition,
+scripts\akt\local_response_calibration.py:156: in fit_temperature_spooled
+    monitor.check()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;scripts.akt.local_response_calibration._Monitor object at 0x0000024E6ABF1450&gt;
+
+    def check(self):
+        rss=self.process.memory_info().rss
+        self.peak_rss=max(self.peak_rss,rss)
+        if rss &gt; self.budget.max_rss_bytes:
+            raise MemoryError('local calibration RSS budget exceeded')
+        if time.monotonic()-self.started &gt; self.budget.max_seconds:
+&gt;           raise TimeoutError('local calibration wall budget exceeded')
+E           TimeoutError: local calibration wall budget exceeded
+
+scripts\akt\local_response_calibration.py:50: TimeoutError</failure></testcase><testcase classname="tests.akt.test_local_calibration_compact" name="test_public_record_stream_and_full_fit_payload_exact[7]" time="1495.286"><failure message="TimeoutError: local calibration wall budget exceeded">cloud_case = {'roles': JunyiResearchRoles(train_users=('0', '1', '10', '11', '12', '13', '16', '2', '3', '5', '6', '8'), selection_...st=WindowsPath('D:/Dev/KLTN/artifacts/akt/test-temp/local-compact03/test_public_record_stream_and_1/roles.json')), ...}
+shard_rows = 7
+
+    @pytest.mark.parametrize('shard_rows',[32768,7])
+    def test_public_record_stream_and_full_fit_payload_exact(cloud_case,shard_rows):
+        value=cloud_case;raw=value['raw']
+        before=arguments(raw)
+        destination=value['output']/'compact'
+        result=compact_raw_export(raw,destination,**before,min_free_bytes=1,max_rows_per_shard=shard_rows)
+        after=arguments(destination)
+        left=list(iter_pinned_prediction_export(raw,**before))
+        right=list(iter_pinned_prediction_export(destination,**after))
+        assert left==right and len(left)==20
+        assert len({row.user_id for row in right})==2
+        assert sum(row.prediction is None for row in right)==2
+        assert arguments(raw)==before
+        results=[]
+        for index,(directory,pins) in enumerate(((raw,before),(destination,after))):
+&gt;           results.append(fit_raw_spooled(directory,value['paths'],value['phase'],binding=value['binding'],
+                population=value['population'],source_pins=value['pins'],max_learner_events=10,
+                output=value['output']/('fit'+str(index)),budget=LocalCalibrationBudget(max_targets=20),**pins))
+
+tests\akt\test_local_calibration_compact.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+scripts\akt\local_calibration_migration.py:175: in fit_raw_spooled
+    calibration=fit_temperature_spooled((target for _,target,_ in observations()),binding=binding,partition=partition,
+scripts\akt\local_response_calibration.py:156: in fit_temperature_spooled
+    monitor.check()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;scripts.akt.local_response_calibration._Monitor object at 0x0000024E6AC01940&gt;
+
+    def check(self):
+        rss=self.process.memory_info().rss
+        self.peak_rss=max(self.peak_rss,rss)
+        if rss &gt; self.budget.max_rss_bytes:
+            raise MemoryError('local calibration RSS budget exceeded')
+        if time.monotonic()-self.started &gt; self.budget.max_seconds:
+&gt;           raise TimeoutError('local calibration wall budget exceeded')
+E           TimeoutError: local calibration wall budget exceeded
+
+scripts\akt\local_response_calibration.py:50: TimeoutError</failure></testcase><testcase classname="tests.akt.test_local_calibration_compact" name="test_compact_rejects_invalid_sources_and_preserves_original[incomplete]" time="0.981" /><testcase classname="tests.akt.test_local_calibration_compact" name="test_compact_rejects_invalid_sources_and_preserves_original[manifest]" time="1.515" /><testcase classname="tests.akt.test_local_calibration_compact" name="test_compact_rejects_invalid_sources_and_preserves_original[shard]" time="1.277" /><testcase classname="tests.akt.test_local_calibration_compact" name="test_compact_rejects_invalid_sources_and_preserves_original[existing]" time="1.171" /><testcase classname="tests.akt.test_local_calibration_compact" name="test_compact_rejects_invalid_sources_and_preserves_original[diskcap]" time="1.660" /><testcase classname="tests.akt.test_local_calibration_compact" name="test_2048_rows_multiple_batches_and_bounded_shards" time="2.915" /></testsuite></testsuites>

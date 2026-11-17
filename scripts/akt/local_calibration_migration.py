@@ -22,6 +22,31 @@ def need(value,reason):
         raise ValueError(reason)
 
 
+def raw_storage_lineage(raw,manifest,shards):
+    """Compact chỉ được fit sau COMPLETE chứng minh stream và nguồn gốc."""
+    if 'storage_layout' not in manifest:
+        return None
+    need(manifest['storage_layout']=='complete_multi_learner_compact_v1'
+         and manifest.get('resume_supported') is False,'supported closed compact layout required')
+    raw=Path(raw)
+    complete=raw/'COMPLETE.json'
+    need(not complete.is_symlink(),'physical compact provenance required')
+    receipt=json.loads(complete.read_text(encoding='utf-8'))
+    need(receipt['status']=='COMPLETE_RAW_COMPACTION_EXACT_STREAM'
+         and receipt['compact_manifest_sha256']==sha(raw/'manifest.json')
+         and receipt['compact_shard_sha256']==shards
+         and receipt['rows']==manifest['prediction_rows']==sum(row['rows'] for row in manifest['shards'])
+         and receipt['compacted_shards']==len(manifest['shards'])
+         and receipt['original_shards']==len(receipt['original_shard_sha256'])
+         and receipt['helper_sha256']==sha(Path(__file__).parent/'local_calibration_compact.py')
+         and receipt['reader_memory_limit']=='128MB' and receipt['reader_spill'] is False
+         and receipt['resume_supported'] is False
+         and 0<receipt['max_rows_per_shard']<=32768
+         and all(0<row['rows']<=receipt['max_rows_per_shard'] for row in manifest['shards']),
+         'compact provenance differs from pinned raw or helper')
+    return dict(manifest=manifest,compaction_receipt=receipt,receipt_sha256=sha(complete))
+
+
 def relocate(value,root):
     """Chỉ đổi prefix Volume tuyệt đối, không sửa bytes của artifact nguồn."""
     if isinstance(value,dict):
@@ -155,6 +180,7 @@ def fit_raw_spooled(raw,paths,view,*,binding,population,source_pins,expected_man
     raw=Path(raw)
     need(sha(raw/'manifest.json')==expected_manifest_sha256,'raw manifest pin changed')
     manifest=json.loads((raw/'manifest.json').read_text(encoding='utf-8'))
+    raw_storage_lineage(raw,manifest,shard_sha256)
     identity=manifest['identity']
     need(manifest['status']=='complete' and view.scope=='calibration_predict' and view.full_role_coverage
          and binding.split_sha256==view.roles.identity and population['source_pins']==source_pins
@@ -319,6 +345,9 @@ def main():
                 raw_manifest_sha256=args.raw_manifest_sha256,raw_shard_sha256=shards,
                 source_pins=context['request']['source_pins'],calibration_identity=calibration.identity,
                 algorithm='original_v1_solver_sqlite_representation',resource=resource)
+            lineage=raw_storage_lineage(raw,manifest,shards)
+            if lineage is not None:
+                metadata['raw_storage_lineage']=lineage
             for name,value in (('config.json',metadata),('fit/manifest.json',metadata),('resource.json',resource)):
                 (payloads/name).write_text(json.dumps(value,indent=2)+'\n',encoding='utf-8')
             files=['config.json','fit/temperature.json','fit/manifest.json','resource.json']

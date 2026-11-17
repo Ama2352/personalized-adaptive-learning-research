@@ -26,3 +26,11 @@ Lượt A3 attempt100 gặp `WinError5` khi thay manifest. Phép kiểm `WINDOWS
 Adapter bổ sung retry có giới hạn0,05/0,1/0,2/0,4giây cho lỗi Windows5/32/33, theo lịch sẵn có trong `src/knowledge_tracing/akt/runner.py`. Serializer gốc và nguồn KT frozen giữ nguyên. Có31kiểm thử đạt10,37giây, gồm ca mở reader thật trên Windows rồi đóng để kiểm retry. Log `TESTS_LOCAL_RETRY_GREEN02.txt` giữ trong bundle thực thi. Lỗi quyền tồn tại sau năm lần gọi tiếp tục được trả ra.
 
 Toàn bộ file của attempt100 được giữ. Snapshot phục hồi chỉ dùng shard được manifest liệt kê, kiểm SHA từng file. File chưa được manifest xác nhận được liệt kê riêng, tiếp tục giữ tại output lỗi. Metadata relocation phiên bản mới đặt theo SHA adapter để giữ hồ sơ phiên bản trước.
+
+## Biểu diễn gọn đã kiểm trên toàn cohort A2
+
+`COMPACT_A2_FULL_PARITY100.json` xác nhận1.621.484record giữ nguyên nội dung và thứ tự khi gom15.847Parquet thành50shard, mỗi shard tối đa32.768row. Thời gian552,52giây bao gồm đọc nguồn, dựng lại và kiểm publicreader. File nguồn giữ nguyên; bản compact dùng riêng sau khi cóCOMPLETE và lineage khớp. Fit lưu cả manifest compact và hồ sơ nguồn trong metadata trên Drive.
+
+`THIN_LOGITS_A2_FULL_PARITY100.json` tái tính nguyên solver V1 trên bảng29.327.360byte từ database A2 đã đóng1.155.735.552byte, bằng attachread-only. Toàn payload và identity calibrator khớp exact kết quả đã nghiệm thu, gồm69lần tính mục tiêu. Lượt kiểm mất417,63giây, sampledpeak khoảng36,4MiB. Thời gian này đo bước kiểm solver với biểu diễn hẹp. Lượt fit A2 trước có gián đoạn host nên hai số không tạo phép so tốc độ end-to-end có kiểm soát.
+
+Nguồn solver V1, quy tắcclip, bounds và thuật toán tìm hệ số được giữ. Chỉ bảng trung gian dùng đọc lặp được thu gọn.43kiểm thử fitter/join/compact/lineage đạt30,83giây trong `TESTS_THIN_COMPACT_LINEAGE_GREEN01.txt`. A3 được đưa qua cùng kiểm stream trước khi fit với biểu diễn mới.
