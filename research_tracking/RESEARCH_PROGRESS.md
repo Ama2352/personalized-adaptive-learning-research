@@ -1,5 +1,16 @@
 # Tiến độ nghiên cứu
 
+## Mốc 17/11 — Calibration thật 2/4, dự báo A2/A3 đã có trên Drive
+
+Junyi A0–A3 đã hoàn tất selected-fit và refit, tương ứng4/4model ở mỗi chặng. Cả4model đã suy luận calibration trên cùng15.847người học và1.621.484target,0OOV. A0/A1 đã fit temperature và được đọc lại từ Drive để kiểm source/partition/binding. A2/A3 đã có archive numeric trên Drive Sang với checksum khớp, còn bước CPU nối nhãn/audit/fit. [Trạng thái tiếp tục](runs/junyi-calibration-real-20261117-01/STATE.json), [nghiệm thu sao lưu](runs/junyi-calibration-real-20261117-01/NUMERIC_BACKUP_ACCEPTANCE01.md), [hai calibrator đã nhận](runs/junyi-calibration-real-20261117-01/POSTSTOP_CALIBRATION_METADATA_ACCEPTANCE01.json).
+
+Calibration hiện2/4=50%; đánh giá outer độc lập0/4=0%. Các tỷ lệ này chỉ tính theo chặng. Bằng chứng chẩn đoán hẹp RQ1 khép5/7mục và ba bẫy RQ2 khép6/7mục, còn điều kiện hiệu lực đầy đủ và kết quả học với KT đã fitted. [Mẫu số và giới hạn](runs/thesis-results-discussion-writing-20261117-01/MILESTONE_REVIEW.md).
+
+[Tái tính thống kê Paper2 v2](runs/paper2-statistical-reproduction-20261117-02/README.md) khớp117phép so sánh từ outcome lịch sử, gồm bootstrap/Wilcoxon/Holm. [Báo cáo hiện hành](supervisor_reports/2026-11-16/01_tien_do/BAO_CAO_NGHIEN_CUU.html) đã cập nhật và [snapshot trên Drive Sang](https://drive.google.com/drive/folders/12cPMtllz-A_Qck_RntemvALISvdT5cWF) giữ báo cáo cùng39file nguồn bằng chứng.
+
+Chính sách tài nguyên hiện hành chỉ dùng Modal H100 cho GPU. CPU chạy local `.venv` hoặc Colab miễn phí. Các App CPU cũ đã dừng; hồ sơ các lượt trước bên dưới giữ diễn tiến lịch sử. Notebook CPU A2/A3 đang được kiểm và chuẩn bị xác thực Drive, chưa ghi nhận fit mới.
+
+
 ## Mốc 17/11 — producer calibration đã qua kiểm tổng hợp
 
 [Producer calibration](reports/CALIBRATION_PRODUCER_20261117.md) đã có API attach refit export, population/prefix độc lập, raw inference/export và fit temperature từ Parquet trên CPU riêng. 29 ca source hiện hành đạt, gồm bốn snapshot/native backbone A0–A3 nhỏ; peak working set khoảng 369,5 MB trong lượt toy. Đây là kiểm phần mềm, chưa nạp checkpoint nghiên cứu hoặc chạy calibration/outer thật. Bước tiếp theo là nối builder/entrypoint từ export thật, nguồn calibration10 và population manifest, current-source runtime, rồi inference có giới hạn trước lượt đầy đủ. Fit CPU và raw inference tiếp tục tách để trả GPU sau export. [Nghiệm thu](runs/calibration-producer-20261117-01/ACCEPTANCE.json).

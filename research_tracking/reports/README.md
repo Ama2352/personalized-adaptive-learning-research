@@ -720,3 +720,7 @@ Gate21 chỉ chạy `tests/akt tests/shared_kt`; các số139SAKT và38Graph-GAM
 - [A0 trên toàn TRAIN80 và phục hồi sau preemption](../runs/junyi-main-selected-20261112-01/README.md), giữ điểm46000 và các execution nối tiếp.
 - [Đo throughput và kiểm toàn cache](../runs/junyi-throughput-20261112-01/README.md), có SVG/PDF/PNG/CSV và forecast có giả định.
 - [Recovery A1 typed](../runs/junyi-a1-recovery-20261112-01/README.md) và [producer A1 chung protocol](../runs/junyi-a1-selection-20261112-01/README.md), nguồn hiện hành2.226ca CPU đạt, chưa selected fit A1 Junyi.
+
+### 17/11 — Chuẩn bị outer và CPU miễn phí
+
+[JUNYI_OUTER_EXECUTION_READINESS_20261117.md](JUNYI_OUTER_EXECUTION_READINESS_20261117.md) tách bước đánh giá độc lập khỏi calibration, ghi giới hạn cache OOV và hợp đồng áp dụng temperature. [Bổ sung phép đếm đã đạt](../runs/junyi-outer-count-20261117-03/README.md) khóa144row OOV theo refit90vocab. [Wrapper outer](../runs/junyi-outer-wrapper-20261117-01/README.md) đã kiểm tổng hợp, chưa chạy model nghiên cứu. [Notebook CPU calibration](../runs/free-cpu-calibration-20261117-01/README.md) giữ frozen V1,13ca kiểm đạt, thực thi Colab còn chờ xác thực.
