@@ -49,6 +49,7 @@ def test_streaming_archive_exact_files_and_pin(tiny):
         assert archive.namelist() == ['config.json', 'CLOUD_INPUT_PLAN.json']
         assert archive.read('config.json') == payload.read_bytes()
         assert json.loads(archive.read('CLOUD_INPUT_PLAN.json')) == plan
+        assert receipt['embedded_plan_sha256']==hashlib.sha256(archive.read('CLOUD_INPUT_PLAN.json')).hexdigest()
     assert receipt['sha256'] == hashlib.sha256(output.read_bytes()).hexdigest()
 
 
@@ -86,3 +87,25 @@ def test_change_between_preflight_and_zip_write_detected(tiny, monkeypatch):
     monkeypatch.setattr(module, 'sha256', mutate_after_hash)
     with pytest.raises(ValueError, match='trong lúc'):
         module.write_archive(source, plan, output, max_total_bytes=1024)
+
+
+def test_explicit_local_input_staging_uses_bounded_repository_region(tiny,monkeypatch):
+    source,payload,plan,_=tiny
+    monkeypatch.setattr(module,'ROOT',source)
+    output=source/'artifacts/akt/runtime/calibration-cloud-inputs/input01.zip'
+    output.parent.mkdir(parents=True)
+    receipt=module.write_archive(source,plan,output,max_total_bytes=1024,local_input_staging=True)
+    with zipfile.ZipFile(output) as archive:
+        assert archive.read('config.json')==payload.read_bytes()
+    assert receipt['files']==1
+
+
+@pytest.mark.parametrize('escape,limit',[(True,1024),(False,161*1024**2)])
+def test_explicit_local_staging_rejects_escape_or_large_budget(tiny,monkeypatch,escape,limit):
+    source,_,plan,output=tiny
+    monkeypatch.setattr(module,'ROOT',source)
+    if not escape:
+        output=source/'artifacts/akt/runtime/calibration-cloud-inputs/input01.zip'
+    with pytest.raises(ValueError,match='staging'):
+        module.write_archive(source,plan,output,max_total_bytes=limit,local_input_staging=True)
+    assert not output.exists()

@@ -134,8 +134,16 @@ def cpu_prepare(request, root, *, volume_commit):
 
 
 def gpu_predict(request, root, *, volume_commit):
-    validate_request(request, 'gpu')
     started = time.monotonic()
+    host_phase_seconds = {}
+    phase_started = started
+    def mark_phase(name):
+        nonlocal phase_started
+        current = time.monotonic()
+        host_phase_seconds[name] = current-phase_started
+        phase_started = current
+    validate_request(request, 'gpu')
+    mark_phase('request_validation')
     from knowledge_tracing.akt.cache_artifacts import JunyiCacheArtifactRoot
     from knowledge_tracing.akt.research_junyi_calibration import inference_source_identity
     from knowledge_tracing.akt.research_junyi_window_cache import JunyiWindowCacheSession
@@ -144,8 +152,11 @@ def gpu_predict(request, root, *, volume_commit):
     from knowledge_tracing.akt.research_junyi_numeric_predictions import NumericBinding
     from knowledge_tracing.akt.research_junyi_cached_numeric import CachedNumericBudget, run_cuda_cached_numeric
     from run_junyi_refit import configure_cuda
+    mark_phase('imports')
     cache_info = json.loads(pinned(request['cache_receipt'], root).read_text())
+    mark_phase('cache_receipt_read')
     assets, _, population = load_inputs(request, root, cuda=True)
+    mark_phase('load_inputs')
     if inference_source_identity() != request['source_identity']:
         raise ValueError('image inference source identity mismatch')
     view, encoding = assets['calibration'], assets['encoding']
@@ -154,29 +165,37 @@ def gpu_predict(request, root, *, volume_commit):
         raise ValueError('CPU cache population/source mismatch')
     cloud = JunyiCacheArtifactRoot(Path(root).resolve(strict=True))
     win = cache_info['windows']
+    mark_phase('source_checks')
     cache = JunyiWindowCacheSession(Path(win['path']), view, encoding,
         cache_info['source_data_sha256'], cache_info['population']['targets'], win['manifest_sha256'],
         prefetch=True, admission_receipt=Path(win['admission_path']),
         expected_admission_sha256=win['admission_sha256'], artifact_root=cloud)
+    mark_phase('window_session')
     phase = graph = None
     if request['variant'] != 'A0':
         phase = JunyiGraphPhaseSession(assets['condition'], view)
         info = cache_info['graphs'][request['variant']]
         graph = GraphContextCache.open(info['path'], info['sha256'], phase,
             dataset_sha256=population['identity'], window_manifest_sha256=win['manifest_sha256'], artifact_root=cloud)
+    mark_phase('graph_cache')
     binding = NumericBinding(request['variant'], assets['index']['checkpoint_sha256'],
         assets['index']['checkpoint_sha256'], view.identity, encoding.identity,
         win['manifest_sha256'], request['source_identity'])
+    mark_phase('numeric_binding')
     configure_cuda(assets['cuda_profile'], assets['config'].threads)
+    mark_phase('configure_cuda')
     result = run_cuda_cached_numeric(assets, cache, graph_cache=graph, phase=phase, binding=binding,
         dataset_sha256=population['identity'], output_root=cloud.validate(Path(root)/request['gpu_output']),
         budget=CachedNumericBudget(**request['numeric_budget']))
+    mark_phase('numeric_core')
     with (Path(root)/request['gpu_output']/'config.json').open('x', encoding='utf-8') as stream:
         json.dump(request, stream, sort_keys=True, allow_nan=False)
-    commit_started = time.monotonic()
+    mark_phase('config_write')
     volume_commit()
+    mark_phase('volume_commit')
     return dict(status='GPU_NUMERIC_COMMITTED_RELEASE_GPU', **result,
-        worker_seconds=time.monotonic()-started, volume_commit_seconds=time.monotonic()-commit_started)
+        worker_seconds=phase_started-started, volume_commit_seconds=host_phase_seconds['volume_commit'],
+        host_phase_seconds=host_phase_seconds)
 
 
 def attempt_identifier(value):

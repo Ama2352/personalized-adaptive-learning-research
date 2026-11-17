@@ -399,3 +399,58 @@ def test_gpu_monitor_timeout_stops_child_without_query():
             popen=lambda *a,**k:process,query=lambda *a,**k:pytest.fail('must stop first'),
             clock=lambda:next(times),sleep=lambda _:None)
     assert process.terminated and not process.running
+
+
+@pytest.mark.parametrize('variant',['A0','A1'])
+def test_gpu_host_timings_partition_and_preserve_numeric_contract(tmp_path,monkeypatch,variant):
+    import json
+    monkeypatch.syspath_prepend(str(ROOT/'scripts/akt'))
+    worker=load('calibration_cloud_worker')
+    import knowledge_tracing.akt.cache_artifacts as cache_artifacts
+    import knowledge_tracing.akt.research_junyi_calibration as calibration
+    import knowledge_tracing.akt.research_junyi_window_cache as window_cache
+    import knowledge_tracing.akt.research_junyi_graph_cache as graph_cache
+    import knowledge_tracing.akt.research_junyi_graph as graph
+    import knowledge_tracing.akt.research_junyi_cached_numeric as numeric
+    import run_junyi_refit
+    value=request();value['variant']=variant;value['gpu_output']=value['run_id']+'/'+variant.lower()+'-numeric/payloads'
+    value['numeric_budget'].update(expected_records=1,expected_windows=1,expected_targets=3)
+    view=SimpleNamespace(identity='c'*64)
+    encoding=SimpleNamespace(identity='d'*64)
+    assets=dict(calibration=view,encoding=encoding,condition=object(),cuda_profile=object(),
+        index={'checkpoint_sha256':'a'*64},config=SimpleNamespace(threads=1))
+    population=dict(identity='f'*64,targets=3)
+    info=dict(population=population,source_pins={},source_data_sha256='a'*64,
+        windows=dict(path=str(tmp_path/'windows'),manifest_sha256='e'*64,
+            admission_path=str(tmp_path/'admission.json'),admission_sha256='a'*64),
+        graphs={variant:dict(path=str(tmp_path/'graph.sqlite'),sha256='a'*64)})
+    cache_file=tmp_path/'cache.json';cache_file.write_text(json.dumps(info))
+    monkeypatch.setattr(worker,'pinned',lambda *a:cache_file)
+    monkeypatch.setattr(worker,'load_inputs',lambda *a,**k:(assets,None,population))
+    monkeypatch.setattr(calibration,'inference_source_identity',lambda:value['source_identity'])
+    monkeypatch.setattr(cache_artifacts,'JunyiCacheArtifactRoot',lambda root:SimpleNamespace(validate=lambda path:path))
+    monkeypatch.setattr(window_cache,'JunyiWindowCacheSession',lambda *a,**k:'admitted-cache')
+    monkeypatch.setattr(graph,'JunyiGraphPhaseSession',lambda *a:'graph-phase')
+    monkeypatch.setattr(graph_cache,'GraphContextCache',SimpleNamespace(open=lambda *a,**k:'graph-cache'))
+    monkeypatch.setattr(run_junyi_refit,'configure_cuda',lambda profile,threads:None)
+    received=[]
+    def run(loaded,cache,**kwargs):
+        received.append(kwargs)
+        assert loaded is assets and cache=='admitted-cache'
+        kwargs['output_root'].mkdir(parents=True)
+        return dict(receipt_path=str(kwargs['output_root']/'RECEIPT.json'),receipt_sha256='a'*64,counts={'targets':3})
+    monkeypatch.setattr(numeric,'run_cuda_cached_numeric',run)
+    ticks=iter(index*.125 for index in range(100))
+    monkeypatch.setattr(worker,'time',SimpleNamespace(monotonic=lambda:next(ticks)))
+    committed=[]
+    result=worker.gpu_predict(value,tmp_path,volume_commit=lambda:committed.append(True))
+    phases=result['host_phase_seconds']
+    assert set(phases)=={'request_validation','imports','cache_receipt_read','load_inputs','source_checks',
+        'window_session','graph_cache','numeric_binding','configure_cuda','numeric_core','config_write','volume_commit'}
+    assert all(seconds>=0 for seconds in phases.values())
+    assert sum(phases.values())==pytest.approx(result['worker_seconds'])
+    assert result['volume_commit_seconds']==phases['volume_commit']
+    assert received[0]['binding'].variant==variant
+    assert received[0]['graph_cache']==(None if variant=='A0' else 'graph-cache')
+    assert received[0]['budget'].batch_size==128 and committed==[True]
+    assert json.loads((tmp_path/value['gpu_output']/'config.json').read_text())==value

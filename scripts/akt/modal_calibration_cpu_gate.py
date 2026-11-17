@@ -22,9 +22,11 @@ image=(modal.Image.debian_slim(python_version='3.13')
     .add_local_file(str(ROOT/'artifacts/akt/dependencies/upstream/akt.py'),
                     '/opt/kltn/artifacts/akt/dependencies/upstream/akt.py'))
 for name in ['test_cloud_calibration_fit.py','test_junyi_calibration_producer.py','test_drive_artifact_sink.py',
-             'test_research_junyi_numeric_predictions.py']:
+             'test_research_junyi_numeric_predictions.py','test_cloud_calibration_numeric_join.py',
+             'test_junyi_calibration_cloud_caches.py','test_junyi_window_cache.py',
+             'test_research_junyi_cached_numeric.py']:
     image=image.add_local_file(str(ROOT/'tests/akt'/name),'/opt/kltn/tests/akt/'+name)
-for name in ['drive_artifact_sink.py','drive_resumable_upload.py']:
+for name in ['drive_artifact_sink.py','drive_resumable_upload.py','prepare_junyi_calibration_caches.py']:
     image=image.add_local_file(str(ROOT/'scripts/akt'/name),'/opt/kltn/scripts/akt/'+name)
 app=modal.App('kltn-calibration-linux-cpu-gate')
 
@@ -45,13 +47,17 @@ def gate():
     volume.reload()
     sink.CLOUD_ROOT=Path('/artifacts').resolve(strict=True)
     run_id='cloud-calibration-linux-20261117-01'
-    tranche_id='cpu-tests03'
+    tranche_id='cpu-tests04'
     output=sink.CLOUD_ROOT/run_id/tranche_id/'payloads'
     output.mkdir(parents=True,exist_ok=False)
     command=[sys.executable,'-B','-m','pytest','/opt/kltn/tests/akt/test_cloud_calibration_fit.py',
         '/opt/kltn/tests/akt/test_junyi_calibration_producer.py',
         '/opt/kltn/tests/akt/test_drive_artifact_sink.py',
         '/opt/kltn/tests/akt/test_research_junyi_numeric_predictions.py','-q','-p','no:cacheprovider',
+        '/opt/kltn/tests/akt/test_cloud_calibration_numeric_join.py',
+        '/opt/kltn/tests/akt/test_junyi_calibration_cloud_caches.py',
+        '/opt/kltn/tests/akt/test_junyi_window_cache.py',
+        '/opt/kltn/tests/akt/test_research_junyi_cached_numeric.py',
         '--basetemp=/tmp/kltn-calibration-tests']
     import hashlib
     import importlib.metadata
@@ -78,7 +84,7 @@ def gate():
 
 if __name__=='__main__':
     import json
-    destination=ROOT/'research_tracking/runs/cloud-calibration-fit-20261117-01/LINUX_CPU_GATE03.json'
+    destination=ROOT/'research_tracking/runs/cloud-calibration-fit-20261117-01/LINUX_CPU_GATE04.json'
     if destination.exists():
         raise SystemExit('Đã có receipt, kiểm trạng thái trước khi chạy lại.')
     with modal.enable_output(),app.run(environment_name='main'):

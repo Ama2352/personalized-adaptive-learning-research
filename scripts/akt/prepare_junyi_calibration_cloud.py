@@ -1,7 +1,7 @@
-"""Lập allowlist đầu vào calibration cloud, chỉ ghi plan nhỏ ở local.
+"""Lập allowlist đầu vào calibration cloud, CLI ghi plan nhỏ ở local.
 
-ZIP là API riêng dành cho cloud scratch sau khi source đã được stage. CLI local
-không sao chép model hoặc dữ liệu thật và không upload.
+API ZIP hỗ trợ cloud scratch. Cờ local_input_staging mở riêng vùng runtime
+trong repository với trần160MiB để chuyển input, output nghiên cứu giữ ở cloud.
 """
 import argparse
 import hashlib
@@ -112,8 +112,8 @@ def build_plan(root, *, max_total_bytes=160 * 1024**2, max_file_bytes=64 * 1024*
                       'Chuyển inputs qua cloud staging theo SHA, chưa upload trong lượt này.'])
 
 
-def write_archive(root, plan, output, *, max_total_bytes, max_files=256):
-    """Streaming ZIP từ input cloud, không giữ model trong RAM hoặc ghi ZIP PC."""
+def write_archive(root, plan, output, *, max_total_bytes, max_files=256, local_input_staging=False):
+    """Stream ZIP theo pin, có vùng staging input local khai báo rõ và hữu hạn."""
     if (type(max_files) is not int or not 1 <= max_files <= 256
             or type(max_total_bytes) is not int or max_total_bytes <= 0):
         raise ValueError('Cần ngân sách byte và số file hữu hạn.')
@@ -125,10 +125,18 @@ def write_archive(root, plan, output, *, max_total_bytes, max_files=256):
             or sum(row['bytes'] for row in rows) != plan['bytes'] or plan['bytes'] > max_total_bytes):
         raise ValueError('Archive vượt giới hạn hoặc trùng đường dẫn.')
     root = Path(root).resolve()
-    if not root.is_relative_to(Path('/artifacts').resolve()) and not root.is_relative_to(Path('/tmp').resolve()):
+    if type(local_input_staging) is not bool:
+        raise ValueError('Local input staging cần Boolean rõ ràng.')
+    local = local_input_staging and root == ROOT.resolve()
+    if local_input_staging and not local:
+        raise ValueError('Local input staging chỉ dùng repository hiện hành.')
+    if not local and not root.is_relative_to(Path('/artifacts').resolve()) and not root.is_relative_to(Path('/tmp').resolve()):
         raise ValueError('ZIP payload chỉ tạo trên cloud Volume hoặc /tmp.')
     output = Path(output).resolve()
-    if not output.is_relative_to(Path('/artifacts').resolve()) and not output.is_relative_to(Path('/tmp').resolve()):
+    if local and (not output.is_relative_to((ROOT/'artifacts/akt/runtime/calibration-cloud-inputs').resolve())
+                  or max_total_bytes > 160*1024**2):
+        raise ValueError('Local input ZIP cần vùng staging riêng và trần160MiB.')
+    if not local and not output.is_relative_to(Path('/artifacts').resolve()) and not output.is_relative_to(Path('/tmp').resolve()):
         raise ValueError('ZIP output cần cloud Volume hoặc /tmp.')
     allowed = set(allowed_paths(root))
     for row in rows:
@@ -137,6 +145,7 @@ def write_archive(root, plan, output, *, max_total_bytes, max_files=256):
         if (row['path'] not in allowed or path.is_symlink() or not path.resolve().is_relative_to(root)
                 or path.stat().st_size != row['bytes'] or sha256(path) != row['sha256']):
             raise ValueError('Input archive khác allowlist/pin.')
+    plan_bytes=json.dumps(plan,ensure_ascii=False,indent=2).encode('utf-8')
     with zipfile.ZipFile(output, 'x', compression=zipfile.ZIP_STORED, allowZip64=True) as archive:
         for row in rows:
             digest = hashlib.sha256()
@@ -148,8 +157,11 @@ def write_archive(root, plan, output, *, max_total_bytes, max_files=256):
                     member.write(block)
             if size != row['bytes'] or digest.hexdigest() != row['sha256']:
                 raise ValueError('Input đổi trong lúc ghi archive; giữ ZIP lỗi để rà cloud.')
-        archive.writestr('CLOUD_INPUT_PLAN.json', json.dumps(plan, ensure_ascii=False, indent=2))
-    return dict(bytes=output.stat().st_size, sha256=sha256(output), files=len(rows))
+        archive.writestr('CLOUD_INPUT_PLAN.json', plan_bytes)
+    return dict(bytes=output.stat().st_size, sha256=sha256(output), files=len(rows),
+                embedded_plan_sha256=hashlib.sha256(plan_bytes).hexdigest(),
+                plan_identity_sha256=hashlib.sha256(json.dumps(plan,sort_keys=True,
+                    separators=(',',':')).encode()).hexdigest())
 
 
 def main():
@@ -162,7 +174,7 @@ def main():
         parser.error('Plan mới cần nằm đúng bundle cloud-calibration-inputs.')
     plan = build_plan(ROOT)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    with destination.open('x', encoding='utf-8') as stream:
+    with destination.open('x', encoding='utf-8', newline='\n') as stream:
         json.dump(plan, stream, ensure_ascii=False, indent=2)
     print(json.dumps(dict(files=len(plan['files']), bytes=plan['bytes'], plan_sha256=sha256(destination))))
 
