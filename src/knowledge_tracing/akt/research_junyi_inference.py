@@ -1,5 +1,5 @@
 """Builder CPU cho export refit Junyi thật, tách probe khỏi calibration dữ liệu."""
-from dataclasses import asdict,dataclass
+from dataclasses import asdict,dataclass,replace
 import hashlib
 import json
 import math
@@ -7,7 +7,7 @@ from pathlib import Path
 import sys
 import time
 
-from .config import PROJECT_ROOT,config_from_payload
+from .config import PROJECT_ROOT,config_from_payload,validate_config,ResearchCUDAExecutionProfile
 from .encoding import encoding_from_payload
 from .research_junyi_roles import JunyiResearchRoles
 from .research_junyi_data import JunyiPhaseView,JunyiResearchEncoding
@@ -113,7 +113,34 @@ def inspect_cpu_refit_export(export, *, expected_index_sha256, output, run_id, b
                 encoding=encoding,origin=origin,calibration=calibration,condition=condition,budget=budget)
 
 
+def inspect_cuda_refit_export(export, *, expected_index_sha256, output, run_id, budget, cuda_profile):
+    """Tái dùng toàn bộ kiểm lineage CPU, thêm profile CUDA mà không nạp Torch."""
+    _need(type(cuda_profile) is ResearchCUDAExecutionProfile,'typed CUDA inference profile required')
+    assets=inspect_cpu_refit_export(export,expected_index_sha256=expected_index_sha256,
+        output=output,run_id=run_id,budget=budget)
+    assets['config']=replace(assets['config'],device='cuda')
+    validate_config(assets['config'],cuda_profile=cuda_profile)
+    assets['cuda_profile']=cuda_profile
+    return assets
+
+
 def build_cpu_refit_predictor(assets, *, domain_sha256):
+    _need(assets['config'].device=='cpu' and assets.get('cuda_profile') is None,
+          'CPU builder requires CPU-only assets')
+    return _build_refit_predictor(assets,domain_sha256=domain_sha256)
+
+
+def build_cuda_refit_predictor(assets, *, domain_sha256):
+    """Caller cấu hình backend/VRAM trước; CUDA không được fallback về CPU."""
+    _need(assets['config'].device=='cuda'
+          and type(assets.get('cuda_profile')) is ResearchCUDAExecutionProfile,
+          'CUDA builder requires typed CUDA assets')
+    from .research_graph_model import _cuda_execution_check
+    _cuda_execution_check(assets['cuda_profile'],synchronize=True)
+    return _build_refit_predictor(assets,domain_sha256=domain_sha256)
+
+
+def _build_refit_predictor(assets, *, domain_sha256):
     """Dựng backbone chuẩn, nạp weights thật bằng attach API đã kiểm."""
     budget=assets['budget']
     started=time.monotonic()
@@ -131,7 +158,7 @@ def build_cpu_refit_predictor(assets, *, domain_sha256):
         from .research_junyi_graph_model import JunyiGraphAKTAdapter
         adapter=JunyiGraphAKTAdapter(config=assets['config'],encoding=assets['encoding'],
             condition=assets['condition'],phase=JunyiGraphPhaseSession(assets['condition'],assets['calibration']),
-            compact_context=True)
+            compact_context=True,cuda_profile=assets.get('cuda_profile'))
     budget.check(started)
     index=assets['index']
     vocabulary=assets['encoding'].native.vocabulary.values

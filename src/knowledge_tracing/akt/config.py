@@ -126,7 +126,7 @@ def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionPro
         if type(cuda_profile) is not ResearchCUDAExecutionProfile:
             raise ValueError('exact typed CUDA research profile required')
         cuda_profile.__post_init__()
-        if config.phase not in {'simulator-research','junyi-research'} or config.device != 'cuda':
+        if config.phase not in {'simulator-research','junyi-research','junyi-inference'} or config.device != 'cuda':
             raise ValueError('CUDA research profile requires explicit simulator-research CUDA config')
         if (cuda_profile.recipe_id == 'cgakt-cuda-fp32-batch128-v2'
                 and config.protocol_version != 'akt-nr-exercise-v2-batch128'):
@@ -210,8 +210,11 @@ def validate_config(config: AKTConfig, *, cuda_profile: ResearchCUDAExecutionPro
             raise ValueError('pilot cap or architecture exceeded')
     if config.phase in {'simulator-research','junyi-research','junyi-inference'}:
         inference_only=config.phase=='junyi-inference'
-        if inference_only and (config.device!='cpu' or cuda_profile is not None):
-            raise ValueError('Junyi local inference requires CPU and no CUDA training profile')
+        if inference_only and config.device != ('cpu' if cuda_profile is None else 'cuda'):
+            raise ValueError('Junyi inference device requires its explicit execution profile')
+        if (inference_only and cuda_profile is not None
+                and cuda_profile.recipe_id != 'cgakt-cuda-fp32-batch128-v2'):
+            raise ValueError('Junyi CUDA inference requires frozen batch128 execution recipe')
         if config.phase=='junyi-research' and cuda_profile is None:
             raise ValueError('Junyi research requires an explicit typed CUDA profile')
         # New scope only; no dataclass/default/hash change for historical phases.

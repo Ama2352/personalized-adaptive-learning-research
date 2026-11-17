@@ -33,6 +33,21 @@ def test_cpu_inference_accepts_frozen_batch128_without_cuda_profile():
     validate_config(config())
 
 
+def test_cuda_inference_accepts_explicit_frozen_profile_without_loading_torch():
+    from knowledge_tracing.akt.config import ResearchCUDAExecutionProfile
+    profile=ResearchCUDAExecutionProfile(max_vram_bytes=8*1024**3,
+        recipe_id='cgakt-cuda-fp32-batch128-v2')
+    validate_config(replace(config(),device='cuda'),cuda_profile=profile)
+
+
+def test_cuda_inference_rejects_cpu_device_with_cuda_profile():
+    from knowledge_tracing.akt.config import ResearchCUDAExecutionProfile
+    profile=ResearchCUDAExecutionProfile(max_vram_bytes=8*1024**3,
+        recipe_id='cgakt-cuda-fp32-batch128-v2')
+    with pytest.raises(ValueError):
+        validate_config(config(),cuda_profile=profile)
+
+
 @pytest.mark.parametrize('field,value',[('device','cuda'),('batch_size',4),('d_model',32),
     ('outer_fold',0),('seed',43),('n_pid',1),('graph',True),('lr',.001)])
 def test_cpu_inference_does_not_relax_architecture_or_domain(field,value):
@@ -93,6 +108,35 @@ def test_metadata_builder_reuses_encoding_and_preserves_training_fields(portable
     assert assets['encoding'].identity==index['identity']['encoding']
     assert assets['origin'].fit_view.scope=='select_train80'
     assert not any(p.suffix=='.pt' for p in path.iterdir())
+
+
+def test_cuda_metadata_builder_keeps_same_roles_encoding_and_checkpoint_lineage(portable):
+    from knowledge_tracing.akt.config import ResearchCUDAExecutionProfile
+    from knowledge_tracing.akt.research_junyi_inference import inspect_cuda_refit_export
+    path,members,index,write=portable
+    pin=write()
+    profile=ResearchCUDAExecutionProfile(max_vram_bytes=8*1024**3,
+        recipe_id='cgakt-cuda-fp32-batch128-v2')
+    assets=inspect_cuda_refit_export(path,expected_index_sha256=pin,
+        output=config().output_dir,run_id=config().run_id,budget=budget(),cuda_profile=profile)
+    assert assets['config'].phase=='junyi-inference'
+    assert assets['config'].device=='cuda'
+    assert assets['config'].batch_size==128
+    assert assets['cuda_profile'] is profile
+    assert assets['index']==index
+    assert assets['encoding'].identity==index['identity']['encoding']
+
+
+def test_cpu_builder_rejects_cuda_assets_before_import_or_loading_weights():
+    from knowledge_tracing.akt.research_junyi_inference import build_cpu_refit_predictor
+    with pytest.raises(ValueError,match='CPU-only'):
+        build_cpu_refit_predictor({'config':replace(config(),device='cuda')},domain_sha256='a'*64)
+
+
+def test_cuda_builder_rejects_missing_profile_before_import_or_loading_weights():
+    from knowledge_tracing.akt.research_junyi_inference import build_cuda_refit_predictor
+    with pytest.raises(ValueError,match='typed CUDA assets'):
+        build_cuda_refit_predictor({'config':replace(config(),device='cuda')},domain_sha256='a'*64)
 
 
 @pytest.mark.parametrize('field',['roles','encoding','plan'])
