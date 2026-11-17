@@ -1,5 +1,7 @@
 # Calibration A2/A3 chuyển CPU local ngày17/11
 
+Mốc mới nhất. A2 đã fit và được đọc lại độc lập từ Drive Sang, biên nhận `LOCAL_A2_FIT_ACCEPTANCE100.json` trong bundle thực thi. Calibration đạt3/4 ở phạm vi Junyi fold4. TemperatureA2=1,0295325171, LogLoss trên chínhcohortfit0,3584482535→0,3583105009. Phải chờ nhóm đánh giá độc lập để so sánh mô hình. LượtA2 cógiánđoạnhost, wall77,35phút không được dùng kết luận hiệu năngCPU. Các đoạn sau giữ diễn tiến kỹ thuật.
+
 Theo yêu cầu sử dụng CPU máy cá nhân, cache tạm tối đa4GB đặt tại `artifacts/akt/local-calibration/20261117`. Kết quả chính tiếp tục lưu trên Drive Sang. Cache sau khôi phục đầu vào và snapshot A2 chiếm546.461.091byte.
 
 ## Đã xác nhận

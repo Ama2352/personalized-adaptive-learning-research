@@ -1,5 +1,9 @@
 # Bản đồ repository và bằng chứng cho báo cáo KLTN
 
+## 17/11 — Calibration Junyi đã nghiệm thu3/4
+
+[Nghiệm thu A2 local](../research_tracking/runs/junyi-calibration-real-20261117-01/LOCAL_A2_FIT_ACCEPTANCE100.json) kiểm lại nămartifact Drive Sang và binding/cohort1.621.484target. A0/A1/A2 đã có hệ số, A3 đang tiếp tụcCPUlocal; outer độc lập0/4. [Báo cáo GVHD](../research_tracking/supervisor_reports/2026-11-16/01_tien_do/BAO_CAO_NGHIEN_CUU.html) đã thêm mốcA2 và nguồn số liệu tải được. Colab đã trảruntime. Các mốc bên dưới giữ diễn tiến trước nghiệm thuA2.
+
 ## 17/11 — Calibration, lưu trữ Drive và chính sách tài nguyên hiện hành
 
 [Biên nhận numeric A2/A3](../research_tracking/runs/junyi-calibration-real-20261117-01/NUMERIC_BACKUP_ACCEPTANCE01.md) định vị hai archive trên Drive Sang, tổng71.546.486byte, checksum/owner/parent đã đọc lại độc lập. Truyền bằng CPU local và API lưu trữ, peakRSS khoảng121,5MiB, không tạo ZIP/model binary trên máy. [Hai calibrator](../research_tracking/runs/junyi-calibration-real-20261117-01/POSTSTOP_CALIBRATION_METADATA_ACCEPTANCE01.json) xác nhận A0/A1 đã fit, A2/A3 fit còn chờ. [Model và checkpoint](../research_tracking/runs/junyi-calibration-real-20261117-01/MODEL_DRIVE_COVERAGE01.md) định vị bản sao Drive Sang và nguồn phục hồi.

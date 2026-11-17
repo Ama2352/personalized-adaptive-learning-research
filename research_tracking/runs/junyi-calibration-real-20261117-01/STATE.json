@@ -1,5 +1,5 @@
 {
-  "status": "LOCAL_A2_FIT_RUNNING_A3_JOIN_RECOVERED_A0_A1_ACCEPTED",
+  "status": "A0_A1_A2_CALIBRATION_ACCEPTED_A3_JOIN_AUDIT_PENDING",
   "updated": "2026-11-17",
   "run_id": "junyi-calibration-real-20261117-01",
   "workspace": "honguyenminhsang2016",
@@ -181,19 +181,20 @@
   },
   "active_cpu_job": {
     "variant": "A2",
-    "phase": "local_fit",
+    "phase": "fit_accepted",
     "local_exec_session_id": 38468,
     "driver": "scripts/akt/local_calibration_migration.py",
     "attempt": 100,
     "log": "local-a2-fit100.txt",
-    "accepted": false,
+    "accepted": true,
     "partial_snapshot_receipt": "LOCAL_A2_SNAPSHOT01.json",
     "cache_limit_bytes": 4000000000,
     "cache_bytes_after_staging": 546461091,
     "authoritative_output": "Drive Sang",
     "synthetic_tests": 26,
     "synthetic_tests_log": "../local-calibration-migration-20261117-02/tests-root03.txt",
-    "raw_acceptance": "LOCAL_A2_RAW_ACCEPTANCE100.json"
+    "raw_acceptance": "LOCAL_A2_RAW_ACCEPTANCE100.json",
+    "acceptance": "LOCAL_A2_FIT_ACCEPTANCE100.json"
   },
   "software_review": {
     "data_binding_partition": "Independent review found no binding/partition/label-join defect in examined code",
@@ -219,5 +220,19 @@
     "failure_log": "local-a3-join100.txt",
     "recovery_stage_session": 75712,
     "recovery": "LOCAL_A3_RECOVERY100.json"
+  },
+  "calibration_acceptance_current": {
+    "accepted": [
+      "A0",
+      "A1",
+      "A2"
+    ],
+    "pending": [
+      "A3"
+    ],
+    "count": 3,
+    "total": 4,
+    "percentage_of_phase": 75,
+    "scope": "Junyi fold4 calibration10"
   }
 }

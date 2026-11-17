@@ -6,7 +6,7 @@ KLTN nghiên cứu cách chọn bài phù hợp với từng người học bằ
 
 Từ đó, KLTN đặt ba bước tiếp nối. RQ1 tìm mắt xích khiến dự báo khác chưa chuyển thành tiến bộ học tập. RQ2 kiểm điều kiện khiến lợi ích đồ thị xuất hiện hoặc biến mất. RQ3 thử độ tin cậy theo từng cạnh và cổng điều tiết trên AKT để xử lý những điều kiện ấy.
 
-**Mốc đã đạt** gồm chẩn đoán một phần nguyên nhân ở RQ1, các đối chứng thăm dò ở RQ2, cùng bốn mô hình AKT/CG-AKT đã chọn bản và học lại trên Junyi. Ngày 17/11, cả A0–A3 đã tính đủ dự báo cho cùng 15.847 người học trong phần hiệu chỉnh riêng. **Mốc còn thiếu** là hoàn tất hiệu chỉnh xác suất, đánh giá độc lập và mô phỏng vòng kín để kiểm hiệu quả của giải pháp. A0/A1 đã hoàn tất hiệu chỉnh xác suất; A2/A3 đã lưu đủ dự báo để tiếp tục. Cả ba RQ còn các tiêu chí nghiệm thu thực nghiệm.
+**Mốc đã đạt** gồm chẩn đoán một phần nguyên nhân ở RQ1, các đối chứng thăm dò ở RQ2, cùng bốn mô hình AKT/CG-AKT đã chọn bản và học lại trên Junyi. Ngày 17/11, cả A0–A3 đã tính đủ dự báo cho cùng 15.847 người học trong phần hiệu chỉnh riêng. **Mốc còn thiếu** là hoàn tất hiệu chỉnh xác suất, đánh giá độc lập và mô phỏng vòng kín để kiểm hiệu quả của giải pháp. A0, A1 và A2 đã hoàn tất hiệu chỉnh xác suất; A3 đang tiếp tục xử lý từ dự báo đã lưu. Cả ba RQ còn các tiêu chí nghiệm thu thực nghiệm.
 
 <a id="history"></a>
 
@@ -17,6 +17,7 @@ Từ đó, KLTN đặt ba bước tiếp nối. RQ1 tìm mắt xích khiến d�
 3. **12–16/11 — tạo các mô hình để kiểm giải pháp.** Đã chọn bản cho bảy điều kiện Grade10 và hoàn tất chọn bản/học lại bốn phiên bản Junyi. Bước kế tiếp dùng các mô hình này để tạo bảng đánh giá độc lập và kết quả vòng kín dùng chung ba RQ.
 4. **17/11 — kiểm chéo các lịch sử đã lưu.** Đã đối chiếu bảng thay đổi quyết định và chuỗi quan sát của pilot. Ở mức khởi tạo 1150, mức tăng năng lực ẩn đổi khi bật phạt trong khi chuỗi câu hỏi, đáp án và xác suất KT giữ nguyên. Đây là phân tích lại các thí nghiệm đã có.
 5. **17/11 — đưa mô hình đã học vào bước hiệu chỉnh thực tế.** Cả A0–A3 đã tính đủ 1.621.484 xác suất dự báo mỗi mô hình trên cùng phần hiệu chỉnh Junyi. A0 và A1 đã hoàn tất hiệu chỉnh và kiểm lại artifact trên Drive. Dự báo A2/A3 đã được lưu đầy đủ trên Drive; hai mô hình còn bước fit hệ số hiệu chỉnh, sau đó cả bốn cần đánh giá trên nhóm người học độc lập.
+6. **17/11 — hoàn tất hiệu chỉnh A2 trên CPU local.** A2 đã được đối chiếu đầy đủ trên cùng 1.621.484 tương tác và nghiệm thu artifact trên Drive. Mốc hiệu chỉnh đạt 3/4 mô hình. A3 đang xử lý tiếp; so sánh hiệu quả dự báo còn cần nhóm đánh giá độc lập.
 
 
 
@@ -31,7 +32,7 @@ Các tỷ lệ dưới đây đếm mốc có tiêu chí và mẫu số cụ th�
 | Junyi · chọn vòng A0–A3 | 4/4 | 100% |
 | Junyi · học lại A0–A3 | 4/4 | 100% |
 | Junyi · suy luận trên phần hiệu chỉnh | 4/4 | 100% |
-| Junyi · fit hệ số hiệu chỉnh đã nghiệm thu | 2/4 | 50% |
+| Junyi · fit hệ số hiệu chỉnh đã nghiệm thu | 3/4 | 75% |
 | Junyi · đánh giá độc lập | 0/4 | 0% |
 | Grade10 · chọn vòng các mô hình hiện đại | 7/9 | 77,8% |
 
@@ -119,16 +120,16 @@ Mỗi biến thể Junyi đã chạy 12 vòng để chọn bản mô hình, ch�
 | --- | --- | --- |
 | Chọn vòng | Đã chọn vòng 9 cho cả bốn mô hình | Đã chọn vòng 4 hoặc 5 |
 | Học lại | Đã hoàn tất 9 vòng mỗi mô hình | Còn phải học lại theo số vòng đã chọn |
-| Hiệu chỉnh | Dự báo đủ 4/4. A0/A1 đã hiệu chỉnh và xác minh artifact; A2/A3 còn fit hệ số | Còn phải thực hiện |
+| Hiệu chỉnh | Dự báo đủ 4/4. A0–A2 đã hiệu chỉnh và xác minh artifact; A3 còn fit hệ số | Còn phải thực hiện |
 | Đánh giá độc lập | Còn bảng kết quả trên nhóm người học đánh giá riêng | Còn dự báo, quyết định và kết quả vòng kín trên các lượt đánh giá mới |
 
 ### Cả bốn mô hình đã tính đủ dự báo để hiệu chỉnh xác suất
 
-Trước khi kiểm độ tự tin của mô hình, cần đối chiếu xác suất dự báo với đáp án trên một nhóm người học riêng, tách khỏi các nhóm dùng để huấn luyện và chọn vòng học. Mỗi mô hình A0–A3 đã tính đủ **1.621.484 xác suất cho cùng 15.847 người học**, với **0 tương tác ngoài danh mục đã học**. Nhóm này chiếm 10% người học trong phần dữ liệu dành xây dựng mô hình của phép chia fold4 và được dành riêng để hiệu chỉnh. Ngày 17/11 sử dụng bốn bản mô hình đã học lại xong để tính dự báo và tìm mức hiệu chỉnh. Bốn lượt dùng cùng dữ liệu, phép chia, danh mục bài và cấu hình xử lý đã ghim. Kết quả số, mô hình nguồn và nhật ký đã được lưu. A0/A1 đã fit hệ số; A2/A3 đã sao lưu đầy đủ dự báo để tiếp tục bước này.
+Trước khi kiểm độ tự tin của mô hình, cần đối chiếu xác suất dự báo với đáp án trên một nhóm người học riêng, tách khỏi các nhóm dùng để huấn luyện và chọn vòng học. Mỗi mô hình A0–A3 đã tính đủ **1.621.484 xác suất cho cùng 15.847 người học**, với **0 tương tác ngoài danh mục đã học**. Nhóm này chiếm 10% người học trong phần dữ liệu dành xây dựng mô hình của phép chia fold4 và được dành riêng để hiệu chỉnh. Ngày 17/11 sử dụng bốn bản mô hình đã học lại xong để tính dự báo và tìm mức hiệu chỉnh. Bốn lượt dùng cùng dữ liệu, phép chia, danh mục bài và cấu hình xử lý đã ghim. Kết quả số, mô hình nguồn và nhật ký đã được lưu. A0–A2 đã fit hệ số và nghiệm thu trên Drive; A3 đang tiếp tục từ dự báo đã sao lưu.
 
 Lượt A0 dùng H100 mất khoảng **58 giây**, còn A1/A2/A3 lần lượt khoảng **42/42/48 giây**. Trong lượt A0, phần chấm và ghi dự báo trong vòng xử lý chính mất khoảng 12 giây, riêng tính xác suất mất 6,88 giây. Theo 55 mẫu đo toàn lượt A0, mức sử dụng GPU trung bình **6,2%**, cao nhất **43%** và mốc 50% chưa đạt. Các bước chuẩn bị, nạp và kiểm dữ liệu đã được bổ sung phép đo riêng ở các lượt sau.
 
-**Tiến bộ mới là đã có đủ đầu ra dự báo của cả bốn mô hình trên phần hiệu chỉnh thực.** A0/A1 đã có hệ số hiệu chỉnh được nghiệm thu. A2/A3 còn bước fit hệ số từ các dự báo đã lưu. So sánh chất lượng dự báo sau hiệu chỉnh và hiệu quả của đồ thị còn cần tập đánh giá độc lập.
+**Tiến bộ mới là đã có đủ đầu ra dự báo của cả bốn mô hình trên phần hiệu chỉnh thực.** A0–A2 đã có hệ số hiệu chỉnh được nghiệm thu. A3 còn bước fit hệ số từ các dự báo đã lưu. So sánh chất lượng dự báo sau hiệu chỉnh và hiệu quả của đồ thị còn cần tập đánh giá độc lập.
 
 Benchmark BKT/GAM-KT qua 5 phép chia ở Sprint 2 cần được lấy ra phần dự đoán tương ứng với cùng người học và tương tác đánh giá trước khi đối chiếu với AKT. Phạm vi AKT hiện có là một phép chia phát triển.
 
@@ -136,7 +137,7 @@ Benchmark BKT/GAM-KT qua 5 phép chia ở Sprint 2 cần được lấy ra phầ
 
 **Thành quả RQ3 hiện tại gồm mô hình đã triển khai, các bản huấn luyện đã lưu và đầu ra A0–A3 phục vụ hiệu chỉnh.** Điểm tin cậy cạnh được ước lượng từ dữ liệu huấn luyện. Mô phỏng biết cạnh thật/nhiễu sẽ kiểm xem điểm ấy có giúp điều tiết đồ thị đúng chỗ hay không. Hiệu quả dự báo, lựa chọn bài và kết quả học còn chờ đánh giá độc lập.
 
-### Hiệu chỉnh đã hoàn tất cho hai mô hình Junyi
+### Hiệu chỉnh đã hoàn tất cho ba mô hình Junyi
 
 Mỗi mô hình dùng cùng 1.621.484 tương tác thuộc nhóm hiệu chỉnh riêng. Bước này tìm một hệ số để mức tự tin dự báo phù hợp hơn với đáp án đã quan sát.
 
@@ -144,8 +145,9 @@ Mỗi mô hình dùng cùng 1.621.484 tương tác thuộc nhóm hiệu chỉnh 
 | --- | ---: | ---: | ---: |
 | A0 | 1,03018 | 0,358459 | 0,358315 |
 | A1 | 1,02635 | 0,358434 | 0,358324 |
+| A2 | 1,02953 | 0,358448 | 0,358311 |
 
-Các giá trị trước và sau được đo trên chính nhóm dùng tìm hệ số. So sánh chất lượng mô hình trên nhóm độc lập và kiểm chuẩn quanh ngưỡng thành thạo trong Grade10 còn chờ thực hiện. Dự báo số A2/A3 đã được lưu đầy đủ và kiểm toàn vẹn trên Drive; hệ số hiệu chỉnh của hai mô hình còn chờ fit.
+Các giá trị trước và sau được đo trên chính nhóm dùng tìm hệ số. So sánh chất lượng mô hình trên nhóm độc lập và kiểm chuẩn quanh ngưỡng thành thạo trong Grade10 còn chờ thực hiện. A2 đã hoàn tất fit và được đọc lại từ Drive để đối chiếu model, nhóm dữ liệu và toàn vẹn artifact. A3 còn bước fit. Các tỷ lệ này thuộc giao thức Junyi fold4 hiện hành.
 
 **Còn thiếu để kết thúc RQ3** — hiệu chỉnh và đánh giá dự báo độc lập, hoàn thiện mô hình Grade10, so A0–A3 trên cạnh thật/nhiễu, tách đóng góp độ tin cậy/cổng và đo kết quả học vòng kín. Kết quả cổng tắt đồ thị vẫn được chấp nhận nếu có bằng chứng.
 
@@ -170,7 +172,7 @@ Các giá trị trước và sau được đo trên chính nhóm dùng tìm hệ
 
 ## Công việc ưu tiên tiếp theo
 
-1. **Hoàn tất hiệu chỉnh A2/A3 và đánh giá độc lập A0–A3** từ các dự báo đã lưu, rồi đánh giá độc lập để so sánh dự báo và độ tin cậy xác suất.
+1. **Hoàn tất hiệu chỉnh A3 và đánh giá độc lập A0–A3** từ các dự báo đã lưu, rồi đánh giá độc lập để so sánh dự báo và độ tin cậy xác suất.
 2. **Hoàn thiện huấn luyện/hiệu chỉnh Grade10 và chạy đánh giá dùng chung ba RQ**, theo dõi dự báo, thành thạo, chọn bài và mức tiến bộ trên các lượt mô phỏng ghép cặp.
 3. **Thực hiện đối chứng thứ tự Junyi và các điều kiện RQ2**, rồi tổng hợp thống kê, demo và luận văn.
 
@@ -180,3 +182,5 @@ Nguồn chi tiết ở [tổng hợp RQ1–RQ2](../../../reports/RQ12_EXISTING_E
 
 
 Hai công trình làm nền gồm “Separating Graph and Policy Effects in Adaptive Mathematics Sequencing: A Simulation Study” (Paper 1) và “Auditing Prerequisite Context in Online Knowledge Tracing: Shared-Stream Prediction, Development Gating, and Closed-Loop Simulation” (Paper 2).
+
+Nguồn mốc A2 tại [biên bản nghiệm thu trên Drive](../../../runs/junyi-calibration-real-20261117-01/LOCAL_A2_FIT_ACCEPTANCE100.json).

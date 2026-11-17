@@ -4,6 +4,8 @@
 
 ## Mốc hiện hành — chuyển CPU local
 
+Cập nhật sau lượt local. A2 đã hoàn tất temperature V1 trên1.621.484target, hệ số1,0295325171. `LOCAL_A2_FIT_ACCEPTANCE100.json` xác nhận đọc lại nămartifact Drive Sang, đối chiếu SHA/owner/binding/cohort. Calibration nghiệm thu3/4, A3 còn join/audit/fit. `resource.json` trên Drive ghi sampledpeak406MiB và wall4.641giây; có gián đoạn host trong lượt nên thời gian này không dùng làm benchmark CPU. Nguồn adapter của lượt A2 giữ trong commit6370aacb. Hai báo cáo cho GVHD đã nối mốc A2, kiểm nội dung tại `REPORT_A2_STATIC_CHECK100.json`.
+
 Người dùng duyệt cache tạm tối đa4GB tại `artifacts/akt/local-calibration/20261117`. Đầu vào đã kiểm SHA trong `LOCAL_CALIBRATION_INPUTS01.json`. Snapshot A2 gồm1.278.474target/12.439người học đã sao lưu Drive và khôi phục local, kiểm12.440file theo inventory trong ZIP. `LOCAL_A2_SNAPSHOT01.json` ghi cache sau staging546.461.091byte.
 
 Colab đã dừng writer, xóa access token tạm và trả runtime. Nguồn tại `COLAB_LOCAL_MIGRATION_STOP01.json`, `A2_PARTIAL_RAW_DRIVE01.json`, `COLAB_RELEASE_AFTER_MIGRATION01.json`. Lượt A2 local attempt100 nối tiếp snapshot, log `local-a2-join100.txt`. Fitter SQLite được kiểm26ca tổng hợp, commit6370aacb. Calibration nghiệm thu hiện2/4, A2/A3 còn chờ fit và kiểm Drive. Các đoạn dưới giữ diễn tiến trước mốc này.
