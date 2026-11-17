@@ -1,6 +1,6 @@
 # RQ1–RQ2 — từ kết quả hai paper đến các nguyên nhân và điều kiện đã xác định
 
-Ngày 17/11/2026. Báo cáo tổng hợp bằng chứng đã nghiệm thu và kiểm chéo hậu nghiệm, giữ nguyên simulator, model và kết quả lịch sử. Phần số học mới của lượt17/11 dùng pilot GAM/graph package và fresh120 đã lưu. Bản tổng hợp mở rộng nối chúng với các chứng minh Paper1, cơ chế retention và kiểm exposure Junyi. Không bổ sung người học, seed block hoặc phép chạy độc lập trong lượt tổng hợp này.
+Ngày 17/11/2026. Báo cáo tổng hợp bằng chứng đã nghiệm thu và kiểm chéo hậu nghiệm, giữ nguyên simulator, model và kết quả lịch sử. Phần số học của lượt17/11 dùng pilot GAM/graph package, fresh120 đã lưu và bảng thống kê frozen Paper2. Bản tổng hợp nối chúng với các chứng minh Paper1, cơ chế retention và kiểm exposure Junyi. Không bổ sung người học, seed block hoặc phép chạy độc lập trong lượt tổng hợp này.
 
 ## Kết luận tiến độ hiện tại
 
@@ -30,6 +30,20 @@ Các chỉ tiêu dự báo LL/Brier/AUC/ECE tiếp tục phục vụ so sánh KT
 Các số 964 thay đổi xác suất, 90 thay đổi mastery, 60 thay đổi ready và 22 thay đổi gợi ý đã được lưu. Chúng cùng dùng 1.080 cặp trạng thái pilot nhưng đo các biến khác nhau. Lần này đối chiếu từng dòng CSV với bảng joint PMRA để hiểu chính xác những thay đổi nào cùng xuất hiện. Nguồn theo [pilot transitions](../runs/cpu-rq1-transitions-20261108-01/README.md).
 
 Đối với RQ2, mười block fresh đã so expert với một learned graph cố định, đồng thời bật/tắt mức phạt thiếu tiên quyết. Lần này đối chiếu trực tiếp chuỗi câu hỏi, đáp án và xác suất KT giữa hai mức phạt trong cùng block/ability/graph. Mục đích là phân biệt thay đổi trạng thái kiến thức ẩn của simulator với thay đổi hành vi quan sát được của hệ thống. Nguồn theo [fresh120](rq2_fresh_graph_source_replication_20261110.md).
+
+### Đã tính lại phần nào của kết quả thống kê Paper2
+
+Để xác nhận nền số liệu trước khi phát triển chẩn đoán, nhóm đã tính lại model means, mean paired delta và Holm từ outcome frozen của Paper2. Mỗi phase có600dòng model×profile×seed, mỗi hồ sơ có50seed ghép cặp. Toàn45hypotheses fixed-replay và72hypotheses closed-loop khớp bảng lịch sử, kể cả quyết định Holm. Raw Wilcoxon p-value và CI95% từ3.000bootstrap draws được kế thừa. Lượt này chưa chạy lại simulator, signed-rank hoặc bootstrap. [Nghiệm thu117dòng và phạm vi tái lập](../runs/paper2-statistical-reproduction-20261117-01/ACCEPTANCE.json)
+
+| Hồ sơ Paper2 | Δ Log Loss cùng luồng, graph package−GAM | Qua Holm family45 | Δ learning gain mỗi bước | Δ retained theta gain14ngày |
+| --- | ---: | --- | ---: | ---: |
+| Năng lực cao | −0,000255888 | Chưa | +0,007455 | −0,006615 |
+| Năng lực thấp | −0,003194533 | Có | +0,026815 | +0,037761 |
+| Yếu hàm số | −0,001692390 | Có | −0,015907 | −0,009136 |
+
+Hai outcome gain ở cả ba hồ sơ đều chưa qua Holm trong family72, pHolm bằng1 cho sáu contrast này. Phần tái lập cho phép đặt câu hỏi RQ1 trên số liệu đã đối chiếu rõ, dự báo tốt hơn ở Low/Function-weak vẫn chưa dẫn đến bằng chứng cải thiện outcome chính theo family đã chốt. Độ bất định và các đường tác động còn cần được phân tích tiếp. Contrast này tác động cả gói context/adaptation, nên câu hỏi về đóng góp riêng của cạnh vẫn mở. [Bảng39contrast chính](../runs/paper2-statistical-reproduction-20261117-01/PRIMARY_PACKAGE_CONTRAST.csv), [SVG độc lập và dữ liệu dựng](../runs/paper2-statistical-reproduction-20261117-01/paper2-prediction-outcome-v01.svg)
+
+Đây là một phần hoàn thiện Sprint1 về tái lập và thực hành thống kê của Sprint5 theo đề cương. 13kiểm thử hồi quy tổng hợp đạt, bao gồm ghép seed đầy đủ và giữ đúng family Holm. Kết quả không tăng số sample nghiên cứu hoặc xác nhận hoàn tất RQ. [Quy trình, log và giới hạn](../runs/paper2-statistical-reproduction-20261117-01/README.md)
 
 ## 2. RQ1 — tập đủ điều kiện đổi thường vẫn giữ cùng gợi ý
 

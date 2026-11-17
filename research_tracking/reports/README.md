@@ -1,5 +1,7 @@
 # Mục lục báo cáo và phân tích KLTN
 
+[17/11 — Tái lập bảng thống kê Paper2](../runs/paper2-statistical-reproduction-20261117-01/README.md) tính lại mean/paired delta/Holm cho117hypotheses từ600seedrows mỗi phase, giữ đúng family45/72 và50pairedseeds/hồ sơ. Số học và quyết định Holm khớp nguồn. Wilcoxon p-value/CIbootstrap được kế thừa. Có13hồi quy tổng hợp, bảng39contrast chính, CSV/SVG/PNG và giới hạn tái lập rõ. Phần này được nối trong [tổng hợp RQ1–RQ2](RQ12_EXISTING_EVIDENCE_20261117.md).
+
 [17/11 — Lưu artifact trực tiếp Drive](../runs/drive-cloud-artifacts-20261117-01/ROOT_ACCEPTANCE.md) đã kiểm CPU cloud ngắt/resume và checksum thật. [Nguồn calibration](../runs/junyi-calibration-data-20261117-01/README.md) đủ15.847người học,1.621.484target. [Builder inference](../runs/junyi-real-calibration-wiring-20261117-01/README.md) nối model thật; inference/calibration đầy đủ còn chờ worker cloud.
 
 [17/11 — Đã dọn 35 GB archive lịch sử](../runs/history-cleanup-20261117-01/README.md) ghi 70 hardlink đã xóa, 44 file bảo vệ còn khớp SHA và 35 ZIP Drive kiểm lại đạt. Có relocation để phục hồi run lịch sử.
