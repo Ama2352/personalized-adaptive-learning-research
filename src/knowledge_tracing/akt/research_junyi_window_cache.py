@@ -17,6 +17,7 @@ import numpy as np
 from ..shared_kt import CausalSequenceInputs
 from .config import PROJECT_ROOT
 from .filesystem import publish_new_file
+from .cache_artifacts import JunyiCacheArtifactRoot
 from .research_junyi_data import JunyiPhaseView, JunyiResearchEncoding
 from .types import KTEvent, TrainingWindow, UnseenTarget, WindowInputs
 
@@ -51,7 +52,10 @@ def _write_json(path, value):
     publish_new_file(temporary, path)
 
 
-def _owned_root(path):
+def _owned_root(path, artifact_root=None):
+    if artifact_root is not None:
+        _need(type(artifact_root) is JunyiCacheArtifactRoot, 'Typed cloud cache artifact root required')
+        return artifact_root.validate(path)
     absolute = Path(path).absolute()
     base = CACHE_BASE.absolute()
     _need(absolute != base and absolute.is_relative_to(base), 'Owned Junyi window-cache path required')
@@ -192,13 +196,14 @@ def _save_shard(path, records, *, compressed):
 
 
 def build_junyi_window_cache(cache_root, records, *, view, encoding, source_data_sha256,
-                             expected_target_rows, shard_records=256, max_shard_tokens=51200, compressed=False):
+                             expected_target_rows, shard_records=256, max_shard_tokens=51200, compressed=False,
+                             artifact_root=None):
     """Tiêu thụ stream một lần; lỗi giữ failure, không công bố COMPLETE."""
     key = window_cache_key(view, encoding, source_data_sha256, expected_target_rows=expected_target_rows)
     _need(type(shard_records) is int and 1 <= shard_records <= 1024
           and type(max_shard_tokens) is int and 200 <= max_shard_tokens <= 204800
           and type(compressed) is bool, 'Explicit bounded shard limits required')
-    root = _owned_root(cache_root)
+    root = _owned_root(cache_root, artifact_root)
     root.mkdir(parents=True, exist_ok=False)
     _write_json(root/'BUILD_REQUEST.json', dict(key=key, shard_records=shard_records,
         max_shard_tokens=max_shard_tokens, compressed=compressed))
@@ -277,10 +282,10 @@ def _load_shard(path, entry, manifest):
 
 
 def iter_junyi_window_cache(cache_root, *, view, encoding, source_data_sha256,
-                            expected_target_rows, expected_manifest_sha256):
+                            expected_target_rows, expected_manifest_sha256, artifact_root=None):
     """Factory dùng lại qua lambda; chỉ giữ một shard trong RAM mỗi lần đọc."""
     key = window_cache_key(view, encoding, source_data_sha256, expected_target_rows=expected_target_rows)
-    root = _owned_root(cache_root)
+    root = _owned_root(cache_root, artifact_root)
     complete = json.loads((root/'COMPLETE.json').read_text())
     _need(complete == dict(kind=KIND, manifest_sha256=expected_manifest_sha256)
           and _sha(root/'manifest.json') == expected_manifest_sha256, 'Incomplete or changed window-cache manifest')
@@ -335,6 +340,7 @@ Hot iterator giữ nguyên record, kiểm key/encoding và SHA/bytes từng shar
     prefetch: bool = False
     admission_receipt: Path | None = None
     expected_admission_sha256: str | None = None
+    artifact_root: JunyiCacheArtifactRoot | None = None
     strict_records_verified: int = field(init=False)
     strict_seconds: float = field(init=False)
     _root: Path = field(init=False, repr=False)
@@ -350,7 +356,7 @@ Hot iterator giữ nguyên record, kiểm key/encoding và SHA/bytes từng shar
         _need(type(self.prefetch) is bool, 'Boolean shard prefetch control required')
         started = time.monotonic()
         validator_sources=tuple(sorted(_admission_sources().items()))
-        root = _owned_root(self.cache_root)
+        root = _owned_root(self.cache_root, self.artifact_root)
         self._check_control_files(root)
         key = window_cache_key(self.view, self.encoding, self.source_data_sha256,
                                expected_target_rows=self.expected_target_rows)
@@ -360,7 +366,7 @@ Hot iterator giữ nguyên record, kiểm key/encoding và SHA/bytes từng shar
             verified = 0
             for _ in iter_junyi_window_cache(root, view=self.view, encoding=self.encoding,
                     source_data_sha256=self.source_data_sha256, expected_target_rows=self.expected_target_rows,
-                    expected_manifest_sha256=self.expected_manifest_sha256):
+                    expected_manifest_sha256=self.expected_manifest_sha256, artifact_root=self.artifact_root):
                 verified += 1
         else:
             verified = _verify_cpu_admission(self, root, key)
@@ -396,7 +402,7 @@ Hot iterator giữ nguyên record, kiểm key/encoding và SHA/bytes từng shar
                   manifest_sha256=self.expected_manifest_sha256), 'Cache control files changed')
 
     def assert_boundary(self):
-        _need(_owned_root(self.cache_root) == self._root
+        _need(_owned_root(self.cache_root, self.artifact_root) == self._root
               and _session_header(self.view, self.encoding) == self._header,
               'Window-cache session phase/encoding header changed')
         self._check_control_files(self._root)
@@ -450,7 +456,7 @@ Hot iterator giữ nguyên record, kiểm key/encoding và SHA/bytes từng shar
 
 
 def _admission_sources():
-    names=('research_junyi_window_cache.py','research_junyi_data.py','windows.py','types.py','encoding.py',
+    names=('research_junyi_window_cache.py','cache_artifacts.py','research_junyi_data.py','windows.py','types.py','encoding.py',
            'config.py','../shared_kt.py')
     return {name:hashlib.sha256((Path(__file__).parent/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest()
             for name in names}

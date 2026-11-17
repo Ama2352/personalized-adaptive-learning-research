@@ -16,6 +16,7 @@ import numpy as np
 
 from .config import PROJECT_ROOT
 from .filesystem import publish_new_file
+from .cache_artifacts import JunyiCacheArtifactRoot
 from .research_junyi_compact import (CompactA1Context, CompactConfidenceContext,
     build_compact_context, build_compact_confidence_context)
 
@@ -41,7 +42,10 @@ def _digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
 
 
-def _owned(path):
+def _owned(path, artifact_root=None):
+    if artifact_root is not None:
+        _need(type(artifact_root) is JunyiCacheArtifactRoot, 'Typed cloud graph cache root required')
+        return artifact_root.validate(path)
     path = Path(path).absolute()
     base = CACHE_ROOT.absolute()
     _need(path != base and path.is_relative_to(base), 'owned graph-context cache required')
@@ -95,11 +99,11 @@ def _decode(width, window_id, payload, phase):
 
 
 def build_graph_context_cache(path, records, phase, *, dataset_sha256, window_manifest_sha256,
-                              expected_windows, expected_targets, max_seconds, max_rss_bytes):
+                              expected_windows, expected_targets, max_seconds, max_rss_bytes, artifact_root=None):
     """Công bố file mới sau khi kiểm coverage; lỗi giữ file .partial có danh tính riêng."""
     import psutil
     from .types import TrainingWindow, WindowInputs
-    path = _owned(path)
+    path = _owned(path, artifact_root)
     _need(not path.exists(), 'graph cache already exists')
     _need(type(expected_windows) is int and expected_windows > 0
           and type(expected_targets) is int and expected_targets > 0
@@ -184,8 +188,8 @@ class GraphContextCache:
     targets: int
 
     @classmethod
-    def open(cls, path, expected_sha256, phase, *, dataset_sha256, window_manifest_sha256):
-        path = _owned(path)
+    def open(cls, path, expected_sha256, phase, *, dataset_sha256, window_manifest_sha256, artifact_root=None):
+        path = _owned(path, artifact_root)
         _need(path.is_file() and _sha(path) == expected_sha256, 'graph cache file SHA mismatch')
         connection = sqlite3.connect(path.as_uri() + '?mode=ro&immutable=1', uri=True)
         try:
